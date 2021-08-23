@@ -4,7 +4,7 @@ import path from 'path';
 import { cors } from './middlewares/cors.js';
 import { logger } from './middlewares/logger.js';
 import logging from './utils/logging.js';
-
+import categoryRoutes from './routes/categories.js';
 
 const app = express();
 const __dirname = process.cwd();
@@ -24,6 +24,7 @@ app.use(cors);
 
 // Routes which should handle requests
 app.get('/', (req, res) => res.render("public/index"));
+app.use('/api/categories', categoryRoutes);
 
 
 // Handle error
