@@ -5,11 +5,24 @@
 
 ## Overview
 
-- Technical: **MERN Stack** (**M**ongoDB **E**xpress **R**eact **N**ode)
+- Technical: **MERN Stack** (**M**ongoDB **E**xpress **R**eact **N**odeJs)
 - Instructor: PhD. **Phung** Huynh Xuan
 - Authors:
   - **Hoang** Ho Huy <@hohuyhoangg>
   - **Khanh** Lam Quoc <@quockhanhtn>
+
+<br>
+<br>
+
+## Documents (in Vietnamese)
+- [UserRequirement](./docs/00_vi_UserRequirement.md)
+- [UserCase (was drew with draw.io)](./docs/01_vi_Usercase.drawio)
+  <details>
+    <summary>Click to show usercase</summary>
+
+    ![usercase image](./docs/images/usercase.svg)
+  </details>
+
 
 <br>
 <br>

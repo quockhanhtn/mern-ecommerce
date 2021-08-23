@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon index.js --trace-warnings",
-    "start": "node index.js"
+    "dev": "nodemon ./src/index.js --trace-warnings",
+    "start": "node ./src/index.js"
   },
   "contributors": [
     {
