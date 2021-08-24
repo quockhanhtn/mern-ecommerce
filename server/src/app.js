@@ -1,10 +1,11 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import path from 'path'; 
+import path from 'path';
 import { cors } from './middlewares/cors.js';
 import { logger } from './middlewares/logger.js';
 import logging from './utils/logging.js';
 import categoryRoutes from './routes/categories.js';
+import brandRoutes from './routes/brands.js';
 
 const app = express();
 const __dirname = process.cwd();
@@ -25,6 +26,7 @@ app.use(cors);
 // Routes which should handle requests
 app.get('/', (req, res) => res.render("public/index"));
 app.use('/api/categories', categoryRoutes);
+app.use('/api/brands', brandRoutes);
 
 
 // Handle error
