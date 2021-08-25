@@ -41,7 +41,7 @@ const formatBrand = (brand, req) => {
 
 export const getBrands = async (req, res) => {
   try {
-    let brands = await Brand.find({ parent: null }).sort({ createdAt: -1 }).lean().exec();
+    let brands = await Brand.find().sort({ createdAt: -1 }).lean().exec();
     if (brands && brands.length > 0) {
       resUtils.status200(res, null, brands.map(brand => formatBrand(brand, req)));
     } else {
