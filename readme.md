@@ -6,6 +6,7 @@
 ## Overview
 
 - Technical: **MERN Stack** (**M**ongoDB **E**xpress **R**eact **N**odeJs)
+- Subject: Essay on software engineering (Tiểu luận chuyên ngành Công nghệ phần mềm - Hệ đại trà).
 - Instructor: PhD. **Phung** Huynh Xuan
 - Authors:
   - **Hoang** Ho Huy <@hohuyhoangg>
