@@ -1,3 +1,21 @@
+# Tiểu luận chuyên ngành Công nghệ phần mềm
+- Đề tài: **Website bán điện thoại và phụ kiện dùng MERN stack**
+- Giáo viên hướng dẫn: TS. Huỳnh Xuân Phụng
+- Sinh viên:
+  - Hồ Huy Hoàng. MSSV: 18110284. Lớp đại trà
+  - Lâm Quốc Khánh. MSSV: 18110304. Lớp đại trà
+
+## Tài liệu
+- [Đặc tả yêu cầu](./docs/00_vi_UserRequirement.md)
+- [UserCase (vẽ bằng draw.io)](./docs/01_vi_Usercase.drawio)
+  ![usercase image](./docs/images/usercase.svg)
+
+
+<br>
+<br>
+
+<details>
+  <summary>Readme.md in English version</summary>
 # [Under construction] eCommerce website for Cellphones and accessories store
 
 <br>
@@ -39,3 +57,5 @@
 
 <br>
 <br>
+
+</details>
