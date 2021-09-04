@@ -2,10 +2,6 @@ import mongoose from 'mongoose';
 import slugGenerator from 'mongoose-slug-updater';
 import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
 
-const autoPopulateChildren = function (next) {
-  this.populate('children');
-  next();
-};
 
 const discountSchema = mongoose.Schema(
   {
@@ -30,9 +26,6 @@ const discountSchema = mongoose.Schema(
 
 discountSchema.plugin(slugGenerator);
 discountSchema.plugin(removeMultiSpace);
-discountSchema
-  .pre('findOne', autoPopulateChildren)
-  .pre('find', autoPopulateChildren);
 
 const discountModel = mongoose.model('Discount', discountSchema);
 export default discountModel;
