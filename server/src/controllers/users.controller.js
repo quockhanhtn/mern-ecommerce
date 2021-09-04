@@ -82,8 +82,8 @@ const formatOneUser = (user, req) => {
     user.image = `${req.protocol}://${req.get('host')}${user.image}`;
   }
   const userTemp = new User({ ...user._doc });
-  const userRessult = expectPassword(userTemp);
-  return userRessult;
+  const userResult = expectPassword(userTemp);
+  return userResult;
 }
 
 
