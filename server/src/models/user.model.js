@@ -2,11 +2,6 @@ import mongoose from 'mongoose';
 import slugGenerator from 'mongoose-slug-updater';
 import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
 
-const autoPopulateChildren = function (next) {
-  this.populate('children');
-  next();
-};
-
 const userSchema = mongoose.Schema(
   {
     _id: mongoose.Types.ObjectId,
@@ -57,9 +52,7 @@ const userSchema = mongoose.Schema(
 
 userSchema.plugin(slugGenerator);
 userSchema.plugin(removeMultiSpace);
-userSchema
-  .pre('findOne', autoPopulateChildren)
-  .pre('find', autoPopulateChildren);
+
 
 const userModel = mongoose.model('User', userSchema);
 export default userModel;

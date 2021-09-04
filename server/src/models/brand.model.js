@@ -2,10 +2,6 @@ import mongoose from 'mongoose';
 import slugGenerator from 'mongoose-slug-updater';
 import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
 
-const autoPopulateChildren = function (next) {
-  this.populate('children');
-  next();
-};
 
 const brandSchema = mongoose.Schema(
   {
@@ -25,9 +21,6 @@ const brandSchema = mongoose.Schema(
 
 brandSchema.plugin(slugGenerator);
 brandSchema.plugin(removeMultiSpace);
-brandSchema
-  .pre('findOne', autoPopulateChildren)
-  .pre('find', autoPopulateChildren);
 
 const brandModel = mongoose.model('Brand', brandSchema);
 export default brandModel;
