@@ -43,7 +43,7 @@ const getUserFromRequest = (req) => {
 };
 
 
-const getUserFromRequestUpdate = (req) => {
+const getUserUpdateFromRequest = (req) => {
   let user = {};
 
   if (req.body.firstName) { user.firstName = req.body.firstName; }
@@ -77,7 +77,7 @@ const getAddressFromRequest = (req) => {
 };
 
 
-const formatUser = (user, req) => {
+const formatOneUser = (user, req) => {
   if (user.image && user.image.startsWith('/')) {
     user.image = `${req.protocol}://${req.get('host')}${user.image}`;
   }
@@ -87,7 +87,7 @@ const formatUser = (user, req) => {
 }
 
 
-const formatUserAll = (user, req) => {
+const formatAllUser = (user, req) => {
   if (user.image && user.image.startsWith('/')) {
     user.image = `${req.protocol}://${req.get('host')}${user.image}`;
   }
@@ -118,7 +118,7 @@ export const createUser = async (req, res) => {
     resUtils.status201(
       res,
       `Create NEW user '${user.fullName}' successfully!`,
-      formatUser(user, req)
+      formatOneUser(user, req)
     );
   } catch (err) { resUtils.status500(res, err); }
 }
@@ -129,14 +129,14 @@ export const updateUser = async (req, res) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
-    let updated = getUserFromRequestUpdate(req);
+    let updated = getUserUpdateFromRequest(req);
 
     const updateUser = await User.findOneAndUpdate(filter, updated, { new: true });
     if (updateUser) {
       resUtils.status200(
         res,
         `Update user '${updateUser.fullName}' successfully!`,
-        formatUser(updateUser, req)
+        formatOneUser(updateUser, req)
       );
     } else {
       resUtils.status404(res, `User '${identity}' not found!`);
@@ -150,7 +150,7 @@ export const getUsers = async (req, res) => {
   try {
     let users = await User.find().sort({ createdAt: -1 }).lean().exec();
     if (users && users.length > 0) {
-      resUtils.status200(res, null, users.map(user => formatUserAll(user, req)));
+      resUtils.status200(res, null, users.map(user => formatAllUser(user, req)));
     } else {
       resUtils.status404(res, 'No users found');
     }
@@ -165,7 +165,7 @@ export const getUser = async (req, res) => {
     let filter = getFindOneFilter(identity);
     const user = await User.findOne(filter);
     if (user) {
-      resUtils.status200(res, `Get user '${user.fullName}' successfully!`, formatUser(user, req));
+      resUtils.status200(res, `Get user '${user.fullName}' successfully!`, formatOneUser(user, req));
     } else {
       resUtils.status404(res, `User '${identity}' not found!`);
     }
