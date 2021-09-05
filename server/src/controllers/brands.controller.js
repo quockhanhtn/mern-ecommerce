@@ -92,7 +92,7 @@ export const updateBrand = async (req, res) => {
     if (updateBrand) {
       resUtils.status200(
         res,
-        `Update category '${updateBrand.name}' successfully!`,
+        `Update brand '${updateBrand.name}' successfully!`,
         formatBrand(updateBrand, req)
       );
     } else {
