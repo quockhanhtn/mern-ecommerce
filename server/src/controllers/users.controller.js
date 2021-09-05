@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import resUtils from '../utils/res-utils.js';
 import strUtils from '../utils/str-utils.js';
 import argon2 from "argon2";
-import _ from 'lodash';
 import User from '../models/user.model.js';
 
 const getFindOneFilter = (identity) => {
@@ -78,27 +77,22 @@ const getAddressFromRequest = (req) => {
 
 
 const formatOneUser = (user, req) => {
+  user = user.toObject();
   if (user.image && user.image.startsWith('/')) {
     user.image = `${req.protocol}://${req.get('host')}${user.image}`;
   }
-  const userTemp = new User({ ...user._doc });
-  const userResult = expectPassword(userTemp);
-  return userResult;
+  if (user.password) { delete user.password; }
+  return user;
 }
 
 
 const formatAllUser = (user, req) => {
+  console.log(user)
   if (user.image && user.image.startsWith('/')) {
     user.image = `${req.protocol}://${req.get('host')}${user.image}`;
   }
+  if (user.password) { delete user.password; }
   return user;
-}
-
-// Expect Password
-const expectPassword = (user) => {
-  const userOld = new User({ ...user._doc });
-  const userResult = _.omit(userOld._doc, ['password']);
-  return userResult;
 }
 
 
