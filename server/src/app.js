@@ -6,6 +6,7 @@ import { logger } from './middlewares/logger.js';
 import logging from './utils/logging.js';
 import categoryRoutes from './routes/categories.js';
 import brandRoutes from './routes/brands.js';
+import discountRoutes from './routes/discounts.js';
 
 const app = express();
 const __dirname = process.cwd();
@@ -27,6 +28,7 @@ app.use(cors);
 app.get('/', (req, res) => res.render("public/index"));
 app.use('/api/categories', categoryRoutes);
 app.use('/api/brands', brandRoutes);
+app.use('/api/discounts', discountRoutes);
 
 
 // Handle error
