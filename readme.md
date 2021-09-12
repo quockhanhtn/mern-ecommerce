@@ -6,8 +6,13 @@
   - Lâm Quốc Khánh. MSSV: 18110304. Lớp đại trà
 
 ## Tài liệu
-- [Đặc tả yêu cầu](./docs/00_vi_UserRequirement.md)
-- [UserCase (vẽ bằng draw.io)](./docs/01_vi_Usercase.drawio)
+- Đặc tả yêu cầu: 
+  - [Xem online (markdown)](./docs/00_vi_UserRequirement.md) 
+  - [Download pdf](./docs/00_vi_UserRequirement.pdf)
+- UserCase: 
+  - [File pdf](./docs/01_vi_Usercase.pdf) 
+  - [File .drawio](./docs/01_vi_Usercase.drawio)
+  
   ![usercase image](./docs/images/usercase.svg)
 
 
