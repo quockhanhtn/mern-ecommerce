@@ -23,11 +23,10 @@ function multerUpload(customPath, allowedMimes = [], filePerReq = 1) {
   if (!fs.existsSync(uploadPath)) { fs.mkdirSync(uploadPath); }
 
   const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, uploadPath);
-    },
+    destination: uploadPath,
     filename: function (req, file, cb) {
-      cb(null, Date.now() + "_" + strUtils.removeAccents(file.originalname));
+      const uniquePrefix = Date.now() + '_';
+      cb(null, uniquePrefix + strUtils.removeAccents(file.originalname));
     }
   });
 

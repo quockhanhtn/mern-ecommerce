@@ -1,3 +1,7 @@
+function splitsAndTrim(str, delimiter) {
+  return str.split(delimiter).map(item => item.trim());
+}
+
 function removeMultiSpace(str) {
   return str.replace(/\s+/g, ' ');
 }
@@ -30,6 +34,7 @@ function isUUID(str) {
 
 
 export default {
+  splitsAndTrim,
   removeMultiSpace,
   replaceAll,
   removeAccents,
