@@ -19,7 +19,7 @@ const populateOptions = [
   }
 ];
 
-
+//#region Format and preprogess data from req
 const getImageUrl = (req, path) => {
   if (path.startsWith('/')) {
     return `${req.protocol}://${req.get('host')}${path}`;
@@ -35,24 +35,16 @@ const getFindOneFilter = (identity) => {
   }
 };
 
-const validateCategory = async (categoryId) => {
-  if (!categoryId) { return { id: null, mess: 'Missing category for product!' }; }
-
+const findCategoryId = async (categoryId) => {
   let filter = getFindOneFilter(categoryId);
   const category = await Category.findOne(filter);
-
-  if (category) { return { id: category._id, mess: null }; }
-  return { id: null, mess: `Category '${categoryId}' not found!` };
+  return category ? category._id : null;
 };
 
-const validateBrand = async (brandId) => {
-  if (!brandId) { return { id: null, mess: 'Missing brand for product!' }; }
-
+const findBrandId = async (brandId) => {
   let filter = getFindOneFilter(brandId);
   const brand = await Brand.findOne(filter);
-
-  if (brand) { return { id: brand._id, mess: null }; }
-  return { id: null, mess: `Brand '${brandId}' not found!` };
+  return brand ? brand._id : null;
 };
 
 const formatPath = (path) => {
@@ -83,6 +75,7 @@ const formatProduct = (product, req) => {
   }
   return product;
 }
+
 
 const getProductVariantFromRequest = (req) => {
   let variant = {};
@@ -129,6 +122,9 @@ const getProductFromRequest = (req, isAddNew = false) => {
     }
   }
   if (req.body.tags) { product.tags = strUtils.splitsAndTrim(req.body.tags, ','); }
+  if (req.body.releaseTime) { product.releaseTime = new Date(Date.parse(req.body.releaseTime)); }
+  if (req.body.warrantyPeriod) { product.warrantyPeriod = Number.parseInt(req.body.warrantyPeriod); }
+  if (req.body.origin) { product.origin = Number.parseInt(req.body.origin); }
 
   if (isAddNew) {
     product.variants = [getProductVariantFromRequest(req)];
@@ -137,63 +133,9 @@ const getProductFromRequest = (req, isAddNew = false) => {
 
   return product;
 };
+//#endregion
 
-
-export const getAllProducts = async (req, res) => {
-  try {
-    let products = await Product.find()
-      .select(SELECT_FIELD)
-      .sort({ createdAt: -1 })
-      .populate(populateOptions)
-      .lean().exec();
-    if (products && products.length > 0) {
-      resUtils.status200(res, null, products.map(product => formatProduct(product, req)));
-    } else {
-      resUtils.status204(res, 'No products found');
-    }
-  } catch (err) { resUtils.status500(res, err); }
-};
-
-export const getProductById = async (req, res) => {
-  try {
-    const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
-    const product = await Product.findOne(filter)
-      .select(SELECT_FIELD)
-      .populate(populateOptions)
-      .lean().exec();
-    if (product) {
-      resUtils.status200(res, null, formatProduct(product, req));
-    } else {
-      resUtils.status404(res, `Product '${identity}' not found!`);
-    }
-  } catch (err) { resUtils.status500(res, err); }
-}
-
-export const createProduct = async (req, res) => {
-  try {
-    const { id: categoryId, mess: messCat } = await validateCategory(req.body.categoryId);
-    if (categoryId === null) { return resUtils.status400(res, messCat); }
-
-    const { id: brandId, mess: messBrand } = await validateBrand(req.body.brandId);
-    if (brandId === null) { return resUtils.status400(res, messBrand); }
-
-    const product = new Product({
-      _id: new mongoose.Types.ObjectId(),
-      category: categoryId,
-      brand: brandId,
-      ...getProductFromRequest(req, true),
-    });
-
-    const newProduct = await product.save();
-    resUtils.status201(
-      res,
-      `Create NEW product '${newProduct.name}' successfully!`,
-      formatProduct(newProduct, req)
-    );
-  } catch (err) { resUtils.status500(res, err); }
-};
-
+//#region Product variants
 export const addProductVariants = async (req, res) => {
   try {
     const { identity } = req.params;
@@ -211,3 +153,81 @@ export const addProductVariants = async (req, res) => {
     } else { resUtils.status404(res, `Product '${identity}' not found!`); }
   } catch (err) { resUtils.status500(res, err); }
 };
+
+export const updateProductVariants = async (req, res) => {
+  try {
+    const { identity } = req.params;
+    let filter = getFindOneFilter(identity);
+    const product = await Product.findOne(filter);
+    if (product) {
+      product.variants.push(getProductVariantFromRequest(req));
+      product.markModified('variants');
+      const newProduct = await product.save();
+      resUtils.status201(
+        res,
+        `Add product variant to '${newProduct.name}' successfully!`,
+        formatProduct(newProduct, req)
+      );
+    } else { resUtils.status404(res, `Product '${identity}' not found!`); }
+  } catch (err) { resUtils.status500(res, err); }
+};
+//#endregion
+
+//#region Product info
+export const getAllProducts = async (req, res) => {
+  try {
+    let products = await Product.find()
+      .select(SELECT_FIELD)
+      .sort({ createdAt: -1 })
+      .populate(populateOptions)
+      .lean().exec();
+    if (products && products.length > 0) {
+      resUtils.status200(res, null, products.map(product => formatProduct(product, req)));
+    } else {
+      resUtils.status204(res, 'No products found');
+    }
+  } catch (err) { resUtils.status500(res, err); }
+};
+
+
+export const getProductById = async (req, res) => {
+  try {
+    const { identity } = req.params;
+    let filter = getFindOneFilter(identity);
+    // update views and get new data for return
+    const product = await Product.findOneAndUpdate(filter, { $inc: { views: 1 } }, { new: true })
+      .select(SELECT_FIELD)
+      .populate(populateOptions)
+      .lean().exec();
+    if (product) {
+      resUtils.status200(res, null, formatProduct(product, req));
+    } else {
+      resUtils.status404(res, `Product '${identity}' not found!`);
+    }
+  } catch (err) { resUtils.status500(res, err); }
+}
+
+export const createProduct = async (req, res) => {
+  try {
+    const categoryId = await findCategoryId(req.body.categoryId);
+    if (!categoryId) { return resUtils.status400(res, `Category '${req.body.categoryId}' not found!`); }
+
+    const brandId = await findBrandId(req.body.brandId);
+    if (!brandId) { return resUtils.status400(res, `Brand '${req.body.brandId}' not found!`); }
+
+    const product = new Product({
+      _id: new mongoose.Types.ObjectId(),
+      category: categoryId,
+      brand: brandId,
+      ...getProductFromRequest(req, true),
+    });
+
+    const newProduct = await product.save();
+    resUtils.status201(
+      res,
+      `Create NEW product '${newProduct.name}' successfully!`,
+      formatProduct(newProduct, req)
+    );
+  } catch (err) { resUtils.status500(res, err); }
+};
+//#endregion

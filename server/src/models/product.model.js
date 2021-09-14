@@ -47,7 +47,12 @@ const productSchema = mongoose.Schema({
     value: { type: String, trim: true, required: true }
   }],
 
-  releaseTime: { type: Date, default: () => new Date(new Date() - 3 * 30 * 24 * 60 * 60 * 1000) },
+  releaseTime: {
+    type: Date,
+    default: () => new Date(new Date() - 30 * 24 * 60 * 60 * 1000)      // now - 30 day
+  },
+  warrantyPeriod: { type: Number, min: 0, default: 12 },                // in months
+  origin: { type: String, trim: true, required: false },                // country of manufacture
 
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null },
   brand: { type: mongoose.Schema.Types.ObjectId, ref: 'Brand', default: null },
@@ -59,7 +64,9 @@ const productSchema = mongoose.Schema({
 
   variants: [productVariantSchema],
 
-  isHide: { type: Boolean, required: true, default: false },
+  isHide: { type: Boolean, default: false },
+  isOutOfStock: { type: Boolean, default: false },
+
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, { timestamps: true, versionKey: false });
