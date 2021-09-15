@@ -147,4 +147,13 @@ temp/
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,node
+
+# yarn lock
 server/yarn.lock
+client/yarn.lock
+
+# IntelliJ
+.idea
+
+# MacOS files
+.DS_Store
