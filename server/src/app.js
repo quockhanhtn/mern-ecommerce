@@ -8,6 +8,7 @@ import logging from './utils/logging.js';
 import categoryRoutes from './routes/categories.js';
 import brandRoutes from './routes/brands.js';
 import productRoutes from './routes/products.js';
+import commentRoutes from './routes/comments.js';
 import userRoutes from './routes/users.js';
 import discountRoutes from './routes/discounts.js';
 
@@ -33,6 +34,7 @@ app.get('/', (req, res) => res.render("public/index"));
 app.use('/api/categories', categoryRoutes);
 app.use('/api/brands', brandRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/comments', commentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/discounts', discountRoutes);
 

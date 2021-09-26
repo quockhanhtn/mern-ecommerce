@@ -58,8 +58,13 @@ const productSchema = mongoose.Schema({
   brand: { type: mongoose.Schema.Types.ObjectId, ref: 'Brand', default: null },
 
   views: { type: Number, default: 0, min: 0 },                          // views of product
-  rate: [{ type: Number, default: 0, min: 1, max: 5 }],                 // rate of product
-  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }], // comments of product
+  rates: [                                                              // rate of product
+    {
+      _id: false,
+      ip: { type: String, trim: true, required: true },
+      star: { type: String, default: 0, min: 1, max: 5 }
+    }
+  ],
 
   variants: [productVariantSchema],
   defaultVariant: { type: String }, // default variant of product

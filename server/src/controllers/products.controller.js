@@ -288,4 +288,29 @@ export const deleteProduct = async (req, res) => {
   }
   catch (err) { resUtils.status500(res, err); }
 };
+
+export const rateProduct = async (req, res) => {
+  try {
+    const { identity } = req.params;
+    let filter = getFindOneFilter(identity);
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const rateStar = Number.parseFloat(req.body.rateStar) || 0;
+
+    if (rateStar < 1 || rateStar > 5) {
+      throw new Error('Rate must be between 1 and 5');
+    }
+
+    await Product.findOneAndUpdate(filter, { $pull: { rates: { ip: ip } } }); // remove old rate if exist
+    const updatedProduct = await Product.findOneAndUpdate(filter, { $addToSet: { rates: { ip: ip, star: rateStar } } }, { new: true });
+    if (updatedProduct) {
+      resUtils.status200(
+        res,
+        `Rate product '${updatedProduct.name}' successfully!`,
+        formatProduct(updatedProduct, req)
+      );
+    } else {
+      resUtils.status404(res, `Product '${identity}' not found!`);
+    }
+  } catch (err) { resUtils.status500(res, err); }
+};
 //#endregion
