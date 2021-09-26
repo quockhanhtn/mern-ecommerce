@@ -15,7 +15,6 @@ const categorySchema = mongoose.Schema(
     desc: { type: String, trim: true, required: false },
 
     image: { type: String, trim: true, required: false },
-    imageCdn: { type: String, trim: true, required: false },
 
     parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null },
     children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],

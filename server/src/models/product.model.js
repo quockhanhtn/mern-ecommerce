@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import slugGenerator from 'mongoose-slug-updater';
 import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
 
-
 const productVariantSchema = new mongoose.Schema({
   sku: { type: String, trim: true, required: true },
 

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
+import Category from '../models/category.model.js';
 import resUtils from '../utils/res-utils.js';
 import strUtils from '../utils/str-utils.js';
-import Category from '../models/category.model.js';
 
 
 const getFindOneFilter = (identity) => {
@@ -22,7 +22,6 @@ const getCategoryFromRequest = (req) => {
 
   if (req.body.name) { category.name = req.body.name; }
   if (req.body.desc) { category.desc = req.body.desc; }
-  if (req.body.imageCdn) { category.imageCdn = req.body.imageCdn; }
 
   if (req?.file?.path) {
     category.image = '/' + strUtils.replaceAll(req.file.path, '\\', '/');

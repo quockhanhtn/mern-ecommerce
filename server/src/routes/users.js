@@ -3,7 +3,7 @@ import { addressUserAdd, addressUserDelete, addressUserUpdate, createUser, getUs
 import multerUpload from '../utils/upload-utils.js';
 
 const router = express.Router();
-const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif'];
+const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
 const upload = multerUpload('/users/', allowedMimes);
 
 
@@ -23,6 +23,4 @@ router.route('/:identity/address/:identityAddress')
   .delete(addressUserDelete)
   .patch(addressUserUpdate);
 
-
-// router.patch('/:identity/hide', hiddenBrand);
 export default router;

@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
+import Brand from '../models/brand.model.js';
 import resUtils from '../utils/res-utils.js';
 import strUtils from '../utils/str-utils.js';
-import Brand from '../models/brand.model.js';
+
 
 const getFindOneFilter = (identity) => {
   const filter = {};
@@ -21,8 +22,8 @@ const getBrandFromRequest = (req) => {
 
   if (req.body.name) { brand.name = req.body.name; }
   if (req.body.desc) { brand.desc = req.body.desc; }
-  if (req.body.headQuaters) { brand.headQuaters = req.body.headQuaters; }
-  if (req.body.imageCdn) { brand.imageCdn = req.body.imageCdn; }
+  if (req.body.headQuarters) { brand.headQuarters = req.body.headQuarters; }
+  if (req.body.country) { brand.country = req.body.country; }
 
   if (req?.file?.path) {
     brand.image = '/' + strUtils.replaceAll(req.file.path, '\\', '/');

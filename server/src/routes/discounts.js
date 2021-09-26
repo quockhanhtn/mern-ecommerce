@@ -3,7 +3,7 @@ import { createDiscount, deleteDiscount, getDiscount, getDiscounts, hiddenDiscou
 import multerUpload from '../utils/upload-utils.js';
 
 const router = express.Router();
-const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif'];
+const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
 const upload = multerUpload('/discounts/', allowedMimes);
 
 

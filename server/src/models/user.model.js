@@ -53,6 +53,5 @@ const userSchema = mongoose.Schema(
 userSchema.plugin(slugGenerator);
 userSchema.plugin(removeMultiSpace);
 
-
 const userModel = mongoose.model('User', userSchema);
 export default userModel;

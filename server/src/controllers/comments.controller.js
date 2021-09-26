@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import Comment from '../models/comment.model.js';
 import resUtils from '../utils/res-utils.js';
 
+
 const getCommentFromRequest = (req) => {
   let comment = { product: req.body.product };
 
@@ -11,8 +12,6 @@ const getCommentFromRequest = (req) => {
   if (req.body.email) { comment.anonymousAuthor.email = req.body.email; }
   if (req.body.phone) { comment.anonymousAuthor.phone = req.body.phone; }
   if (req.body.content) { comment.content = req.body.content; }
-
-  console.log(comment);
 
   return comment;
 };

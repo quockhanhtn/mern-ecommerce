@@ -1,8 +1,9 @@
+import argon2 from 'argon2';
 import mongoose from 'mongoose';
+import User from '../models/user.model.js';
 import resUtils from '../utils/res-utils.js';
 import strUtils from '../utils/str-utils.js';
-import argon2 from "argon2";
-import User from '../models/user.model.js';
+
 
 const getFindOneFilter = (identity) => {
   const filter = {};

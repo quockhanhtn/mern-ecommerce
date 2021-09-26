@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
+import Brand from '../models/brand.model.js';
+import Category from '../models/category.model.js';
+import Product from '../models/product.model.js';
 import resUtils from '../utils/res-utils.js';
 import strUtils from '../utils/str-utils.js';
-import Category from '../models/category.model.js';
-import Brand from '../models/brand.model.js';
-import Product from '../models/product.model.js';
+
 
 const SELECT_FIELD = '_id name slug desc video specifications category brand tags views rate variants createdAt updatedAt';
 const populateOptions = [
