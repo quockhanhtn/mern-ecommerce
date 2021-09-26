@@ -5,13 +5,9 @@ import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
 
 const productVariantSchema = new mongoose.Schema({
   sku: { type: String, trim: true, required: true },
-  isDefault: { type: Boolean, default: false },         // only one variant can be default
 
   variantName: { type: String, trim: true },
   slug: { type: String, slug: "variantName", unique: false },
-
-  thumbnail: { type: String, trim: true, required: false },
-  pictures: [{ type: String, trim: true }],
 
   price: { type: Number, required: true },              // promotional price (market price - discount)
   marketPrice: { type: Number, required: true },        // market price
@@ -24,7 +20,10 @@ const productVariantSchema = new mongoose.Schema({
     key: { type: String, slug: "name", required: true },
     value: { type: String, trim: true, required: true }
   }],
-}, { timestamps: true, versionKey: false, id: false });
+
+  thumbnail: { type: String, trim: true, required: false },
+  pictures: [{ type: String, trim: true }]
+}, { timestamps: true, versionKey: false, id: false, _id: false });
 
 const productSchema = mongoose.Schema({
   _id: mongoose.Types.ObjectId,
@@ -46,6 +45,7 @@ const productSchema = mongoose.Schema({
     key: { type: String, slug: "name", required: false },
     value: { type: String, trim: true, required: true }
   }],
+  tags: [{ type: String, trim: true }],
 
   releaseTime: {
     type: Date,
@@ -56,13 +56,13 @@ const productSchema = mongoose.Schema({
 
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null },
   brand: { type: mongoose.Schema.Types.ObjectId, ref: 'Brand', default: null },
-  tags: [{ type: String, trim: true }],
 
   views: { type: Number, default: 0, min: 0 },                          // views of product
   rate: [{ type: Number, default: 0, min: 1, max: 5 }],                 // rate of product
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }], // comments of product
 
   variants: [productVariantSchema],
+  defaultVariant: { type: String }, // default variant of product
 
   isHide: { type: Boolean, default: false },
   isOutOfStock: { type: Boolean, default: false },

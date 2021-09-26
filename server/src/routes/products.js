@@ -3,7 +3,11 @@ import {
   getAllProducts,
   getProductById,
   createProduct,
-  addProductVariants
+  updateProduct,
+  deleteProduct,
+  addProductVariants,
+  updateProductVariants,
+  deleteProductVariants
 } from '../controllers/products.controller.js';
 import multerUpload from '../utils/upload-utils.js';
 
@@ -20,9 +24,18 @@ router.post('/',
   upload.fields(uploadFields),
   createProduct
 );
+router.patch('/:identity', updateProduct);
+router.delete('/:identity', deleteProduct);
+
+
 router.post('/:identity/variants',
   upload.fields(uploadFields),
   addProductVariants
 );
+router.patch('/:identity/variants/:sku',
+  upload.fields(uploadFields),
+  updateProductVariants
+);
+router.delete('/:identity/variants/:sku', deleteProductVariants);
 
 export default router;
