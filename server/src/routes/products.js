@@ -5,6 +5,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  rateProduct,
   addProductVariants,
   updateProductVariants,
   deleteProductVariants
@@ -26,6 +27,7 @@ router.post('/',
 );
 router.patch('/:identity', updateProduct);
 router.delete('/:identity', deleteProduct);
+router.patch('/:identity/rate', rateProduct);
 
 
 router.post('/:identity/variants',
