@@ -47,7 +47,7 @@ export default function MenuPopover({ children, sx, ...other }) {
       }}
       {...other}
     >
-      <ArrowStyle className="arrow" />
+      <ArrowStyle />
 
       {children}
     </Popover>

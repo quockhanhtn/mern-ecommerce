@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { createContext } from 'react';
+import React, { createContext } from 'react';
 // hooks
 import useLocalStorage from '../hooks/useLocalStorage';
 // theme
@@ -25,7 +25,7 @@ const PRIMARY_COLOR = [
   },
   // CYAN
   {
-    name: 'cyan',
+    name: 'Cyan',
     lighter: '#D1FFFC',
     light: '#76F2FF',
     main: '#1CCAFF',
@@ -78,7 +78,7 @@ function SetColor(themeColor) {
     case 'purple':
       color = PURPLE;
       break;
-    case 'cyan':
+    case 'Cyan':
       color = CYAN;
       break;
     case 'blue':

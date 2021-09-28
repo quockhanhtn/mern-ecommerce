@@ -1,6 +1,8 @@
 {
   "name": "mern.ecommerce.client",
   "version": "0.1.0",
+  "licence": "UNLICENSED",
+  "version": "1.0",
   "private": true,
   "scripts": {
     "start": "react-scripts start",

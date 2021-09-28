@@ -101,14 +101,13 @@ function NavItem({ item, active }) {
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {children.map((item) => {
-              const { title, path } = item;
-              const isActiveSub = active(path);
+              const isActiveSub = active(item.path);
 
               return (
                 <ListItemStyle
-                  key={title}
+                  key={item.title}
                   component={RouterLink}
-                  to={path}
+                  to={item.path}
                   sx={{
                     ...(isActiveSub && activeSubStyle)
                   }}
@@ -132,7 +131,7 @@ function NavItem({ item, active }) {
                       }}
                     />
                   </ListItemIconStyle>
-                  <ListItemText disableTypography primary={title} />
+                  <ListItemText disableTypography primary={item.title} />
                 </ListItemStyle>
               );
             })}
@@ -151,7 +150,7 @@ function NavItem({ item, active }) {
       }}
     >
       <ListItemIconStyle>{icon && icon}</ListItemIconStyle>
-      <ListItemText disableTypography primary={title} />
+      <ListItemText disableTypography primary={item.title} />
       {info && info}
     </ListItemStyle>
   );

@@ -1,9 +1,6 @@
-import { Link as RouterLink } from 'react-router-dom';
 // material
 import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Grid, Button, Container, Typography } from '@material-ui/core';
-// routes
-import { PATH_PAGE } from '../../../routes/paths';
 //
 import { varFadeInUp, MotionInView } from '../../animate';
 
@@ -111,13 +108,7 @@ export default function LandingHugePackElements() {
               </MotionInView>
 
               <MotionInView variants={varFadeInUp}>
-                <Button
-                  size="large"
-                  color="inherit"
-                  variant="outlined"
-                  component={RouterLink}
-                  to={PATH_PAGE.components}
-                >
+                <Button size="large" color="inherit" variant="outlined">
                   View All Components
                 </Button>
               </MotionInView>

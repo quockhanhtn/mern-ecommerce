@@ -1,8 +1,13 @@
+import PropTypes from 'prop-types';
 // material
 import { useTheme } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
+
+SeoIllustration.propTypes = {
+  sx: PropTypes.object
+};
 
 export default function SeoIllustration({ ...other }) {
   const theme = useTheme();

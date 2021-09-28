@@ -1,10 +1,15 @@
+import PropTypes from 'prop-types';
 // material
 import { useTheme } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
 
-export default function SeverErrorIllustration({ ...other }) {
+SeverErrorIllustration.propTypes = {
+  sx: PropTypes.object
+};
+
+export default function SeverErrorIllustration({ sx, ...other }) {
   const theme = useTheme();
   const PRIMARY_LIGHTER = theme.palette.primary.lighter;
   const PRIMARY_MAIN = theme.palette.primary.main;
@@ -12,7 +17,7 @@ export default function SeverErrorIllustration({ ...other }) {
   const PRIMARY_DARKER = theme.palette.primary.darker;
 
   return (
-    <Box {...other}>
+    <Box sx={sx} {...other}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"

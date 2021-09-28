@@ -2,18 +2,35 @@ import { useRef, useState } from 'react';
 // material
 import { alpha } from '@material-ui/core/styles';
 import { Box, MenuItem, ListItemIcon, ListItemText } from '@material-ui/core';
-// hooks
-import useLocales from '../../hooks/useLocales';
 // components
 import MenuPopover from '../../components/MenuPopover';
 import { MIconButton } from '../../components/@material-extend';
 
 // ----------------------------------------------------------------------
 
+const LANGS = [
+  {
+    value: 'en',
+    label: 'English',
+    icon: '/static/icons/ic_flag_en.svg'
+  },
+  {
+    value: 'de',
+    label: 'German',
+    icon: '/static/icons/ic_flag_de.svg'
+  },
+  {
+    value: 'fr',
+    label: 'French',
+    icon: '/static/icons/ic_flag_fr.svg'
+  }
+];
+
+// ----------------------------------------------------------------------
+
 export default function LanguagePopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const { allLang, currentLang, onChangeLang } = useLocales();
 
   const handleOpen = () => {
     setOpen(true);
@@ -21,11 +38,6 @@ export default function LanguagePopover() {
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleChangeLang = (value) => {
-    onChangeLang(value);
-    handleClose();
   };
 
   return (
@@ -42,23 +54,25 @@ export default function LanguagePopover() {
           })
         }}
       >
-        <img src={currentLang.icon} alt={currentLang.label} />
+        <img src={LANGS[0].icon} alt={LANGS[0].label} />
       </MIconButton>
 
-      <MenuPopover open={open} onClose={handleClose} anchorEl={anchorRef.current} sx={{ py: 1 }}>
-        {allLang.map((option) => (
-          <MenuItem
-            key={option.value}
-            selected={option.value === currentLang.value}
-            onClick={() => handleChangeLang(option.value)}
-            sx={{ py: 1, px: 2.5 }}
-          >
-            <ListItemIcon>
-              <Box component="img" alt={option.label} src={option.icon} />
-            </ListItemIcon>
-            <ListItemText primaryTypographyProps={{ variant: 'body2' }}>{option.label}</ListItemText>
-          </MenuItem>
-        ))}
+      <MenuPopover open={open} onClose={handleClose} anchorEl={anchorRef.current}>
+        <Box sx={{ py: 1 }}>
+          {LANGS.map((option) => (
+            <MenuItem
+              key={option.value}
+              selected={option.value === LANGS[0].value}
+              onClick={handleClose}
+              sx={{ py: 1, px: 2.5 }}
+            >
+              <ListItemIcon>
+                <Box component="img" alt={option.label} src={option.icon} />
+              </ListItemIcon>
+              <ListItemText primaryTypographyProps={{ variant: 'body2' }}>{option.label}</ListItemText>
+            </MenuItem>
+          ))}
+        </Box>
       </MenuPopover>
     </>
   );
