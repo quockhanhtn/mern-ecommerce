@@ -1,6 +1,6 @@
 import express from 'express';
-import { addressUserAdd, addressUserDelete, addressUserUpdate, createUser, getUser, getUsers, updateUser } from '../controllers/users.controller.js';
-import multerUpload from '../utils/upload-utils.js';
+import multerUpload from '../../utils/upload-utils.js';
+import { addressUserAdd, addressUserDelete, addressUserUpdate, createUser, getUser, getUsers, updateUser } from '../../controllers/users.controller.js';
 
 const router = express.Router();
 const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];

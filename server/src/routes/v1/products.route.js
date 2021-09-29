@@ -9,8 +9,8 @@ import {
   addProductVariants,
   updateProductVariants,
   deleteProductVariants
-} from '../controllers/products.controller.js';
-import multerUpload from '../utils/upload-utils.js';
+} from '../../controllers/products.controller.js';
+import multerUpload from '../../utils/upload-utils.js';
 
 const router = express.Router();
 const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];

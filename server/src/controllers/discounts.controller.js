@@ -28,8 +28,6 @@ const getDiscountFromRequest = (req) => {
   if (req.body.quantity) { discount.quantity = req.body.quantity; }
   if (req.body.discount) { discount.discount = req.body.discount; }
 
-  if (req.body.imageCdn) { discount.imageCdn = req.body.imageCdn; }
-
   if (req?.file?.path) {
     discount.image = '/' + strUtils.replaceAll(req.file.path, '\\', '/');
   }
@@ -45,7 +43,7 @@ const formatDiscount = (discount, req) => {
 }
 
 
-export const getDiscounts = async (req, res) => {
+export const getDiscounts = async (req, res, next) => {
   try {
     let discounts = await Discount.find().sort({ createdAt: -1 }).lean().exec();
     if (discounts && discounts.length > 0) {
@@ -53,11 +51,11 @@ export const getDiscounts = async (req, res) => {
     } else {
       resUtils.status404(res, 'No discounts found');
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const getDiscount = async (req, res) => {
+export const getDiscount = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -67,11 +65,11 @@ export const getDiscount = async (req, res) => {
     } else {
       resUtils.status404(res, `Discount '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const createDiscount = async (req, res) => {
+export const createDiscount = async (req, res, next) => {
   try {
     console.log(req.body)
     const discount = new Discount({
@@ -85,11 +83,11 @@ export const createDiscount = async (req, res) => {
       `Create NEW discount '${newDiscount.name}' successfully!`,
       formatDiscount(newDiscount, req)
     );
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const updateDiscount = async (req, res) => {
+export const updateDiscount = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -105,11 +103,11 @@ export const updateDiscount = async (req, res) => {
     } else {
       resUtils.status404(res, `Discount '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const hiddenDiscount = async (req, res) => {
+export const hiddenDiscount = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -127,12 +125,11 @@ export const hiddenDiscount = async (req, res) => {
     } else {
       resUtils.status404(res, `Discount '${identity}' not found!`);
     }
-  }
-  catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const deleteDiscount = async (req, res) => {
+export const deleteDiscount = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -143,6 +140,5 @@ export const deleteDiscount = async (req, res) => {
     } else {
       resUtils.status404(res, `Discount '${identity}' not found!`);
     }
-  }
-  catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }

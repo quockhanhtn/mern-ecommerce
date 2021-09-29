@@ -17,7 +17,7 @@ const getCommentFromRequest = (req) => {
 };
 
 
-export const getComments = async (req, res) => {
+export const getComments = async (req, res, next) => {
   try {
     const { product } = req.body;
 
@@ -27,11 +27,11 @@ export const getComments = async (req, res) => {
     } else {
       resUtils.status404(res, 'No comments found');
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const createComment = async (req, res) => {
+export const createComment = async (req, res, next) => {
   try {
     const comment = new Comment({
       _id: new mongoose.Types.ObjectId(),
@@ -40,11 +40,11 @@ export const createComment = async (req, res) => {
 
     const newComment = await comment.save();
     resUtils.status201(res, `Create NEW comment successfully!`, newComment);
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const updateComment = async (req, res) => {
+export const updateComment = async (req, res, next) => {
   try {
     const { id } = req.params;
     let updated = getCommentFromRequest(req);
@@ -54,11 +54,11 @@ export const updateComment = async (req, res) => {
     } else {
       resUtils.status404(res, `Comment '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const verifiedComment = async (req, res) => {
+export const verifiedComment = async (req, res, next) => {
   try {
     const { id } = req.params;
     const status = req.body.status || false;
@@ -71,12 +71,11 @@ export const verifiedComment = async (req, res) => {
     } else {
       resUtils.status404(res, `Comment '${id}' not found!`);
     }
-  }
-  catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const deleteComment = async (req, res) => {
+export const deleteComment = async (req, res, next) => {
   try {
     const { id } = req.params;
     const deletedComment = await Comment.findByIdAndRemove(id);
@@ -85,6 +84,5 @@ export const deleteComment = async (req, res) => {
     } else {
       resUtils.status404(res, `Comment '${id}' not found!`);
     }
-  }
-  catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }

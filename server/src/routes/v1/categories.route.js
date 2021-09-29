@@ -2,8 +2,8 @@ import express from 'express';
 import {
   createCategory, deleteCategory, getCategories,
   getCategory, hiddenCategory, updateCategory
-} from '../controllers/categories.controller.js';
-import multerUpload from '../utils/upload-utils.js';
+} from '../../controllers/categories.controller.js';
+import multerUpload from '../../utils/upload-utils.js';
 
 const router = express.Router();
 const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];

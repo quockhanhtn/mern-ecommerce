@@ -38,7 +38,7 @@ const formatCategory = (category, req) => {
 }
 
 
-export const getCategories = async (req, res) => {
+export const getCategories = async (req, res, next) => {
   try {
     let categories = await Category.find({ parent: null }).sort({ createdAt: -1 }).lean().exec();
     if (categories && categories.length > 0) {
@@ -46,11 +46,11 @@ export const getCategories = async (req, res) => {
     } else {
       resUtils.status404(res, 'No categories found');
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const getCategory = async (req, res) => {
+export const getCategory = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -60,11 +60,11 @@ export const getCategory = async (req, res) => {
     } else {
       resUtils.status404(res, `Category '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const createCategory = async (req, res) => {
+export const createCategory = async (req, res, next) => {
   try {
     const category = new Category({
       _id: new mongoose.Types.ObjectId(),
@@ -86,11 +86,11 @@ export const createCategory = async (req, res) => {
       `Create NEW category '${newCategory.name}' successfully!`,
       formatCategory(newCategory, req)
     );
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const updateCategory = async (req, res) => {
+export const updateCategory = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -117,11 +117,11 @@ export const updateCategory = async (req, res) => {
     } else {
       resUtils.status404(res, `Category '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const hiddenCategory = async (req, res) => {
+export const hiddenCategory = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -139,12 +139,11 @@ export const hiddenCategory = async (req, res) => {
     } else {
       resUtils.status404(res, `Category '${identity}' not found!`);
     }
-  }
-  catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const deleteCategory = async (req, res) => {
+export const deleteCategory = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -155,6 +154,5 @@ export const deleteCategory = async (req, res) => {
     } else {
       resUtils.status404(res, `Category '${identity}' not found!`);
     }
-  }
-  catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }

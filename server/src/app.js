@@ -3,15 +3,10 @@ import mongoose from 'mongoose';
 import path from 'path';
 import { cors } from './middlewares/cors.js';
 import { logger } from './middlewares/logger.js';
+import error from './middlewares/error.js'
 import logging from './utils/logging.js';
 
-import categoryRoutes from './routes/categories.js';
-import brandRoutes from './routes/brands.js';
-import productRoutes from './routes/products.js';
-import commentRoutes from './routes/comments.js';
-import userRoutes from './routes/users.js';
-import discountRoutes from './routes/discounts.js';
-
+import routesV1 from './routes/v1/index.js';
 
 const app = express();
 const __dirname = process.cwd();
@@ -30,24 +25,13 @@ app.use(cors);
 
 
 // Routes which should handle requests
-app.get('/', (req, res) => res.render("public/index"));
-app.use('/api/categories', categoryRoutes);
-app.use('/api/brands', brandRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/comments', commentRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/discounts', discountRoutes);
+app.get('/', (req, res) => res.render("public/index")); // home page
+app.use('/api/v1', routesV1);                           // api v1 routes
 
-
-// Handle error
-app.use((req, res, next) => {
-  const error = new Error('Not found');
-  next({ ...error, status: 404 });
-});
-app.use((error, req, res, next) => {
-  res.status(error.status || 500);
-  res.json({ success: false, error: error });
-});
+// Error handling
+app.use(error.converter);   // if error is not an instanceOf APIError, convert it.
+app.use(error.notFound);    // catch 404 and forward to error handler
+app.use(error.handler);     // error handler, send stacktrace only during development
 
 
 //Config connection to MongoDb and listen app
