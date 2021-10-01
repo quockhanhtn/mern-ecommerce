@@ -1,4 +1,12 @@
-export const cors = (req, res, next) => {
+export default cors;
+
+/**
+ * CORS middleware
+ * @param {*} req - Express request object
+ * @param {*} res - Express response object
+ * @param {*} next - Express next function
+ */
+function cors(req, res, next) {
   // No cache for IE
   // https://support.microsoft.com/en-us/kb/234067
   res.header('Pragma', 'no-cache');
@@ -16,9 +24,10 @@ export const cors = (req, res, next) => {
   if (req.method === 'OPTIONS') {
     // Request methods you wish to allow
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-    return res.status(200).json({});
+    res.status(200).json({}).end();
+    return;
   }
 
   // Pass to next layer of middleware
   next();
-};
+}

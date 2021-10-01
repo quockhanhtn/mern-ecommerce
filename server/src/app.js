@@ -1,12 +1,12 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import path from 'path';
-import { cors } from './middlewares/cors.js';
-import { logger } from './middlewares/logger.js';
-import error from './middlewares/error.js'
+import cors from './middlewares/cors.js';
+import error from './middlewares/error.js';
+import logger from './middlewares/logger.js';
+import routesV1 from './routes/v1/index.js';
 import logging from './utils/logging.js';
 
-import routesV1 from './routes/v1/index.js';
 
 const app = express();
 const __dirname = process.cwd();
@@ -36,6 +36,7 @@ app.use(cors);
 // Routes which should handle requests
 app.get('/', (req, res) => res.render("public/index")); // home page
 app.use('/api/v1', routesV1);                           // api v1 routes
+
 
 // Error handling
 app.use(error.converter);   // if error is not an instanceOf APIError, convert it.
