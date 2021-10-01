@@ -18,6 +18,15 @@ app.use('/public/uploads', express.static(path.join(__dirname, 'public', 'upload
 
 
 // User middleware
+app.use((req, _, next) => {
+  // This middleware take care of the origin when the origin is undefined.
+  // origin is undefined when request is local
+  req.headers.origin = req.headers.origin || req.headers.host;
+  if (!req.headers.origin.startsWith('http')) {
+    req.headers.origin = req.protocol + '://' + req.headers.origin;
+  }
+  next();
+});
 app.use(logger);
 app.use(express.urlencoded({ limit: '30mb', extended: false }));
 app.use(express.json({ limit: '30mb' }));
