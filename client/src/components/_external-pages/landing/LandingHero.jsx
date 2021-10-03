@@ -92,47 +92,32 @@ export default function LandingHero() {
                 faster and better.
               </Typography>
             </motion.div>
-
-            <Stack
-              component={motion.div}
-              variants={varFadeInRight}
-              direction="row"
-              spacing={1}
-              justifyContent={{ xs: 'center', md: 'flex-start' }}
-            >
-              <img alt="sketch icon" src="/static/home/ic_sketch.svg" width={20} height={20} />
-              <Link
-                underline="always"
-                href="https://www.sketch.com/s/0fa4699d-a3ff-4cd5-a3a7-d851eb7e17f0"
-                target="_blank"
-                sx={{ color: 'common.white' }}
-              >
-                Preview in Sketch Cloud
-              </Link>
-            </Stack>
-
-            <motion.div variants={varFadeInRight}>
-              <Button
-                size="large"
-                variant="contained"
-                component={RouterLink}
-                to={PATH_DASHBOARD.root}
-                startIcon={<Icon icon={flashFill} width={20} height={20} />}
-              >
-                Live Preview
-              </Button>
-            </motion.div>
-
-            <Stack direction="row" spacing={1.5} justifyContent={{ xs: 'center', md: 'flex-start' }}>
-              <motion.img variants={varFadeInRight} src="/static/home/ic_m_sketch.svg" />
-              <motion.img variants={varFadeInRight} src="/static/home/ic_m_figma.svg" />
-              <motion.img variants={varFadeInRight} src="/static/home/ic_m_material.svg" />
-              <motion.img variants={varFadeInRight} src="/static/home/ic_m_react.svg" />
-              <motion.img variants={varFadeInRight} src="/static/home/ic_m_js.svg" />
-              <motion.img variants={varFadeInRight} src="/static/home/ic_m_ts.svg" />
-            </Stack>
           </ContentStyle>
         </Container>
+        {/* {!isHome ? ( */}
+        {/*  <MainFooter /> */}
+        {/* ) : ( */}
+        {/*  <Box */}
+        {/*    sx={{ */}
+        {/*      py: 5, */}
+        {/*      textAlign: 'center', */}
+        {/*      position: 'relative', */}
+        {/*      bgcolor: 'background.default' */}
+        {/*    }} */}
+        {/*  > */}
+        {/*    <Container maxWidth="lg"> */}
+        {/*      <ScrollLink to="move_top" spy smooth> */}
+        {/*        <Logo sx={{ mb: 1, mx: 'auto', cursor: 'pointer' }} /> */}
+        {/*      </ScrollLink> */}
+
+        {/*      <Typography variant="caption" component="p"> */}
+        {/*        © All rights reserved */}
+        {/*        <br /> made by &nbsp; */}
+        {/*        <Link href="https://minimals.cc/">minimals.cc</Link> */}
+        {/*      </Typography> */}
+        {/*    </Container> */}
+        {/*  </Box> */}
+        {/* )} */}
       </RootStyle>
       <Box sx={{ height: { md: '100vh' } }} />
     </>

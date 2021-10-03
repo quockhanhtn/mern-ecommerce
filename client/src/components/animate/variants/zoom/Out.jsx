@@ -2,7 +2,7 @@
 
 const DISTANCE = 720;
 const IN = { scale: 1, opacity: 1 };
-const OUT = { scale: 0, opacity: 0 };
+const Out = { scale: 0, opacity: 0 };
 
 const TRANSITION_ENTER = {
   duration: 0.64,
@@ -16,20 +16,20 @@ export const varZoomOut = {
 
 export const varZoomOutUp = {
   initial: IN,
-  animate: { ...OUT, translateY: -DISTANCE, transition: TRANSITION_ENTER }
+  animate: { ...Out, translateY: -DISTANCE, transition: TRANSITION_ENTER }
 };
 
 export const varZoomOutDown = {
   initial: IN,
-  animate: { ...OUT, translateY: DISTANCE, transition: TRANSITION_ENTER }
+  animate: { ...Out, translateY: DISTANCE, transition: TRANSITION_ENTER }
 };
 
 export const varZoomOutLeft = {
   initial: IN,
-  animate: { ...OUT, translateX: -DISTANCE, transition: TRANSITION_ENTER }
+  animate: { ...Out, translateX: -DISTANCE, transition: TRANSITION_ENTER }
 };
 
 export const varZoomOutRight = {
   initial: IN,
-  animate: { ...OUT, translateX: DISTANCE, transition: TRANSITION_ENTER }
+  animate: { ...Out, translateX: DISTANCE, transition: TRANSITION_ENTER }
 };

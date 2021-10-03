@@ -26,16 +26,17 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function LandingPage() {
-  return (
-    <RootStyle title="The starting point for your next project | Minimal-UI" id="move_top">
-      <LandingHero />
-      <ContentStyle>
-        <LandingMinimal />
-        <LandingHugePackElements />
-        <LandingDarkMode />
-        <LandingCleanInterfaces />
-        <LandingAdvertisement />
-      </ContentStyle>
-    </RootStyle>
-  );
+  return <LandingHero />;
+  // return (
+  //   <RootStyle title="Cell phones and accessories store | HK - Shop" id="move_top">
+  //     <LandingHero />
+  //     <ContentStyle>
+  //       <LandingMinimal />
+  //       <LandingHugePackElements />
+  //       <LandingDarkMode />
+  //       <LandingCleanInterfaces />
+  //       <LandingAdvertisement />
+  //     </ContentStyle>
+  //   </RootStyle>
+  // );
 }
