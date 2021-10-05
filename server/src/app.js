@@ -34,7 +34,7 @@ app.use(cors);
 
 
 // Routes which should handle requests
-app.get('/', (req, res) => res.render("public/index")); // home page
+app.get('/', (_, res) => res.render("public/index")); // home page
 app.use('/api/v1', routesV1);                           // api v1 routes
 
 

@@ -70,6 +70,7 @@ function handler(err, req, res, _) {
     IP: req.ip,
     URL: req.originalUrl,
   };
+  console.log(response);
 
   // if (env !== 'development') {
   //   delete response.stack;

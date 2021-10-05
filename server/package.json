@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon ./src/index.js --trace-warnings",
+    "dev": "nodemon ./src/index.js --trace-warnings --unhandled-rejections=strict",
     "start": "node ./src/index.js"
   },
   "contributors": [
@@ -38,7 +38,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.7",
     "mongoose-slug-updater": "^3.3.0",
-    "multer": "^1.4.3"
+    "multer": "^1.4.3",
+    "sharp": "^0.29.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.13"

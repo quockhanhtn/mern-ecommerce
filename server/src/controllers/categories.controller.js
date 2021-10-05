@@ -1,20 +1,11 @@
 import categoryService from '../services/categories.service.js';
+import imagesService from '../services/images.service.js';
 import resUtils from '../utils/res-utils.js';
-import strUtils from '../utils/str-utils.js';
-
-
-const getCategoryFromRequest = (req) => {
-  let category = {};
-  if (req?.file?.path) {
-    category.image = '/' + strUtils.replaceAll(req.file.path, '\\', '/');
-  }
-  return { ...req.body, ...category };
-};
 
 
 const formatCategory = (category, req) => {
-  if (category.image && category.image.startsWith('/')) {
-    category.image = req.headers.origin + category.image;
+  if (category.image) {
+    category.image = imagesService.formatPath(category.image, req.headers.origin);
   }
 
   if (category.children && category.children.length > 0) {
@@ -27,7 +18,6 @@ const formatCategory = (category, req) => {
 
 export const getCategories = async (req, res, next) => {
   try {
-    console.log(req.headers.origin);
     let categories = await categoryService.getAll();
     categories = categories.map(category => formatCategory(category, req));
 
@@ -55,8 +45,7 @@ export const getCategory = async (req, res, next) => {
 
 export const createCategory = async (req, res, next) => {
   try {
-    const createData = getCategoryFromRequest(req);
-    const newCategory = await categoryService.create(createData);
+    const newCategory = await categoryService.create(req.body);
     resUtils.status201(
       res,
       `Create NEW category '${newCategory.name}' successfully!`,
@@ -69,9 +58,7 @@ export const createCategory = async (req, res, next) => {
 export const updateCategory = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let updated = getCategoryFromRequest(req);
-
-    const updatedCategory = await categoryService.update(identity, updated);
+    const updatedCategory = await categoryService.update(identity, req.body);
     if (updatedCategory) {
       resUtils.status200(
         res,

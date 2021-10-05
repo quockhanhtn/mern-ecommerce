@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import Category from '../models/category.model.js';
 import strUtils from '../utils/str-utils.js';
+import imagesService from './images.service.js';
 
 export default {
   getAll,
@@ -12,6 +13,13 @@ export default {
 };
 
 const SELECTED_FIELDS = '_id name slug isHide parent children';
+const POPULATE_OPTS = [
+  {
+    path: 'image',
+    select: 'dirPath ext hasSmall hasMedium hasLarge',
+    model: 'Image'
+  }
+];
 
 /**
  * 
@@ -20,6 +28,7 @@ const SELECTED_FIELDS = '_id name slug isHide parent children';
 async function getAll() {
   let categories = await Category.find({ parent: null })
     .select(SELECTED_FIELDS)
+    .populate(POPULATE_OPTS)
     .sort({ createdAt: -1 })
     .lean().exec();
   return categories;
@@ -63,6 +72,13 @@ async function create(data) {
 
 async function update(identity, updatedData) {
   const currentCategory = await getOne(identity);
+
+  // delete old image
+  if (currentCategory.image && currentCategory.image?._id !== updatedData?.image) {
+    await imagesService.remove(currentCategory.image._id);
+  }
+
+  // update parent category
   if (updatedData.parent && currentCategory.parent !== updatedData.parent) {
     const parentFilter = strUtils.isUUID(updatedData.parent)
       ? { _id: updatedData.parent }
