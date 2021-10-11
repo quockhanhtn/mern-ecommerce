@@ -1,20 +1,54 @@
+export default {
+  splitsAndTrim,
+  removeMultiSpace,
+  replaceAll,
+  removeAccents,
+  isUUID
+}
+
+/**
+ * Splits string into array by separator and trim each element
+ * @param {String} str        - string to split
+ * @param {String} delimiter  - separator
+ * @returns String[]
+ */
+function splitsAndTrim(str, delimiter) {
+  return str.split(delimiter).map(item => item.trim());
+}
+
+/**
+ * Remove multiple spaces in string
+ * @param {String} str - string to remove space
+ * @returns String without multiple space
+ */
 function removeMultiSpace(str) {
   return str.replace(/\s+/g, ' ');
 }
 
-function escapeRegExp(string) {
-  return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+/**
+ * Escape RegExp
+ * @param {*} str - string to escape
+ * @returns String escaped
+ */
+function escapeRegExp(str) {
+  return str.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
+/**
+ * Replaces all text in a string, using a regular expression or search string.
+ * @param {*} str - string to replace
+ * @param {*} find - string to find
+ * @param {*} replace - replace string
+ * @returns String replaced
+ */
 function replaceAll(str, find, replace) {
   return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
 }
 
 /**
  * Remove accents in String
- * 
- * Ref: https://www.tunglt.com/2018/11/bo-dau-tieng-viet-javascript-es6/
- * @param {String} str 
+ * @see https://www.tunglt.com/2018/11/bo-dau-tieng-viet-javascript-es6/
+ * @param {String} str - string to remove accents
  * @returns String without accents
  */
 function removeAccents(str) {
@@ -23,15 +57,11 @@ function removeAccents(str) {
     .replace(/đ/g, 'd').replace(/Đ/g, 'D');
 }
 
-// check string is UUID
+/**
+ * Validate string is uuid
+ * @param {String} str - string to check
+ * @returns true if string is Uuid else false
+ */
 function isUUID(str) {
   return /^[0-9a-fA-F]{24}$/.test(str);
-}
-
-
-export default {
-  removeMultiSpace,
-  replaceAll,
-  removeAccents,
-  isUUID
 }
