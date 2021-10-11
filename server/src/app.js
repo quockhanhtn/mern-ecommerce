@@ -1,16 +1,11 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import path from 'path';
-import { cors } from './middlewares/cors.js';
-import { logger } from './middlewares/logger.js';
+import cors from './middlewares/cors.js';
+import error from './middlewares/error.js';
+import logger from './middlewares/logger.js';
+import routesV1 from './routes/v1/index.js';
 import logging from './utils/logging.js';
-
-import categoryRoutes from './routes/categories.js';
-import brandRoutes from './routes/brands.js';
-import productRoutes from './routes/products.js';
-import commentRoutes from './routes/comments.js';
-import userRoutes from './routes/users.js';
-import discountRoutes from './routes/discounts.js';
 
 
 const app = express();
@@ -23,6 +18,15 @@ app.use('/public/uploads', express.static(path.join(__dirname, 'public', 'upload
 
 
 // User middleware
+app.use((req, _, next) => {
+  // This middleware take care of the origin when the origin is undefined.
+  // origin is undefined when request is local
+  req.headers.origin = req.headers.origin || req.headers.host;
+  if (!req.headers.origin.startsWith('http')) {
+    req.headers.origin = req.protocol + '://' + req.headers.origin;
+  }
+  next();
+});
 app.use(logger);
 app.use(express.urlencoded({ limit: '30mb', extended: false }));
 app.use(express.json({ limit: '30mb' }));
@@ -30,33 +34,20 @@ app.use(cors);
 
 
 // Routes which should handle requests
-app.get('/', (req, res) => res.render("public/index"));
-app.use('/api/categories', categoryRoutes);
-app.use('/api/brands', brandRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/comments', commentRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/discounts', discountRoutes);
+app.get('/', (_, res) => res.render("public/index")); // home page
+app.use('/api/v1', routesV1);                           // api v1 routes
 
 
-// Handle error
-app.use((req, res, next) => {
-  const error = new Error('Not found');
-  next({ ...error, status: 404 });
-});
-app.use((error, req, res, next) => {
-  res.status(error.status || 500);
-  res.json({ success: false, error: error });
-});
+// Error handling
+app.use(error.converter);   // if error is not an instanceOf APIError, convert it.
+app.use(error.notFound);    // catch 404 and forward to error handler
+app.use(error.handler);     // error handler, send stacktrace only during development
 
 
 //Config connection to MongoDb and listen app
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI)
   .then(() => logging.info('DATABASE', `Connected successfully to MongoDB`))
   .catch(err => logging.info('DATABASE', 'Connect to MongoDB failed', err));
 
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
 
 export default app;

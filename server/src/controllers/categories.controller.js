@@ -1,114 +1,64 @@
-import mongoose from 'mongoose';
+import categoryService from '../services/categories.service.js';
+import imagesService from '../services/images.service.js';
 import resUtils from '../utils/res-utils.js';
-import strUtils from '../utils/str-utils.js';
-import Category from '../models/category.model.js';
-
-
-const getFindOneFilter = (identity) => {
-  const filter = {};
-
-  if (strUtils.isUUID(identity)) {
-    filter._id = identity;
-  } else {
-    filter.slug = identity;
-  }
-
-  return filter;
-};
-
-
-const getCategoryFromRequest = (req) => {
-  let category = {};
-
-  if (req.body.name) { category.name = req.body.name; }
-  if (req.body.desc) { category.desc = req.body.desc; }
-  if (req.body.imageCdn) { category.imageCdn = req.body.imageCdn; }
-
-  if (req?.file?.path) {
-    category.image = '/' + strUtils.replaceAll(req.file.path, '\\', '/');
-  }
-  return category;
-};
 
 
 const formatCategory = (category, req) => {
-  if (category.image && category.image.startsWith('/')) {
-    category.image = `${req.protocol}://${req.get('host')}${category.image}`;
+  if (category.image) {
+    category.image = imagesService.formatPath(category.image, req.headers.origin);
   }
+
+  if (category.children && category.children.length > 0) {
+    category.children = category.children.map(child => formatCategory(child, req));
+  }
+
   return category;
 }
 
 
-export const getCategories = async (req, res) => {
+export const getCategories = async (req, res, next) => {
   try {
-    let categories = await Category.find({ parent: null }).sort({ createdAt: -1 }).lean().exec();
+    let categories = await categoryService.getAll();
+    categories = categories.map(category => formatCategory(category, req));
+
     if (categories && categories.length > 0) {
-      resUtils.status200(res, null, categories.map(category => formatCategory(category, req)));
+      resUtils.status200(res, 'Gets all categories successfully', categories);
     } else {
       resUtils.status404(res, 'No categories found');
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const getCategory = async (req, res) => {
+export const getCategory = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
-    const category = await Category.findOne(filter);
+    const category = await categoryService.getOne(identity);
     if (category) {
       resUtils.status200(res, `Get category '${category.name}' successfully!`, formatCategory(category, req));
     } else {
       resUtils.status404(res, `Category '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const createCategory = async (req, res) => {
+export const createCategory = async (req, res, next) => {
   try {
-    const category = new Category({
-      _id: new mongoose.Types.ObjectId(),
-      ...getCategoryFromRequest(req)
-    });
-
-    if (req.body.parent) {
-      const parent = await Category.findOne(getFindOneFilter(req.body.parent));
-      if (parent) {
-        category.parent = parent._id;
-        await Category.findByIdAndUpdate(parent._id, { $addToSet: { children: category._id } });
-      }
-      else { resUtils.status400(res, `Parent category '${req.body.parent}' not found!`); }
-    }
-
-    const newCategory = await category.save();
+    const newCategory = await categoryService.create(req.body);
     resUtils.status201(
       res,
       `Create NEW category '${newCategory.name}' successfully!`,
       formatCategory(newCategory, req)
     );
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const updateCategory = async (req, res) => {
+export const updateCategory = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
-    let updated = getCategoryFromRequest(req);
-
-    const currentCategory = await Category.findOne(filter);
-    if (req.body.parent && currentCategory.parent !== req.body.parent) {
-      const parent = await Category.findOne(getFindOneFilter(req.body.parent));
-      if (parent) {
-        updated.parent = parent._id;
-        await Category.findByIdAndUpdate(parent._id, { $addToSet: { children: currentCategory._id } });
-        await Category.findByIdAndUpdate(currentCategory.parent, { $pull: { children: currentCategory._id } });
-      }
-      else { resUtils.status400(res, `Parent category '${req.body.parent}' not found!`); }
-    }
-
-    const updatedCategory = await Category.findOneAndUpdate(filter, updated, { new: true });
+    const updatedCategory = await categoryService.update(identity, req.body);
     if (updatedCategory) {
       resUtils.status200(
         res,
@@ -118,44 +68,37 @@ export const updateCategory = async (req, res) => {
     } else {
       resUtils.status404(res, `Category '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const hiddenCategory = async (req, res) => {
+export const hiddenCategory = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
+    const result = await categoryService.hidden(identity);
 
-    const category = await Category.findOne(filter);
-    const updatedCategory = !category ? null
-      : await Category.findOneAndUpdate(filter, { isHide: !category.isHide }, { new: true });
-
-    if (updatedCategory) {
+    if (result) {
       resUtils.status200(
         res,
-        `${category.isHide ? 'Show' : 'Hide'} category '${updatedCategory.name}' successfully!`,
-        formatCategory(updatedCategory, req)
+        `${result.isHide ? 'Show' : 'Hide'} category '${result.name}' successfully!`,
+        formatCategory(result, req)
       );
     } else {
       resUtils.status404(res, `Category '${identity}' not found!`);
     }
-  }
-  catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const deleteCategory = async (req, res) => {
+export const deleteCategory = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
+    let result = await categoryService.remove(identity);
 
-    const deletedCategory = await Category.findOneAndDelete(filter);
-    if (deletedCategory) {
-      resUtils.status200(res, `Deleted category '${deletedCategory.name}' successfully!`, deletedCategory);
+    if (result) {
+      resUtils.status200(res, `Deleted category '${identity}' successfully!`);
     } else {
       resUtils.status404(res, `Category '${identity}' not found!`);
     }
-  }
-  catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }

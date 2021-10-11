@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import slugGenerator from 'mongoose-slug-updater';
 import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
 
-
 const discountSchema = mongoose.Schema(
   {
     _id: mongoose.Types.ObjectId,
@@ -17,8 +16,6 @@ const discountSchema = mongoose.Schema(
     discount: { type: Number, trim: true, required: false, default: 0 },
 
     image: { type: String, trim: true, required: false },
-    imageCdn: { type: String, trim: true, required: false },
-
     isHide: { type: Boolean, required: true, default: false }
   },
   { timestamps: true, versionKey: false }

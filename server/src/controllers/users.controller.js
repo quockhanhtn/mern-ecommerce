@@ -1,8 +1,9 @@
+import argon2 from 'argon2';
 import mongoose from 'mongoose';
+import User from '../models/user.model.js';
 import resUtils from '../utils/res-utils.js';
 import strUtils from '../utils/str-utils.js';
-import argon2 from "argon2";
-import User from '../models/user.model.js';
+
 
 const getFindOneFilter = (identity) => {
   const filter = {};
@@ -97,7 +98,7 @@ const formatAllUser = (user, req) => {
 
 
 // Temp
-export const createUser = async (req, res) => {
+export const createUser = async (req, res, next) => {
   try {
     const user = new User({
       _id: new mongoose.Types.ObjectId(),
@@ -114,12 +115,12 @@ export const createUser = async (req, res) => {
       `Create NEW user '${user.fullName}' successfully!`,
       formatOneUser(user, req)
     );
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
 // Update
-export const updateUser = async (req, res) => {
+export const updateUser = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -135,12 +136,12 @@ export const updateUser = async (req, res) => {
     } else {
       resUtils.status404(res, `User '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
 // Get
-export const getUsers = async (req, res) => {
+export const getUsers = async (req, res, next) => {
   try {
     let users = await User.find().sort({ createdAt: -1 }).lean().exec();
     if (users && users.length > 0) {
@@ -148,12 +149,12 @@ export const getUsers = async (req, res) => {
     } else {
       resUtils.status404(res, 'No users found');
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
 // Get user by id
-export const getUser = async (req, res) => {
+export const getUser = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -163,12 +164,12 @@ export const getUser = async (req, res) => {
     } else {
       resUtils.status404(res, `User '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
 // Add address
-export const addressUserAdd = async (req, res) => {
+export const addressUserAdd = async (req, res, next) => {
   try {
     // Get user
     const { identity } = req.params;
@@ -203,12 +204,12 @@ export const addressUserAdd = async (req, res) => {
       `Create NEW address for '${user.fullName}' successfully!`,
       address
     );
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
 // Update address
-export const addressUserUpdate = async (req, res) => {
+export const addressUserUpdate = async (req, res, next) => {
   try {
     // Get user
     const { identity, identityAddress } = req.params;
@@ -247,13 +248,13 @@ export const addressUserUpdate = async (req, res) => {
       `Update address for '${user.fullName}' successfully!`,
       addressUpdate
     );
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
 
 // Delete address
-export const addressUserDelete = async (req, res) => {
+export const addressUserDelete = async (req, res, next) => {
   try {
     // Get user
     const { identity, identityAddress } = req.params;
@@ -276,5 +277,5 @@ export const addressUserDelete = async (req, res) => {
     user.address = address;
     await User.findOneAndUpdate(filter, user, { new: true });
     resUtils.status200(res, `Deleted address for '${user.fullName}' successfully!`);
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }

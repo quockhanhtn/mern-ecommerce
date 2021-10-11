@@ -1,12 +1,13 @@
 import mongoose from 'mongoose';
+import Brand from '../models/brand.model.js';
+import Category from '../models/category.model.js';
+import Product from '../models/product.model.js';
 import resUtils from '../utils/res-utils.js';
 import strUtils from '../utils/str-utils.js';
-import Category from '../models/category.model.js';
-import Brand from '../models/brand.model.js';
-import Product from '../models/product.model.js';
+
 
 const SELECT_FIELD = '_id name slug desc video specifications category brand tags views rate variants createdAt updatedAt';
-const populateOptions = [
+const POPULATE_OPTS = [
   {
     path: 'category',
     select: 'name slug image -_id -children',
@@ -141,7 +142,7 @@ const getProductFromRequest = (req, isAddNew = false) => {
 //#endregion
 
 //#region Product variants
-export const addProductVariants = async (req, res) => {
+export const addProductVariants = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -156,10 +157,10 @@ export const addProductVariants = async (req, res) => {
         formatProduct(newProduct, req)
       );
     } else { resUtils.status404(res, `Product '${identity}' not found!`); }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 };
 
-export const updateProductVariants = async (req, res) => {
+export const updateProductVariants = async (req, res, next) => {
   try {
     const { identity, sku } = req.params;
     let filter = getFindOneFilter(identity);
@@ -184,54 +185,54 @@ export const updateProductVariants = async (req, res) => {
     } else {
       resUtils.status404(res, `Product '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 };
 
-export const deleteProductVariants = async (req, res) => {
+export const deleteProductVariants = async (req, res, next) => {
   try {
     const { identity, sku } = req.params;
     let filter = getFindOneFilter(identity);
     await Product.findOneAndUpdate(filter, { $pull: { variants: { sku: sku } } });
     resUtils.status204(res, `Delete product variant successfully!`,);
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 };
 //#endregion
 
 //#region Product info
-export const getAllProducts = async (req, res) => {
+export const getAllProducts = async (req, res, next) => {
   try {
     let products = await Product.find()
       .select(SELECT_FIELD)
       .sort({ createdAt: -1 })
-      .populate(populateOptions)
+      .populate(POPULATE_OPTS)
       .lean().exec();
     if (products && products.length > 0) {
       resUtils.status200(res, null, products.map(product => formatProduct(product, req)));
     } else {
       resUtils.status204(res, 'No products found');
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 };
 
 
-export const getProductById = async (req, res) => {
+export const getProductById = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
     // update views and get new data for return
     const product = await Product.findOneAndUpdate(filter, { $inc: { views: 1 } }, { new: true })
       .select(SELECT_FIELD)
-      .populate(populateOptions)
+      .populate(POPULATE_OPTS)
       .lean().exec();
     if (product) {
       resUtils.status200(res, null, formatProduct(product, req));
     } else {
       resUtils.status404(res, `Product '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
-export const createProduct = async (req, res) => {
+export const createProduct = async (req, res, next) => {
   try {
     const categoryId = await findCategoryId(req.body.categoryId);
     if (!categoryId) { return resUtils.status400(res, `Category '${req.body.categoryId}' not found!`); }
@@ -252,10 +253,10 @@ export const createProduct = async (req, res) => {
       `Create NEW product '${newProduct.name}' successfully!`,
       formatProduct(newProduct, req)
     );
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 };
 
-export const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -271,10 +272,10 @@ export const updateProduct = async (req, res) => {
     } else {
       resUtils.status404(res, `Product '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 };
 
-export const deleteProduct = async (req, res) => {
+export const deleteProduct = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -285,11 +286,10 @@ export const deleteProduct = async (req, res) => {
     } else {
       resUtils.status404(res, `Product '${identity}' not found!`);
     }
-  }
-  catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 };
 
-export const rateProduct = async (req, res) => {
+export const rateProduct = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -311,6 +311,6 @@ export const rateProduct = async (req, res) => {
     } else {
       resUtils.status404(res, `Product '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 };
 //#endregion

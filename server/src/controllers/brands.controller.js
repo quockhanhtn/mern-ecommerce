@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
+import Brand from '../models/brand.model.js';
 import resUtils from '../utils/res-utils.js';
 import strUtils from '../utils/str-utils.js';
-import Brand from '../models/brand.model.js';
+
 
 const getFindOneFilter = (identity) => {
   const filter = {};
@@ -21,8 +22,8 @@ const getBrandFromRequest = (req) => {
 
   if (req.body.name) { brand.name = req.body.name; }
   if (req.body.desc) { brand.desc = req.body.desc; }
-  if (req.body.headQuaters) { brand.headQuaters = req.body.headQuaters; }
-  if (req.body.imageCdn) { brand.imageCdn = req.body.imageCdn; }
+  if (req.body.headQuarters) { brand.headQuarters = req.body.headQuarters; }
+  if (req.body.country) { brand.country = req.body.country; }
 
   if (req?.file?.path) {
     brand.image = '/' + strUtils.replaceAll(req.file.path, '\\', '/');
@@ -39,7 +40,7 @@ const formatBrand = (brand, req) => {
 }
 
 
-export const getBrands = async (req, res) => {
+export const getBrands = async (req, res, next) => {
   try {
     let brands = await Brand.find().sort({ createdAt: -1 }).lean().exec();
     if (brands && brands.length > 0) {
@@ -47,11 +48,11 @@ export const getBrands = async (req, res) => {
     } else {
       resUtils.status404(res, 'No brands found');
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const getBrand = async (req, res) => {
+export const getBrand = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -61,11 +62,11 @@ export const getBrand = async (req, res) => {
     } else {
       resUtils.status404(res, `Brand '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const createBrand = async (req, res) => {
+export const createBrand = async (req, res, next) => {
   try {
     const brand = new Brand({
       _id: new mongoose.Types.ObjectId(),
@@ -78,11 +79,11 @@ export const createBrand = async (req, res) => {
       `Create NEW brand '${newBrand.name}' successfully!`,
       formatBrand(newBrand, req)
     );
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const updateBrand = async (req, res) => {
+export const updateBrand = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -98,11 +99,11 @@ export const updateBrand = async (req, res) => {
     } else {
       resUtils.status404(res, `Brand '${identity}' not found!`);
     }
-  } catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const hiddenBrand = async (req, res) => {
+export const hiddenBrand = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -120,12 +121,11 @@ export const hiddenBrand = async (req, res) => {
     } else {
       resUtils.status404(res, `Brand '${identity}' not found!`);
     }
-  }
-  catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }
 
 
-export const deleteBrand = async (req, res) => {
+export const deleteBrand = async (req, res, next) => {
   try {
     const { identity } = req.params;
     let filter = getFindOneFilter(identity);
@@ -136,6 +136,5 @@ export const deleteBrand = async (req, res) => {
     } else {
       resUtils.status404(res, `Brand '${identity}' not found!`);
     }
-  }
-  catch (err) { resUtils.status500(res, err); }
+  } catch (err) { next(err); }
 }

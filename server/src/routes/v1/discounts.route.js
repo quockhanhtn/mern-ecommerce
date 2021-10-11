@@ -1,9 +1,9 @@
 import express from 'express';
-import { createDiscount, deleteDiscount, getDiscount, getDiscounts, hiddenDiscount, updateDiscount } from '../controllers/discounts.controller.js';
-import multerUpload from '../utils/upload-utils.js';
+import { createDiscount, deleteDiscount, getDiscount, getDiscounts, hiddenDiscount, updateDiscount } from '../../controllers/discounts.controller.js';
+import multerUpload from '../../utils/upload-utils.js';
 
 const router = express.Router();
-const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif'];
+const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
 const upload = multerUpload('/discounts/', allowedMimes);
 
 
