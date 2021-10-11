@@ -71,14 +71,18 @@ export default function MainNavbar() {
           <RouterLink to="/">
             <Logo />
           </RouterLink>
-          {/* <Label color="info" sx={{ ml: 1 }}> */}
-          {/*  Simple 2.1.0 */}
-          {/* </Label> */}
+          <Label color="warning" sx={{ ml: 1 }}>
+            Under construction
+          </Label>
           <Box sx={{ flexGrow: 1 }} />
 
           <MHidden width="mdDown">
             <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
           </MHidden>
+
+          <Button variant="contained" target="_blank" href="https://github.com/quockhanhtn/mern-ecommerce">
+            Github repo
+          </Button>
 
           <MHidden width="mdUp">
             <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />

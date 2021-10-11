@@ -17,6 +17,7 @@ const RootStyle = styled('div')(({ theme }) => ({
 const ContentStyle = styled('div')(({ theme }) => ({
   width: '100%',
   textAlign: 'center',
+  marginTop: theme.spacing(10),
   marginBottom: theme.spacing(10),
   [theme.breakpoints.up('md')]: {
     textAlign: 'left',

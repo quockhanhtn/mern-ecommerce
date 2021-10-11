@@ -1,3 +1,4 @@
+/* eslint-disable */
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 // components
@@ -26,17 +27,16 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function LandingPage() {
-  return <LandingHero />;
-  // return (
-  //   <RootStyle title="Cell phones and accessories store | HK - Shop" id="move_top">
-  //     <LandingHero />
-  //     <ContentStyle>
-  //       <LandingMinimal />
-  //       <LandingHugePackElements />
-  //       <LandingDarkMode />
-  //       <LandingCleanInterfaces />
-  //       <LandingAdvertisement />
-  //     </ContentStyle>
-  //   </RootStyle>
-  // );
+  return (
+    <RootStyle title="Home page" id="move_top">
+      <LandingHero />
+      <ContentStyle>
+        {/* <LandingMinimal />
+        <LandingHugePackElements />
+        <LandingDarkMode />
+        <LandingCleanInterfaces />
+        <LandingAdvertisement /> */}
+      </ContentStyle>
+    </RootStyle>
+  );
 }

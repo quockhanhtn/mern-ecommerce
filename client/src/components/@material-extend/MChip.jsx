@@ -69,7 +69,7 @@ const ChipStyle = styled(Chip)(({ theme, styleProps }) => {
 
 // ----------------------------------------------------------------------
 
-const MChip = forwardRef(
+const Mchip = forwardRef(
   ({ color = 'default', variant = 'filled', clickable: clickableProp, onDelete: onDeleteProp, ...other }, ref) => {
     if (color === 'default' || color === 'primary' || color === 'secondary') {
       return (
@@ -102,11 +102,11 @@ const MChip = forwardRef(
   }
 );
 
-MChip.propTypes = {
+Mchip.propTypes = {
   clickable: PropTypes.bool,
   onDelete: PropTypes.func,
   color: PropTypes.oneOf(['default', 'primary', 'secondary', 'info', 'success', 'warning', 'error']),
   variant: PropTypes.oneOfType([PropTypes.oneOf(['filled', 'outlined']), PropTypes.string])
 };
 
-export default MChip;
+export default Mchip;

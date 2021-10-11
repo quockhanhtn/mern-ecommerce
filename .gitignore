@@ -1,6 +1,5 @@
 # Config nodemon env for dev test
 nodemon.json
-package-lock.json
 
 # Private folder
 private
@@ -148,12 +147,11 @@ temp/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,node
 
-# yarn lock
-server/yarn.lock
-client/yarn.lock
-
 # IntelliJ
 .idea
 
 # MacOS files
 .DS_Store
+
+
+.vscode/

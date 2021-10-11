@@ -17,12 +17,7 @@ const menuConfig = [
     path: '/',
     icon: <Icon icon={homeFill} {...ICON_SIZE} />
   },
-  { title: 'Dashboard', path: PATH_DASHBOARD.root, icon: <Icon icon={fileFill} {...ICON_SIZE} /> },
-  {
-    title: 'Client',
-    path: '/client',
-    icon: <Icon icon={fileFill} {...ICON_SIZE} />
-  }
+  { title: 'Dashboard', path: PATH_DASHBOARD.root, icon: <Icon icon={fileFill} {...ICON_SIZE} /> }
 ];
 
 export default menuConfig;

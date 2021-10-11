@@ -46,8 +46,8 @@ export default function LandingAdvertisement() {
         >
           <MotionInView variants={varFadeInDown} sx={{ color: 'common.white', mb: 5 }}>
             <Typography variant="h2">
-              Get started with
-              <br /> minimal kit today
+              Contribute to this project
+              <br /> with us on Github today
             </Typography>
           </MotionInView>
           <MotionInView variants={varFadeInDown}>
@@ -55,7 +55,7 @@ export default function LandingAdvertisement() {
               size="large"
               variant="contained"
               target="_blank"
-              href="https://material-ui.com/store/items/minimal-dashboard/"
+              href="https://github.com/quockhanhtn/mern-ecommerce"
               sx={{
                 whiteSpace: 'nowrap',
                 boxShadow: (theme) => theme.customShadows.z8,
@@ -64,7 +64,7 @@ export default function LandingAdvertisement() {
                 '&:hover': { bgcolor: 'grey.300' }
               }}
             >
-              Purchase Now
+              Github repo
             </Button>
           </MotionInView>
         </Box>

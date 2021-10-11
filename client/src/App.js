@@ -7,7 +7,6 @@ import Settings from './components/settings';
 import RtlLayout from './components/RtlLayout';
 import ScrollToTop from './components/ScrollToTop';
 import ThemePrimaryColor from './components/ThemePrimaryColor';
-import NotistackProvider from './components/NotistackProvider';
 
 // ----------------------------------------------------------------------
 
@@ -16,11 +15,9 @@ export default function App() {
     <ThemeConfig>
       <ThemePrimaryColor>
         <RtlLayout>
-          <NotistackProvider>
-            <Settings />
-            <ScrollToTop />
-            <Router />
-          </NotistackProvider>
+          <Settings />
+          <ScrollToTop />
+          <Router />
         </RtlLayout>
       </ThemePrimaryColor>
     </ThemeConfig>
