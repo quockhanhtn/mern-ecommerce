@@ -1,132 +1,41 @@
-import argon2 from 'argon2';
-import mongoose from 'mongoose';
 import User from '../models/user.model.js';
 import resUtils from '../utils/res-utils.js';
-import strUtils from '../utils/str-utils.js';
-
-
-const getFindOneFilter = (identity) => {
-  const filter = {};
-
-  if (strUtils.isUUID(identity)) {
-    filter._id = identity;
-  }
-
-  return filter;
-};
-
-
-const getUserFromRequest = (req) => {
-  let user = {};
-
-  if (req.body.firstName) { user.firstName = req.body.firstName; }
-  if (req.body.lastName) { user.lastName = req.body.lastName; }
-  if (req.body.gender) { user.gender = req.body.gender; }
-  if (req.body.birthDay) { user.birthDay = req.body.birthDay; }
-  if (req.body.email) {
-    user.email = req.body.email;
-    user.username = user.email;
-  }
-  if (req.body.phone) { user.phone = req.body.phone; }
-  if (req.body.password) { user.password = req.body.password; }
-  if (req.body.username) { user.username = req.body.username; }
-  if (req.body.status) { user.status = req.body.status; }
-
-  // Add full name for user
-  user.fullName = `${user.firstName} ${user.lastName}`
-
-  if (req.body.imageCdn) { user.imageCdn = req.body.imageCdn; }
-  if (req?.file?.path) {
-    user.image = '/' + strUtils.replaceAll(req.file.path, '\\', '/');
-  }
-  return user;
-};
-
-
-const getUserUpdateFromRequest = (req) => {
-  let user = {};
-
-  if (req.body.firstName) { user.firstName = req.body.firstName; }
-  if (req.body.lastName) { user.lastName = req.body.lastName; }
-  if (req.body.gender) { user.gender = req.body.gender; }
-  if (req.body.birthDay) { user.birthDay = req.body.birthDay; }
-  if (req.body.phone) { user.phone = req.body.phone; }
-  if (req.body.status) { user.status = req.body.status; }
-
-  // Add full name for user
-  user.fullName = `${user.firstName} ${user.lastName}`
-
-  if (req.body.imageCdn) { user.imageCdn = req.body.imageCdn; }
-  if (req?.file?.path) {
-    user.image = '/' + strUtils.replaceAll(req.file.path, '\\', '/');
-  }
-  return user;
-};
-
-
-const getAddressFromRequest = (req) => {
-  let newAddress = {};
-  const addressReq = req.body;
-
-  if (addressReq.stressName) { newAddress.stressName = addressReq.stressName; }
-  if (addressReq.wardName) { newAddress.wardName = addressReq.wardName; }
-  if (addressReq.districtName) { newAddress.districtName = addressReq.districtName; }
-  if (addressReq.provinceName) { newAddress.provinceName = addressReq.provinceName; }
-
-  return newAddress;
-};
-
+import imagesService from "../services/images.service.js"
+import userService from "../services/user.service.js";
 
 const formatOneUser = (user, req) => {
-  user = user.toObject();
-  if (user.image && user.image.startsWith('/')) {
-    user.image = `${req.protocol}://${req.get('host')}${user.image}`;
+  if (user.image) {
+    user.image = imagesService.formatPath(user.image, req.headers.origin);
   }
+  user = user.toObject();
   if (user.password) { delete user.password; }
   return user;
 }
-
 
 const formatAllUser = (user, req) => {
-  console.log(user)
-  if (user.image && user.image.startsWith('/')) {
-    user.image = `${req.protocol}://${req.get('host')}${user.image}`;
+  if (user.image) {
+    user.image = imagesService.formatPath(user.image, req.headers.origin);
   }
   if (user.password) { delete user.password; }
   return user;
 }
 
-
-// Temp
+// Add for auth
 export const createUser = async (req, res, next) => {
   try {
-    const user = new User({
-      _id: new mongoose.Types.ObjectId(),
-      ...getUserFromRequest(req)
-    });
-    // Hash password
-    const hashedPassword = await argon2.hash(user.password);
-    user.password = hashedPassword;
-
-    // Save
-    await user.save();
+    const newUser = await userService.create(req.body);
     resUtils.status201(
       res,
-      `Create NEW user '${user.fullName}' successfully!`,
-      formatOneUser(user, req)
+      `Create NEW user '${newUser.fullName}' successfully!`,
+      formatOneUser(newUser, req)
     );
   } catch (err) { next(err); }
 }
 
-
-// Update
 export const updateUser = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
-    let updated = getUserUpdateFromRequest(req);
-
-    const updateUser = await User.findOneAndUpdate(filter, updated, { new: true });
+    const updateUser = await userService.update(identity, req.body);
     if (updateUser) {
       resUtils.status200(
         res,
@@ -139,26 +48,22 @@ export const updateUser = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
-
-// Get
 export const getUsers = async (req, res, next) => {
   try {
-    let users = await User.find().sort({ createdAt: -1 }).lean().exec();
+    let users = await userService.getAll();
+    users = users.map(user => formatAllUser(user, req));
     if (users && users.length > 0) {
-      resUtils.status200(res, null, users.map(user => formatAllUser(user, req)));
+      resUtils.status200(res, 'Gets all users successfully', users);
     } else {
       resUtils.status404(res, 'No users found');
     }
   } catch (err) { next(err); }
 }
 
-
-// Get user by id
 export const getUser = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
-    const user = await User.findOne(filter);
+    const user = await userService.getOne(identity);
     if (user) {
       resUtils.status200(res, `Get user '${user.fullName}' successfully!`, formatOneUser(user, req));
     } else {
@@ -167,115 +72,37 @@ export const getUser = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
-
 // Add address
 export const addressUserAdd = async (req, res, next) => {
   try {
-    // Get user
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
-    let user = await User.findOne(filter);
-
-    if (!user) {
-      resUtils.status500(res, { message: 'User does not exist.' });
-    }
-
-    // Get list address current
-    const addressOld = user.address;
-
-    // Create new address
-    const address = {
-      _id: new mongoose.Types.ObjectId(),
-      ...getAddressFromRequest(req)
-    };
-
-    //Check address
-    if (!address?.stressName || !address?.wardName || !address?.districtName || !address?.provinceName) {
-      resUtils.status500(res, { message: 'Address does not exist.' });
-    }
-
-    // Add address into list address
-    const addressNew = [...addressOld, address];
-    user.address = addressNew;
-    await user.save();
-
+    const address = await userService.addressAdd(identity, req.body);
     resUtils.status201(
       res,
-      `Create NEW address for '${user.fullName}' successfully!`,
+      `Create NEW address successfully!`,
       address
     );
   } catch (err) { next(err); }
 }
 
-
 // Update address
 export const addressUserUpdate = async (req, res, next) => {
   try {
-    // Get user
     const { identity, identityAddress } = req.params;
-    let filter = getFindOneFilter(identity);
-    let user = await User.findOne(filter);
-
-    if (!user) {
-      resUtils.status500(res, { message: 'User does not exist.' });
-    }
-
-    // Address
-    const addressUpdate = {
-      _id: identityAddress,
-      ...getAddressFromRequest(req)
-    };
-
-    //Check address
-    if (!addressUpdate?.stressName || !addressUpdate?.wardName || !addressUpdate?.districtName || !addressUpdate?.provinceName) {
-      resUtils.status500(res, { message: 'Address does not exist.' });
-    }
-
-    // Get list address current
-    let address = user.address;
-
-    //Update
-    var foundIndex = address.findIndex(x => x._id == identityAddress);
-    if (foundIndex < 0) {
-      resUtils.status500(res, { message: 'Address does not exist.' });
-    }
-    address[foundIndex] = addressUpdate;
-
-    user.address = address;
-    const updateAddress = await User.findOneAndUpdate(filter, user, { new: true });
+    const updateAddressed = await userService.addressUpdate(identity, identityAddress, req.body);
     resUtils.status201(
       res,
-      `Update address for '${user.fullName}' successfully!`,
-      addressUpdate
+      `Update address successfully!`,
+      updateAddressed
     );
   } catch (err) { next(err); }
 }
 
-
-
 // Delete address
 export const addressUserDelete = async (req, res, next) => {
   try {
-    // Get user
     const { identity, identityAddress } = req.params;
-    let filter = getFindOneFilter(identity);
-    let user = await User.findOne(filter);
-
-    if (!user) {
-      resUtils.status500(res, { message: 'User does not exist.' });
-    }
-    // Get list address current
-    let address = user.address;
-
-    //Update
-    let foundIndex = address.findIndex(x => x._id == identityAddress);
-    if (foundIndex < 0) {
-      resUtils.status500(res, { message: 'Address does not exist.' });
-    }
-    address.splice(foundIndex, 1);
-
-    user.address = address;
-    await User.findOneAndUpdate(filter, user, { new: true });
-    resUtils.status200(res, `Deleted address for '${user.fullName}' successfully!`);
+    await userService.addressDelete(identity, identityAddress);
+    resUtils.status200(res, `Deleted address successfully!`);
   } catch (err) { next(err); }
 }
