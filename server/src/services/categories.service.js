@@ -44,7 +44,7 @@ async function getOne(identity) {
     ? { _id: identity }
     : { slug: identity };
 
-  const category = await Category.findOne(filter);
+  const category = await Category.findOne(filter).lean().exec();
   return category;
 }
 
