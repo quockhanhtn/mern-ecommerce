@@ -41,7 +41,6 @@ const userSchema = mongoose.Schema(
     status: { type: Boolean, trim: true, required: false, default: false },
 
     image: { type: String, trim: true, required: false },
-    imageCdn: { type: String, trim: true, required: false },
 
     isHide: { type: Boolean, required: true, default: false },
 

@@ -1,65 +1,30 @@
-import mongoose from 'mongoose';
-import Discount from '../models/discount.model.js';
 import resUtils from '../utils/res-utils.js';
-import strUtils from '../utils/str-utils.js';
-
-
-const getFindOneFilter = (identity) => {
-  const filter = {};
-
-  if (strUtils.isUUID(identity)) {
-    filter._id = identity;
-  } else {
-    filter.slug = identity;
-  }
-
-  return filter;
-};
-
-
-const getDiscountFromRequest = (req) => {
-  let discount = {};
-
-  if (req.body.name) { discount.name = req.body.name; }
-  if (req.body.desc) { discount.desc = req.body.desc; }
-  if (req.body.code) { discount.code = req.body.code; }
-  if (req.body.fromDate) { discount.fromDate = req.body.fromDate; }
-  if (req.body.endDate) { discount.endDate = req.body.endDate; }
-  if (req.body.quantity) { discount.quantity = req.body.quantity; }
-  if (req.body.discount) { discount.discount = req.body.discount; }
-
-  if (req?.file?.path) {
-    discount.image = '/' + strUtils.replaceAll(req.file.path, '\\', '/');
-  }
-  return discount;
-};
-
+import imagesService from "../services/images.service.js";
+import discountService from "../services/discounts.service.js";
 
 const formatDiscount = (discount, req) => {
-  if (discount.image && discount.image.startsWith('/')) {
-    discount.image = `${req.protocol}://${req.get('host')}${discount.image}`;
+  if (discount.image) {
+    discount.image = imagesService.formatPath(discount.image, req.headers.origin);
   }
   return discount;
 }
 
-
 export const getDiscounts = async (req, res, next) => {
   try {
-    let discounts = await Discount.find().sort({ createdAt: -1 }).lean().exec();
+    let discounts = await discountService.getAll();
+    discounts = discounts.map(discount => formatDiscount(discount, req));
     if (discounts && discounts.length > 0) {
-      resUtils.status200(res, null, discounts.map(discount => formatDiscount(discount, req)));
+      resUtils.status200(res, 'Gets all discounts successfully', discounts);
     } else {
       resUtils.status404(res, 'No discounts found');
     }
   } catch (err) { next(err); }
 }
 
-
 export const getDiscount = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
-    const discount = await Discount.findOne(filter);
+    const discount = await discountService.getOne(identity);
     if (discount) {
       resUtils.status200(res, `Get discount '${discount.name}' successfully!`, formatDiscount(discount, req));
     } else {
@@ -68,16 +33,9 @@ export const getDiscount = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
-
 export const createDiscount = async (req, res, next) => {
   try {
-    console.log(req.body)
-    const discount = new Discount({
-      _id: new mongoose.Types.ObjectId(),
-      ...getDiscountFromRequest(req)
-    });
-    console.log(discount)
-    const newDiscount = await discount.save();
+    const newDiscount = await discountService.create(req.body);
     resUtils.status201(
       res,
       `Create NEW discount '${newDiscount.name}' successfully!`,
@@ -86,14 +44,10 @@ export const createDiscount = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
-
 export const updateDiscount = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
-    let updated = getDiscountFromRequest(req);
-
-    const updateDiscount = await Discount.findOneAndUpdate(filter, updated, { new: true });
+    const updateDiscount = await discountService.update(identity, req.body);
     if (updateDiscount) {
       resUtils.status200(
         res,
@@ -106,21 +60,15 @@ export const updateDiscount = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
-
 export const hiddenDiscount = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
-
-    const discount = await Discount.findOne(filter);
-    const updatedDiscount = !discount ? null
-      : await Discount.findOneAndUpdate(filter, { isHide: !discount.isHide }, { new: true });
-
-    if (updatedDiscount) {
+    const result = await discountService.hidden(identity);
+    if (result) {
       resUtils.status200(
         res,
-        `${discount.isHide ? 'Show' : 'Hide'} discount '${updatedDiscount.name}' successfully!`,
-        formatDiscount(updatedDiscount, req)
+        `${result.isHide ? 'Show' : 'Hide'} discount '${result.name}' successfully!`,
+        formatDiscount(result, req)
       );
     } else {
       resUtils.status404(res, `Discount '${identity}' not found!`);
@@ -128,15 +76,12 @@ export const hiddenDiscount = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
-
 export const deleteDiscount = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
-
-    const deletedDiscount = await Discount.findOneAndDelete(filter);
-    if (deletedDiscount) {
-      resUtils.status200(res, `Deleted discount '${deletedDiscount.name}' successfully!`, deletedDiscount);
+    let result = await discountService.remove(identity);
+    if (result) {
+      resUtils.status200(res, `Deleted discount '${result.name}' successfully!`, result);
     } else {
       resUtils.status404(res, `Discount '${identity}' not found!`);
     }

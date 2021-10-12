@@ -1,50 +1,20 @@
-import mongoose from 'mongoose';
-import Brand from '../models/brand.model.js';
 import resUtils from '../utils/res-utils.js';
-import strUtils from '../utils/str-utils.js';
-
-
-const getFindOneFilter = (identity) => {
-  const filter = {};
-
-  if (strUtils.isUUID(identity)) {
-    filter._id = identity;
-  } else {
-    filter.slug = identity;
-  }
-
-  return filter;
-};
-
-
-const getBrandFromRequest = (req) => {
-  let brand = {};
-
-  if (req.body.name) { brand.name = req.body.name; }
-  if (req.body.desc) { brand.desc = req.body.desc; }
-  if (req.body.headQuarters) { brand.headQuarters = req.body.headQuarters; }
-  if (req.body.country) { brand.country = req.body.country; }
-
-  if (req?.file?.path) {
-    brand.image = '/' + strUtils.replaceAll(req.file.path, '\\', '/');
-  }
-  return brand;
-};
-
+import imagesService from "../services/images.service.js";
+import brandService from "../services/brands.service.js";
 
 const formatBrand = (brand, req) => {
-  if (brand.image && brand.image.startsWith('/')) {
-    brand.image = `${req.protocol}://${req.get('host')}${brand.image}`;
+  if (brand.image) {
+    brand.image = imagesService.formatPath(brand.image, req.headers.origin);
   }
   return brand;
 }
 
-
 export const getBrands = async (req, res, next) => {
   try {
-    let brands = await Brand.find().sort({ createdAt: -1 }).lean().exec();
+    let brands = await brandService.getAll();
+    brands = brands.map(brand => formatBrand(brand, req));
     if (brands && brands.length > 0) {
-      resUtils.status200(res, null, brands.map(brand => formatBrand(brand, req)));
+      resUtils.status200(res, 'Gets all brands successfully', brands);
     } else {
       resUtils.status404(res, 'No brands found');
     }
@@ -55,8 +25,7 @@ export const getBrands = async (req, res, next) => {
 export const getBrand = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
-    const brand = await Brand.findOne(filter);
+    const brand = await brandService.getOne(identity);
     if (brand) {
       resUtils.status200(res, `Get brand '${brand.name}' successfully!`, formatBrand(brand, req));
     } else {
@@ -68,16 +37,11 @@ export const getBrand = async (req, res, next) => {
 
 export const createBrand = async (req, res, next) => {
   try {
-    const brand = new Brand({
-      _id: new mongoose.Types.ObjectId(),
-      ...getBrandFromRequest(req)
-    });
-
-    const newBrand = await brand.save();
+    const newBrand = await brandService.create(req.body);
     resUtils.status201(
-      res,
-      `Create NEW brand '${newBrand.name}' successfully!`,
-      formatBrand(newBrand, req)
+        res,
+        `Create NEW brand '${newBrand.name}' successfully!`,
+        formatBrand(newBrand, req)
     );
   } catch (err) { next(err); }
 }
@@ -86,10 +50,7 @@ export const createBrand = async (req, res, next) => {
 export const updateBrand = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
-    let updated = getBrandFromRequest(req);
-
-    const updateBrand = await Brand.findOneAndUpdate(filter, updated, { new: true });
+    const updateBrand = await brandService.update(identity, req.body);
     if (updateBrand) {
       resUtils.status200(
         res,
@@ -106,21 +67,17 @@ export const updateBrand = async (req, res, next) => {
 export const hiddenBrand = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
-
-    const brand = await Brand.findOne(filter);
-    const updatedBrand = !brand ? null
-      : await Brand.findOneAndUpdate(filter, { isHide: !brand.isHide }, { new: true });
-
-    if (updatedBrand) {
+    const result = await brandService.hidden(identity);
+    if (result) {
       resUtils.status200(
         res,
-        `${brand.isHide ? 'Show' : 'Hide'} brand '${updatedBrand.name}' successfully!`,
-        formatBrand(updatedBrand, req)
+        `${result.isHide ? 'Show' : 'Hide'} brand '${result.name}' successfully!`,
+        formatBrand(result, req)
       );
     } else {
       resUtils.status404(res, `Brand '${identity}' not found!`);
     }
+
   } catch (err) { next(err); }
 }
 
@@ -128,11 +85,9 @@ export const hiddenBrand = async (req, res, next) => {
 export const deleteBrand = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    let filter = getFindOneFilter(identity);
-
-    const deletedBrand = await Brand.findOneAndDelete(filter);
-    if (deletedBrand) {
-      resUtils.status200(res, `Deleted brand '${deletedBrand.name}' successfully!`, deletedBrand);
+    let result = await brandService.remove(identity);
+    if (result) {
+      resUtils.status200(res, `Deleted brand '${result.name}' successfully!`, result);
     } else {
       resUtils.status404(res, `Brand '${identity}' not found!`);
     }

@@ -1,9 +1,25 @@
-import './App.css';
+// routes
+import Router from './routes';
+// theme
+import ThemeConfig from './theme';
+// components
+import Settings from './components/settings';
+import RtlLayout from './components/RtlLayout';
+import ScrollToTop from './components/ScrollToTop';
+import ThemePrimaryColor from './components/ThemePrimaryColor';
 
-function App() {
+// ----------------------------------------------------------------------
+
+export default function App() {
   return (
-    <h1>Cell phones and accessories store</h1>
+    <ThemeConfig>
+      <ThemePrimaryColor>
+        <RtlLayout>
+          <Settings />
+          <ScrollToTop />
+          <Router />
+        </RtlLayout>
+      </ThemePrimaryColor>
+    </ThemeConfig>
   );
 }
-
-export default App;
