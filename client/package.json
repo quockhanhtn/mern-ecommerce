@@ -24,7 +24,7 @@
   "license": "MIT",
   "scripts": {
     "start": "react-scripts start",
-    "build": "eslint --fix --ext .js,.jsx ./src && react-scripts build",
+    "build": "eslint --fix --ext .js,.jsx ./src && react-scripts build && npm i -g serve && serve -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .js,.jsx ./src",
