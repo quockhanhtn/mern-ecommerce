@@ -10,8 +10,7 @@
     },
     {
       "name": "Hoang Ho",
-      "email": "hoangho1147@gmail.com",
-      "url": "http://barnyrubble.tumblr.com/"
+      "email": "hoangho1147@gmail.com"
     }
   ],
   "repository": {
@@ -24,9 +23,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "start": "eslint --fix --ext .js,.jsx ./src && react-scripts start",
-    "dev": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-scripts start",
+    "build": "eslint --fix --ext .js,.jsx ./src && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .js,.jsx ./src",
