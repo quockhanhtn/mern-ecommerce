@@ -79,7 +79,7 @@ export default function LandingHero() {
           <ContentStyle>
             <motion.div variants={varFadeInRight}>
               <Typography variant="h1" sx={{ color: 'common.white' }}>
-                HK - Start contribute <br />
+                HK Shop - Start contribute <br />
                 to this project <br /> with
                 <Typography component="span" variant="h1" sx={{ color: 'primary.main' }}>
                   &nbsp;my team
