@@ -1,7 +1,6 @@
 import { ValidationError } from 'express-validation';
 import httpStatus from 'http-status';
 import APIError from '../utils/APIError.js';
-//import { env } from '../../constants';
 
 export default {
   converter,

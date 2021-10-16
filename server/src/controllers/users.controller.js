@@ -1,4 +1,3 @@
-import User from '../models/user.model.js';
 import resUtils from '../utils/res-utils.js';
 import imagesService from "../services/images.service.js"
 import userService from "../services/user.service.js";
