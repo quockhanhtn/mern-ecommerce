@@ -41,7 +41,7 @@ async function getOne(identity) {
     ? { _id: identity }
     : { slug: identity };
 
-  const brand = await Brand.findOne(filter);
+  const brand = await Brand.findOne(filter).populate(POPULATE_OPTS).lean().exec();
   return brand;
 }
 
