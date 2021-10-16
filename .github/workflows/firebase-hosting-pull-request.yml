@@ -33,7 +33,7 @@ jobs:
           set -x
           npm -v
           npm i
-          npm run dev
+          npm run start
 
       - name: Deploy Preview 🚀
         uses: FirebaseExtended/action-hosting-deploy@v0

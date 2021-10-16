@@ -35,7 +35,7 @@ jobs:
           set -x
           npm -v
           npm i
-          npm run dev
+          npm run start
 
       - name: Deploy 🚀
         uses: FirebaseExtended/action-hosting-deploy@v0
