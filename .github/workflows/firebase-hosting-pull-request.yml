@@ -24,7 +24,7 @@ jobs:
           npm ci
           npm run pullrequest
 
-      - name: Build Server
+      - name: Build Unit Test for Server
         working-directory: server
         env:
           CI: false
