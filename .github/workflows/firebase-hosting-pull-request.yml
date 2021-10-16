@@ -13,14 +13,6 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Cache npm packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Build Client
         working-directory: client
         env:
@@ -42,11 +34,3 @@ jobs:
           npm -v
           npm ci
           npm run dev
-
-      - name: Deploy 🚀
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MERN_ECOMMERCE_B848D }}'
-          projectId: mern-ecommerce-b848d
-          entryPoint: "./client"

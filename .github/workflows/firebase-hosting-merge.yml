@@ -15,14 +15,6 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Cache npm packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Build Client
         working-directory: client
         env:
