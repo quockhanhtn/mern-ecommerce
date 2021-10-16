@@ -11,6 +11,7 @@ import {
   deleteProductVariants
 } from '../../controllers/products.controller.js';
 import multerUpload from '../../utils/upload-utils.js';
+import { singleImageHandler } from '../../middlewares/image-handler.js';
 
 const router = express.Router();
 const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
@@ -32,10 +33,12 @@ router.patch('/:identity/rate', rateProduct);
 
 router.post('/:identity/variants',
   upload.fields(uploadFields),
+  singleImageHandler('thumbnail', 'variants'),
   addProductVariants
 );
 router.patch('/:identity/variants/:sku',
   upload.fields(uploadFields),
+  singleImageHandler('thumbnail', 'variants'),
   updateProductVariants
 );
 router.delete('/:identity/variants/:sku', deleteProductVariants);

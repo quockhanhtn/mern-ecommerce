@@ -26,12 +26,11 @@ const POPULATE_OPTS = [
  * @returns all categories
  */
 async function getAll() {
-  let categories = await Category.find({ parent: null })
+  return await Category.find({parent: null})
     .select(SELECTED_FIELDS)
     .populate(POPULATE_OPTS)
-    .sort({ createdAt: -1 })
+    .sort({createdAt: -1})
     .lean().exec();
-  return categories;
 }
 
 /**
@@ -44,8 +43,7 @@ async function getOne(identity) {
     ? { _id: identity }
     : { slug: identity };
 
-  const category = await Category.findOne(filter).lean().exec();
-  return category;
+  return await Category.findOne(filter).populate(POPULATE_OPTS).lean().exec()
 }
 
 
@@ -64,9 +62,7 @@ async function create(data) {
       throw new Error(`Parent category '${data.parent}' not found!`);
     }
   }
-
-  const newCategory = await category.save();
-  return newCategory;
+  return await category.save();
 }
 
 
@@ -110,12 +106,11 @@ async function update(identity, updatedData) {
 async function hidden(identity) {
   const category = await getOne(identity);
   if (category) {
-    const updatedCategory = await Category.findByIdAndUpdate(
+    return Category.findByIdAndUpdate(
       category._id,
-      { isHide: !category.isHide },
-      { new: true }
+      {isHide: !category.isHide},
+      {new: true}
     );
-    return updatedCategory;
   }
   return null;
 }
@@ -130,5 +125,5 @@ async function remove(identity) {
     ? { _id: identity }
     : { slug: identity };
   const deletedCategory = await Category.findOneAndDelete(filter);
-  return deletedCategory ? true : false;
+  return !!deletedCategory;
 }

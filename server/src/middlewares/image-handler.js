@@ -11,7 +11,6 @@ export const singleImageHandler = (field, dir) => async (req, _, next) => {
   next();
 };
 
-export const imageHandler = (fields) => (req, res, next) => {
-
+export const imageHandler = () => (req, res, next) => {
   next();
 }

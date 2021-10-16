@@ -44,9 +44,7 @@ async function getOne(identity) {
   const filter = strUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
-
-  const user = await User.findOne(filter);
-  return user;
+  return await User.findOne(filter).populate(POPULATE_OPTS).lean().exec();
 }
 
 /**
@@ -65,9 +63,7 @@ async function create(data) {
 
   // Hash password
   user.password = await argon2.hash(user.password);
-
-  const newUser = await user.save();
-  return newUser;
+  return await user.save();
 }
 
 /**
@@ -112,12 +108,11 @@ async function update(identity, updatedData) {
 async function hidden(identity) {
   const user = await getOne(identity);
   if (user) {
-    const updatedUser = await User.findByIdAndUpdate(
+    return User.findByIdAndUpdate(
       user._id,
-      { isHide: !user.isHide },
-      { new: true }
+      {isHide: !user.isHide},
+      {new: true}
     );
-    return updatedUser;
   }
   return null;
 }
@@ -137,7 +132,8 @@ async function remove(identity) {
 
 /**
  * Add address for user
- * @param {*} identity, data
+ * @param {*} identity
+ * @param data
  * @returns
  */
 async function addressAdd(identity, data) {
@@ -168,8 +164,7 @@ async function addressAdd(identity, data) {
   console.log(user.address);
 
   // Save user
-  const updateAddressUser = await User.findByIdAndUpdate(user._id, user, { new: true });
-  return updateAddressUser;
+  return User.findByIdAndUpdate(user._id, user, {new: true});
 }
 
 /**
@@ -211,8 +206,7 @@ async function addressUpdate(identity, identityAddress, updatedData) {
   user.address = currentAddress;
 
   // Save user
-  const updateAddressUser = await User.findByIdAndUpdate(user._id, user, { new: true });
-  return updateAddressUser;
+  return User.findByIdAndUpdate(user._id, user, {new: true});
 }
 
 /**
@@ -243,6 +237,5 @@ async function addressDelete(identity, identityAddress) {
   user.address = currentAddress;
 
   // Save user
-  const updateAddressUser = await User.findByIdAndUpdate(user._id, user, { new: true });
-  return updateAddressUser;
+  return User.findByIdAndUpdate(user._id, user, {new: true});
 }

@@ -41,8 +41,7 @@ async function getOne(identity) {
     ? { _id: identity }
     : { slug: identity };
 
-  const brand = await Brand.findOne(filter);
-  return brand;
+  return await Brand.findOne(filter).populate(POPULATE_OPTS).lean().exec();
 }
 
 /**
@@ -57,8 +56,7 @@ async function create(data) {
     ...data
   });
 
-  const newBrand = await brand.save();
-  return newBrand;
+  return await brand.save();
 }
 
 /**
@@ -92,12 +90,11 @@ async function update(identity, updatedData) {
 async function hidden(identity) {
   const brand = await getOne(identity);
   if (brand) {
-    const updatedBrand= await Brand.findByIdAndUpdate(
+    return Brand.findByIdAndUpdate(
       brand._id,
-      { isHide: !brand.isHide },
-      { new: true }
+      {isHide: !brand.isHide},
+      {new: true}
     );
-    return updatedBrand;
   }
   return null;
 }

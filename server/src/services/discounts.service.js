@@ -40,9 +40,7 @@ async function getOne(identity) {
   const filter = strUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
-
-  const discount = await Discount.findOne(filter);
-  return discount;
+  return Discount.findOne(filter).populate(POPULATE_OPTS).lean().exec();
 }
 
 /**
@@ -56,9 +54,7 @@ async function create(data) {
     _id: new mongoose.Types.ObjectId(),
     ...data
   });
-
-  const newDiscount = await discount.save();
-  return newDiscount;
+  return await discount.save();
 }
 
 /**
@@ -92,12 +88,11 @@ async function update(identity, updatedData) {
 async function hidden(identity) {
   const discount = await getOne(identity);
   if (discount) {
-    const updatedDiscount = await Discount.findByIdAndUpdate(
+    return Discount.findByIdAndUpdate(
       discount._id,
-      { isHide: !discount.isHide },
-      { new: true }
+      {isHide: !discount.isHide},
+      {new: true}
     );
-    return updatedDiscount;
   }
   return null;
 }
