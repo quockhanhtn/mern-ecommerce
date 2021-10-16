@@ -10,6 +10,41 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
 
+      - name: Nodejs set up
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Cache npm packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Build Client
+        working-directory: client
+        env:
+          CI: false
+          NODE_OPTIONS: "--max-old-space-size=8192"
+        run: |
+          set -x
+          npm -v
+          npm ci
+          npm run build
+
+      - name: Build Server
+        working-directory: server
+        env:
+          CI: false
+          NODE_OPTIONS: "--max-old-space-size=8192"
+        run: |
+          set -x
+          npm -v
+          npm ci
+          npm run dev
+
       - name: Deploy 🚀
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
