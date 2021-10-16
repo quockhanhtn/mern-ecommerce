@@ -53,11 +53,12 @@ function initFilePaths(saveDir, imageId, fExt) {
 }
 
 /**
- * 
+ *
  * @param {*}      sharpInput -  sharp input, read more at https://sharp.pixelplumbing.com/api-constructor
- * @param {String} fileName   - file name
- * @param {String} uploadDir  - directory to save file
- * @returns 
+ * @param saveDir
+ * @param imageId
+ * @param isExistOriginal
+ * @returns
  */
 async function resizeWithSharp(sharpInput, saveDir, imageId, isExistOriginal) {
   let imageSharp = sharp(sharpInput);
@@ -126,16 +127,16 @@ async function resizeWithSharp(sharpInput, saveDir, imageId, isExistOriginal) {
     );
   } else {
     // Save original image if it's not exists
-    imageSharp.toFile(filePaths.original.absFilePath);
+    await imageSharp.toFile(filePaths.original.absFilePath);
   }
 
   return {
     dirPath: filePaths.dirPath,
     ext: fileExt,
     original: filePaths.original.filePath,
-    hasSmall: filePaths.small ? true : false,
-    hasMedium: filePaths.medium ? true : false,
-    hasLarge: filePaths.large ? true : false
+    hasSmall: !!filePaths.small,
+    hasMedium: !!filePaths.medium,
+    hasLarge: !!filePaths.large
   };
 }
 
@@ -146,10 +147,7 @@ async function resizeWithSharp(sharpInput, saveDir, imageId, isExistOriginal) {
  */
 async function get(imageId) {
   const image = await Image.findById(imageId);
-  if (image) {
-    return formatPath(image);
-  }
-  return null;
+  return !!image ? formatPath(image, null) : null;
 }
 
 /**
