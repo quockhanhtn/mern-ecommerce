@@ -26,7 +26,7 @@ jobs:
           npm ci
           npm run pullrequest
 
-      - name: Build Server
+      - name: Build Unit Test for Server
         working-directory: server
         env:
           CI: false
@@ -35,7 +35,7 @@ jobs:
           set -x
           npm -v
           npm i
-          npm run start
+          npm test
 
       - name: Deploy 🚀
         uses: FirebaseExtended/action-hosting-deploy@v0
