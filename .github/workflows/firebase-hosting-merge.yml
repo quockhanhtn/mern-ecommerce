@@ -34,7 +34,7 @@ jobs:
         run: |
           set -x
           npm -v
-          npm ci
+          npm i
           npm run dev
 
       - name: Deploy 🚀

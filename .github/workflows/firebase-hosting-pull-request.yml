@@ -32,5 +32,13 @@ jobs:
         run: |
           set -x
           npm -v
-          npm ci
+          npm i
           npm run dev
+
+      - name: Deploy Preview 🚀
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MERN_ECOMMERCE_B848D }}'
+          projectId: mern-ecommerce-b848d
+          entryPoint: "./client"
