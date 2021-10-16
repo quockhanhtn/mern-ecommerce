@@ -24,7 +24,7 @@ jobs:
           set -x
           npm -v
           npm ci
-          npm run build
+          npm run pullrequest
 
       - name: Build Server
         working-directory: server
