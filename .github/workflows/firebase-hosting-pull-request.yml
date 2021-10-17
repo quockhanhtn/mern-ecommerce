@@ -24,6 +24,12 @@ jobs:
           npm ci
           npm run pullrequest
 
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build
+
       - name: Build Unit Test for Server
         working-directory: server
         env:
@@ -35,10 +41,15 @@ jobs:
           npm ci
           npm test
 
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
+
       - name: Deploy Preview 🚀
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MERN_ECOMMERCE_B848D }}'
           projectId: mern-ecommerce-b848d
-          entryPoint: "./client"
