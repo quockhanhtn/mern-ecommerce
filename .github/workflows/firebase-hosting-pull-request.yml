@@ -28,7 +28,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build
-          path: build
+          path: ./client
 
       - name: Build Unit Test for Server
         working-directory: server
