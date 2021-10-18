@@ -17,6 +17,7 @@ export const PATH_DASHBOARD = {
   },
   app: {
     root: path(ROOTS_DASHBOARD, '/app'),
+    categories: path(ROOTS_DASHBOARD, '/app/categories'),
     pageFour: path(ROOTS_DASHBOARD, '/app/four'),
     pageFive: path(ROOTS_DASHBOARD, '/app/five'),
     pageSix: path(ROOTS_DASHBOARD, '/app/six')

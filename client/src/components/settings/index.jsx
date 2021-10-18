@@ -4,6 +4,8 @@ import closeFill from '@iconify/icons-eva/close-fill';
 import options2Fill from '@iconify/icons-eva/options-2-fill';
 // material
 import { Box, Backdrop, Paper, Tooltip, Divider, Typography, Stack } from '@material-ui/core';
+// hook
+import useLocales from '../../hooks/useLocales';
 //
 import Scrollbar from '../Scrollbar';
 import { MIconButton } from '../@material-extend';
@@ -17,6 +19,7 @@ import SettingFullscreen from './SettingFullscreen';
 const DRAWER_WIDTH = 260;
 
 export default function Settings() {
+  const { t } = useLocales();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -63,7 +66,7 @@ export default function Settings() {
             boxShadow: (theme) => theme.customShadows.z12
           }}
         >
-          <Tooltip title="Settings">
+          <Tooltip title={t('settings.title')}>
             <MIconButton
               color="inherit"
               onClick={handleToggle}
@@ -91,7 +94,7 @@ export default function Settings() {
           }}
         >
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ py: 2, pr: 1, pl: 2.5 }}>
-            <Typography variant="subtitle1">Settings</Typography>
+            <Typography variant="subtitle1">{t('settings.title')}</Typography>
             <MIconButton onClick={handleClose}>
               <Icon icon={closeFill} width={20} height={20} />
             </MIconButton>
@@ -100,22 +103,22 @@ export default function Settings() {
 
           <Scrollbar sx={{ height: 1 }}>
             <Stack spacing={4} sx={{ pt: 3, px: 3, pb: 15 }}>
+              <SettingFullscreen titleOn={t('settings.full-screen')} titleOff={t('settings.exit-full-screen')} />
+
               <Stack spacing={1.5}>
-                <Typography variant="subtitle2">Mode</Typography>
+                <Typography variant="subtitle2">{t('settings.mode')}</Typography>
                 <SettingMode />
               </Stack>
 
               <Stack spacing={1.5}>
-                <Typography variant="subtitle2">Direction</Typography>
-                <SettingDirection />
-              </Stack>
-
-              <Stack spacing={1.5}>
-                <Typography variant="subtitle2">Color</Typography>
+                <Typography variant="subtitle2">{t('settings.color')}</Typography>
                 <SettingColor />
               </Stack>
 
-              <SettingFullscreen />
+              <Stack spacing={1.5}>
+                <Typography variant="subtitle2">{t('settings.direction')}</Typography>
+                <SettingDirection />
+              </Stack>
             </Stack>
           </Scrollbar>
         </Paper>

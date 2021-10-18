@@ -4,13 +4,16 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Avatar, Box, Link, Drawer, Typography } from '@material-ui/core';
+// hook
+import useLocales from '../../hooks/useLocales';
+// routes
+import { PATH_DASHBOARD } from '../../routes/paths';
 // components
 import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
-//
+import SvgIconStyle from '../../components/SvgIconStyle';
 import { MHidden } from '../../components/@material-extend';
-import sidebarConfig from './SidebarConfig';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +34,18 @@ const AccountStyle = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.grey[500_12]
 }));
 
+const getIcon = (name) => (
+  <SvgIconStyle src={`/static/icons/navbar/${name}.svg`} sx={{ width: '100%', height: '100%' }} />
+);
+
+const ICONS = {
+  user: getIcon('ic_user'),
+  ecommerce: getIcon('ic_ecommerce'),
+  analytics: getIcon('ic_analytics'),
+  dashboard: getIcon('ic_dashboard'),
+  categories: getIcon('ic_categories')
+};
+
 // ----------------------------------------------------------------------
 
 DashboardSidebar.propTypes = {
@@ -40,6 +55,7 @@ DashboardSidebar.propTypes = {
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
+  const { t } = useLocales();
 
   useEffect(() => {
     if (isOpenSidebar) {
@@ -47,6 +63,47 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  const sidebarConfig = [
+    // GENERAL
+    // ----------------------------------------------------------------------
+    {
+      // subheader: 'general',
+      items: [
+        { title: t('dashboard.categories.title'), path: PATH_DASHBOARD.general.pageOne, icon: ICONS.categories },
+        { title: 'Two', path: PATH_DASHBOARD.general.pageTwo, icon: ICONS.ecommerce },
+        { title: 'Three', path: PATH_DASHBOARD.general.pageThree, icon: ICONS.analytics }
+      ]
+    },
+
+    // MANAGEMENT
+    // ----------------------------------------------------------------------
+    {
+      subheader: 'management',
+      items: [
+        {
+          title: t('dashboard.categories.title'),
+          path: PATH_DASHBOARD.app.categories,
+          icon: ICONS.categories,
+          children: [
+            { title: 'Four', path: PATH_DASHBOARD.app.pageFour },
+            { title: 'Five', path: PATH_DASHBOARD.app.pageFive },
+            { title: 'Six', path: PATH_DASHBOARD.app.pageSix }
+          ]
+        },
+        {
+          title: 'user',
+          path: PATH_DASHBOARD.app.root,
+          icon: ICONS.user,
+          children: [
+            { title: 'Four', path: PATH_DASHBOARD.app.pageFour },
+            { title: 'Five', path: PATH_DASHBOARD.app.pageFive },
+            { title: 'Six', path: PATH_DASHBOARD.app.pageSix }
+          ]
+        }
+      ]
+    }
+  ];
 
   const renderContent = (
     <Scrollbar

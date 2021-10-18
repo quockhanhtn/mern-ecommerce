@@ -13,6 +13,16 @@ const PRIMARY_COLOR = [
     name: 'default',
     ...palette.light.primary
   },
+  // PINK
+  {
+    name: 'pink',
+    lighter: '#ffdeeb',
+    light: '#ff99b9',
+    main: '#ff5c8a',
+    dark: '#ba1141',
+    darker: '#8a0030',
+    contrastText: '#fff'
+  },
   // PURPLE
   {
     name: 'purple',
@@ -68,13 +78,17 @@ const PRIMARY_COLOR = [
 function SetColor(themeColor) {
   let color;
   const DEFAULT = PRIMARY_COLOR[0];
-  const PURPLE = PRIMARY_COLOR[1];
-  const CYAN = PRIMARY_COLOR[2];
-  const BLUE = PRIMARY_COLOR[3];
-  const ORANGE = PRIMARY_COLOR[4];
-  const RED = PRIMARY_COLOR[5];
+  const PINK = PRIMARY_COLOR[1];
+  const PURPLE = PRIMARY_COLOR[2];
+  const CYAN = PRIMARY_COLOR[3];
+  const BLUE = PRIMARY_COLOR[4];
+  const ORANGE = PRIMARY_COLOR[5];
+  const RED = PRIMARY_COLOR[6];
 
   switch (themeColor) {
+    case 'pink':
+      color = PINK;
+      break;
     case 'purple':
       color = PURPLE;
       break;

@@ -53,6 +53,7 @@ export default function Router() {
               path: '/',
               element: <Navigate to="/dashboard/app/four" replace />
             },
+            { path: 'categories', element: <PageFour /> },
             { path: 'four', element: <PageFour /> },
             { path: 'five', element: <PageFive /> },
             { path: 'six', element: <PageSix /> }

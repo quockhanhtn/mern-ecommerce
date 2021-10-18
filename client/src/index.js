@@ -1,3 +1,5 @@
+// i18n
+import './i18n';
 // scroll bar
 import 'simplebar/src/simplebar.css';
 
