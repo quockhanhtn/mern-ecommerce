@@ -137,6 +137,7 @@
     "react-spring": "^9.1.0",
     "redux": "^4.1.0",
     "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.3.0",
     "rehype-highlight": "^4.1.0",
     "rehype-raw": "^5.1.0",
     "simplebar": "^5.3.3",
