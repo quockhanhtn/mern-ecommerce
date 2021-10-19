@@ -2,7 +2,9 @@
 export default {
   common: {
     'search-placeholder': 'Tìm kiếm...',
-    'search-btn': 'Tìm'
+    'search-btn': 'Tìm',
+    'rows-per-page': 'Số hàng trên trang',
+    'small-padding': 'Thu gọn khoảng cách'
   },
   settings: {
     title: 'Cài đặt',

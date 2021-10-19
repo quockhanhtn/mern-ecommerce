@@ -1,5 +1,6 @@
 export const START_LOADING = 'START_LOADING';
 export const END_LOADING = 'END_LOADING';
+export const HAS_ERROR = 'HAS_ERROR';
 
 export const CATEGORY = {
   GET_ALL: 'CATEGORY_GET_ALL',
