@@ -1,7 +1,9 @@
 export default {
   common: {
     'search-placeholder': 'Search...',
-    'search-btn': 'Search'
+    'search-btn': 'Search',
+    'rows-per-page': 'Rows per page',
+    'small-padding': 'Small padding'
   },
   settings: {
     title: 'Setting',

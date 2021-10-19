@@ -10,6 +10,7 @@ export const getAllCategories = () => async (dispatch) => {
     dispatch({ type: actionTypes.END_LOADING });
   } catch (e) {
     console.error('Error when get posts in actions/categories/getAllCategories', e);
+    dispatch({ type: actionTypes.HAS_ERROR });
   }
 };
 

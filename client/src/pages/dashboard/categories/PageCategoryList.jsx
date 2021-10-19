@@ -90,7 +90,7 @@ export default function PageCategoryList() {
   const { t } = useLocales();
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { list: categoriesList, isLoading } = useSelector((state) => state.category);
+  const { list: categoriesList, isLoading, hasError } = useSelector((state) => state.category);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
@@ -154,19 +154,19 @@ export default function PageCategoryList() {
   const handleSelectAllClick = (event) => {
     console.log(categoriesList);
     if (event.target.checked) {
-      const newSelected = categoriesList.map((n) => n.name);
+      const newSelected = categoriesList.map((n) => n.slug);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, slug) => {
+    const selectedIndex = selected.indexOf(slug);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, slug);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -194,13 +194,18 @@ export default function PageCategoryList() {
     setOpenForm(true);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (slug) => selected.indexOf(slug) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty categoriesList.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - categoriesList.length) : 0;
 
   if (isLoading) {
     return <LoadingScreen />;
+  }
+
+  if (hasError) {
+    // TODO: handle not found
+    return <div>{t('dashboard.categories.not-found')}</div>;
   }
 
   console.log(categoriesList);
@@ -246,13 +251,13 @@ export default function PageCategoryList() {
                   {stableSort(categoriesList, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
-                      const isItemSelected = isSelected(row.name);
+                      const isItemSelected = isSelected(row.slug);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
                         <TableRow
                           hover
-                          onClick={(event) => handleClick(event, row.name)}
+                          onClick={(event) => handleClick(event, row.slug)}
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
@@ -276,7 +281,7 @@ export default function PageCategoryList() {
                               </Box>
                             </TableCell>
                           )}
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Label
                               variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
                               color={row.isHide ? 'default' : 'success'}
@@ -308,7 +313,8 @@ export default function PageCategoryList() {
 
           <Box sx={{ position: 'relative' }}>
             <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
+              labelRowsPerPage={t('common.rows-per-page')}
+              rowsPerPageOptions={[5, 10, 25, 50, 100]}
               component="div"
               count={categoriesList.length}
               rowsPerPage={rowsPerPage}
@@ -326,7 +332,7 @@ export default function PageCategoryList() {
             >
               <FormControlLabel
                 control={<Switch checked={dense} onChange={handleChangeDense} />}
-                label="Dense padding"
+                label={t('common.small-padding')}
               />
             </Box>
           </Box>
