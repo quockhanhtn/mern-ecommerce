@@ -43,7 +43,7 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { path: '/', element: <Navigate to="/dashboard/one" replace /> },
-        { path: 'one', element: <PageOne /> },
+        { path: 'one', element: <PageCategoryList /> },
         { path: 'two', element: <PageTwo /> },
         { path: 'three', element: <PageThree /> },
         {
@@ -53,7 +53,7 @@ export default function Router() {
               path: '/',
               element: <Navigate to="/dashboard/app/four" replace />
             },
-            { path: 'categories', element: <PageFour /> },
+            { path: 'categories', element: <PageCategoryList /> },
             { path: 'four', element: <PageFour /> },
             { path: 'five', element: <PageFive /> },
             { path: 'six', element: <PageSix /> }
@@ -89,6 +89,8 @@ const PageThree = Loadable(lazy(() => import('../pages/PageThree')));
 const PageFour = Loadable(lazy(() => import('../pages/PageFour')));
 const PageFive = Loadable(lazy(() => import('../pages/PageFive')));
 const PageSix = Loadable(lazy(() => import('../pages/PageSix')));
+const PageCategoryList = Loadable(lazy(() => import('../pages/dashboard/categories/PageCategoryList')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
+
 // Main
 const LandingPage = Loadable(lazy(() => import('../pages/LandingPage')));

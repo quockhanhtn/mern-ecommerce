@@ -11,6 +11,8 @@ import {
   Card,
   Table,
   Button,
+  Switch,
+  FormControlLabel,
   TableRow,
   Checkbox,
   TableBody,
@@ -21,8 +23,8 @@ import {
   TablePagination
 } from '@material-ui/core';
 // redux
-import { useDispatch, useSelector } from '../../redux/store';
-import { getCategorys, deleteCategory } from '../../redux/slices/Category';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllCategories, deleteCategory } from '../../../actions/categories';
 // utils
 import { fDate } from '../../../utils/formatTime';
 import { fCurrency } from '../../../utils/formatNumber';
@@ -34,17 +36,16 @@ import Label from '../../../components/Label';
 import Scrollbar from '../../../components/Scrollbar';
 import SearchNotFound from '../../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
-import { CategoryListHead, CategoryListToolbar, CategoryMoreMenu } from '../../../components/dashboard/category-list';
+import LoadingScreen from '../../../components/LoadingScreen';
+import {
+  CategoryListHead,
+  CategoryListToolbar,
+  CategoryMoreMenu,
+  CategoryCollapsibleTableRow
+} from '../../../components/dashboard/CategoryList';
+import CategoryForm from './CategoryForm';
 
 // ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  { id: 'name', label: 'Category', alignRight: false },
-  { id: 'createdAt', label: 'Create at', alignRight: false },
-  { id: 'inventoryType', label: 'Status', alignRight: false },
-  { id: 'price', label: 'Price', alignRight: true },
-  { id: '' }
-];
 
 const ThumbImgStyle = styled('img')(({ theme }) => ({
   width: 64,
@@ -72,36 +73,86 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function applySortFilter(array, comparator, query) {
+function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
-
-  if (query) {
-    return filter(array, (_Category) => _Category.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-  }
-
   return stabilizedThis.map((el) => el[0]);
 }
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceCategoryList() {
-  const theme = useTheme();
+function createData(name, calories, fat, carbs, protein) {
+  return { name, calories, fat, carbs, protein };
+}
+
+const SORTING_SELECTING_TABLE = [
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Donut', 452, 25.0, 51, 4.9),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Honeycomb', 408, 3.2, 87, 6.5),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Jelly Bean', 375, 0.0, 94, 0.0),
+  createData('KitKat', 518, 26.0, 65, 7.0),
+  createData('Lollipop', 392, 0.2, 98, 0.0),
+  createData('Marshmallow', 318, 0, 81, 2.0),
+  createData('Nougat', 360, 19.0, 9, 37.0),
+  createData('Oreo', 437, 18.0, 63, 4.0)
+];
+
+const TABLE_HEAD = [
+  {
+    id: 'name',
+    numeric: false,
+    disablePadding: true,
+    label: 'Dessert (100g serving)'
+  },
+  {
+    id: 'calories',
+    numeric: true,
+    disablePadding: false,
+    label: 'Calories'
+  },
+  {
+    id: 'fat',
+    numeric: true,
+    disablePadding: false,
+    label: 'Fat (g)'
+  },
+  {
+    id: 'carbs',
+    numeric: true,
+    disablePadding: false,
+    label: 'Carbs (g)'
+  },
+  {
+    id: 'protein',
+    numeric: true,
+    disablePadding: false,
+    label: 'Protein (g)'
+  }
+];
+
+// ----------------------------------------------------------------------
+
+export default function PageCategoryList() {
   const dispatch = useDispatch();
-  const { Categorys } = useSelector((state) => state.Category);
-  const [page, setPage] = useState(0);
+  const { list: categoriesList, isLoading } = useSelector((state) => state.category);
   const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
-  const [filterName, setFilterName] = useState('');
+  const [page, setPage] = useState(0);
+  const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [orderBy, setOrderBy] = useState('createdAt');
+  const [openForm, setOpenForm] = useState(false);
 
   useEffect(() => {
-    dispatch(getCategorys());
+    dispatch(getAllCategories());
   }, [dispatch]);
 
   const handleRequestSort = (event, property) => {
@@ -111,8 +162,9 @@ export default function EcommerceCategoryList() {
   };
 
   const handleSelectAllClick = (event) => {
+    console.log(categoriesList);
     if (event.target.checked) {
-      const newSelecteds = Categorys.map((n) => n.name);
+      const newSelecteds = SORTING_SELECTING_TABLE.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -122,6 +174,7 @@ export default function EcommerceCategoryList() {
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
+
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
@@ -143,146 +196,141 @@ export default function EcommerceCategoryList() {
     setPage(0);
   };
 
-  const handleFilterByName = (event) => {
-    setFilterName(event.target.value);
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked);
   };
 
-  const handleDeleteCategory = (CategoryId) => {
-    dispatch(deleteCategory(CategoryId));
+  const handleOpenForm = () => {
+    setOpenForm(true);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Categorys.length) : 0;
+  const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  const filteredCategorys = applySortFilter(Categorys, getComparator(order, orderBy), filterName);
+  // Avoid a layout jump when reaching the last page with empty SORTING_SELECTING_TABLE.
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - SORTING_SELECTING_TABLE.length) : 0;
 
-  const isCategoryNotFound = filteredCategorys.length === 0;
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
+  console.log(categoriesList);
 
   return (
     <Page title="Ecommerce: Category List | Minimal-UI">
       <Container>
+        <CategoryForm open={openForm} setOpen={setOpenForm} />
+
         <HeaderBreadcrumbs
           heading="Category List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
               name: 'E-Commerce',
-              href: PATH_DASHBOARD.eCommerce.root
+              href: PATH_DASHBOARD.app.categories
             },
             { name: 'Category List' }
           ]}
           action={
-            <Button
-              variant="contained"
-              component={RouterLink}
-              to={PATH_DASHBOARD.eCommerce.newCategory}
-              startIcon={<Icon icon={plusFill} />}
-            >
+            <Button onClick={handleOpenForm} startIcon={<Icon icon={plusFill} />}>
               New Category
             </Button>
           }
         />
 
         <Card>
-          <CategoryListToolbar
-            numSelected={selected.length}
-            filterName={filterName}
-            onFilterName={handleFilterByName}
-          />
+          <CategoryListToolbar numSelected={selected.length} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
-              <Table>
+              <Table size={dense ? 'small' : 'medium'}>
                 <CategoryListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={Categorys.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
+                  rowCount={SORTING_SELECTING_TABLE.length}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredCategorys.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, cover, price, createdAt, inventoryType } = row;
+                  {stableSort(SORTING_SELECTING_TABLE, getComparator(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => {
+                      const isItemSelected = isSelected(row.name);
+                      const labelId = `enhanced-table-checkbox-${index}`;
 
-                    const isItemSelected = selected.indexOf(name) !== -1;
-
-                    return (
-                      <TableRow
-                        hover
-                        key={id}
-                        tabIndex={-1}
-                        role="checkbox"
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
-                        </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
-                          <Box
-                            sx={{
-                              py: 2,
-                              display: 'flex',
-                              alignItems: 'center'
-                            }}
-                          >
-                            <ThumbImgStyle alt={name} src={cover} />
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Box>
-                        </TableCell>
-                        <TableCell style={{ minWidth: 160 }}>{fDate(createdAt)}</TableCell>
-                        <TableCell style={{ minWidth: 160 }}>
-                          <Label
-                            variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                            color={
-                              (inventoryType === 'out_of_stock' && 'error') ||
-                              (inventoryType === 'low_stock' && 'warning') ||
-                              'success'
-                            }
-                          >
-                            {sentenceCase(inventoryType)}
-                          </Label>
-                        </TableCell>
-                        <TableCell align="right">{fCurrency(price)}</TableCell>
-                        <TableCell align="right">
-                          <CategoryMoreMenu onDelete={() => handleDeleteCategory(id)} CategoryName={name} />
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                      return (
+                        <TableRow
+                          hover
+                          onClick={(event) => handleClick(event, row.name)}
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={row.name}
+                          selected={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox checked={isItemSelected} />
+                          </TableCell>
+                          {dense ? (
+                            <TableCell component="th" id={labelId} scope="row" padding="none">
+                              {row.name}
+                            </TableCell>
+                          ) : (
+                            <TableCell component="th" scope="row" padding="none">
+                              <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
+                                <ThumbImgStyle alt={row.name} src={row.cover} />
+                                <Typography variant="subtitle2" noWrap>
+                                  {row.name}
+                                </Typography>
+                              </Box>
+                            </TableCell>
+                          )}
+                          <TableCell align="right">{row.calories}</TableCell>
+                          <TableCell align="right">{row.fat}</TableCell>
+                          <TableCell align="right">{row.carbs}</TableCell>
+                          <TableCell align="right">{row.protein}</TableCell>
+                        </TableRow>
+                      );
+                    })}
                   {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableRow
+                      style={{
+                        height: (dense ? 33 : 53) * emptyRows
+                      }}
+                    >
                       <TableCell colSpan={6} />
                     </TableRow>
                   )}
                 </TableBody>
-                {isCategoryNotFound && (
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center" colSpan={6}>
-                        <Box sx={{ py: 3 }}>
-                          <SearchNotFound searchQuery={filterName} />
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                )}
               </Table>
             </TableContainer>
           </Scrollbar>
 
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={Categorys.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          <Box sx={{ position: 'relative' }}>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={categoriesList.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+            <Box
+              sx={{
+                px: 3,
+                py: 1.5,
+                top: 0,
+                position: { md: 'absolute' }
+              }}
+            >
+              <FormControlLabel
+                control={<Switch checked={dense} onChange={handleChangeDense} />}
+                label="Dense padding"
+              />
+            </Box>
+          </Box>
         </Card>
       </Container>
     </Page>
