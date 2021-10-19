@@ -6,7 +6,7 @@ import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton } from '@material-ui/core';
 //
 import { MHidden } from '../../components/@material-extend';
-import Searchbar from './Searchbar';
+import SearchBar from './SearchBar';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
@@ -14,8 +14,8 @@ import NotificationsPopover from './NotificationsPopover';
 // ----------------------------------------------------------------------
 
 const DRAWER_WIDTH = 280;
-const APPBAR_MOBILE = 64;
-const APPBAR_DESKTOP = 92;
+const APP_BAR_MOBILE = 64;
+const APP_BAR_DESKTOP = 92;
 
 const RootStyle = styled(AppBar)(({ theme }) => ({
   boxShadow: 'none',
@@ -28,9 +28,9 @@ const RootStyle = styled(AppBar)(({ theme }) => ({
 }));
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
-  minHeight: APPBAR_MOBILE,
+  minHeight: APP_BAR_MOBILE,
   [theme.breakpoints.up('lg')]: {
-    minHeight: APPBAR_DESKTOP,
+    minHeight: APP_BAR_DESKTOP,
     padding: theme.spacing(0, 5)
   }
 }));
@@ -51,7 +51,7 @@ export default function DashboardNavbar({ onOpenSidebar }) {
           </IconButton>
         </MHidden>
 
-        <Searchbar />
+        <SearchBar />
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" spacing={{ xs: 0.5, sm: 1.5 }}>

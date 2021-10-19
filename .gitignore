@@ -3,6 +3,7 @@ nodemon.json
 
 # Private folder
 private
+server/public/uploads
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,node

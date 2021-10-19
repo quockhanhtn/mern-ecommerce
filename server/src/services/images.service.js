@@ -117,14 +117,13 @@ async function resizeWithSharp(sharpInput, saveDir, imageId, isExistOriginal) {
   } else { delete filePaths.small; }
 
   if (isExistOriginal) {
+    filePaths.original.filePath = '/' + strUtils.replaceAll(sharpInput, '\\', '/');
     // move image to new location
-    console.log(path.join(process.cwd(), sharpInput));
-    const newPath = filePaths.original.absFilePath.replace(/\.[^/.]+$/, "") + path.extname(sharpInput);
-
-    fs.renameSync(
-      path.join(process.cwd(), sharpInput),
-      newPath
-    );
+    // const newPath = filePaths.original.absFilePath.replace(/\.[^/.]+$/, "") + path.extname(sharpInput);
+    // fs.renameSync(
+    //   path.join(process.cwd(), sharpInput),
+    //   newPath
+    // );
   } else {
     // Save original image if it's not exists
     await imageSharp.toFile(filePaths.original.absFilePath);
@@ -218,6 +217,7 @@ async function remove(imageId) {
  * @returns image model with new path
  */
 function formatPath(imageObj, headerOrigin) {
+  console.log(headerOrigin);
   const format = {
     original: headerOrigin + imageObj.original
   };
