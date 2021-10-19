@@ -6,7 +6,7 @@ const autoPopulateChildren = function (next) {
   this.populate('children')
     .populate({
       path: 'image',
-      select: 'dirPath ext hasSmall hasMedium hasLarge',
+      select: 'dirPath ext original hasSmall hasMedium hasLarge',
       model: 'Image'
     });
   next();

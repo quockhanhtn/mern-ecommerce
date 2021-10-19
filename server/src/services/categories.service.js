@@ -12,7 +12,7 @@ export default {
   remove
 };
 
-const SELECTED_FIELDS = '_id name slug isHide parent children';
+const SELECTED_FIELDS = '_id slug name desc isHide parent children createdAt updatedAt';
 const POPULATE_OPTS = [
   {
     path: 'image',
