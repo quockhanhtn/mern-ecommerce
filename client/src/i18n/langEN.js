@@ -14,13 +14,19 @@ export default {
     'language-not-available': 'This language is not available'
   },
   dashboard: {
+    title: 'Dashboard',
+    'created-at': 'Created at',
+    'updated-at': 'Updated at',
     categories: {
       title: 'Categories',
       add: 'Add category',
       edit: 'Edit category',
       delete: 'Delete category',
       name: 'Category name',
-      description: 'Mô tả'
+      desc: 'Category description',
+      status: 'Status',
+      hidden: 'Hidden',
+      visible: 'Visible'
     }
   }
 };

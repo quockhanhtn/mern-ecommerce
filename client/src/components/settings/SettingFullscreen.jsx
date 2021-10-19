@@ -38,7 +38,6 @@ export default function SettingFullscreen({ titleOn, titleOff }) {
       size="large"
       variant="outlined"
       color={fullscreen ? 'primary' : 'inherit'}
-      style={{ textTransform: 'none' }}
       startIcon={<Icon icon={fullscreen ? roundFullscreenExit : roundFullscreen} />}
       onClick={toggleFullScreen}
       sx={{

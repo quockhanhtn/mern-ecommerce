@@ -26,7 +26,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllCategories, deleteCategory } from '../../../actions/categories';
 // utils
-import { fDate } from '../../../utils/formatTime';
+import { fDateTime } from '../../../utils/formatTime';
 import { fCurrency } from '../../../utils/formatNumber';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
@@ -44,6 +44,7 @@ import {
   CategoryCollapsibleTableRow
 } from '../../../components/dashboard/CategoryList';
 import CategoryForm from './CategoryForm';
+import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -85,62 +86,9 @@ function stableSort(array, comparator) {
 
 // ----------------------------------------------------------------------
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const SORTING_SELECTING_TABLE = [
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Honeycomb', 408, 3.2, 87, 6.5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0),
-  createData('KitKat', 518, 26.0, 65, 7.0),
-  createData('Lollipop', 392, 0.2, 98, 0.0),
-  createData('Marshmallow', 318, 0, 81, 2.0),
-  createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0)
-];
-
-const TABLE_HEAD = [
-  {
-    id: 'name',
-    numeric: false,
-    disablePadding: true,
-    label: 'Dessert (100g serving)'
-  },
-  {
-    id: 'calories',
-    numeric: true,
-    disablePadding: false,
-    label: 'Calories'
-  },
-  {
-    id: 'fat',
-    numeric: true,
-    disablePadding: false,
-    label: 'Fat (g)'
-  },
-  {
-    id: 'carbs',
-    numeric: true,
-    disablePadding: false,
-    label: 'Carbs (g)'
-  },
-  {
-    id: 'protein',
-    numeric: true,
-    disablePadding: false,
-    label: 'Protein (g)'
-  }
-];
-
-// ----------------------------------------------------------------------
-
 export default function PageCategoryList() {
+  const { t } = useLocales();
+  const theme = useTheme();
   const dispatch = useDispatch();
   const { list: categoriesList, isLoading } = useSelector((state) => state.category);
   const [order, setOrder] = useState('asc');
@@ -155,6 +103,48 @@ export default function PageCategoryList() {
     dispatch(getAllCategories());
   }, [dispatch]);
 
+  const tableHeads = [
+    {
+      id: 'name',
+      numeric: false,
+      disablePadding: true,
+      label: t('dashboard.categories.name')
+    },
+    // {
+    //   id: 'desc',
+    //   numeric: false,
+    //   disablePadding: false,
+    //   label: t('dashboard.categories.desc')
+    // },
+    {
+      id: 'isHide',
+      numeric: false,
+      disablePadding: false,
+      label: t('dashboard.categories.status')
+    },
+    {
+      id: 'createdAt',
+      numeric: true,
+      disablePadding: false,
+      label: t('dashboard.created-at')
+    },
+    {
+      id: 'updatedAt',
+      numeric: true,
+      disablePadding: false,
+      label: t('dashboard.updated-at')
+    },
+    {
+      id: 'action',
+      numeric: false,
+      disablePadding: false
+    }
+  ];
+
+  const handleDeleteCategory = (id) => {
+    dispatch(deleteCategory(id));
+  };
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -164,8 +154,8 @@ export default function PageCategoryList() {
   const handleSelectAllClick = (event) => {
     console.log(categoriesList);
     if (event.target.checked) {
-      const newSelecteds = SORTING_SELECTING_TABLE.map((n) => n.name);
-      setSelected(newSelecteds);
+      const newSelected = categoriesList.map((n) => n.name);
+      setSelected(newSelected);
       return;
     }
     setSelected([]);
@@ -206,8 +196,8 @@ export default function PageCategoryList() {
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty SORTING_SELECTING_TABLE.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - SORTING_SELECTING_TABLE.length) : 0;
+  // Avoid a layout jump when reaching the last page with empty categoriesList.
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - categoriesList.length) : 0;
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -231,8 +221,8 @@ export default function PageCategoryList() {
             { name: 'Category List' }
           ]}
           action={
-            <Button onClick={handleOpenForm} startIcon={<Icon icon={plusFill} />}>
-              New Category
+            <Button variant="contained" startIcon={<Icon icon={plusFill} />} onClick={handleOpenForm}>
+              {t('dashboard.categories.add')}
             </Button>
           }
         />
@@ -246,14 +236,14 @@ export default function PageCategoryList() {
                 <CategoryListHead
                   order={order}
                   orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
+                  headLabel={tableHeads}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
-                  rowCount={SORTING_SELECTING_TABLE.length}
+                  rowCount={categoriesList.length}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {stableSort(SORTING_SELECTING_TABLE, getComparator(order, orderBy))
+                  {stableSort(categoriesList, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
                       const isItemSelected = isSelected(row.name);
@@ -266,7 +256,7 @@ export default function PageCategoryList() {
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.name}
+                          key={row._id}
                           selected={isItemSelected}
                         >
                           <TableCell padding="checkbox">
@@ -279,26 +269,35 @@ export default function PageCategoryList() {
                           ) : (
                             <TableCell component="th" scope="row" padding="none">
                               <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
-                                <ThumbImgStyle alt={row.name} src={row.cover} />
+                                <ThumbImgStyle alt={row.name} src={row.image.original} />
                                 <Typography variant="subtitle2" noWrap>
                                   {row.name}
                                 </Typography>
                               </Box>
                             </TableCell>
                           )}
-                          <TableCell align="right">{row.calories}</TableCell>
-                          <TableCell align="right">{row.fat}</TableCell>
-                          <TableCell align="right">{row.carbs}</TableCell>
-                          <TableCell align="right">{row.protein}</TableCell>
+                          <TableCell align="center">
+                            <Label
+                              variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
+                              color={row.isHide ? 'default' : 'success'}
+                            >
+                              {t(`dashboard.categories.${row.isHide ? 'hidden' : 'visible'}`)}
+                            </Label>
+                          </TableCell>
+                          <TableCell align="right" style={{ minWidth: 160 }}>
+                            {fDateTime(row.createdAt)}
+                          </TableCell>
+                          <TableCell align="right" style={{ minWidth: 160 }}>
+                            {fDateTime(row.updatedAt)}
+                          </TableCell>
+                          <TableCell align="right">
+                            <CategoryMoreMenu onDelete={() => handleDeleteCategory(row._id)} productName={row.name} />
+                          </TableCell>
                         </TableRow>
                       );
                     })}
                   {emptyRows > 0 && (
-                    <TableRow
-                      style={{
-                        height: (dense ? 33 : 53) * emptyRows
-                      }}
-                    >
+                    <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
                       <TableCell colSpan={6} />
                     </TableRow>
                   )}

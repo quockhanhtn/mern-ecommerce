@@ -16,13 +16,18 @@ export default {
   },
   dashboard: {
     title: 'Bảng điều khiển',
+    'created-at': 'Ngày tạo',
+    'updated-at': 'Ngày sửa',
     categories: {
       title: 'Danh mục',
       add: 'Thêm danh mục',
       edit: 'Sửa danh mục',
       delete: 'Xóa danh mục',
       name: 'Tên danh mục',
-      description: 'Mô tả'
+      desc: 'Mô tả',
+      status: 'Trạng thái',
+      hidden: 'Đã ẩn',
+      visible: 'Hiển thị'
     }
   }
 };

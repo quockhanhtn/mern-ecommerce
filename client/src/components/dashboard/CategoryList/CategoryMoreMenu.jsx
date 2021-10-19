@@ -8,17 +8,16 @@ import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
-// routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
 
 // ----------------------------------------------------------------------
 
 CategoryMoreMenu.propTypes = {
+  onEdit: PropTypes.func,
   onDelete: PropTypes.func,
-  productName: PropTypes.string
+  categoryId: PropTypes.string
 };
 
-export default function CategoryMoreMenu({ onDelete, productName }) {
+export default function CategoryMoreMenu({ onEdit, onDelete, categoryId }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -45,11 +44,7 @@ export default function CategoryMoreMenu({ onDelete, productName }) {
           <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
-        <MenuItem
-          component={RouterLink}
-          to={`${PATH_DASHBOARD.eCommerce.root}/product/${paramCase(productName)}/edit`}
-          sx={{ color: 'text.secondary' }}
-        >
+        <MenuItem onClick={onEdit} sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Icon icon={editFill} width={24} height={24} />
           </ListItemIcon>

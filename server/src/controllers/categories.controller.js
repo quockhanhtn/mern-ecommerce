@@ -5,7 +5,8 @@ import resUtils from '../utils/res-utils.js';
 
 const formatCategory = (category, req) => {
   if (category.image) {
-    category.image = imagesService.formatPath(category.image, req.headers.origin);
+    console.log(`${req.protocol}://${req.get('host')}`);
+    category.image = imagesService.formatPath(category.image, `${req.protocol}://${req.get('host')}`);
   }
 
   if (category.children && category.children.length > 0) {

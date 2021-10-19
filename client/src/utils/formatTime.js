@@ -2,16 +2,16 @@ import { format, formatDistanceToNow } from 'date-fns';
 
 // ----------------------------------------------------------------------
 
-export function fDate(date) {
-  return format(new Date(date), 'dd MMMM yyyy');
+export function fDate(date, formatStr = 'dd MMMM yyyy') {
+  return format(new Date(date), formatStr);
 }
 
-export function fDateTime(date) {
-  return format(new Date(date), 'dd MMM yyyy HH:mm');
+export function fDateTime(date, formatStr = 'dd MMMM yyyy HH:mm') {
+  return format(new Date(date), formatStr);
 }
 
-export function fDateTimeSuffix(date) {
-  return format(new Date(date), 'dd/MM/yyyy hh:mm p');
+export function fDateTimeSuffix(date, formatStr = 'dd/MM/yyyy hh:mm p') {
+  return format(new Date(date), formatStr);
 }
 
 export function fToNow(date) {

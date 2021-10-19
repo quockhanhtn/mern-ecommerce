@@ -217,6 +217,7 @@ async function remove(imageId) {
  * @returns image model with new path
  */
 function formatPath(imageObj, headerOrigin) {
+  console.log(headerOrigin);
   const format = {
     original: headerOrigin + imageObj.original
   };
