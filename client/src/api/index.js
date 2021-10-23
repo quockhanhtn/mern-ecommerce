@@ -11,4 +11,8 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
+// ----------------------------Category-----------------------------
 export const getAllCategory = () => API.get('/categories');
+
+// ----------------------------Brand-----------------------------
+export const getAllBrand = () => API.get('/brands');

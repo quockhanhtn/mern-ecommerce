@@ -6,6 +6,7 @@ import DashboardLayout from '../layouts/dashboard';
 import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
 // components
 import LoadingScreen from '../components/LoadingScreen';
+import PageBrandList from '../pages/dashboard/brands/PageBrandList';
 
 // ----------------------------------------------------------------------
 
@@ -44,7 +45,7 @@ export default function Router() {
       children: [
         { path: '/', element: <Navigate to="/dashboard/one" replace /> },
         { path: 'one', element: <PageCategoryList /> },
-        { path: 'two', element: <PageTwo /> },
+        { path: 'brand', element: <PageBrandList /> },
         { path: 'three', element: <PageThree /> },
         {
           path: 'app',
@@ -54,6 +55,7 @@ export default function Router() {
               element: <Navigate to="/dashboard/app/four" replace />
             },
             { path: 'categories', element: <PageCategoryList /> },
+            { path: 'brands', element: <PageBrandList /> },
             { path: 'four', element: <PageFour /> },
             { path: 'five', element: <PageFive /> },
             { path: 'six', element: <PageSix /> }
