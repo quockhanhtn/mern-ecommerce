@@ -43,7 +43,8 @@ const ICONS = {
   ecommerce: getIcon('ic_ecommerce'),
   analytics: getIcon('ic_analytics'),
   dashboard: getIcon('ic_dashboard'),
-  categories: getIcon('ic_categories')
+  categories: getIcon('ic_categories'),
+  brands: getIcon('ic_brands')
 };
 
 // ----------------------------------------------------------------------
@@ -71,7 +72,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       // subheader: 'general',
       items: [
         { title: t('dashboard.categories.title'), path: PATH_DASHBOARD.general.pageOne, icon: ICONS.categories },
-        { title: 'Two', path: PATH_DASHBOARD.general.pageTwo, icon: ICONS.ecommerce },
+        { title: 'Brand', path: PATH_DASHBOARD.general.pageBrand, icon: ICONS.brands },
         { title: 'Three', path: PATH_DASHBOARD.general.pageThree, icon: ICONS.analytics }
       ]
     },
