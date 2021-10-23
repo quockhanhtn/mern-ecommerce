@@ -12,12 +12,13 @@ import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@materia
 // ----------------------------------------------------------------------
 
 CategoryMoreMenu.propTypes = {
+  editTitle: PropTypes.string,
   onEdit: PropTypes.func,
-  onDelete: PropTypes.func,
-  categoryId: PropTypes.string
+  deleteTitle: PropTypes.string,
+  onDelete: PropTypes.func
 };
 
-export default function CategoryMoreMenu({ onEdit, onDelete, categoryId }) {
+export default function CategoryMoreMenu({ editTitle, onEdit, deleteTitle, onDelete }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -37,18 +38,18 @@ export default function CategoryMoreMenu({ onEdit, onDelete, categoryId }) {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem onClick={onDelete} sx={{ color: 'text.secondary' }}>
-          <ListItemIcon>
-            <Icon icon={trash2Outline} width={24} height={24} />
-          </ListItemIcon>
-          <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
-        </MenuItem>
-
         <MenuItem onClick={onEdit} sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Icon icon={editFill} width={24} height={24} />
           </ListItemIcon>
-          <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
+          <ListItemText primary={editTitle} primaryTypographyProps={{ variant: 'body2' }} />
+        </MenuItem>
+
+        <MenuItem onClick={onDelete} sx={{ color: 'text.secondary' }}>
+          <ListItemIcon>
+            <Icon icon={trash2Outline} width={24} height={24} />
+          </ListItemIcon>
+          <ListItemText primary={deleteTitle} primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
       </Menu>
     </>

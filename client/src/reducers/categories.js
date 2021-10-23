@@ -22,7 +22,7 @@ const categoriesReducer = (state = initialState, action) => {
       return { ...state, item: payload };
 
     case actionTypes.CATEGORY.CREATE:
-      return { ...state, list: [payload, ...state.list] };
+      return { ...state, list: [payload.data, ...state.list] };
 
     case actionTypes.CATEGORY.UPDATE:
       return {

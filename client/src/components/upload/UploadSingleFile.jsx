@@ -115,9 +115,9 @@ export default function UploadSingleFile({ error, file, sx, ...other }) {
             sx={{
               top: 8,
               borderRadius: 1,
-              objectFit: 'cover',
+              objectFit: 'contain',
               position: 'absolute',
-              // width: 'calc(100% - 16px)',
+              width: 'calc(100% - 16px)',
               height: 'calc(100% - 16px)',
               bgcolor: 'background.paper'
             }}
