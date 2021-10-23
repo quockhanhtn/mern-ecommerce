@@ -32,10 +32,11 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 CategoryListToolbar.propTypes = {
+  searchPlaceHolder: PropTypes.string.isRequired,
   numSelected: PropTypes.number.isRequired
 };
 
-export default function CategoryListToolbar({ numSelected, filterName, onFilterName }) {
+export default function CategoryListToolbar({ searchPlaceHolder, numSelected, filterName, onFilterName }) {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
 
@@ -56,7 +57,7 @@ export default function CategoryListToolbar({ numSelected, filterName, onFilterN
         <SearchStyle
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search product..."
+          placeholder={searchPlaceHolder}
           startAdornment={
             <InputAdornment position="start">
               <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />

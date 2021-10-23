@@ -4,8 +4,11 @@ export default {
     'search-btn': 'Search',
     'rows-per-page': 'Rows per page',
     'small-padding': 'Small padding',
-    delete: 'Delete',
     'filter-list': 'Filter list'
+    save: 'Save',
+    cancel: 'Cancel',
+    edit: 'Edit',
+    delete: 'Delete'
   },
   settings: {
     title: 'Setting',
@@ -23,15 +26,19 @@ export default {
     'updated-at': 'Updated at',
     categories: {
       title: 'Categories',
-      add: 'Add category',
-      edit: 'Edit category',
-      delete: 'Delete category',
+      search: 'Search category ...',
       name: 'Category name',
       desc: 'Category description',
+      parent: 'Parent category',
       status: 'Status',
       hidden: 'Hidden',
-      visible: 'Visible'
-    },
+      visible: 'Visible',
+      add: 'Add category',
+      'add-title': 'Add new category',
+      edit: 'Edit category',
+      'edit-title': 'Edit category',
+      delete: 'Delete category'
+    }
     brands: {
       'title-page': 'Ecommerce: Brand List | HK-MOBILE',
       heading: 'Brand List',
@@ -44,7 +51,12 @@ export default {
       desc: 'Brand description',
       status: 'Status',
       hidden: 'Hidden',
-      visible: 'Visible'
+      visible: 'Visible',
+      add: 'Add category',
+      'add-title': 'Add new category',
+      edit: 'Edit category',
+      'edit-title': 'Edit category',
+      delete: 'Delete category'
     }
   }
 };
