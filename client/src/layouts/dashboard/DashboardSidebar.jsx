@@ -69,11 +69,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     // GENERAL
     // ----------------------------------------------------------------------
     {
-      // subheader: 'general',
+      subheader: 'general',
       items: [
-        { title: t('dashboard.categories.title'), path: PATH_DASHBOARD.general.pageOne, icon: ICONS.categories },
-        { title: 'Brand', path: PATH_DASHBOARD.general.pageBrand, icon: ICONS.brands },
-        { title: 'Three', path: PATH_DASHBOARD.general.pageThree, icon: ICONS.analytics }
+        { title: 'Statics', path: PATH_DASHBOARD.general.statics, icon: ICONS.analytics },
+        { title: 'Config', path: PATH_DASHBOARD.general.config, icon: ICONS.analytics }
       ]
     },
 
@@ -82,26 +81,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     {
       subheader: 'management',
       items: [
-        {
-          title: t('dashboard.categories.title'),
-          path: PATH_DASHBOARD.app.categories,
-          icon: ICONS.categories,
-          children: [
-            { title: 'Four', path: PATH_DASHBOARD.app.pageFour },
-            { title: 'Five', path: PATH_DASHBOARD.app.pageFive },
-            { title: 'Six', path: PATH_DASHBOARD.app.pageSix }
-          ]
-        },
-        {
-          title: 'user',
-          path: PATH_DASHBOARD.app.root,
-          icon: ICONS.user,
-          children: [
-            { title: 'Four', path: PATH_DASHBOARD.app.pageFour },
-            { title: 'Five', path: PATH_DASHBOARD.app.pageFive },
-            { title: 'Six', path: PATH_DASHBOARD.app.pageSix }
-          ]
-        }
+        { title: t('dashboard.categories.title'), path: PATH_DASHBOARD.app.categories, icon: ICONS.categories },
+        { title: t('dashboard.brands.title'), path: PATH_DASHBOARD.app.brands, icon: ICONS.brands }
       ]
     }
   ];

@@ -41,6 +41,7 @@ export default {
     },
     brands: {
       'title-page': 'Ecommerce: Brand List | HK-MOBILE',
+      title: 'Brand',
       heading: 'Brand List',
       'search-brand-placeholder': 'Search brand...',
       add: 'Add brand',

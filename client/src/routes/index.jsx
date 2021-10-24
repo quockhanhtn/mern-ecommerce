@@ -6,7 +6,6 @@ import DashboardLayout from '../layouts/dashboard';
 import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
 // components
 import LoadingScreen from '../components/LoadingScreen';
-import PageBrandList from '../pages/dashboard/brands/PageBrandList';
 
 // ----------------------------------------------------------------------
 
@@ -43,22 +42,18 @@ export default function Router() {
       path: 'dashboard',
       element: <DashboardLayout />,
       children: [
-        { path: '/', element: <Navigate to="/dashboard/one" replace /> },
-        { path: 'one', element: <PageCategoryList /> },
-        { path: 'brand', element: <PageBrandList /> },
-        { path: 'three', element: <PageThree /> },
+        { path: '/', element: <Navigate to="/dashboard/statics" replace /> },
+        { path: 'statics', element: <PageOne /> },
+        { path: 'config', element: <PageTwo /> },
         {
           path: 'app',
           children: [
             {
               path: '/',
-              element: <Navigate to="/dashboard/app/four" replace />
+              element: <Navigate to="/dashboard/app/categories" replace />
             },
             { path: 'categories', element: <PageCategoryList /> },
-            { path: 'brands', element: <PageBrandList /> },
-            { path: 'four', element: <PageFour /> },
-            { path: 'five', element: <PageFive /> },
-            { path: 'six', element: <PageSix /> }
+            { path: 'brands', element: <PageBrandList /> }
           ]
         }
       ]
@@ -87,11 +82,8 @@ export default function Router() {
 // Dashboard
 const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
 const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));
-const PageThree = Loadable(lazy(() => import('../pages/PageThree')));
-const PageFour = Loadable(lazy(() => import('../pages/PageFour')));
-const PageFive = Loadable(lazy(() => import('../pages/PageFive')));
-const PageSix = Loadable(lazy(() => import('../pages/PageSix')));
 const PageCategoryList = Loadable(lazy(() => import('../pages/dashboard/categories/PageCategoryList')));
+const PageBrandList = Loadable(lazy(() => import('../pages/dashboard/brands/PageBrandList')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 
 // Main

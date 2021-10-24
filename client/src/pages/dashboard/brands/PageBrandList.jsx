@@ -225,7 +225,7 @@ export default function PageBrandList() {
                           ) : (
                             <TableCell component="th" scope="row" padding="none">
                               <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
-                                <ThumbImgStyle alt={row.name} src={row.image.original} />
+                                {/* <ThumbImgStyle alt={row.name} src={row.image.original} /> */}
                                 <Typography variant="subtitle2" noWrap>
                                   {row.name}
                                 </Typography>
