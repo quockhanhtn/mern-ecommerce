@@ -4,7 +4,7 @@ export default {
     'search-btn': 'Search',
     'rows-per-page': 'Rows per page',
     'small-padding': 'Small padding',
-    'filter-list': 'Filter list'
+    'filter-list': 'Filter list',
     save: 'Save',
     cancel: 'Cancel',
     edit: 'Edit',
@@ -38,7 +38,7 @@ export default {
       edit: 'Edit category',
       'edit-title': 'Edit category',
       delete: 'Delete category'
-    }
+    },
     brands: {
       'title-page': 'Ecommerce: Brand List | HK-MOBILE',
       heading: 'Brand List',
@@ -51,12 +51,7 @@ export default {
       desc: 'Brand description',
       status: 'Status',
       hidden: 'Hidden',
-      visible: 'Visible',
-      add: 'Add category',
-      'add-title': 'Add new category',
-      edit: 'Edit category',
-      'edit-title': 'Edit category',
-      delete: 'Delete category'
+      visible: 'Visible'
     }
   }
 };
