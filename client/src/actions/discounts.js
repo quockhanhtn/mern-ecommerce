@@ -13,10 +13,10 @@ export const getAllDiscounts = () => async (dispatch) => {
   }
 };
 
-export const createDiscount = (newBrand) => async (dispatch) => {
+export const createDiscount = (newDiscount) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
-    const { data } = await api.createDiscount(newBrand);
+    const { data } = await api.createDiscount(newDiscount);
     dispatch({ type: actionTypes.DISCOUNT.CREATE, payload: data });
     dispatch({ type: actionTypes.END_LOADING });
   } catch (e) {
@@ -25,10 +25,10 @@ export const createDiscount = (newBrand) => async (dispatch) => {
   }
 };
 
-export const updateDiscount = (id, updatedCategory) => async (dispatch) => {
+export const updateDiscount = (id, updatedDiscount) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
-    const { data } = await api.updateDiscount(id, updatedCategory);
+    const { data } = await api.updateDiscount(id, updatedDiscount);
     console.log('updateBrand', data);
     dispatch({ type: actionTypes.DISCOUNT.UPDATE, payload: data.data });
     dispatch({ type: actionTypes.END_LOADING });

@@ -48,7 +48,7 @@ export default function DiscountForm({ currentId, open, setOpen }) {
     code: '',
     fromDate: '',
     endDate: '',
-    quantity: '',
+    quantity: 100,
     discount: 0,
     selectedFile: null,
     image: ''
@@ -62,7 +62,7 @@ export default function DiscountForm({ currentId, open, setOpen }) {
       code: '',
       fromDate: discount ? new Date(discount.fromDate) : new Date(),
       endDate: discount ? new Date(discount.endDate) : new Date(),
-      quantity: '',
+      quantity: discount?.quantity || 100,
       discount: discount?.discount || 0,
       selectedFile: null,
       image: ''
@@ -71,7 +71,6 @@ export default function DiscountForm({ currentId, open, setOpen }) {
     if (discountData || discount) {
       return merge({}, _discountData, discount);
     }
-
     return _discountData;
   };
 
@@ -84,7 +83,7 @@ export default function DiscountForm({ currentId, open, setOpen }) {
   const handleDropSingleFile = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
     if (file) {
-      setFieldValue({
+      setDiscountData({
         ...discountData,
         selectedFile: { ...file, preview: URL.createObjectURL(file) }
       });
@@ -96,28 +95,30 @@ export default function DiscountForm({ currentId, open, setOpen }) {
   };
 
   const DiscountSchema = Yup.object().shape({
-    name: Yup.string().required(t('dashboard.brands.name-validation')),
-    desc: Yup.string().required(t('dashboard.brands.desc-validation')),
-    code: Yup.string().required(t('dashboard.brands.country-validation')),
+    name: Yup.string().required(t('dashboard.discounts.name-validation')),
+    desc: Yup.string().required(t('dashboard.discounts.desc-validation')),
+    code: Yup.string().required(t('dashboard.discounts.code-validation')),
     fromDate: Yup.date(),
     endDate: Yup.date().when(
       'fromDate',
       (fromDate, schema) => fromDate && schema.min(fromDate, 'End date must be later than start date')
     ),
-    quantity: Yup.number().required(t('dashboard.brands.headQuarters-validation')),
-    discount: Yup.number().required(t('dashboard.brands.country-validation'))
+    quantity: Yup.number().required(t('dashboard.discounts.quantity-validation')),
+    discount: Yup.number().required(t('dashboard.discounts.discount-validation'))
   });
   const formik = useFormik({
     initialValues: getInitialValues(discount),
     validationSchema: DiscountSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm, setSubmitting }) => {
       try {
         values.isHide = discountData.isHide;
+        console.log(currentId);
         if (currentId) {
           dispatch(updateDiscount(currentId, values));
           enqueueSnackbar('Update success', { variant: 'success' });
         } else {
-          dispatch(createDiscount(discountData));
+          console.log('currentId');
+          dispatch(createDiscount(values));
           enqueueSnackbar('Create success', { variant: 'success' });
         }
         handleClose();
@@ -200,6 +201,18 @@ export default function DiscountForm({ currentId, open, setOpen }) {
                   fullWidth
                   type="number"
                   placeholder="0"
+                  label={t('dashboard.discounts.quantity')}
+                  {...getFieldProps('quantity')}
+                  error={Boolean(touched.quantity && errors.quantity)}
+                  helperText={touched.quantity && errors.quantity}
+                />
+              </MotionInView>
+              <MotionInView variants={varFadeInUp}>
+                <TextField
+                  required
+                  fullWidth
+                  type="number"
+                  placeholder="0"
                   label={t('dashboard.discounts.discount')}
                   {...getFieldProps('discount')}
                   error={Boolean(touched.discount && errors.discount)}
@@ -233,7 +246,7 @@ export default function DiscountForm({ currentId, open, setOpen }) {
                 />
               </MotionInView>
               <MotionInView variants={varFadeInUp}>
-                <UploadSingleFile file={values.selectedFile} onDrop={handleDropSingleFile} accept="image/*" />
+                <UploadSingleFile file={discountData.selectedFile} onDrop={handleDropSingleFile} accept="image/*" />
               </MotionInView>
             </Stack>
           </Form>

@@ -81,6 +81,8 @@ export default {
       'desc-validation': 'Discount is required',
       discount: 'Percentage',
       'discount-validation': 'Discount is required',
+      quantity: 'Quantity',
+      'quantity-validation': 'Quantity is required',
       status: 'Status',
       hidden: 'Hidden',
       visible: 'Visible',
