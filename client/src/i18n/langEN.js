@@ -51,9 +51,13 @@ export default {
       'edit-title': 'Edit brand',
       delete: 'Delete brand',
       name: 'Brand name',
+      'name-validation': 'Brand name is required',
       country: 'Country',
+      'country-validation': 'Country is required',
       desc: 'Brand description',
+      'desc-validation': 'Description is required',
       headQuarters: 'Head quarter',
+      'headQuarters-validation': 'Head quarter is required',
       status: 'Status',
       hidden: 'Hidden',
       visible: 'Visible'
