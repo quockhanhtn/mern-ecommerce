@@ -42,7 +42,7 @@ import {
   CategoryListToolbar,
   CategoryMoreMenu,
   CategoryCollapsibleTableRow
-} from '../../../components/dashboard/CategoryList';
+} from '../../../components/dashboard/category-list';
 import CategoryForm from './CategoryForm';
 import useLocales from '../../../hooks/useLocales';
 import { ImageBrokenIcon } from '../../../assets';
