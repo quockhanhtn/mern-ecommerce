@@ -19,6 +19,7 @@ import plusFill from '@iconify/icons-eva/plus-fill';
 import { useEffect, useState } from 'react';
 import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 import Page from '../../../components/Page';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
@@ -44,6 +45,7 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
 export default function PageBrandList() {
   const { t } = useLocales();
   const theme = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const { list: brandsList, isLoading, hasError } = useSelector((state) => state.brand);
   const [order, setOrder] = useState('asc');
@@ -100,6 +102,7 @@ export default function PageBrandList() {
   const handleDeleteBrand = async (id, slug) => {
     await dispatch(deleteBrand(id));
     dispatch(getAllBrands());
+    enqueueSnackbar(t('dashboard.brands.delete'), { variant: 'success' });
     const index = selected.indexOf(slug);
     selected.splice(index, 1);
   };
@@ -177,8 +180,9 @@ export default function PageBrandList() {
   return (
     <Page title={t('dashboard.brands.title-page')}>
       <Container>
-        <BrandForm open={openForm} setOpen={setOpenForm} currentId={currentId} setCurrentId={setCurrentId} />
-
+        {openForm && (
+          <BrandForm open={openForm} setOpen={setOpenForm} currentId={currentId} setCurrentId={setCurrentId} />
+        )}
         <HeaderBreadcrumbs
           heading={t('dashboard.brands.heading')}
           links={[
@@ -227,8 +231,9 @@ export default function PageBrandList() {
                           tabIndex={-1}
                           key={_id}
                           selected={isItemSelected}
+                          onClick={(event) => handleClick(event, slug)}
                         >
-                          <TableCell padding="checkbox" onClick={(event) => handleClick(event, slug)}>
+                          <TableCell padding="checkbox">
                             <Checkbox checked={isItemSelected} />
                           </TableCell>
                           {dense ? (
@@ -264,7 +269,7 @@ export default function PageBrandList() {
                           <TableCell align="right" style={{ minWidth: 160 }}>
                             {fDateTime(updatedAt)}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="right" onClick={(event) => event.stopPropagation()}>
                             <BrandMoreMenu
                               onEdit={() => handleEditBrand(_id)}
                               onDelete={() => handleDeleteBrand(_id, slug)}

@@ -13,11 +13,11 @@ const brandsReducer = (state = initialState, action) => {
     case actionTypes.HAS_ERROR:
       return { ...state, isLoading: false, hasError: true };
     case actionTypes.BRAND.GET_ALL:
-      return { ...state, list: payload.data };
+      return { ...state, list: payload.data, hasError: false };
     case actionTypes.BRAND.GET_ONE:
-      return { ...state, item: payload };
+      return { ...state, item: payload, hasError: false };
     case actionTypes.BRAND.CREATE:
-      return { ...state, list: [payload.data, ...state.list] };
+      return { ...state, list: [payload.data, ...state.list], hasError: false };
     case actionTypes.BRAND.UPDATE:
       return {
         ...state,
