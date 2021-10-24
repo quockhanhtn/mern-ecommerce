@@ -47,11 +47,12 @@ export default function PageBrandList() {
   const dispatch = useDispatch();
   const { list: brandsList, isLoading, hasError } = useSelector((state) => state.brand);
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('calories');
+  const [orderBy, setOrderBy] = useState('createdAt');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [currentId, setCurrentId] = useState(null);
   const [openForm, setOpenForm] = useState(false);
 
   useEffect(() => {
@@ -96,8 +97,11 @@ export default function PageBrandList() {
     }
   ];
 
-  const handleDeleteBrand = (id) => {
-    dispatch(deleteBrand(id));
+  const handleDeleteBrand = async (id, slug) => {
+    await dispatch(deleteBrand(id));
+    dispatch(getAllBrands());
+    const index = selected.indexOf(slug);
+    selected.splice(index, 1);
   };
 
   const handleRequestSort = (event, property) => {
@@ -110,6 +114,9 @@ export default function PageBrandList() {
     if (event.target.checked) {
       const newSelected = brandsList.map((n) => n.slug);
       setSelected(newSelected);
+      if (selected.count === 1) {
+        setCurrentId(brandsList[brandsList.indexOf(selected[0])]._id);
+      }
       return;
     }
     setSelected([]);
@@ -144,13 +151,19 @@ export default function PageBrandList() {
     setDense(event.target.checked);
   };
 
-  const handleOpenForm = () => {
+  const handleCreateNew = () => {
+    setCurrentId(null);
+    setOpenForm(true);
+  };
+
+  const handleEditBrand = (brandId) => {
+    setCurrentId(brandId);
     setOpenForm(true);
   };
 
   const isSelected = (slug) => selected.indexOf(slug) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty categoriesList.
+  // Avoid a layout jump when reaching the last page with empty brandsList.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - brandsList.length) : 0;
 
   if (isLoading) {
@@ -164,7 +177,7 @@ export default function PageBrandList() {
   return (
     <Page title={t('dashboard.brands.title-page')}>
       <Container>
-        <BrandForm open={openForm} setOpen={setOpenForm} />
+        <BrandForm open={openForm} setOpen={setOpenForm} currentId={currentId} setCurrentId={setCurrentId} />
 
         <HeaderBreadcrumbs
           heading={t('dashboard.brands.heading')}
@@ -177,7 +190,7 @@ export default function PageBrandList() {
             { name: t('dashboard.brands.heading') }
           ]}
           action={
-            <Button variant="contained" startIcon={<Icon icon={plusFill} />} onClick={handleOpenForm}>
+            <Button variant="contained" startIcon={<Icon icon={plusFill} />} onClick={handleCreateNew}>
               {t('dashboard.brands.add')}
             </Button>
           }
@@ -202,57 +215,60 @@ export default function PageBrandList() {
                   {Helper.stableSort(brandsList, Helper.getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
-                      const isItemSelected = isSelected(row.slug);
+                      const { _id, slug, name, country, image, createdAt, updatedAt, isHide } = row;
+                      const isItemSelected = isSelected(slug);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
                         <TableRow
                           hover
-                          onClick={(event) => handleClick(event, row.slug)}
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row._id}
+                          key={_id}
                           selected={isItemSelected}
                         >
-                          <TableCell padding="checkbox">
+                          <TableCell padding="checkbox" onClick={(event) => handleClick(event, slug)}>
                             <Checkbox checked={isItemSelected} />
                           </TableCell>
                           {dense ? (
                             <TableCell component="th" id={labelId} scope="row" padding="none">
-                              {row.name}
+                              {name}
                             </TableCell>
                           ) : (
                             <TableCell component="th" scope="row" padding="none">
                               <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
-                                {/* <ThumbImgStyle alt={row.name} src={row.image.original} /> */}
+                                {/* <ThumbImgStyle alt={row.name} src={image.original} /> */}
                                 <Typography variant="subtitle2" noWrap>
-                                  {row.name}
+                                  {name}
                                 </Typography>
                               </Box>
                             </TableCell>
                           )}
                           <TableCell align="left" style={{ minWidth: 160 }}>
                             <Typography variant="subtitle4" noWrap>
-                              {row.country}
+                              {country}
                             </Typography>
                           </TableCell>
                           <TableCell align="left">
                             <Label
                               variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                              color={row.isHide ? 'default' : 'success'}
+                              color={isHide ? 'default' : 'success'}
                             >
-                              {t(`dashboard.categories.${row.isHide ? 'hidden' : 'visible'}`)}
+                              {t(`dashboard.brands.${isHide ? 'hidden' : 'visible'}`)}
                             </Label>
                           </TableCell>
                           <TableCell align="right" style={{ minWidth: 160 }}>
-                            {fDateTime(row.createdAt)}
+                            {fDateTime(createdAt)}
                           </TableCell>
                           <TableCell align="right" style={{ minWidth: 160 }}>
-                            {fDateTime(row.updatedAt)}
+                            {fDateTime(updatedAt)}
                           </TableCell>
                           <TableCell align="right">
-                            <BrandMoreMenu onDelete={() => handleDeleteBrand(row._id)} />
+                            <BrandMoreMenu
+                              onEdit={() => handleEditBrand(_id)}
+                              onDelete={() => handleDeleteBrand(_id, slug)}
+                            />
                           </TableCell>
                         </TableRow>
                       );

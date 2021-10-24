@@ -6,6 +6,7 @@ import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
+import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -15,6 +16,7 @@ BrandMoreMenu.propTypes = {
 };
 
 export default function BrandMoreMenu({ onEdit, onDelete }) {
+  const { t } = useLocales();
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -34,17 +36,17 @@ export default function BrandMoreMenu({ onEdit, onDelete }) {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <div onMouseLeave={() => setIsOpen(false)}>
-          <MenuItem onClick={onDelete} sx={{ color: 'text.secondary' }}>
-            <ListItemIcon>
-              <Icon icon={trash2Outline} width={24} height={24} />
-            </ListItemIcon>
-            <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
-          </MenuItem>
           <MenuItem onClick={onEdit} sx={{ color: 'text.secondary' }}>
             <ListItemIcon>
               <Icon icon={editFill} width={24} height={24} />
             </ListItemIcon>
-            <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
+            <ListItemText primary={t('common.edit')} primaryTypographyProps={{ variant: 'body2' }} />
+          </MenuItem>
+          <MenuItem onClick={onDelete} sx={{ color: 'text.secondary' }}>
+            <ListItemIcon>
+              <Icon icon={trash2Outline} width={24} height={24} />
+            </ListItemIcon>
+            <ListItemText primary={t('common.delete')} primaryTypographyProps={{ variant: 'body2' }} />
           </MenuItem>
         </div>
       </Menu>
