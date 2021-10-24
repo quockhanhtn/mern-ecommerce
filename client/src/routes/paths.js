@@ -17,6 +17,7 @@ export const PATH_DASHBOARD = {
   app: {
     root: path(ROOTS_DASHBOARD, '/app'),
     categories: path(ROOTS_DASHBOARD, '/app/categories'),
-    brands: path(ROOTS_DASHBOARD, '/app/brands')
+    brands: path(ROOTS_DASHBOARD, '/app/brands'),
+    discounts: path(ROOTS_DASHBOARD, '/app/discounts')
   }
 };

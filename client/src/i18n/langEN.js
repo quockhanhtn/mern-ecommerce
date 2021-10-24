@@ -61,6 +61,30 @@ export default {
       status: 'Status',
       hidden: 'Hidden',
       visible: 'Visible'
+    },
+    discounts: {
+      'title-page': 'Ecommerce: Discount List | HK-MOBILE',
+      title: 'Discounts',
+      heading: 'Discount List',
+      'search-placeholder': 'Search discount...',
+      add: 'Add discount',
+      'add-title': 'Add new discount',
+      edit: 'Edit discount',
+      'edit-title': 'Edit discount',
+      delete: 'Delete discount',
+      name: 'Discount name',
+      'name-validation': 'Discount name is required',
+      code: 'Code',
+      'code-validation': 'Code is required',
+      desc: 'Discount description',
+      'desc-validation': 'Discount is required',
+      discount: 'Percentage',
+      'discount-validation': 'Discount is required',
+      status: 'Status',
+      hidden: 'Hidden',
+      visible: 'Visible',
+      'date-start': 'Date start',
+      'date-end': 'Date end'
     }
   }
 };

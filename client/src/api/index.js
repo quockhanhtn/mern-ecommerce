@@ -21,6 +21,13 @@ export const deleteCategory = (identity) => API.delete(`/categories/${identity}`
 // ----------------------------Brand-----------------------------
 export const getAllBrand = () => API.get('/brands');
 export const getOneBrand = (identity) => API.get(`/brands/${identity}`);
-export const createBrand = (newCategory) => API.post('/brands', newCategory);
+export const createBrand = (newBrand) => API.post('/brands', newBrand);
 export const updateBrand = (identity, updatedBrand) => API.patch(`/brands/${identity}`, updatedBrand);
 export const deleteBrand = (identity) => API.delete(`/brands/${identity}`);
+
+// ----------------------------Discount-----------------------------
+export const getAllDiscount = () => API.get('/discounts');
+export const getOneDiscount = (identity) => API.get(`/discounts/${identity}`);
+export const createDiscount = (newDiscount) => API.post('/discounts', newDiscount);
+export const updateDiscount = (identity, updatedDiscount) => API.patch(`/discounts/${identity}`, updatedDiscount);
+export const deleteDiscount = (identity) => API.delete(`/discounts/${identity}`);
