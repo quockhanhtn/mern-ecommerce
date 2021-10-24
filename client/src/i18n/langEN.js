@@ -9,7 +9,8 @@ export default {
     save: 'Save',
     cancel: 'Cancel',
     edit: 'Edit',
-    delete: 'Delete'
+    delete: 'Delete',
+    'invalid-file-type': 'Invalid file type !'
   },
   settings: {
     title: 'Setting',

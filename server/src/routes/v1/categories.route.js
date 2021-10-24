@@ -4,7 +4,7 @@ import {
   getCategory, hiddenCategory, updateCategory
 } from '../../controllers/categories.controller.js';
 import multerUpload from '../../utils/upload-utils.js';
-import { singleImageHandler } from '../../middlewares/image-handler.js';
+// import { singleImageHandler } from '../../middlewares/image-handler.js';
 
 const router = express.Router();
 const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
@@ -15,7 +15,7 @@ router.route('/')
   .get(getCategories)
   .post(
     upload.single('image'),
-    singleImageHandler('image', 'categories'),
+    // singleImageHandler('image', 'categories'),
     createCategory
   );
 
@@ -24,7 +24,7 @@ router.route('/:identity')
   .get(getCategory)
   .patch(
     upload.single('image'),
-    singleImageHandler('image', 'categories'),
+    // singleImageHandler('image', 'categories'),
     updateCategory
   )
   .delete(deleteCategory);

@@ -46,6 +46,7 @@ import {
 import CategoryForm from './CategoryForm';
 import useLocales from '../../../hooks/useLocales';
 import { ImageBrokenIcon } from '../../../assets';
+import { stableSort, getComparator } from '../../../helper/Helper';
 
 // ----------------------------------------------------------------------
 
@@ -56,34 +57,6 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
   margin: theme.spacing(0, 2, 0, 0),
   borderRadius: theme.shape.borderRadiusSm
 }));
-
-// ----------------------------------------------------------------------
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
 
 // ----------------------------------------------------------------------
 
@@ -240,91 +213,95 @@ export default function PageCategoryList() {
         <Card>
           <CategoryListToolbar searchPlaceHolder={t('dashboard.categories.search')} numSelected={selected.length} />
 
-          <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table size={dense ? 'small' : 'medium'}>
-                <CategoryListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={tableHeads}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  rowCount={categoriesList.length}
-                  onSelectAllClick={handleSelectAllClick}
-                />
-                <TableBody>
-                  {stableSort(categoriesList, getComparator(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const { _id, slug, name, image, createdAt, updatedAt, isHide } = row;
-                      const isItemSelected = isSelected(slug);
-                      const labelId = `enhanced-table-checkbox-${index}`;
+          {categoriesList.length > 0 ? (
+            <Scrollbar>
+              <TableContainer sx={{ minWidth: 800 }}>
+                <Table size={dense ? 'small' : 'medium'}>
+                  <CategoryListHead
+                    order={order}
+                    orderBy={orderBy}
+                    headLabel={tableHeads}
+                    numSelected={selected.length}
+                    onRequestSort={handleRequestSort}
+                    rowCount={categoriesList.length}
+                    onSelectAllClick={handleSelectAllClick}
+                  />
+                  <TableBody>
+                    {stableSort(categoriesList, getComparator(order, orderBy))
+                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .map((row, index) => {
+                        const { _id, slug, name, image, createdAt, updatedAt, isHide } = row;
+                        const isItemSelected = isSelected(slug);
+                        const labelId = `enhanced-table-checkbox-${index}`;
 
-                      return (
-                        <TableRow
-                          hover
-                          onClick={(event) => handleClick(event, slug)}
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={_id}
-                          selected={isItemSelected}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox checked={isItemSelected} />
-                          </TableCell>
-                          {dense ? (
-                            <TableCell component="th" id={labelId} scope="row" padding="none">
-                              {name}
+                        return (
+                          <TableRow
+                            hover
+                            onClick={(event) => handleClick(event, slug)}
+                            role="checkbox"
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            key={_id}
+                            selected={isItemSelected}
+                          >
+                            <TableCell padding="checkbox">
+                              <Checkbox checked={isItemSelected} />
                             </TableCell>
-                          ) : (
-                            <TableCell component="th" scope="row" padding="none">
-                              <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
-                                {image?.original ? (
-                                  <ThumbImgStyle alt={row.name} src={row.image.original} />
-                                ) : (
-                                  <ImageBrokenIcon width={64} height={64} marginRight={2} />
-                                )}
-                                <Typography variant="subtitle2" noWrap>
-                                  {name}
-                                </Typography>
-                              </Box>
+                            {dense ? (
+                              <TableCell component="th" id={labelId} scope="row" padding="none">
+                                {name}
+                              </TableCell>
+                            ) : (
+                              <TableCell component="th" scope="row" padding="none">
+                                <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
+                                  {image ? (
+                                    <ThumbImgStyle alt={name} src={image} />
+                                  ) : (
+                                    <ImageBrokenIcon width={64} height={64} marginRight={2} />
+                                  )}
+                                  <Typography variant="subtitle2" noWrap>
+                                    {name}
+                                  </Typography>
+                                </Box>
+                              </TableCell>
+                            )}
+                            <TableCell align="left">
+                              <Label
+                                variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
+                                color={isHide ? 'default' : 'success'}
+                              >
+                                {t(`dashboard.categories.${isHide ? 'hidden' : 'visible'}`)}
+                              </Label>
                             </TableCell>
-                          )}
-                          <TableCell align="left">
-                            <Label
-                              variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                              color={isHide ? 'default' : 'success'}
-                            >
-                              {t(`dashboard.categories.${isHide ? 'hidden' : 'visible'}`)}
-                            </Label>
-                          </TableCell>
-                          <TableCell align="right" style={{ minWidth: 160 }}>
-                            {fDateTime(createdAt)}
-                          </TableCell>
-                          <TableCell align="right" style={{ minWidth: 160 }}>
-                            {fDateTime(updatedAt)}
-                          </TableCell>
-                          <TableCell align="right">
-                            <CategoryMoreMenu
-                              editTitle={t('common.edit')}
-                              onEdit={() => handleEdit(_id)}
-                              deleteTitle={t('common.delete')}
-                              onDelete={() => handleDeleteCategory(_id)}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Scrollbar>
+                            <TableCell align="right" style={{ minWidth: 160 }}>
+                              {fDateTime(createdAt)}
+                            </TableCell>
+                            <TableCell align="right" style={{ minWidth: 160 }}>
+                              {fDateTime(updatedAt)}
+                            </TableCell>
+                            <TableCell align="right" onClick={(e) => e.stopPropagation()}>
+                              <CategoryMoreMenu
+                                editTitle={t('common.edit')}
+                                onEdit={() => handleEdit(_id)}
+                                deleteTitle={t('common.delete')}
+                                onDelete={() => handleDeleteCategory(_id)}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    {emptyRows > 0 && (
+                      <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                        <TableCell colSpan={6} />
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Scrollbar>
+          ) : (
+            <div>Empty</div>
+          )}
 
           <Box sx={{ position: 'relative' }}>
             <TablePagination

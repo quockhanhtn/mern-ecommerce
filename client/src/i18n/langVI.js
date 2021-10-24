@@ -8,7 +8,8 @@ export default {
     save: 'Lưu',
     cancel: 'Hủy',
     edit: 'Chỉnh sửa',
-    delete: 'Xóa'
+    delete: 'Xóa',
+    'invalid-file-type': 'Tệp tin không hợp lệ !'
   },
   settings: {
     title: 'Cài đặt',

@@ -1,4 +1,7 @@
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
+import { Icon } from '@iconify/react';
+import closeFill from '@iconify/icons-eva/close-fill';
 import { useState, useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // material
@@ -17,12 +20,15 @@ import {
   Stack,
   Typography
 } from '@material-ui/core';
-import { MRadio } from '../../../components/@material-extend';
+import { MRadio, MIconButton } from '../../../components/@material-extend';
 //
 import { UploadSingleFile } from '../../../components/upload';
 import { varFadeInUp, MotionInView } from '../../../components/animate';
 import useLocales from '../../../hooks/useLocales';
 import { createCategory, updateCategory } from '../../../actions/categories';
+import { firebaseUploadSingle } from '../../../helper/Helper';
+import LoadingScreen from '../../../components/LoadingScreen';
+import { allowImageMineTypes } from '../../../constants/imageMineTypes';
 
 // ----------------------------------------------------------------------
 
@@ -35,49 +41,86 @@ CategoryForm.propTypes = {
 
 export default function CategoryForm({ currentId, setCurrentId, open, setOpen }) {
   const { t } = useLocales();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const { list: categoriesList, isLoading, hasError } = useSelector((state) => state.category);
   const category = categoriesList.find((c) => c._id === currentId);
-  const [categoryData, setCategoryData] = useState({
-    name: '',
-    desc: '',
-    isHide: false,
-    parent: '',
-    selectedFile: null,
-    image: ''
-  });
+  const [categoryData, setCategoryData] = useState({ name: '', desc: '', isHide: false, parent: '', image: '' });
+  const [uploadImage, setUploadImage] = useState(null);
+  const [uploadPercent, setUploadPercent] = useState(-1);
 
   useEffect(() => {
     if (category) {
       setCategoryData({ ...categoryData, ...category });
+    } else {
+      setCategoryData({ name: '', desc: '', isHide: false, parent: '', image: '' });
     }
   }, [category]);
 
   // setCategoryData({ ...categoryData, ...category });
 
   const handleDropSingleFile = useCallback((acceptedFiles) => {
-    const file = acceptedFiles[0];
-    if (file) {
-      setCategoryData({
-        ...categoryData,
-        selectedFile: { ...file, preview: URL.createObjectURL(file) }
-      });
+    const uploadFile = acceptedFiles[0];
+    if (uploadFile) {
+      console.log(uploadFile);
+      if (allowImageMineTypes.indexOf(uploadFile.type) < 0) {
+        enqueueSnackbar(t('common.invalid-file-type'), {
+          variant: 'error',
+          action: (key) => (
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          )
+        });
+        return;
+      }
+      uploadFile.preview = URL.createObjectURL(uploadFile);
+      setUploadImage(uploadFile);
     }
+    console.log('uploadFile', uploadFile);
   }, []);
 
-  const handleCreate = () => {
-    if (!categoryData.parent) {
+  const handleSave = () => {
+    if (categoryData.parent === '') {
       delete categoryData.parent;
     }
-    dispatch(createCategory(categoryData));
-    console.log(categoryData);
-    handleClose();
-  };
 
-  const handleUpdate = () => {
-    dispatch(updateCategory(currentId, categoryData));
-    console.log(categoryData);
-    handleClose();
+    if (!uploadImage) {
+      if (currentId) {
+        dispatch(updateCategory(currentId, categoryData));
+      } else {
+        dispatch(createCategory(categoryData));
+      }
+      handleClose();
+      return;
+    }
+
+    firebaseUploadSingle(
+      uploadImage,
+      'categories',
+      setUploadPercent,
+      (error) => {
+        enqueueSnackbar(error, {
+          variant: 'error',
+          action: (key) => (
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          )
+        });
+      },
+      (url) => {
+        // setCategoryData({ ...categoryData, image: url }); this way not effect
+        categoryData.image = url;
+        setCategoryData(categoryData);
+        if (currentId) {
+          dispatch(updateCategory(currentId, categoryData));
+        } else {
+          dispatch(createCategory(categoryData));
+        }
+        handleClose();
+      }
+    );
   };
 
   const handleClose = () => {
@@ -92,72 +135,78 @@ export default function CategoryForm({ currentId, setCurrentId, open, setOpen })
         </Typography>
       </DialogTitle>
       <DialogContent>
-        <Stack spacing={3}>
-          <MotionInView variants={varFadeInUp}>
-            <TextField
-              fullWidth
-              label={t('dashboard.categories.name')}
-              value={categoryData.name}
-              onChange={(e) => setCategoryData({ ...categoryData, name: e.target.value })}
-            />
-          </MotionInView>
+        {isLoading ? (
+          <LoadingScreen />
+        ) : (
+          <Stack spacing={3}>
+            <MotionInView variants={varFadeInUp}>
+              <TextField
+                fullWidth
+                label={t('dashboard.categories.name')}
+                value={categoryData.name}
+                onChange={(e) => setCategoryData({ ...categoryData, name: e.target.value })}
+              />
+            </MotionInView>
 
-          <MotionInView variants={varFadeInUp}>
-            <TextField
-              fullWidth
-              label={t('dashboard.categories.desc')}
-              multiline
-              rows={3}
-              value={categoryData.desc}
-              onChange={(e) => setCategoryData({ ...categoryData, desc: e.target.value })}
-            />
-          </MotionInView>
+            <MotionInView variants={varFadeInUp}>
+              <TextField
+                fullWidth
+                label={t('dashboard.categories.desc')}
+                multiline
+                rows={3}
+                value={categoryData.desc}
+                onChange={(e) => setCategoryData({ ...categoryData, desc: e.target.value })}
+              />
+            </MotionInView>
 
-          <MotionInView variants={varFadeInUp}>
-            <Grid>
-              <Typography variant="body2" marginRight={5}>
-                {t('dashboard.categories.status')}
-              </Typography>
-              <RadioGroup
-                row
-                value={categoryData.isHide.toString()}
-                onChange={(e) => setCategoryData({ ...categoryData, isHide: e.target.value === 'true' })}
-              >
-                <FormControlLabel
-                  value="false"
-                  control={<MRadio color="success" />}
-                  label={t('dashboard.categories.visible')}
-                />
-                <FormControlLabel
-                  value="true"
-                  control={<Radio color="default" />}
-                  label={t('dashboard.categories.hidden')}
-                />
-              </RadioGroup>
-            </Grid>
-          </MotionInView>
+            <MotionInView variants={varFadeInUp}>
+              <Grid>
+                <Typography variant="body2" marginRight={5}>
+                  {t('dashboard.categories.status')}
+                </Typography>
+                <RadioGroup
+                  row
+                  value={categoryData.isHide.toString()}
+                  onChange={(e) => setCategoryData({ ...categoryData, isHide: e.target.value === 'true' })}
+                >
+                  <FormControlLabel
+                    value="false"
+                    control={<MRadio color="success" />}
+                    label={t('dashboard.categories.visible')}
+                  />
+                  <FormControlLabel
+                    value="true"
+                    control={<Radio color="default" />}
+                    label={t('dashboard.categories.hidden')}
+                  />
+                </RadioGroup>
+              </Grid>
+            </MotionInView>
 
-          <MotionInView variants={varFadeInUp}>
-            <Autocomplete
-              fullWidth
-              options={categoriesList.filter((x) => !x.isHide)}
-              getOptionLabel={(option) => option.name}
-              value={categoriesList.find((c) => c.slug === categoryData.parent)}
-              onChange={(e, newValue) => setCategoryData({ ...categoryData, parent: newValue._id })}
-              renderInput={(params) => <TextField {...params} label={t('dashboard.categories.parent')} margin="none" />}
-            />
-          </MotionInView>
+            <MotionInView variants={varFadeInUp}>
+              <Autocomplete
+                fullWidth
+                options={categoriesList.filter((x) => !x.isHide && x._id !== currentId)}
+                getOptionLabel={(option) => option.name}
+                value={categoriesList.find((c) => c.slug === categoryData.parent)}
+                onChange={(e, newValue) => setCategoryData({ ...categoryData, parent: newValue._id })}
+                renderInput={(params) => (
+                  <TextField {...params} label={t('dashboard.categories.parent')} margin="none" />
+                )}
+              />
+            </MotionInView>
 
-          <MotionInView variants={varFadeInUp}>
-            <UploadSingleFile file={categoryData.selectedFile} onDrop={handleDropSingleFile} />
-          </MotionInView>
-        </Stack>
+            <MotionInView variants={varFadeInUp}>
+              <UploadSingleFile file={uploadImage} onDrop={handleDropSingleFile} uploadPercent={uploadPercent} />
+            </MotionInView>
+          </Stack>
+        )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="inherit">
+        <Button onClick={handleClose} color="inherit" disabled={isLoading}>
           {t('common.cancel')}
         </Button>
-        <Button onClick={currentId ? handleUpdate : handleCreate} variant="contained">
+        <Button onClick={handleSave} variant="contained" disabled={isLoading}>
           {t('common.save')}
         </Button>
       </DialogActions>

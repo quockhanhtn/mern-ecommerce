@@ -4,6 +4,7 @@ import { useDropzone } from 'react-dropzone';
 // material
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Paper, Box, Typography } from '@material-ui/core';
+import { MLinearProgress } from '../@material-extend';
 // utils
 import { fData } from '../../utils/formatNumber';
 //
@@ -37,10 +38,11 @@ const DropZoneStyle = styled('div')(({ theme }) => ({
 UploadSingleFile.propTypes = {
   error: PropTypes.bool,
   file: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  sx: PropTypes.object
+  sx: PropTypes.object,
+  uploadPercent: PropTypes.number
 };
 
-export default function UploadSingleFile({ error, file, sx, ...other }) {
+export default function UploadSingleFile({ error, file, sx, uploadPercent, ...other }) {
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
     multiple: false,
     ...other
@@ -124,6 +126,8 @@ export default function UploadSingleFile({ error, file, sx, ...other }) {
           />
         )}
       </DropZoneStyle>
+
+      {uploadPercent > 0 && <MLinearProgress sx={{ marginTop: 2 }} variant="determinate" value={uploadPercent} />}
 
       {fileRejections.length > 0 && <ShowRejectionItems />}
     </Box>
