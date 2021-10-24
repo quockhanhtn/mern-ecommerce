@@ -75,6 +75,12 @@ export default function PageDiscountList() {
       label: t('dashboard.discounts.code')
     },
     {
+      id: 'quantity',
+      numeric: false,
+      disablePadding: true,
+      label: t('dashboard.discounts.quantity')
+    },
+    {
       id: 'discount',
       numeric: false,
       disablePadding: true,
@@ -225,7 +231,7 @@ export default function PageDiscountList() {
                   {Helper.stableSort(discountsList, Helper.getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
-                      const { _id, slug, name, code, discount, image, fromDate, endDate, isHide } = row;
+                      const { _id, slug, name, code, discount, quantity, image, fromDate, endDate, isHide } = row;
                       const isItemSelected = isSelected(slug);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -259,6 +265,11 @@ export default function PageDiscountList() {
                           <TableCell align="left" style={{ minWidth: 40 }}>
                             <Typography variant="subtitle4" noWrap>
                               {code.toUpperCase()}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left" style={{ minWidth: 40 }}>
+                            <Typography variant="subtitle4" noWrap>
+                              {quantity}
                             </Typography>
                           </TableCell>
                           <TableCell align="left" style={{ minWidth: 40 }}>
