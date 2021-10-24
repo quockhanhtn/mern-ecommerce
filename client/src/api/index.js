@@ -12,3 +12,7 @@ API.interceptors.request.use((req) => {
 });
 
 export const getAllCategory = () => API.get('/categories');
+export const getOneCategory = (identity) => API.get(`/categories/${identity}`);
+export const createCategory = (newCategory) => API.post('/categories', newCategory);
+export const updateCategory = (identity, updatedCategory) => API.patch(`/categories/${identity}`, updatedCategory);
+export const deleteCategory = (identity) => API.delete(`/categories/${identity}`);

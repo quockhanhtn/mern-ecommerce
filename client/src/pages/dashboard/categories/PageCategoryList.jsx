@@ -45,6 +45,7 @@ import {
 } from '../../../components/dashboard/CategoryList';
 import CategoryForm from './CategoryForm';
 import useLocales from '../../../hooks/useLocales';
+import { ImageBrokenIcon } from '../../../assets';
 
 // ----------------------------------------------------------------------
 
@@ -52,7 +53,7 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
   width: 64,
   height: 64,
   objectFit: 'cover',
-  margin: theme.spacing(0, 2),
+  margin: theme.spacing(0, 2, 0, 0),
   borderRadius: theme.shape.borderRadiusSm
 }));
 
@@ -92,11 +93,12 @@ export default function PageCategoryList() {
   const dispatch = useDispatch();
   const { list: categoriesList, isLoading, hasError } = useSelector((state) => state.category);
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('calories');
+  const [orderBy, setOrderBy] = useState('createdAt');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [currentId, setCurrentId] = useState(null);
   const [openForm, setOpenForm] = useState(false);
 
   useEffect(() => {
@@ -152,10 +154,12 @@ export default function PageCategoryList() {
   };
 
   const handleSelectAllClick = (event) => {
-    console.log(categoriesList);
     if (event.target.checked) {
       const newSelected = categoriesList.map((n) => n.slug);
       setSelected(newSelected);
+      if (selected.count === 1) {
+        setCurrentId(categoriesList[categoriesList.indexOf(selected[0])]._id);
+      }
       return;
     }
     setSelected([]);
@@ -186,11 +190,13 @@ export default function PageCategoryList() {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
+  const handleCreateNew = () => {
+    setCurrentId(null);
+    setOpenForm(true);
   };
 
-  const handleOpenForm = () => {
+  const handleEdit = (categoryId) => {
+    setCurrentId(categoryId);
     setOpenForm(true);
   };
 
@@ -205,15 +211,14 @@ export default function PageCategoryList() {
 
   if (hasError) {
     // TODO: handle not found
-    return <div>{t('dashboard.categories.not-found')}</div>;
+    return <SearchNotFound />;
   }
 
-  console.log(categoriesList);
-
+  console.log('Categories list: ', categoriesList);
   return (
     <Page title="Ecommerce: Category List | Minimal-UI">
       <Container>
-        <CategoryForm open={openForm} setOpen={setOpenForm} />
+        <CategoryForm open={openForm} setOpen={setOpenForm} currentId={currentId} setCurrentId={setCurrentId} />
 
         <HeaderBreadcrumbs
           heading="Category List"
@@ -226,14 +231,14 @@ export default function PageCategoryList() {
             { name: 'Category List' }
           ]}
           action={
-            <Button variant="contained" startIcon={<Icon icon={plusFill} />} onClick={handleOpenForm}>
+            <Button variant="contained" startIcon={<Icon icon={plusFill} />} onClick={handleCreateNew}>
               {t('dashboard.categories.add')}
             </Button>
           }
         />
 
         <Card>
-          <CategoryListToolbar numSelected={selected.length} />
+          <CategoryListToolbar searchPlaceHolder={t('dashboard.categories.search')} numSelected={selected.length} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -251,17 +256,18 @@ export default function PageCategoryList() {
                   {stableSort(categoriesList, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
-                      const isItemSelected = isSelected(row.slug);
+                      const { _id, slug, name, image, createdAt, updatedAt, isHide } = row;
+                      const isItemSelected = isSelected(slug);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
                         <TableRow
                           hover
-                          onClick={(event) => handleClick(event, row.slug)}
+                          onClick={(event) => handleClick(event, slug)}
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row._id}
+                          key={_id}
                           selected={isItemSelected}
                         >
                           <TableCell padding="checkbox">
@@ -269,14 +275,18 @@ export default function PageCategoryList() {
                           </TableCell>
                           {dense ? (
                             <TableCell component="th" id={labelId} scope="row" padding="none">
-                              {row.name}
+                              {name}
                             </TableCell>
                           ) : (
                             <TableCell component="th" scope="row" padding="none">
                               <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
-                                <ThumbImgStyle alt={row.name} src={row.image.original} />
+                                {image?.original ? (
+                                  <ThumbImgStyle alt={row.name} src={row.image.original} />
+                                ) : (
+                                  <ImageBrokenIcon width={64} height={64} marginRight={2} />
+                                )}
                                 <Typography variant="subtitle2" noWrap>
-                                  {row.name}
+                                  {name}
                                 </Typography>
                               </Box>
                             </TableCell>
@@ -284,19 +294,24 @@ export default function PageCategoryList() {
                           <TableCell align="left">
                             <Label
                               variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                              color={row.isHide ? 'default' : 'success'}
+                              color={isHide ? 'default' : 'success'}
                             >
-                              {t(`dashboard.categories.${row.isHide ? 'hidden' : 'visible'}`)}
+                              {t(`dashboard.categories.${isHide ? 'hidden' : 'visible'}`)}
                             </Label>
                           </TableCell>
                           <TableCell align="right" style={{ minWidth: 160 }}>
-                            {fDateTime(row.createdAt)}
+                            {fDateTime(createdAt)}
                           </TableCell>
                           <TableCell align="right" style={{ minWidth: 160 }}>
-                            {fDateTime(row.updatedAt)}
+                            {fDateTime(updatedAt)}
                           </TableCell>
                           <TableCell align="right">
-                            <CategoryMoreMenu onDelete={() => handleDeleteCategory(row._id)} productName={row.name} />
+                            <CategoryMoreMenu
+                              editTitle={t('common.edit')}
+                              onEdit={() => handleEdit(_id)}
+                              deleteTitle={t('common.delete')}
+                              onDelete={() => handleDeleteCategory(_id)}
+                            />
                           </TableCell>
                         </TableRow>
                       );
@@ -322,16 +337,9 @@ export default function PageCategoryList() {
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
-            <Box
-              sx={{
-                px: 3,
-                py: 1.5,
-                top: 0,
-                position: { md: 'absolute' }
-              }}
-            >
+            <Box sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}>
               <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense} />}
+                control={<Switch checked={dense} onChange={(e) => setDense(e.target.checked)} />}
                 label={t('common.small-padding')}
               />
             </Box>

@@ -1,9 +1,9 @@
 import i18next from 'i18next';
-import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-//
-import viLocales from './langVI';
+import { initReactI18next } from 'react-i18next';
+// translations
 import enLocales from './langEN';
+import viLocales from './langVI';
 
 i18next
   .use(LanguageDetector)

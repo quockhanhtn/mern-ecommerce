@@ -3,7 +3,11 @@ export default {
     'search-placeholder': 'Search...',
     'search-btn': 'Search',
     'rows-per-page': 'Rows per page',
-    'small-padding': 'Small padding'
+    'small-padding': 'Small padding',
+    save: 'Save',
+    cancel: 'Cancel',
+    edit: 'Edit',
+    delete: 'Delete'
   },
   settings: {
     title: 'Setting',
@@ -21,14 +25,18 @@ export default {
     'updated-at': 'Updated at',
     categories: {
       title: 'Categories',
-      add: 'Add category',
-      edit: 'Edit category',
-      delete: 'Delete category',
+      search: 'Search category ...',
       name: 'Category name',
       desc: 'Category description',
+      parent: 'Parent category',
       status: 'Status',
       hidden: 'Hidden',
-      visible: 'Visible'
+      visible: 'Visible',
+      add: 'Add category',
+      'add-title': 'Add new category',
+      edit: 'Edit category',
+      'edit-title': 'Edit category',
+      delete: 'Delete category'
     }
   }
 };
