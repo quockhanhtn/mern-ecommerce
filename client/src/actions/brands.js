@@ -13,17 +13,39 @@ export const getAllBrands = () => async (dispatch) => {
   }
 };
 
-export const createBrand = (brand) => ({
-  type: actionTypes.BRAND.CREATE,
-  payload: brand
-});
+export const createBrand = (newBrand) => async (dispatch) => {
+  try {
+    dispatch({ type: actionTypes.START_LOADING });
+    const { data } = await api.createBrand(newBrand);
+    dispatch({ type: actionTypes.BRAND.CREATE, payload: data });
+    dispatch({ type: actionTypes.END_LOADING });
+  } catch (e) {
+    console.error('Error when get posts in actions/brands/createBrand', e);
+    dispatch({ type: actionTypes.HAS_ERROR });
+  }
+};
 
-export const updateBrand = (brand) => ({
-  type: actionTypes.BRAND.UPDATE,
-  payload: brand
-});
+export const updateBrand = (id, updatedCategory) => async (dispatch) => {
+  try {
+    dispatch({ type: actionTypes.START_LOADING });
+    const { data } = await api.updateBrand(id, updatedCategory);
+    console.log('updateBrand', data);
+    dispatch({ type: actionTypes.BRAND.UPDATE, payload: data.data });
+    dispatch({ type: actionTypes.END_LOADING });
+  } catch (e) {
+    console.error('Error when get posts in actions/brands/updateBrand', e);
+    dispatch({ type: actionTypes.HAS_ERROR });
+  }
+};
 
-export const deleteBrand = (brand) => ({
-  type: actionTypes.BRAND.DELETE,
-  payload: brand
-});
+export const deleteBrand = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: actionTypes.START_LOADING });
+    const { data } = await api.deleteBrand(id);
+    dispatch({ type: actionTypes.BRAND.DELETE, payload: data });
+    dispatch({ type: actionTypes.END_LOADING });
+  } catch (e) {
+    console.error('Error when get posts in actions/brands/deleteBrand', e);
+    dispatch({ type: actionTypes.HAS_ERROR });
+  }
+};

@@ -4,7 +4,7 @@ import brandService from "../services/brands.service.js";
 
 const formatBrand = (brand, req) => {
   if (brand.image) {
-    brand.image = imagesService.formatPath(brand.image, req.headers.origin);
+    brand.image = imagesService.formatPath(brand.image, `${req.protocol}://${req.get('host')}`);
   }
   return brand;
 }
@@ -13,7 +13,7 @@ export const getBrands = async (req, res, next) => {
   try {
     let brands = await brandService.getAll();
     brands = brands.map(brand => formatBrand(brand, req));
-    if (brands && brands.length > 0) {
+    if (brands) {
       resUtils.status200(res, 'Gets all brands successfully', brands);
     } else {
       resUtils.status404(res, 'No brands found');

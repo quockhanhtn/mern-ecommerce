@@ -20,3 +20,7 @@ export const deleteCategory = (identity) => API.delete(`/categories/${identity}`
 
 // ----------------------------Brand-----------------------------
 export const getAllBrand = () => API.get('/brands');
+export const getOneBrand = (identity) => API.get(`/brands/${identity}`);
+export const createBrand = (newCategory) => API.post('/brands', newCategory);
+export const updateBrand = (identity, updatedBrand) => API.patch(`/brands/${identity}`, updatedBrand);
+export const deleteBrand = (identity) => API.delete(`/brands/${identity}`);

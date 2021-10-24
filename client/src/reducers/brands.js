@@ -17,7 +17,7 @@ const brandsReducer = (state = initialState, action) => {
     case actionTypes.BRAND.GET_ONE:
       return { ...state, item: payload };
     case actionTypes.BRAND.CREATE:
-      return { ...state, list: [payload, ...state.list] };
+      return { ...state, list: [payload.data, ...state.list] };
     case actionTypes.BRAND.UPDATE:
       return {
         ...state,
