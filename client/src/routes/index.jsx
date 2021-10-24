@@ -53,7 +53,8 @@ export default function Router() {
               element: <Navigate to="/dashboard/app/categories" replace />
             },
             { path: 'categories', element: <PageCategoryList /> },
-            { path: 'brands', element: <PageBrandList /> }
+            { path: 'brands', element: <PageBrandList /> },
+            { path: 'discounts', element: <PageDiscountList /> }
           ]
         }
       ]
@@ -84,6 +85,7 @@ const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
 const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));
 const PageCategoryList = Loadable(lazy(() => import('../pages/dashboard/categories/PageCategoryList')));
 const PageBrandList = Loadable(lazy(() => import('../pages/dashboard/brands/PageBrandList')));
+const PageDiscountList = Loadable(lazy(() => import('../pages/dashboard/discounts/PageDiscountList')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 
 // Main

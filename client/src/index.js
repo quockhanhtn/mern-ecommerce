@@ -9,6 +9,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 // redux
 import { Provider as ReduxProvider } from 'react-redux';
+import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
+import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
 import store from './store';
 // contexts
 import { SettingsProvider } from './contexts/SettingsContext';
@@ -23,11 +25,13 @@ ReactDOM.render(
   <StrictMode>
     <HelmetProvider>
       <ReduxProvider store={store}>
-        <SettingsProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </SettingsProvider>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <SettingsProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </SettingsProvider>
+        </LocalizationProvider>
       </ReduxProvider>
     </HelmetProvider>
   </StrictMode>,

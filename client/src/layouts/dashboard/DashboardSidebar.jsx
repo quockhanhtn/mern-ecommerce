@@ -44,7 +44,8 @@ const ICONS = {
   analytics: getIcon('ic_analytics'),
   dashboard: getIcon('ic_dashboard'),
   categories: getIcon('ic_categories'),
-  brands: getIcon('ic_brands')
+  brands: getIcon('ic_brands'),
+  discounts: getIcon('ic_discounts')
 };
 
 // ----------------------------------------------------------------------
@@ -82,7 +83,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       subheader: 'management',
       items: [
         { title: t('dashboard.categories.title'), path: PATH_DASHBOARD.app.categories, icon: ICONS.categories },
-        { title: t('dashboard.brands.title'), path: PATH_DASHBOARD.app.brands, icon: ICONS.brands }
+        { title: t('dashboard.brands.title'), path: PATH_DASHBOARD.app.brands, icon: ICONS.brands },
+        { title: t('dashboard.discounts.title'), path: PATH_DASHBOARD.app.discounts, icon: ICONS.discounts }
       ]
     }
   ];
