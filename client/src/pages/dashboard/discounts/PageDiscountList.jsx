@@ -178,7 +178,7 @@ export default function PageDiscountList() {
 
   const isSelected = (slug) => selected.indexOf(slug) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty brandsList.
+  // Avoid a layout jump when reaching the last page with empty discounts.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - discountsList.length) : 0;
 
   if (isLoading) {
@@ -198,9 +198,9 @@ export default function PageDiscountList() {
         <HeaderBreadcrumbs
           heading={t('dashboard.discounts.heading')}
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: t('dashboard.title'), href: PATH_DASHBOARD.root },
             {
-              name: 'E-Commerce',
+              name: t('dashboard.ecommerce'),
               href: PATH_DASHBOARD.root
             },
             { name: t('dashboard.discounts.heading') }

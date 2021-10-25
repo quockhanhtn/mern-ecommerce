@@ -25,11 +25,10 @@ export const createBrand = (newBrand) => async (dispatch) => {
   }
 };
 
-export const updateBrand = (id, updatedCategory) => async (dispatch) => {
+export const updateBrand = (id, updateBrand) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
-    const { data } = await api.updateBrand(id, updatedCategory);
-    console.log('updateBrand', data);
+    const { data } = await api.updateBrand(id, updateBrand);
     dispatch({ type: actionTypes.BRAND.UPDATE, payload: data.data });
     dispatch({ type: actionTypes.END_LOADING });
   } catch (e) {

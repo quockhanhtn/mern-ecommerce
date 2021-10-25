@@ -42,6 +42,7 @@ const ICONS = {
   user: getIcon('ic_user'),
   ecommerce: getIcon('ic_ecommerce'),
   analytics: getIcon('ic_analytics'),
+  config: getIcon('ic_config'),
   dashboard: getIcon('ic_dashboard'),
   categories: getIcon('ic_categories'),
   brands: getIcon('ic_brands'),
@@ -73,7 +74,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       subheader: 'general',
       items: [
         { title: 'Statics', path: PATH_DASHBOARD.general.statics, icon: ICONS.analytics },
-        { title: 'Config', path: PATH_DASHBOARD.general.config, icon: ICONS.analytics }
+        { title: 'Config', path: PATH_DASHBOARD.general.config, icon: ICONS.config }
       ]
     },
 

@@ -24,6 +24,7 @@ export default {
   },
   dashboard: {
     title: 'Dashboard',
+    ecommerce: 'E-commerce',
     'created-at': 'Created at',
     'updated-at': 'Updated at',
     categories: {
@@ -81,11 +82,16 @@ export default {
       'desc-validation': 'Discount is required',
       discount: 'Percentage',
       'discount-validation': 'Discount is required',
+      'discount-validation-max': 'Promotion percentage must be less than 100',
+      'discount-validation-min': 'Promotion percentage must be greater than 0',
       quantity: 'Quantity',
       'quantity-validation': 'Quantity is required',
       status: 'Status',
       hidden: 'Hidden',
       visible: 'Visible',
+      'create-success': 'Create success',
+      'updated-success': 'Updated success',
+      error: 'Error',
       'date-start': 'Date start',
       'date-end': 'Date end'
     }
