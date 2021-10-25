@@ -9,55 +9,58 @@ export default {
   create,
   update,
   hidden,
-  remove
+  remove,
 };
 
-const SELECTED_FIELDS = '_id slug name desc isHide parent children createdAt updatedAt';
-const POPULATE_OPTS = [
-  {
-    path: 'image',
-    select: 'dirPath ext hasSmall hasMedium hasLarge',
-    model: 'Image'
-  }
-];
+const SELECTED_FIELDS =
+  '_id slug name desc isHide image parent children createdAt updatedAt';
+// const POPULATE_OPTS = [
+//   {
+//     path: 'image',
+//     select: 'dirPath ext hasSmall hasMedium hasLarge',
+//     model: 'Image'
+//   }
+// ];
 
 /**
- * 
+ *
  * @returns all categories
  */
 async function getAll() {
-  return await Category.find({parent: null})
+  return await Category.find({ parent: null })
     .select(SELECTED_FIELDS)
-    .populate(POPULATE_OPTS)
-    .sort({createdAt: -1})
-    .lean().exec();
+    // .populate(POPULATE_OPTS)
+    .sort({ createdAt: -1 })
+    .lean()
+    .exec();
 }
 
 /**
  * Get category
- * @param {*} identity     
- * @returns 
+ * @param {*} identity
+ * @returns
  */
 async function getOne(identity) {
   const filter = strUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
 
-  return await Category.findOne(filter).populate(POPULATE_OPTS).lean().exec()
+  return await Category.findOne(filter).lean().exec();
 }
-
 
 async function create(data) {
   const category = new Category({
     _id: new mongoose.Types.ObjectId(),
-    ...data
+    ...data,
   });
 
   if (data.parent) {
     const parent = await getOne(data.parent);
     if (parent) {
       category.parent = parent._id;
-      await Category.findByIdAndUpdate(parent._id, { $addToSet: { children: category._id } });
+      await Category.findByIdAndUpdate(parent._id, {
+        $addToSet: { children: category._id },
+      });
     } else {
       throw new Error(`Parent category '${data.parent}' not found!`);
     }
@@ -65,14 +68,16 @@ async function create(data) {
   return await category.save();
 }
 
-
 async function update(identity, updatedData) {
   const currentCategory = await getOne(identity);
 
-  // delete old image
-  if (currentCategory.image && currentCategory.image?._id !== updatedData?.image) {
-    await imagesService.remove(currentCategory.image._id);
-  }
+  // // delete old image
+  // if (
+  //   currentCategory.image &&
+  //   currentCategory.image?._id !== updatedData?.image
+  // ) {
+  //   await imagesService.remove(currentCategory.image._id);
+  // }
 
   // update parent category
   if (updatedData.parent && currentCategory.parent !== updatedData.parent) {
@@ -82,21 +87,28 @@ async function update(identity, updatedData) {
     const parent = await Category.findOne(parentFilter);
     if (parent) {
       updatedData.parent = parent._id;
-      await Category.findByIdAndUpdate(parent._id, { $addToSet: { children: currentCategory._id } });
-      await Category.findByIdAndUpdate(currentCategory.parent, { $pull: { children: currentCategory._id } });
+      await Category.findByIdAndUpdate(parent._id, {
+        $addToSet: { children: currentCategory._id },
+      });
+      await Category.findByIdAndUpdate(currentCategory.parent, {
+        $pull: { children: currentCategory._id },
+      });
     } else {
       throw new Error(`Parent category '${updatedData.parent}' not found!`);
     }
   }
 
-  const updatedCategory = await Category.findByIdAndUpdate(currentCategory._id, updatedData, { new: true });
+  const updatedCategory = await Category.findByIdAndUpdate(
+    currentCategory._id,
+    updatedData,
+    { new: true }
+  );
   if (updatedCategory) {
     return updatedCategory;
   } else {
     throw new Error(`Category '${identity}' not found!`);
   }
 }
-
 
 /**
  * Toggle category isHide
@@ -108,8 +120,8 @@ async function hidden(identity) {
   if (category) {
     return Category.findByIdAndUpdate(
       category._id,
-      {isHide: !category.isHide},
-      {new: true}
+      { isHide: !category.isHide },
+      { new: true }
     );
   }
   return null;
@@ -117,7 +129,7 @@ async function hidden(identity) {
 
 /**
  * Delete category
- * @param {*} identity  category id or slug 
+ * @param {*} identity  category id or slug
  * @returns true if delete successfully else false
  */
 async function remove(identity) {
@@ -125,5 +137,5 @@ async function remove(identity) {
     ? { _id: identity }
     : { slug: identity };
   const deletedCategory = await Category.findOneAndDelete(filter);
-  return !!deletedCategory;
+  return deletedCategory;
 }

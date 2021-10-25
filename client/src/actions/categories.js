@@ -16,6 +16,7 @@ export const getAllCategories = () => async (dispatch) => {
 
 export const createCategory = (newCategory) => async (dispatch) => {
   try {
+    console.log('crae', newCategory);
     dispatch({ type: actionTypes.START_LOADING });
     const { data } = await api.createCategory(newCategory);
     dispatch({ type: actionTypes.CATEGORY.CREATE, payload: data });
@@ -42,8 +43,8 @@ export const updateCategory = (id, updatedCategory) => async (dispatch) => {
 export const deleteCategory = (id) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
-    const { data } = await api.deleteCategory(id);
-    dispatch({ type: actionTypes.CATEGORY.DELETE, payload: data });
+    await api.deleteCategory(id);
+    dispatch({ type: actionTypes.CATEGORY.DELETE, payload: { _id: id } });
     dispatch({ type: actionTypes.END_LOADING });
   } catch (e) {
     console.error('Error when get posts in actions/categories/deleteCategory', e);
