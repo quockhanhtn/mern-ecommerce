@@ -29,7 +29,7 @@ import { deleteBrand, getAllBrands } from '../../../actions/brands';
 import Label from '../../../components/Label';
 import { fDateTime } from '../../../utils/formatTime';
 import Scrollbar from '../../../components/Scrollbar';
-import * as Helper from '../../../helper/Helper';
+import * as Helper from '../../../helper/listHelper';
 import BrandForm from './BrandForm';
 import { BrandListHead, BrandListToolbar, BrandMoreMenu } from '../../../components/dashboard/brand-list';
 import Page404 from '../../Page404';

@@ -28,7 +28,7 @@ import LoadingScreen from '../../../components/LoadingScreen';
 import Label from '../../../components/Label';
 import { fDateTime } from '../../../utils/formatTime';
 import Scrollbar from '../../../components/Scrollbar';
-import * as Helper from '../../../components/helper/Helper';
+import * as Helper from '../../../helper/listHelper';
 import Page404 from '../../Page404';
 import { DiscountListToolbar, DiscountListHead, DiscountMoreMenu } from '../../../components/dashboard/discount-list';
 import { deleteDiscount, getAllDiscounts } from '../../../actions/discounts';

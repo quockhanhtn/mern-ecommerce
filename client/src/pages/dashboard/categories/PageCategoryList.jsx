@@ -46,7 +46,7 @@ import {
 import CategoryForm from './CategoryForm';
 import useLocales from '../../../hooks/useLocales';
 import { ImageBrokenIcon } from '../../../assets';
-import { stableSort, getComparator } from '../../../helper/Helper';
+import { stableSort, getComparator } from '../../../helper/listHelper';
 
 // ----------------------------------------------------------------------
 

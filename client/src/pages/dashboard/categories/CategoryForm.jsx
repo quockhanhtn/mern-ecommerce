@@ -26,7 +26,7 @@ import { UploadSingleFile } from '../../../components/upload';
 import { varFadeInUp, MotionInView } from '../../../components/animate';
 import useLocales from '../../../hooks/useLocales';
 import { createCategory, updateCategory } from '../../../actions/categories';
-import { firebaseUploadSingle } from '../../../helper/Helper';
+import { firebaseUploadSingle } from '../../../helper/firebaseHelper';
 import LoadingScreen from '../../../components/LoadingScreen';
 import { allowImageMineTypes } from '../../../constants/imageMineTypes';
 
