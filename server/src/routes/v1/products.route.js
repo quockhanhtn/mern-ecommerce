@@ -10,12 +10,11 @@ import {
   updateProductVariants,
   deleteProductVariants
 } from '../../controllers/products.controller.js';
-import multerUpload from '../../utils/upload-utils.js';
-import { singleImageHandler } from '../../middlewares/image-handler.js';
+import uploadUtils from '../../utils/upload-utils.js';
 
 const router = express.Router();
 const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
-const upload = multerUpload('/products/', allowedMimes, 21); // 21 = 1 thumbnail + 20 images
+const upload = uploadUtils.multerUpload('/products/', allowedMimes, 21); // 21 = 1 thumbnail + 20 images
 const uploadFields = [{ name: 'thumbnail', maxCount: 1 }, { name: 'pictures', maxCount: 20 }];
 
 
@@ -24,23 +23,24 @@ router.get('/:identity', getProductById);
 
 router.post('/',
   upload.fields(uploadFields),
+  uploadUtils.handleFilePath(uploadFields),
   createProduct
 );
 router.patch('/:identity', updateProduct);
 router.delete('/:identity', deleteProduct);
 router.patch('/:identity/rate', rateProduct);
 
-
 router.post('/:identity/variants',
   upload.fields(uploadFields),
-  singleImageHandler('thumbnail', 'variants'),
+  uploadUtils.handleFilePath(uploadFields),
   addProductVariants
 );
 router.patch('/:identity/variants/:sku',
   upload.fields(uploadFields),
-  singleImageHandler('thumbnail', 'variants'),
+  uploadUtils.handleFilePath(uploadFields),
   updateProductVariants
 );
 router.delete('/:identity/variants/:sku', deleteProductVariants);
+
 
 export default router;

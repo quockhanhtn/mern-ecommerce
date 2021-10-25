@@ -1,9 +1,8 @@
-import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
+import { motion } from 'framer-motion';
 // material
 import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
 import {
@@ -27,7 +26,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getAllCategories, deleteCategory } from '../../../actions/categories';
 // utils
 import { fDateTime } from '../../../utils/formatTime';
-import { fCurrency } from '../../../utils/formatNumber';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
@@ -37,6 +35,7 @@ import Scrollbar from '../../../components/Scrollbar';
 import SearchNotFound from '../../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
 import LoadingScreen from '../../../components/LoadingScreen';
+import EmptyCard from '../../../components/EmptyCard';
 import {
   CategoryListHead,
   CategoryListToolbar,
@@ -116,8 +115,13 @@ export default function PageCategoryList() {
     }
   ];
 
-  const handleDeleteCategory = (id) => {
+  const handleDeleteCategory = (id, slug) => {
     dispatch(deleteCategory(id));
+    const selectedIndex = selected.indexOf(slug);
+    if (selectedIndex > -1) {
+      selected.splice(selectedIndex, 1);
+    }
+    setSelected(selected);
   };
 
   const handleRequestSort = (event, property) => {
@@ -210,10 +214,10 @@ export default function PageCategoryList() {
           }
         />
 
-        <Card>
-          <CategoryListToolbar searchPlaceHolder={t('dashboard.categories.search')} numSelected={selected.length} />
+        {categoriesList.length > 0 ? (
+          <Card>
+            <CategoryListToolbar searchPlaceHolder={t('dashboard.categories.search')} numSelected={selected.length} />
 
-          {categoriesList.length > 0 ? (
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800 }}>
                 <Table size={dense ? 'small' : 'medium'}>
@@ -284,7 +288,7 @@ export default function PageCategoryList() {
                                 editTitle={t('common.edit')}
                                 onEdit={() => handleEdit(_id)}
                                 deleteTitle={t('common.delete')}
-                                onDelete={() => handleDeleteCategory(_id)}
+                                onDelete={() => handleDeleteCategory(_id, slug)}
                               />
                             </TableCell>
                           </TableRow>
@@ -299,29 +303,29 @@ export default function PageCategoryList() {
                 </Table>
               </TableContainer>
             </Scrollbar>
-          ) : (
-            <div>Empty</div>
-          )}
 
-          <Box sx={{ position: 'relative' }}>
-            <TablePagination
-              labelRowsPerPage={t('common.rows-per-page')}
-              rowsPerPageOptions={[5, 10, 25, 50, 100]}
-              component="div"
-              count={categoriesList.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-            <Box sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}>
-              <FormControlLabel
-                control={<Switch checked={dense} onChange={(e) => setDense(e.target.checked)} />}
-                label={t('common.small-padding')}
+            <Box sx={{ position: 'relative' }}>
+              <TablePagination
+                labelRowsPerPage={t('common.rows-per-page')}
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                component="div"
+                count={categoriesList.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
               />
+              <Box sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}>
+                <FormControlLabel
+                  control={<Switch checked={dense} onChange={(e) => setDense(e.target.checked)} />}
+                  label={t('common.small-padding')}
+                />
+              </Box>
             </Box>
-          </Box>
-        </Card>
+          </Card>
+        ) : (
+          <EmptyCard title="Not found" />
+        )}
       </Container>
     </Page>
   );

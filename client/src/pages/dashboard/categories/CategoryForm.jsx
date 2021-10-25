@@ -9,7 +9,9 @@ import {
   Autocomplete,
   Button,
   Dialog,
+  FormControl,
   FormControlLabel,
+  InputLabel,
   Grid,
   TextField,
   DialogTitle,
@@ -17,10 +19,11 @@ import {
   DialogActions,
   RadioGroup,
   Radio,
+  Select,
   Stack,
   Typography
 } from '@material-ui/core';
-import { MRadio, MIconButton } from '../../../components/@material-extend';
+import { MRadio, MIconButton, MLabelTypo } from '../../../components/@material-extend';
 //
 import { UploadSingleFile } from '../../../components/upload';
 import { varFadeInUp, MotionInView } from '../../../components/animate';
@@ -34,12 +37,13 @@ import { allowImageMineTypes } from '../../../constants/imageMineTypes';
 
 CategoryForm.propTypes = {
   currentId: PropTypes.any.isRequired,
-  setCurrentId: PropTypes.any.isRequired,
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired
 };
 
-export default function CategoryForm({ currentId, setCurrentId, open, setOpen }) {
+// ----------------------------------------------------------------------
+
+export default function CategoryForm({ currentId, open, setOpen }) {
   const { t } = useLocales();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const dispatch = useDispatch();
@@ -52,6 +56,9 @@ export default function CategoryForm({ currentId, setCurrentId, open, setOpen })
   useEffect(() => {
     if (category) {
       setCategoryData({ ...categoryData, ...category });
+      if (category.image) {
+        setUploadImage(category.image);
+      }
     } else {
       setCategoryData({ name: '', desc: '', isHide: false, parent: '', image: '' });
     }
@@ -85,7 +92,11 @@ export default function CategoryForm({ currentId, setCurrentId, open, setOpen })
       delete categoryData.parent;
     }
 
-    if (!uploadImage) {
+    if (!uploadImage || typeof uploadImage === 'string') {
+      if (typeof uploadImage === 'string') {
+        setCategoryData({ ...categoryData, image: uploadImage });
+      }
+
       if (currentId) {
         dispatch(updateCategory(currentId, categoryData));
       } else {
@@ -160,10 +171,21 @@ export default function CategoryForm({ currentId, setCurrentId, open, setOpen })
             </MotionInView>
 
             <MotionInView variants={varFadeInUp}>
+              <Autocomplete
+                fullWidth
+                options={categoriesList.filter((x) => !x.isHide && x._id !== currentId)}
+                getOptionLabel={(option) => option.name}
+                value={categoriesList.find((c) => c.slug === categoryData.parent)}
+                onChange={(e, newValue) => setCategoryData({ ...categoryData, parent: newValue._id })}
+                renderInput={(params) => (
+                  <TextField {...params} label={t('dashboard.categories.parent')} margin="none" />
+                )}
+              />
+            </MotionInView>
+
+            <MotionInView variants={varFadeInUp}>
               <Grid>
-                <Typography variant="body2" marginRight={5}>
-                  {t('dashboard.categories.status')}
-                </Typography>
+                <MLabelTypo text={t('dashboard.categories.status')} />
                 <RadioGroup
                   row
                   value={categoryData.isHide.toString()}
@@ -184,29 +206,17 @@ export default function CategoryForm({ currentId, setCurrentId, open, setOpen })
             </MotionInView>
 
             <MotionInView variants={varFadeInUp}>
-              <Autocomplete
-                fullWidth
-                options={categoriesList.filter((x) => !x.isHide && x._id !== currentId)}
-                getOptionLabel={(option) => option.name}
-                value={categoriesList.find((c) => c.slug === categoryData.parent)}
-                onChange={(e, newValue) => setCategoryData({ ...categoryData, parent: newValue._id })}
-                renderInput={(params) => (
-                  <TextField {...params} label={t('dashboard.categories.parent')} margin="none" />
-                )}
-              />
-            </MotionInView>
-
-            <MotionInView variants={varFadeInUp}>
+              <MLabelTypo text={t('dashboard.categories.image')} />
               <UploadSingleFile file={uploadImage} onDrop={handleDropSingleFile} uploadPercent={uploadPercent} />
             </MotionInView>
           </Stack>
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="inherit" disabled={isLoading}>
+        <Button onClick={handleClose} color="inherit" disabled={isLoading || uploadPercent > -1}>
           {t('common.cancel')}
         </Button>
-        <Button onClick={handleSave} variant="contained" disabled={isLoading}>
+        <Button onClick={handleSave} variant="contained" disabled={isLoading || uploadPercent > -1}>
           {t('common.save')}
         </Button>
       </DialogActions>

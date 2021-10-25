@@ -1,6 +1,7 @@
 import { ValidationError } from 'express-validation';
 import httpStatus from 'http-status';
 import APIError from '../utils/APIError.js';
+import uploadUtils from '../utils/upload-utils.js';
 
 export default {
   converter,
@@ -69,12 +70,13 @@ function handler(err, req, res, _) {
     IP: req.ip,
     URL: req.originalUrl,
   };
-  console.log(response);
-
   // if (env !== 'development') {
   //   delete response.stack;
   // }
+  console.log(response);
 
+  uploadUtils.clearUploadFile(req);
+  
   res.status(response.code);
   res.json(response);
   res.end();

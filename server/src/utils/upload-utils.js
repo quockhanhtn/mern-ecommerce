@@ -8,6 +8,12 @@ const MAX_UPLOAD_FILE_SIZE = 1024 * 1024;
 
 if (!fs.existsSync(ROOT_UPLOAD_PATH)) { fs.mkdirSync(ROOT_UPLOAD_PATH); }
 
+export default {
+  multerUpload,
+  handleFilePath,
+  clearUploadFile
+}
+
 
 /**
  * Get Multer instance
@@ -18,7 +24,7 @@ if (!fs.existsSync(ROOT_UPLOAD_PATH)) { fs.mkdirSync(ROOT_UPLOAD_PATH); }
  * @returns Multer instance that provides several methods for generating
  * middleware that process files uploaded in `multipart/form-data` format.
  */
-function multerUpload(customPath, allowedMimes = [], filePerReq = 1) {
+export function multerUpload(customPath, allowedMimes = [], filePerReq = 1) {
   const uploadPath = path.join(ROOT_UPLOAD_PATH, customPath);
   if (!fs.existsSync(uploadPath)) { fs.mkdirSync(uploadPath); }
 
@@ -50,5 +56,48 @@ function multerUpload(customPath, allowedMimes = [], filePerReq = 1) {
   return multer(uploadOptions);
 }
 
+export function handleFilePath(field) {
+  return (req, res, next) => {
+    if (typeof field === 'string') {        // single file upload
+      if (req?.file?.path) {
+        req.body[field] = '/' + strUtils.replaceAll(req?.file?.path, '\\', '/');
+      }
+    } else if (Array.isArray(field)) {  // multiple files upload 
+      for (let i = 0; i < field.length; i++) {
+        const f = field[i];
+        if (req?.files?.[f.name] && req?.files?.[f.name].length > 0) {
+          req.body[f.name] = req?.files?.[f.name].map(x => '/' + strUtils.replaceAll(x.path, '\\', '/'));
+        }
+      }
+    }
+    req.body.multerUpload = field;  // use to delete file upload if error occur
+    next();
+  };
+}
 
-export default multerUpload;
+export function clearUploadFile(req) {
+  const field = req?.body?.multerUpload;
+  const files = [];
+
+  if (typeof field === 'string') {        // single file upload
+    if (req?.file?.path) {
+      files.push(req.body[field]);
+    }
+  } else if (Array.isArray(field)) {  // multiple files upload 
+    for (let i = 0; i < field.length; i++) {
+      const f = field[i];
+      if (req.body[f.name] && req.body[f.name].length > 0) {
+        req.body[f.name].forEach(item => files.push(item));
+      }
+    }
+  }
+
+  if (files.length > 0) {
+    files.forEach(element => {
+      const p = path.join(process.cwd(), element);
+      if (fs.existsSync(p)) {
+        fs.unlinkSync(p);
+      }
+    });
+  }
+}

@@ -40,7 +40,8 @@ export default {
       'add-title': 'Thêm danh mục mới',
       edit: 'Sửa danh mục',
       'edit-title': 'Chỉnh sửa danh mục',
-      delete: 'Xóa danh mục'
+      delete: 'Xóa danh mục',
+      image: 'Hình ảnh'
     },
     brands: {
       'title-page': 'Thương mại điện tử: Danh sách thương hiệu | HK-MOBILE',

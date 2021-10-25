@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
 import Category from '../models/category.model.js';
 import strUtils from '../utils/str-utils.js';
-import imagesService from './images.service.js';
+// import imagesService from './images.service.js';
 
 export default {
   getAll,
   getOne,
+  getId,
   create,
   update,
   hidden,
@@ -46,6 +47,17 @@ async function getOne(identity) {
     : { slug: identity };
 
   return await Category.findOne(filter).lean().exec();
+}
+
+/**
+ * Get id and check exist
+ * @param {*} identity 
+ * @returns _id of document if found, otherwise null
+ */
+async function getId(identity) {
+  const filter = strUtils.isUUID(identity) ? { _id: identity } : { slug: identity };
+  const result = await Category.findOne(filter).select('_id').lean().exec();
+  return result ? result._id : null;
 }
 
 async function create(data) {
@@ -136,6 +148,5 @@ async function remove(identity) {
   let filter = strUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
-  const deletedCategory = await Category.findOneAndDelete(filter);
-  return deletedCategory;
+  return await Category.findOneAndDelete(filter);
 }
