@@ -186,9 +186,9 @@ export default function PageBrandList() {
         <HeaderBreadcrumbs
           heading={t('dashboard.brands.heading')}
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: t('dashboard.title'), href: PATH_DASHBOARD.root },
             {
-              name: 'E-Commerce',
+              name: t('dashboard.ecommerce'),
               href: PATH_DASHBOARD.root
             },
             { name: t('dashboard.brands.heading') }

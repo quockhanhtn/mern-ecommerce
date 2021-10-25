@@ -104,26 +104,28 @@ export default function DiscountForm({ currentId, open, setOpen }) {
       (fromDate, schema) => fromDate && schema.min(fromDate, 'End date must be later than start date')
     ),
     quantity: Yup.number().required(t('dashboard.discounts.quantity-validation')),
-    discount: Yup.number().required(t('dashboard.discounts.discount-validation'))
+    discount: Yup.number()
+      .required(t('dashboard.discounts.discount-validation'))
+      .max(100, t('dashboard.discounts.discount-validation-max'))
+      .min(0, t('dashboard.discounts.discount-validation-min'))
   });
   const formik = useFormik({
     initialValues: getInitialValues(discount),
     validationSchema: DiscountSchema,
-    onSubmit: async (values, { resetForm, setSubmitting }) => {
+    onSubmit: async (values) => {
       try {
         values.isHide = discountData.isHide;
-        console.log(currentId);
+        values.image = discountData.image;
         if (currentId) {
           dispatch(updateDiscount(currentId, values));
-          enqueueSnackbar('Update success', { variant: 'success' });
+          enqueueSnackbar(t('dashboard.discounts.updated-success'), { variant: 'success' });
         } else {
-          console.log('currentId');
           dispatch(createDiscount(values));
-          enqueueSnackbar('Create success', { variant: 'success' });
+          enqueueSnackbar(t('dashboard.discounts.create-success'), { variant: 'success' });
         }
         handleClose();
       } catch (error) {
-        enqueueSnackbar('Error', { variant: 'error' });
+        enqueueSnackbar(t('dashboard.discounts.error'), { variant: 'error' });
       }
     }
   });
@@ -221,7 +223,7 @@ export default function DiscountForm({ currentId, open, setOpen }) {
               </MotionInView>
               <MotionInView variants={varFadeInUp}>
                 <MobileDateTimePicker
-                  label="Start date"
+                  label={t('dashboard.discounts.date-start')}
                   value={values.fromDate}
                   inputFormat="dd/MM/yyyy hh:mm a"
                   onChange={(date) => setFieldValue('fromDate', date)}
@@ -230,7 +232,7 @@ export default function DiscountForm({ currentId, open, setOpen }) {
               </MotionInView>
               <MotionInView variants={varFadeInUp}>
                 <MobileDateTimePicker
-                  label="End date"
+                  label={t('dashboard.discounts.date-end')}
                   value={values.endDate}
                   inputFormat="dd/MM/yyyy hh:mm a"
                   onChange={(date) => setFieldValue('endDate', date)}
