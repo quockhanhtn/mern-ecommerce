@@ -9,9 +9,7 @@ import {
   Autocomplete,
   Button,
   Dialog,
-  FormControl,
   FormControlLabel,
-  InputLabel,
   Grid,
   TextField,
   DialogTitle,
@@ -19,7 +17,6 @@ import {
   DialogActions,
   RadioGroup,
   Radio,
-  Select,
   Stack,
   Typography
 } from '@material-ui/core';
