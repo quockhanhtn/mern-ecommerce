@@ -2,6 +2,15 @@
 import './i18n';
 // scroll bar
 import 'simplebar/src/simplebar.css';
+// highlight
+import './utils/highlight';
+// editor
+import 'react-quill/dist/quill.snow.css';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+// map
+import 'mapbox-gl/dist/mapbox-gl.css';
+// lightbox
+import 'react-image-lightbox/style.css';
 
 import ReactDOM from 'react-dom';
 import { StrictMode } from 'react';

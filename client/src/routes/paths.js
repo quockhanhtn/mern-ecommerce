@@ -18,6 +18,11 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/app'),
     categories: path(ROOTS_DASHBOARD, '/app/categories'),
     brands: path(ROOTS_DASHBOARD, '/app/brands'),
-    discounts: path(ROOTS_DASHBOARD, '/app/discounts')
+    discounts: path(ROOTS_DASHBOARD, '/app/discounts'),
+    products: {
+      root: path(ROOTS_DASHBOARD, '/app/products'),
+      list: path(ROOTS_DASHBOARD, '/app/products/list'),
+      add: path(ROOTS_DASHBOARD, '/app/products/create')
+    }
   }
 };

@@ -24,7 +24,7 @@ const brandsReducer = (state = initialState, action) => {
         list: state.list.map((post) => (post._id === payload._id ? payload : post))
       };
     case actionTypes.BRAND.DELETE:
-      return { ...state, list: state.list.filter((post) => post._id !== payload._id) };
+      return { ...state, list: state.list.filter((post) => post._id !== payload) };
     default:
       return state;
   }
