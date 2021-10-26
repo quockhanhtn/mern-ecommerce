@@ -1,11 +1,10 @@
 import resUtils from '../utils/res-utils.js';
-import imagesService from "../services/images.service.js"
-import userService from "../services/user.service.js";
+import imagesService from '../services/images.service.js';
+import userService from '../services/user.service.js';
+import { formatImageUrl } from '../utils/format-utils.js';
 
 const formatOneUser = (user, req) => {
-  if (user.image) {
-    user.image = imagesService.formatPath(user.image, req.headers.origin);
-  }
+  user = formatImageUrl(user, 'image', req);
   user = user.toObject();
   if (user.password) { delete user.password; }
   return user;

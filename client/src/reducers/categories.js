@@ -16,22 +16,23 @@ const categoriesReducer = (state = initialState, action) => {
       return { ...state, isLoading: false, hasError: true };
 
     case actionTypes.CATEGORY.GET_ALL:
-      return { ...state, list: payload.data };
+      return { ...state, list: payload.data, hasError: false };
 
     case actionTypes.CATEGORY.GET_ONE:
-      return { ...state, item: payload };
+      return { ...state, item: payload, hasError: false };
 
     case actionTypes.CATEGORY.CREATE:
-      return { ...state, list: [payload, ...state.list] };
+      return { ...state, list: [payload.data, ...state.list], hasError: false };
 
     case actionTypes.CATEGORY.UPDATE:
       return {
         ...state,
-        list: state.list.map((post) => (post._id === payload._id ? payload : post))
+        list: state.list.map((cat) => (cat._id === payload._id ? payload : cat)),
+        hasError: false
       };
 
     case actionTypes.CATEGORY.DELETE:
-      return { ...state, list: state.list.filter((post) => post._id !== payload._id) };
+      return { ...state, list: state.list.filter((cat) => cat._id !== payload._id), hasError: false };
 
     default:
       return state;

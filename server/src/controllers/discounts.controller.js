@@ -1,12 +1,9 @@
 import resUtils from '../utils/res-utils.js';
-import imagesService from "../services/images.service.js";
-import discountService from "../services/discounts.service.js";
+import discountService from '../services/discounts.service.js';
+import { formatImageUrl } from '../utils/format-utils.js';
 
 const formatDiscount = (discount, req) => {
-  if (discount.image) {
-    discount.image = imagesService.formatPath(discount.image, req.headers.origin);
-  }
-  return discount;
+  return formatImageUrl(discount, 'image', req);
 }
 
 export const getDiscounts = async (req, res, next) => {

@@ -1,9 +1,8 @@
-import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
+import { motion } from 'framer-motion';
 // material
 import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
 import {
@@ -27,7 +26,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getAllCategories, deleteCategory } from '../../../actions/categories';
 // utils
 import { fDateTime } from '../../../utils/formatTime';
-import { fCurrency } from '../../../utils/formatNumber';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
@@ -37,14 +35,17 @@ import Scrollbar from '../../../components/Scrollbar';
 import SearchNotFound from '../../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
 import LoadingScreen from '../../../components/LoadingScreen';
+import EmptyCard from '../../../components/EmptyCard';
 import {
   CategoryListHead,
   CategoryListToolbar,
   CategoryMoreMenu,
   CategoryCollapsibleTableRow
-} from '../../../components/dashboard/CategoryList';
+} from '../../../components/dashboard/category-list';
 import CategoryForm from './CategoryForm';
 import useLocales from '../../../hooks/useLocales';
+import { ImageBrokenIcon } from '../../../assets';
+import { stableSort, getComparator } from '../../../helper/listHelper';
 
 // ----------------------------------------------------------------------
 
@@ -52,37 +53,9 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
   width: 64,
   height: 64,
   objectFit: 'cover',
-  margin: theme.spacing(0, 2),
+  margin: theme.spacing(0, 2, 0, 0),
   borderRadius: theme.shape.borderRadiusSm
 }));
-
-// ----------------------------------------------------------------------
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
 
 // ----------------------------------------------------------------------
 
@@ -92,11 +65,12 @@ export default function PageCategoryList() {
   const dispatch = useDispatch();
   const { list: categoriesList, isLoading, hasError } = useSelector((state) => state.category);
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('calories');
+  const [orderBy, setOrderBy] = useState('createdAt');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [currentId, setCurrentId] = useState(null);
   const [openForm, setOpenForm] = useState(false);
 
   useEffect(() => {
@@ -141,8 +115,13 @@ export default function PageCategoryList() {
     }
   ];
 
-  const handleDeleteCategory = (id) => {
+  const handleDeleteCategory = (id, slug) => {
     dispatch(deleteCategory(id));
+    const selectedIndex = selected.indexOf(slug);
+    if (selectedIndex > -1) {
+      selected.splice(selectedIndex, 1);
+    }
+    setSelected(selected);
   };
 
   const handleRequestSort = (event, property) => {
@@ -152,10 +131,12 @@ export default function PageCategoryList() {
   };
 
   const handleSelectAllClick = (event) => {
-    console.log(categoriesList);
     if (event.target.checked) {
       const newSelected = categoriesList.map((n) => n.slug);
       setSelected(newSelected);
+      if (selected.count === 1) {
+        setCurrentId(categoriesList[categoriesList.indexOf(selected[0])]._id);
+      }
       return;
     }
     setSelected([]);
@@ -186,11 +167,13 @@ export default function PageCategoryList() {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
+  const handleCreateNew = () => {
+    setCurrentId(null);
+    setOpenForm(true);
   };
 
-  const handleOpenForm = () => {
+  const handleEdit = (categoryId) => {
+    setCurrentId(categoryId);
     setOpenForm(true);
   };
 
@@ -205,15 +188,14 @@ export default function PageCategoryList() {
 
   if (hasError) {
     // TODO: handle not found
-    return <div>{t('dashboard.categories.not-found')}</div>;
+    return <SearchNotFound />;
   }
 
-  console.log(categoriesList);
-
+  console.log('Categories list: ', categoriesList);
   return (
     <Page title="Ecommerce: Category List | Minimal-UI">
       <Container>
-        <CategoryForm open={openForm} setOpen={setOpenForm} />
+        <CategoryForm open={openForm} setOpen={setOpenForm} currentId={currentId} setCurrentId={setCurrentId} />
 
         <HeaderBreadcrumbs
           heading="Category List"
@@ -226,117 +208,124 @@ export default function PageCategoryList() {
             { name: 'Category List' }
           ]}
           action={
-            <Button variant="contained" startIcon={<Icon icon={plusFill} />} onClick={handleOpenForm}>
+            <Button variant="contained" startIcon={<Icon icon={plusFill} />} onClick={handleCreateNew}>
               {t('dashboard.categories.add')}
             </Button>
           }
         />
 
-        <Card>
-          <CategoryListToolbar numSelected={selected.length} />
+        {categoriesList.length > 0 ? (
+          <Card>
+            <CategoryListToolbar searchPlaceHolder={t('dashboard.categories.search')} numSelected={selected.length} />
 
-          <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table size={dense ? 'small' : 'medium'}>
-                <CategoryListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={tableHeads}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  rowCount={categoriesList.length}
-                  onSelectAllClick={handleSelectAllClick}
-                />
-                <TableBody>
-                  {stableSort(categoriesList, getComparator(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.slug);
-                      const labelId = `enhanced-table-checkbox-${index}`;
+            <Scrollbar>
+              <TableContainer sx={{ minWidth: 800 }}>
+                <Table size={dense ? 'small' : 'medium'}>
+                  <CategoryListHead
+                    order={order}
+                    orderBy={orderBy}
+                    headLabel={tableHeads}
+                    numSelected={selected.length}
+                    onRequestSort={handleRequestSort}
+                    rowCount={categoriesList.length}
+                    onSelectAllClick={handleSelectAllClick}
+                  />
+                  <TableBody>
+                    {stableSort(categoriesList, getComparator(order, orderBy))
+                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .map((row, index) => {
+                        const { _id, slug, name, image, createdAt, updatedAt, isHide } = row;
+                        const isItemSelected = isSelected(slug);
+                        const labelId = `enhanced-table-checkbox-${index}`;
 
-                      return (
-                        <TableRow
-                          hover
-                          onClick={(event) => handleClick(event, row.slug)}
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={row._id}
-                          selected={isItemSelected}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox checked={isItemSelected} />
-                          </TableCell>
-                          {dense ? (
-                            <TableCell component="th" id={labelId} scope="row" padding="none">
-                              {row.name}
+                        return (
+                          <TableRow
+                            hover
+                            onClick={(event) => handleClick(event, slug)}
+                            role="checkbox"
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            key={_id}
+                            selected={isItemSelected}
+                          >
+                            <TableCell padding="checkbox">
+                              <Checkbox checked={isItemSelected} />
                             </TableCell>
-                          ) : (
-                            <TableCell component="th" scope="row" padding="none">
-                              <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
-                                <ThumbImgStyle alt={row.name} src={row.image.original} />
-                                <Typography variant="subtitle2" noWrap>
-                                  {row.name}
-                                </Typography>
-                              </Box>
+                            {dense ? (
+                              <TableCell component="th" id={labelId} scope="row" padding="none">
+                                {name}
+                              </TableCell>
+                            ) : (
+                              <TableCell component="th" scope="row" padding="none">
+                                <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
+                                  {image ? (
+                                    <ThumbImgStyle alt={name} src={image} />
+                                  ) : (
+                                    <ImageBrokenIcon width={64} height={64} marginRight={2} />
+                                  )}
+                                  <Typography variant="subtitle2" noWrap>
+                                    {name}
+                                  </Typography>
+                                </Box>
+                              </TableCell>
+                            )}
+                            <TableCell align="left">
+                              <Label
+                                variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
+                                color={isHide ? 'default' : 'success'}
+                              >
+                                {t(`dashboard.categories.${isHide ? 'hidden' : 'visible'}`)}
+                              </Label>
                             </TableCell>
-                          )}
-                          <TableCell align="left">
-                            <Label
-                              variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                              color={row.isHide ? 'default' : 'success'}
-                            >
-                              {t(`dashboard.categories.${row.isHide ? 'hidden' : 'visible'}`)}
-                            </Label>
-                          </TableCell>
-                          <TableCell align="right" style={{ minWidth: 160 }}>
-                            {fDateTime(row.createdAt)}
-                          </TableCell>
-                          <TableCell align="right" style={{ minWidth: 160 }}>
-                            {fDateTime(row.updatedAt)}
-                          </TableCell>
-                          <TableCell align="right">
-                            <CategoryMoreMenu onDelete={() => handleDeleteCategory(row._id)} productName={row.name} />
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Scrollbar>
+                            <TableCell align="right" style={{ minWidth: 160 }}>
+                              {fDateTime(createdAt)}
+                            </TableCell>
+                            <TableCell align="right" style={{ minWidth: 160 }}>
+                              {fDateTime(updatedAt)}
+                            </TableCell>
+                            <TableCell align="right" onClick={(e) => e.stopPropagation()}>
+                              <CategoryMoreMenu
+                                editTitle={t('common.edit')}
+                                onEdit={() => handleEdit(_id)}
+                                deleteTitle={t('common.delete')}
+                                onDelete={() => handleDeleteCategory(_id, slug)}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    {emptyRows > 0 && (
+                      <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                        <TableCell colSpan={6} />
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Scrollbar>
 
-          <Box sx={{ position: 'relative' }}>
-            <TablePagination
-              labelRowsPerPage={t('common.rows-per-page')}
-              rowsPerPageOptions={[5, 10, 25, 50, 100]}
-              component="div"
-              count={categoriesList.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-            <Box
-              sx={{
-                px: 3,
-                py: 1.5,
-                top: 0,
-                position: { md: 'absolute' }
-              }}
-            >
-              <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense} />}
-                label={t('common.small-padding')}
+            <Box sx={{ position: 'relative' }}>
+              <TablePagination
+                labelRowsPerPage={t('common.rows-per-page')}
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                component="div"
+                count={categoriesList.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
               />
+              <Box sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}>
+                <FormControlLabel
+                  control={<Switch checked={dense} onChange={(e) => setDense(e.target.checked)} />}
+                  label={t('common.small-padding')}
+                />
+              </Box>
             </Box>
-          </Box>
-        </Card>
+          </Card>
+        ) : (
+          <EmptyCard title="Not found" />
+        )}
       </Container>
     </Page>
   );

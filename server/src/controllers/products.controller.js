@@ -1,71 +1,61 @@
 import resUtils from '../utils/res-utils.js';
 import productService from '../services/products.service.js'
+import { formatImageUrl } from '../utils/format-utils.js';
 
 const formatProduct = (product, req) => {
-  if (product.category?.image) {
-    product.category.image = productService.getImageUrlService(req, product.category.image);
-  }
-  
-  if (product.brand?.image) {
-    product.brand.image = productService.getImageUrlService(req, product.brand.image);
-  }
-  
+  product.category = formatImageUrl(product.category, 'image', req);
+  product.brand = formatImageUrl(product.brand, 'image', req);
+
   if (product.variants && product.variants.length > 0) {
     product.variants = product.variants.map(x => {
-      if (x.thumbnail) {
-        x.thumbnail = productService.getImageUrlService(req, x.thumbnail);
-      }
-      
-      if (x.pictures && x.pictures.length > 0) {
-        x.pictures = x.pictures.map(y => productService.getImageUrlService(req, y));
-      }
+      x = formatImageUrl(x, 'thumbnail', req);
+      x = formatImageUrl(x, 'pictures', req);
       return x;
     });
   }
   return product;
 }
-//#endregion
 
 //#region Product variants
 export const addProductVariants = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    const product = await productService.getOne(identity);
-    if (product) {
-      const newProduct = productService.addProductVariantsService(req, product);
+
+    const updatedProduct = await productService.addProductVariants(identity, req.body);
+    if (updatedProduct) {
       resUtils.status201(
         res,
-        `Add product variant to '${newProduct.name}' successfully!`,
-        formatProduct(newProduct, req)
+        `Add product variant to '${updatedProduct.name}' successfully!`,
+        formatProduct(updatedProduct, req)
       );
-    } else { resUtils.status404(res, `Product '${identity}' not found!`); }
+    } else {
+      resUtils.status500(res, `Has error when add variant to product '${identity}`);
+    }
   } catch (err) { next(err); }
 };
 
 export const updateProductVariants = async (req, res, next) => {
   try {
-    const { identity } = req.params;
-    const updatedProduct = await productService.getOne(identity);
+    const { identity, sku } = req.params;
+    const updatedProduct = await productService.updateProductVariants(identity, sku, req.body);
+
     if (updatedProduct) {
-      const saveResult = await productService.updateProductVariantsService(req, updatedProduct);
-      if (saveResult) {
-        resUtils.status200(
-          res,
-          `Update product variant of '${updatedProduct.name}' successfully!`,
-          formatProduct(updatedProduct, req)
-        );
-      }
-      else { resUtils.status500(res, `Update product variant of '${updatedProduct.name}' failed!`); }
+      resUtils.status200(
+        res,
+        `Update product variant of '${updatedProduct.name}' successfully!`,
+        formatProduct(updatedProduct, req)
+      );
     } else {
-      resUtils.status404(res, `Product '${identity}' not found!`);
+      resUtils.status500(res, `Update product variant of '${updatedProduct.name}' failed!`);
     }
+
   } catch (err) { next(err); }
 };
 
 export const deleteProductVariants = async (req, res, next) => {
   try {
     const { identity, sku } = req.params;
-    await productService.deleteProductVariantsService(identity, sku);
+    await productService.deleteProductVariants(identity, sku);
     resUtils.status204(res, `Delete product variant successfully!`,);
   } catch (err) { next(err); }
 };
@@ -74,11 +64,12 @@ export const deleteProductVariants = async (req, res, next) => {
 //#region Product info
 export const getAllProducts = async (req, res, next) => {
   try {
-    const products = await productService.getAllService();
+    let products = await productService.getAllProducts();
+    products = products.map(p => formatProduct(p, req));
     if (products && products.length > 0) {
-      resUtils.status200(res, null, products.map(product => formatProduct(product, req)));
+      resUtils.status200(res, 'Get all products successfully!', products);
     } else {
-      resUtils.status204(res, 'No products found');
+      resUtils.status200(res, 'No products found');
     }
   } catch (err) { next(err); }
 };
@@ -87,8 +78,8 @@ export const getAllProducts = async (req, res, next) => {
 export const getProductById = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    // update views and get new data for return
-    const product = await productService.getProductByIdService(identity);
+    // inc views and get new data for return
+    const product = await productService.getOneProduct(identity, true);
     if (product) {
       resUtils.status200(res, null, formatProduct(product, req));
     } else {
@@ -99,7 +90,7 @@ export const getProductById = async (req, res, next) => {
 
 export const createProduct = async (req, res, next) => {
   try {
-    const newProduct = await productService.createProductService(req);
+    const newProduct = await productService.createProduct(req.body);
     resUtils.status201(
       res,
       `Create NEW product '${newProduct.name}' successfully!`,
@@ -110,7 +101,8 @@ export const createProduct = async (req, res, next) => {
 
 export const updateProduct = async (req, res, next) => {
   try {
-    const updatedProduct = await productService.updateProductService(req);
+    const { identity } = req.params;
+    const updatedProduct = await productService.updateProduct(identity, req.body);
     if (updatedProduct) {
       resUtils.status200(
         res,
@@ -125,8 +117,9 @@ export const updateProduct = async (req, res, next) => {
 
 export const deleteProduct = async (req, res, next) => {
   try {
-    const deletedProduct = await productService.deleteProductService(req);
-    if (deletedProduct) {
+    const { identity } = req.params;
+    const result = await productService.removeProduct(identity);
+    if (result) {
       resUtils.status204(res, `Deleted product successfully!`);
     } else {
       resUtils.status404(res, `Product not found!`);
@@ -136,12 +129,21 @@ export const deleteProduct = async (req, res, next) => {
 
 export const rateProduct = async (req, res, next) => {
   try {
-    const updatedProduct = await productService.rateProductService(req);
-    if (updatedProduct) {
+    const { identity } = req.params;
+
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const rateStar = Number.parseFloat(req.body.rateStar) || 0;
+
+    if (rateStar < 1 || rateStar > 5) {
+      throw new Error('Rate must be between 1 and 5');
+    }
+
+    const result = await productService.rateProduct(identity, ip, rateStar);
+    if (result) {
       resUtils.status200(
         res,
-        `Rate product '${updatedProduct.name}' successfully!`,
-        formatProduct(updatedProduct, req)
+        `Rate product '${result.name}' successfully!`,
+        formatProduct(result, req)
       );
     } else {
       resUtils.status404(res, `Product not found!`);

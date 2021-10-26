@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink, Navigate, useLocation } from 'react-router-dom';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Avatar, Box, Link, Drawer, Typography } from '@material-ui/core';
@@ -42,8 +42,11 @@ const ICONS = {
   user: getIcon('ic_user'),
   ecommerce: getIcon('ic_ecommerce'),
   analytics: getIcon('ic_analytics'),
+  config: getIcon('ic_config'),
   dashboard: getIcon('ic_dashboard'),
-  categories: getIcon('ic_categories')
+  categories: getIcon('ic_categories'),
+  brands: getIcon('ic_brands'),
+  discounts: getIcon('ic_discounts')
 };
 
 // ----------------------------------------------------------------------
@@ -68,11 +71,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     // GENERAL
     // ----------------------------------------------------------------------
     {
-      // subheader: 'general',
+      subheader: 'general',
       items: [
-        { title: t('dashboard.categories.title'), path: PATH_DASHBOARD.general.pageOne, icon: ICONS.categories },
-        { title: 'Two', path: PATH_DASHBOARD.general.pageTwo, icon: ICONS.ecommerce },
-        { title: 'Three', path: PATH_DASHBOARD.general.pageThree, icon: ICONS.analytics }
+        { title: 'Statics', path: PATH_DASHBOARD.general.statics, icon: ICONS.analytics },
+        { title: 'Config', path: PATH_DASHBOARD.general.config, icon: ICONS.config }
       ]
     },
 
@@ -81,24 +83,16 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     {
       subheader: 'management',
       items: [
+        { title: t('dashboard.categories.title'), path: PATH_DASHBOARD.app.categories, icon: ICONS.categories },
+        { title: t('dashboard.brands.title'), path: PATH_DASHBOARD.app.brands, icon: ICONS.brands },
+        { title: t('dashboard.discounts.title'), path: PATH_DASHBOARD.app.discounts, icon: ICONS.discounts },
         {
-          title: t('dashboard.categories.title'),
-          path: PATH_DASHBOARD.app.categories,
-          icon: ICONS.categories,
+          title: 'Products',
+          path: PATH_DASHBOARD.app.products.root,
+          icon: ICONS.ecommerce,
           children: [
-            { title: 'Four', path: PATH_DASHBOARD.app.pageFour },
-            { title: 'Five', path: PATH_DASHBOARD.app.pageFive },
-            { title: 'Six', path: PATH_DASHBOARD.app.pageSix }
-          ]
-        },
-        {
-          title: 'user',
-          path: PATH_DASHBOARD.app.root,
-          icon: ICONS.user,
-          children: [
-            { title: 'Four', path: PATH_DASHBOARD.app.pageFour },
-            { title: 'Five', path: PATH_DASHBOARD.app.pageFive },
-            { title: 'Six', path: PATH_DASHBOARD.app.pageSix }
+            { title: 'Product List', path: PATH_DASHBOARD.app.products.list },
+            { title: 'Add Product', path: PATH_DASHBOARD.app.products.add }
           ]
         }
       ]

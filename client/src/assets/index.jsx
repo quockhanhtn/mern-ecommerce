@@ -10,3 +10,5 @@ export { default as DocIcon } from './icon_doc';
 export { default as PlanFreeIcon } from './icon_plan_free';
 export { default as PlanStarterIcon } from './icon_plan_starter';
 export { default as PlanPremiumIcon } from './icon_plan_premium';
+export { default as ImageBrokenIcon } from './icon_image_broken';
+export { default as EmptyBoxIcon } from './icon_empty_box';

@@ -11,15 +11,18 @@ const ROOTS_DASHBOARD = '/dashboard';
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   general: {
-    pageOne: path(ROOTS_DASHBOARD, '/one'),
-    pageTwo: path(ROOTS_DASHBOARD, '/two'),
-    pageThree: path(ROOTS_DASHBOARD, '/three')
+    statics: path(ROOTS_DASHBOARD, '/statics'),
+    config: path(ROOTS_DASHBOARD, '/config')
   },
   app: {
     root: path(ROOTS_DASHBOARD, '/app'),
     categories: path(ROOTS_DASHBOARD, '/app/categories'),
-    pageFour: path(ROOTS_DASHBOARD, '/app/four'),
-    pageFive: path(ROOTS_DASHBOARD, '/app/five'),
-    pageSix: path(ROOTS_DASHBOARD, '/app/six')
+    brands: path(ROOTS_DASHBOARD, '/app/brands'),
+    discounts: path(ROOTS_DASHBOARD, '/app/discounts'),
+    products: {
+      root: path(ROOTS_DASHBOARD, '/app/products'),
+      list: path(ROOTS_DASHBOARD, '/app/products/list'),
+      add: path(ROOTS_DASHBOARD, '/app/products/create')
+    }
   }
 };

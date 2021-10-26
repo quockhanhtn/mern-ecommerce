@@ -2,6 +2,15 @@
 import './i18n';
 // scroll bar
 import 'simplebar/src/simplebar.css';
+// highlight
+import './utils/highlight';
+// editor
+import 'react-quill/dist/quill.snow.css';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+// map
+import 'mapbox-gl/dist/mapbox-gl.css';
+// lightbox
+import 'react-image-lightbox/style.css';
 
 import ReactDOM from 'react-dom';
 import { StrictMode } from 'react';
@@ -9,6 +18,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 // redux
 import { Provider as ReduxProvider } from 'react-redux';
+import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
+import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
 import store from './store';
 // contexts
 import { SettingsProvider } from './contexts/SettingsContext';
@@ -23,11 +34,13 @@ ReactDOM.render(
   <StrictMode>
     <HelmetProvider>
       <ReduxProvider store={store}>
-        <SettingsProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </SettingsProvider>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <SettingsProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </SettingsProvider>
+        </LocalizationProvider>
       </ReduxProvider>
     </HelmetProvider>
   </StrictMode>,

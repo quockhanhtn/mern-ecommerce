@@ -6,6 +6,7 @@ import roundFilterList from '@iconify/icons-ic/round-filter-list';
 // material
 import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Toolbar, Tooltip, Typography, IconButton, OutlinedInput, InputAdornment } from '@material-ui/core';
+import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -31,14 +32,14 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-CategoryListToolbar.propTypes = {
+DiscountListToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired
 };
 
-export default function CategoryListToolbar({ numSelected, filterName, onFilterName }) {
+export default function DiscountListToolbar({ numSelected, filterName, onFilterName }) {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
-
+  const { t } = useLocales();
   return (
     <RootStyle
       sx={{
@@ -56,7 +57,7 @@ export default function CategoryListToolbar({ numSelected, filterName, onFilterN
         <SearchStyle
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search product..."
+          placeholder={t('dashboard.discounts.search-placeholder')}
           startAdornment={
             <InputAdornment position="start">
               <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
@@ -66,13 +67,13 @@ export default function CategoryListToolbar({ numSelected, filterName, onFilterN
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
+        <Tooltip title={t('common.delete')}>
           <IconButton>
             <Icon icon={trash2Fill} />
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
+        <Tooltip title={t('common.filter-list')}>
           <IconButton>
             <Icon icon={roundFilterList} />
           </IconButton>

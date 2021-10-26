@@ -4,11 +4,11 @@ import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
 
 const autoPopulateChildren = function (next) {
   this.populate('children')
-    .populate({
-      path: 'image',
-      select: 'dirPath ext original hasSmall hasMedium hasLarge',
-      model: 'Image'
-    });
+    // .populate({
+    //   path: 'image',
+    //   select: 'dirPath ext original hasSmall hasMedium hasLarge',
+    //   model: 'Image'
+    // });
   next();
 };
 
@@ -19,7 +19,8 @@ const categorySchema = mongoose.Schema(
     slug: { type: String, slug: "name", slugPaddingSize: 2, unique: true },
     desc: { type: String, trim: true, required: false },
 
-    image: { type: mongoose.Schema.Types.ObjectId, ref: 'Image', default: null },
+    // image: { type: mongoose.Schema.Types.ObjectId, ref: 'Image', default: null },
+    image: { type: String, trim: true, required: false },
 
     parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null },
     children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
