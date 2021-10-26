@@ -20,6 +20,7 @@ import { useEffect, useState } from 'react';
 import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
+import { Link as RouterLink } from 'react-router-dom';
 import Page from '../../../components/Page';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
@@ -30,7 +31,6 @@ import Label from '../../../components/Label';
 import { fDateTime } from '../../../utils/formatTime';
 import Scrollbar from '../../../components/Scrollbar';
 import * as Helper from '../../../helper/listHelper';
-import BrandForm from './BrandForm';
 import { BrandListHead, BrandListToolbar, BrandMoreMenu } from '../../../components/dashboard/brand-list';
 import Page404 from '../../Page404';
 // ----------------------------------------------------------------------
@@ -42,7 +42,7 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
   borderRadius: theme.shape.borderRadiusSm
 }));
 
-export default function PageBrandList() {
+export default function PageProductList() {
   const { t } = useLocales();
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
@@ -99,8 +99,9 @@ export default function PageBrandList() {
     }
   ];
 
-  const handleDeleteBrand = (id, slug) => {
-    dispatch(deleteBrand(id));
+  const handleDeleteBrand = async (id, slug) => {
+    await dispatch(deleteBrand(id));
+    dispatch(getAllBrands());
     enqueueSnackbar(t('dashboard.brands.delete'), { variant: 'success' });
     const index = selected.indexOf(slug);
     selected.splice(index, 1);
@@ -179,9 +180,6 @@ export default function PageBrandList() {
   return (
     <Page title={t('dashboard.brands.title-page')}>
       <Container>
-        {openForm && (
-          <BrandForm open={openForm} setOpen={setOpenForm} currentId={currentId} setCurrentId={setCurrentId} />
-        )}
         <HeaderBreadcrumbs
           heading={t('dashboard.brands.heading')}
           links={[
@@ -193,8 +191,13 @@ export default function PageBrandList() {
             { name: t('dashboard.brands.heading') }
           ]}
           action={
-            <Button variant="contained" startIcon={<Icon icon={plusFill} />} onClick={handleCreateNew}>
-              {t('dashboard.brands.add')}
+            <Button
+              variant="contained"
+              component={RouterLink}
+              to={PATH_DASHBOARD.app.product}
+              startIcon={<Icon icon={plusFill} />}
+            >
+              New Product
             </Button>
           }
         />

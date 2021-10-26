@@ -40,8 +40,8 @@ export const updateBrand = (id, updateBrand) => async (dispatch) => {
 export const deleteBrand = (id) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
-    const { data } = await api.deleteBrand(id);
-    dispatch({ type: actionTypes.BRAND.DELETE, payload: data });
+    await api.deleteBrand(id);
+    dispatch({ type: actionTypes.BRAND.DELETE, payload: id });
     dispatch({ type: actionTypes.END_LOADING });
   } catch (e) {
     console.error('Error when get posts in actions/brands/deleteBrand', e);

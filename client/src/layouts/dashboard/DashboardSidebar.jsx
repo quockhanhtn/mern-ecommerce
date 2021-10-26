@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink, Navigate, useLocation } from 'react-router-dom';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Avatar, Box, Link, Drawer, Typography } from '@material-ui/core';
@@ -85,7 +85,16 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       items: [
         { title: t('dashboard.categories.title'), path: PATH_DASHBOARD.app.categories, icon: ICONS.categories },
         { title: t('dashboard.brands.title'), path: PATH_DASHBOARD.app.brands, icon: ICONS.brands },
-        { title: t('dashboard.discounts.title'), path: PATH_DASHBOARD.app.discounts, icon: ICONS.discounts }
+        { title: t('dashboard.discounts.title'), path: PATH_DASHBOARD.app.discounts, icon: ICONS.discounts },
+        {
+          title: 'Products',
+          path: PATH_DASHBOARD.app.products.root,
+          icon: ICONS.ecommerce,
+          children: [
+            { title: 'Product List', path: PATH_DASHBOARD.app.products.list },
+            { title: 'Add Product', path: PATH_DASHBOARD.app.products.add }
+          ]
+        }
       ]
     }
   ];
