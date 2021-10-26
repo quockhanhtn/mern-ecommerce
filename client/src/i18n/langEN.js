@@ -35,6 +35,7 @@ export default {
       status: 'Status',
       hidden: 'Hidden',
       visible: 'Visible',
+      image: 'Category image',
       add: 'Add category',
       'add-title': 'Add new category',
       edit: 'Edit category',

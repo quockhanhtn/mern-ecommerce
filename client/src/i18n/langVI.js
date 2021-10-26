@@ -36,7 +36,8 @@ export default {
       visible: 'Hiển thị',
       add: 'Thêm danh mục',
       edit: 'Sửa danh mục',
-      delete: 'Xóa danh mục'
+      delete: 'Xóa danh mục',
+      image: 'Hình ảnh'
     }
   }
 };
