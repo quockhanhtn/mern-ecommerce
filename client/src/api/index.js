@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'http://localhost:3001/api/v1' });
+const API = axios.create({ baseURL: 'https://api-mobile7076.herokuapp.com/api/v1' });
 
 // Add Header Authorization
 API.interceptors.request.use((req) => {
