@@ -3,24 +3,19 @@ import Product from '../models/product.model.js';
 import categoryService from './categories.service.js'
 import brandService from './brands.service.js'
 import strUtils from '../utils/str-utils.js';
+import APIError from '../utils/APIError.js';
 
 export default {
-  getImageUrlService,
-  getProductFromRequestService,
-  getProductVariantFromRequestService,
-  getOne,
-  formatPathService,
-  findBrandIdService,
-  findCategoryIdService,
-  addProductVariantsService,
-  updateProductVariantsService,
-  deleteProductVariantsService,
-  getAllService,
-  getProductByIdService,
-  createProductService,
-  updateProductService,
-  deleteProductService,
-  rateProductService,
+  getAllProducts,
+  getOneProduct,
+  createProduct,
+  updateProduct,
+  removeProduct,
+  rateProduct,
+
+  addProductVariants,
+  updateProductVariants,
+  deleteProductVariants,
 };
 
 const SELECT_FIELD = '_id name slug desc video specifications category brand tags views rate variants createdAt updatedAt';
@@ -38,151 +33,160 @@ const POPULATE_OPTS = [
 ];
 
 /**
- *  Get Image Url
- * @returns string
- * @param req
- * @param path
+ * Initial product variant from data
+ * @param {object} data - Data pass from req.body
+ * @returns product variant
  */
-async function getImageUrlService(req, path){
-  if (path.startsWith('/')) {
-    return `${req.protocol}://${req.get('host')}${path}`;
-  }
-  return path;
-}
-
-/**
- *  Find Category by Id
- * @returns Category
- * @param categoryId
- */
-async function findCategoryIdService(categoryId) {
-  const category = await categoryService.getOne(categoryId);
-  return !!category ? category._id : null;
-}
-
-/**
- *  Find Brand by Id
- * @returns Brand
- * @param brandId
- */
-async function findBrandIdService(brandId) {
-  const brand = await brandService.getOne(brandId);
-  return !!brand ? brand._id : null;
-}
-
-/**
- *  Format Path
- * @returns string
- * @param path
- */
-function formatPathService (path) {
-  return '/' + strUtils.replaceAll(path, '\\', '/');
-}
-
-/**
- *  get Product Variant From Request
- * @returns
- * @param req
- */
-function getProductVariantFromRequestService(req) {
+function initialProductVariant(data) {
   let variant = {};
-  
-  if (req.body.sku) { variant.sku = req.body.sku; }
-  if (req.body.variantName) { variant.variantName = req.body.variantName; }
-  
-  if (req.body.price) { variant.price = Number.parseInt(req.body.price) }
-  if (req.body.marketPrice) { variant.marketPrice = Number.parseInt(req.body.marketPrice) }
-  
-  if (req.body.quantity) { variant.quantity = Number.parseInt(req.body.quantity); }
-  
-  if (req.body.addSpecifications) {
-    if (typeof req.body.addSpecifications === 'string') {
-      variant.addSpecifications = JSON.parse(req.body.addSpecifications);
-    } else if (req.body.addSpecifications) {
-      variant.addSpecifications = req.body.addSpecifications;
+
+  if (data.sku) { variant.sku = data.sku; }
+  if (data.variantName) { variant.variantName = data.variantName; }
+
+  if (data.price) { variant.price = Number.parseInt(data.price); }
+  if (data.marketPrice) { variant.marketPrice = Number.parseInt(data.marketPrice); }
+  if (data.quantity) { variant.quantity = Number.parseInt(data.quantity); }
+
+  if (data.addSpecifications) {
+    if (typeof data.addSpecifications === 'string') {
+      variant.addSpecifications = JSON.parse(data.addSpecifications);
+    } else if (data.addSpecifications) {
+      variant.addSpecifications = data.addSpecifications;
     }
   }
-  
+
   // product thumbnail
-  let thumbnail = req?.files?.thumbnail?.[0]?.path;
-  if (thumbnail) { variant.thumbnail = formatPathService(thumbnail); }
-  
+  if (data.thumbnail && data.thumbnail.length > 0) {
+    variant.thumbnail = data.thumbnail[0];
+  }
   // product pictures
-  if (req?.files?.pictures?.length > 0) {
-    variant.pictures = [];
-    req?.files?.pictures.forEach(x => variant.pictures.push(formatPathService(x.path)));
+  if (data.pictures && data.pictures.length > 0) {
+    variant.pictures = data.pictures;
   }
   return variant;
 }
 
 /**
- *  get Product  FroRequest
- * @returns
- * @param req
- * @param isAddNew
+ * Initial product from data
+ * @param {object} data - Data pass from req.body
+ * @returns product
  */
-function getProductFromRequestService(req, isAddNew = false) {
+async function initialProduct(data, isAddNew = false) {
   let product = {};
-  
-  if (req.body.name) { product.name = req.body.name; }
-  if (req.body.desc) { product.desc = req.body.desc; }
-  if (req.body.video) { product.video = req.body.video; }
-  if (req.body.specifications) {
-    if (typeof req.body.specifications === 'string') {
-      product.specifications = JSON.parse(req.body.specifications);
-    } else if (req.body.specifications) {
-      product.specifications = req.body.specifications;
+
+  //#region Handle category and brand
+  const categoryId = await categoryService.getId(data.categoryId);
+  if (!categoryId && isAddNew) {
+    throw new APIError({
+      message: `Category '${data.categoryId}' not found!`,
+      status: 404
+    });
+  } else if (categoryId) {
+    product.category = categoryId;
+  } else { }   // is updated and not change category
+
+  const brandId = await brandService.getId(data.brandId);
+  if (!brandId && isAddNew) {
+    throw new APIError({
+      message: `Brand '${data.brandId}' not found!`,
+      status: 404
+    });
+  } else if (brandId) {
+    product.brand = brandId;
+  } else { }   // is updated and not change brand
+  //#endregion
+
+  if (data.name) { product.name = data.name; }
+  if (data.desc) { product.desc = data.desc; }
+  if (data.video) { product.video = data.video; }
+  if (data.specifications) {
+    if (typeof data.specifications === 'string') {
+      product.specifications = JSON.parse(data.specifications);
+    } else if (data.specifications) {
+      product.specifications = data.specifications;
     }
   }
-  if (req.body.tags) { product.tags = strUtils.splitsAndTrim(req.body.tags, ','); }
-  
-  if (req.body.releaseTime) { product.releaseTime = new Date(Date.parse(req.body.releaseTime)); }
-  if (req.body.warrantyPeriod) { product.warrantyPeriod = Number.parseInt(req.body.warrantyPeriod); }
-  if (req.body.origin) { product.origin = Number.parseInt(req.body.origin); }
-  
+  if (data.tags) {
+    if (typeof data.tags === 'string') {
+      product.tags = strUtils.splitsAndTrim(data.tags, ',');
+    } else if (Array.isArray(data.tags)) {
+      product.tags = data.tags;
+    }
+  }
+
+  if (data.releaseTime) { product.releaseTime = new Date(Date.parse(data.releaseTime)); }
+  if (data.warrantyPeriod) { product.warrantyPeriod = Number.parseInt(data.warrantyPeriod); }
+  if (data.origin) { product.origin = Number.parseInt(data.origin); }
+
   if (isAddNew) {
-    let firstVariant = getProductVariantFromRequestService(req);
+    let firstVariant = initialProductVariant(data);
     product.variants = [firstVariant];
     product.defaultVariant = firstVariant.sku;
-  } else if (req.body.defaultVariant) {
-    product.defaultVariant = req.body.defaultVariant;
+  } else if (data.defaultVariant) {
+    product.defaultVariant = data.defaultVariant;
   }
-  
+
   return product;
 }
 
 /**
  * Get product
  * @param {*} identity
+ * @param {boolean} needIncView - if true, inc views 1
  * @returns
  */
-async function getOne(identity) {
+async function getOneProduct(identity, needIncView = false, notLean = false) {
   const filter = strUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
 
-  return Product.findOne(filter).populate(POPULATE_OPTS).lean().exec();
+  if (needIncView) {
+    return await Product.findOneAndUpdate(filter, { $inc: { views: 1 } }, { new: true })
+      .select(SELECT_FIELD)
+      .populate(POPULATE_OPTS)
+      .lean().exec();
+  } else if (notLean) {
+    return Product.findOne(filter).populate(POPULATE_OPTS).exec();
+  } else {
+    return Product.findOne(filter).populate(POPULATE_OPTS).lean().exec();
+  }
 }
 
-async function addProductVariantsService(req, product) {
-  product.variants.push(getProductVariantFromRequestService(req));
+async function addProductVariants(productIdentity, variantData) {
+  const product = await getOneProduct(productIdentity, false, true);
+  if (!product) {
+    throw new APIError({
+      message: `Product ${productIdentity} not found !`,
+      status: 404
+    })
+  };
+
+  const newVariant = initialProductVariant(variantData);
+  product.variants.push(newVariant);
   product.markModified('variants');
   return await product.save();
 }
 
-async function updateProductVariantsService (req, updatedProduct) {
-  const { sku } = req.params;
-  let variantUpdate = getProductVariantFromRequestService(req);
-  
-  let index = updatedProduct.variants.findIndex(x => x.sku === sku);
+async function updateProductVariants(productIdentity, sku, variantData) {
+  const product = await getOneProduct(productIdentity, false, true);
+  if (!product) {
+    throw new APIError({
+      message: `Product ${productIdentity} not found !`,
+      status: 404
+    })
+  };
+
+  let variantUpdate = initialProductVariant(variantData);
+
+  let index = product.variants.findIndex(x => x.sku === sku);
   for (const property in variantUpdate) {
-    updatedProduct.variants[index][property] = variantUpdate[property];
+    product.variants[index][property] = variantUpdate[property];
   }
-  updatedProduct.markModified('variants');
-  return await updatedProduct.save();
+  product.markModified('variants');
+  return await product.save();
 }
 
-async function deleteProductVariantsService (identity, sku) {
+async function deleteProductVariants(identity, sku) {
   const filter = strUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
@@ -191,71 +195,44 @@ async function deleteProductVariantsService (identity, sku) {
 
 
 //#region Product info
-async function getAllService() {
+async function getAllProducts() {
   return await Product.find()
     .select(SELECT_FIELD)
-    .sort({createdAt: -1})
+    .sort({ createdAt: -1 })
     .populate(POPULATE_OPTS)
     .lean().exec();
 }
 
-async function getProductByIdService(identity) {
-  const filter = strUtils.isUUID(identity)
-    ? { _id: identity }
-    : { slug: identity };
-
-  return await Product.findOneAndUpdate(filter, {$inc: {views: 1}}, {new: true})
-    .select(SELECT_FIELD)
-    .populate(POPULATE_OPTS)
-    .lean().exec();
-}
-
-async function createProductService(req) {
-  const categoryId = await findCategoryIdService(req.body.categoryId);
-  if (!categoryId) { throw new Error(`Category '${req.body.categoryId}' not found!`); }
-  
-  const brandId = await findBrandIdService(req.body.brandId);
-  if (!brandId) { throw new Error(`Brand '${req.body.brandId}' not found!`); }
-  
-  const product = new Product({
+async function createProduct(data) {
+  const product = await initialProduct(data, true);
+  const newProduct = new Product({
     _id: new mongoose.Types.ObjectId(),
-    category: categoryId,
-    brand: brandId,
-    ...getProductFromRequestService(req, true),
+    ...product,
   });
-  return await product.save();
+  return await newProduct.save();
 }
 
-async function updateProductService(req) {
-  const { identity } = req.params;
+async function updateProduct(identity, data) {
   const filter = strUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
-  let updated = getProductFromRequestService(req);
 
-  return Product.findOneAndUpdate(filter, updated, {new: true});
+  let updated = await initialProduct(data);
+  return Product.findOneAndUpdate(filter, updated, { new: true });
 }
 
-async function deleteProductService(req) {
-  const { identity } = req.params;
+async function removeProduct(identity) {
   const filter = strUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
   return Product.findOneAndDelete(filter);
 }
 
-async function rateProductService(req) {
-  const { identity } = req.params;
+async function rateProduct(identity, ip, rateStar) {
   const filter = strUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
-  console.log(filter)
-  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  const rateStar = Number.parseFloat(req.body.rateStar) || 0;
-  
-  if (rateStar < 1 || rateStar > 5) {
-    throw new Error('Rate must be between 1 and 5');
-  }
+
   await Product.findOneAndUpdate(filter, { $pull: { rates: { ip: ip } } }); // remove old rate if exist
-  return Product.findOneAndUpdate(filter, {$addToSet: {rates: {ip: ip, star: rateStar}}}, {new: true});
+  return Product.findOneAndUpdate(filter, { $addToSet: { rates: { ip: ip, star: rateStar } } }, { new: true });
 }

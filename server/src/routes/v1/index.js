@@ -30,4 +30,5 @@ router.use('/comments', commentRoutes);
 router.use('/users', userRoutes);
 router.use('/discounts', discountRoutes);
 
+
 export default router;

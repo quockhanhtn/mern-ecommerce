@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Comment from "../models/comment.model.js";
+import Comment from '../models/comment.model.js';
 
 export default {
   getAllCommentsService,
@@ -11,14 +11,14 @@ export default {
 
 function getCommentFromRequest(req) {
   let comment = { product: req.body.product };
-  
+
   if (req.body.author) { comment.author = req.body.author; }
   else { comment.anonymousAuthor = {}; }
   if (req.body.name) { comment.anonymousAuthor.name = req.body.name; }
   if (req.body.email) { comment.anonymousAuthor.email = req.body.email; }
   if (req.body.phone) { comment.anonymousAuthor.phone = req.body.phone; }
   if (req.body.content) { comment.content = req.body.content; }
-  
+
   return comment;
 }
 
@@ -38,13 +38,13 @@ async function createCommentService(req) {
 async function updateCommentService(req) {
   const { id } = req.params;
   let updated = getCommentFromRequest(req);
-  return Comment.findByIdAndUpdate(id, updated, {new: true});
+  return Comment.findByIdAndUpdate(id, updated, { new: true });
 }
 
 async function verifiedCommentService(req) {
   const { id } = req.params;
   const status = req.body.status || false;
-  return Comment.findByIdAndUpdate(id, {isVerified: status}, {new: true});
+  return Comment.findByIdAndUpdate(id, { isVerified: status }, { new: true });
 }
 
 async function deleteCommentService(req) {

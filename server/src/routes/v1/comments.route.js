@@ -16,4 +16,6 @@ router.route('/:id')
   .delete(deleteComment);
 
 router.patch('/:id/verified', verifiedComment);
+
+
 export default router;

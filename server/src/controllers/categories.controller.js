@@ -1,14 +1,16 @@
 import categoryService from '../services/categories.service.js';
-import imagesService from '../services/images.service.js';
+// import imagesService from '../services/images.service.js';
 import resUtils from '../utils/res-utils.js';
 import strUtils from '../utils/str-utils.js';
+import { formatImageUrl } from '../utils/format-utils.js';
 
 const formatCategory = (category, req) => {
-  if (category.image && category.image.startsWith('/')) {
-    // console.log(`${req.protocol}://${req.get('host')}`);
-    // category.image = imagesService.formatPath(category.image, `${req.protocol}://${req.get('host')}`);
-    category.image = `${req.protocol}://${req.get('host')}` + category.image;
-  }
+  // if (category.image && category.image.startsWith('/')) {
+  //   // console.log(`${req.protocol}://${req.get('host')}`);
+  //   // category.image = imagesService.formatPath(category.image, `${req.protocol}://${req.get('host')}`);
+  //   category.image = `${req.protocol}://${req.get('host')}` + category.image;
+  // }
+  category = formatImageUrl(category, 'image', req);
 
   if (category.children && category.children.length > 0) {
     category.children = category.children.map((child) =>
@@ -19,20 +21,20 @@ const formatCategory = (category, req) => {
   return category;
 };
 
+
 export const getCategories = async (req, res, next) => {
   try {
     let categories = await categoryService.getAll();
     categories = categories.map((category) => formatCategory(category, req));
 
-    if (categories) {
+    if (categories && categories.length > 0) {
       resUtils.status200(res, 'Gets all categories successfully', categories);
     } else {
       resUtils.status200(res, 'No categories found', []);
     }
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 };
+
 
 export const getCategory = async (req, res, next) => {
   try {
@@ -47,33 +49,25 @@ export const getCategory = async (req, res, next) => {
     } else {
       resUtils.status404(res, `Category '${identity}' not found!`);
     }
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 };
+
 
 export const createCategory = async (req, res, next) => {
   try {
-    if (req?.file?.path) {
-      req.body.image = '/' + strUtils.replaceAll(req?.file?.path, '\\', '/');
-    }
     const newCategory = await categoryService.create(req.body);
     resUtils.status201(
       res,
       `Create NEW category '${newCategory.name}' successfully!`,
       formatCategory(newCategory, req)
     );
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 };
+
 
 export const updateCategory = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    if (req?.file?.path) {
-      req.body.image = '/' + strUtils.replaceAll(req?.file?.path, '\\', '/');
-    }
     const updatedCategory = await categoryService.update(identity, req.body);
     if (updatedCategory) {
       resUtils.status200(
@@ -84,10 +78,9 @@ export const updateCategory = async (req, res, next) => {
     } else {
       resUtils.status404(res, `Category '${identity}' not found!`);
     }
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 };
+
 
 export const hiddenCategory = async (req, res, next) => {
   try {
@@ -97,18 +90,16 @@ export const hiddenCategory = async (req, res, next) => {
     if (result) {
       resUtils.status200(
         res,
-        `${result.isHide ? 'Show' : 'Hide'} category '${
-          result.name
+        `${result.isHide ? 'Show' : 'Hide'} category '${result.name
         }' successfully!`,
         formatCategory(result, req)
       );
     } else {
       resUtils.status404(res, `Category '${identity}' not found!`);
     }
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 };
+
 
 export const deleteCategory = async (req, res, next) => {
   try {
@@ -120,7 +111,5 @@ export const deleteCategory = async (req, res, next) => {
     } else {
       resUtils.status404(res, `Category '${identity}' not found!`);
     }
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 };

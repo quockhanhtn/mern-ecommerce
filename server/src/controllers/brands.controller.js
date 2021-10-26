@@ -1,12 +1,9 @@
 import resUtils from '../utils/res-utils.js';
-import imagesService from "../services/images.service.js";
 import brandService from "../services/brands.service.js";
+import { formatImageUrl } from '../utils/format-utils.js';
 
 const formatBrand = (brand, req) => {
-  if (brand.image) {
-    brand.image = imagesService.formatPath(brand.image, `${req.protocol}://${req.get('host')}`);
-  }
-  return brand;
+  return formatImageUrl(brand, 'image', req);
 }
 
 export const getBrands = async (req, res, next) => {
@@ -16,7 +13,7 @@ export const getBrands = async (req, res, next) => {
     if (brands) {
       resUtils.status200(res, 'Gets all brands successfully', brands);
     } else {
-      resUtils.status404(res, 'No brands found');
+      resUtils.status200(res, 'No brands found', []);
     }
   } catch (err) { next(err); }
 }
@@ -39,9 +36,9 @@ export const createBrand = async (req, res, next) => {
   try {
     const newBrand = await brandService.create(req.body);
     resUtils.status201(
-        res,
-        `Create NEW brand '${newBrand.name}' successfully!`,
-        formatBrand(newBrand, req)
+      res,
+      `Create NEW brand '${newBrand.name}' successfully!`,
+      formatBrand(newBrand, req)
     );
   } catch (err) { next(err); }
 }
@@ -77,7 +74,6 @@ export const hiddenBrand = async (req, res, next) => {
     } else {
       resUtils.status404(res, `Brand '${identity}' not found!`);
     }
-
   } catch (err) { next(err); }
 }
 

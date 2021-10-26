@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import User from '../models/user.model.js';
 import strUtils from '../utils/str-utils.js';
-import imagesService from "./images.service.js";
 import argon2 from 'argon2';
 
 export default {
@@ -16,22 +15,13 @@ export default {
   addressDelete
 };
 
-const POPULATE_OPTS = [
-  {
-    path: 'image',
-    select: 'dirPath ext hasSmall hasMedium hasLarge',
-    model: 'Image'
-  }
-];
-
 /**
  *
  * @returns all users
  */
 async function getAll() {
-  return await User.find({parent: null})
-    .populate(POPULATE_OPTS)
-    .sort({createdAt: -1})
+  return await User.find()
+    .sort({ createdAt: -1 })
     .lean().exec();
 }
 
@@ -76,11 +66,6 @@ async function create(data) {
 async function update(identity, updatedData) {
   const currentUser = await getOne(identity);
 
-  // delete old image
-  if (currentUser.image && currentUser.image?._id !== updatedData?.image) {
-    await imagesService.remove(currentUser.image._id);
-  }
-
   let updatedDataNew = new User({
     ...updatedData,
     username: updatedData.email,
@@ -110,8 +95,8 @@ async function hidden(identity) {
   if (user) {
     return User.findByIdAndUpdate(
       user._id,
-      {isHide: !user.isHide},
-      {new: true}
+      { isHide: !user.isHide },
+      { new: true }
     );
   }
   return null;
@@ -164,7 +149,7 @@ async function addressAdd(identity, data) {
   console.log(user.address);
 
   // Save user
-  return User.findByIdAndUpdate(user._id, user, {new: true});
+  return User.findByIdAndUpdate(user._id, user, { new: true });
 }
 
 /**
@@ -206,7 +191,7 @@ async function addressUpdate(identity, identityAddress, updatedData) {
   user.address = currentAddress;
 
   // Save user
-  return User.findByIdAndUpdate(user._id, user, {new: true});
+  return User.findByIdAndUpdate(user._id, user, { new: true });
 }
 
 /**
@@ -227,7 +212,6 @@ async function addressDelete(identity, identityAddress) {
   // Get list current address
   let currentAddress = user.address;
 
-
   // Update
   const foundIndex = currentAddress.findIndex(x => x._id.toString() === identityAddress);
   if (foundIndex < 0) {
@@ -237,5 +221,5 @@ async function addressDelete(identity, identityAddress) {
   user.address = currentAddress;
 
   // Save user
-  return User.findByIdAndUpdate(user._id, user, {new: true});
+  return User.findByIdAndUpdate(user._id, user, { new: true });
 }
