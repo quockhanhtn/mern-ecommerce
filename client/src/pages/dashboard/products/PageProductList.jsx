@@ -26,13 +26,14 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
 import useLocales from '../../../hooks/useLocales';
 import LoadingScreen from '../../../components/LoadingScreen';
-import { deleteBrand, getAllBrands } from '../../../actions/brands';
+import { deleteProduct, getAllProducts } from '../../../actions/products';
 import Label from '../../../components/Label';
-import { fDateTime } from '../../../utils/formatTime';
 import Scrollbar from '../../../components/Scrollbar';
 import * as Helper from '../../../helper/listHelper';
-import { BrandListHead, BrandListToolbar, BrandMoreMenu } from '../../../components/dashboard/brand-list';
-import Page404 from '../../Page404';
+import SearchNotFound from '../../../components/SearchNotFound';
+import { ProductListHead, ProductListToolbar, ProductMoreMenu } from '../../../components/dashboard/products';
+import { ImageBrokenIcon } from '../../../assets';
+import { fCurrency } from '../../../utils/formatNumber';
 // ----------------------------------------------------------------------
 const ThumbImgStyle = styled('img')(({ theme }) => ({
   width: 64,
@@ -41,24 +42,25 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
   margin: theme.spacing(0, 2),
   borderRadius: theme.shape.borderRadiusSm
 }));
+// ----------------------------------------------------------------------
 
 export default function PageProductList() {
   const { t } = useLocales();
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const { list: brandsList, isLoading, hasError } = useSelector((state) => state.brand);
+  const { list: productsList, isLoading, hasError } = useSelector((state) => state.product);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('createdAt');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
-  const [dense, setDense] = useState(false);
+  const [isCompact, setIsCompact] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [currentId, setCurrentId] = useState(null);
   const [openForm, setOpenForm] = useState(false);
 
   useEffect(() => {
-    dispatch(getAllBrands());
+    dispatch(getAllProducts());
   }, [dispatch]);
 
   const tableHeads = [
@@ -66,31 +68,37 @@ export default function PageProductList() {
       id: 'name',
       numeric: false,
       disablePadding: true,
-      label: t('dashboard.brands.name')
+      label: t('dashboard.products.name')
     },
     {
-      id: 'country',
+      id: 'price',
       numeric: false,
-      disablePadding: true,
-      label: t('dashboard.brands.country')
+      disablePadding: false,
+      label: t('dashboard.products.price')
+    },
+    {
+      id: 'marketPrice',
+      numeric: false,
+      disablePadding: false,
+      label: t('dashboard.products.market-price')
+    },
+    {
+      id: 'quantity',
+      numeric: false,
+      disablePadding: false,
+      label: t('dashboard.products.quantity')
+    },
+    {
+      id: 'sold',
+      numeric: false,
+      disablePadding: false,
+      label: t('dashboard.products.sold')
     },
     {
       id: 'isHide',
       numeric: false,
       disablePadding: false,
-      label: t('dashboard.brands.status')
-    },
-    {
-      id: 'createdAt',
-      numeric: true,
-      disablePadding: false,
-      label: t('dashboard.created-at')
-    },
-    {
-      id: 'updatedAt',
-      numeric: true,
-      disablePadding: false,
-      label: t('dashboard.updated-at')
+      label: t('dashboard.products.status')
     },
     {
       id: 'action',
@@ -99,10 +107,9 @@ export default function PageProductList() {
     }
   ];
 
-  const handleDeleteBrand = async (id, slug) => {
-    await dispatch(deleteBrand(id));
-    dispatch(getAllBrands());
-    enqueueSnackbar(t('dashboard.brands.delete'), { variant: 'success' });
+  const handleDeleteProduct = (id, slug) => {
+    dispatch(deleteProduct(id));
+    enqueueSnackbar(t('dashboard.products.delete'), { variant: 'success' });
     const index = selected.indexOf(slug);
     selected.splice(index, 1);
   };
@@ -115,10 +122,10 @@ export default function PageProductList() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = brandsList.map((n) => n.slug);
+      const newSelected = productsList.map((n) => n.slug);
       setSelected(newSelected);
       if (selected.count === 1) {
-        setCurrentId(brandsList[brandsList.indexOf(selected[0])]._id);
+        setCurrentId(productsList[productsList.indexOf(selected[0])]._id);
       }
       return;
     }
@@ -151,50 +158,45 @@ export default function PageProductList() {
   };
 
   const handleChangeDense = (event) => {
-    setDense(event.target.checked);
+    setIsCompact(event.target.checked);
   };
 
-  const handleCreateNew = () => {
-    setCurrentId(null);
-    setOpenForm(true);
-  };
-
-  const handleEditBrand = (brandId) => {
-    setCurrentId(brandId);
+  const handleEditProduct = (productId) => {
+    setCurrentId(productId);
     setOpenForm(true);
   };
 
   const isSelected = (slug) => selected.indexOf(slug) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty brandsList.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - brandsList.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productsList.length) : 0;
 
   if (isLoading) {
     return <LoadingScreen />;
   }
 
   if (hasError) {
-    return <Page404 />;
+    return <SearchNotFound />;
   }
 
   return (
-    <Page title={t('dashboard.brands.title-page')}>
+    <Page title={t('dashboard.products.title-page')}>
       <Container>
         <HeaderBreadcrumbs
-          heading={t('dashboard.brands.heading')}
+          heading={t('dashboard.products.heading')}
           links={[
             { name: t('dashboard.title'), href: PATH_DASHBOARD.root },
             {
               name: t('dashboard.ecommerce'),
               href: PATH_DASHBOARD.root
             },
-            { name: t('dashboard.brands.heading') }
+            { name: t('dashboard.products.heading') }
           ]}
           action={
             <Button
               variant="contained"
               component={RouterLink}
-              to={PATH_DASHBOARD.app.product}
+              to={PATH_DASHBOARD.app.products.add}
               startIcon={<Icon icon={plusFill} />}
             >
               New Product
@@ -203,25 +205,25 @@ export default function PageProductList() {
         />
 
         <Card>
-          <BrandListToolbar numSelected={selected.length} />
-
+          <ProductListToolbar numSelected={selected.length} />
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
-              <Table size={dense ? 'small' : 'medium'}>
-                <BrandListHead
+              <Table size={isCompact ? 'small' : 'medium'}>
+                <ProductListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={tableHeads}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
-                  rowCount={brandsList.length}
+                  rowCount={productsList.length}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {Helper.stableSort(brandsList, Helper.getComparator(order, orderBy))
+                  {Helper.stableSort(productsList, Helper.getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
-                      const { _id, slug, name, country, image, createdAt, updatedAt, isHide } = row;
+                      const { _id, slug, name, isHide } = row;
+                      const { price, marketPrice, quantity, sold, thumbnail } = row.variants[0];
                       const isItemSelected = isSelected(slug);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -238,50 +240,56 @@ export default function PageProductList() {
                           <TableCell padding="checkbox">
                             <Checkbox checked={isItemSelected} />
                           </TableCell>
-                          {dense ? (
-                            <TableCell component="th" id={labelId} scope="row" padding="none">
+                          {isCompact ? (
+                            <TableCell component="th" id={labelId} scope="row" padding="normal">
                               {name}
                             </TableCell>
                           ) : (
                             <TableCell component="th" scope="row" padding="none">
                               <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
-                                {/* <ThumbImgStyle alt={row.name} src={image.original} /> */}
+                                {thumbnail ? (
+                                  <ThumbImgStyle alt={name} src={thumbnail} />
+                                ) : (
+                                  <ImageBrokenIcon width={64} height={64} marginRight={2} />
+                                )}
                                 <Typography variant="subtitle2" noWrap>
                                   {name}
                                 </Typography>
                               </Box>
                             </TableCell>
                           )}
-                          <TableCell align="left" style={{ minWidth: 160 }}>
+                          <TableCell align="left" style={{ minWidth: 100 }}>
                             <Typography variant="subtitle4" noWrap>
-                              {country}
+                              {fCurrency(price)}
                             </Typography>
+                          </TableCell>
+                          <TableCell align="left" style={{ minWidth: 100 }}>
+                            <Typography variant="subtitle4" noWrap>
+                              {fCurrency(marketPrice)}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left" style={{ minWidth: 100 }}>
+                            {quantity}
+                          </TableCell>
+                          <TableCell align="left" style={{ minWidth: 100 }}>
+                            {sold}
                           </TableCell>
                           <TableCell align="left">
                             <Label
                               variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
                               color={isHide ? 'default' : 'success'}
                             >
-                              {t(`dashboard.brands.${isHide ? 'hidden' : 'visible'}`)}
+                              {t(`dashboard.products.${isHide ? 'hidden' : 'visible'}`)}
                             </Label>
                           </TableCell>
-                          <TableCell align="right" style={{ minWidth: 160 }}>
-                            {fDateTime(createdAt)}
-                          </TableCell>
-                          <TableCell align="right" style={{ minWidth: 160 }}>
-                            {fDateTime(updatedAt)}
-                          </TableCell>
                           <TableCell align="right" onClick={(event) => event.stopPropagation()}>
-                            <BrandMoreMenu
-                              onEdit={() => handleEditBrand(_id)}
-                              onDelete={() => handleDeleteBrand(_id, slug)}
-                            />
+                            <ProductMoreMenu onDelete={() => handleDeleteProduct(_id, slug)} productName={name} />
                           </TableCell>
                         </TableRow>
                       );
                     })}
                   {emptyRows > 0 && (
-                    <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                    <TableRow style={{ height: (isCompact ? 33 : 53) * emptyRows }}>
                       <TableCell colSpan={6} />
                     </TableRow>
                   )}
@@ -295,7 +303,7 @@ export default function PageProductList() {
               labelRowsPerPage={t('common.rows-per-page')}
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
               component="div"
-              count={brandsList.length}
+              count={productsList.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
@@ -310,7 +318,7 @@ export default function PageProductList() {
               }}
             >
               <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense} />}
+                control={<Switch checked={isCompact} onChange={handleChangeDense} />}
                 label={t('common.small-padding')}
               />
             </Box>
