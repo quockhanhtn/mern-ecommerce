@@ -1,5 +1,6 @@
 import { isString } from 'lodash';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useDropzone } from 'react-dropzone';
 import fileFill from '@iconify/icons-eva/file-fill';
@@ -57,6 +58,7 @@ UploadMultiFile.propTypes = {
 
 export default function UploadMultiFile({ error, showPreview = false, files, onRemove, onRemoveAll, sx, ...other }) {
   const hasFile = files.length > 0;
+  const [isMoveHover, setIsMoveHover] = useState(false);
 
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
     ...other
@@ -93,8 +95,11 @@ export default function UploadMultiFile({ error, showPreview = false, files, onR
 
   return (
     <Box sx={{ width: '100%', ...sx }}>
+      {isMoveHover && <>ss</>}
       <DropZoneStyle
         {...getRootProps()}
+        onMouseEnter={setIsMoveHover(true)}
+        onMouseLeave={setIsMoveHover(false)}
         sx={{
           ...(isDragActive && { opacity: 0.72 }),
           ...((isDragReject || error) && {

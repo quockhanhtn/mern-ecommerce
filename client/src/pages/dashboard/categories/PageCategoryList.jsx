@@ -36,12 +36,7 @@ import SearchNotFound from '../../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
 import LoadingScreen from '../../../components/LoadingScreen';
 import EmptyCard from '../../../components/EmptyCard';
-import {
-  CategoryListHead,
-  CategoryListToolbar,
-  CategoryMoreMenu,
-  CategoryCollapsibleTableRow
-} from '../../../components/dashboard/category-list';
+import { CategoryListHead, CategoryListToolbar, CategoryMoreMenu } from '../../../components/dashboard/category-list';
 import CategoryForm from './CategoryForm';
 import useLocales from '../../../hooks/useLocales';
 import { ImageBrokenIcon } from '../../../assets';
@@ -68,7 +63,7 @@ export default function PageCategoryList() {
   const [orderBy, setOrderBy] = useState('createdAt');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
-  const [dense, setDense] = useState(false);
+  const [isCompact, setIsCompact] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [currentId, setCurrentId] = useState(null);
   const [openForm, setOpenForm] = useState(false);
@@ -220,7 +215,7 @@ export default function PageCategoryList() {
 
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800 }}>
-                <Table size={dense ? 'small' : 'medium'}>
+                <Table size={isCompact ? 'small' : 'medium'}>
                   <CategoryListHead
                     order={order}
                     orderBy={orderBy}
@@ -251,7 +246,7 @@ export default function PageCategoryList() {
                             <TableCell padding="checkbox">
                               <Checkbox checked={isItemSelected} />
                             </TableCell>
-                            {dense ? (
+                            {isCompact ? (
                               <TableCell component="th" id={labelId} scope="row" padding="none">
                                 {name}
                               </TableCell>
@@ -295,7 +290,7 @@ export default function PageCategoryList() {
                         );
                       })}
                     {emptyRows > 0 && (
-                      <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                      <TableRow style={{ height: (isCompact ? 33 : 53) * emptyRows }}>
                         <TableCell colSpan={6} />
                       </TableRow>
                     )}
@@ -317,7 +312,7 @@ export default function PageCategoryList() {
               />
               <Box sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}>
                 <FormControlLabel
-                  control={<Switch checked={dense} onChange={(e) => setDense(e.target.checked)} />}
+                  control={<Switch checked={isCompact} onChange={(e) => setIsCompact(e.target.checked)} />}
                   label={t('common.small-padding')}
                 />
               </Box>

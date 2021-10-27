@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { Icon } from '@iconify/react';
 import { useState } from 'react';
+import { Icon } from '@iconify/react';
 import arrowIosUpwardFill from '@iconify/icons-eva/arrow-ios-upward-fill';
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 // material
@@ -18,7 +18,7 @@ import {
 
 // ----------------------------------------------------------------------
 
-CategoryCollapsibleTableRow.propTypes = {
+CategoryTableRow.propTypes = {
   row: PropTypes.shape({
     calories: PropTypes.number.isRequired,
     carbs: PropTypes.number.isRequired,
@@ -36,7 +36,7 @@ CategoryCollapsibleTableRow.propTypes = {
   }).isRequired
 };
 
-export default function CategoryCollapsibleTableRow({ row }) {
+export default function CategoryTableRow({ row }) {
   const [open, setOpen] = useState(false);
 
   return (

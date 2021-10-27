@@ -1,5 +1,6 @@
 import { isString } from 'lodash';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 // material
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
@@ -43,6 +44,7 @@ UploadSingleFile.propTypes = {
 };
 
 export default function UploadSingleFile({ error, file, sx, uploadPercent, ...other }) {
+  const [isMoveHover, setIsMoveHover] = useState(false);
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
     multiple: false,
     ...other
@@ -77,10 +79,21 @@ export default function UploadSingleFile({ error, file, sx, uploadPercent, ...ot
     </Paper>
   );
 
+  const handleMoveEnter = () => {
+    setIsMoveHover(true);
+  };
+
+  const handleMoveLeave = () => {
+    setIsMoveHover(false);
+  };
+
   return (
     <Box sx={{ width: '100%', ...sx }}>
+      {isMoveHover && <>ddd</>}
       <DropZoneStyle
         {...getRootProps()}
+        onMouseEnter={handleMoveEnter}
+        onMouseLeave={handleMoveLeave}
         sx={{
           ...(isDragActive && { opacity: 0.72 }),
           ...((isDragReject || error) && {

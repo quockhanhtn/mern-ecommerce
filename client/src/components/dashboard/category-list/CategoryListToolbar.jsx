@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
+import eyeFill from '@iconify/icons-eva/eye-fill';
+import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
+import editFill from '@iconify/icons-eva/edit-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
 // material
@@ -67,11 +70,27 @@ export default function CategoryListToolbar({ searchPlaceHolder, numSelected, fi
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Icon icon={trash2Fill} />
-          </IconButton>
-        </Tooltip>
+        <Box sx={{ display: 'flex', justifyContent: 'right' }}>
+          {numSelected === 1 && (
+            <>
+              <Tooltip title="Edit">
+                <IconButton>
+                  <Icon icon={editFill} />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Hide / show">
+                <IconButton>
+                  <Icon icon={eyeFill} />
+                </IconButton>
+              </Tooltip>
+            </>
+          )}
+          <Tooltip title="Delete">
+            <IconButton>
+              <Icon icon={trash2Fill} />
+            </IconButton>
+          </Tooltip>
+        </Box>
       ) : (
         <Tooltip title="Filter list">
           <IconButton>

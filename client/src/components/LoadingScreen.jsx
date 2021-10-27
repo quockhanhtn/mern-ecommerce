@@ -59,7 +59,7 @@ export default function LoadingScreen({ ...other }) {
   }, []);
 
   return (
-    <RootStyle {...other}>
+    <RootStyle {...other} sx={{ marginTop: 20 }}>
       <motion.div
         initial={{ rotateY: 0 }}
         animate={{ rotateY: 360 }}
