@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'https://api-mobile7076.herokuapp.com/api/v1' });
+const API = axios.create({ baseURL: 'http://localhost:3001/api/v1' });
 
 // Add Header Authorization
 API.interceptors.request.use((req) => {
@@ -31,3 +31,10 @@ export const getOneDiscount = (identity) => API.get(`/discounts/${identity}`);
 export const createDiscount = (newDiscount) => API.post('/discounts', newDiscount);
 export const updateDiscount = (identity, updatedDiscount) => API.patch(`/discounts/${identity}`, updatedDiscount);
 export const deleteDiscount = (identity) => API.delete(`/discounts/${identity}`);
+
+// ----------------------------Product-----------------------------
+export const getAllProduct = () => API.get('/products');
+export const getOneProduct = (identity) => API.get(`/products/${identity}`);
+export const createProduct = (newProduct) => API.post('/products', newProduct);
+export const updateProduct = (identity, updatedProduct) => API.patch(`/products/${identity}`, updatedProduct);
+export const deleteProduct = (identity) => API.delete(`/products/${identity}`);

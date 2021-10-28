@@ -23,7 +23,7 @@ export default function EcommerceProductCreate() {
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
               name: 'Product list',
-              href: PATH_DASHBOARD.app.products
+              href: PATH_DASHBOARD.app.products.list
             },
             { name: 'New product' }
           ]}

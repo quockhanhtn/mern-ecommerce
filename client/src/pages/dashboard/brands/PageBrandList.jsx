@@ -33,6 +33,7 @@ import * as Helper from '../../../helper/listHelper';
 import BrandForm from './BrandForm';
 import { BrandListHead, BrandListToolbar, BrandMoreMenu } from '../../../components/dashboard/brand-list';
 import Page404 from '../../Page404';
+import { ImageBrokenIcon } from '../../../assets';
 // ----------------------------------------------------------------------
 const ThumbImgStyle = styled('img')(({ theme }) => ({
   width: 64,
@@ -242,7 +243,11 @@ export default function PageBrandList() {
                           ) : (
                             <TableCell component="th" scope="row" padding="none">
                               <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
-                                {/* <ThumbImgStyle alt={row.name} src={image.original} /> */}
+                                {image ? (
+                                  <ThumbImgStyle alt={name} src={image} />
+                                ) : (
+                                  <ImageBrokenIcon width={64} height={64} marginRight={2} />
+                                )}
                                 <Typography variant="subtitle2" noWrap>
                                   {name}
                                 </Typography>

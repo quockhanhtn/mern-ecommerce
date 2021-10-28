@@ -95,6 +95,28 @@ export default {
       error: 'Error',
       'date-start': 'Date start',
       'date-end': 'Date end'
+    },
+    products: {
+      'title-page': 'Ecommerce: Product List | HK-MOBILE',
+      title: 'Products',
+      heading: 'Product List',
+      'search-product-placeholder': 'Search product...',
+      add: 'Add product',
+      'add-title': 'Add new product',
+      edit: 'Edit product',
+      'edit-title': 'Edit product',
+      delete: 'Delete product',
+      name: 'Product name',
+      'name-validation': 'Product name is required',
+      desc: 'Product description',
+      'desc-validation': 'Product Description is required',
+      price: 'Promotional price',
+      'market-price': 'Market price',
+      quantity: 'Quantity in stock',
+      sold: 'Sold',
+      status: 'Status',
+      hidden: 'Hidden',
+      visible: 'Visible'
     }
   }
 };

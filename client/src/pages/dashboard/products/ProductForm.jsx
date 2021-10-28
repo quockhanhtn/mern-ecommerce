@@ -25,11 +25,6 @@ import {
   FormHelperText,
   FormControlLabel
 } from '@material-ui/core';
-// utils
-import fakeRequest from '../../../utils/fakeRequest';
-// routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
-//
 import { QuillEditor } from '../../../components/editor';
 import { UploadMultiFile } from '../../../components/upload';
 
@@ -100,19 +95,7 @@ export default function ProductForm({ isEdit, currentProduct }) {
       category: currentProduct?.category || CATEGORY_OPTION[0].classify[1]
     },
     validationSchema: NewProductSchema,
-    onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
-      try {
-        await fakeRequest(500);
-        resetForm();
-        setSubmitting(false);
-        enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
-        navigate(PATH_DASHBOARD.eCommerce.list);
-      } catch (error) {
-        console.error(error);
-        setSubmitting(false);
-        setErrors(error);
-      }
-    }
+    onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {}
   });
 
   const { errors, values, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;

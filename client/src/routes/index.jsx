@@ -59,8 +59,9 @@ export default function Router() {
               path: 'products',
               children: [
                 { path: '/', element: <Navigate to="/dashboard/products/list" replace /> },
-                { path: 'list', element: <PageOne /> },
-                { path: 'create', element: <PageProduct /> }
+                { path: 'list', element: <PageProductList /> },
+                { path: 'create', element: <PageProduct /> },
+                { path: ':name/edit', element: <PageProduct /> }
               ]
             }
           ]
