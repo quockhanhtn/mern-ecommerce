@@ -2,14 +2,15 @@ import { isString } from 'lodash';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { Icon } from '@iconify/react';
+import closeFill from '@iconify/icons-eva/close-fill';
 // material
-import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Paper, Box, Typography } from '@material-ui/core';
-import { MLinearProgress } from '../@material-extend';
-// utils
-import { fData } from '../../utils/formatNumber';
+import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { Box, FormControlLabel, Switch, Typography, TextField, Tooltip } from '@material-ui/core';
+import { MLinearProgress, MIconButton, MLabelTypo } from '../@material-extend';
 //
 import { UploadIllustration } from '../../assets';
+import useLocales from '../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -37,112 +38,127 @@ const DropZoneStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 UploadSingleFile.propTypes = {
+  label: PropTypes.string,
   error: PropTypes.bool,
   file: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  setFile: PropTypes.func,
   sx: PropTypes.object,
   uploadPercent: PropTypes.number
 };
 
-export default function UploadSingleFile({ error, file, sx, uploadPercent, ...other }) {
-  const [isMoveHover, setIsMoveHover] = useState(false);
-  const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
+export default function UploadSingleFile({ label, error, file, setFile, sx, uploadPercent, ...other }) {
+  const { t } = useLocales();
+  const [showInputUrl, setShowInputUrl] = useState(false);
+
+  const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
     multiple: false,
     ...other
   });
 
-  const ShowRejectionItems = () => (
-    <Paper
-      variant="outlined"
-      sx={{
-        py: 1,
-        px: 2,
-        mt: 3,
-        borderColor: 'error.light',
-        bgcolor: (theme) => alpha(theme.palette.error.main, 0.08)
-      }}
-    >
-      {fileRejections.map(({ file, errors }) => {
-        const { path, size } = file;
-        return (
-          <Box key={path} sx={{ my: 1 }}>
-            <Typography variant="subtitle2" noWrap>
-              {path} - {fData(size)}
-            </Typography>
-            {errors.map((e) => (
-              <Typography key={e.code} variant="caption" component="p">
-                - {e.message}
-              </Typography>
-            ))}
-          </Box>
-        );
-      })}
-    </Paper>
-  );
-
-  const handleMoveEnter = () => {
-    setIsMoveHover(true);
+  const handleRemove = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // eslint-disable-next-line no-undef
+    if (setFile) setFile(null);
   };
 
-  const handleMoveLeave = () => {
-    setIsMoveHover(false);
+  const handleInputUrl = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowInputUrl(!showInputUrl);
+  };
+
+  const onInputChange = (e) => {
+    setFile(e.target.value);
   };
 
   return (
-    <Box sx={{ width: '100%', ...sx }}>
-      {isMoveHover && <>ddd</>}
-      <DropZoneStyle
-        {...getRootProps()}
-        onMouseEnter={handleMoveEnter}
-        onMouseLeave={handleMoveLeave}
-        sx={{
-          ...(isDragActive && { opacity: 0.72 }),
-          ...((isDragReject || error) && {
-            color: 'error.main',
-            borderColor: 'error.light',
-            bgcolor: 'error.lighter'
-          }),
-          ...(file && { padding: '12% 0' })
-        }}
-      >
-        <input {...getInputProps()} />
-
-        <UploadIllustration sx={{ width: 220 }} />
-
-        <Box sx={{ p: 3, ml: { md: 2 } }}>
-          <Typography gutterBottom variant="h5">
-            Drop or Select file
-          </Typography>
-
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Drop files here or click&nbsp;
-            <Typography variant="body2" component="span" sx={{ color: 'primary.main' }}>
-              browse
-            </Typography>
-            &nbsp;thorough your machine
-          </Typography>
+    <>
+      <Box sx={{ width: '100%', ...sx }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+          {label && <MLabelTypo text={label} />}
+          <FormControlLabel
+            control={<Switch value={showInputUrl} onChange={handleInputUrl} />}
+            label={t('common.upload.from-url')}
+          />
         </Box>
 
-        {file && (
-          <Box
-            component="img"
-            alt="file preview"
-            src={isString(file) ? file : file.preview}
-            sx={{
-              top: 8,
-              borderRadius: 1,
-              objectFit: 'contain',
-              position: 'absolute',
-              width: 'calc(100% - 16px)',
-              height: 'calc(100% - 16px)',
-              bgcolor: 'background.paper'
-            }}
+        {showInputUrl && (
+          <TextField
+            autoFocus
+            fullWidth
+            type="url"
+            variant="outlined"
+            label={t('common.upload.image-url')}
+            onChange={onInputChange}
+            value={file}
+            sx={{ marginTop: 1, marginBottom: 1 }}
           />
         )}
-      </DropZoneStyle>
 
-      {uploadPercent > 0 && <MLinearProgress sx={{ marginTop: 2 }} variant="determinate" value={uploadPercent} />}
+        <DropZoneStyle
+          {...getRootProps()}
+          sx={{
+            ...(isDragActive && { opacity: 0.72 }),
+            ...((isDragReject || error) && {
+              color: 'error.main',
+              borderColor: 'error.light',
+              bgcolor: 'error.lighter'
+            }),
+            ...(file && { padding: '12% 0' })
+          }}
+        >
+          <input {...getInputProps()} />
 
-      {fileRejections.length > 0 && <ShowRejectionItems />}
-    </Box>
+          <UploadIllustration sx={{ width: 220, ...(file && { opacity: 0 }) }} />
+
+          <Box sx={{ p: 3, ml: { md: 2 } }}>
+            <Typography gutterBottom variant="h5">
+              {t('common.upload.drop-or-select-file')}
+            </Typography>
+
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              {t('common.upload.drop-files-here-or-click')}&nbsp;
+              <Typography variant="body2" component="span" sx={{ color: 'primary.main' }}>
+                {t('common.upload.browse')}
+              </Typography>
+              &nbsp;{t('common.upload.thorough-your-machine')}
+            </Typography>
+          </Box>
+
+          {file && (
+            <Box
+              component="img"
+              alt="file preview"
+              src={isString(file) ? file : file.preview}
+              sx={{
+                top: 8,
+                borderRadius: 1,
+                objectFit: 'contain',
+                position: 'absolute',
+                width: 'calc(100% - 16px)',
+                height: 'calc(100% - 16px)',
+                bgcolor: 'background.paper'
+              }}
+            />
+          )}
+
+          <Box
+            component="span"
+            sx={{ position: 'absolute', top: 8, right: 8, display: 'flex', flexDirection: 'column' }}
+          >
+            {file && (
+              <Tooltip title={t('common.delete')} arrow>
+                <MIconButton color="error" onClick={handleRemove}>
+                  <Icon icon={closeFill} />
+                </MIconButton>
+              </Tooltip>
+            )}
+          </Box>
+        </DropZoneStyle>
+
+        {uploadPercent > 0 && <MLinearProgress sx={{ marginTop: 2 }} variant="determinate" value={uploadPercent} />}
+      </Box>
+    </>
   );
 }

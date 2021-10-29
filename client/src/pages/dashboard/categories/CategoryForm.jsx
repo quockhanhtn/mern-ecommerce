@@ -203,8 +203,14 @@ export default function CategoryForm({ currentId, open, setOpen }) {
             </MotionInView>
 
             <MotionInView variants={varFadeInUp}>
-              <MLabelTypo text={t('dashboard.categories.image')} />
-              <UploadSingleFile file={uploadImage} onDrop={handleDropSingleFile} uploadPercent={uploadPercent} />
+              <UploadSingleFile
+                label={t('dashboard.categories.image')}
+                file={uploadImage}
+                setFile={setUploadImage}
+                onDrop={handleDropSingleFile}
+                uploadPercent={uploadPercent}
+                accepted="image/*"
+              />
             </MotionInView>
           </Stack>
         )}

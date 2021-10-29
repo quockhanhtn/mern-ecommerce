@@ -10,7 +10,15 @@ export default {
     cancel: 'Cancel',
     edit: 'Edit',
     delete: 'Delete',
-    'invalid-file-type': 'Invalid file type !'
+    'invalid-file-type': 'Invalid file type !',
+    upload: {
+      'from-url': 'Select from URL',
+      'image-url': 'Image URL',
+      'drop-or-select-file': 'Drop or select file',
+      'drop-files-here-or-click': 'Drop files here or click',
+      browse: 'Browse',
+      'thorough-your-machine': 'thorough your machine'
+    }
   },
   settings: {
     title: 'Setting',
