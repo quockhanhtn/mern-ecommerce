@@ -38,7 +38,7 @@ const nprogressStyle = makeStyles((theme) => ({
 }));
 
 const RootStyle = styled('div')(({ theme }) => ({
-  height: '100%',
+  height: 'calc(100vh - 200px)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -59,7 +59,7 @@ export default function LoadingScreen({ ...other }) {
   }, []);
 
   return (
-    <RootStyle {...other} sx={{ marginTop: 20 }}>
+    <RootStyle {...other}>
       <motion.div
         initial={{ rotateY: 0 }}
         animate={{ rotateY: 360 }}
@@ -99,11 +99,7 @@ export default function LoadingScreen({ ...other }) {
           opacity: [1, 0.25, 0.25, 0.25, 1],
           borderRadius: ['25%', '25%', '50%', '50%', '25%']
         }}
-        transition={{
-          ease: 'linear',
-          duration: 3.2,
-          repeat: Infinity
-        }}
+        transition={{ ease: 'linear', duration: 3.2, repeat: Infinity }}
         sx={{
           width: 120,
           height: 120,
