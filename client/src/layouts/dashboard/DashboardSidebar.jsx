@@ -94,6 +94,15 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             { title: 'Product List', path: PATH_DASHBOARD.app.products.list },
             { title: 'Add Product', path: PATH_DASHBOARD.app.products.add }
           ]
+        },
+        {
+          title: 'Users',
+          path: PATH_DASHBOARD.app.users.root,
+          icon: ICONS.user,
+          children: [
+            { title: 'User List', path: PATH_DASHBOARD.app.users.user_list },
+            { title: 'Employee List', path: PATH_DASHBOARD.app.users.employee_list }
+          ]
         }
       ]
     }

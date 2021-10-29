@@ -32,7 +32,7 @@ const userSchema = mongoose.Schema(
       required: true,
       index: {
         unique: true,
-        partialFilterExpression: { phone: { $type: 'string' } }
+        partialFilterExpression: { phone: { $type: 'string' } },
       }
     },
     username: { type: String, trim: true, required: false, default: '' },
@@ -48,6 +48,7 @@ const userSchema = mongoose.Schema(
   { timestamps: true, versionKey: false, },
 
 );
+userSchema.index({"email": 1}, { unique: true });
 
 userSchema.plugin(slugGenerator);
 userSchema.plugin(removeMultiSpace);

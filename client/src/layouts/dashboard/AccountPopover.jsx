@@ -10,13 +10,14 @@ import { Avatar, Button, Box, Divider, MenuItem, Typography } from '@material-ui
 // components
 import { MIconButton } from '../../components/@material-extend';
 import MenuPopover from '../../components/MenuPopover';
+import { PATH_DASHBOARD } from '../../routes/paths';
 
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
-  { label: 'Home', icon: homeFill, linkTo: '/' },
-  { label: 'Profile', icon: personFill, linkTo: '#' },
-  { label: 'Settings', icon: settings2Fill, linkTo: '#' }
+  { label: 'Home', icon: homeFill, linkTo: PATH_DASHBOARD.app },
+  { label: 'Profile', icon: personFill, linkTo: PATH_DASHBOARD.app.profile },
+  { label: 'Settings', icon: settings2Fill, linkTo: PATH_DASHBOARD.app.account_setting }
 ];
 
 // ----------------------------------------------------------------------
@@ -86,7 +87,6 @@ export default function AccountPopover() {
                 height: 24
               }}
             />
-
             {option.label}
           </MenuItem>
         ))}

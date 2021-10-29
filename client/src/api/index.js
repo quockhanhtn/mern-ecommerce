@@ -38,3 +38,10 @@ export const getOneProduct = (identity) => API.get(`/products/${identity}`);
 export const createProduct = (newProduct) => API.post('/products', newProduct);
 export const updateProduct = (identity, updatedProduct) => API.patch(`/products/${identity}`, updatedProduct);
 export const deleteProduct = (identity) => API.delete(`/products/${identity}`);
+
+// ----------------------------User-----------------------------
+export const getAllUser = () => API.get('/users');
+export const getOneUser = (identity) => API.get(`/users/${identity}`);
+export const createUser = (newUser) => API.post('/users', newUser);
+export const updateUser = (identity, updatedUser) => API.patch(`/users/${identity}`, updatedUser);
+export const deleteUser = (identity) => API.delete(`/users/${identity}`);

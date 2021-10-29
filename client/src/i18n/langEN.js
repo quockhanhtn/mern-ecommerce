@@ -125,6 +125,22 @@ export default {
       status: 'Status',
       hidden: 'Hidden',
       visible: 'Visible'
+    },
+    users: {
+      'title-page': 'Ecommerce: User List | HK-MOBILE',
+      title: 'Users',
+      heading: 'User List',
+      'search-user-placeholder': 'Search user...',
+      detail: 'Detail',
+      'lock-account': 'Lock account',
+      'full-name': 'Full name',
+      gender: 'Gender',
+      email: 'Email',
+      phone: 'Phone',
+      sold: 'Sold',
+      status: 'Status',
+      hidden: 'Hidden',
+      visible: 'Visible'
     }
   }
 };
