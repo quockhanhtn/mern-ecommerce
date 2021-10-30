@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import slugGenerator from 'mongoose-slug-updater';
 import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
-import { hashPassword, comparePassword } from '../utils/cipher-utils.js';
+import { hashPassword } from '../utils/cipher-utils.js';
 
 const userSchema = mongoose.Schema(
   {
@@ -90,11 +90,6 @@ userSchema.pre('save', function (next) {
   this.password = hashPassword(this.password);
   next();
 });
-
-userSchema.methods.comparePassword = function (password) {
-  const isMatch = comparePassword(password, this.password);
-  return isMatch;
-};
 
 const userModel = mongoose.model('User', userSchema);
 export default userModel;

@@ -8,7 +8,6 @@ export default {
   getUserById,
   create,
   update,
-  hidden,
   remove,
   addressAdd,
   addressUpdate,
@@ -38,7 +37,7 @@ async function getOne(identity) {
       { username: identity }
     ]
   }
-  return await User.findOne(filter).exec();
+  return await User.findOne(filter).lean().exec();
 }
 
 async function getUserById(id) {
@@ -86,23 +85,6 @@ async function update(identity, updatedData) {
   } else {
     throw new Error(`User '${identity}' not found!`);
   }
-}
-
-/**
- * Toggle user isHide
- * @param {*} identity slug or id
- * @returns user if found and toggle isHide else null
- */
-async function hidden(identity) {
-  const user = await getOne(identity);
-  if (user) {
-    return User.findByIdAndUpdate(
-      user._id,
-      { isHide: !user.isHide },
-      { new: true }
-    );
-  }
-  return null;
 }
 
 /**

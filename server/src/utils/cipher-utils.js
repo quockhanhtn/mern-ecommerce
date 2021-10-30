@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 // more info about bcrypt: https://www.youtube.com/watch?v=ZwKrMKzd5J8
 
-export default hashPassword = (password) => {
+export const hashPassword = (password) => {
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
   const hash = bcrypt.hashSync(password, salt);
