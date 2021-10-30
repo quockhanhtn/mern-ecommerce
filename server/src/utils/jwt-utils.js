@@ -8,3 +8,12 @@ export const generateToken = (payload) => {
   );
   return token;
 }
+
+export const verifyToken = (token) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      throw err;
+    }
+    return decoded;
+  });
+};
