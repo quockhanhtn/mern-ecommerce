@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import slugGenerator from 'mongoose-slug-updater';
 import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
+import { hashPassword, comparePassword } from '../utils/cipher-utils.js';
 
 const userSchema = mongoose.Schema(
   {
@@ -35,23 +36,65 @@ const userSchema = mongoose.Schema(
         partialFilterExpression: { phone: { $type: 'string' } },
       }
     },
-    username: { type: String, trim: true, required: false, default: '' },
+
+    /*
+     * Username regex validation explain
+     * Reference https://stackoverflow.com/a/12019115
+     * ^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
+     * └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
+     *       │         │         │            │           no _ or . at the end
+     *       │         │         │            │
+     *       │         │         │            allowed characters
+     *       │         │         │
+     *       │         │         no __ or _. or ._ or .. inside
+     *       │         │
+     *       │         no _ or . at the beginning
+     *       │
+     *       username is 8-20 characters long
+    */
+    username: {
+      type: String,
+      match: [/^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/, 'Please fill a valid username'],
+      trim: true,
+      required: false,
+      default: ''
+    },
     password: { type: String, trim: true, required: true },
+
+    role: {
+      type: String,
+      enum: ['ADMIN', 'STAFF', 'CUSTOMER'],
+      default: 'CUSTOMER',
+      required: true
+    },
+
     address: { type: Array, trim: true, required: false, default: [] },
     status: { type: Boolean, trim: true, required: false, default: false },
 
     image: { type: String, trim: true, required: false },
-
-    isHide: { type: Boolean, required: true, default: false },
-
   },
   { timestamps: true, versionKey: false, },
 
 );
-userSchema.index({"email": 1}, { unique: true });
+userSchema.index({ "email": 1 }, { unique: true });
 
 userSchema.plugin(slugGenerator);
 userSchema.plugin(removeMultiSpace);
+
+userSchema.pre('save', function (next) {
+  this.fullName = `${this.firstName} ${this.lastName}`;
+
+  if (!this.isModified('password')) { return next(); }
+
+  // hash password
+  this.password = hashPassword(this.password);
+  next();
+});
+
+userSchema.methods.comparePassword = function (password) {
+  const isMatch = comparePassword(password, this.password);
+  return isMatch;
+};
 
 const userModel = mongoose.model('User', userSchema);
 export default userModel;

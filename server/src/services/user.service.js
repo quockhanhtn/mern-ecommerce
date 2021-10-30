@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 import User from '../models/user.model.js';
 import strUtils from '../utils/str-utils.js';
-import argon2 from 'argon2';
 
 export default {
   getAll,
   getOne,
+  getUserById,
   create,
   update,
   hidden,
@@ -27,14 +27,22 @@ async function getAll() {
 
 /**
  * Get user
- * @param {*} identity
+ * @param {*} identity - username, email or phoneNumber
  * @returns
  */
 async function getOne(identity) {
-  const filter = strUtils.isUUID(identity)
-    ? { _id: identity }
-    : { slug: identity };
-  return await User.findOne(filter).populate(POPULATE_OPTS).lean().exec();
+  const filter = {
+    $or: [
+      { email: identity },
+      { phone: identity },
+      { username: identity }
+    ]
+  }
+  return await User.findOne(filter).exec();
+}
+
+async function getUserById(id) {
+  return await User.findById(id).exec();
 }
 
 /**
@@ -46,13 +54,8 @@ async function getOne(identity) {
 async function create(data) {
   const user = new User({
     _id: new mongoose.Types.ObjectId(),
-    ...data,
-    username: data.email,
-    fullName: `${data.firstName} ${data.lastName}`,
+    ...data
   });
-
-  // Hash password
-  user.password = await argon2.hash(user.password);
   return await user.save();
 }
 
