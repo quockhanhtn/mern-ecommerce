@@ -5,6 +5,7 @@ const resJson = (res, statusCode, message, data = null, extras = {}) => {
   };
   if (data) { resJsonData.data = data; }
   res.status(statusCode).json({ ...resJsonData, ...extras });
+  res.end();
 };
 
 // Send **200 OK** success status response

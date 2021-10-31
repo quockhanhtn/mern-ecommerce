@@ -1,52 +1,62 @@
 import { verifyToken } from '../utils/jwt-utils.js';
-import APIError from '../utils/APIError.js';
+import resUtils from '../utils/res-utils.js';
 
-const decodeToken = (req) => {
+const decodeToken = (req, role = null) => {
   // Header 'Authorization: Bearer {access_token}'
   const token = req.headers?.authorization?.split(' ')[1] || '';
-  console.log('token', token);
   if (!token) {
-    throw new APIError({ message: 'No token provided', status: 401 });
+    return { decoded: null, message: 'No token provided' };
   }
+
   const decoded = verifyToken(token);
   if (!decoded) {
-    throw new APIError({ message: 'Invalid token', status: 401 });
+    return { decoded: null, message: 'Invalid token' };
   }
 
-  return decoded;
-};
-
-export function isAuthenticated(req, _, next) {
-  const decoded = decodeToken(req, next);
-  console.log(decoded);
-  req.user = decoded;
-  next();
-};
-
-export function isAdmin(req, _, next) {
-  const decoded = decodeToken(req);
-  if (decoded.role !== 'ADMIN') {
-    throw new APIError({ message: 'Unauthorized', status: 401 });
+  if (role && decoded.role !== role) {
+    return { decoded: null, message: `Unauthorized, you need role ${role} to access` };
   }
-  req.user = decoded;
-  next();
+
+  return { decoded: decoded, message: null };
 };
 
-export function isStaff(req, _, next) {
-  const decoded = decodeToken(req);
-  if (decoded.role !== 'STAFF') {
-    throw new APIError({ message: 'Unauthorized', status: 401 });
+export function isAuthenticated(req, res, next) {
+  const { decoded, message } = decodeToken(req);
+  if (decoded) {
+    req.user = decoded;
+    next();
+  } else {
+    resUtils.status401(res, message);
   }
-  req.user = decoded;
-  next();
+};
+
+export function isAdmin(req, res, next) {
+  const { decoded, message } = decodeToken(req, 'ADMIN');
+  if (decoded) {
+    req.user = decoded;
+    next();
+  } else {
+    resUtils.status401(res, message);
+  }
+};
+
+export function isStaff(req, res, next) {
+  const { decoded, message } = decodeToken(req, 'STAFF');
+  if (decoded) {
+    req.user = decoded;
+    next();
+  } else {
+    resUtils.status401(res, message);
+  }
 };
 
 
-export function isCustomer(req, _, next) {
-  const decoded = decodeToken(req);
-  if (decoded.role !== 'CUSTOMER') {
-    throw new APIError({ message: 'Unauthorized', status: 401 });
+export function isCustomer(req, res, next) {
+  const { decoded, message } = decodeToken(req, 'CUSTOMER');
+  if (decoded) {
+    req.user = decoded;
+    next();
+  } else {
+    resUtils.status401(res, message);
   }
-  req.user = decoded;
-  next();
 };
