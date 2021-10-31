@@ -34,12 +34,13 @@ import SearchNotFound from '../../../components/SearchNotFound';
 import { ProductListHead, ProductListToolbar, ProductMoreMenu } from '../../../components/dashboard/products';
 import { ImageBrokenIcon } from '../../../assets';
 import { fCurrency } from '../../../utils/formatNumber';
+import EmptyCard from '../../../components/EmptyCard';
 // ----------------------------------------------------------------------
 const ThumbImgStyle = styled('img')(({ theme }) => ({
   width: 64,
   height: 64,
   objectFit: 'cover',
-  margin: theme.spacing(0, 2),
+  margin: theme.spacing(0, 2, 0, 0),
   borderRadius: theme.shape.borderRadiusSm
 }));
 // ----------------------------------------------------------------------
@@ -203,127 +204,130 @@ export default function PageProductList() {
             </Button>
           }
         />
+        {productsList.length > 0 ? (
+          <Card>
+            <ProductListToolbar numSelected={selected.length} />
+            <Scrollbar>
+              <TableContainer sx={{ minWidth: 800 }}>
+                <Table size={isCompact ? 'small' : 'medium'}>
+                  <ProductListHead
+                    order={order}
+                    orderBy={orderBy}
+                    headLabel={tableHeads}
+                    numSelected={selected.length}
+                    onRequestSort={handleRequestSort}
+                    rowCount={productsList.length}
+                    onSelectAllClick={handleSelectAllClick}
+                  />
+                  <TableBody>
+                    {Helper.stableSort(productsList, Helper.getComparator(order, orderBy))
+                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .map((row, index) => {
+                        const { _id, slug, name, isHide } = row;
+                        const { price, marketPrice, quantity, sold, thumbnail } = row.variants[0];
+                        const isItemSelected = isSelected(slug);
+                        const labelId = `enhanced-table-checkbox-${index}`;
 
-        <Card>
-          <ProductListToolbar numSelected={selected.length} />
-          <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table size={isCompact ? 'small' : 'medium'}>
-                <ProductListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={tableHeads}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  rowCount={productsList.length}
-                  onSelectAllClick={handleSelectAllClick}
-                />
-                <TableBody>
-                  {Helper.stableSort(productsList, Helper.getComparator(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const { _id, slug, name, isHide } = row;
-                      const { price, marketPrice, quantity, sold, thumbnail } = row.variants[0];
-                      const isItemSelected = isSelected(slug);
-                      const labelId = `enhanced-table-checkbox-${index}`;
-
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={_id}
-                          selected={isItemSelected}
-                          onClick={(event) => handleClick(event, slug)}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox checked={isItemSelected} />
-                          </TableCell>
-                          {isCompact ? (
-                            <TableCell component="th" id={labelId} scope="row" padding="normal">
-                              {name}
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            key={_id}
+                            selected={isItemSelected}
+                            onClick={(event) => handleClick(event, slug)}
+                          >
+                            <TableCell padding="checkbox">
+                              <Checkbox checked={isItemSelected} />
                             </TableCell>
-                          ) : (
-                            <TableCell component="th" scope="row" padding="none">
-                              <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
-                                {thumbnail ? (
-                                  <ThumbImgStyle alt={name} src={thumbnail} />
-                                ) : (
-                                  <ImageBrokenIcon width={64} height={64} marginRight={2} />
-                                )}
-                                <Typography variant="subtitle2" noWrap>
-                                  {name}
-                                </Typography>
-                              </Box>
+                            {isCompact ? (
+                              <TableCell component="th" id={labelId} scope="row" padding="normal">
+                                {name}
+                              </TableCell>
+                            ) : (
+                              <TableCell component="th" scope="row" padding="none">
+                                <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
+                                  {thumbnail ? (
+                                    <ThumbImgStyle alt={name} src={thumbnail} />
+                                  ) : (
+                                    <ImageBrokenIcon width={64} height={64} marginRight={2} />
+                                  )}
+                                  <Typography variant="subtitle2" noWrap>
+                                    {name}
+                                  </Typography>
+                                </Box>
+                              </TableCell>
+                            )}
+                            <TableCell align="left" style={{ minWidth: 100 }}>
+                              <Typography variant="subtitle4" noWrap>
+                                {fCurrency(price)}
+                              </Typography>
                             </TableCell>
-                          )}
-                          <TableCell align="left" style={{ minWidth: 100 }}>
-                            <Typography variant="subtitle4" noWrap>
-                              {fCurrency(price)}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="left" style={{ minWidth: 100 }}>
-                            <Typography variant="subtitle4" noWrap>
-                              {fCurrency(marketPrice)}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="left" style={{ minWidth: 100 }}>
-                            {quantity}
-                          </TableCell>
-                          <TableCell align="left" style={{ minWidth: 100 }}>
-                            {sold}
-                          </TableCell>
-                          <TableCell align="left">
-                            <Label
-                              variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                              color={isHide ? 'default' : 'success'}
-                            >
-                              {t(`dashboard.products.${isHide ? 'hidden' : 'visible'}`)}
-                            </Label>
-                          </TableCell>
-                          <TableCell align="right" onClick={(event) => event.stopPropagation()}>
-                            <ProductMoreMenu onDelete={() => handleDeleteProduct(_id, slug)} productName={name} />
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: (isCompact ? 33 : 53) * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Scrollbar>
+                            <TableCell align="left" style={{ minWidth: 100 }}>
+                              <Typography variant="subtitle4" noWrap>
+                                {fCurrency(marketPrice)}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="left" style={{ minWidth: 100 }}>
+                              {quantity}
+                            </TableCell>
+                            <TableCell align="left" style={{ minWidth: 100 }}>
+                              {sold}
+                            </TableCell>
+                            <TableCell align="left">
+                              <Label
+                                variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
+                                color={isHide ? 'default' : 'success'}
+                              >
+                                {t(`dashboard.products.${isHide ? 'hidden' : 'visible'}`)}
+                              </Label>
+                            </TableCell>
+                            <TableCell align="right" onClick={(event) => event.stopPropagation()}>
+                              <ProductMoreMenu onDelete={() => handleDeleteProduct(_id, slug)} productName={name} />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    {emptyRows > 0 && (
+                      <TableRow style={{ height: (isCompact ? 33 : 53) * emptyRows }}>
+                        <TableCell colSpan={6} />
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Scrollbar>
 
-          <Box sx={{ position: 'relative' }}>
-            <TablePagination
-              labelRowsPerPage={t('common.rows-per-page')}
-              rowsPerPageOptions={[5, 10, 25, 50, 100]}
-              component="div"
-              count={productsList.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-            <Box
-              sx={{
-                px: 3,
-                py: 1.5,
-                top: 0,
-                position: { md: 'absolute' }
-              }}
-            >
-              <FormControlLabel
-                control={<Switch checked={isCompact} onChange={handleChangeDense} />}
-                label={t('common.small-padding')}
+            <Box sx={{ position: 'relative' }}>
+              <TablePagination
+                labelRowsPerPage={t('common.rows-per-page')}
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                component="div"
+                count={productsList.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
               />
+              <Box
+                sx={{
+                  px: 3,
+                  py: 1.5,
+                  top: 0,
+                  position: { md: 'absolute' }
+                }}
+              >
+                <FormControlLabel
+                  control={<Switch checked={isCompact} onChange={handleChangeDense} />}
+                  label={t('common.small-padding')}
+                />
+              </Box>
             </Box>
-          </Box>
-        </Card>
+          </Card>
+        ) : (
+          <EmptyCard title={t('dashboard.products.title-not-found')} />
+        )}
       </Container>
     </Page>
   );

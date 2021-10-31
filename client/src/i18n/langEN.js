@@ -37,9 +37,12 @@ export default {
     'updated-at': 'Updated at',
     categories: {
       title: 'Categories',
+      'title-not-found': 'Category not found!',
       search: 'Search category ...',
       name: 'Category name',
+      'name-validation': 'Category name is required',
       desc: 'Category description',
+      'desc-validation': 'Category description is required',
       parent: 'Parent category',
       status: 'Status',
       hidden: 'Hidden',
@@ -54,8 +57,10 @@ export default {
     brands: {
       'title-page': 'Ecommerce: Brand List | HK-MOBILE',
       title: 'Brands',
+      'title-not-found': 'Brand not found!',
       heading: 'Brand List',
       'search-brand-placeholder': 'Search brand...',
+      image: 'Add image',
       add: 'Add brand',
       'add-title': 'Add new brand',
       edit: 'Edit brand',
@@ -76,6 +81,7 @@ export default {
     discounts: {
       'title-page': 'Ecommerce: Discount List | HK-MOBILE',
       title: 'Discounts',
+      'title-not-found': 'Discounts not found!',
       heading: 'Discount List',
       'search-placeholder': 'Search discount...',
       add: 'Add discount',
@@ -95,6 +101,7 @@ export default {
       'discount-validation-min': 'Promotion percentage must be greater than 0',
       quantity: 'Quantity',
       'quantity-validation': 'Quantity is required',
+      image: 'Discount image',
       status: 'Status',
       hidden: 'Hidden',
       visible: 'Visible',
@@ -107,6 +114,7 @@ export default {
     products: {
       'title-page': 'Ecommerce: Product List | HK-MOBILE',
       title: 'Products',
+      'title-not-found': 'Products not found!',
       heading: 'Product List',
       'search-product-placeholder': 'Search product...',
       add: 'Add product',
