@@ -18,7 +18,6 @@ const formatAllUser = (user, req) => {
   return user;
 }
 
-// Add for auth
 export const createUser = async (req, res, next) => {
   try {
     const newUser = await userService.create(req.body);

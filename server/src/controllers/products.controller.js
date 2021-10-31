@@ -69,7 +69,7 @@ export const getAllProducts = async (req, res, next) => {
     if (products && products.length > 0) {
       resUtils.status200(res, 'Get all products successfully!', products);
     } else {
-      resUtils.status200(res, 'No products found');
+      resUtils.status200(res, 'No products found', []);
     }
   } catch (err) { next(err); }
 };

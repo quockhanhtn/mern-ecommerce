@@ -10,7 +10,15 @@ export default {
     cancel: 'Hủy',
     edit: 'Chỉnh sửa',
     delete: 'Xóa',
-    'invalid-file-type': 'Tệp tin không hợp lệ !'
+    'invalid-file-type': 'Tệp tin không hợp lệ !',
+    upload: {
+      'from-url': 'Nhập địa chỉ hình ảnh',
+      'image-url': 'Địa chỉ hình ảnh',
+      'drop-or-select-file': 'Kéo thả hoạch chọn hình',
+      'drop-files-here-or-click': 'Kéo thả hoặc chọn hình',
+      browse: 'Tại đây',
+      'thorough-your-machine': 'từ thiết bị của bạn'
+    }
   },
   settings: {
     title: 'Cài đặt',

@@ -1,6 +1,7 @@
 import express from 'express';
 
 // import all the routes here
+import authRotes from './auth.route.js';
 import categoryRoutes from './categories.route.js';
 import brandRoutes from './brands.route.js';
 import productRoutes from './products.route.js';
@@ -23,6 +24,7 @@ router.get('/status', (req, res) => {
 	});
 });
 
+router.use('/auth', authRotes);
 router.use('/categories', categoryRoutes);
 router.use('/brands', brandRoutes);
 router.use('/products', productRoutes);

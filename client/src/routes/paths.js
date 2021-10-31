@@ -23,6 +23,13 @@ export const PATH_DASHBOARD = {
       root: path(ROOTS_DASHBOARD, '/app/products'),
       list: path(ROOTS_DASHBOARD, '/app/products/list'),
       add: path(ROOTS_DASHBOARD, '/app/products/create')
-    }
+    },
+    users: {
+      root: path(ROOTS_DASHBOARD, '/app/users'),
+      user_list: path(ROOTS_DASHBOARD, '/app/users/user_list'),
+      employee_list: path(ROOTS_DASHBOARD, '/app/users/employee_list')
+    },
+    account_setting: path(ROOTS_DASHBOARD, '/app/setting'),
+    profile: path(ROOTS_DASHBOARD, '/app/profile')
   }
 };

@@ -32,13 +32,15 @@ import Scrollbar from '../../../components/Scrollbar';
 import * as Helper from '../../../helper/listHelper';
 import BrandForm from './BrandForm';
 import { BrandListHead, BrandListToolbar, BrandMoreMenu } from '../../../components/dashboard/brand-list';
-import Page404 from '../../Page404';
+import { ImageBrokenIcon } from '../../../assets';
+import SearchNotFound from '../../../components/SearchNotFound';
+import EmptyCard from '../../../components/EmptyCard';
 // ----------------------------------------------------------------------
 const ThumbImgStyle = styled('img')(({ theme }) => ({
   width: 64,
   height: 64,
   objectFit: 'cover',
-  margin: theme.spacing(0, 2),
+  margin: theme.spacing(0, 2, 0, 0),
   borderRadius: theme.shape.borderRadiusSm
 }));
 
@@ -52,7 +54,7 @@ export default function PageBrandList() {
   const [orderBy, setOrderBy] = useState('createdAt');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
-  const [dense, setDense] = useState(false);
+  const [isCompact, setIsCompact] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [currentId, setCurrentId] = useState(null);
   const [openForm, setOpenForm] = useState(false);
@@ -102,8 +104,10 @@ export default function PageBrandList() {
   const handleDeleteBrand = (id, slug) => {
     dispatch(deleteBrand(id));
     enqueueSnackbar(t('dashboard.brands.delete'), { variant: 'success' });
-    const index = selected.indexOf(slug);
-    selected.splice(index, 1);
+    const selectedIndex = selected.indexOf(slug);
+    if (selectedIndex > -1) {
+      selected.splice(selectedIndex, 1);
+    }
   };
 
   const handleRequestSort = (event, property) => {
@@ -150,7 +154,7 @@ export default function PageBrandList() {
   };
 
   const handleChangeDense = (event) => {
-    setDense(event.target.checked);
+    setIsCompact(event.target.checked);
   };
 
   const handleCreateNew = () => {
@@ -173,15 +177,13 @@ export default function PageBrandList() {
   }
 
   if (hasError) {
-    return <Page404 />;
+    return <SearchNotFound />;
   }
 
   return (
     <Page title={t('dashboard.brands.title-page')}>
       <Container>
-        {openForm && (
-          <BrandForm open={openForm} setOpen={setOpenForm} currentId={currentId} setCurrentId={setCurrentId} />
-        )}
+        {openForm && <BrandForm open={openForm} setOpen={setOpenForm} currentId={currentId} />}
         <HeaderBreadcrumbs
           heading={t('dashboard.brands.heading')}
           links={[
@@ -198,121 +200,128 @@ export default function PageBrandList() {
             </Button>
           }
         />
+        {brandsList.length > 0 ? (
+          <Card>
+            <BrandListToolbar numSelected={selected.length} />
 
-        <Card>
-          <BrandListToolbar numSelected={selected.length} />
+            <Scrollbar>
+              <TableContainer sx={{ minWidth: 800 }}>
+                <Table size={isCompact ? 'small' : 'medium'}>
+                  <BrandListHead
+                    order={order}
+                    orderBy={orderBy}
+                    headLabel={tableHeads}
+                    numSelected={selected.length}
+                    onRequestSort={handleRequestSort}
+                    rowCount={brandsList.length}
+                    onSelectAllClick={handleSelectAllClick}
+                  />
+                  <TableBody>
+                    {Helper.stableSort(brandsList, Helper.getComparator(order, orderBy))
+                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .map((row, index) => {
+                        const { _id, slug, name, country, image, createdAt, updatedAt, isHide } = row;
+                        const isItemSelected = isSelected(slug);
+                        const labelId = `enhanced-table-checkbox-${index}`;
 
-          <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table size={dense ? 'small' : 'medium'}>
-                <BrandListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={tableHeads}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  rowCount={brandsList.length}
-                  onSelectAllClick={handleSelectAllClick}
-                />
-                <TableBody>
-                  {Helper.stableSort(brandsList, Helper.getComparator(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const { _id, slug, name, country, image, createdAt, updatedAt, isHide } = row;
-                      const isItemSelected = isSelected(slug);
-                      const labelId = `enhanced-table-checkbox-${index}`;
-
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={_id}
-                          selected={isItemSelected}
-                          onClick={(event) => handleClick(event, slug)}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox checked={isItemSelected} />
-                          </TableCell>
-                          {dense ? (
-                            <TableCell component="th" id={labelId} scope="row" padding="none">
-                              {name}
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            key={_id}
+                            selected={isItemSelected}
+                            onClick={(event) => handleClick(event, slug)}
+                          >
+                            <TableCell padding="checkbox">
+                              <Checkbox checked={isItemSelected} />
                             </TableCell>
-                          ) : (
-                            <TableCell component="th" scope="row" padding="none">
-                              <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
-                                {/* <ThumbImgStyle alt={row.name} src={image.original} /> */}
-                                <Typography variant="subtitle2" noWrap>
-                                  {name}
-                                </Typography>
-                              </Box>
+                            {isCompact ? (
+                              <TableCell component="th" id={labelId} scope="row" padding="none">
+                                {name}
+                              </TableCell>
+                            ) : (
+                              <TableCell component="th" scope="row" padding="none">
+                                <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
+                                  {image ? (
+                                    <ThumbImgStyle alt={name} src={image} />
+                                  ) : (
+                                    <ImageBrokenIcon width={64} height={64} marginRight={2} />
+                                  )}
+                                  <Typography variant="subtitle2" noWrap>
+                                    {name}
+                                  </Typography>
+                                </Box>
+                              </TableCell>
+                            )}
+                            <TableCell align="left" style={{ minWidth: 160 }}>
+                              <Typography variant="subtitle4" noWrap>
+                                {country}
+                              </Typography>
                             </TableCell>
-                          )}
-                          <TableCell align="left" style={{ minWidth: 160 }}>
-                            <Typography variant="subtitle4" noWrap>
-                              {country}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="left">
-                            <Label
-                              variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                              color={isHide ? 'default' : 'success'}
-                            >
-                              {t(`dashboard.brands.${isHide ? 'hidden' : 'visible'}`)}
-                            </Label>
-                          </TableCell>
-                          <TableCell align="right" style={{ minWidth: 160 }}>
-                            {fDateTime(createdAt)}
-                          </TableCell>
-                          <TableCell align="right" style={{ minWidth: 160 }}>
-                            {fDateTime(updatedAt)}
-                          </TableCell>
-                          <TableCell align="right" onClick={(event) => event.stopPropagation()}>
-                            <BrandMoreMenu
-                              onEdit={() => handleEditBrand(_id)}
-                              onDelete={() => handleDeleteBrand(_id, slug)}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Scrollbar>
+                            <TableCell align="left">
+                              <Label
+                                variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
+                                color={isHide ? 'default' : 'success'}
+                              >
+                                {t(`dashboard.brands.${isHide ? 'hidden' : 'visible'}`)}
+                              </Label>
+                            </TableCell>
+                            <TableCell align="right" style={{ minWidth: 160 }}>
+                              {fDateTime(createdAt)}
+                            </TableCell>
+                            <TableCell align="right" style={{ minWidth: 160 }}>
+                              {fDateTime(updatedAt)}
+                            </TableCell>
+                            <TableCell align="right" onClick={(event) => event.stopPropagation()}>
+                              <BrandMoreMenu
+                                onEdit={() => handleEditBrand(_id)}
+                                onDelete={() => handleDeleteBrand(_id, slug)}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    {emptyRows > 0 && (
+                      <TableRow style={{ height: (isCompact ? 33 : 53) * emptyRows }}>
+                        <TableCell colSpan={6} />
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Scrollbar>
 
-          <Box sx={{ position: 'relative' }}>
-            <TablePagination
-              labelRowsPerPage={t('common.rows-per-page')}
-              rowsPerPageOptions={[5, 10, 25, 50, 100]}
-              component="div"
-              count={brandsList.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-            <Box
-              sx={{
-                px: 3,
-                py: 1.5,
-                top: 0,
-                position: { md: 'absolute' }
-              }}
-            >
-              <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense} />}
-                label={t('common.small-padding')}
+            <Box sx={{ position: 'relative' }}>
+              <TablePagination
+                labelRowsPerPage={t('common.rows-per-page')}
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                component="div"
+                count={brandsList.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
               />
+              <Box
+                sx={{
+                  px: 3,
+                  py: 1.5,
+                  top: 0,
+                  position: { md: 'absolute' }
+                }}
+              >
+                <FormControlLabel
+                  control={<Switch checked={isCompact} onChange={handleChangeDense} />}
+                  label={t('common.small-padding')}
+                />
+              </Box>
             </Box>
-          </Box>
-        </Card>
+          </Card>
+        ) : (
+          <EmptyCard title={t('dashboard.brands.title-not-found')} />
+        )}
       </Container>
     </Page>
   );

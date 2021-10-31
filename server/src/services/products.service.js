@@ -97,6 +97,7 @@ async function initialProduct(data, isAddNew = false) {
   //#endregion
 
   if (data.name) { product.name = data.name; }
+  if (data.code) { product.code = data.code; }
   if (data.desc) { product.desc = data.desc; }
   if (data.video) { product.video = data.video; }
   if (data.specifications) {

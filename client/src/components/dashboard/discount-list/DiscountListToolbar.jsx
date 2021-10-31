@@ -6,6 +6,8 @@ import roundFilterList from '@iconify/icons-ic/round-filter-list';
 // material
 import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Toolbar, Tooltip, Typography, IconButton, OutlinedInput, InputAdornment } from '@material-ui/core';
+import editFill from '@iconify/icons-eva/edit-fill';
+import eyeFill from '@iconify/icons-eva/eye-fill';
 import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
@@ -67,13 +69,29 @@ export default function DiscountListToolbar({ numSelected, filterName, onFilterN
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title={t('common.delete')}>
-          <IconButton>
-            <Icon icon={trash2Fill} />
-          </IconButton>
-        </Tooltip>
+        <Box sx={{ display: 'flex', justifyContent: 'right' }}>
+          {numSelected === 1 && (
+            <>
+              <Tooltip title="Edit">
+                <IconButton>
+                  <Icon icon={editFill} />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Hide / show">
+                <IconButton>
+                  <Icon icon={eyeFill} />
+                </IconButton>
+              </Tooltip>
+            </>
+          )}
+          <Tooltip title="Delete">
+            <IconButton>
+              <Icon icon={trash2Fill} />
+            </IconButton>
+          </Tooltip>
+        </Box>
       ) : (
-        <Tooltip title={t('common.filter-list')}>
+        <Tooltip title="Filter list">
           <IconButton>
             <Icon icon={roundFilterList} />
           </IconButton>

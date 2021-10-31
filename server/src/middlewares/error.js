@@ -70,13 +70,15 @@ function handler(err, req, res, _) {
     IP: req.ip,
     URL: req.originalUrl,
   };
-  // if (env !== 'development') {
-  //   delete response.stack;
-  // }
-  console.log(response);
 
+  if (process.env.NODE_ENV !== 'dev') {
+    delete response.stack;
+  } else {
+    console.log(response);
+  }
+  // clear uploaded files
   uploadUtils.clearUploadFile(req);
-  
+
   res.status(response.code);
   res.json(response);
   res.end();

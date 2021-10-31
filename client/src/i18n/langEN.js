@@ -10,7 +10,15 @@ export default {
     cancel: 'Cancel',
     edit: 'Edit',
     delete: 'Delete',
-    'invalid-file-type': 'Invalid file type !'
+    'invalid-file-type': 'Invalid file type !',
+    upload: {
+      'from-url': 'Select from URL',
+      'image-url': 'Image URL',
+      'drop-or-select-file': 'Drop or select file',
+      'drop-files-here-or-click': 'Drop files here or click',
+      browse: 'Browse',
+      'thorough-your-machine': 'thorough your machine'
+    }
   },
   settings: {
     title: 'Setting',
@@ -29,9 +37,12 @@ export default {
     'updated-at': 'Updated at',
     categories: {
       title: 'Categories',
+      'title-not-found': 'Category not found!',
       search: 'Search category ...',
       name: 'Category name',
+      'name-validation': 'Category name is required',
       desc: 'Category description',
+      'desc-validation': 'Category description is required',
       parent: 'Parent category',
       status: 'Status',
       hidden: 'Hidden',
@@ -46,8 +57,10 @@ export default {
     brands: {
       'title-page': 'Ecommerce: Brand List | HK-MOBILE',
       title: 'Brands',
+      'title-not-found': 'Brand not found!',
       heading: 'Brand List',
       'search-brand-placeholder': 'Search brand...',
+      image: 'Add image',
       add: 'Add brand',
       'add-title': 'Add new brand',
       edit: 'Edit brand',
@@ -68,6 +81,7 @@ export default {
     discounts: {
       'title-page': 'Ecommerce: Discount List | HK-MOBILE',
       title: 'Discounts',
+      'title-not-found': 'Discounts not found!',
       heading: 'Discount List',
       'search-placeholder': 'Search discount...',
       add: 'Add discount',
@@ -87,6 +101,7 @@ export default {
       'discount-validation-min': 'Promotion percentage must be greater than 0',
       quantity: 'Quantity',
       'quantity-validation': 'Quantity is required',
+      image: 'Discount image',
       status: 'Status',
       hidden: 'Hidden',
       visible: 'Visible',
@@ -95,6 +110,45 @@ export default {
       error: 'Error',
       'date-start': 'Date start',
       'date-end': 'Date end'
+    },
+    products: {
+      'title-page': 'Ecommerce: Product List | HK-MOBILE',
+      title: 'Products',
+      'title-not-found': 'Products not found!',
+      heading: 'Product List',
+      'search-product-placeholder': 'Search product...',
+      add: 'Add product',
+      'add-title': 'Add new product',
+      edit: 'Edit product',
+      'edit-title': 'Edit product',
+      delete: 'Delete product',
+      name: 'Product name',
+      'name-validation': 'Product name is required',
+      desc: 'Product description',
+      'desc-validation': 'Product Description is required',
+      price: 'Promotional price',
+      'market-price': 'Market price',
+      quantity: 'Quantity in stock',
+      sold: 'Sold',
+      status: 'Status',
+      hidden: 'Hidden',
+      visible: 'Visible'
+    },
+    users: {
+      'title-page': 'Ecommerce: User List | HK-MOBILE',
+      title: 'Users',
+      heading: 'User List',
+      'search-user-placeholder': 'Search user...',
+      detail: 'Detail',
+      'lock-account': 'Lock account',
+      'full-name': 'Full name',
+      gender: 'Gender',
+      email: 'Email',
+      phone: 'Phone',
+      sold: 'Sold',
+      status: 'Status',
+      hidden: 'Hidden',
+      visible: 'Visible'
     }
   }
 };

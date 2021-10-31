@@ -10,8 +10,9 @@ export const getBrands = async (req, res, next) => {
   try {
     let brands = await brandService.getAll();
     brands = brands.map(brand => formatBrand(brand, req));
-    if (brands) {
+    if (brands && brands.length > 0) {
       resUtils.status200(res, 'Gets all brands successfully', brands);
+      
     } else {
       resUtils.status200(res, 'No brands found', []);
     }

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import slugGenerator from 'mongoose-slug-updater';
 import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
+import { hashPassword } from '../utils/cipher-utils.js';
 
 const userSchema = mongoose.Schema(
   {
@@ -19,7 +20,6 @@ const userSchema = mongoose.Schema(
       type: String,
       match: [/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/, 'Please fill a valid email address'],
       trim: true,
-      required: true,
       index: {
         unique: true,
         partialFilterExpression: { email: { $type: 'string' } }
@@ -29,28 +29,69 @@ const userSchema = mongoose.Schema(
       type: String,
       match: [/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, 'Please fill a valid phone number'],
       trim: true,
-      required: true,
       index: {
         unique: true,
-        partialFilterExpression: { phone: { $type: 'string' } }
+        partialFilterExpression: { phone: { $type: 'string' } },
       }
     },
-    username: { type: String, trim: true, required: false, default: '' },
+
+    /*
+     * Username regex validation explain
+     * Reference https://stackoverflow.com/a/12019115
+     * ^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
+     * └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
+     *       │         │         │            │           no _ or . at the end
+     *       │         │         │            │
+     *       │         │         │            allowed characters
+     *       │         │         │
+     *       │         │         no __ or _. or ._ or .. inside
+     *       │         │
+     *       │         no _ or . at the beginning
+     *       │
+     *       username is 8-20 characters long
+    */
+    username: {
+      type: String,
+      match: [/^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/, 'Please fill a valid username'],
+      trim: true,
+      required: false,
+      default: ''
+    },
     password: { type: String, trim: true, required: true },
+
+    role: {
+      type: String,
+      enum: ['ADMIN', 'STAFF', 'CUSTOMER'],
+      default: 'CUSTOMER',
+      required: true
+    },
+
     address: { type: Array, trim: true, required: false, default: [] },
     status: { type: Boolean, trim: true, required: false, default: false },
 
     image: { type: String, trim: true, required: false },
-
-    isHide: { type: Boolean, required: true, default: false },
-
   },
   { timestamps: true, versionKey: false, },
 
 );
+// userSchema.index({ "email": 1 }, { unique: true });
 
 userSchema.plugin(slugGenerator);
 userSchema.plugin(removeMultiSpace);
+
+userSchema.pre('save', function (next) {
+  if (!this?.email?.trim() && !this?.phone?.trim()) {
+    return next(new Error('Email or phone is required'));
+  }
+
+  this.fullName = `${this.firstName} ${this.lastName}`;
+
+  if (!this.isModified('password')) { return next(); }
+
+  // hash password
+  this.password = hashPassword(this.password);
+  next();
+});
 
 const userModel = mongoose.model('User', userSchema);
 export default userModel;
