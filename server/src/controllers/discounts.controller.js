@@ -13,7 +13,7 @@ export const getDiscounts = async (req, res, next) => {
     if (discounts && discounts.length > 0) {
       resUtils.status200(res, 'Gets all discounts successfully', discounts);
     } else {
-      resUtils.status404(res, 'No discounts found');
+      resUtils.status200(res, 'No discounts found',[]);
     }
   } catch (err) { next(err); }
 }

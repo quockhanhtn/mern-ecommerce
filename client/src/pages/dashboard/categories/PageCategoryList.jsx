@@ -1,8 +1,6 @@
 import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
-import { Link as RouterLink } from 'react-router-dom';
-import { motion } from 'framer-motion';
 // material
 import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
 import {
@@ -79,12 +77,6 @@ export default function PageCategoryList() {
       disablePadding: true,
       label: t('dashboard.categories.name')
     },
-    // {
-    //   id: 'desc',
-    //   numeric: false,
-    //   disablePadding: false,
-    //   label: t('dashboard.categories.desc')
-    // },
     {
       id: 'isHide',
       numeric: false,
@@ -182,11 +174,9 @@ export default function PageCategoryList() {
   }
 
   if (hasError) {
-    // TODO: handle not found
     return <SearchNotFound />;
   }
 
-  console.log('Categories list: ', categoriesList);
   return (
     <Page title="Ecommerce: Category List | Minimal-UI">
       <Container>
@@ -198,7 +188,7 @@ export default function PageCategoryList() {
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
               name: 'E-Commerce',
-              href: PATH_DASHBOARD.app.categories
+              href: PATH_DASHBOARD.root
             },
             { name: 'Category List' }
           ]}
@@ -319,7 +309,7 @@ export default function PageCategoryList() {
             </Box>
           </Card>
         ) : (
-          <EmptyCard title="Not found" />
+          <EmptyCard title={t('dashboard.categories.title-not-found')} />
         )}
       </Container>
     </Page>
