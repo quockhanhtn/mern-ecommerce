@@ -20,7 +20,6 @@ const userSchema = mongoose.Schema(
       type: String,
       match: [/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/, 'Please fill a valid email address'],
       trim: true,
-      required: true,
       index: {
         unique: true,
         partialFilterExpression: { email: { $type: 'string' } }
@@ -30,7 +29,6 @@ const userSchema = mongoose.Schema(
       type: String,
       match: [/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, 'Please fill a valid phone number'],
       trim: true,
-      required: true,
       index: {
         unique: true,
         partialFilterExpression: { phone: { $type: 'string' } },
@@ -76,12 +74,16 @@ const userSchema = mongoose.Schema(
   { timestamps: true, versionKey: false, },
 
 );
-userSchema.index({ "email": 1 }, { unique: true });
+// userSchema.index({ "email": 1 }, { unique: true });
 
 userSchema.plugin(slugGenerator);
 userSchema.plugin(removeMultiSpace);
 
 userSchema.pre('save', function (next) {
+  if (!this?.email?.trim() && !this?.phone?.trim()) {
+    return next(new Error('Email or phone is required'));
+  }
+
   this.fullName = `${this.firstName} ${this.lastName}`;
 
   if (!this.isModified('password')) { return next(); }

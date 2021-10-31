@@ -1,0 +1,25 @@
+@BASE_URL = http://localhost:3001/api/v1
+@RESOURCE = auth
+
+POST {{BASE_URL}}/{{RESOURCE}}/login
+content-type: application/json
+
+{
+  "username": "0125256789",
+  "password": "hello123"
+}
+
+###
+
+POST {{BASE_URL}}/{{RESOURCE}}/register
+content-type: application/json
+
+{
+    "firstName":"Khánh",
+    "lastName":"Lâm",
+    "phone":"0125256789",
+    "email":"ssssss@nf.com",
+    "password":"hello123"
+}
+
+####
