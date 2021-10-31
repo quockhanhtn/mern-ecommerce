@@ -1,5 +1,11 @@
+import constants from '../constants.js';
 import { verifyToken } from '../utils/jwt-utils.js';
 import resUtils from '../utils/res-utils.js';
+
+const roleAdmin = constants.USER.ROLE.ADMIN;
+const roleStaff = constants.USER.ROLE.STAFF;
+const roleAdminOrStaff = [roleAdmin, roleStaff];
+const roleCustomer = constants.USER.ROLE.CUSTOMER;
 
 const decodeToken = (req, role = null) => {
   // Header 'Authorization: Bearer {access_token}'
@@ -13,8 +19,18 @@ const decodeToken = (req, role = null) => {
     return { decoded: null, message: 'Invalid token' };
   }
 
-  if (role && decoded.role !== role) {
-    return { decoded: null, message: `Unauthorized, you need role ${role} to access` };
+  if (!role) {
+    return { decoded, message: null };
+  }
+
+  if (role && typeof role === 'string') {
+    if (decoded.role !== role) {
+      return { decoded: null, message: `Unauthorized, you need role ${role} to access` };
+    }
+  } else if (role && Array.isArray(role)) {
+    if (!role.includes(decoded.role)) {
+      return { decoded: null, message: `Unauthorized, you need role ${role} to access` };
+    }
   }
 
   return { decoded: decoded, message: null };
@@ -31,7 +47,17 @@ export function isAuthenticated(req, res, next) {
 };
 
 export function isAdmin(req, res, next) {
-  const { decoded, message } = decodeToken(req, 'ADMIN');
+  const { decoded, message } = decodeToken(req, roleAdmin);
+  if (decoded) {
+    req.user = decoded;
+    next();
+  } else {
+    resUtils.status401(res, message);
+  }
+};
+
+export function isAdminOrStaff(req, res, next) {
+  const { decoded, message } = decodeToken(req, roleAdminOrStaff);
   if (decoded) {
     req.user = decoded;
     next();
@@ -41,7 +67,7 @@ export function isAdmin(req, res, next) {
 };
 
 export function isStaff(req, res, next) {
-  const { decoded, message } = decodeToken(req, 'STAFF');
+  const { decoded, message } = decodeToken(req, roleStaff);
   if (decoded) {
     req.user = decoded;
     next();
@@ -52,7 +78,7 @@ export function isStaff(req, res, next) {
 
 
 export function isCustomer(req, res, next) {
-  const { decoded, message } = decodeToken(req, 'CUSTOMER');
+  const { decoded, message } = decodeToken(req, roleCustomer);
   if (decoded) {
     req.user = decoded;
     next();

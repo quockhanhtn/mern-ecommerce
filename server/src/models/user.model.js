@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import slugGenerator from 'mongoose-slug-updater';
+import constants from '../constants.js';
 import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
 import { hashPassword } from '../utils/cipher-utils.js';
 
@@ -12,8 +12,8 @@ const userSchema = mongoose.Schema(
 
     gender: {
       type: String, trim: true,
-      enum: ['MALE', 'FEMALE', 'OTHER'],
-      default: 'OTHER'
+      enum: Object.values(constants.USER.GENDER),
+      default: constants.USER.GENDER.OTHER
     },
     birthDay: { type: Date, trim: true, required: false },
     email: {
@@ -61,8 +61,8 @@ const userSchema = mongoose.Schema(
 
     role: {
       type: String,
-      enum: ['ADMIN', 'STAFF', 'CUSTOMER'],
-      default: 'CUSTOMER',
+      enum: Object.values(constants.USER.ROLE),
+      default: constants.USER.ROLE.CUSTOMER,
       required: true
     },
 
@@ -76,7 +76,6 @@ const userSchema = mongoose.Schema(
 );
 // userSchema.index({ "email": 1 }, { unique: true });
 
-userSchema.plugin(slugGenerator);
 userSchema.plugin(removeMultiSpace);
 
 userSchema.pre('save', function (next) {
