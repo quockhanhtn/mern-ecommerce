@@ -1,7 +1,6 @@
 import userService from '../services/user.service.js';
 import authService from '../services/auth.service.js';
 import resUtils from '../utils/res-utils.js';
-import { comparePassword } from '../utils/cipher-utils.js';
 import { formatImageUrl } from '../utils/format-utils.js';
 import { generateToken } from '../utils/jwt-utils.js';
 
@@ -47,10 +46,31 @@ export const login = async (req, res, next) => {
 };
 
 export const refreshToken = async (req, res, next) => {
+  try {
+    const ipAddress = req.ip;
+    const refreshToken = req.body.refreshToken;
+
+    const result = await authService.refreshToken(refreshToken, ipAddress);
+    const userData = formatImageUrl(result.user, 'image', req);
+    delete userData.password;
+
+    resUtils.status200(
+      res,
+      'Refresh Token successful !',
+      {
+        user: userData,
+        token: result.jwtToken,
+        refreshToken: result.refreshToken
+      }
+    );
+  } catch (err) { next(err); }
 };
 
 export const logout = async (req, res, next) => {
   try {
-
+    const ipAddress = req.ip;
+    const refreshToken = req.body.refreshToken;
+    await authService.revokeToken(refreshToken, ipAddress);
+    resUtils.status204(res);
   } catch (err) { next(err) }
 };

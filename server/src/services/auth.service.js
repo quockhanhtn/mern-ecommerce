@@ -1,11 +1,10 @@
-import mongoose from 'mongoose';
-import User from '../models/user.model.js';
 import RefreshToken from '../models/refresh-token.model.js';
 import userService from './user.service.js';
+import { randomBytes } from 'crypto';
 import { generateToken } from '../utils/jwt-utils.js';
 import { comparePassword } from '../utils/cipher-utils.js';
 import ApiError from '../utils/APIError.js';
-import { randomBytes } from 'crypto';
+
 
 export default {
   authenticate,
@@ -23,7 +22,7 @@ async function authenticate(username, password, ipAddress) {
 
   // authentication successful so generate jwt and refresh tokens
   const jwtToken = generateToken({ _id: user._id });
-  const refreshToken = generateRefreshToken(user, ipAddress);
+  const refreshToken = generateRefreshToken(user._id, ipAddress);
 
   // save refresh token
   await refreshToken.save();
@@ -35,55 +34,58 @@ async function authenticate(username, password, ipAddress) {
   };
 }
 
-async function refreshToken({ token, ipAddress }) {
-  const refreshToken = await getRefreshToken(token);
-  const { user } = refreshToken;
+async function refreshToken(refreshToken, ipAddress) {
+  const currentRfToken = await getRefreshToken(refreshToken);
+  if (currentRfToken.createdByIp !== ipAddress) {
+    throw ApiError.simple('Can\'t refresh token from other ip address', 401);
+  }
+
+  const { user } = currentRfToken;
 
   // replace old refresh token with a new one and save
-  const newRefreshToken = generateRefreshToken(user, ipAddress);
-  refreshToken.revoked = Date.now();
-  refreshToken.revokedByIp = ipAddress;
-  refreshToken.replacedByToken = newRefreshToken.token;
-  await refreshToken.save();
-  await newRefreshToken.save();
+  const newRfToken = generateRefreshToken(user._id, ipAddress);
+  currentRfToken.revokedAt = Date.now();
+  currentRfToken.revokedByIp = ipAddress;
+  currentRfToken.replacedByToken = newRfToken.token;
+  await currentRfToken.save();
+  await newRfToken.save();
 
   // generate new jwt
-  const jwtToken = generateJwtToken(user);
+  const jwtToken = generateToken({ _id: user._id });
 
   // return basic details and tokens
   return {
-    ...basicDetails(user),
+    user: user.toObject(),
     jwtToken,
-    refreshToken: newRefreshToken.token
+    refreshToken: newRfToken.token
   };
 }
 
-async function revokeToken({ token, ipAddress }) {
-  const refreshToken = await getRefreshToken(token);
+async function revokeToken(refreshToken, ipAddress) {
+  const currentRfToken = await getRefreshToken(refreshToken);
 
   // revoke token and save
-  refreshToken.revoked = Date.now();
-  refreshToken.revokedByIp = ipAddress;
-  await refreshToken.save();
+  currentRfToken.revokedAt = Date.now();
+  currentRfToken.revokedByIp = ipAddress;
+  await currentRfToken.save();
 }
 
 async function getRefreshToken(token) {
-  const refreshToken = await db.RefreshToken.findOne({ token }).populate('user');
-  if (!refreshToken || !refreshToken.isActive) throw 'Invalid token';
+  const refreshToken = await RefreshToken
+    .findOne({ token })
+    .populate({ path: 'user', select: '-addresses -password' });
+  if (!refreshToken || !refreshToken.isActive) {
+    throw ApiError.simple('Invalid token', 400);
+  }
   return refreshToken;
 }
 
-function generateRefreshToken(user, ipAddress) {
+function generateRefreshToken(userId, ipAddress) {
   // create a refresh token that expires in 7 days
   return new RefreshToken({
-    user: user._id,
+    user: userId,
     token: randomBytes(64).toString('hex'),
     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     createdByIp: ipAddress
   });
-}
-
-function basicDetails(user) {
-  const { id, firstName, lastName, username, role } = user;
-  return { id, firstName, lastName, username, role };
 }

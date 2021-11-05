@@ -21,18 +21,7 @@ refreshTokenSchema.virtual('isExpired').get(function () {
 });
 
 refreshTokenSchema.virtual('isActive').get(function () {
-  return !this.revoked && !this.isExpired;
-});
-
-refreshTokenSchema.set('toJSON', {
-  virtuals: true,
-  versionKey: false,
-  transform: function (doc, ret) {
-    // remove these props when object is serialized
-    delete ret._id;
-    delete ret.id;
-    delete ret.user;
-  }
+  return !this.revokedAt && !this.isExpired;
 });
 
 refreshTokenSchema.plugin(mongooseLeanVirtuals);
