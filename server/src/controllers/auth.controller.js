@@ -4,14 +4,13 @@ import resUtils from '../utils/res-utils.js';
 import { formatImageUrl } from '../utils/format-utils.js';
 import { generateToken } from '../utils/jwt-utils.js';
 
-
 export const register = async (req, res, next) => {
   try {
     const newUser = await userService.create(req.body);
     if (newUser && newUser._doc) {
       const userData = formatImageUrl(newUser._doc, 'image', req);
       delete userData.password;
-      delete userData.address;
+      delete userData.addresses;
 
       resUtils.status201(
         res,

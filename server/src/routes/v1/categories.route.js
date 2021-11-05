@@ -1,15 +1,15 @@
 import express from 'express';
+// import { singleImageHandler } from '../../middlewares/image-handler.js';
+import { allowImageMineTypes } from '../../constants.js';
 import {
   createCategory, deleteCategory, getCategories,
   getCategory, hiddenCategory, updateCategory
 } from '../../controllers/categories.controller.js';
 import { isAdmin, isAdminOrStaff } from '../../middlewares/jwt-auth.js';
-import uploadUtils from '../../utils/upload-utils.js';
-// import { singleImageHandler } from '../../middlewares/image-handler.js';
+import { handleFilePath, multerUpload } from '../../utils/upload-utils.js';
 
 const router = express.Router();
-const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
-const upload = uploadUtils.multerUpload('/categories/', allowedMimes);
+const upload = multerUpload('/categories/', allowImageMineTypes);
 
 /**
  * Authorization
@@ -23,7 +23,7 @@ router.route('/')
   .post(
     isAdminOrStaff,
     upload.single('image'),
-    uploadUtils.handleFilePath('image'),
+    handleFilePath('image'),
     // singleImageHandler('image', 'categories'),
     createCategory
   );
@@ -34,7 +34,7 @@ router.route('/:identity')
   .patch(
     isAdminOrStaff,
     upload.single('image'),
-    uploadUtils.handleFilePath('image'),
+    handleFilePath('image'),
     // singleImageHandler('image', 'categories'),
     updateCategory
   )

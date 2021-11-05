@@ -1,11 +1,11 @@
 import express from 'express';
+import { allowImageMineTypes } from '../../constants.js';
 import { createDiscount, deleteDiscount, getDiscount, getDiscounts, hiddenDiscount, updateDiscount } from '../../controllers/discounts.controller.js';
 import { isAdmin, isCustomer } from '../../middlewares/jwt-auth.js';
-import uploadUtils from '../../utils/upload-utils.js';
+import { handleFilePath, multerUpload } from '../../utils/upload-utils.js';
 
 const router = express.Router();
-const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
-const upload = uploadUtils.multerUpload('/discounts/', allowedMimes);
+const upload = multerUpload('/discounts/', allowImageMineTypes);
 
 /**
  * Authorization
@@ -19,7 +19,7 @@ router.route('/')
   .post(
     isAdmin,
     upload.single('image'),
-    uploadUtils.handleFilePath('image'),
+    handleFilePath('image'),
     createDiscount
   );
 
@@ -29,7 +29,7 @@ router.route('/:identity')
   .patch(
     isAdmin,
     upload.single('image'),
-    uploadUtils.handleFilePath('image'),
+    handleFilePath('image'),
     updateDiscount
   )
   .delete(isAdmin, deleteDiscount);

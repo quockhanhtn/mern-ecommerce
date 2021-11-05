@@ -1,7 +1,8 @@
 import express from 'express';
 import Joi from 'joi';
-import validateRequest from '../../middlewares/validate-request.js'
-import { login, register, refreshToken, logout } from '../../controllers/auth.controller.js';
+import { allowImageMineTypes } from '../../constants.js';
+import { login, logout, refreshToken, register } from '../../controllers/auth.controller.js';
+import validateRequest from '../../middlewares/validate-request.js';
 import uploadUtils from '../../utils/upload-utils.js';
 
 //#region Define schema for request validation
@@ -19,8 +20,7 @@ const registerSchema = Joi.object().keys({
 //#endregion
 
 const router = express.Router();
-const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
-const upload = uploadUtils.multerUpload('/users/', allowedMimes);
+const upload = uploadUtils.multerUpload('/users/', allowImageMineTypes);
 
 router.route('/register').post(
   upload.single('avatar'),

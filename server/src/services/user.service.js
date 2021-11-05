@@ -121,7 +121,7 @@ async function addressAdd(identity, data) {
   }
 
   // Get list current address
-  const currentAddress = user.address;
+  const currentAddress = user.addresses;
 
   // Create new address
   const addressItemNew = {
@@ -135,7 +135,7 @@ async function addressAdd(identity, data) {
   }
 
   // Add address into list address
-  user.address = [...currentAddress, addressItemNew];
+  user.addresses = [...currentAddress, addressItemNew];
   console.log(user.address);
 
   // Save user

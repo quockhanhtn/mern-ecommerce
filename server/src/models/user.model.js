@@ -66,10 +66,10 @@ const userSchema = mongoose.Schema(
       required: true
     },
 
-    address: { type: Array, trim: true, required: false, default: [] },
+    addresses: { type: Array, required: false },
     status: { type: Boolean, trim: true, required: false, default: false },
 
-    image: { type: String, trim: true, required: false },
+    avatar: { type: String, trim: true, required: false },
   },
   { timestamps: true, versionKey: false, }
 );

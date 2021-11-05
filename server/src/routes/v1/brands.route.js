@@ -1,13 +1,13 @@
 import express from 'express';
+import { allowImageMineTypes } from '../../constants.js';
 import {
-  createBrand, getBrands, getBrand, updateBrand, hiddenBrand, deleteBrand
+  createBrand, deleteBrand, getBrand, getBrands, hiddenBrand, updateBrand
 } from '../../controllers/brands.controller.js';
 import { isAdmin, isAdminOrStaff } from '../../middlewares/jwt-auth.js';
-import uploadUtils, { handleFilePath } from '../../utils/upload-utils.js';
+import { multerUpload, handleFilePath } from '../../utils/upload-utils.js';
 
 const router = express.Router();
-const allowedMimes = ['image/jpeg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
-const upload = uploadUtils.multerUpload('/brands/', allowedMimes);
+const upload = multerUpload('/brands/', allowImageMineTypes);
 
 /**
  * Authorization

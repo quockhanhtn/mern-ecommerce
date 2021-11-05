@@ -8,7 +8,7 @@ const roleStaff = constants.USER.ROLE.STAFF;
 const roleAdminOrStaff = [roleAdmin, roleStaff];
 const roleCustomer = constants.USER.ROLE.CUSTOMER;
 
-export function isAuthenticated(roles = []) {
+export function isAuthorized(roles = []) {
   // roles param can be a single role string (e.g. Role.User or 'User') 
   // or an array of roles (e.g. [Role.Admin, Role.User] or ['Admin', 'User'])
   if (typeof roles === 'string') {
@@ -35,7 +35,7 @@ export function isAuthenticated(roles = []) {
   ];
 };
 
-export const isAdmin = isAuthenticated(roleAdmin);
-export const isStaff = isAuthenticated(roleStaff);
-export const isAdminOrStaff = isAuthenticated(roleAdminOrStaff);
-export const isCustomer = isAuthenticated(roleCustomer);
+export const isAdmin = isAuthorized(roleAdmin);
+export const isStaff = isAuthorized(roleStaff);
+export const isAdminOrStaff = isAuthorized(roleAdminOrStaff);
+export const isCustomer = isAuthorized(roleCustomer);
