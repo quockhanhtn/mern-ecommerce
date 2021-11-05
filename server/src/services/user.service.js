@@ -5,7 +5,7 @@ import strUtils from '../utils/str-utils.js';
 export default {
   getAll,
   getOne,
-  getUserById,
+  getOneById,
   create,
   update,
   remove,
@@ -21,15 +21,16 @@ export default {
 async function getAll() {
   return await User.find()
     .sort({ createdAt: -1 })
-    .lean().exec();
+    .lean({ virtuals: true }).exec();
 }
 
 /**
  * Get user
  * @param {*} identity - username, email or phoneNumber
+ * @param {boolean} includeAddresses - include address or not, default is false
  * @returns
  */
-async function getOne(identity) {
+async function getOne(identity, includeAddresses = false) {
   const filter = {
     $or: [
       { email: identity },
@@ -37,11 +38,15 @@ async function getOne(identity) {
       { username: identity }
     ]
   }
-  return await User.findOne(filter).lean().exec();
+  return includeAddresses ?
+    await User.findOne(filter).lean({ virtuals: true }).exec() :
+    await User.findOne(filter).select('-addresses').lean({ virtuals: true }).exec();
 }
 
-async function getUserById(id) {
-  return await User.findById(id).exec();
+async function getOneById(id, selectFields = null, needVirtuals = true) {
+  return selectFields ?
+    await User.findById(id).select(selectFields).lean({ virtuals: needVirtuals }).exec() :
+    await User.findById(id).lean({ virtuals: needVirtuals }).exec();
 }
 
 /**

@@ -29,22 +29,6 @@ export const createUser = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
-export const updateUser = async (req, res, next) => {
-  try {
-    const { identity } = req.params;
-    const updateUser = await userService.update(identity, req.body);
-    if (updateUser) {
-      resUtils.status200(
-        res,
-        `Update user '${updateUser.fullName}' successfully!`,
-        formatOneUser(updateUser, req)
-      );
-    } else {
-      resUtils.status404(res, `User '${identity}' not found!`);
-    }
-  } catch (err) { next(err); }
-}
-
 export const getUsers = async (req, res, next) => {
   try {
     let users = await userService.getAll();
@@ -57,12 +41,30 @@ export const getUsers = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
-export const getUser = async (req, res, next) => {
+export const getInfo = async (req, res, next) => {
   try {
-    const { identity } = req.params;
-    const user = await userService.getOne(identity);
+    const params = req.query;
+    console.log('params', params);
+    const userData = req.user;
+    const user = await userService.getOneById(userData._id);
     if (user) {
       resUtils.status200(res, `Get user '${user.fullName}' successfully!`, formatOneUser(user, req));
+    } else {
+      resUtils.status404(res, `User '${identity}' not found!`);
+    }
+  } catch (err) { next(err); }
+}
+
+export const updateInfo = async (req, res, next) => {
+  try {
+    const { identity } = req.params;
+    const updateUser = await userService.update(identity, req.body);
+    if (updateUser) {
+      resUtils.status200(
+        res,
+        `Update user '${updateUser.fullName}' successfully!`,
+        formatOneUser(updateUser, req)
+      );
     } else {
       resUtils.status404(res, `User '${identity}' not found!`);
     }

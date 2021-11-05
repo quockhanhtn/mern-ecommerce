@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import constants from '../constants.js';
-import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
+import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
+import removeMultiSpace from './plugins/remove-multi-space.js';
 import { hashPassword } from '../utils/cipher-utils.js';
 
 const userSchema = mongoose.Schema(
@@ -8,7 +9,6 @@ const userSchema = mongoose.Schema(
     _id: mongoose.Types.ObjectId,
     firstName: { type: String, trim: true, required: true },
     lastName: { type: String, trim: true, required: true },
-    fullName: { type: String, trim: true, required: false, default: '' },
 
     gender: {
       type: String, trim: true,
@@ -71,11 +71,22 @@ const userSchema = mongoose.Schema(
 
     image: { type: String, trim: true, required: false },
   },
-  { timestamps: true, versionKey: false, },
-
+  { timestamps: true, versionKey: false, }
 );
 // userSchema.index({ "email": 1 }, { unique: true });
 
+// reference https://mongoosejs.com/docs/tutorials/virtuals.html#virtuals-with-lean
+userSchema.virtual('fullName').
+  get(function () { return `${this.firstName} ${this.lastName}`; }).
+  set(function (v) {
+    // `v` is the value being set, so use the value to set
+    // `firstName` and `lastName`.
+    const firstName = v.substring(0, v.indexOf(' '));
+    const lastName = v.substring(v.indexOf(' ') + 1);
+    this.set({ firstName, lastName });
+  });
+
+userSchema.plugin(mongooseLeanVirtuals);
 userSchema.plugin(removeMultiSpace);
 
 userSchema.pre('save', function (next) {
@@ -83,9 +94,9 @@ userSchema.pre('save', function (next) {
     return next(new Error('Email or phone is required'));
   }
 
-  this.fullName = `${this.firstName} ${this.lastName}`;
-
-  if (!this.isModified('password')) { return next(); }
+  if (!this.isModified('password')) {
+    return next();
+  }
 
   // hash password
   this.password = hashPassword(this.password);

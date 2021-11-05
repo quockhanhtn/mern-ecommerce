@@ -17,9 +17,16 @@ content-type: application/json
 {
     "firstName":"Khánh",
     "lastName":"Lâm",
-    "phone":"0125256789",
-    "email":"ssssss@nf.com",
+    "phone":"0125256780",
+    "email":"sssssss@nf.com",
     "password":"hello123"
 }
 
 ####
+
+
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTdlM2U0YmUxYTQ3NjhiMjdkOTBjMDAiLCJmaXJzdE5hbWUiOiJLaMOhbmgiLCJsYXN0TmFtZSI6IkzDom0iLCJmdWxsTmFtZSI6Iktow6FuaCBMw6JtIiwiZ2VuZGVyIjoiT1RIRVIiLCJlbWFpbCI6InNzc3Nzc0BuZi5jb20iLCJwaG9uZSI6IjAxMjUyNTY3ODkiLCJ1c2VybmFtZSI6IiIsInJvbGUiOiJBRE1JTiIsInN0YXR1cyI6ZmFsc2UsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMzFUMDY6NTc6MTUuMjQ1WiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMzFUMDY6NTc6MTUuMjQ1WiIsImlhdCI6MTYzNTkzNDY3NCwiZXhwIjoxNjM2NTM5NDc0fQ.SL5nCvRdL1koVWLu_SSK063vhE9Yus0Ve6ZBNxSPbAQ
+GET {{BASE_URL}}/users/me?refesh=true
+authorization: Bearer {{TOKEN}}
+
+###

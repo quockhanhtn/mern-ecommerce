@@ -1,4 +1,5 @@
 import userService from '../services/user.service.js';
+import authService from '../services/auth.service.js';
 import resUtils from '../utils/res-utils.js';
 import { comparePassword } from '../utils/cipher-utils.js';
 import { formatImageUrl } from '../utils/format-utils.js';
@@ -21,33 +22,35 @@ export const register = async (req, res, next) => {
     }
     throw new Error('Register failed !');
   } catch (err) { next(err) }
-}
+};
 
 
 export const login = async (req, res, next) => {
   try {
     const { username, password } = req.body;
+    const ipAddress = req.ip;
 
-    const user = await userService.getOne(username);
-    if (!user) { throw new Error('User not found'); }
-
-    const isMatch = comparePassword(password, user.password);
-    if (!isMatch) { throw new Error('Invalid password'); }
-
-    const userData = formatImageUrl(user, 'image', req);
+    const result = await authService.authenticate(username, password, ipAddress);
+    const userData = formatImageUrl(result.user, 'image', req);
     delete userData.password;
-    delete userData.address;
 
     resUtils.status200(
       res,
       'Login successful !',
-      { token: generateToken(userData), user: userData }
+      {
+        user: userData,
+        token: result.jwtToken,
+        refreshToken: result.refreshToken
+      }
     );
   } catch (err) { next(err) }
-}
+};
+
+export const refreshToken = async (req, res, next) => {
+};
 
 export const logout = async (req, res, next) => {
   try {
 
   } catch (err) { next(err) }
-}
+};

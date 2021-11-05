@@ -1,5 +1,3 @@
-import httpStatus from 'http-status';
-
 /**
  * @extends Error
  * @author Anand Undavia <abundavia@gmail.com>
@@ -23,7 +21,7 @@ class ExtendableError extends Error {
  * @extends ExtendableError
  * @author Anand Undavia <abundavia@gmail.com>
  */
-class APIError extends ExtendableError {
+class ApiError extends ExtendableError {
   /**
    * Creates an API error.
    * @param {string} message - Error message.
@@ -32,7 +30,7 @@ class APIError extends ExtendableError {
    * @param {number} status - HTTP status code of error.
    * @param {boolean} isPublic - Whether the message should be visible to user or not.
    */
-  constructor({ message, errors, stack, status = httpStatus.INTERNAL_SERVER_ERROR, isPublic = false }) {
+  constructor({ message, errors, stack, status = 500, isPublic = false }) {
     super({
       message,
       errors,
@@ -41,6 +39,16 @@ class APIError extends ExtendableError {
       stack,
     });
   }
+
+  /**
+   * Simple helper method to create an error of type APIError.  
+   * @param {string} message  - Error message.
+   * @param {number} status   - HTTP status code of error.
+   * @returns 
+   */
+  static simple(message, status = 500) {
+    return new ApiError({ message, status });
+  }
 }
 
-export default APIError;
+export default ApiError;
