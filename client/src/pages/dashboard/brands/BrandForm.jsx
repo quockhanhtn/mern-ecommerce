@@ -29,7 +29,6 @@ import { MIconButton, MRadio } from '../../../components/@material-extend';
 import countries from '../../../utils/countries';
 import { createBrand, updateBrand } from '../../../actions/brands';
 import { allowImageMineTypes } from '../../../constants/imageMineTypes';
-import { createCategory, updateCategory } from '../../../actions/categories';
 import { firebaseUploadSingle } from '../../../helper/firebaseHelper';
 
 // ----------------------------------------------------------------------

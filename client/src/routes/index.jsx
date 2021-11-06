@@ -96,7 +96,7 @@ export default function Router() {
                 { path: '/', element: <Navigate to="/dashboard/products/list" replace /> },
                 { path: 'list', element: <PageProductList /> },
                 { path: 'create', element: <PageProduct /> },
-                { path: ':name/edit', element: <PageProduct /> }
+                { path: ':id/edit', element: <PageProductEdit /> }
               ]
             },
             {
@@ -152,6 +152,7 @@ const PageDiscountList = Loadable(lazy(() => import('../pages/dashboard/discount
 // Product
 const PageProductList = Loadable(lazy(() => import('../pages/dashboard/products/PageProductList')));
 const PageProduct = Loadable(lazy(() => import('../pages/dashboard/products/PageProduct')));
+const PageProductEdit = Loadable(lazy(() => import('../pages/dashboard/products/PageProductEdit')));
 // User
 const PageUserList = Loadable(lazy(() => import('../pages/dashboard/users/PageUserList')));
 const PageEmployeeList = Loadable(lazy(() => import('../pages/dashboard/users/PageEmployeeList')));

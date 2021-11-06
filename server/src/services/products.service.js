@@ -18,16 +18,16 @@ export default {
   deleteProductVariants,
 };
 
-const SELECT_FIELD = '_id name slug desc video specifications category brand tags views rate variants createdAt updatedAt';
+const SELECT_FIELD = '_id name slug desc video specifications origin category brand tags views rate variants quantity warrantyPeriod code createdAt updatedAt';
 const POPULATE_OPTS = [
   {
     path: 'category',
-    select: 'name slug image -_id -children',
+    select: 'name slug image _id -children',
     model: 'Category'
   },
   {
     path: 'brand',
-    select: 'name slug image -_id',
+    select: 'name slug image _id',
     model: 'Brand'
   }
 ];
@@ -57,7 +57,11 @@ function initialProductVariant(data) {
 
   // product thumbnail
   if (data.thumbnail && data.thumbnail.length > 0) {
-    variant.thumbnail = data.thumbnail[0];
+    if (typeof data.thumbnail === 'string') {
+      variant.thumbnail = data.thumbnail;
+    } else if (Array.isArray(data.thumbnail)) {
+      variant.thumbnail = data.thumbnail[0];
+    }
   }
   // product pictures
   if (data.pictures && data.pictures.length > 0) {
@@ -117,7 +121,7 @@ async function initialProduct(data, isAddNew = false) {
 
   if (data.releaseTime) { product.releaseTime = new Date(Date.parse(data.releaseTime)); }
   if (data.warrantyPeriod) { product.warrantyPeriod = Number.parseInt(data.warrantyPeriod); }
-  if (data.origin) { product.origin = Number.parseInt(data.origin); }
+  if (data.origin) { product.origin = data.origin }
 
   if (isAddNew) {
     let firstVariant = initialProductVariant(data);

@@ -16,7 +16,7 @@ const productVariantSchema = new mongoose.Schema({
   // additional specs
   addSpecifications: [{
     name: { type: String, trim: true, required: true },
-    key: { type: String, slug: "name", required: true },
+    key: { type: String, slug: "name", required: false },
     value: { type: String, trim: true, required: true }
   }],
 

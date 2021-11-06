@@ -4,21 +4,18 @@ import { useRef, useState } from 'react';
 import editFill from '@iconify/icons-eva/edit-fill';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
-import { Link as RouterLink } from 'react-router-dom';
-import { paramCase } from 'change-case';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
 import useLocales from '../../../hooks/useLocales';
-import { PATH_DASHBOARD } from '../../../routes/paths';
 
 // ----------------------------------------------------------------------
 
-ProductMoreMenu.propTypes = {
+ProductVariantMoreMenu.propTypes = {
   onEdit: PropTypes.func,
   onDelete: PropTypes.func
 };
 
-export default function ProductMoreMenu({ productId, onDelete, currentIdProduct }) {
+export default function ProductVariantMoreMenu({ onEdit, onDelete }) {
   const { t } = useLocales();
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -39,11 +36,7 @@ export default function ProductMoreMenu({ productId, onDelete, currentIdProduct 
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <div onMouseLeave={() => setIsOpen(false)}>
-          <MenuItem
-            component={RouterLink}
-            to={`${PATH_DASHBOARD.app.products.root}/${paramCase(productId)}/edit`}
-            sx={{ color: 'text.secondary' }}
-          >
+          <MenuItem onClick={onEdit} sx={{ color: 'text.secondary' }}>
             <ListItemIcon>
               <Icon icon={editFill} width={24} height={24} />
             </ListItemIcon>

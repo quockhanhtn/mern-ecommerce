@@ -34,6 +34,19 @@ const productsReducer = (state = initialState, action) => {
     case actionTypes.PRODUCT.DELETE:
       return { ...state, list: state.list.filter((cat) => cat._id !== payload), hasError: false };
 
+    case actionTypes.PRODUCT.CREATE_VARIANT:
+      return { ...state, list: [payload.data, ...state.list], hasError: false };
+
+    case actionTypes.PRODUCT.UPDATE_VARIANT:
+      return {
+        ...state,
+        list: state.list.map((cat) => (cat._id === payload._id ? payload : cat)),
+        hasError: false
+      };
+
+    case actionTypes.PRODUCT.DELETE_VARIANT:
+      return { ...state, list: state.list.variants.filter((cat) => cat.sku !== payload), hasError: false };
+
     default:
       return state;
   }

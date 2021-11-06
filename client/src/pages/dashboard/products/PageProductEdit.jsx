@@ -6,26 +6,28 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import Page from '../../../components/Page';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
-import ProductForm from './ProductForm';
+import ProductFormEdit from './ProductFormEdit';
+import ProductVariant from './ProductVariant';
 
 // ----------------------------------------------------------------------
 
-export default function PageProduct() {
+export default function PageProductEdit() {
   return (
-    <Page title="Ecommerce: Create a new product">
+    <Page title="Ecommerce: Edit product">
       <Container>
         <HeaderBreadcrumbs
-          heading="Create a new product"
+          heading="Edit product"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
               name: 'Product list',
               href: PATH_DASHBOARD.app.products.list
             },
-            { name: 'New product' }
+            { name: 'Edit product' }
           ]}
         />
-        <ProductForm />
+        <ProductFormEdit />
+        <ProductVariant />
       </Container>
     </Page>
   );

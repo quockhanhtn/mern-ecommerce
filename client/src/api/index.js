@@ -52,6 +52,13 @@ export const createProduct = (newProduct) => API.post('/products', newProduct);
 export const updateProduct = (identity, updatedProduct) => API.patch(`/products/${identity}`, updatedProduct);
 export const deleteProduct = (identity) => API.delete(`/products/${identity}`);
 
+// ----------------------------Variant-----------------------------
+export const createProductVariant = (identity, newProductVariant) =>
+  API.post(`/products/${identity}/variants`, newProductVariant);
+export const updateProductVariant = (identity, sku, updatedProduct) =>
+  API.patch(`/products/${identity}/variants/${sku}`, updatedProduct);
+export const deleteProductVariant = (identity, sku) => API.delete(`/products/${identity}/variants/${sku}`);
+
 // ----------------------------User-----------------------------
 export const getAllUser = () => API.get('/users');
 export const getOneUser = (identity) => API.get(`/users/${identity}`);
