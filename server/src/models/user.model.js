@@ -1,8 +1,19 @@
 import mongoose from 'mongoose';
-import constants from '../constants.js';
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 import removeMultiSpace from './plugins/remove-multi-space.js';
+import constants from '../constants.js';
 import { hashPassword } from '../utils/cipher-utils.js';
+
+const addressSchema = new mongoose.Schema(
+  {
+    street: { type: String, required: true },
+    ward: { type: String, required: true },
+    district: { type: String, required: true },
+    province: { type: String, required: true },
+  },
+  { id: false, _id: false, versionKey: false },
+);
+
 
 const userSchema = mongoose.Schema(
   {
@@ -104,4 +115,5 @@ userSchema.pre('save', function (next) {
 });
 
 const userModel = mongoose.model('User', userSchema);
+export { addressSchema }; // for re-use in other model
 export default userModel;
