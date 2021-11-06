@@ -15,7 +15,7 @@ const upload = multerUpload('/discounts/', allowImageMineTypes);
  */
 
 router.route('/')
-  .get(isCustomer, getDiscounts)
+  .get(getDiscounts)
   .post(
     isAdmin,
     upload.single('image'),
