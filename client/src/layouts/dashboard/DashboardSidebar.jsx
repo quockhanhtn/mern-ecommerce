@@ -5,6 +5,7 @@ import { Link as RouterLink, Navigate, useLocation } from 'react-router-dom';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Avatar, Box, Link, Drawer, Typography } from '@material-ui/core';
 // hook
+import useAuth from '../../hooks/useAuth';
 import useLocales from '../../hooks/useLocales';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
@@ -58,6 +59,7 @@ DashboardSidebar.propTypes = {
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
+  const { user } = useAuth();
   const { t } = useLocales();
 
   useEffect(() => {
@@ -124,7 +126,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             <Avatar alt="My Avatar" src="/static/mock-images/avatars/avatar_default.jpg" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                displayName
+                {user?.fullName}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 role

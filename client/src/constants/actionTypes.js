@@ -2,6 +2,12 @@ export const START_LOADING = 'START_LOADING';
 export const END_LOADING = 'END_LOADING';
 export const HAS_ERROR = 'HAS_ERROR';
 
+export const AUTH = {
+  LOGIN: 'AUTH_LOGIN',
+  REGISTER: 'AUTH_REGISTER',
+  LOGOUT: 'AUTH_LOGOUT'
+};
+
 export const CATEGORY = {
   GET_ALL: 'CATEGORY_GET_ALL',
   GET_ONE: 'CATEGORY_GET_ONE',
