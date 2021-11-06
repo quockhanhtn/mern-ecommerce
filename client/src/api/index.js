@@ -1,15 +1,28 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'https://api-mobile7076.herokuapp.com/api/v1' });
+const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+const baseURL = isDev ? 'http://localhost:3001/api/v1' : 'https://api-mobile7076.herokuapp.com/api/v1';
+const API = axios.create({ baseURL });
 
 // Add Header Authorization
 API.interceptors.request.use((req) => {
-  const authData = JSON.parse(localStorage.getItem('authData'));
-  if (authData?.tokenId) {
-    req.headers.authorization = `Bearer ${authData.tokenId}`;
+  const accessToken = localStorage.getItem('accessToken');
+  if (accessToken) {
+    req.headers.authorization = `Bearer ${accessToken}`;
   }
   return req;
 });
+
+export const apiInstance = API;
+
+// ----------------------------Auth---------------------------------
+
+export const register = (data) => API.post('/auth/login', data);
+export const login = (username, password) => API.post('/auth/login', { username, password });
+export const logout = (refreshToken) => API.post('/auth/logout', { refreshToken });
+
+// ----------------------------Me---------------------------------
+export const getInfo = () => API.get('/me');
 
 // ----------------------------Category-----------------------------
 export const getAllCategory = () => API.get('/categories');

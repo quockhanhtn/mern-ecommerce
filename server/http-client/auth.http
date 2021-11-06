@@ -20,16 +20,16 @@ POST {{BASE_URL}}/{{RESOURCE}}/login
 content-type: application/json
 
 {
-  "username": "0125256780",
+  "username": "sssssss@nf.com",
   "password": "hello123"
 }
 
 ###
 
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTdlM2U0YmUxYTQ3NjhiMjdkOTBjMDAiLCJpYXQiOjE2MzYxMjI0ODUsImV4cCI6MTYzNjcyNzI4NX0.PmgzpSVNpC41OfE_EmupHRieKvUWEWERSD2oBwfASoQ
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTg1NGQ2M2YyYjNkMjczZDNhZTFkMTMiLCJpYXQiOjE2MzYxODc1MDIsImV4cCI6MTYzNjc5MjMwMn0.LBECdSK_t6jnqW5zYL9XYQtLgFkamThc6VckD65P3ig
 
-@RF_TOKEN = a815deec61aa78bc024b62599f8f25bc9facf21d14d330b113efc084ffcb0c9d54ebe875223648073dcfcc7d0a2052c768725facfeefd6dc69119bd1c1f5ef78
+@RF_TOKEN = 2c527af0d66f99b4aea24dee6c409e5618870c2a07df2692541460ec26515b0da2e9ce2e17a3efbb3f1d4373ee80f658cafa97c6cde9ca3cf0525eb64e67a3c5
 
 POST {{BASE_URL}}/{{RESOURCE}}/refresh-token
 Content-Type: application/json
@@ -49,7 +49,7 @@ Content-Type: application/json
 
 ###
 
-GET {{BASE_URL}}/users/me?refesh=true
+GET {{BASE_URL}}/me
 authorization: Bearer {{TOKEN}}
 
 ###

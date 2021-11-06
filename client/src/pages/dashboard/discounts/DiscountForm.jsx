@@ -200,7 +200,7 @@ export default function DiscountForm({ currentId, open, setOpen }) {
   const { values, errors, touched, handleSubmit, getFieldProps, setFieldValue } = formik;
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog disableEscapeKeyDown onBackdropClick="false" open={open} onClose={handleClose}>
       <DialogTitle>
         <Typography variant="h4" marginBottom={2} sx={{ textTransform: 'uppercase' }}>
           {currentId ? t('dashboard.discounts.edit') : t('dashboard.discounts.add-title')}
