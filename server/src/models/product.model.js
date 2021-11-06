@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import slugGenerator from 'mongoose-slug-updater';
-import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
+import removeMultiSpace from './plugins/remove-multi-space.js';
 
 const productVariantSchema = new mongoose.Schema({
   sku: { type: String, trim: true, required: true },
@@ -16,7 +16,7 @@ const productVariantSchema = new mongoose.Schema({
   // additional specs
   addSpecifications: [{
     name: { type: String, trim: true, required: true },
-    key: { type: String, slug: "name", required: true },
+    key: { type: String, slug: "name", required: false },
     value: { type: String, trim: true, required: true }
   }],
 

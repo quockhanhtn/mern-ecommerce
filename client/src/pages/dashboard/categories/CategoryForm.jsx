@@ -61,6 +61,7 @@ export default function CategoryForm({ currentId, open, setOpen }) {
     } else {
       setCategoryData({ name: '', desc: '', isHide: false, parent: '', image: '' });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
 
   const handleDropSingleFile = useCallback((acceptedFiles) => {
@@ -156,7 +157,7 @@ export default function CategoryForm({ currentId, open, setOpen }) {
   const { errors, touched, handleSubmit, getFieldProps } = formik;
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog disableEscapeKeyDown onBackdropClick="false" open={open} onClose={handleClose}>
       <DialogTitle>
         <Typography variant="h4" marginBottom={2} sx={{ textTransform: 'uppercase' }}>
           {currentId ? t('dashboard.categories.edit') : t('dashboard.categories.add-title')}

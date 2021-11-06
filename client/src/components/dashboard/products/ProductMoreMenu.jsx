@@ -18,7 +18,7 @@ ProductMoreMenu.propTypes = {
   onDelete: PropTypes.func
 };
 
-export default function ProductMoreMenu({ productName, onDelete }) {
+export default function ProductMoreMenu({ productId, onDelete, currentIdProduct }) {
   const { t } = useLocales();
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +41,7 @@ export default function ProductMoreMenu({ productName, onDelete }) {
         <div onMouseLeave={() => setIsOpen(false)}>
           <MenuItem
             component={RouterLink}
-            to={`${PATH_DASHBOARD.app.products.root}/${paramCase(productName)}/edit`}
+            to={`${PATH_DASHBOARD.app.products.root}/${paramCase(productId)}/edit`}
             sx={{ color: 'text.secondary' }}
           >
             <ListItemIcon>

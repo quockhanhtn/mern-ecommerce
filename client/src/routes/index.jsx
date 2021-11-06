@@ -4,6 +4,10 @@ import { Navigate, useRoutes, useLocation } from 'react-router-dom';
 import MainLayout from '../layouts/main';
 import DashboardLayout from '../layouts/dashboard';
 import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
+// guards
+import GuestGuard from '../guards/GuestGuard';
+import AuthGuard from '../guards/AuthGuard';
+// import RoleBasedGuard from '../guards/RoleBasedGuard';
 // components
 import LoadingScreen from '../components/LoadingScreen';
 
@@ -37,10 +41,41 @@ const Loadable = (Component) => (props) => {
 
 export default function Router() {
   return useRoutes([
+    // auth routes
+    {
+      path: 'auth',
+      children: [
+        {
+          path: 'login',
+          element: (
+            <GuestGuard>
+              <Login />
+            </GuestGuard>
+          )
+        },
+        {
+          path: 'register',
+          element: (
+            <GuestGuard>
+              <Register />
+            </GuestGuard>
+          )
+        },
+        { path: 'login-unprotected', element: <Login /> },
+        { path: 'register-unprotected', element: <Register /> }
+        // { path: 'reset-password', element: <ResetPassword /> },
+        // { path: 'verify', element: <VerifyCode /> }
+      ]
+    },
+
     // Dashboard Routes
     {
       path: 'dashboard',
-      element: <DashboardLayout />,
+      element: (
+        <AuthGuard>
+          <DashboardLayout />
+        </AuthGuard>
+      ),
       children: [
         { path: '/', element: <Navigate to="/dashboard/statics" replace /> },
         { path: 'statics', element: <PageOne /> },
@@ -61,7 +96,7 @@ export default function Router() {
                 { path: '/', element: <Navigate to="/dashboard/products/list" replace /> },
                 { path: 'list', element: <PageProductList /> },
                 { path: 'create', element: <PageProduct /> },
-                { path: ':name/edit', element: <PageProduct /> }
+                { path: ':id/edit', element: <PageProductEdit /> }
               ]
             },
             {
@@ -99,6 +134,12 @@ export default function Router() {
 
 // IMPORT COMPONENTS
 
+// Authentication
+const Login = Loadable(lazy(() => import('../pages/authentication/Login')));
+const Register = Loadable(lazy(() => import('../pages/authentication/Register')));
+// const ResetPassword = Loadable(lazy(() => import('../pages/authentication/ResetPassword')));
+// const VerifyCode = Loadable(lazy(() => import('../pages/authentication/VerifyCode')));
+
 // Dashboard
 const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
 const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));
@@ -111,6 +152,7 @@ const PageDiscountList = Loadable(lazy(() => import('../pages/dashboard/discount
 // Product
 const PageProductList = Loadable(lazy(() => import('../pages/dashboard/products/PageProductList')));
 const PageProduct = Loadable(lazy(() => import('../pages/dashboard/products/PageProduct')));
+const PageProductEdit = Loadable(lazy(() => import('../pages/dashboard/products/PageProductEdit')));
 // User
 const PageUserList = Loadable(lazy(() => import('../pages/dashboard/users/PageUserList')));
 const PageEmployeeList = Loadable(lazy(() => import('../pages/dashboard/users/PageEmployeeList')));

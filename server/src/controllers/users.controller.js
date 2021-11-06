@@ -4,7 +4,7 @@ import userService from '../services/user.service.js';
 import { formatImageUrl } from '../utils/format-utils.js';
 
 const formatOneUser = (user, req) => {
-  user = formatImageUrl(user, 'image', req);
+  user = formatImageUrl(user, 'avatar', req);
   user = user.toObject();
   if (user.password) { delete user.password; }
   return user;
@@ -29,22 +29,6 @@ export const createUser = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
-export const updateUser = async (req, res, next) => {
-  try {
-    const { identity } = req.params;
-    const updateUser = await userService.update(identity, req.body);
-    if (updateUser) {
-      resUtils.status200(
-        res,
-        `Update user '${updateUser.fullName}' successfully!`,
-        formatOneUser(updateUser, req)
-      );
-    } else {
-      resUtils.status404(res, `User '${identity}' not found!`);
-    }
-  } catch (err) { next(err); }
-}
-
 export const getUsers = async (req, res, next) => {
   try {
     let users = await userService.getAll();
@@ -57,12 +41,26 @@ export const getUsers = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
-export const getUser = async (req, res, next) => {
+export const getInfo = async (req, res, next) => {
   try {
-    const { identity } = req.params;
-    const user = await userService.getOne(identity);
+    const user = await userService.getOneById(req.user._id, '-addresses -password');
     if (user) {
-      resUtils.status200(res, `Get user '${user.fullName}' successfully!`, formatOneUser(user, req));
+      resUtils.status200(res, `Get info successfully!`, formatOneUser(user, req));
+    } else {
+      resUtils.status404(res, `User not found!`);
+    }
+  } catch (err) { next(err); }
+}
+
+export const updateInfo = async (req, res, next) => {
+  try {
+    const updateUser = await userService.update(req.user._id, req.body);
+    if (updateUser) {
+      resUtils.status200(
+        res,
+        `Update info successfully!`,
+        formatOneUser(updateUser, req)
+      );
     } else {
       resUtils.status404(res, `User '${identity}' not found!`);
     }

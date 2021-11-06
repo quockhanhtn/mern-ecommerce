@@ -1,25 +1,18 @@
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
 import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
-import { LoadingButton } from '@material-ui/lab';
 import {
   Card,
   Chip,
   Grid,
   Stack,
-  Radio,
   Switch,
-  Select,
   TextField,
-  InputLabel,
   Typography,
-  RadioGroup,
-  FormControl,
   Autocomplete,
   InputAdornment,
   FormHelperText,
@@ -28,6 +21,8 @@ import {
   Button
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
+import { Icon } from '@iconify/react';
+import closeFill from '@iconify/icons-eva/close-fill';
 import { QuillEditor } from '../../../components/editor';
 import { UploadMultiFile, UploadSingleFile } from '../../../components/upload';
 import { PATH_DASHBOARD } from '../../../routes/paths';
@@ -35,14 +30,12 @@ import useLocales from '../../../hooks/useLocales';
 import countries from '../../../utils/countries';
 import { getAllBrands } from '../../../actions/brands';
 import { getAllCategories } from '../../../actions/categories';
+import { allowImageMineTypes } from '../../../constants/imageMineTypes';
+import { MIconButton } from '../../../components/@material-extend';
+import { firebaseUploadMultiple, firebaseUploadSingle } from '../../../helper/firebaseHelper';
+import { createProduct } from '../../../actions/products';
 
 // ----------------------------------------------------------------------
-
-const CATEGORY_OPTION = [
-  { group: 'Clothing', classify: ['Shirts', 'T-shirts', 'Jeans', 'Leather'] },
-  { group: 'Tailored', classify: ['Suits', 'Blazers', 'Trousers', 'Waistcoats'] },
-  { group: 'Accessories', classify: ['Shoes', 'Backpacks and bags', 'Bracelets', 'Face masks'] }
-];
 
 const TAGS_OPTION = [
   'Toy Story 3',
@@ -68,21 +61,24 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-ProductForm.propTypes = {
-  isEdit: PropTypes.bool,
-  currentProduct: PropTypes.object
-};
+ProductForm.propTypes = {};
 
-export default function ProductForm({ isEdit, currentProduct }) {
+export default function ProductForm() {
   const { t } = useLocales();
   const navigate = useNavigate();
   const theme = useTheme();
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const { list: brandsList, isLoadingBrand, hasErrorBrand } = useSelector((state) => state.brand);
-  const { list: categoriesList, isLoadingCategory, hasErrorCategory } = useSelector((state) => state.category);
-  const [specifications, setSpecifications] = useState([{ id: 1, name: '', key: '', value: '' }]);
+  const { list: brandsList } = useSelector((state) => state?.brand);
+  const { list: categoriesList } = useSelector((state) => state?.category);
+  const [specifications, setSpecifications] = useState([{ id: 1, name: '', value: '' }]);
   const [isErrorSpecifications, setIsErrorSpecifications] = useState(false);
+  const [uploadImage, setUploadImage] = useState(null);
+  const [uploadPercent, setUploadPercent] = useState(-1);
+  const [validationThumbnail, setValidationThumbnail] = useState(false);
+  const [validationBrand, setValidationBrand] = useState(false);
+  const [validationCategory, setValidationCategory] = useState(false);
+  const [urlsPictures, setUrlsPictures] = useState([]);
 
   useEffect(() => {
     dispatch(getAllBrands());
@@ -105,15 +101,11 @@ export default function ProductForm({ isEdit, currentProduct }) {
 
   const handleAddFields = () => {
     const indexCurrent = specifications.length - 1;
-    if (
-      specifications[indexCurrent].name === '' ||
-      specifications[indexCurrent].key === '' ||
-      specifications[indexCurrent].value === ''
-    ) {
+    if (specifications[indexCurrent].name === '' || specifications[indexCurrent].value === '') {
       setIsErrorSpecifications(true);
       return;
     }
-    setSpecifications([...specifications, { id: specifications.length + 1, name: '', key: '', value: '' }]);
+    setSpecifications([...specifications, { id: specifications.length + 1, name: '', value: '' }]);
   };
 
   const handleRemoveFields = (id) => {
@@ -128,14 +120,9 @@ export default function ProductForm({ isEdit, currentProduct }) {
   const renderSpecificationsForm = () => (
     <div>
       {specifications.map((inputField) => (
-        <Stack
-          key={inputField.id}
-          direction="row"
-          justifyContent="flex-between"
-          spacing={3}
-          sx={{ marginBottom: theme.spacing(2) }}
-        >
+        <Stack key={inputField.id} direction="row" spacing={3} sx={{ marginBottom: theme.spacing(2) }}>
           <TextField
+            fullWidth
             name="name"
             label="Specifications name"
             size="small"
@@ -144,14 +131,7 @@ export default function ProductForm({ isEdit, currentProduct }) {
             onChange={(event) => handleChangeInput(inputField.id, event)}
           />
           <TextField
-            name="key"
-            label="Specifications key"
-            size="small"
-            value={inputField.key}
-            error={isErrorSpecifications && inputField.key === ''}
-            onChange={(event) => handleChangeInput(inputField.id, event)}
-          />
-          <TextField
+            fullWidth
             name="value"
             label="Specifications value"
             size="small"
@@ -180,12 +160,144 @@ export default function ProductForm({ isEdit, currentProduct }) {
     </div>
   );
 
+  const handleDropSingleFile = useCallback((acceptedFiles) => {
+    const uploadFile = acceptedFiles[0];
+    if (uploadFile) {
+      if (allowImageMineTypes.indexOf(uploadFile.type) < 0) {
+        enqueueSnackbar(t('common.invalid-file-type'), {
+          variant: 'error',
+          action: (key) => (
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          )
+        });
+        return;
+      }
+      uploadFile.preview = URL.createObjectURL(uploadFile);
+      setUploadImage(uploadFile);
+    }
+  }, []);
+
+  const validationCustomer = () => {
+    if (!uploadImage) {
+      setValidationThumbnail(true);
+    }
+    if (!values.brand) {
+      setValidationBrand(true);
+    }
+    if (!values.category) {
+      setValidationCategory(true);
+    }
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < specifications.length; i++) {
+      if (
+        (specifications[i]?.name !== '' && specifications[i]?.value === '') ||
+        (specifications[i]?.name === '' && specifications[i]?.value !== '')
+      ) {
+        setIsErrorSpecifications(true);
+      }
+    }
+    return !!(uploadImage && values.brand && values.category);
+  };
+
+  const handleSave = () => {
+    if (validationCustomer()) {
+      if (!uploadImage || typeof uploadImage === 'string') {
+        if (typeof uploadImage === 'string') {
+          const productData = handleAddDataForProduct(uploadImage);
+          dispatch(createProduct(productData));
+          enqueueSnackbar(t('dashboard.brands.edit-title'), {
+            variant: 'success'
+          });
+          navigate(PATH_DASHBOARD.app.products.list);
+        }
+      }
+      firebaseUploadSingle(
+        uploadImage,
+        'products',
+        setUploadPercent,
+        (error) => {
+          enqueueSnackbar(error, {
+            variant: 'error',
+            action: (key) => (
+              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                <Icon icon={closeFill} />
+              </MIconButton>
+            )
+          });
+        },
+        (url) => {
+          const productData = handleAddDataForProduct(url);
+          dispatch(createProduct(productData));
+          enqueueSnackbar(t('dashboard.brands.edit-title'), {
+            variant: 'success'
+          });
+          navigate(PATH_DASHBOARD.app.products.list);
+        }
+      );
+    }
+  };
+
+  const handleUploadMultiple = async () => {
+    const urlsPicturesNew = [];
+    if (values.pictures) {
+      firebaseUploadMultiple(
+        values.pictures,
+        'products',
+        setUploadPercent,
+        (error) => {
+          enqueueSnackbar(error, {
+            variant: 'error',
+            action: (key) => (
+              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                <Icon icon={closeFill} />
+              </MIconButton>
+            )
+          });
+        },
+        (urls) => {
+          urlsPicturesNew.push(urls);
+        }
+      );
+      setUrlsPictures(urlsPicturesNew);
+    }
+  };
+
+  const handleAddDataForProduct = (url) => {
+    const product = {
+      name: values.name,
+      variantName: values?.variantName,
+      desc: values.description,
+      code: values.code,
+      sku: values.sku,
+      quantity: values.quantity,
+      warrantyPeriod: values.warrantyPeriod,
+      origin: values?.origin.label,
+      brandId: values.brand,
+      categoryId: values.category,
+      tags: values.tags,
+      price: values.price,
+      marketPrice: values.marketPrice,
+      thumbnail: url,
+      pictures: urlsPictures[0],
+      video: values.video
+    };
+    specifications.map((item) => {
+      delete item.id;
+      return item;
+    });
+    if (specifications.length >= 0 && specifications[0].name !== '') {
+      product.addSpecifications = specifications;
+    }
+    return product;
+  };
+
   const NewProductSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     description: Yup.string().required('Description is required'),
     code: Yup.string().required('Code is required'),
     sku: Yup.string().required('Sku is required'),
-    pictures: Yup.array().min(1, 'Pictures is required'),
     price: Yup.number().required('Price is required'),
     marketPrice: Yup.number().required('Market Price is required')
   });
@@ -193,32 +305,31 @@ export default function ProductForm({ isEdit, currentProduct }) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: currentProduct?.name || '',
-      variantName: currentProduct?.variantName || '',
-      description: currentProduct?.description || '',
-      code: currentProduct?.code || '',
-      sku: currentProduct?.sku || '',
-      quantity: currentProduct?.quantity || 0,
-      warrantyPeriod: currentProduct?.warrantyPeriod || 12,
-      origin: currentProduct?.origin || '',
-      brand: currentProduct?.brand || '',
-      category: currentProduct?.category || '',
-      tags: currentProduct?.tags || [TAGS_OPTION[0]],
-      price: currentProduct?.price || '',
-      marketPrice: currentProduct?.marketPrice || '',
-      thumbnail: currentProduct?.thumbnail || '',
-      pictures: currentProduct?.pictures || [],
-      video: currentProduct?.video || '',
+      name: '',
+      variantName: '',
+      description: '',
+      code: '',
+      sku: '',
+      quantity: 1,
+      warrantyPeriod: 12,
+      origin: '',
+      brand: '',
+      category: '',
+      tags: [TAGS_OPTION[0]],
+      price: '',
+      marketPrice: '',
+      thumbnail: '',
+      pictures: [],
+      video: '',
       taxes: true
     },
     validationSchema: NewProductSchema,
-    onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
-      values.addSpecifications = specifications;
-      console.log(values);
+    onSubmit: async () => {
+      handleSave();
     }
   });
 
-  const { errors, values, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
+  const { errors, values, touched, handleSubmit, setFieldValue, getFieldProps } = formik;
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -288,25 +399,30 @@ export default function ProductForm({ isEdit, currentProduct }) {
 
               <Card sx={{ p: 3 }}>
                 <Stack spacing={3}>
-                  <div>
+                  <div onChange={() => setValidationThumbnail(false)}>
                     <UploadSingleFile
                       label="Thumbnail"
-                      // file={uploadImage}
-                      // setFile={setUploadImage}
-                      // onDrop={handleDropSingleFile}
-                      // uploadPercent={uploadPercent}
+                      file={uploadImage}
+                      setFile={setUploadImage}
+                      onDrop={handleDropSingleFile}
+                      uploadPercent={uploadPercent}
                       accepted="image/*"
                       maxSize={3145728}
-                      error={Boolean(touched.thumbnail && errors.thumbnail)}
+                      error={Boolean(validationThumbnail)}
                     />
-                    {touched.thumbnail && errors.thumbnail && (
+                    {validationThumbnail && (
                       <FormHelperText error sx={{ px: 2 }}>
-                        {touched.thumbnail && errors.thumbnail}
+                        Thumbnail is required
                       </FormHelperText>
                     )}
                   </div>
                   <div>
-                    <LabelStyle>Add more picture</LabelStyle>
+                    <LabelStyle>
+                      Add more picture.
+                      <Typography component="span" variant="subtitle4" sx={{ color: 'primary.main' }}>
+                        &nbsp;Note: must upload more pictures before saving.
+                      </Typography>
+                    </LabelStyle>
                     <UploadMultiFile
                       showPreview
                       maxSize={3145728}
@@ -315,13 +431,8 @@ export default function ProductForm({ isEdit, currentProduct }) {
                       onDrop={handleDrop}
                       onRemove={handleRemove}
                       onRemoveAll={handleRemoveAll}
-                      error={Boolean(touched.pictures && errors.pictures)}
+                      uploadAll={handleUploadMultiple}
                     />
-                    {touched.pictures && errors.pictures && (
-                      <FormHelperText error sx={{ px: 2 }}>
-                        {touched.pictures && errors.pictures}
-                      </FormHelperText>
-                    )}
                   </div>
                   <TextField fullWidth label="Link Video" {...getFieldProps('video')} />
                 </Stack>
@@ -352,7 +463,7 @@ export default function ProductForm({ isEdit, currentProduct }) {
                     fullWidth
                     label="Quantity"
                     {...getFieldProps('quantity')}
-                    defaultValue={0}
+                    defaultValue={1}
                     error={Boolean(touched.quantity && errors.quantity)}
                     helperText={touched.quantity && errors.quantity}
                   />
@@ -371,70 +482,71 @@ export default function ProductForm({ isEdit, currentProduct }) {
                   <Autocomplete
                     required
                     fullWidth
+                    defaultValue={countries[0]}
                     options={countries.map((country) => ({
                       label: country.label
                     }))}
+                    onChange={(event, label) => {
+                      setFieldValue('origin', label);
+                    }}
                     getOptionLabel={(option) => option.label}
                     renderInput={(params) => <TextField {...params} label="Origin" margin="none" />}
                   />
-                  <FormControl fullWidth>
-                    <TextField
-                      select
-                      fullWidth
-                      label="Brand"
-                      placeholder="Brand"
-                      {...getFieldProps('brand')}
-                      SelectProps={{ native: true }}
-                      error={Boolean(touched.brand && errors.brand)}
-                      helperText={touched.brand && errors.brand}
-                      defaultValue={brandsList[0]?.name}
-                    >
-                      {brandsList.map((option) => (
-                        <option key={option._id} value={option._id}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </TextField>
-                    <Link to={PATH_DASHBOARD.app.brands} color="inherit" component={RouterLink}>
-                      <Typography
-                        variant="inherit"
-                        sx={{
-                          marginTop: theme.spacing(1),
-                          marginLeft: theme.spacing(1),
-                          fontSize: 'small'
-                        }}
-                      >
-                        Add new brand here.
-                      </Typography>
-                    </Link>
-                  </FormControl>
 
-                  <FormControl fullWidth>
-                    <InputLabel>Category</InputLabel>
-                    <Select label="Category" native {...getFieldProps('category')} value={values.category}>
-                      {categoriesList.map((category) => (
-                        <optgroup key={category._id} label={category.name}>
-                          {category.children.map((children) => (
-                            <option key={children} value={children._id}>
-                              {children.name}
-                            </option>
-                          ))}
-                        </optgroup>
-                      ))}
-                    </Select>
-                    <Link to={PATH_DASHBOARD.app.categories} color="inherit" component={RouterLink}>
-                      <Typography
-                        variant="inherit"
-                        sx={{
-                          marginTop: theme.spacing(1),
-                          marginLeft: theme.spacing(1),
-                          fontSize: 'small'
-                        }}
-                      >
-                        Add new category here.
-                      </Typography>
-                    </Link>
-                  </FormControl>
+                  <Autocomplete
+                    required
+                    fullWidth
+                    options={brandsList.filter((x) => !x.isHide && x._id !== values.brand)}
+                    getOptionLabel={(option) => option.name}
+                    value={brandsList.find((c) => c.slug === values.brand)}
+                    onChange={(e, newValue) => {
+                      setFieldValue('brand', newValue?._id);
+                      setValidationBrand(false);
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Brand" margin="none" error={Boolean(validationBrand)} />
+                    )}
+                    error={Boolean(true)}
+                  />
+                  <Link to={PATH_DASHBOARD.app.brands} color="inherit" component={RouterLink}>
+                    <Typography
+                      variant="inherit"
+                      sx={{
+                        marginTop: theme.spacing(-2),
+                        marginLeft: theme.spacing(1),
+                        fontSize: 'small'
+                      }}
+                    >
+                      <a>Add new brand here.</a>
+                    </Typography>
+                  </Link>
+
+                  <Autocomplete
+                    fullWidth
+                    options={categoriesList.filter((x) => !x.isHide && x._id !== values?.category)}
+                    getOptionLabel={(option) => option.name}
+                    value={categoriesList.find((c) => c.slug === values?.category)}
+                    onChange={(e, newValue) => {
+                      setFieldValue('category', newValue?._id);
+                      setValidationCategory(false);
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Category" margin="none" error={Boolean(validationCategory)} />
+                    )}
+                  />
+                  <Link to={PATH_DASHBOARD.app.brands} color="inherit" component={RouterLink}>
+                    <Typography
+                      variant="inherit"
+                      sx={{
+                        marginTop: theme.spacing(-2),
+                        marginLeft: theme.spacing(1),
+                        fontSize: 'small'
+                      }}
+                    >
+                      <a>Add new category here.</a>
+                    </Typography>
+                  </Link>
+
                   <Autocomplete
                     multiple
                     freeSolo
@@ -489,16 +601,9 @@ export default function ProductForm({ isEdit, currentProduct }) {
                 />
               </Card>
 
-              <LoadingButton
-                type="submit"
-                fullWidth
-                variant="contained"
-                size="large"
-                loading={isSubmitting}
-                onClick={handleSubmit}
-              >
-                {!isEdit ? 'Create Product' : 'Save Changes'}
-              </LoadingButton>
+              <Button fullWidth variant="contained" size="large" onClick={handleSubmit}>
+                Create Product
+              </Button>
             </Stack>
           </Grid>
         </Grid>

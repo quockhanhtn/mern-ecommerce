@@ -52,10 +52,21 @@ UploadMultiFile.propTypes = {
   files: PropTypes.array,
   onRemove: PropTypes.func,
   onRemoveAll: PropTypes.func,
+  uploadAll: PropTypes.func,
   sx: PropTypes.object
 };
 
-export default function UploadMultiFile({ error, showPreview = false, files, onRemove, onRemoveAll, sx, ...other }) {
+export default function UploadMultiFile({
+  error,
+  showPreview = false,
+  files,
+  onRemove,
+  onRemoveAll,
+  uploadAll,
+  isShowUploadAll = true,
+  sx,
+  ...other
+}) {
   const hasFile = files.length > 0;
 
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
@@ -210,7 +221,11 @@ export default function UploadMultiFile({ error, showPreview = false, files, onR
           <Button onClick={onRemoveAll} sx={{ mr: 1.5 }}>
             Remove all
           </Button>
-          <Button variant="contained">Upload files</Button>
+          {isShowUploadAll && (
+            <Button variant="contained" onClick={uploadAll}>
+              Upload files
+            </Button>
+          )}
         </Stack>
       )}
     </Box>

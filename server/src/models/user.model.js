@@ -1,19 +1,30 @@
 import mongoose from 'mongoose';
-import slugGenerator from 'mongoose-slug-updater';
-import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
+import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
+import removeMultiSpace from './plugins/remove-multi-space.js';
+import constants from '../constants.js';
 import { hashPassword } from '../utils/cipher-utils.js';
+
+const addressSchema = new mongoose.Schema(
+  {
+    street: { type: String, required: true },
+    ward: { type: String, required: true },
+    district: { type: String, required: true },
+    province: { type: String, required: true },
+  },
+  { id: false, _id: false, versionKey: false },
+);
+
 
 const userSchema = mongoose.Schema(
   {
     _id: mongoose.Types.ObjectId,
     firstName: { type: String, trim: true, required: true },
     lastName: { type: String, trim: true, required: true },
-    fullName: { type: String, trim: true, required: false, default: '' },
 
     gender: {
       type: String, trim: true,
-      enum: ['MALE', 'FEMALE', 'OTHER'],
-      default: 'OTHER'
+      enum: Object.values(constants.USER.GENDER),
+      default: constants.USER.GENDER.OTHER
     },
     birthDay: { type: Date, trim: true, required: false },
     email: {
@@ -61,22 +72,32 @@ const userSchema = mongoose.Schema(
 
     role: {
       type: String,
-      enum: ['ADMIN', 'STAFF', 'CUSTOMER'],
-      default: 'CUSTOMER',
+      enum: Object.values(constants.USER.ROLE),
+      default: constants.USER.ROLE.CUSTOMER,
       required: true
     },
 
-    address: { type: Array, trim: true, required: false, default: [] },
+    addresses: { type: Array, required: false },
     status: { type: Boolean, trim: true, required: false, default: false },
 
-    image: { type: String, trim: true, required: false },
+    avatar: { type: String, trim: true, required: false },
   },
-  { timestamps: true, versionKey: false, },
-
+  { timestamps: true, versionKey: false, }
 );
 // userSchema.index({ "email": 1 }, { unique: true });
 
-userSchema.plugin(slugGenerator);
+// reference https://mongoosejs.com/docs/tutorials/virtuals.html#virtuals-with-lean
+userSchema.virtual('fullName').
+  get(function () { return `${this.firstName} ${this.lastName}`; }).
+  set(function (v) {
+    // `v` is the value being set, so use the value to set
+    // `firstName` and `lastName`.
+    const firstName = v.substring(0, v.indexOf(' '));
+    const lastName = v.substring(v.indexOf(' ') + 1);
+    this.set({ firstName, lastName });
+  });
+
+userSchema.plugin(mongooseLeanVirtuals);
 userSchema.plugin(removeMultiSpace);
 
 userSchema.pre('save', function (next) {
@@ -84,9 +105,9 @@ userSchema.pre('save', function (next) {
     return next(new Error('Email or phone is required'));
   }
 
-  this.fullName = `${this.firstName} ${this.lastName}`;
-
-  if (!this.isModified('password')) { return next(); }
+  if (!this.isModified('password')) {
+    return next();
+  }
 
   // hash password
   this.password = hashPassword(this.password);
@@ -94,4 +115,5 @@ userSchema.pre('save', function (next) {
 });
 
 const userModel = mongoose.model('User', userSchema);
+export { addressSchema }; // for re-use in other model
 export default userModel;

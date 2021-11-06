@@ -1,6 +1,3 @@
-import { useEffect } from 'react';
-import { paramCase } from 'change-case';
-import { useParams, useLocation } from 'react-router-dom';
 // material
 import { Container } from '@material-ui/core';
 // redux
@@ -13,9 +10,9 @@ import ProductForm from './ProductForm';
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceProductCreate() {
+export default function PageProduct() {
   return (
-    <Page title="Ecommerce: Create a new product | Minimal-UI">
+    <Page title="Ecommerce: Create a new product">
       <Container>
         <HeaderBreadcrumbs
           heading="Create a new product"

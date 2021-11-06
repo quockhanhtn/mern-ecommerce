@@ -58,7 +58,6 @@ export default function PageProductList() {
   const [isCompact, setIsCompact] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [currentId, setCurrentId] = useState(null);
-  const [openForm, setOpenForm] = useState(false);
 
   useEffect(() => {
     dispatch(getAllProducts());
@@ -72,28 +71,28 @@ export default function PageProductList() {
       label: t('dashboard.products.name')
     },
     {
-      id: 'price',
+      id: 'brand',
       numeric: false,
       disablePadding: false,
-      label: t('dashboard.products.price')
+      label: 'Brand'
     },
     {
-      id: 'marketPrice',
+      id: 'category',
       numeric: false,
       disablePadding: false,
-      label: t('dashboard.products.market-price')
+      label: 'Category'
     },
     {
-      id: 'quantity',
+      id: 'origin',
       numeric: false,
       disablePadding: false,
-      label: t('dashboard.products.quantity')
+      label: 'Origin'
     },
     {
-      id: 'sold',
+      id: 'warrantyPeriod',
       numeric: false,
       disablePadding: false,
-      label: t('dashboard.products.sold')
+      label: 'Warranty Period'
     },
     {
       id: 'isHide',
@@ -162,11 +161,6 @@ export default function PageProductList() {
     setIsCompact(event.target.checked);
   };
 
-  const handleEditProduct = (productId) => {
-    setCurrentId(productId);
-    setOpenForm(true);
-  };
-
   const isSelected = (slug) => selected.indexOf(slug) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty brandsList.
@@ -223,7 +217,7 @@ export default function PageProductList() {
                     {Helper.stableSort(productsList, Helper.getComparator(order, orderBy))
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row, index) => {
-                        const { _id, slug, name, isHide } = row;
+                        const { _id, slug, name, brand, category, origin, warrantyPeriod, isHide } = row;
                         const { price, marketPrice, quantity, sold, thumbnail } = row.variants[0];
                         const isItemSelected = isSelected(slug);
                         const labelId = `enhanced-table-checkbox-${index}`;
@@ -261,19 +255,19 @@ export default function PageProductList() {
                             )}
                             <TableCell align="left" style={{ minWidth: 100 }}>
                               <Typography variant="subtitle4" noWrap>
-                                {fCurrency(price)}
+                                {brand.name}
                               </Typography>
                             </TableCell>
                             <TableCell align="left" style={{ minWidth: 100 }}>
                               <Typography variant="subtitle4" noWrap>
-                                {fCurrency(marketPrice)}
+                                {category.name}
                               </Typography>
                             </TableCell>
                             <TableCell align="left" style={{ minWidth: 100 }}>
-                              {quantity}
+                              {origin}
                             </TableCell>
                             <TableCell align="left" style={{ minWidth: 100 }}>
-                              {sold}
+                              {warrantyPeriod}
                             </TableCell>
                             <TableCell align="left">
                               <Label
@@ -284,7 +278,7 @@ export default function PageProductList() {
                               </Label>
                             </TableCell>
                             <TableCell align="right" onClick={(event) => event.stopPropagation()}>
-                              <ProductMoreMenu onDelete={() => handleDeleteProduct(_id, slug)} productName={name} />
+                              <ProductMoreMenu onDelete={() => handleDeleteProduct(_id, slug)} productId={_id} />
                             </TableCell>
                           </TableRow>
                         );
