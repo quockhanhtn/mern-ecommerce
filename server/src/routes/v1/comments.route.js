@@ -6,6 +6,10 @@ import {
 
 const router = express.Router();
 
+/**
+ * No authorization
+ */
+
 router.route('/')
   .get(getComments)
   .post(createComment);

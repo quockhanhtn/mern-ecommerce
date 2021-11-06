@@ -1,15 +1,6 @@
 @BASE_URL = http://localhost:3001/api/v1
 @RESOURCE = auth
 
-POST {{BASE_URL}}/{{RESOURCE}}/login
-content-type: application/json
-
-{
-  "username": "0125256789",
-  "password": "hello123"
-}
-
-###
 
 POST {{BASE_URL}}/{{RESOURCE}}/register
 content-type: application/json
@@ -17,9 +8,48 @@ content-type: application/json
 {
     "firstName":"Khánh",
     "lastName":"Lâm",
-    "phone":"0125256789",
-    "email":"ssssss@nf.com",
+    "phone":"0125256780",
+    "email":"sssssss@nf.com",
     "password":"hello123"
 }
 
 ####
+
+
+POST {{BASE_URL}}/{{RESOURCE}}/login
+content-type: application/json
+
+{
+  "username": "0125256780",
+  "password": "hello123"
+}
+
+###
+
+
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTdlM2U0YmUxYTQ3NjhiMjdkOTBjMDAiLCJpYXQiOjE2MzYxMjI0ODUsImV4cCI6MTYzNjcyNzI4NX0.PmgzpSVNpC41OfE_EmupHRieKvUWEWERSD2oBwfASoQ
+
+@RF_TOKEN = a815deec61aa78bc024b62599f8f25bc9facf21d14d330b113efc084ffcb0c9d54ebe875223648073dcfcc7d0a2052c768725facfeefd6dc69119bd1c1f5ef78
+
+POST {{BASE_URL}}/{{RESOURCE}}/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken":"{{RF_TOKEN}}"
+}
+
+###
+
+POST {{BASE_URL}}/{{RESOURCE}}/logout
+Content-Type: application/json
+
+{
+  "refreshToken":"{{RF_TOKEN}}"
+}
+
+###
+
+GET {{BASE_URL}}/users/me?refesh=true
+authorization: Bearer {{TOKEN}}
+
+###

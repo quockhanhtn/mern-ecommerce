@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import removeMultiSpace from '../utils/mongoose-remove-multi-space.js';
+import removeMultiSpace from './plugins/remove-multi-space.js';
 
 const imageSchema = mongoose.Schema(
   {

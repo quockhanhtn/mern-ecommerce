@@ -3,7 +3,7 @@ import Product from '../models/product.model.js';
 import categoryService from './categories.service.js'
 import brandService from './brands.service.js'
 import strUtils from '../utils/str-utils.js';
-import APIError from '../utils/APIError.js';
+import ApiError from '../utils/APIError.js';
 
 export default {
   getAllProducts,
@@ -77,7 +77,7 @@ async function initialProduct(data, isAddNew = false) {
   //#region Handle category and brand
   const categoryId = await categoryService.getId(data.categoryId);
   if (!categoryId && isAddNew) {
-    throw new APIError({
+    throw new ApiError({
       message: `Category '${data.categoryId}' not found!`,
       status: 404
     });
@@ -87,7 +87,7 @@ async function initialProduct(data, isAddNew = false) {
 
   const brandId = await brandService.getId(data.brandId);
   if (!brandId && isAddNew) {
-    throw new APIError({
+    throw new ApiError({
       message: `Brand '${data.brandId}' not found!`,
       status: 404
     });
@@ -156,7 +156,7 @@ async function getOneProduct(identity, needIncView = false, notLean = false) {
 async function addProductVariants(productIdentity, variantData) {
   const product = await getOneProduct(productIdentity, false, true);
   if (!product) {
-    throw new APIError({
+    throw new ApiError({
       message: `Product ${productIdentity} not found !`,
       status: 404
     })
@@ -171,7 +171,7 @@ async function addProductVariants(productIdentity, variantData) {
 async function updateProductVariants(productIdentity, sku, variantData) {
   const product = await getOneProduct(productIdentity, false, true);
   if (!product) {
-    throw new APIError({
+    throw new ApiError({
       message: `Product ${productIdentity} not found !`,
       status: 404
     })

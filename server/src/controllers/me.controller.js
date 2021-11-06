@@ -1,45 +1,6 @@
 import resUtils from '../utils/res-utils.js';
-import imagesService from '../services/images.service.js';
 import userService from '../services/user.service.js';
 import { formatImageUrl } from '../utils/format-utils.js';
-
-const formatOneUser = (user, req) => {
-  user = formatImageUrl(user, 'avatar', req);
-  user = user.toObject();
-  if (user.password) { delete user.password; }
-  return user;
-}
-
-const formatAllUser = (user, req) => {
-  if (user.image) {
-    user.image = imagesService.formatPath(user.image, req.headers.origin);
-  }
-  if (user.password) { delete user.password; }
-  return user;
-}
-
-export const createUser = async (req, res, next) => {
-  try {
-    const newUser = await userService.create(req.body);
-    resUtils.status201(
-      res,
-      `Create NEW user '${newUser.fullName}' successfully!`,
-      formatOneUser(newUser, req)
-    );
-  } catch (err) { next(err); }
-}
-
-export const getUsers = async (req, res, next) => {
-  try {
-    let users = await userService.getAll();
-    users = users.map(user => formatAllUser(user, req));
-    if (users && users.length > 0) {
-      resUtils.status200(res, 'Gets all users successfully', users);
-    } else {
-      resUtils.status404(res, 'No users found');
-    }
-  } catch (err) { next(err); }
-}
 
 export const getInfo = async (req, res, next) => {
   try {
