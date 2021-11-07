@@ -5,6 +5,7 @@ import { Box, Card, Stack, Link, Alert, Tooltip, Container, Typography, Button }
 // routes
 import { PATH_AUTH } from '../../routes/paths';
 // hooks
+import useLocales from '../../hooks/useLocales';
 import useAuth from '../../hooks/useAuth';
 // layouts
 import AuthLayout from '../../layouts/AuthLayout';
@@ -44,6 +45,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Login() {
+  const { t } = useLocales();
   const { user, method, login } = useAuth();
 
   const handleLoginAuth0 = async () => {
@@ -58,16 +60,16 @@ export default function Login() {
   return (
     <RootStyle title="Login | Minimal-UI">
       <AuthLayout>
-        Don’t have an account? &nbsp;
+        {t('auth.dont-have-account')} &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to={PATH_AUTH.register}>
-          Get started
+          {t('auth.get-started')}
         </Link>
       </AuthLayout>
 
       <MHidden width="mdDown">
         <SectionStyle>
           <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-            Hi, Welcome Back
+            {t('auth.salutation')}
           </Typography>
           <img src="/static/illustrations/illustration_login.png" alt="login" />
         </SectionStyle>
@@ -78,9 +80,9 @@ export default function Login() {
           <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
             <Box sx={{ flexGrow: 1 }}>
               <Typography variant="h4" gutterBottom>
-                Sign in to Minimal
+                {t('auth.sign-in')}
               </Typography>
-              <Typography sx={{ color: 'text.secondary' }}>Enter your details below.</Typography>
+              <Typography sx={{ color: 'text.secondary' }}>{t('auth.sign-in-description')}</Typography>
             </Box>
 
             <Tooltip title={method}>
@@ -88,21 +90,21 @@ export default function Login() {
             </Tooltip>
           </Stack>
 
-          <AuthFirebaseSocials />
+          <AuthFirebaseSocials orText={t('auth.or')} />
 
           {method !== 'auth0' ? (
             <LoginForm />
           ) : (
             <Button fullWidth size="large" type="submit" variant="contained" onClick={handleLoginAuth0}>
-              Login
+              {t('auth.login')}
             </Button>
           )}
 
           <MHidden width="smUp">
             <Typography variant="body2" align="center" sx={{ mt: 3 }}>
-              Don’t have an account?&nbsp;
+              {t('auth.dont-have-account')}&nbsp;
               <Link variant="subtitle2" component={RouterLink} to={PATH_AUTH.register}>
-                Get started
+                {t('auth.get-started')}
               </Link>
             </Typography>
           </MHidden>

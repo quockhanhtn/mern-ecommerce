@@ -6,11 +6,11 @@ POST {{BASE_URL}}/{{RESOURCE}}/register
 content-type: application/json
 
 {
-    "firstName":"Khánh",
-    "lastName":"Lâm",
-    "phone":"0125256780",
-    "email":"sssssss@nf.com",
-    "password":"hello123"
+    "firstName":"Admin",
+    "lastName":"Admin",
+    "phone":"0123456789",
+    "email":"admin@hk.com",
+    "password":"12"
 }
 
 ####
