@@ -5,8 +5,8 @@ import { Link as RouterLink, Navigate, useLocation } from 'react-router-dom';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Avatar, Box, Link, Drawer, Typography } from '@material-ui/core';
 // hook
-import useAuth from '../../hooks/useAuth';
 import useLocales from '../../hooks/useLocales';
+import useAuth from '../../hooks/useAuth';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
@@ -59,8 +59,8 @@ DashboardSidebar.propTypes = {
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
-  const { user } = useAuth();
   const { t } = useLocales();
+  const { user } = useAuth();
 
   useEffect(() => {
     if (isOpenSidebar) {
@@ -129,7 +129,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
                 {user?.fullName}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                role
+                {t(`auth.role-${user.role}`)}
               </Typography>
             </Box>
           </AccountStyle>

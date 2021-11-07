@@ -7,6 +7,8 @@ import { Link as RouterLink } from 'react-router-dom';
 // material
 import { alpha } from '@material-ui/core/styles';
 import { Avatar, Button, Box, Divider, MenuItem, Typography } from '@material-ui/core';
+// hooks
+import useLocales from '../../hooks/useLocales';
 import useAuth from '../../hooks/useAuth';
 // components
 import { MIconButton } from '../../components/@material-extend';
@@ -25,7 +27,8 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const anchorRef = useRef(null);
-  const { logout } = useAuth();
+  const { t } = useLocales();
+  const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -66,10 +69,10 @@ export default function AccountPopover() {
       <MenuPopover open={open} onClose={handleClose} anchorEl={anchorRef.current} sx={{ width: 220 }}>
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            displayName
+            {user?.fullName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            email
+            {user?.email || user?.username || user?.phone || '-'}
           </Typography>
         </Box>
 
@@ -83,22 +86,14 @@ export default function AccountPopover() {
             onClick={handleClose}
             sx={{ typography: 'body2', py: 1, px: 2.5 }}
           >
-            <Box
-              component={Icon}
-              icon={option.icon}
-              sx={{
-                mr: 2,
-                width: 24,
-                height: 24
-              }}
-            />
+            <Box component={Icon} icon={option.icon} sx={{ mr: 2, width: 24, height: 24 }} />
             {option.label}
           </MenuItem>
         ))}
 
         <Box sx={{ p: 2, pt: 1.5 }}>
           <Button fullWidth color="inherit" variant="outlined" onClick={handleLogout}>
-            Logout
+            {t('auth.logout')}
           </Button>
         </Box>
       </MenuPopover>

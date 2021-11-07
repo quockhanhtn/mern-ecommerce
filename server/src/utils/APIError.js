@@ -49,6 +49,13 @@ class ApiError extends ExtendableError {
   static simple(message, status = 500) {
     return new ApiError({ message, status });
   }
+  static simple2(obj) {
+    return new ApiError({
+      message: obj.message,
+      status: obj.status,
+      errors: obj.code,
+    });
+  }
 }
 
 export default ApiError;

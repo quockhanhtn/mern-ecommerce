@@ -45,13 +45,12 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Login() {
-  const { t } = useLocales();
-  const { user, method, login } = useAuth();
+  const { t, currentLang } = useLocales();
+  const { user, method, login, errMessage } = useAuth();
 
   const handleLoginAuth0 = async () => {
     try {
       await login();
-      console.log('login success', user);
     } catch (error) {
       console.error(error);
     }
@@ -91,6 +90,12 @@ export default function Login() {
           </Stack>
 
           <AuthFirebaseSocials orText={t('auth.or')} />
+
+          {errMessage && (
+            <Alert severity="error" sx={{ marginBottom: 5 }}>
+              <Typography variant="body1"> {errMessage?.[currentLang.value] || errMessage} </Typography>
+            </Alert>
+          )}
 
           {method !== 'auth0' ? (
             <LoginForm />

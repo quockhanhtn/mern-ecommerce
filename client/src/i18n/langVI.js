@@ -53,7 +53,9 @@ export default {
     'reset-password': 'Đặt lại mật khẩu',
     'confirm-password': 'Xác nhận mật khẩu',
     'enter-new-password': 'Nhập mật khẩu mới',
-    'confirm-new-password': 'Xác nhận mật khẩu mới'
+    'confirm-new-password': 'Xác nhận mật khẩu mới',
+    'role-admin': 'Quản trị viên',
+    'role-staff': 'Nhân viên'
   },
   dashboard: {
     title: 'Bảng điều khiển',

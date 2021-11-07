@@ -53,7 +53,9 @@ export default {
     'reset-password': 'Reset password',
     'confirm-password': 'Confirm password',
     'enter-new-password': 'Enter new password',
-    'confirm-new-password': 'Confirm new password'
+    'confirm-new-password': 'Confirm new password',
+    'role-admin': 'Admin',
+    'role-staff': 'Staff'
   },
   dashboard: {
     title: 'Dashboard',
