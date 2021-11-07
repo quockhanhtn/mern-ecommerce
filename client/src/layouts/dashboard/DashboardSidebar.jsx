@@ -66,7 +66,6 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     if (isOpenSidebar) {
       onCloseSidebar();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const sidebarConfig = [
@@ -128,8 +127,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
                 {user?.fullName}
               </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                role
+              <Typography component="span" variant="subtitle4" sx={{ color: 'primary.main' }}>
+                &nbsp;{(user?.role).toUpperCase()}
               </Typography>
             </Box>
           </AccountStyle>
