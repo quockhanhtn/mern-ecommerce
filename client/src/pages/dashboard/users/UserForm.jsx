@@ -26,6 +26,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import Label from '../../../components/Label';
 import { UploadAvatar } from '../../../components/upload';
 import countries from '../../../utils/countries';
+import useAuth from '../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -34,9 +35,10 @@ UserForm.propTypes = {
   currentUser: PropTypes.object
 };
 
-export default function UserForm({ isEdit, currentUser }) {
+export default function UserForm() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const { user } = useAuth();
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
@@ -54,19 +56,18 @@ export default function UserForm({ isEdit, currentUser }) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: currentUser?.name || '',
-      email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      address: currentUser?.address || '',
-      country: currentUser?.country || '',
-      state: currentUser?.state || '',
-      city: currentUser?.city || '',
-      zipCode: currentUser?.zipCode || '',
-      avatarUrl: currentUser?.avatarUrl || null,
-      isVerified: currentUser?.isVerified || true,
-      status: currentUser?.status,
-      company: currentUser?.company || '',
-      role: currentUser?.role || ''
+      name: user?.fullName || '',
+      email: user?.email || '',
+      phoneNumber: user?.phone || '',
+      address: user?.address || '',
+      state: user?.state || '',
+      city: user?.city || '',
+      zipCode: user?.zipCode || '',
+      avatarUrl: user?.avatarUrl || null,
+      isVerified: user?.isVerified || true,
+      status: user?.status,
+      company: user?.company || '',
+      role: user?.role || ''
     },
     validationSchema: NewUserSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
@@ -74,7 +75,7 @@ export default function UserForm({ isEdit, currentUser }) {
         await fakeRequest(500);
         resetForm();
         setSubmitting(false);
-        enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
+        enqueueSnackbar('Update success', { variant: 'success' });
         navigate(PATH_DASHBOARD.user.list);
       } catch (error) {
         console.error(error);
@@ -105,7 +106,7 @@ export default function UserForm({ isEdit, currentUser }) {
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             <Card sx={{ py: 10, px: 3 }}>
-              {isEdit && (
+              {user && (
                 <Label
                   color={values.status !== 'active' ? 'error' : 'success'}
                   sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
@@ -142,7 +143,7 @@ export default function UserForm({ isEdit, currentUser }) {
                 </FormHelperText>
               </Box>
 
-              {isEdit && (
+              {user && (
                 <FormControlLabel
                   labelPlacement="start"
                   control={
@@ -276,7 +277,7 @@ export default function UserForm({ isEdit, currentUser }) {
                 </Stack>
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                   <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                    {!isEdit ? 'Create User' : 'Save Changes'}
+                    Save Changes
                   </LoadingButton>
                 </Box>
               </Stack>
