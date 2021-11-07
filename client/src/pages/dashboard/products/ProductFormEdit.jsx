@@ -23,10 +23,9 @@ import { useParams } from 'react-router';
 import { QuillEditor } from '../../../components/editor';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import useLocales from '../../../hooks/useLocales';
-import countries from '../../../utils/countries';
 import { getAllBrands } from '../../../actions/brands';
 import { getAllCategories } from '../../../actions/categories';
-import { getAllProducts, getProductById, updateProduct } from '../../../actions/products';
+import { getProductById, updateProduct } from '../../../actions/products';
 // ----------------------------------------------------------------------
 
 const TAGS_OPTION = [
@@ -122,9 +121,9 @@ export default function PageProductEdit() {
   };
 
   const NewProductSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    description: Yup.string().required('Description is required'),
-    code: Yup.string().required('Code is required')
+    name: Yup.string().required(t('dashboard.products.name-validation')),
+    description: Yup.string().required(t('dashboard.products.desc-validation')),
+    code: Yup.string().required(t('dashboard.products.code-validation'))
   });
 
   const formik = useFormik({
@@ -153,7 +152,7 @@ export default function PageProductEdit() {
       <Form noValidate autoComplete="off">
         <Stack direction="row" spacing={3} sx={{ justifyContent: 'space-between', marginBottom: theme.spacing(2) }}>
           <Typography variant="h4" gutterBottom>
-            General Information
+            {t('dashboard.products.general-info')}
           </Typography>
         </Stack>
         <Grid container spacing={3}>
@@ -163,7 +162,7 @@ export default function PageProductEdit() {
                 <Stack spacing={3}>
                   <TextField
                     fullWidth
-                    label="Product Name"
+                    label={t('dashboard.products.name')}
                     {...getFieldProps('name')}
                     error={Boolean(touched.name && errors.name)}
                     helperText={touched.name && errors.name}
@@ -171,7 +170,7 @@ export default function PageProductEdit() {
                   <Stack direction="row" spacing={3} sx={{ marginBottom: theme.spacing(2) }}>
                     <TextField
                       fullWidth
-                      label="Product Code"
+                      label={t('dashboard.products.code')}
                       {...getFieldProps('code')}
                       error={Boolean(touched.code && errors.code)}
                       helperText={touched.code && errors.code}
@@ -179,13 +178,13 @@ export default function PageProductEdit() {
                     <TextField
                       type="number"
                       fullWidth
-                      label="Warranty Period"
+                      label={t('dashboard.products.warranty-period')}
                       {...getFieldProps('warrantyPeriod')}
                       defaultValue={12}
                     />
                   </Stack>
                   <div>
-                    <LabelStyle>Description</LabelStyle>
+                    <LabelStyle>{t('dashboard.products.desc')}</LabelStyle>
                     <QuillEditor
                       simple
                       id="product-description"
@@ -199,7 +198,7 @@ export default function PageProductEdit() {
                       </FormHelperText>
                     )}
                   </div>
-                  <TextField fullWidth label="Link Video" {...getFieldProps('video')} />
+                  <TextField fullWidth label={t('dashboard.products.video')} {...getFieldProps('video')} />
                 </Stack>
               </Card>
             </Stack>
@@ -237,7 +236,12 @@ export default function PageProductEdit() {
                           setValidationBrand(false);
                         }}
                         renderInput={(params) => (
-                          <TextField {...params} label="Brand" margin="none" error={Boolean(validationBrand)} />
+                          <TextField
+                            {...params}
+                            label={t('dashboard.products.brand')}
+                            margin="none"
+                            error={Boolean(validationBrand)}
+                          />
                         )}
                         error={Boolean(true)}
                       />
@@ -250,7 +254,11 @@ export default function PageProductEdit() {
                             fontSize: 'small'
                           }}
                         >
-                          <a>Add new brand here.</a>
+                          <a>
+                            <Typography component="span" variant="subtitle4" sx={{ color: 'primary.main' }}>
+                              &nbsp;{t('dashboard.products.brand-add')}
+                            </Typography>
+                          </a>
                         </Typography>
                       </Link>
                       <Autocomplete
@@ -264,7 +272,12 @@ export default function PageProductEdit() {
                           setValidationCategory(false);
                         }}
                         renderInput={(params) => (
-                          <TextField {...params} label="Category" margin="none" error={Boolean(validationCategory)} />
+                          <TextField
+                            {...params}
+                            label={t('dashboard.products.category')}
+                            margin="none"
+                            error={Boolean(validationCategory)}
+                          />
                         )}
                       />
                       <Link to={PATH_DASHBOARD.app.brands} color="inherit" component={RouterLink}>
@@ -276,7 +289,11 @@ export default function PageProductEdit() {
                             fontSize: 'small'
                           }}
                         >
-                          <a>Add new category here.</a>
+                          <a>
+                            <Typography component="span" variant="subtitle4" sx={{ color: 'primary.main' }}>
+                              &nbsp;{t('dashboard.products.category-add')}
+                            </Typography>
+                          </a>
                         </Typography>
                       </Link>
                       <Autocomplete
@@ -298,7 +315,7 @@ export default function PageProductEdit() {
                   </Card>
                 )}
               <Button fullWidth variant="contained" size="large" onClick={handleSubmit}>
-                Save Changes
+                {t('dashboard.products.save')}
               </Button>
             </Stack>
           </Grid>

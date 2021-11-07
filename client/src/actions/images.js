@@ -1,6 +1,9 @@
 import * as actionTypes from '../constants/actionTypes';
 import { storage } from '../services/firebase';
 
+/*
+ * Not use
+ */
 export const uploadSingleImage =
   (imageFile, uploadDir = 'images') =>
   async (dispatch) => {
