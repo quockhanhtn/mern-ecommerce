@@ -23,6 +23,7 @@ import { LoadingButton } from '@material-ui/lab';
 import { PATH_AUTH } from '../../../routes/paths';
 // hooks
 import useAuth from '../../../hooks/useAuth';
+import useLocales from '../../../hooks/useLocales';
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 //
 import { MIconButton } from '../../@material-extend';
@@ -31,25 +32,26 @@ import { MIconButton } from '../../@material-extend';
 
 export default function LoginForm() {
   const { login } = useAuth();
+  const { t } = useLocales();
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required')
+    account: Yup.string().required(t('auth.account-invalid')),
+    password: Yup.string().required(t('auth.password-invalid'))
   });
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      account: '',
       password: '',
       remember: true
     },
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
-        await login(values.email, values.password);
+        await login(values.account, values.password);
         enqueueSnackbar('Login success', {
           variant: 'success',
           action: (key) => (
@@ -87,18 +89,18 @@ export default function LoginForm() {
           <TextField
             fullWidth
             autoComplete="username"
-            type="email"
-            label="Email address"
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
+            type="text"
+            label={t('auth.account')}
+            {...getFieldProps('account')}
+            error={Boolean(touched.account && errors.account)}
+            helperText={touched.account && errors.account}
           />
 
           <TextField
             fullWidth
             autoComplete="current-password"
             type={showPassword ? 'text' : 'password'}
-            label="Password"
+            label={t('auth.password')}
             {...getFieldProps('password')}
             InputProps={{
               endAdornment: (
@@ -117,16 +119,16 @@ export default function LoginForm() {
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
           <FormControlLabel
             control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
-            label="Remember me"
+            label={t('auth.remember-me')}
           />
 
           <Link component={RouterLink} variant="subtitle2" to={PATH_AUTH.resetPassword}>
-            Forgot password?
+            {t('auth.forgot-password')}
           </Link>
         </Stack>
 
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
-          Login
+          {t('auth.login')}
         </LoadingButton>
       </Form>
     </FormikProvider>

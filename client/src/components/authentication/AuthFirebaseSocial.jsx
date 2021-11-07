@@ -9,7 +9,7 @@ import useAuth from '../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
-export default function AuthFirebaseSocials() {
+export default function AuthFirebaseSocials({ orText }) {
   const { loginWithGoogle, loginWithFaceBook, loginWithTwitter } = useAuth();
 
   const handleLoginGoogle = async () => {
@@ -54,7 +54,7 @@ export default function AuthFirebaseSocials() {
 
       <Divider sx={{ my: 3 }}>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          OR
+          {orText ? orText.toUpperCase() : 'OR'}
         </Typography>
       </Divider>
     </>

@@ -1,7 +1,5 @@
 import jwtDecode from 'jwt-decode';
 import { verify, sign } from 'jsonwebtoken';
-//
-import { apiInstance } from '../api';
 
 // ----------------------------------------------------------------------
 
@@ -29,17 +27,16 @@ const isValidToken = (accessToken) => {
 //   }, timeLeft);
 // };
 
-const setSession = (accessToken) => {
+const setSession = (accessToken, refreshToken) => {
   if (accessToken) {
-    console.log('setSession', accessToken);
     localStorage.setItem('accessToken', accessToken);
-    apiInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+    localStorage.setItem('refreshToken', refreshToken);
     // This function below will handle when token is expired
     // const { exp } = jwtDecode(accessToken);
     // handleTokenExpired(exp);
   } else {
     localStorage.removeItem('accessToken');
-    delete apiInstance.defaults.headers.common.Authorization;
+    localStorage.removeItem('refreshToken');
   }
 };
 

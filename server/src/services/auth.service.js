@@ -3,6 +3,7 @@ import userService from './user.service.js';
 import { randomBytes } from 'crypto';
 import { generateToken } from '../utils/jwt-utils.js';
 import { comparePassword } from '../utils/cipher-utils.js';
+import responseDef from '../responseCode.js';
 import ApiError from '../utils/APIError.js';
 
 
@@ -15,10 +16,14 @@ export default {
 
 async function authenticate(username, password, ipAddress) {
   const user = await userService.getOne(username);
-  if (!user) { throw ApiError.simple('User not found!', 404); }
+  if (!user) {
+    throw ApiError.simple2(responseDef.AUTH.USER_NOT_FOUND);
+  }
 
   const isMatch = comparePassword(password, user.password);
-  if (!isMatch) { throw ApiError.simple('Invalid password!', 400); }
+  if (!isMatch) {
+    throw ApiError.simple2(responseDef.AUTH.INVALID_PASSWORD);
+  }
 
   // authentication successful so generate jwt and refresh tokens
   const jwtToken = generateToken({ _id: user._id });
@@ -75,7 +80,7 @@ async function getRefreshToken(token) {
     .findOne({ token })
     .populate({ path: 'user', select: '-addresses -password' });
   if (!refreshToken || !refreshToken.isActive) {
-    throw ApiError.simple('Invalid token', 400);
+    throw ApiError.simple2(responseDef.AUTH.INVALID_TOKEN);
   }
   return refreshToken;
 }
