@@ -214,7 +214,8 @@ async function createProduct(data) {
     _id: new mongoose.Types.ObjectId(),
     ...product,
   });
-  return await newProduct.save();
+  const productSearch = await newProduct.save();
+  return Product.findById(productSearch._id).populate(POPULATE_OPTS).lean().exec();
 }
 
 async function updateProduct(identity, data) {

@@ -1,28 +1,27 @@
-// material
 import { Container } from '@material-ui/core';
-// redux
-// routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import Page from '../../../components/Page';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
 import ProductForm from './ProductForm';
+import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
 export default function PageProduct() {
+  const { t } = useLocales();
   return (
-    <Page title="Ecommerce: Create a new product">
+    <Page title={t('dashboard.products.add-title')}>
       <Container>
         <HeaderBreadcrumbs
-          heading="Create a new product"
+          heading={t('dashboard.products.heading-create')}
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
-              name: 'Product list',
+              name: t('dashboard.products.heading'),
               href: PATH_DASHBOARD.app.products.list
             },
-            { name: 'New product' }
+            { name: t('dashboard.products.add') }
           ]}
         />
         <ProductForm />

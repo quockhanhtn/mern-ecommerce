@@ -8,22 +8,24 @@ import Page from '../../../components/Page';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
 import ProductFormEdit from './ProductFormEdit';
 import ProductVariant from './ProductVariant';
+import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
 export default function PageProductEdit() {
+  const { t } = useLocales();
   return (
-    <Page title="Ecommerce: Edit product">
+    <Page title={t('dashboard.products.edit-title')}>
       <Container>
         <HeaderBreadcrumbs
-          heading="Edit product"
+          heading={t('dashboard.products.edit')}
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
-              name: 'Product list',
+              name: t('dashboard.products.heading'),
               href: PATH_DASHBOARD.app.products.list
             },
-            { name: 'Edit product' }
+            { name: t('dashboard.products.edit') }
           ]}
         />
         <ProductFormEdit />

@@ -33,7 +33,6 @@ import * as Helper from '../../../helper/listHelper';
 import SearchNotFound from '../../../components/SearchNotFound';
 import { ProductListHead, ProductListToolbar, ProductMoreMenu } from '../../../components/dashboard/products';
 import { ImageBrokenIcon } from '../../../assets';
-import { fCurrency } from '../../../utils/formatNumber';
 import EmptyCard from '../../../components/EmptyCard';
 // ----------------------------------------------------------------------
 const ThumbImgStyle = styled('img')(({ theme }) => ({
@@ -74,25 +73,25 @@ export default function PageProductList() {
       id: 'brand',
       numeric: false,
       disablePadding: false,
-      label: 'Brand'
+      label: t('dashboard.products.brand')
     },
     {
       id: 'category',
       numeric: false,
       disablePadding: false,
-      label: 'Category'
+      label: t('dashboard.products.category')
     },
     {
       id: 'origin',
       numeric: false,
       disablePadding: false,
-      label: 'Origin'
+      label: t('dashboard.products.origin')
     },
     {
       id: 'warrantyPeriod',
       numeric: false,
       disablePadding: false,
-      label: 'Warranty Period'
+      label: t('dashboard.products.warrantyPeriod')
     },
     {
       id: 'isHide',
@@ -108,10 +107,14 @@ export default function PageProductList() {
   ];
 
   const handleDeleteProduct = (id, slug) => {
-    dispatch(deleteProduct(id));
-    enqueueSnackbar(t('dashboard.products.delete'), { variant: 'success' });
-    const index = selected.indexOf(slug);
-    selected.splice(index, 1);
+    try {
+      dispatch(deleteProduct(id));
+      enqueueSnackbar(t('dashboard.products.delete'), { variant: 'success' });
+      const index = selected.indexOf(slug);
+      selected.splice(index, 1);
+    } catch (e) {
+      enqueueSnackbar(t('dashboard.products.error'), { variant: 'error' });
+    }
   };
 
   const handleRequestSort = (event, property) => {
@@ -163,7 +166,7 @@ export default function PageProductList() {
 
   const isSelected = (slug) => selected.indexOf(slug) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty brandsList.
+  // Avoid a layout jump when reaching the last page with empty productsList.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productsList.length) : 0;
 
   if (isLoading) {
@@ -218,7 +221,7 @@ export default function PageProductList() {
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row, index) => {
                         const { _id, slug, name, brand, category, origin, warrantyPeriod, isHide } = row;
-                        const { price, marketPrice, quantity, sold, thumbnail } = row.variants[0];
+                        const thumbnail = row?.variants[0]?.thumbnail;
                         const isItemSelected = isSelected(slug);
                         const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -255,12 +258,12 @@ export default function PageProductList() {
                             )}
                             <TableCell align="left" style={{ minWidth: 100 }}>
                               <Typography variant="subtitle4" noWrap>
-                                {brand.name}
+                                {brand?.name}
                               </Typography>
                             </TableCell>
                             <TableCell align="left" style={{ minWidth: 100 }}>
                               <Typography variant="subtitle4" noWrap>
-                                {category.name}
+                                {category?.name}
                               </Typography>
                             </TableCell>
                             <TableCell align="left" style={{ minWidth: 100 }}>

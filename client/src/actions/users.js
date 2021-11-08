@@ -1,6 +1,22 @@
 import * as actionTypes from '../constants/actionTypes';
 import * as api from '../api';
 
+// --------------------------------- Staff -------------------------------
+
+export const getAllStaffs = () => async (dispatch) => {
+  try {
+    dispatch({ type: actionTypes.START_LOADING });
+    const { data } = await api.getAllUser();
+    dispatch({ type: actionTypes.USER.GET_ALL, payload: data });
+    dispatch({ type: actionTypes.END_LOADING });
+  } catch (e) {
+    console.error('Error when get posts in actions/users/getAllUsers', e);
+    dispatch({ type: actionTypes.HAS_ERROR });
+  }
+};
+
+// --------------------------------- End staff ---------------------------
+
 export const getAllUsers = () => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });

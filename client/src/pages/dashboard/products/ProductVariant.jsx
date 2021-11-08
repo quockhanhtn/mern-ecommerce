@@ -57,7 +57,7 @@ export default function ProductVariant() {
       id: 'sku',
       numeric: false,
       disablePadding: true,
-      label: 'Sku'
+      label: t('dashboard.products.sku')
     },
     {
       id: 'variantName',
@@ -69,19 +69,19 @@ export default function ProductVariant() {
       id: 'price',
       numeric: false,
       disablePadding: false,
-      label: 'Price'
+      label: t('dashboard.products.price')
     },
     {
       id: 'marketPrice',
       numeric: true,
       disablePadding: false,
-      label: 'Market Price'
+      label: t('dashboard.products.market-price')
     },
     {
       id: 'quantity',
       numeric: true,
       disablePadding: false,
-      label: 'Quantity'
+      label: t('dashboard.products.quantity')
     },
     {
       id: 'sold',
@@ -98,11 +98,11 @@ export default function ProductVariant() {
 
   const handleDeleteVariant = (sku) => {
     if (variants.length === 1) {
-      enqueueSnackbar('Một sản phẩm phải có ít nhất 1 chi tiết', { variant: 'error' });
+      enqueueSnackbar('A product must have at least 1 item', { variant: 'error' });
     } else {
       dispatch(deleteProductVariant(id, sku));
       variants.length -= 1;
-      enqueueSnackbar(t('dashboard.brands.delete'), { variant: 'success' });
+      enqueueSnackbar('Delete successfully', { variant: 'success' });
     }
   };
 

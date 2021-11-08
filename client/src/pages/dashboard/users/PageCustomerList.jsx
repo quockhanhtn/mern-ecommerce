@@ -24,7 +24,6 @@ import LoadingScreen from '../../../components/LoadingScreen';
 import Label from '../../../components/Label';
 import Scrollbar from '../../../components/Scrollbar';
 import * as Helper from '../../../helper/listHelper';
-import Page404 from '../../Page404';
 import { ImageBrokenIcon } from '../../../assets';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../../components/dashboard/users';
 import { getAllUsers } from '../../../actions/users';
@@ -38,7 +37,7 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
   borderRadius: theme.shape.borderRadiusSm
 }));
 
-export default function PageUserList() {
+export default function PageCustomerList() {
   const { t } = useLocales();
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
@@ -125,10 +124,6 @@ export default function PageUserList() {
 
   if (isLoading) {
     return <LoadingScreen />;
-  }
-
-  if (hasError) {
-    return <Page404 />;
   }
 
   return (

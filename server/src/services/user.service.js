@@ -4,6 +4,7 @@ import strUtils from '../utils/str-utils.js';
 
 export default {
   getAll,
+  getListByRole,
   getOne,
   getOneById,
   create,
@@ -17,6 +18,16 @@ export default {
  */
 async function getAll() {
   return await User.find()
+    .sort({ createdAt: -1 })
+    .lean({ virtuals: true }).exec();
+}
+
+/**
+ * Get users by role
+ * @returns all users
+ */
+async function getListByRole(role) {
+  return await User.find({ role })
     .sort({ createdAt: -1 })
     .lean({ virtuals: true }).exec();
 }

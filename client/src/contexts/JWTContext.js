@@ -6,9 +6,12 @@ import { isValidToken, setSession } from '../utils/jwt';
 
 // ----------------------------------------------------------------------
 
+const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+
 const initialState = {
   isAuthenticated: false,
   isInitialized: false,
+  errMessage: null,
   user: null
 };
 
@@ -25,7 +28,7 @@ const handlers = {
   LOGIN: (state, action) => ({
     ...state,
     isAuthenticated: true,
-    user: action.payload.userData
+    user: action.payload.user
   }),
   LOGOUT: (state) => ({
     ...state,
@@ -40,7 +43,17 @@ const handlers = {
       isAuthenticated: true,
       user
     };
-  }
+  },
+  ERROR: (state, action) => ({
+    ...state,
+    isAuthenticated: false,
+    user: null,
+    errMessage: action.payload
+  })
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired
 };
 
 const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
@@ -74,21 +87,9 @@ function AuthProvider({ children }) {
           const userInfo = response.data.data;
           console.log(userInfo);
 
-          dispatch({
-            type: 'INITIALIZE',
-            payload: {
-              isAuthenticated: true,
-              user: userInfo
-            }
-          });
+          dispatch({ type: 'INITIALIZE', payload: { isAuthenticated: true, user: userInfo } });
         } else {
-          dispatch({
-            type: 'INITIALIZE',
-            payload: {
-              isAuthenticated: false,
-              user: null
-            }
-          });
+          dispatch({ type: 'INITIALIZE', payload: { isAuthenticated: false, user: null } });
         }
       } catch (err) {
         console.error(err);
@@ -114,15 +115,15 @@ function AuthProvider({ children }) {
 
   const loginAction = async (username, password) => {
     try {
-      console.log(username, password);
+      if (isDev) console.log('[JWTAuth][login] input', { username, password });
       const { data } = await api.login(username, password);
-      const { token, refreshToken, userData } = data.data;
-      console.log(data);
-      console.log(token, refreshToken, userData);
-      setSession(token);
-      dispatch({ type: 'LOGIN', payload: { userData } });
+      if (isDev) console.log('[JWTAuth][login] result', data);
+      const { token, refreshToken, user } = data.data;
+      setSession(token, refreshToken);
+      dispatch({ type: 'LOGIN', payload: { user } });
     } catch (e) {
-      const { data, status } = e.response;
+      dispatch({ type: 'ERROR', payload: e.response.data.message });
+      if (isDev) console.log('[JWTAuth][login] error', e.response);
     }
   };
 

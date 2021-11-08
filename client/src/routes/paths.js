@@ -37,8 +37,8 @@ export const PATH_DASHBOARD = {
     },
     users: {
       root: path(ROOTS_DASHBOARD, '/app/users'),
-      user_list: path(ROOTS_DASHBOARD, '/app/users/user_list'),
-      employee_list: path(ROOTS_DASHBOARD, '/app/users/employee_list')
+      customer_list: path(ROOTS_DASHBOARD, '/app/users/customer/list'),
+      staff_list: path(ROOTS_DASHBOARD, '/app/users/staff/list')
     },
     account_setting: path(ROOTS_DASHBOARD, '/app/setting'),
     profile: path(ROOTS_DASHBOARD, '/app/profile')
