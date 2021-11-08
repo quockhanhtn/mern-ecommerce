@@ -101,8 +101,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
           path: PATH_DASHBOARD.app.users.root,
           icon: ICONS.user,
           children: [
-            { title: 'User List', path: PATH_DASHBOARD.app.users.user_list },
-            { title: 'Employee List', path: PATH_DASHBOARD.app.users.employee_list }
+            { title: 'Customer List', path: PATH_DASHBOARD.app.users.customer_list },
+            { title: 'Staff List', path: PATH_DASHBOARD.app.users.staff_list }
           ]
         }
       ]
@@ -127,8 +127,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
                 {user?.fullName}
               </Typography>
-              <Typography component="span" variant="subtitle4" sx={{ color: 'primary.main' }}>
-                &nbsp;{t(`auth.role-${user.role}`)}
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {t(`auth.role-${user.role}`)}
               </Typography>
             </Box>
           </AccountStyle>

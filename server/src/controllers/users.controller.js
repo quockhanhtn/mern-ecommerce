@@ -18,7 +18,7 @@ const formatAllUser = (user, req) => {
   return user;
 }
 
-export const createUser = async (req, res, next) => {
+export const createUser = (role) => async (req, res, next) => {
   try {
     const newUser = await userService.create(req.body);
     resUtils.status201(
@@ -29,9 +29,9 @@ export const createUser = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
-export const getUsers = async (req, res, next) => {
+export const getUsers = (role) => async (req, res, next) => {
   try {
-    let users = await userService.getAll();
+    let users = await userService.getListByRole(role);
     users = users.map(user => formatAllUser(user, req));
     if (users && users.length > 0) {
       resUtils.status200(res, 'Gets all users successfully', users);

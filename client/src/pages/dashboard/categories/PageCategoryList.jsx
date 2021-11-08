@@ -292,6 +292,7 @@ export default function PageCategoryList() {
             <Box sx={{ position: 'relative' }}>
               <TablePagination
                 labelRowsPerPage={t('common.rows-per-page')}
+                // labelDisplayedRows : todo
                 rowsPerPageOptions={[5, 10, 25, 50, 100]}
                 component="div"
                 count={categoriesList.length}

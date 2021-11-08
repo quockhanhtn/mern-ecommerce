@@ -103,8 +103,8 @@ export default function Router() {
               path: 'users',
               children: [
                 { path: '/', element: <Navigate to="/dashboard/users/user_list" replace /> },
-                { path: 'user_list', element: <PageUserList /> },
-                { path: 'employee_list', element: <PageEmployeeList /> }
+                { path: 'customer/list', element: <PageCustomerList /> },
+                { path: 'staff/list', element: <PageStaffList /> }
               ]
             },
             { path: 'setting', element: <PageAccountSetting /> },
@@ -154,8 +154,8 @@ const PageProductList = Loadable(lazy(() => import('../pages/dashboard/products/
 const PageProduct = Loadable(lazy(() => import('../pages/dashboard/products/PageProduct')));
 const PageProductEdit = Loadable(lazy(() => import('../pages/dashboard/products/PageProductEdit')));
 // User
-const PageUserList = Loadable(lazy(() => import('../pages/dashboard/users/PageUserList')));
-const PageEmployeeList = Loadable(lazy(() => import('../pages/dashboard/users/PageEmployeeList')));
+const PageCustomerList = Loadable(lazy(() => import('../pages/dashboard/users/PageCustomerList')));
+const PageStaffList = Loadable(lazy(() => import('../pages/dashboard/users/PageStaffList')));
 const PageAccountSetting = Loadable(lazy(() => import('../pages/dashboard/users/PageAccountSetting')));
 const PageProfileUser = Loadable(lazy(() => import('../pages/dashboard/users/PageProfileUser')));
 // General

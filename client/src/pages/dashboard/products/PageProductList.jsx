@@ -221,7 +221,7 @@ export default function PageProductList() {
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row, index) => {
                         const { _id, slug, name, brand, category, origin, warrantyPeriod, isHide } = row;
-                        const { thumbnail } = row.variants[0];
+                        const thumbnail = row?.variants[0]?.thumbnail;
                         const isItemSelected = isSelected(slug);
                         const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -258,12 +258,12 @@ export default function PageProductList() {
                             )}
                             <TableCell align="left" style={{ minWidth: 100 }}>
                               <Typography variant="subtitle4" noWrap>
-                                {brand.name}
+                                {brand?.name}
                               </Typography>
                             </TableCell>
                             <TableCell align="left" style={{ minWidth: 100 }}>
                               <Typography variant="subtitle4" noWrap>
-                                {category.name}
+                                {category?.name}
                               </Typography>
                             </TableCell>
                             <TableCell align="left" style={{ minWidth: 100 }}>

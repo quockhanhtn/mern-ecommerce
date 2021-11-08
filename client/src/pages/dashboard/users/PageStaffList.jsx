@@ -5,7 +5,7 @@ import Page from '../../../components/Page';
 
 // ----------------------------------------------------------------------
 
-export default function PageEmployeeList() {
+export default function PageStaffList() {
   return (
     <Page title="Page One | Minimal-UI">
       <Container maxWidth="xl">

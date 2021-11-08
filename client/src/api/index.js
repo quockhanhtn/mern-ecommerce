@@ -15,51 +15,58 @@ API.interceptors.request.use((req) => {
 
 export const apiInstance = API;
 
-// ----------------------------Auth---------------------------------
+// ----------------------------Auth------------------------------------
 
 export const register = (data) => API.post('/auth/login', data);
 export const login = (username, password) => API.post('/auth/login', { username, password });
 export const logout = (refreshToken) => API.post('/auth/logout', { refreshToken });
 
-// ----------------------------Me---------------------------------
+// ----------------------------Me--------------------------------------
 export const getInfo = () => API.get('/me');
 
-// ----------------------------Category-----------------------------
+// ----------------------------Category--------------------------------
 export const getAllCategory = () => API.get('/categories');
 export const getOneCategory = (identity) => API.get(`/categories/${identity}`);
 export const createCategory = (newCategory) => API.post('/categories', newCategory);
 export const updateCategory = (identity, updatedCategory) => API.patch(`/categories/${identity}`, updatedCategory);
 export const deleteCategory = (identity) => API.delete(`/categories/${identity}`);
 
-// ----------------------------Brand-----------------------------
+// ----------------------------Brand-----------------------------------
 export const getAllBrand = () => API.get('/brands');
 export const getOneBrand = (identity) => API.get(`/brands/${identity}`);
 export const createBrand = (newBrand) => API.post('/brands', newBrand);
 export const updateBrand = (identity, updatedBrand) => API.patch(`/brands/${identity}`, updatedBrand);
 export const deleteBrand = (identity) => API.delete(`/brands/${identity}`);
 
-// ----------------------------Discount-----------------------------
+// ----------------------------Discount--------------------------------
 export const getAllDiscount = () => API.get('/discounts');
 export const getOneDiscount = (identity) => API.get(`/discounts/${identity}`);
 export const createDiscount = (newDiscount) => API.post('/discounts', newDiscount);
 export const updateDiscount = (identity, updatedDiscount) => API.patch(`/discounts/${identity}`, updatedDiscount);
 export const deleteDiscount = (identity) => API.delete(`/discounts/${identity}`);
 
-// ----------------------------Product-----------------------------
+// ----------------------------Product---------------------------------
 export const getAllProduct = () => API.get('/products');
 export const getOneProduct = (identity) => API.get(`/products/${identity}`);
 export const createProduct = (newProduct) => API.post('/products', newProduct);
 export const updateProduct = (identity, updatedProduct) => API.patch(`/products/${identity}`, updatedProduct);
 export const deleteProduct = (identity) => API.delete(`/products/${identity}`);
 
-// ----------------------------Variant-----------------------------
+// ----------------------------Variant--------------------------------
 export const createProductVariant = (identity, newProductVariant) =>
   API.post(`/products/${identity}/variants`, newProductVariant);
 export const updateProductVariant = (identity, sku, updatedProduct) =>
   API.patch(`/products/${identity}/variants/${sku}`, updatedProduct);
 export const deleteProductVariant = (identity, sku) => API.delete(`/products/${identity}/variants/${sku}`);
 
-// ----------------------------User-----------------------------
+// ----------------------------User (staff) --------------------------
+export const getAllStaffs = () => API.get('/users/staff');
+export const getStaff = (identity) => API.get(`/users/staff/${identity}`);
+export const createStaff = (newUser) => API.post('/users/staff', newUser);
+export const updateStaff = (identity, updatedUser) => API.patch(`/users/staff/${identity}`, updatedUser);
+export const deleteStaff = (identity) => API.delete(`/users/staff/${identity}`);
+
+// ----------------------------User (customer) -----------------------
 export const getAllUser = () => API.get('/users');
 export const getOneUser = (identity) => API.get(`/users/${identity}`);
 export const createUser = (newUser) => API.post('/users', newUser);
