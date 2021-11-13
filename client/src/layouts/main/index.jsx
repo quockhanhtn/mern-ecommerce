@@ -29,7 +29,7 @@ export default function MainLayout() {
             py: 5,
             textAlign: 'center',
             position: 'relative',
-            bgcolor: 'background.default'
+            bgcolor: (theme) => (theme.palette.mode === 'light' ? 'grey.200' : 'grey.800')
           }}
         >
           <Container maxWidth="lg">
@@ -38,8 +38,8 @@ export default function MainLayout() {
             </ScrollLink>
 
             <Typography variant="caption" component="p">
-              © All rights reserved
-              <br /> made by &nbsp;
+              &copy; 2021 HK Mobile. All rights reserved
+              <br /> Temple made by &nbsp;
               <Link href="https://minimals.cc/">minimals.cc</Link>
             </Typography>
           </Container>

@@ -12,6 +12,7 @@ import { MHidden } from '../../components/@material-extend';
 import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';
 import navConfig from './MenuConfig';
+import SearchBar from './SearchBar';
 
 // ----------------------------------------------------------------------
 
@@ -60,20 +61,15 @@ export default function MainNavbar() {
           })
         }}
       >
-        <Container
-          maxWidth="lg"
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}
-        >
+        <Container maxWidth="lg" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <RouterLink to="/">
             <Logo />
           </RouterLink>
           <Label color="warning" sx={{ ml: 1 }}>
             Under construction
           </Label>
+
+          <SearchBar />
           <Box sx={{ flexGrow: 1 }} />
 
           <MHidden width="mdDown">
