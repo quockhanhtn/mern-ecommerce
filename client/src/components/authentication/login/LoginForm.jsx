@@ -31,8 +31,8 @@ import { MIconButton } from '../../@material-extend';
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
-  const { login } = useAuth();
-  const { t } = useLocales();
+  const { login, errMessage } = useAuth();
+  const { t, currentLang } = useLocales();
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [showPassword, setShowPassword] = useState(false);
@@ -52,16 +52,20 @@ export default function LoginForm() {
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
         await login(values.account, values.password);
-        enqueueSnackbar('Login success', {
-          variant: 'success',
-          action: (key) => (
-            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-              <Icon icon={closeFill} />
-            </MIconButton>
-          )
-        });
+
         if (isMountedRef.current) {
           setSubmitting(false);
+          const messageDisplay = errMessage?.[currentLang.value] || errMessage;
+          setErrors({ afterSubmit: messageDisplay });
+        } else {
+          enqueueSnackbar('Login success', {
+            variant: 'success',
+            action: (key) => (
+              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                <Icon icon={closeFill} />
+              </MIconButton>
+            )
+          });
         }
       } catch (error) {
         console.error(error);
