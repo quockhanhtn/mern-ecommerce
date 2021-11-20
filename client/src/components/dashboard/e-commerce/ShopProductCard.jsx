@@ -6,11 +6,8 @@ import { Box, Card, Link, Typography, Stack } from '@material-ui/core';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
-// utils
 //
 import { fCurrency } from '../../../utils/formatNumber';
-import Label from '../../Label';
-import ColorPreview from '../../ColorPreview';
 
 // ----------------------------------------------------------------------
 
@@ -28,27 +25,13 @@ ShopProductCard.propTypes = {
   product: PropTypes.object
 };
 
-export default function ShopProductCard({ product, ...other }) {
-  const { name, slug, variants, status, category } = product;
+export default function ShopProductCard({ product }) {
+  const { name, slug, variants, category } = product;
   const linkTo = `${PATH_DASHBOARD.app.users.root}/${paramCase(category.name)}/${paramCase(slug)}`;
 
   return (
-    <Card {...other}>
-      <Box sx={{ pt: '100%', position: 'relative' }}>
-        {status && (
-          <Label
-            variant="filled"
-            color={(status === 'sale' && 'error') || 'info'}
-            sx={{
-              top: 16,
-              right: 16,
-              position: 'absolute',
-              textTransform: 'uppercase'
-            }}
-          >
-            {status}
-          </Label>
-        )}
+    <Card>
+      <Box sx={{ pt: '90%', position: 'relative' }}>
         <ProductImgStyle alt={name} src={variants[0].thumbnail} />
       </Box>
 
@@ -60,7 +43,6 @@ export default function ShopProductCard({ product, ...other }) {
         </Link>
 
         <Stack>
-          <ColorPreview colors={variants} />
           <Typography
             component="span"
             variant="subtitle2"
@@ -69,7 +51,7 @@ export default function ShopProductCard({ product, ...other }) {
               textDecoration: 'line-through'
             }}
           >
-            {variants[0].price && fCurrency(variants[0].price)}
+            {variants[0].marketPrice && fCurrency(variants[0].marketPrice)}
           </Typography>
           <Typography variant="subtitle1" noWrap>
             {fCurrency(variants[0].price)}

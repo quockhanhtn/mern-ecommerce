@@ -5,11 +5,8 @@ import { useState, useRef, useEffect } from 'react';
 // material
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import LightboxModal from '../../LightboxModal';
 import { CarouselControlsArrowsIndex } from '../../carousel';
-import { getProductById } from '../../../actions/products';
 //
 
 // ----------------------------------------------------------------------
@@ -90,9 +87,7 @@ function ThumbnailItem({ item }) {
   );
 }
 
-export default function ProductDetailsCarousel() {
-  const { item: product } = useSelector((state) => state.product);
-
+export default function ProductDetailsCarousel({ images }) {
   const [openLightbox, setOpenLightbox] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -101,10 +96,8 @@ export default function ProductDetailsCarousel() {
   const slider1 = useRef(null);
   const slider2 = useRef(null);
 
-  const imagesLightbox = product.variants[0].pictures.map((_image) => _image);
-
   const handleOpenLightbox = (url) => {
-    const selectedImage = findIndex(imagesLightbox, (index) => index === url);
+    const selectedImage = findIndex(images, (index) => index === url);
     setOpenLightbox(true);
     setSelectedImage(selectedImage);
   };
@@ -128,7 +121,7 @@ export default function ProductDetailsCarousel() {
     focusOnSelect: true,
     variableWidth: true,
     centerPadding: '0px',
-    slidesToShow: product.variants[0].pictures.length > 3 ? 3 : product.variants[0].pictures.length
+    slidesToShow: images?.length > 3 ? 3 : images?.length
   };
 
   useEffect(() => {
@@ -156,13 +149,13 @@ export default function ProductDetailsCarousel() {
           }}
         >
           <Slider {...settings1} asNavFor={nav2} ref={slider1}>
-            {product.variants[0].pictures.map((item) => (
+            {images?.map((item) => (
               <LargeItem key={item} item={item} onOpenLightbox={handleOpenLightbox} />
             ))}
           </Slider>
           <CarouselControlsArrowsIndex
             index={currentIndex}
-            total={product.variants[0].pictures.length}
+            total={images?.length}
             onNext={handleNext}
             onPrevious={handlePrevious}
           />
@@ -174,12 +167,12 @@ export default function ProductDetailsCarousel() {
           my: 3,
           mx: 'auto',
           '& .slick-current .isActive': { opacity: 1 },
-          ...(product.variants[0].pictures.length === 1 && { maxWidth: THUMB_SIZE + 16 }),
-          ...(product.variants[0].pictures.length === 2 && { maxWidth: THUMB_SIZE * 2 + 32 }),
-          ...(product.variants[0].pictures.length === 3 && { maxWidth: THUMB_SIZE * 3 + 48 }),
-          ...(product.variants[0].pictures.length === 4 && { maxWidth: THUMB_SIZE * 3 + 48 }),
-          ...(product.variants[0].pictures.length >= 5 && { maxWidth: THUMB_SIZE * 6 }),
-          ...(product.variants[0].pictures.length > 2 && {
+          ...(images?.length === 1 && { maxWidth: THUMB_SIZE + 16 }),
+          ...(images?.length === 2 && { maxWidth: THUMB_SIZE * 2 + 32 }),
+          ...(images?.length === 3 && { maxWidth: THUMB_SIZE * 3 + 48 }),
+          ...(images?.length === 4 && { maxWidth: THUMB_SIZE * 3 + 48 }),
+          ...(images?.length >= 5 && { maxWidth: THUMB_SIZE * 6 }),
+          ...(images?.length > 2 && {
             position: 'relative',
             '&:before, &:after': {
               top: 0,
@@ -198,14 +191,14 @@ export default function ProductDetailsCarousel() {
         }}
       >
         <Slider {...settings2} asNavFor={nav1} ref={slider2}>
-          {product.variants[0].pictures.map((item) => (
+          {images?.map((item) => (
             <ThumbnailItem key={item} item={item} />
           ))}
         </Slider>
       </Box>
 
       <LightboxModal
-        images={imagesLightbox}
+        images={images}
         photoIndex={selectedImage}
         setPhotoIndex={setSelectedImage}
         isOpen={openLightbox}
