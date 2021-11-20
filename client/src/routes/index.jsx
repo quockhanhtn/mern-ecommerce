@@ -103,9 +103,7 @@ export default function Router() {
               path: 'users',
               children: [
                 { path: '/', element: <Navigate to="/dashboard/users/user_list" replace /> },
-                { path: 'customer/list', element: <PageCustomerList /> },
-                { path: 'staff/list', element: <EcommerceShop /> },
-                { path: ':category/:slug', element: <ProductDetails /> }
+                { path: 'customer/list', element: <PageCustomerList /> }
               ]
             },
             { path: 'setting', element: <PageAccountSetting /> },
@@ -127,7 +125,11 @@ export default function Router() {
     {
       path: '/',
       element: <MainLayout />,
-      children: [{ path: '/', element: <HomePage /> }]
+      children: [
+        { path: '/', element: <HomePage /> },
+        { path: '/products', element: <ProductList /> },
+        { path: '/:category/:slug', element: <ProductDetailPage /> }
+      ]
     },
     { path: '*', element: <Navigate to="/404" replace /> }
   ]);
@@ -144,7 +146,7 @@ const Register = Loadable(lazy(() => import('../pages/authentication/Register'))
 // Dashboard
 const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
 const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));
-const EcommerceShop = Loadable(lazy(() => import('../pages/EcommerceShop')));
+const EcommerceShop = Loadable(lazy(() => import('../pages/main/EcommerceShop')));
 
 // Category
 const PageCategoryList = Loadable(lazy(() => import('../pages/dashboard/categories/PageCategoryList')));
@@ -156,7 +158,7 @@ const PageDiscountList = Loadable(lazy(() => import('../pages/dashboard/discount
 const PageProductList = Loadable(lazy(() => import('../pages/dashboard/products/PageProductList')));
 const PageProduct = Loadable(lazy(() => import('../pages/dashboard/products/PageProduct')));
 const PageProductEdit = Loadable(lazy(() => import('../pages/dashboard/products/PageProductEdit')));
-const ProductDetails = Loadable(lazy(() => import('../pages/ProductDetails')));
+const ProductDetails = Loadable(lazy(() => import('../pages/main/ProductDetails')));
 // User
 const PageCustomerList = Loadable(lazy(() => import('../pages/dashboard/users/PageCustomerList')));
 const PageStaffList = Loadable(lazy(() => import('../pages/dashboard/users/PageStaffList')));
@@ -166,5 +168,6 @@ const PageProfileUser = Loadable(lazy(() => import('../pages/dashboard/users/Pag
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 
 // Main
-const LandingPage = Loadable(lazy(() => import('../pages/LandingPage')));
 const HomePage = Loadable(lazy(() => import('../pages/main/HomePage')));
+const ProductList = Loadable(lazy(() => import('../pages/main/EcommerceShop')));
+const ProductDetailPage = Loadable(lazy(() => import('../pages/main/ProductDetails')));

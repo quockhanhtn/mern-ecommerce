@@ -6,15 +6,15 @@ import { Backdrop, Container, Typography, CircularProgress, Stack } from '@mater
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 // components
-import Page from '../components/Page';
+import Page from '../../components/Page';
 import {
   CartWidget,
   ShopFilterSidebar,
   ShopProductList,
   ShopProductSort,
   ShopTagFiltered
-} from '../components/dashboard/e-commerce';
-import { getAllProducts } from '../actions/products';
+} from '../../components/dashboard/e-commerce';
+import { getAllProducts } from '../../actions/products';
 
 // ----------------------------------------------------------------------
 

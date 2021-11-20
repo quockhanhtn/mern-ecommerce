@@ -10,15 +10,15 @@ import { alpha, experimentalStyled as styled, useTheme } from '@material-ui/core
 import { Box, Tab, Card, Grid, Divider, Skeleton, Container, Typography } from '@material-ui/core';
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 import { useDispatch, useSelector } from 'react-redux';
-import Page from '../components/Page';
-import { CartWidget } from '../components/dashboard/e-commerce';
-import Markdown from '../components/Markdown';
+import Page from '../../components/Page';
+import { CartWidget } from '../../components/dashboard/e-commerce';
+import Markdown from '../../components/Markdown';
 import {
   ProductDetailsCarousel,
   ProductDetailsReview,
   ProductDetailsSummary
-} from '../components/dashboard/product-details';
-import { getAllProducts, getProductById } from '../actions/products';
+} from '../../components/dashboard/product-details';
+import { getAllProducts, getProductById } from '../../actions/products';
 // ----------------------------------------------------------------------
 
 const PRODUCT_DESCRIPTION = [
