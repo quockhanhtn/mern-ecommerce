@@ -5,11 +5,12 @@ import { Box, Card, CardHeader, CardContent, Paper, Stack, Container, Grid, Typo
 import Page from '../../components/Page';
 import { MegaMenuDesktopVertical, MegaMenuMobile, MenuConfig } from '../../components/mega-menu';
 import { MHidden } from '../../components/@material-extend';
+import { CarouselAnimation } from '../../components/carousel';
 
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Page)(({ theme }) => ({
-  paddingTop: theme.spacing(11)
+  paddingTop: theme.spacing(0)
   // paddingBottom: theme.spacing(15)
 }));
 
@@ -45,6 +46,7 @@ export default function HomePage() {
                 src="/static/mock-images/feeds/feed_8.jpg"
                 sx={{ height: '100%', objectFit: 'cover' }}
               />
+              {/* <CarouselAnimation /> */}
             </Paper>
           </Stack>
         </Container>
