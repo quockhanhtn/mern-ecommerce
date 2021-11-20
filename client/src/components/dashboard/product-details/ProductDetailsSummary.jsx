@@ -24,31 +24,12 @@ import {
   FormHelperText
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { MButton, MIconButton } from '../../@material-extend';
 import Label from '../../Label';
 import { fCurrency, fShortenNumber } from '../../../utils/formatNumber';
-import ColorSinglePicker from '../../ColorSinglePicker';
-// ----------------------------------------------------------------------
-
-const SOCIALS = [
-  {
-    name: 'Facebook',
-    icon: <Icon icon={facebookFill} width={20} height={20} color="#1877F2" />
-  },
-  {
-    name: 'Instagram',
-    icon: <Icon icon={instagramFilled} width={20} height={20} color="#D7336D" />
-  },
-  {
-    name: 'Linkedin',
-    icon: <Icon icon={linkedinFill} width={20} height={20} color="#006097" />
-  },
-  {
-    name: 'Twitter',
-    icon: <Icon icon={twitterFill} width={20} height={20} color="#1C9CEA" />
-  }
-];
+// --------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
   padding: theme.spacing(3),
@@ -107,7 +88,7 @@ const Incrementer = (props) => {
   );
 };
 
-export default function ProductDetailsSummary() {
+export default function ProductDetailsSummary({ indexVariant, handleChangeIndexVariant }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -167,25 +148,6 @@ export default function ProductDetailsSummary() {
     <RootStyle>
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-          <Label
-            variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-            color={inventoryType === 'in_stock' ? 'success' : 'error'}
-            sx={{ textTransform: 'uppercase' }}
-          >
-            {/* {sentenceCase(inventoryType)} */}
-          </Label>
-          <Typography
-            variant="overline"
-            sx={{
-              mt: 2,
-              mb: 1,
-              display: 'block',
-              color: status === 'sale' ? 'error.main' : 'info.main'
-            }}
-          >
-            {status}
-          </Typography>
-
           <Typography variant="h5" paragraph>
             {name}
           </Typography>
@@ -200,9 +162,9 @@ export default function ProductDetailsSummary() {
 
           <Typography variant="h4" sx={{ mb: 3 }}>
             <Box component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>
-              {priceSale && fCurrency(priceSale)}
+              {variants[indexVariant] && fCurrency(variants[indexVariant].price)}
             </Box>
-            &nbsp;{fCurrency(price)}
+            &nbsp;{fCurrency(variants[indexVariant].marketPrice)}
           </Typography>
 
           <Divider sx={{ borderStyle: 'dashed' }} />
@@ -210,42 +172,25 @@ export default function ProductDetailsSummary() {
           <Stack spacing={3} sx={{ my: 3 }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
-                Color
+                Variants
               </Typography>
-              <ColorSinglePicker
-                {...getFieldProps('color')}
-                colors={variants}
-                sx={{
-                  ...(variants.length > 4 && {
-                    maxWidth: 144,
-                    justifyContent: 'flex-end'
-                  })
-                }}
-              />
-            </Stack>
-
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
-                Size
-              </Typography>
-              <TextField
-                select
-                size="small"
-                {...getFieldProps('size')}
-                SelectProps={{ native: true }}
-                FormHelperTextProps={{
-                  sx: {
-                    textAlign: 'right',
-                    margin: 0,
-                    mt: 1
-                  }
-                }}
-                helperText={
-                  <Link href="#" underline="always" color="text.primary">
-                    Size Chart
-                  </Link>
-                }
-              />
+              <div sx={{ justifyContent: 'flex-end' }}>
+                {variants.map((variant, index) => {
+                  const { _id, slug, name, country, image, createdAt, updatedAt, isHide } = variant;
+                  return (
+                    <Button
+                      clicked
+                      onClick={() => {
+                        handleChangeIndexVariant(index);
+                      }}
+                      variant={index === indexVariant ? 'contained' : ''}
+                      color="info"
+                    >
+                      {variant.sku}
+                    </Button>
+                  );
+                })}
+              </div>
             </Stack>
 
             <Stack direction="row" justifyContent="space-between">
@@ -290,14 +235,6 @@ export default function ProductDetailsSummary() {
               Buy Now
             </Button>
           </Stack>
-
-          <Box sx={{ mt: 3, textAlign: 'center' }}>
-            {SOCIALS.map((social) => (
-              <Tooltip key={social.name} title={social.name}>
-                <MIconButton>{social.icon}</MIconButton>
-              </Tooltip>
-            ))}
-          </Box>
         </Form>
       </FormikProvider>
     </RootStyle>

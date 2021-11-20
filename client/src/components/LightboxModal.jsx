@@ -100,7 +100,7 @@ export default function LightboxModal({ images, photoIndex, setPhotoIndex, isOpe
     }
   }, [isOpen]);
 
-  const showIndex = <Typography variant="subtitle2">{`${photoIndex + 1} / ${images.length}`}</Typography>;
+  const showIndex = <Typography variant="subtitle2">{`${photoIndex + 1} / ${images?.length}`}</Typography>;
 
   const toolbarButtons = [showIndex];
   const customStyles = {

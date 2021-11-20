@@ -1,12 +1,12 @@
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import clockFill from '@iconify/icons-eva/clock-fill';
 import roundVerified from '@iconify/icons-ic/round-verified';
 import roundVerifiedUser from '@iconify/icons-ic/round-verified-user';
 // material
-import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
+import { alpha, experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
 import { Box, Tab, Card, Grid, Divider, Skeleton, Container, Typography } from '@material-ui/core';
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,18 +23,18 @@ import { getAllProducts, getProductById } from '../actions/products';
 
 const PRODUCT_DESCRIPTION = [
   {
-    title: '100% Original',
-    description: 'Chocolate bar candy canes ice cream toffee cookie halvah.',
+    title: '100% Genuine',
+    description: 'All products in the store are genuine products.',
     icon: roundVerified
   },
   {
     title: '10 Day Replacement',
-    description: 'Marshmallow biscuit donut dragée fruitcake wafer.',
+    description: '10 days free product return for any reason.',
     icon: clockFill
   },
   {
     title: 'Year Warranty',
-    description: 'Cotton candy gingerbread cake I love sugar sweet.',
+    description: 'Genuine warranty from the manufacturer.',
     icon: roundVerifiedUser
   }
 ];
@@ -70,37 +70,60 @@ const SkeletonLoad = (
 );
 
 export default function ProductDetails() {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const { slug } = useParams();
   const [value, setValue] = useState('1');
   const { item: product } = useSelector((state) => state.product);
-  console.log('aaa', product);
+  const [images, setImages] = useState([]);
+  const [indexVariant, setIndexVariant] = useState(0);
+
   useEffect(() => {
     dispatch(getProductById(slug));
   }, [slug]);
 
+  useEffect(() => {
+    setImages([]);
+    handleGatherPicture();
+  }, [product, indexVariant]);
+
   const handleChangeTab = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const handleGatherPicture = () => {
+    if (product?.variants[indexVariant].pictures.length > 0) {
+      const temp = [...product?.variants[indexVariant].pictures];
+      setImages(temp);
+    } else {
+      const temp = [product?.variants[indexVariant].thumbnail];
+      setImages(temp);
+    }
+  };
+
+  const handleChangeIndexVariant = (index) => {
+    setIndexVariant(index);
   };
 
   return (
     <Page title="Ecommerce: Product Details | Minimal-UI">
       <Container>
         <CartWidget />
-
         {product && (
           <>
             <Card>
               <Grid container>
-                <Grid item xs={12} md={6} lg={7}>
-                  <ProductDetailsCarousel />
+                <Grid item xs={12} md={6} lg={7} sx={{ marginBottom: theme.spacing(1) }}>
+                  <ProductDetailsCarousel images={images} />
                 </Grid>
                 <Grid item xs={12} md={6} lg={5}>
-                  <ProductDetailsSummary />
+                  <ProductDetailsSummary
+                    indexVariant={indexVariant}
+                    handleChangeIndexVariant={handleChangeIndexVariant}
+                  />
                 </Grid>
               </Grid>
             </Card>
-
             <Grid container sx={{ my: 8 }}>
               {PRODUCT_DESCRIPTION.map((item) => (
                 <Grid item xs={12} md={4} key={item.title}>
@@ -129,20 +152,19 @@ export default function ProductDetails() {
                 <Box sx={{ px: 3, bgcolor: 'background.neutral' }}>
                   <TabList onChange={handleChangeTab}>
                     <Tab disableRipple value="1" label="Description" />
-                    {/* <Tab */}
-                    {/*  disableRipple */}
-                    {/*  value="2" */}
-                    {/*  label={`Review (${product?.reviews.length})`} */}
-                    {/*  sx={{ '& .MuiTab-wrapper': { whiteSpace: 'nowrap' } }} */}
-                    {/* /> */}
+                    <Tab
+                      disableRipple
+                      value="2"
+                      // label={`Review (${product?.c.length})`}
+                      label="Review"
+                      sx={{ '& .MuiTab-wrapper': { whiteSpace: 'nowrap' } }}
+                    />
                   </TabList>
                 </Box>
-
                 <Divider />
-
                 <TabPanel value="1">
                   <Box sx={{ p: 3 }}>
-                    <Markdown children={product.description} />
+                    <Markdown children={product.desc} />
                   </Box>
                 </TabPanel>
                 <TabPanel value="2">
@@ -152,10 +174,6 @@ export default function ProductDetails() {
             </Card>
           </>
         )}
-
-        {!product && SkeletonLoad}
-
-        <Typography variant="h6">404 Product not found</Typography>
       </Container>
     </Page>
   );

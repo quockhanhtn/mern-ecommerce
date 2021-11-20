@@ -68,30 +68,30 @@ export default function ProductDetailsReviewOverview({ product, onOpen }) {
 
   return (
     <Grid container>
-      <GridStyle item xs={12} md={4}>
-        <Typography variant="subtitle1" gutterBottom>
-          Average rating
-        </Typography>
-        <Typography variant="h2" gutterBottom sx={{ color: 'error.main' }}>
-          {totalRating}/5
-        </Typography>
-        <RatingStyle readOnly value={totalRating} precision={0.1} />
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          ({fShortenNumber(totalReview)}
-          &nbsp;reviews)
-        </Typography>
-      </GridStyle>
+      {/* <GridStyle item xs={12} md={4}> */}
+      {/*  <Typography variant="subtitle1" gutterBottom> */}
+      {/*    Average rating */}
+      {/*  </Typography> */}
+      {/*  <Typography variant="h2" gutterBottom sx={{ color: 'error.main' }}> */}
+      {/*    {totalRating}/5 */}
+      {/*  </Typography> */}
+      {/*  <RatingStyle readOnly value={totalRating} precision={0.1} /> */}
+      {/*  <Typography variant="body2" sx={{ color: 'text.secondary' }}> */}
+      {/*    ({fShortenNumber(totalReview)} */}
+      {/*    &nbsp;reviews) */}
+      {/*  </Typography> */}
+      {/* </GridStyle> */}
 
-      <GridStyle item xs={12} md={4}>
-        <Stack spacing={1.5} sx={{ width: 1 }}>
-          {ratings
-            .slice(0)
-            .reverse()
-            .map((rating) => (
-              <ProgressItem key={rating.name} star={rating} total={total} />
-            ))}
-        </Stack>
-      </GridStyle>
+      {/* <GridStyle item xs={12} md={4}> */}
+      {/*  <Stack spacing={1.5} sx={{ width: 1 }}> */}
+      {/*    {ratings */}
+      {/*      .slice(0) */}
+      {/*      .reverse() */}
+      {/*      .map((rating) => ( */}
+      {/*        <ProgressItem key={rating.name} star={rating} total={total} /> */}
+      {/*      ))} */}
+      {/*  </Stack> */}
+      {/* </GridStyle> */}
 
       <GridStyle item xs={12} md={4}>
         <ScrollLink to="move_add_review" spy smooth offset={-200}>
