@@ -17,7 +17,46 @@ const menuConfig = [
     path: '/',
     icon: <Icon icon={homeFill} {...ICON_SIZE} />
   },
-  { title: 'Dashboard', path: PATH_DASHBOARD.root, icon: <Icon icon={fileFill} {...ICON_SIZE} /> }
+  { title: 'Dashboard', path: PATH_DASHBOARD.root, icon: <Icon icon={fileFill} {...ICON_SIZE} /> },
+  {
+    title: 'Pages',
+    path: '/pages',
+    icon: <Icon icon={fileFill} {...ICON_SIZE} />,
+    children: [
+      {
+        subheader: 'Other',
+        items: [
+          { title: 'About us', path: PATH_DASHBOARD.root },
+          { title: 'Contact us', path: PATH_DASHBOARD.root },
+          { title: 'FAQs', path: PATH_DASHBOARD.root },
+          { title: 'Pricing', path: PATH_DASHBOARD.root },
+          { title: 'Payment', path: PATH_DASHBOARD.root },
+          { title: 'Maintenance', path: PATH_DASHBOARD.root },
+          { title: 'Coming Soon', path: PATH_DASHBOARD.root }
+        ]
+      },
+      {
+        subheader: 'Authentication',
+        items: [
+          { title: 'Login', path: PATH_DASHBOARD.root },
+          { title: 'Register', path: PATH_DASHBOARD.root },
+          { title: 'Reset password', path: PATH_DASHBOARD.root },
+          { title: 'Verify code', path: PATH_DASHBOARD.root }
+        ]
+      },
+      {
+        subheader: 'Error',
+        items: [
+          { title: 'Page 404', path: PATH_DASHBOARD.root },
+          { title: 'Page 500', path: PATH_DASHBOARD.root }
+        ]
+      },
+      {
+        subheader: 'Dashboard',
+        items: [{ title: 'Dashboard', path: PATH_DASHBOARD.root }]
+      }
+    ]
+  }
 ];
 
 export default menuConfig;

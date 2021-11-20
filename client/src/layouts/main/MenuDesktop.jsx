@@ -87,7 +87,7 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
         <Popover
           open={isOpen}
           anchorReference="anchorPosition"
-          anchorPosition={{ top: 80, left: 0 }}
+          anchorPosition={{ top: 124, left: 0 }}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           transformOrigin={{ vertical: 'top', horizontal: 'center' }}
           onClose={onClose}

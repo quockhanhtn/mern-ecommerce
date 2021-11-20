@@ -12,7 +12,7 @@ import MainFooter from './MainFooter';
 // ----------------------------------------------------------------------
 
 const APP_BAR_MOBILE = 64;
-const APP_BAR_DESKTOP = 92;
+const APP_BAR_DESKTOP = 88;
 
 const RootStyle = styled('div')({
   display: 'flex',
@@ -36,15 +36,16 @@ const MainStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function MainLayout() {
-  const { pathname } = useLocation();
-  const isHome = pathname === '/';
+  // const { pathname } = useLocation();
+  // const isHome = pathname === '/';
 
   return (
     <RootStyle>
       <MainNavbar />
       <MainStyle>
         <Outlet />
-        {!isHome ? (
+        <MainFooter />
+        {/* {!isHome ? (
           <MainFooter />
         ) : (
           <Box
@@ -67,7 +68,7 @@ export default function MainLayout() {
               </Typography>
             </Container>
           </Box>
-        )}
+        )} */}
       </MainStyle>
     </RootStyle>
   );
