@@ -8,9 +8,9 @@ import useAuth from './hooks/useAuth';
 import Settings from './components/settings';
 import RtlLayout from './components/RtlLayout';
 import ScrollToTop from './components/ScrollToTop';
+import LoadingScreen from './components/LoadingScreen';
 import ThemePrimaryColor from './components/ThemePrimaryColor';
 import NotistackProvider from './components/NotistackProvider';
-import LoadingScreen from './components/LoadingScreen';
 
 // ----------------------------------------------------------------------
 

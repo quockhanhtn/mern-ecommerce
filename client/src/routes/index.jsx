@@ -127,7 +127,7 @@ export default function Router() {
     {
       path: '/',
       element: <MainLayout />,
-      children: [{ path: '/', element: <LandingPage /> }]
+      children: [{ path: '/', element: <HomePage /> }]
     },
     { path: '*', element: <Navigate to="/404" replace /> }
   ]);
@@ -167,3 +167,4 @@ const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 
 // Main
 const LandingPage = Loadable(lazy(() => import('../pages/LandingPage')));
+const HomePage = Loadable(lazy(() => import('../pages/main/HomePage')));

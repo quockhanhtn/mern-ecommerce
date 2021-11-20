@@ -8,7 +8,7 @@ export const register = async (req, res, next) => {
   try {
     const newUser = await userService.create(req.body);
     if (newUser && newUser._doc) {
-      const userData = formatImageUrl(newUser._doc, 'image', req);
+      const userData = formatImageUrl(newUser._doc, 'avatar', req);
       delete userData.password;
       delete userData.addresses;
 
@@ -29,7 +29,7 @@ export const login = async (req, res, next) => {
     const ipAddress = req.ip;
 
     const result = await authService.authenticate(username, password, ipAddress);
-    const userData = formatImageUrl(result.user, 'image', req);
+    const userData = formatImageUrl(result.user, 'avatar', req);
     delete userData.password;
 
     resUtils.status200(
