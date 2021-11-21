@@ -9,8 +9,7 @@ import { Box, IconButton, AppBar, Toolbar, Container } from '@material-ui/core';
 import useOffSetTop from '../../hooks/useOffSetTop';
 // components
 import Logo from '../../components/Logo';
-import Label from '../../components/Label';
-import { MButton, MHidden } from '../../components/@material-extend';
+import { MBadge, MButton, MHidden } from '../../components/@material-extend';
 //
 import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';
@@ -84,18 +83,13 @@ export default function MainNavbar() {
       >
         <Container
           maxWidth="lg"
-          sx={{
-            display: 'flex',
-            height: 44,
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}
+          sx={{ display: 'flex', height: 44, alignItems: 'center', justifyContent: 'space-between' }}
         >
           <RouterLink to="/">
             <Logo />
           </RouterLink>
 
-          <SearchBar />
+          <SearchBar sx={{ marginLeft: 10 }} />
           <Box sx={{ flexGrow: 1 }} />
 
           <MHidden width="mdUp">
@@ -103,18 +97,15 @@ export default function MainNavbar() {
           </MHidden>
 
           <ButtonIcon text="Lịch sử đơn hàng" icon={history24Filled} color="inherit" href="/order-history" />
-          <ButtonIcon text="Giỏ hàng" icon={cart24Regular} color="primary" href="/products" />
+          <MBadge badgeContent={10} color="primary">
+            <ButtonIcon text="Giỏ hàng" icon={cart24Regular} color="primary" href="/products" />
+          </MBadge>
         </Container>
         <MHidden width="mdDown">
           <ColorBar>
             <Container
               maxWidth="lg"
-              sx={{
-                display: 'flex',
-                height: 44,
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
+              sx={{ display: 'flex', height: 44, alignItems: 'center', justifyContent: 'space-between' }}
             >
               <MenuDesktop isOffset={isOffset} isHome={false} navConfig={navConfig} />
             </Container>

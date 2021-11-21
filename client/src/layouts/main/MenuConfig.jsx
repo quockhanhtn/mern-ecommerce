@@ -15,7 +15,8 @@ const menuConfig = [
   {
     title: 'Home',
     path: '/',
-    icon: <Icon icon={homeFill} {...ICON_SIZE} />
+    icon: <Icon icon={homeFill} {...ICON_SIZE} />,
+    image: 'https://cdn2.iconfinder.com/data/icons/font-awesome/1792/phone-512.png'
   },
   { title: 'Dashboard', path: PATH_DASHBOARD.root, icon: <Icon icon={fileFill} {...ICON_SIZE} /> },
   {

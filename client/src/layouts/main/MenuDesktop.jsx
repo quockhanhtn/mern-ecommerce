@@ -7,7 +7,18 @@ import arrowIosUpwardFill from '@iconify/icons-eva/arrow-ios-upward-fill';
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Link, Grid, List, Stack, Popover, ListItem, ListSubheader, CardActionArea } from '@material-ui/core';
+import {
+  Avatar,
+  Box,
+  Link,
+  Grid,
+  List,
+  Stack,
+  Popover,
+  ListItem,
+  ListSubheader,
+  CardActionArea
+} from '@material-ui/core';
 
 // ----------------------------------------------------------------------
 
@@ -59,7 +70,7 @@ MenuDesktopItem.propTypes = {
 };
 
 function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onClose }) {
-  const { title, path, children } = item;
+  const { title, path, children, image } = item;
   const isActive = pathname === path;
 
   if (children) {
@@ -87,7 +98,7 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
         <Popover
           open={isOpen}
           anchorReference="anchorPosition"
-          anchorPosition={{ top: 124, left: 0 }}
+          anchorPosition={{ top: 120, left: 0 }}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           transformOrigin={{ vertical: 'top', horizontal: 'center' }}
           onClose={onClose}
@@ -190,11 +201,15 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
       to={path}
       component={RouterLink}
       sx={{
+        display: 'flex',
+        height: '80%',
+        alignItems: 'center',
         ...(isHome && { color: 'common.white' }),
         ...(isOffset && { color: 'text.primary' }),
-        ...(isActive && { color: 'primary.main' })
+        ...(isActive && { border: '1px solid text.primary' })
       }}
     >
+      {image && <Avatar src={image} sx={{ width: 22, height: 22, marginRight: 1 }} />}
       {title}
     </LinkStyle>
   );
@@ -226,7 +241,7 @@ export default function MenuDesktop({ isOffset, isHome, navConfig }) {
   };
 
   return (
-    <Stack direction="row">
+    <Stack direction="row" sx={{ height: '100%', alignItems: 'center' }}>
       {navConfig.map((link) => (
         <MenuDesktopItem
           key={link.title}

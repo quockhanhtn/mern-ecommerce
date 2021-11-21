@@ -165,7 +165,7 @@ const PageStaffList = Loadable(lazy(() => import('../pages/dashboard/users/PageS
 const PageAccountSetting = Loadable(lazy(() => import('../pages/dashboard/users/PageAccountSetting')));
 const PageProfileUser = Loadable(lazy(() => import('../pages/dashboard/users/PageProfileUser')));
 // General
-const NotFound = Loadable(lazy(() => import('../pages/Page404')));
+const NotFound = Loadable(lazy(() => import('../pages/error/Page404')));
 
 // Main
 const HomePage = Loadable(lazy(() => import('../pages/main/HomePage')));

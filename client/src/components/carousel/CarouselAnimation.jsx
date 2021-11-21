@@ -1,4 +1,3 @@
-import faker from 'faker';
 import Slider from 'react-slick';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
@@ -6,8 +5,6 @@ import { useState, useRef } from 'react';
 // material
 import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Card, Paper, Button, Typography, CardContent } from '@material-ui/core';
-// utils
-import { mockImgFeed } from '../../utils/mockImages';
 //
 import { varFadeInRight, MotionContainer } from '../animate';
 import { CarouselControlsArrowsIndex } from './controls';
@@ -24,15 +21,6 @@ const CarouselImgStyle = styled('img')({
 
 // ----------------------------------------------------------------------
 
-const CAROUSELS = [...Array(5)].map((_, index) => {
-  const setIndex = index + 1;
-  return {
-    title: faker.name.title(),
-    description: faker.lorem.paragraphs(),
-    image: mockImgFeed(setIndex)
-  };
-});
-
 CarouselItem.propTypes = {
   item: PropTypes.object,
   isActive: PropTypes.bool
@@ -43,12 +31,7 @@ function CarouselItem({ item, isActive }) {
   const { image, title } = item;
 
   return (
-    <Paper
-      sx={{
-        position: 'relative',
-        paddingTop: { xs: '100%', md: '50%' }
-      }}
-    >
+    <Paper sx={{ position: 'relative', paddingTop: { xs: '100%', md: '50%' } }}>
       <CarouselImgStyle alt={title} src={image} />
       <Box
         sx={{
@@ -63,14 +46,7 @@ function CarouselItem({ item, isActive }) {
         }}
       />
       <CardContent
-        sx={{
-          bottom: 0,
-          width: '100%',
-          maxWidth: 480,
-          textAlign: 'left',
-          position: 'absolute',
-          color: 'common.white'
-        }}
+        sx={{ bottom: 0, width: '100%', maxWidth: 480, textAlign: 'left', position: 'absolute', color: 'common.white' }}
       >
         <MotionContainer open={isActive}>
           <motion.div variants={varFadeInRight}>
@@ -94,10 +70,22 @@ function CarouselItem({ item, isActive }) {
   );
 }
 
-export default function CarouselAnimation() {
+CarouselAnimation.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.object,
+      title: PropTypes.string,
+      description: PropTypes.string,
+      image: PropTypes.string
+    })
+  ).isRequired
+};
+
+export default function CarouselAnimation({ items }) {
   const theme = useTheme();
   const carouselRef = useRef();
-  const [currentIndex, setCurrentIndex] = useState(theme.direction === 'rtl' ? CAROUSELS.length - 1 : 0);
+  // const [currentIndex, setCurrentIndex] = useState(theme.direction === 'rtl' ? items.length - 1 : 0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const settings = {
     speed: 800,
@@ -121,14 +109,14 @@ export default function CarouselAnimation() {
   return (
     <Card>
       <Slider ref={carouselRef} {...settings}>
-        {CAROUSELS.map((item, index) => (
-          <CarouselItem key={item.title} item={item} isActive={index === currentIndex} />
+        {items.map((item, index) => (
+          <CarouselItem key={item._id} item={item} isActive={index === currentIndex} />
         ))}
       </Slider>
 
       <CarouselControlsArrowsIndex
         index={currentIndex}
-        total={CAROUSELS.length}
+        total={items.length}
         onNext={handleNext}
         onPrevious={handlePrevious}
       />
