@@ -28,7 +28,7 @@ import { useState } from 'react';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { MButton, MIconButton } from '../../@material-extend';
 import Label from '../../Label';
-import { fCurrency, fShortenNumber } from '../../../utils/formatNumber';
+import { fCurrency, fNumber, fShortenNumber } from '../../../utils/formatNumber';
 // --------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -93,7 +93,7 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { item: product } = useSelector((state) => state.product);
-  const { _id, name, price, cover, status, variants, available, priceSale, totalRating, totalReview, inventoryType } =
+  const { _id, name, price, cover, views, variants, available, rates, totalRating, totalReview, inventoryType } =
     product;
 
   // const alreadyProduct = checkout.cart.map((item) => item._id).includes(_id);
@@ -153,18 +153,18 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
           </Typography>
 
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ mb: 2 }}>
-            <Rating value={totalRating} precision={0.1} readOnly />
+            <Rating value={rates?.length} precision={0.1} readOnly />
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              ({fShortenNumber(totalReview)}
-              reviews)
+              ({fShortenNumber(views)}
+              &nbsp;reviews)
             </Typography>
           </Stack>
 
           <Typography variant="h4" sx={{ mb: 3 }}>
             <Box component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>
-              {variants[indexVariant] && fCurrency(variants[indexVariant].price)}
+              {variants[indexVariant] && `${fNumber(variants[0].price)} ₫`}
             </Box>
-            &nbsp;{fCurrency(variants[indexVariant].marketPrice)}
+            &nbsp;{`${fNumber(variants[0].marketPrice)} ₫`}
           </Typography>
 
           <Divider sx={{ borderStyle: 'dashed' }} />
@@ -176,7 +176,7 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
               </Typography>
               <div sx={{ justifyContent: 'flex-end' }}>
                 {variants.map((variant, index) => {
-                  const { _id, slug, name, country, image, createdAt, updatedAt, isHide } = variant;
+                  const { _id } = variant;
                   return (
                     <Button
                       clicked
@@ -208,7 +208,7 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
                     color: 'text.secondary'
                   }}
                 >
-                  Available: {available}
+                  Available: {variants[indexVariant].quantity}
                 </Typography>
 
                 <FormHelperText error>{touched.quantity && errors.quantity}</FormHelperText>

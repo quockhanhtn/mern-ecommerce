@@ -7,7 +7,7 @@ import { experimentalStyled as styled } from '@material-ui/core/styles';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //
-import { fCurrency } from '../../../utils/formatNumber';
+import { fCurrency, fNumber } from '../../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
@@ -51,10 +51,10 @@ export default function ShopProductCard({ product }) {
               textDecoration: 'line-through'
             }}
           >
-            {variants[0].marketPrice && fCurrency(variants[0].marketPrice)}
+            {variants[0].marketPrice && `${fNumber(variants[0].marketPrice)} ₫`}
           </Typography>
           <Typography variant="subtitle1" noWrap>
-            {fCurrency(variants[0].price)}
+            {`${fNumber(variants[0].price)} ₫`}
           </Typography>
         </Stack>
       </Stack>
