@@ -19,7 +19,7 @@ import faker from 'faker';
 import { mockImgFeed } from '../../utils/mockImages';
 import Page from '../../components/Page';
 import { CarouselAnimation, CarouselMiniList, CarouselCenterMode } from '../../components/carousel';
-
+import ProductList from './home/ProductList';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Page)(({ theme }) => ({
@@ -62,12 +62,7 @@ export default function HomePage() {
               <Card>
                 <CardHeader title="Brand list" />
                 <CardContent>
-                  <CarouselMiniList
-                    items={brandsList}
-                    numberPerRow={2}
-                    numberShow={2}
-                    // sx={{ '& .controlsArrows': { mb: 20 } }}
-                  />
+                  <CarouselMiniList items={brandsList} numberPerRow={2} numberShow={2} />
                 </CardContent>
               </Card>
             </Grid>
@@ -77,7 +72,7 @@ export default function HomePage() {
               <Card>
                 <CardHeader title="Products list" />
                 <CardContent>
-                  <Box sx={{ height: 500 }} />
+                  <ProductList />
                 </CardContent>
               </Card>
             </Grid>

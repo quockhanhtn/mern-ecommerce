@@ -4,8 +4,6 @@ import { Link as RouterLink } from 'react-router-dom';
 // material
 import { Box, Card, Link, Typography, Stack } from '@material-ui/core';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-// routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
 //
 import { fCurrency } from '../../../utils/formatNumber';
 
@@ -27,7 +25,7 @@ ShopProductCard.propTypes = {
 
 export default function ShopProductCard({ product }) {
   const { name, slug, variants, category } = product;
-  const linkTo = `/${paramCase(category.name)}/${paramCase(slug)}`;
+  const linkTo = `/${paramCase(category.slug)}/${paramCase(slug)}`;
 
   return (
     <Card>
@@ -46,10 +44,7 @@ export default function ShopProductCard({ product }) {
           <Typography
             component="span"
             variant="subtitle2"
-            sx={{
-              color: 'text.disabled',
-              textDecoration: 'line-through'
-            }}
+            sx={{ color: 'text.disabled', textDecoration: 'line-through' }}
           >
             {variants[0].marketPrice && fCurrency(variants[0].marketPrice)}
           </Typography>
