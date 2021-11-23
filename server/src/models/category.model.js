@@ -4,17 +4,19 @@ import removeMultiSpace from './plugins/remove-multi-space.js';
 
 const autoPopulateChildren = function (next) {
   this.populate('children')
-    // .populate({
-    //   path: 'image',
-    //   select: 'dirPath ext original hasSmall hasMedium hasLarge',
-    //   model: 'Image'
-    // });
+  // .populate({
+  //   path: 'image',
+  //   select: 'dirPath ext original hasSmall hasMedium hasLarge',
+  //   model: 'Image'
+  // });
   next();
 };
 
 const categorySchema = mongoose.Schema(
   {
     _id: mongoose.Types.ObjectId,
+    order: { type: Number, require: true },
+
     name: { type: String, trim: true, required: true },
     slug: { type: String, slug: "name", slugPaddingSize: 2, unique: true },
     desc: { type: String, trim: true, required: false },
@@ -24,7 +26,10 @@ const categorySchema = mongoose.Schema(
 
     parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null },
     children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
-    isHide: { type: Boolean, required: true, default: false }
+    isHide: { type: Boolean, required: true, default: false },
+
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null }
   },
   { timestamps: true, versionKey: false }
 );
@@ -34,6 +39,13 @@ categorySchema.plugin(removeMultiSpace);
 categorySchema
   .pre('findOne', autoPopulateChildren)
   .pre('find', autoPopulateChildren);
+
+categorySchema.statics.generateOrder = async function () {
+  const item = await this.findOne().select('order').sort('-order').lean().exec();
+  if (item)
+    return item.order + 1;
+  return 1;
+}
 
 const categoryModel = mongoose.model('Category', categorySchema);
 export default categoryModel;

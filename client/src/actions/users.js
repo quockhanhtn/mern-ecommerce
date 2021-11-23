@@ -6,7 +6,7 @@ import * as api from '../api';
 export const getAllStaffs = () => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
-    const { data } = await api.getAllUser();
+    const { data } = await api.getAllStaffs();
     dispatch({ type: actionTypes.USER.GET_ALL, payload: data });
     dispatch({ type: actionTypes.END_LOADING });
   } catch (e) {
@@ -20,7 +20,7 @@ export const getAllStaffs = () => async (dispatch) => {
 export const getAllUsers = () => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
-    const { data } = await api.getAllUser();
+    const { data } = await api.getAllCustomers();
     dispatch({ type: actionTypes.USER.GET_ALL, payload: data });
     dispatch({ type: actionTypes.END_LOADING });
   } catch (e) {

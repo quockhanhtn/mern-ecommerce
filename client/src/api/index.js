@@ -67,8 +67,8 @@ export const updateStaff = (identity, updatedUser) => API.patch(`/users/staff/${
 export const deleteStaff = (identity) => API.delete(`/users/staff/${identity}`);
 
 // ----------------------------User (customer) -----------------------
-export const getAllUser = () => API.get('/users');
-export const getOneUser = (identity) => API.get(`/users/${identity}`);
-export const createUser = (newUser) => API.post('/users', newUser);
-export const updateUser = (identity, updatedUser) => API.patch(`/users/${identity}`, updatedUser);
-export const deleteUser = (identity) => API.delete(`/users/${identity}`);
+export const getAllCustomers = () => API.get('/users/customer');
+export const getOneUser = (identity) => API.get(`/users/customer/${identity}`);
+export const createUser = (newUser) => API.post('/users/customer', newUser);
+export const updateUser = (identity, updatedUser) => API.patch(`/users/customer/${identity}`, updatedUser);
+export const deleteUser = (identity) => API.delete(`/users/customer/${identity}`);

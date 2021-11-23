@@ -1,5 +1,3 @@
-// THIS IS THE DEFAULT VALUE YOU CAN CHANGE IF YOU WANT
-
 const breakpoints = {
   values: {
     xs: 0,

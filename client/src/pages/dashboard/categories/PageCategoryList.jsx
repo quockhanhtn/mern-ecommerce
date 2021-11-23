@@ -62,7 +62,7 @@ export default function PageCategoryList() {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [isCompact, setIsCompact] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentId, setCurrentId] = useState(null);
   const [openForm, setOpenForm] = useState(false);
 
@@ -71,6 +71,11 @@ export default function PageCategoryList() {
   }, [dispatch]);
 
   const tableHeads = [
+    {
+      id: 'order',
+      disablePadding: true,
+      label: t('common.order')
+    },
     {
       id: 'name',
       numeric: false,
@@ -219,7 +224,7 @@ export default function PageCategoryList() {
                     {stableSort(categoriesList, getComparator(order, orderBy))
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row, index) => {
-                        const { _id, slug, name, image, createdAt, updatedAt, isHide } = row;
+                        const { _id, slug, order, name, image, createdAt, updatedAt, isHide } = row;
                         const isItemSelected = isSelected(slug);
                         const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -235,6 +240,9 @@ export default function PageCategoryList() {
                           >
                             <TableCell padding="checkbox">
                               <Checkbox checked={isItemSelected} />
+                            </TableCell>
+                            <TableCell align="left" component="th" id={labelId} scope="row" padding="none">
+                              {order}
                             </TableCell>
                             {isCompact ? (
                               <TableCell component="th" id={labelId} scope="row" padding="none">

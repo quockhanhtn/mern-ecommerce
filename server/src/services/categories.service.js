@@ -14,7 +14,7 @@ export default {
 };
 
 const SELECTED_FIELDS =
-  '_id slug name desc isHide image parent children createdAt updatedAt';
+  '_id slug order name desc isHide image parent children createdAt updatedAt';
 // const POPULATE_OPTS = [
 //   {
 //     path: 'image',
@@ -31,7 +31,7 @@ async function getAll() {
   return await Category.find({ parent: null })
     .select(SELECTED_FIELDS)
     // .populate(POPULATE_OPTS)
-    .sort({ createdAt: -1 })
+    .sort({ order: 1 })
     .lean()
     .exec();
 }
@@ -60,11 +60,24 @@ async function getId(identity) {
   return result ? result._id : null;
 }
 
-async function create(data) {
+/**
+ * Create category
+ * @param {*} data      - Category info
+ * @param {*} createdBy - Id of user created
+ * @returns 
+ */
+async function create(data, createdBy = null) {
+  const order = await Category.generateOrder();
   const category = new Category({
     _id: new mongoose.Types.ObjectId(),
+    order,
     ...data,
   });
+
+  if (createdBy) {
+    category.createdBy = createdBy;
+    category.updatedBy = createdBy;
+  }
 
   if (data.parent) {
     const parent = await getOne(data.parent);
@@ -80,7 +93,7 @@ async function create(data) {
   return await category.save();
 }
 
-async function update(identity, updatedData) {
+async function update(identity, updatedData, updatedBy = null) {
   const currentCategory = await getOne(identity);
 
   // // delete old image
@@ -110,6 +123,8 @@ async function update(identity, updatedData) {
     }
   }
 
+  if (updatedBy) { updatedData = updatedBy; }
+
   const updatedCategory = await Category.findByIdAndUpdate(
     currentCategory._id,
     updatedData,
@@ -118,7 +133,7 @@ async function update(identity, updatedData) {
   if (updatedCategory) {
     return updatedCategory;
   } else {
-    throw new Error(`Category '${identity}' not found!`);
+    throw new Error(`Error when update category`);
   }
 }
 

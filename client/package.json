@@ -67,6 +67,7 @@
     "@fullcalendar/timeline": "^5.7.0",
     "@iconify/icons-ant-design": "^1.1.0",
     "@iconify/icons-eva": "^1.1.0",
+    "@iconify/icons-fluent": "^1.1.31",
     "@iconify/icons-ic": "^1.1.4",
     "@iconify/icons-vscode-icons": "^1.1.1",
     "@iconify/react": "^1.1.4",

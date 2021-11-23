@@ -6,10 +6,10 @@ POST {{BASE_URL}}/{{RESOURCE}}/register
 content-type: application/json
 
 {
-    "firstName":"Admin",
-    "lastName":"Admin",
-    "phone":"0123456789",
-    "email":"admin@hk.com",
+    "firstName":"ddsf",
+    "lastName":"fdsfsdfsd",
+    "phone":"0123456689",
+    "email":"admdin@hk.com",
     "password":"12"
 }
 
@@ -20,8 +20,8 @@ POST {{BASE_URL}}/{{RESOURCE}}/login
 content-type: application/json
 
 {
-  "username": "sssssss@nf.com",
-  "password": "hello123"
+  "username": "admin",
+  "password": "12"
 }
 
 ###

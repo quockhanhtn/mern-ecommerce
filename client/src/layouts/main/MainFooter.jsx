@@ -10,39 +10,15 @@ import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Grid, Link, Divider, Container, Typography, IconButton, Stack } from '@material-ui/core';
 //
 import Logo from '../../components/Logo';
+import useLocales from '../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
 const SOCIALS = [
-  { name: 'FaceBook', icon: facebookFill },
-  { name: 'Google', icon: googleFill },
-  { name: 'Linkedin', icon: linkedinFill },
-  { name: 'Twitter', icon: twitterFill }
-];
-
-const LINKS = [
-  {
-    headline: 'Minimal',
-    children: [
-      { name: 'About us', href: '#' },
-      { name: 'Contact us', href: '#' },
-      { name: 'FAQs', href: '#' }
-    ]
-  },
-  {
-    headline: 'Legal',
-    children: [
-      { name: 'Terms and Condition', href: '#' },
-      { name: 'Privacy Policy', href: '#' }
-    ]
-  },
-  {
-    headline: 'Contact',
-    children: [
-      { name: 'support@minimals.cc', href: '#' },
-      { name: 'Los Angeles, 359  Hidden Valley Road', href: '#' }
-    ]
-  }
+  { name: 'FaceBook', icon: facebookFill, url: 'https://www.facebook.com/hkmobileshop' },
+  { name: 'Google', icon: googleFill, url: 'https://www.google.com/' },
+  { name: 'Linkedin', icon: linkedinFill, url: 'https://www.linkedin.com/' },
+  { name: 'Twitter', icon: twitterFill, url: 'https://www.twitter.com/' }
 ];
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -53,6 +29,35 @@ const RootStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function MainFooter() {
+  const t = useLocales();
+
+  const LINKS = [
+    {
+      headline: 'Minimal',
+      children: [
+        { name: 'About us', href: '#' },
+        { name: 'Contact us', href: '#' },
+        { name: 'FAQs', href: '#' }
+      ]
+    },
+    {
+      headline: 'Legal',
+      children: [
+        { name: 'Terms and Condition', href: '#' },
+        { name: 'Privacy Policy', href: '#' }
+      ]
+    },
+    {
+      headline: 'Tổng đài hỗ trợ (Miễn phí gọi)',
+      children: [
+        { name: 'Gọi mua: 1800.1060 (7:30 - 22:00)' },
+        { name: 'Kỹ thuật: 1800.1763 (7:30 - 22:00)' },
+        { name: 'Khiếu nại: 1800.1062 (8:00 - 21:30)' },
+        { name: 'Bảo hành: 1800.1064 (8:00 - 21:00)' }
+      ]
+    }
+  ];
+
   return (
     <RootStyle>
       <Divider />
@@ -69,8 +74,10 @@ export default function MainFooter() {
           </Grid>
           <Grid item xs={8} md={3}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
-              The starting point for your next project with Minimal UI Kit, built on the newest version of Material-UI
-              ©, ready to be customized to your style.
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate ipsa dicta illo voluptatum, sit
+              repellat tempore voluptas, quisquam nulla similique, hic iure facere obcaecati cumque id laboriosam neque?
+              Quas ipsa necessitatibus et veritatis velit aliquam, maxime labore recusandae non libero sit enim iusto
+              nobis odit cumque quam culpa ipsam atque.
             </Typography>
 
             <Stack
@@ -80,7 +87,7 @@ export default function MainFooter() {
               sx={{ mt: 5, mb: { xs: 5, md: 0 } }}
             >
               {SOCIALS.map((social) => (
-                <IconButton key={social.name} color="primary" sx={{ p: 1 }}>
+                <IconButton key={social.name} color="primary" sx={{ p: 1 }} href={social.url} target="_blank">
                   <Icon icon={social.icon} width={16} height={16} />
                 </IconButton>
               ))}
@@ -96,18 +103,24 @@ export default function MainFooter() {
                     <Typography component="p" variant="overline">
                       {headline}
                     </Typography>
-                    {children.map((link) => (
-                      <Link
-                        to={link.href}
-                        key={link.name}
-                        color="inherit"
-                        variant="body2"
-                        component={RouterLink}
-                        sx={{ display: 'block' }}
-                      >
-                        {link.name}
-                      </Link>
-                    ))}
+                    {children.map((link) =>
+                      link.href ? (
+                        <Link
+                          to={link.href}
+                          key={link.name}
+                          color="inherit"
+                          variant="body2"
+                          component={RouterLink}
+                          sx={{ display: 'block' }}
+                        >
+                          {link.name}
+                        </Link>
+                      ) : (
+                        <Typography key={link.name} component="p" variant="body2" sx={{ display: 'block' }}>
+                          {link.name}
+                        </Typography>
+                      )
+                    )}
                   </Stack>
                 );
               })}
@@ -125,7 +138,7 @@ export default function MainFooter() {
             textAlign: { xs: 'center', md: 'left' }
           }}
         >
-          © 2021. All rights reserved
+          &copy; 2021 HK Mobile. All rights reserved
         </Typography>
       </Container>
     </RootStyle>

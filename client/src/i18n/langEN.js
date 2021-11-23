@@ -5,6 +5,7 @@ export default {
     'rows-per-page': 'Rows per page',
     'small-padding': 'Small padding',
     'filter-list': 'Filter list',
+    order: 'Order',
     create: 'Create',
     save: 'Save',
     cancel: 'Cancel',
