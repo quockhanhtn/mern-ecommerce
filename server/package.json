@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon ./src/index.js --trace-warnings --unhandled-rejections=strict",
     "start": "node ./src/index.js",
-    "test": "mocha run-test.js"
+    "insert-data": "nodemon ./tool/insert-data.js"
   },
   "contributors": [
     {

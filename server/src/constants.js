@@ -8,6 +8,11 @@ export const USER = {
     ADMIN: 'admin',
     STAFF: 'staff',
     CUSTOMER: 'customer'
+  },
+  STATUS: {
+    ACTIVE: 'active',
+    INACTIVE: 'inactive',
+    LOCKED: 'locked'
   }
 }
 

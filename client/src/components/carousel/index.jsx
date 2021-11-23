@@ -6,3 +6,4 @@ export { default as CarouselBasic3 } from './CarouselBasic3';
 export { default as CarouselBasic4 } from './CarouselBasic4';
 export { default as CarouselCenterMode } from './CarouselCenterMode';
 export { default as CarouselThumbnail } from './CarouselThumbnail';
+export { default as CarouselMiniList } from './CarouselMiniList';

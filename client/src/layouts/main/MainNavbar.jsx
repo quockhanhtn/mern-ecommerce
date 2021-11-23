@@ -1,4 +1,4 @@
-import { NavLink as RouterLink, useLocation } from 'react-router-dom';
+import { NavLink as RouterLink } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import cart24Regular from '@iconify/icons-fluent/cart-24-regular';
 import history24Filled from '@iconify/icons-fluent/history-24-filled';

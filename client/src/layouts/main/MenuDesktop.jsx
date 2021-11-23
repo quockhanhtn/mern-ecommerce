@@ -7,18 +7,7 @@ import arrowIosUpwardFill from '@iconify/icons-eva/arrow-ios-upward-fill';
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import {
-  Avatar,
-  Box,
-  Link,
-  Grid,
-  List,
-  Stack,
-  Popover,
-  ListItem,
-  ListSubheader,
-  CardActionArea
-} from '@material-ui/core';
+import { Box, Link, Grid, List, Stack, Popover, ListItem, ListSubheader, CardActionArea } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
 
@@ -206,10 +195,24 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
         alignItems: 'center',
         ...(isHome && { color: 'common.white' }),
         ...(isOffset && { color: 'text.primary' }),
-        ...(isActive && { border: '1px solid text.primary' })
+        ...(isActive && { color: 'common.white' })
       }}
     >
-      {image && <Avatar src={image} sx={{ width: 22, height: 22, marginRight: 1 }} />}
+      {/* {image && <Avatar src={image} sx={{ width: 22, height: 22, marginRight: 1 }} />} */}
+      {image && (
+        <Box
+          component="span"
+          sx={{
+            width: 24,
+            height: 24,
+            marginRight: 1,
+            mask: `url(${image}) no-repeat center / contain`,
+            WebkitMask: `url(${image}) no-repeat center / contain`,
+            bgcolor: 'text.primary',
+            ...(isActive && { bgcolor: 'common.white' })
+          }}
+        />
+      )}
       {title}
     </LinkStyle>
   );

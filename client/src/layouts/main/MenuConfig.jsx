@@ -16,7 +16,8 @@ const menuConfig = [
     title: 'Home',
     path: '/',
     icon: <Icon icon={homeFill} {...ICON_SIZE} />,
-    image: 'https://cdn2.iconfinder.com/data/icons/font-awesome/1792/phone-512.png'
+    image:
+      'https://download.services.iconscout.com/download?name=category&download=1&url=https%3A%2F%2Fd1b1fjiwh8olf2.cloudfront.net%2Ficon%2Ffree%2Fpng-512%2F2036097.png%3Ftoken%3DeyJhbGciOiJoczI1NiIsImtpZCI6ImRlZmF1bHQifQ__.eyJpc3MiOiJkMWIxZmppd2g4b2xmMi5jbG91ZGZyb250Lm5ldCIsImV4cCI6MTYzNzc5ODQwMCwicSI6bnVsbCwiaWF0IjoxNjM3NTcwNzIxfQ__.59fdf37c8f35d473adfed62575285e0ab88350964e25ed1bca56b0985a68376e&width=512&height=512'
   },
   { title: 'Dashboard', path: PATH_DASHBOARD.root, icon: <Icon icon={fileFill} {...ICON_SIZE} /> },
   {

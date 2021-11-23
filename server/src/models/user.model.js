@@ -49,7 +49,7 @@ const userSchema = mongoose.Schema(
     /*
      * Username regex validation explain
      * Reference https://stackoverflow.com/a/12019115
-     * ^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
+     * ^(?=.{5,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
      * └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
      *       │         │         │            │           no _ or . at the end
      *       │         │         │            │
@@ -59,11 +59,11 @@ const userSchema = mongoose.Schema(
      *       │         │
      *       │         no _ or . at the beginning
      *       │
-     *       username is 8-20 characters long
+     *       username is 5-20 characters long
     */
     username: {
       type: String,
-      match: [/^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/, 'Please fill a valid username'],
+      match: [/^(?=.{5,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/, 'Please fill a valid username'],
       trim: true,
       required: false,
       default: ''
@@ -78,7 +78,12 @@ const userSchema = mongoose.Schema(
     },
 
     addresses: { type: Array, required: false },
-    status: { type: Boolean, trim: true, required: false, default: false },
+    status: {
+      type: String,
+      enum: Object.values(constants.USER.STATUS),
+      default: constants.USER.STATUS.INACTIVE,
+      required: true
+    },
 
     avatar: { type: String, trim: true, required: false },
   },

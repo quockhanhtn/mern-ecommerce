@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useState, useRef } from 'react';
 // material
 import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Card, Paper, Button, Typography, CardContent } from '@material-ui/core';
+import { Box, Card, Paper, Typography, CardContent } from '@material-ui/core';
 //
 import { varFadeInRight, MotionContainer } from '../animate';
 import { CarouselControlsArrowsIndex } from './controls';
@@ -21,17 +21,20 @@ const CarouselImgStyle = styled('img')({
 
 // ----------------------------------------------------------------------
 
-CarouselItem.propTypes = {
-  item: PropTypes.object,
-  isActive: PropTypes.bool
-};
+CarouselItem.propTypes = { item: PropTypes.object, isActive: PropTypes.bool };
 
 function CarouselItem({ item, isActive }) {
   const theme = useTheme();
-  const { image, title } = item;
+  const { image, title, link } = item;
+
+  const handleOnClick = () => {
+    if (link) {
+      window.location.href = link;
+    }
+  };
 
   return (
-    <Paper sx={{ position: 'relative', paddingTop: { xs: '100%', md: '50%' } }}>
+    <Paper sx={{ position: 'relative', paddingTop: { xs: '100%', md: '50%' } }} onClick={handleOnClick}>
       <CarouselImgStyle alt={title} src={image} />
       <Box
         sx={{
@@ -59,11 +62,11 @@ function CarouselItem({ item, isActive }) {
               {item.description}
             </Typography>
           </motion.div>
-          <motion.div variants={varFadeInRight}>
+          {/* <motion.div variants={varFadeInRight}>
             <Button variant="contained" sx={{ mt: 3 }}>
               View More
             </Button>
-          </motion.div>
+          </motion.div> */}
         </MotionContainer>
       </CardContent>
     </Paper>
@@ -73,19 +76,19 @@ function CarouselItem({ item, isActive }) {
 CarouselAnimation.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      _id: PropTypes.object,
+      image: PropTypes.string,
       title: PropTypes.string,
       description: PropTypes.string,
-      image: PropTypes.string
+      link: PropTypes.string
     })
-  ).isRequired
+  ).isRequired,
+  otherProps: PropTypes.object
 };
 
-export default function CarouselAnimation({ items }) {
+export default function CarouselAnimation({ items, otherProps }) {
   const theme = useTheme();
   const carouselRef = useRef();
-  // const [currentIndex, setCurrentIndex] = useState(theme.direction === 'rtl' ? items.length - 1 : 0);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(theme.direction === 'rtl' ? items.length - 1 : 0);
 
   const settings = {
     speed: 800,
@@ -95,7 +98,8 @@ export default function CarouselAnimation({ items }) {
     slidesToShow: 1,
     slidesToScroll: 1,
     rtl: Boolean(theme.direction === 'rtl'),
-    beforeChange: (current, next) => setCurrentIndex(next)
+    beforeChange: (current, next) => setCurrentIndex(next),
+    ...otherProps
   };
 
   const handlePrevious = () => {
@@ -106,11 +110,15 @@ export default function CarouselAnimation({ items }) {
     carouselRef.current.slickNext();
   };
 
+  if (!items || items.length === 0) {
+    return <></>;
+  }
+
   return (
     <Card>
       <Slider ref={carouselRef} {...settings}>
         {items.map((item, index) => (
-          <CarouselItem key={item._id} item={item} isActive={index === currentIndex} />
+          <CarouselItem key={index} item={item} isActive={index === currentIndex} />
         ))}
       </Slider>
 
