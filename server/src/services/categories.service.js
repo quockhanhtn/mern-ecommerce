@@ -14,7 +14,7 @@ export default {
 };
 
 const SELECTED_FIELDS =
-  '_id slug name desc isHide image parent children createdAt updatedAt';
+  '_id slug order name desc isHide image parent children createdAt updatedAt';
 // const POPULATE_OPTS = [
 //   {
 //     path: 'image',
@@ -31,7 +31,7 @@ async function getAll() {
   return await Category.find({ parent: null })
     .select(SELECTED_FIELDS)
     // .populate(POPULATE_OPTS)
-    .sort({ createdAt: -1 })
+    .sort({ order: 1 })
     .lean()
     .exec();
 }

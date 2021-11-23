@@ -20,8 +20,8 @@ POST {{BASE_URL}}/{{RESOURCE}}/login
 content-type: application/json
 
 {
-  "username": "sssssss@nf.com",
-  "password": "hello123"
+  "username": "admin",
+  "password": "12"
 }
 
 ###

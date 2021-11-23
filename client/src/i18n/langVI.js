@@ -5,6 +5,7 @@ export default {
     'search-btn': 'Tìm',
     'rows-per-page': 'Số hàng trên trang',
     'small-padding': 'Thu gọn khoảng cách',
+    order: 'Thứ tự',
     create: 'Thêm',
     save: 'Lưu',
     cancel: 'Hủy',

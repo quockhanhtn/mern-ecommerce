@@ -12,7 +12,7 @@ import MainFooter from './MainFooter';
 // ----------------------------------------------------------------------
 
 const APP_BAR_MOBILE = 64;
-const APP_BAR_DESKTOP = 92;
+const APP_BAR_DESKTOP = 88;
 
 const RootStyle = styled('div')({
   display: 'flex',
@@ -27,24 +27,25 @@ const MainStyle = styled('div')(({ theme }) => ({
   paddingTop: APP_BAR_MOBILE + 24,
   paddingBottom: theme.spacing(10),
   [theme.breakpoints.up('lg')]: {
-    paddingTop: APP_BAR_DESKTOP + 24,
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
+    paddingTop: APP_BAR_DESKTOP + 24
+    // paddingLeft: theme.spacing(2),
+    // paddingRight: theme.spacing(2)
   }
 }));
 
 // ----------------------------------------------------------------------
 
 export default function MainLayout() {
-  const { pathname } = useLocation();
-  const isHome = pathname === '/';
+  // const { pathname } = useLocation();
+  // const isHome = pathname === '/';
 
   return (
     <RootStyle>
       <MainNavbar />
       <MainStyle>
         <Outlet />
-        {!isHome ? (
+        <MainFooter />
+        {/* {!isHome ? (
           <MainFooter />
         ) : (
           <Box
@@ -67,7 +68,7 @@ export default function MainLayout() {
               </Typography>
             </Container>
           </Box>
-        )}
+        )} */}
       </MainStyle>
     </RootStyle>
   );

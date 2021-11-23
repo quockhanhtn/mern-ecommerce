@@ -1,4 +1,3 @@
-import faker from 'faker';
 import { useRef } from 'react';
 import Slider from 'react-slick';
 import PropTypes from 'prop-types';
@@ -8,21 +7,10 @@ import arrowForwardFill from '@iconify/icons-eva/arrow-forward-fill';
 // material
 import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Paper, Link, Typography, CardContent } from '@material-ui/core';
-// utils
-import { mockImgFeed } from '../../utils/mockImages';
 //
 import { CarouselControlsArrowsBasic2 } from './controls';
 
 // ----------------------------------------------------------------------
-
-const CAROUSELS = [...Array(5)].map((_, index) => {
-  const setIndex = index + 1;
-  return {
-    title: faker.name.title(),
-    description: faker.lorem.paragraphs(),
-    image: mockImgFeed(setIndex)
-  };
-});
 
 const RootStyle = styled('div')(({ theme }) => ({
   overflow: 'hidden',
@@ -59,9 +47,7 @@ const CarouselImgStyle = styled('img')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-CarouselItem.propTypes = {
-  item: PropTypes.object
-};
+CarouselItem.propTypes = { item: PropTypes.object };
 
 function CarouselItem({ item }) {
   const { image, title } = item;
@@ -117,13 +103,26 @@ function CarouselItem({ item }) {
   );
 }
 
-export default function CarouselCenterMode() {
+CarouselCenterMode.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      image: PropTypes.string,
+      title: PropTypes.string,
+      description: PropTypes.string,
+      link: PropTypes.string
+    })
+  ).isRequired,
+  otherProps: PropTypes.object
+};
+
+export default function CarouselCenterMode({ items }) {
   const carouselRef = useRef();
   const theme = useTheme();
 
   const settings = {
     speed: 500,
     slidesToShow: 3,
+    rows: 2,
     centerMode: true,
     centerPadding: '60px',
     rtl: Boolean(theme.direction === 'rtl'),
@@ -151,10 +150,14 @@ export default function CarouselCenterMode() {
     carouselRef.current.slickNext();
   };
 
+  if (!items || items.length === 0) {
+    return <></>;
+  }
+
   return (
     <RootStyle>
       <Slider ref={carouselRef} {...settings}>
-        {CAROUSELS.map((item) => (
+        {items.map((item) => (
           <CarouselItem key={item.title} item={item} />
         ))}
       </Slider>

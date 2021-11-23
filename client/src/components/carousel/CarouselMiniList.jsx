@@ -6,17 +6,25 @@ import { NavLink as RouterLink } from 'react-router-dom';
 import { useTheme } from '@material-ui/core/styles';
 import { Box, Link, Typography } from '@material-ui/core';
 //
-import { CarouselControlsPaging1, CarouselControlsArrowsBasic2 } from '../carousel';
+import { CarouselControlsPaging1, CarouselControlsArrowsBasic2 } from './controls';
 
 // ----------------------------------------------------------------------
 
-MegaMenuCarousel.propTypes = {
+CarouselBrandList.propTypes = {
+  items: PropTypes.array,
   numberShow: PropTypes.number,
-  products: PropTypes.array,
+  numberPerRow: PropTypes.number,
   sx: PropTypes.object
 };
 
-export default function MegaMenuCarousel({ products, numberShow, sx }) {
+CarouselBrandList.defaultProps = {
+  items: [],
+  numberShow: 5,
+  numberPerRow: 1,
+  sx: {}
+};
+
+export default function CarouselBrandList({ items, numberPerRow, numberShow, sx }) {
   const theme = useTheme();
   const carouselRef = useRef();
 
@@ -24,8 +32,10 @@ export default function MegaMenuCarousel({ products, numberShow, sx }) {
     speed: 500,
     dots: true,
     arrows: false,
+    slidesPerRow: numberPerRow,
     slidesToShow: numberShow,
     slidesToScroll: numberShow,
+    adaptiveHeight: true,
     rtl: Boolean(theme.direction === 'rtl'),
     ...CarouselControlsPaging1({
       color: 'primary.main',
@@ -50,13 +60,13 @@ export default function MegaMenuCarousel({ products, numberShow, sx }) {
   return (
     <Box sx={{ position: 'relative', ...sx }}>
       <Slider ref={carouselRef} {...settings}>
-        {products.map((product) => (
-          <Box key={product.name} sx={{ px: 1, textAlign: 'center' }}>
+        {items.map((item, index) => (
+          <Box key={index} sx={{ px: 1, textAlign: 'center' }}>
             <Link
               component={RouterLink}
               color="inherit"
               underline="none"
-              to={product.path}
+              to={item.path}
               sx={{
                 display: 'block',
                 transition: (theme) => theme.transitions.create('all'),
@@ -66,7 +76,7 @@ export default function MegaMenuCarousel({ products, numberShow, sx }) {
               <Box sx={{ mb: 1, position: 'relative', pt: '100%' }}>
                 <Box
                   component="img"
-                  src={product.image}
+                  src={item.image}
                   sx={{
                     top: 0,
                     width: '100%',
@@ -80,7 +90,7 @@ export default function MegaMenuCarousel({ products, numberShow, sx }) {
               <Typography
                 variant="subtitle2"
                 sx={{
-                  height: 40,
+                  // height: 40,
                   fontSize: 12,
                   overflow: 'hidden',
                   WebkitLineClamp: 2,
@@ -88,7 +98,7 @@ export default function MegaMenuCarousel({ products, numberShow, sx }) {
                   WebkitBoxOrient: 'vertical'
                 }}
               >
-                {product.name}
+                {item.name || item.title}
               </Typography>
             </Link>
           </Box>
@@ -98,11 +108,8 @@ export default function MegaMenuCarousel({ products, numberShow, sx }) {
       <CarouselControlsArrowsBasic2
         onNext={handleNext}
         onPrevious={handlePrevious}
-        className="controlsArrows"
-        sx={{
-          mt: 7,
-          '& .MuiIconButton-root': { width: 24, height: 24 }
-        }}
+        // className="controlsArrows"
+        sx={{ '& .MuiIconButton-root': { width: 24, height: 24 } }}
       />
     </Box>
   );

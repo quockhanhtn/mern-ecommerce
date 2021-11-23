@@ -4,7 +4,6 @@ import { formatImageUrl } from '../utils/format-utils.js';
 
 export const getInfo = async (req, res, next) => {
   try {
-    console.log('getInfo');
     const user = await userService.getOneById(req.user._id, '-addresses -password');
     if (user) {
       resUtils.status200(res, `Get info successfully!`, user);
