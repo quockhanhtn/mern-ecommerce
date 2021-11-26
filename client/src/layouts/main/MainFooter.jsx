@@ -33,7 +33,7 @@ export default function MainFooter() {
 
   const LINKS = [
     {
-      headline: 'Minimal',
+      headline: 'HK Mobile',
       children: [
         { name: 'About us', href: '#' },
         { name: 'Contact us', href: '#' },
@@ -50,10 +50,10 @@ export default function MainFooter() {
     {
       headline: 'Tổng đài hỗ trợ (Miễn phí gọi)',
       children: [
-        { name: 'Gọi mua: 1800.1060 (7:30 - 22:00)' },
-        { name: 'Kỹ thuật: 1800.1763 (7:30 - 22:00)' },
-        { name: 'Khiếu nại: 1800.1062 (8:00 - 21:30)' },
-        { name: 'Bảo hành: 1800.1064 (8:00 - 21:00)' }
+        { name: 'Gọi mua: 1800.xxxx (7:30 - 22:00)' },
+        { name: 'Kỹ thuật: 1800.xyxy (7:30 - 22:00)' },
+        { name: 'Khiếu nại: 1800.xzxz (8:00 - 21:30)' },
+        { name: 'Bảo hành: 1800.xyzt (8:00 - 21:00)' }
       ]
     }
   ];

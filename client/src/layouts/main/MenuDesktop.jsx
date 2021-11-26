@@ -206,10 +206,14 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
             width: 24,
             height: 24,
             marginRight: 1,
-            mask: `url(${image}) no-repeat center / contain`,
-            WebkitMask: `url(${image}) no-repeat center / contain`,
-            bgcolor: 'text.primary',
-            ...(isActive && { bgcolor: 'common.white' })
+            backgroundImage: `url(${image})`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+            // mask: `url(${image}) no-repeat center / contain`,
+            // WebkitMask: `url(${image}) no-repeat center / contain`,
+            // bgcolor: 'text.primary',
+            // ...(isActive && { bgcolor: 'common.white' })
           }}
         />
       )}

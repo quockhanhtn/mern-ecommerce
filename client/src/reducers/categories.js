@@ -1,6 +1,6 @@
 import * as actionTypes from '../constants/actionTypes';
 
-const initialState = { isLoading: true, hasError: false, list: [] };
+const initialState = { isLoading: true, hasError: false, list: [], listSimple: [] };
 
 const categoriesReducer = (state = initialState, action) => {
   const { type, payload } = action;
@@ -17,6 +17,9 @@ const categoriesReducer = (state = initialState, action) => {
 
     case actionTypes.CATEGORY.GET_ALL:
       return { ...state, list: payload.data, hasError: false };
+
+    case actionTypes.CATEGORY.GET_ALL_SIMPLE:
+      return { ...state, listSimple: payload.data, hasError: false };
 
     case actionTypes.CATEGORY.GET_ONE:
       return { ...state, item: payload, hasError: false };

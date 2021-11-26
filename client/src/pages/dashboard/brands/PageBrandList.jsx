@@ -37,9 +37,9 @@ import SearchNotFound from '../../../components/SearchNotFound';
 import EmptyCard from '../../../components/EmptyCard';
 // ----------------------------------------------------------------------
 const ThumbImgStyle = styled('img')(({ theme }) => ({
-  width: 64,
+  width: 150,
   height: 64,
-  objectFit: 'cover',
+  objectFit: 'contain',
   margin: theme.spacing(0, 2, 0, 0),
   borderRadius: theme.shape.borderRadiusSm
 }));
@@ -66,37 +66,35 @@ export default function PageBrandList() {
   const tableHeads = [
     {
       id: 'name',
-      numeric: false,
+      align: 'center',
       disablePadding: true,
-      label: t('dashboard.brands.name')
+      label: `${t('dashboard.brands.name')}\t\t\t`
     },
     {
       id: 'country',
-      numeric: false,
       disablePadding: true,
       label: t('dashboard.brands.country')
     },
     {
       id: 'isHide',
-      numeric: false,
       disablePadding: false,
       label: t('dashboard.brands.status')
     },
     {
       id: 'createdAt',
-      numeric: true,
+      align: 'right',
       disablePadding: false,
       label: t('dashboard.created-at')
     },
     {
       id: 'updatedAt',
-      numeric: true,
+      align: 'right',
       disablePadding: false,
       label: t('dashboard.updated-at')
     },
     {
       id: 'action',
-      numeric: false,
+      align: 'right',
       disablePadding: false
     }
   ];

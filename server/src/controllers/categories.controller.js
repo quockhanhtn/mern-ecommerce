@@ -24,7 +24,8 @@ const formatCategory = (category, req) => {
 
 export const getCategories = async (req, res, next) => {
   try {
-    let categories = await categoryService.getAll();
+    const { fields } = req.query;
+    let categories = await categoryService.getAll(fields);
     categories = categories.map((category) => formatCategory(category, req));
 
     if (categories && categories.length > 0) {
@@ -55,7 +56,10 @@ export const getCategory = async (req, res, next) => {
 
 export const createCategory = async (req, res, next) => {
   try {
-    const newCategory = await categoryService.create(req.body);
+    const newCategory = await categoryService.create(
+      req.body,
+      req.user._id
+    );
     resUtils.status201(
       res,
       `Create NEW category '${newCategory.name}' successfully!`,
@@ -68,7 +72,11 @@ export const createCategory = async (req, res, next) => {
 export const updateCategory = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    const updatedCategory = await categoryService.update(identity, req.body);
+    const updatedCategory = await categoryService.update(
+      identity,
+      req.body,
+      req.user._id
+    );
     if (updatedCategory) {
       resUtils.status200(
         res,

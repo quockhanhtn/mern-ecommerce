@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import sanitizeHtml from 'sanitize-html';
 import slugGenerator from 'mongoose-slug-updater';
 import removeMultiSpace from './plugins/remove-multi-space.js';
 
@@ -31,7 +32,7 @@ const productSchema = mongoose.Schema({
   code: { type: String, trim: true, required: true },
   slug: { type: String, slug: "name", slugPaddingSize: 2, unique: true },
 
-  desc: { type: String, trim: true, required: false },
+  desc: { type: String, required: false },
   video: { type: String, trim: true, required: false },
 
   // product specification (ex: color, size, weight, ...)
@@ -81,6 +82,15 @@ productVariantSchema.plugin(slugGenerator);
 productVariantSchema.plugin(removeMultiSpace);
 productSchema.plugin(slugGenerator);
 productSchema.plugin(removeMultiSpace);
+productSchema.pre('validate', function (next) {
+  if (!this.isModified('desc')) {
+    return next();
+  }
+
+  // sanitize html to prevent XSS
+  this.desc = sanitizeHtml(this.desc);
+  next();
+});
 
 const productModel = mongoose.model('Product', productSchema);
 export default productModel;

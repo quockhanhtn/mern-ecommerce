@@ -3,7 +3,16 @@ import slugGenerator from 'mongoose-slug-updater';
 import removeMultiSpace from './plugins/remove-multi-space.js';
 
 const autoPopulateChildren = function (next) {
-  this.populate('children')
+  const populateOpts = [
+    {
+      path: 'children',
+      select: this._fields,
+      model: 'Category'
+    }
+  ];
+
+  this.populate(populateOpts)
+  // this.populate('children')
   // .populate({
   //   path: 'image',
   //   select: 'dirPath ext original hasSmall hasMedium hasLarge',

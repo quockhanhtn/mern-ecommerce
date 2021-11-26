@@ -1,24 +1,15 @@
+import { useEffect } from 'react';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 // components
-import {
-  Box,
-  Container,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  Link,
-  Paper,
-  Typography,
-  Stack
-} from '@material-ui/core';
-// mock data
-import faker from 'faker';
-import { mockImgFeed } from '../../utils/mockImages';
+import { Container, Card, CardContent, CardHeader, Grid } from '@material-ui/core';
+// redux
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllCategories } from '../../actions/categories';
+import { getAllBrands } from '../../actions/brands';
+// components
 import Page from '../../components/Page';
-import { CarouselAnimation, CarouselMiniList, CarouselCenterMode } from '../../components/carousel';
+import { CarouselAnimation, CarouselMiniList } from '../../components/carousel';
 import ProductList from './home/ProductList';
 // ----------------------------------------------------------------------
 
@@ -40,12 +31,19 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function HomePage() {
   const discountList = discountMockData;
-  const brandsList = brandsMockData.map((x) => ({
+  const dispatch = useDispatch();
+  const { listSimple: brandsListRaw, isLoading: isLoadingBrand } = useSelector((state) => state.brand);
+  const brandsList = brandsListRaw.map((x) => ({
     title: x.name,
     image: x.image,
     description: x.description,
     path: `/b/${x.slug}`
   }));
+
+  useEffect(() => {
+    dispatch(getAllCategories(true));
+    dispatch(getAllBrands(true));
+  }, [dispatch]);
 
   return (
     <RootStyle title="Home page" id="move_top">
@@ -62,7 +60,36 @@ export default function HomePage() {
               <Card>
                 <CardHeader title="Brand list" />
                 <CardContent>
-                  <CarouselMiniList items={brandsList} numberPerRow={2} numberShow={2} />
+                  <CarouselMiniList
+                    items={brandsList}
+                    numberPerRow={2}
+                    numberShow={2}
+                    isLoading={isLoadingBrand}
+                    width={200}
+                    height={60}
+                    isShowTitle={false}
+                    imgObjectFit="contain"
+                    otherSlickSetting={{
+                      infinite: true,
+                      swipeToSlide: true,
+                      slidesPerRow: 2,
+                      rows: 2,
+                      responsive: [
+                        {
+                          breakpoint: 1024,
+                          settings: { slidesToShow: 3, slidesToScroll: 3, infinite: true, dots: true }
+                        },
+                        {
+                          breakpoint: 600,
+                          settings: { slidesToShow: 2, slidesToScroll: 2, initialSlide: 2 }
+                        },
+                        {
+                          breakpoint: 480,
+                          settings: { slidesToShow: 1, slidesToScroll: 1 }
+                        }
+                      ]
+                    }}
+                  />
                 </CardContent>
               </Card>
             </Grid>
@@ -1304,129 +1331,5 @@ const categoryMockData = [
     createdAt: '2021-11-23T04:39:59.698Z',
     updatedAt: '2021-11-23T04:39:59.698Z',
     slug: 'phu-kien-khac'
-  }
-];
-
-const brandsMockData = [
-  {
-    _id: 'b00000000000000000000011',
-    name: 'Canon',
-    desc: 'Canon Inc. là một tập đoàn đa quốc gia của Nhật Bản có trụ sở chính tại Ōta, Tokyo, Nhật Bản, chuyên về các sản phẩm quang học, hình ảnh và công nghiệp, chẳng hạn như ống kính, máy ảnh, thiết bị y tế, máy quét, máy in và thiết bị sản xuất chất bán dẫn.',
-    country: 'Nhật Bản',
-    image: 'http://localhost:3001/public/uploads/brands/canon.png',
-    isHide: false,
-    createdAt: '2021-11-23T04:39:59.751Z',
-    updatedAt: '2021-11-23T04:39:59.751Z',
-    slug: 'canon'
-  },
-  {
-    _id: 'b00000000000000000000010',
-    name: 'Nikon',
-    desc: 'Nikon Corporation, còn được gọi là Nikon, là một tập đoàn đa quốc gia của Nhật Bản có trụ sở chính tại Tokyo, Nhật Bản, chuyên về quang học và các sản phẩm hình ảnh',
-    country: 'Nhật Bản',
-    image: 'http://localhost:3001/public/uploads/brands/nikon.png',
-    isHide: false,
-    createdAt: '2021-11-23T04:39:59.748Z',
-    updatedAt: '2021-11-23T04:39:59.748Z',
-    slug: 'nikon'
-  },
-  {
-    _id: 'b00000000000000000000009',
-    name: 'MSI',
-    desc: 'Micro-Star International Co., Ltd là một tập đoàn công nghệ thông tin đa quốc gia của Đài Loan có trụ sở chính tại thành phố Tân Đài Bắc, Đài Loan.',
-    country: 'Đài Loan',
-    image: 'http://localhost:3001/public/uploads/brands/msi.png',
-    isHide: false,
-    createdAt: '2021-11-23T04:39:59.744Z',
-    updatedAt: '2021-11-23T04:39:59.744Z',
-    slug: 'msi'
-  },
-  {
-    _id: 'b00000000000000000000008',
-    name: 'Dell',
-    desc: 'Dell là một công ty công nghệ máy tính đa quốc gia của Mỹ chuyên phát triển, bán, sửa chữa và hỗ trợ máy tính cũng như các sản phẩm và dịch vụ liên quan và thuộc sở hữu của công ty mẹ Dell Technologies.',
-    country: 'Mỹ',
-    image: 'http://localhost:3001/public/uploads/brands/dell.png',
-    isHide: false,
-    createdAt: '2021-11-23T04:39:59.735Z',
-    updatedAt: '2021-11-23T04:39:59.735Z',
-    slug: 'dell'
-  },
-  {
-    _id: 'b00000000000000000000007',
-    name: 'ASUS',
-    desc: 'ASUS đam mê công nghệ và được thúc đẩy bởi sự đổi mới. Chúng tôi mơ ước, chúng tôi dám và chúng tôi cố gắng để tạo ra một cuộc sống kỹ thuật số dễ dàng và thú vị cho tất cả mọi người. Chúng tôi luôn tìm kiếm những ý tưởng và trải nghiệm đáng kinh ngạc, và chúng tôi mong muốn cung cấp những điều đó trong mọi việc chúng tôi làm.',
-    country: 'Đài Loan',
-    image: 'http://localhost:3001/public/uploads/brands/asus.png',
-    isHide: false,
-    createdAt: '2021-11-23T04:39:59.732Z',
-    updatedAt: '2021-11-23T04:39:59.732Z',
-    slug: 'asus'
-  },
-  {
-    _id: 'b00000000000000000000006',
-    name: 'Sony',
-    desc: 'Sony là một trong những thương hiệu toàn cầu nổi tiếng nhất về điện tử tiêu dùng nhờ vào những sáng tạo đột phá mang tính cách mạng và chất lượng sản phẩm. Thành công của Sony tại thị trường Việt Nam là bởi thương hiệu Sony luôn thể hiện được bản sắc riêng một cách mạnh mẽ và ấn tượng, kết hợp giữa chất lượng sản phẩm-công nghệ hàng đầu-kiểu dáng thiết kế độc đáo và cách xây dựng thương hiệu sáng tạo-tôn trọng văn hóa bản địa tiếp tục nâng cao tinh thần sáng tạo của mình để luôn tạo ra sản phẩm chất lượng cho người dùng.',
-    country: 'Nhật Bản',
-    image: 'http://localhost:3001/public/uploads/brands/sony.png',
-    isHide: false,
-    createdAt: '2021-11-23T04:39:59.729Z',
-    updatedAt: '2021-11-23T04:39:59.729Z',
-    slug: 'sony'
-  },
-  {
-    _id: 'b00000000000000000000005',
-    name: 'Philips',
-    desc: 'Koninklijke Philips N.V. là một tập đoàn đa quốc gia của Hà Lan được thành lập tại Eindhoven. Kể từ năm 1997, nó chủ yếu có trụ sở chính ở Amsterdam, mặc dù trụ sở chính của Benelux vẫn ở Eindhoven',
-    country: 'Hà Lan',
-    image: 'http://localhost:3001/public/uploads/brands/philips.png',
-    isHide: false,
-    createdAt: '2021-11-23T04:39:59.726Z',
-    updatedAt: '2021-11-23T04:39:59.726Z',
-    slug: 'philips'
-  },
-  {
-    _id: 'b00000000000000000000004',
-    name: 'LG Electronics',
-    desc: 'LG Electronics Inc. là một công ty điện tử đa quốc gia của Hàn Quốc có trụ sở chính tại Yeouido-dong, Seoul, Hàn Quốc. LG Electronics là một phần của tập đoàn chaebol lớn thứ tư ở Hàn Quốc và doanh thu toàn cầu của nó đạt 55,91 tỷ USD vào năm 2014.',
-    country: 'Hàn Quốc',
-    image: 'http://localhost:3001/public/uploads/brands/lg-electronics.png',
-    isHide: false,
-    createdAt: '2021-11-23T04:39:59.720Z',
-    updatedAt: '2021-11-23T04:39:59.720Z',
-    slug: 'lg-electronics'
-  },
-  {
-    _id: 'b00000000000000000000003',
-    name: 'Apple',
-    desc: 'Apple Inc. là một công ty công nghệ đa quốc gia của Mỹ có trụ sở chính tại Cupertino, California, chuyên thiết kế, phát triển và bán thiết bị điện tử tiêu dùng, phần mềm máy tính và các dịch vụ trực tuyến',
-    country: 'Mỹ',
-    image: 'http://localhost:3001/public/uploads/brands/apple.png',
-    isHide: false,
-    createdAt: '2021-11-23T04:39:59.712Z',
-    updatedAt: '2021-11-23T04:39:59.712Z',
-    slug: 'apple'
-  },
-  {
-    _id: 'b00000000000000000000002',
-    name: 'Samsung',
-    desc: 'Thương hiệu chiếm lĩnh thị trường smartphone Việt. Samsung là tập đoàn đa quốc gia có trụ sở được đặt tại thủ đô Seoul, Hàn Quốc',
-    country: 'Hàn Quốc',
-    image: 'http://localhost:3001/public/uploads/brands/samsung.png',
-    isHide: false,
-    createdAt: '2021-11-23T04:39:59.709Z',
-    updatedAt: '2021-11-23T04:39:59.709Z',
-    slug: 'samsung'
-  },
-  {
-    _id: 'b00000000000000000000001',
-    name: 'Vsmart',
-    desc: 'Vsmart là thương hiệu mang tính công nghệ và trí tuệ Việt, mang tinh thần của một Việt Nam mới mẻ, hiện đại, là nền tảng hội tụ kết nối trí tuệ, đồng thời là đại diện của Vingroup trong lộ trình toàn cầu hóa, vươn ra thế giới.',
-    country: 'Việt Nam',
-    image: 'http://localhost:3001/public/uploads/brands/vsmart.png',
-    isHide: false,
-    createdAt: '2021-11-23T04:39:59.704Z',
-    updatedAt: '2021-11-23T04:39:59.704Z',
-    slug: 'vsmart'
   }
 ];
