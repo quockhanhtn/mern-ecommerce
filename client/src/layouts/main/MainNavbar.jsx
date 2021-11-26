@@ -20,10 +20,10 @@ import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';
 import navConfig from './MenuConfig';
 import SearchBar from './SearchBar';
-import * as Helper from '../../helper/cartHelper';
+import useToCart from '../../hooks/useToCart';
 
 // ----------------------------------------------------------------------
-
+const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 110;
 
@@ -81,17 +81,18 @@ const ButtonIcon = ({ text, icon, color, ...other }) => (
 export default function MainNavbar() {
   const isOffset = useOffSetTop(100);
   const dispatch = useDispatch();
+  const { cart, quantityInCart, getCart } = useToCart();
   const { listSimple: categoryListRaw, isLoading } = useSelector((state) => state.category);
-  const [quantityInCart, setQuantityInCart] = useState(Helper.getQuantityInCart());
 
   useEffect(() => {
     dispatch(getAllCategories(true));
   }, [dispatch]);
 
   useEffect(() => {
-    window.addEventListener('storage', () => {
-      const quantity = Helper.getQuantityInCart();
-      setQuantityInCart(quantity);
+    getCart().then(() => {
+      if (isDev) {
+        console.log('Get cart successfully');
+      }
     });
   }, []);
 

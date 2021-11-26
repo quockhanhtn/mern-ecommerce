@@ -8,10 +8,11 @@ import { useFormik, Form, FormikProvider, useField } from 'formik';
 import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Stack, Button, Rating, Divider, Typography, FormHelperText } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { MButton, MIconButton } from '../../@material-extend';
-import { fCurrency, fNumber, fShortenNumber } from '../../../utils/formatNumber';
-import * as Helper from '../../../helper/cartHelper';
+import { fNumber, fShortenNumber } from '../../../utils/formatNumber';
+import useToCart from '../../../hooks/useToCart';
 // --------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -73,7 +74,9 @@ const Incrementer = (props) => {
 
 export default function ProductDetailsSummary({ indexVariant, handleChangeIndexVariant }) {
   const theme = useTheme();
+  const { addToCart } = useToCart();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const { item: product } = useSelector((state) => state.product);
   const { _id, name, price, cover, views, variants, rates } = product;
@@ -118,7 +121,11 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
       skuVariant: product.variants[indexVariant].sku,
       quantity: values.quantity
     };
-    Helper.addProductToCartByLocalStorage(productInCart);
+    addToCart(productInCart).then(() => {
+      enqueueSnackbar('Add to cart successfully', {
+        variant: 'success'
+      });
+    });
   };
 
   return (

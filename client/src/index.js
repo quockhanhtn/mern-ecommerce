@@ -33,6 +33,7 @@ import store from './store';
 // contexts
 import { SettingsProvider } from './contexts/SettingsContext';
 import { AuthProvider } from './contexts/JWTContext';
+import { CartProvider } from './contexts/CartContext';
 //
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -47,9 +48,11 @@ ReactDOM.render(
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <SettingsProvider>
             <BrowserRouter>
-              <AuthProvider>
-                <App />
-              </AuthProvider>
+              <CartProvider>
+                <AuthProvider>
+                  <App />
+                </AuthProvider>
+              </CartProvider>
             </BrowserRouter>
           </SettingsProvider>
         </LocalizationProvider>

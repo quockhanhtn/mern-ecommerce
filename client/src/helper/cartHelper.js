@@ -11,10 +11,11 @@ export function addProductToCartByLocalStorage(productObject) {
   }
   const cart = JSON.stringify(cartJson);
   localStorage.setItem('cartLocalStorage', cart);
+  return cartJson;
 }
 
-export function getQuantityInCart() {
+export function getCart() {
   const cartLocalStorage = localStorage.getItem('cartLocalStorage');
   const cartJson = JSON.parse(cartLocalStorage) || [];
-  return cartJson.length || 0;
+  return cartJson;
 }
