@@ -3,14 +3,17 @@ import * as api from '../api';
 
 const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
-export const getAllCategories = () => async (dispatch) => {
+export const getAllCategories = (isSimple) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
 
-    const { data } = await api.getAllCategory();
+    const { data } = await api.getAllCategory(isSimple ? 'name slug image' : null);
     if (isDev) console.log('[actions][categories][getAll] result', data);
 
-    dispatch({ type: actionTypes.CATEGORY.GET_ALL, payload: data });
+    dispatch({
+      type: isSimple ? actionTypes.CATEGORY.GET_ALL_SIMPLE : actionTypes.CATEGORY.GET_ALL,
+      payload: data
+    });
     dispatch({ type: actionTypes.END_LOADING });
   } catch (e) {
     console.error('[actions][categories][getAll] error', e);
@@ -24,7 +27,7 @@ export const createCategory = (newCategory) => async (dispatch) => {
 
     if (isDev) console.log('[actions][categories][create] dataInput', newCategory);
     const { data } = await api.createCategory(newCategory);
-    if (isDev) console.log('[actions][categories][create] result', newCategory);
+    if (isDev) console.log('[actions][categories][create] result', data);
 
     dispatch({ type: actionTypes.CATEGORY.CREATE, payload: data });
     dispatch({ type: actionTypes.END_LOADING });

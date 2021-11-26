@@ -1,10 +1,15 @@
+import { useEffect } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
+// icon
 import { Icon } from '@iconify/react';
 import cart24Regular from '@iconify/icons-fluent/cart-24-regular';
 import history24Filled from '@iconify/icons-fluent/history-24-filled';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, IconButton, AppBar, Toolbar, Container } from '@material-ui/core';
+// redux
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllCategories } from '../../actions/categories';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 // components
@@ -74,6 +79,21 @@ const ButtonIcon = ({ text, icon, color, ...other }) => (
 
 export default function MainNavbar() {
   const isOffset = useOffSetTop(100);
+  const dispatch = useDispatch();
+  const { listSimple: categoryListRaw, isLoading } = useSelector((state) => state.category);
+
+  useEffect(() => {
+    dispatch(getAllCategories(true));
+  }, [dispatch]);
+
+  if (isLoading) return null;
+
+  const categoryList = categoryListRaw.map((item) => ({
+    title: item.name,
+    path: `/category/${item.slug}`,
+    image: item.image,
+    _id: item._id
+  }));
 
   return (
     <AppBar color="default" sx={{ boxShadow: 0 }}>
@@ -93,7 +113,7 @@ export default function MainNavbar() {
           <Box sx={{ flexGrow: 1 }} />
 
           <MHidden width="mdUp">
-            <MenuMobile isOffset={isOffset} isHome={false} navConfig={navConfig} />
+            <MenuMobile isOffset={isOffset} isHome={false} navConfig={categoryList} />
           </MHidden>
 
           <ButtonIcon text="Lịch sử đơn hàng" icon={history24Filled} color="inherit" href="/order-history" />
@@ -107,7 +127,7 @@ export default function MainNavbar() {
               maxWidth="lg"
               sx={{ display: 'flex', height: 44, alignItems: 'center', justifyContent: 'space-between' }}
             >
-              <MenuDesktop isOffset={isOffset} isHome={false} navConfig={navConfig} />
+              <MenuDesktop isOffset={isOffset} isHome={false} navConfig={categoryList} />
             </Container>
           </ColorBar>
         </MHidden>

@@ -8,11 +8,11 @@ const formatBrand = (brand, req) => {
 
 export const getBrands = async (req, res, next) => {
   try {
-    let brands = await brandService.getAll();
+    const { fields } = req.query;
+    let brands = await brandService.getAll(fields);
     brands = brands.map(brand => formatBrand(brand, req));
     if (brands && brands.length > 0) {
       resUtils.status200(res, 'Gets all brands successfully', brands);
-      
     } else {
       resUtils.status200(res, 'No brands found', []);
     }
@@ -35,7 +35,10 @@ export const getBrand = async (req, res, next) => {
 
 export const createBrand = async (req, res, next) => {
   try {
-    const newBrand = await brandService.create(req.body);
+    const newBrand = await brandService.create(
+      req.body,
+      req.user._id
+    );
     resUtils.status201(
       res,
       `Create NEW brand '${newBrand.name}' successfully!`,
@@ -48,7 +51,11 @@ export const createBrand = async (req, res, next) => {
 export const updateBrand = async (req, res, next) => {
   try {
     const { identity } = req.params;
-    const updateBrand = await brandService.update(identity, req.body);
+    const updateBrand = await brandService.update(
+      identity,
+      req.body,
+      req.user._id
+    );
     if (updateBrand) {
       resUtils.status200(
         res,

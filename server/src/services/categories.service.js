@@ -27,9 +27,13 @@ const SELECTED_FIELDS =
  *
  * @returns all categories
  */
-async function getAll() {
+async function getAll(fields = SELECTED_FIELDS) {
+  if (fields.indexOf(',') > -1) {
+    fields = fields.split(',').join(' ');
+  }
+
   return await Category.find({ parent: null })
-    .select(SELECTED_FIELDS)
+    .select(fields)
     // .populate(POPULATE_OPTS)
     .sort({ order: 1 })
     .lean()

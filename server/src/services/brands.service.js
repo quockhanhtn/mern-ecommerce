@@ -12,12 +12,19 @@ export default {
   remove
 };
 
+const SELECTED_FIELDS = '_id order slug name desc headQuarters country image isHide createdAt updatedAt';
+
 /**
  *
  * @returns all brands
  */
-async function getAll() {
+async function getAll(fields = SELECTED_FIELDS) {
+  if (fields.indexOf(',') > -1) {
+    fields = fields.split(',').join(' ');
+  }
+
   return await Brand.find()
+    .select(fields)
     .sort({ createdAt: -1 })
     .lean().exec();
 }
@@ -52,11 +59,19 @@ async function getId(identity) {
  * @returns
  */
 
-async function create(data) {
+async function create(data, createdBy = null) {
+  const order = await Brand.generateOrder();
   const brand = new Brand({
     _id: new mongoose.Types.ObjectId(),
+    order,
     ...data
   });
+
+  if (createdBy) {
+    category.createdBy = createdBy;
+    category.updatedBy = createdBy;
+  }
+
   return await brand.save();
 }
 
@@ -67,7 +82,8 @@ async function create(data) {
  * @returns
  */
 
-async function update(identity, updatedData) {
+async function update(identity, updatedData, updatedBy = null) {
+  if (updatedBy) { updatedData = updatedBy; }
   const currentBrand = await getOne(identity);
 
   const updatedBrand = await Brand.findByIdAndUpdate(currentBrand._id, updatedData, { new: true });

@@ -25,14 +25,14 @@ export const logout = (refreshToken) => API.post('/auth/logout', { refreshToken 
 export const getInfo = () => API.get('/me');
 
 // ----------------------------Category--------------------------------
-export const getAllCategory = () => API.get('/categories');
+export const getAllCategory = (fields) => (fields ? API.get(`/categories?fields=${fields}`) : API.get('/categories'));
 export const getOneCategory = (identity) => API.get(`/categories/${identity}`);
 export const createCategory = (newCategory) => API.post('/categories', newCategory);
 export const updateCategory = (identity, updatedCategory) => API.patch(`/categories/${identity}`, updatedCategory);
 export const deleteCategory = (identity) => API.delete(`/categories/${identity}`);
 
 // ----------------------------Brand-----------------------------------
-export const getAllBrand = () => API.get('/brands');
+export const getAllBrand = (fields) => (fields ? API.get(`/brands?fields=${fields}`) : API.get('/brands'));
 export const getOneBrand = (identity) => API.get(`/brands/${identity}`);
 export const createBrand = (newBrand) => API.post('/brands', newBrand);
 export const updateBrand = (identity, updatedBrand) => API.patch(`/brands/${identity}`, updatedBrand);
