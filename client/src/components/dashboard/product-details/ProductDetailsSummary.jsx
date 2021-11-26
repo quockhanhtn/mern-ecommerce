@@ -1,34 +1,17 @@
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import { useNavigate } from 'react-router-dom';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import minusFill from '@iconify/icons-eva/minus-fill';
-import twitterFill from '@iconify/icons-eva/twitter-fill';
-import linkedinFill from '@iconify/icons-eva/linkedin-fill';
-import facebookFill from '@iconify/icons-eva/facebook-fill';
-import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
 import roundAddShoppingCart from '@iconify/icons-ic/round-add-shopping-cart';
 import { useFormik, Form, FormikProvider, useField } from 'formik';
 // material
 import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import {
-  Box,
-  Link,
-  Stack,
-  Button,
-  Rating,
-  Tooltip,
-  Divider,
-  TextField,
-  Typography,
-  FormHelperText
-} from '@material-ui/core';
+import { Box, Stack, Button, Rating, Divider, Typography, FormHelperText } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { MButton, MIconButton } from '../../@material-extend';
-import Label from '../../Label';
 import { fCurrency, fNumber, fShortenNumber } from '../../../utils/formatNumber';
+import * as Helper from '../../../helper/cartHelper';
 // --------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -93,15 +76,7 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { item: product } = useSelector((state) => state.product);
-  const { _id, name, price, cover, views, variants, available, rates, totalRating, totalReview, inventoryType } =
-    product;
-
-  // const alreadyProduct = checkout.cart.map((item) => item._id).includes(_id);
-  // const isMaxQuantity = checkout.cart.filter((item) => item._id === _id).map((item) => item.quantity)[0] >= available;
-
-  const onAddCart = (product) => {
-    // dispatch(addCart(product));
-  };
+  const { _id, name, price, cover, views, variants, rates } = product;
 
   const handleBuyNow = () => {
     // dispatch(onGotoStep(0));
@@ -113,10 +88,10 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
       _id,
       name,
       cover,
-      available,
+      available: variants[indexVariant].quantity,
       price,
       color: variants[0],
-      quantity: available < 1 ? 0 : 1
+      quantity: variants[indexVariant].quantity < 1 ? 0 : 1
     },
     onSubmit: async (values, { setSubmitting }) => {
       try {
@@ -138,10 +113,12 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
   const { values, touched, errors, getFieldProps, handleSubmit } = formik;
 
   const handleAddCart = () => {
-    onAddCart({
-      ...values,
-      subtotal: values.price * values.quantity
-    });
+    const productInCart = {
+      _id: product._id,
+      skuVariant: product.variants[indexVariant].sku,
+      quantity: values.quantity
+    };
+    Helper.addProductToCartByLocalStorage(productInCart);
   };
 
   return (
@@ -198,7 +175,7 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
                 Quantity
               </Typography>
               <div>
-                <Incrementer name="quantity" available={available} />
+                <Incrementer name="quantity" available={variants[indexVariant].quantity} />
                 <Typography
                   variant="caption"
                   sx={{
@@ -220,7 +197,6 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
           <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 5 }}>
             <MButton
               fullWidth
-              // disabled={isMaxQuantity}
               size="large"
               type="button"
               color="warning"

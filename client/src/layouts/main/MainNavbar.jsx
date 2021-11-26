@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 // icon
 import { Icon } from '@iconify/react';
@@ -20,6 +20,7 @@ import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';
 import navConfig from './MenuConfig';
 import SearchBar from './SearchBar';
+import * as Helper from '../../helper/cartHelper';
 
 // ----------------------------------------------------------------------
 
@@ -81,10 +82,18 @@ export default function MainNavbar() {
   const isOffset = useOffSetTop(100);
   const dispatch = useDispatch();
   const { listSimple: categoryListRaw, isLoading } = useSelector((state) => state.category);
+  const [quantityInCart, setQuantityInCart] = useState(Helper.getQuantityInCart());
 
   useEffect(() => {
     dispatch(getAllCategories(true));
   }, [dispatch]);
+
+  useEffect(() => {
+    window.addEventListener('storage', () => {
+      const quantity = Helper.getQuantityInCart();
+      setQuantityInCart(quantity);
+    });
+  }, []);
 
   if (isLoading) return null;
 
@@ -117,7 +126,7 @@ export default function MainNavbar() {
           </MHidden>
 
           <ButtonIcon text="Lịch sử đơn hàng" icon={history24Filled} color="inherit" href="/order-history" />
-          <MBadge badgeContent={10} color="primary">
+          <MBadge badgeContent={quantityInCart} color="primary">
             <ButtonIcon text="Giỏ hàng" icon={cart24Regular} color="primary" href="/products" />
           </MBadge>
         </Container>
