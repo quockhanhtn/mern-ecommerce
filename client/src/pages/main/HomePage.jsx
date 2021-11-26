@@ -7,6 +7,8 @@ import { Container, Card, CardContent, CardHeader, Grid } from '@material-ui/cor
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllCategories } from '../../actions/categories';
 import { getAllBrands } from '../../actions/brands';
+// hooks
+import useLocales from '../../hooks/useLocales';
 // components
 import Page from '../../components/Page';
 import { CarouselAnimation, CarouselMiniList } from '../../components/carousel';
@@ -30,6 +32,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function HomePage() {
+  const { t } = useLocales();
   const discountList = discountMockData;
   const dispatch = useDispatch();
   const { listSimple: brandsListRaw, isLoading: isLoadingBrand } = useSelector((state) => state.brand);
@@ -46,7 +49,7 @@ export default function HomePage() {
   }, [dispatch]);
 
   return (
-    <RootStyle title="Home page" id="move_top">
+    <RootStyle title={t('home.page-title')} id="move_top">
       <ContentStyle sx={{ bgcolor: (theme) => (theme.palette.mode === 'light' ? 'grey.200' : 'grey.800') }}>
         <Container maxWidth="lg">
           <Grid container spacing={3}>

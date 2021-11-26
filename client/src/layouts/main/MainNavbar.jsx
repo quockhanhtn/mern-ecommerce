@@ -12,13 +12,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getAllCategories } from '../../actions/categories';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
+import useLocales from '../../hooks/useLocales';
 // components
 import Logo from '../../components/Logo';
 import { MBadge, MButton, MHidden } from '../../components/@material-extend';
 //
 import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';
-import navConfig from './MenuConfig';
 import SearchBar from './SearchBar';
 
 // ----------------------------------------------------------------------
@@ -60,6 +60,13 @@ const ColorBar = styled('div')(({ theme }) => ({
   width: '100%'
 }));
 
+const ContainerStyle = styled(Container)(() => ({
+  display: 'flex',
+  height: 44,
+  alignItems: 'center',
+  justifyContent: 'space-between'
+}));
+
 const ButtonIcon = ({ text, icon, color, ...other }) => (
   <>
     <MHidden width="mdUp">
@@ -78,6 +85,7 @@ const ButtonIcon = ({ text, icon, color, ...other }) => (
 // ----------------------------------------------------------------------
 
 export default function MainNavbar() {
+  const { t } = useLocales();
   const isOffset = useOffSetTop(100);
   const dispatch = useDispatch();
   const { listSimple: categoryListRaw, isLoading } = useSelector((state) => state.category);
@@ -101,10 +109,7 @@ export default function MainNavbar() {
         disableGutters
         sx={{ ...(isOffset && { bgcolor: 'background.default', height: { md: APP_BAR_DESKTOP - 16 } }) }}
       >
-        <Container
-          maxWidth="lg"
-          sx={{ display: 'flex', height: 44, alignItems: 'center', justifyContent: 'space-between' }}
-        >
+        <ContainerStyle maxWidth="lg">
           <RouterLink to="/">
             <Logo />
           </RouterLink>
@@ -116,19 +121,16 @@ export default function MainNavbar() {
             <MenuMobile isOffset={isOffset} isHome={false} navConfig={categoryList} />
           </MHidden>
 
-          <ButtonIcon text="Lịch sử đơn hàng" icon={history24Filled} color="inherit" href="/order-history" />
+          <ButtonIcon text={t('home.order-history')} icon={history24Filled} color="inherit" href="/order-history" />
           <MBadge badgeContent={10} color="primary">
-            <ButtonIcon text="Giỏ hàng" icon={cart24Regular} color="primary" href="/products" />
+            <ButtonIcon text={t('home.cart')} icon={cart24Regular} color="primary" href="/products" />
           </MBadge>
-        </Container>
+        </ContainerStyle>
         <MHidden width="mdDown">
           <ColorBar>
-            <Container
-              maxWidth="lg"
-              sx={{ display: 'flex', height: 44, alignItems: 'center', justifyContent: 'space-between' }}
-            >
+            <ContainerStyle maxWidth="lg">
               <MenuDesktop isOffset={isOffset} isHome={false} navConfig={categoryList} />
-            </Container>
+            </ContainerStyle>
           </ColorBar>
         </MHidden>
       </ToolbarStyle>

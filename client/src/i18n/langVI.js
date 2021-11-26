@@ -21,6 +21,11 @@ export default {
       'thorough-your-machine': 'từ thiết bị của bạn'
     }
   },
+  home: {
+    'page-title': 'Điện thoại di dộng và phụ kiện | HK Mobile',
+    cart: 'Giỏ hàng',
+    'order-history': 'Lịch sử mua hàng'
+  },
   settings: {
     title: 'Cài đặt',
     'full-screen': 'Toàn màn hình',
@@ -32,6 +37,8 @@ export default {
     'language-not-available': 'Ngôn ngữ này không khả dụng !'
   },
   auth: {
+    'page-login-title': 'Đăng nhập | HK Mobile',
+    'page-register-title': 'Đăng ký | HK Mobile',
     salutation: 'Chào mừng quay trở lại !',
     register: 'Đăng ký',
     'get-started': 'Đăng ký',
@@ -64,10 +71,14 @@ export default {
     'created-at': 'Ngày tạo',
     'updated-at': 'Ngày sửa',
     categories: {
+      'page-title': 'Quản lý Danh mục | HK Mobile',
       title: 'Danh mục',
+      'title-not-found': 'Danh sách danh mục rỗng!',
       search: 'Tìm kiếm danh mục ...',
       name: 'Tên danh mục',
+      'name-validation': 'Tên danh mục là trường bắt buộc phải điền',
       desc: 'Mô tả',
+      'desc-validation': 'Mô tả là trường bắt buộc phải điền',
       parent: 'Danh mục cha',
       status: 'Trạng thái',
       hidden: 'Đã ẩn',
@@ -80,7 +91,7 @@ export default {
       image: 'Hình ảnh'
     },
     brands: {
-      'title-page': 'Thương mại điện tử: Danh sách thương hiệu | HK-MOBILE',
+      'page-title': 'Quản lý Thương hiệu | HK Mobile',
       title: 'Thương hiệu',
       heading: 'Danh sách thương hiệu',
       'search-brand-placeholder': 'Tìm kiếm thương hiệu ...',
@@ -102,7 +113,7 @@ export default {
       visible: 'Hiển thị'
     },
     discounts: {
-      'title-page': 'Thương mại điện tử: Danh sách giảm giá | HK-MOBILE',
+      'page-title': 'Quản lý Giảm giá | HK Mobile',
       title: 'Khuyến mãi',
       heading: 'Danh sách khuyến mãi',
       'search-placeholder': 'Tìm kiếm mã khuyến mãi...',
@@ -131,6 +142,71 @@ export default {
       error: 'Lỗi',
       'date-start': 'Ngày bắt đầu',
       'date-end': 'Ngày kết thúc'
+    },
+    products: {
+      'page-title': 'Quản lý sản phẩm | HK Mobile',
+      title: 'Sản phẩm',
+      'title-not-found': 'Danh sách sản phẩm trống!',
+      heading: 'Danh sách sản phẩm',
+      'heading-create': 'Tạo sản phẩm mới',
+      'search-product-placeholder': 'Tìm kiếm sản phẩm...',
+      add: 'Thêm sản phẩm',
+      create: 'Thêm sản phẩm',
+      save: 'Lưu lại',
+      'add-title': 'Ecommerce: Add new product | HK Mobile',
+      'add-success': 'Thêm sản phẩm mới thành công',
+      edit: 'Edit product',
+      'edit-title': 'Ecommerce: Edit new product | HK Mobile',
+      delete: 'Delete product',
+      name: 'Product name',
+      'name-validation': 'Product name is required',
+      desc: 'Product description',
+      'desc-validation': 'Product Description is required',
+      price: 'Promotional price',
+      'price-validation': 'Price is required',
+      'market-price': 'Market price',
+      'market-price-validation': 'Market Price is required',
+      code: 'Product code',
+      'code-validation': 'Code is required',
+      sku: 'Product sku',
+      'sku-validation': 'Sku is required',
+      quantity: 'Quantity',
+      'warranty-period': 'Warranty Period',
+      'specifications-name': 'Specifications name',
+      'specifications-value': 'Specifications value',
+      thumbnail: 'Thumbnail',
+      pictures: 'Add more pictures',
+      'pictures-note': 'Note: must upload more pictures before saving.',
+      video: 'Add link',
+      brand: 'Brand',
+      'brand-add': 'Add new brand here.',
+      category: 'Category',
+      'category-add': 'Add new category here.',
+      origin: 'Origin',
+      warrantyPeriod: 'Warranty Period',
+      'general-info': 'General Information',
+      'price-includes-taxes': 'Price includes taxes',
+      sold: 'Sold',
+      status: 'Status',
+      hidden: 'Hidden',
+      visible: 'Visible',
+      error: 'An error occurred, please try again.'
+    },
+    users: {
+      'page-title': 'User management | HK Mobile',
+      title: 'Users',
+      heading: 'User List',
+      'search-user-placeholder': 'Search user...',
+      detail: 'Detail',
+      'lock-account': 'Lock account',
+      'full-name': 'Full name',
+      gender: 'Gender',
+      email: 'Email',
+      phone: 'Phone',
+      sold: 'Sold',
+      status: 'Status',
+      hidden: 'Hidden',
+      visible: 'Visible'
     }
   }
 };

@@ -178,7 +178,7 @@ export default function PageProductList() {
   }
 
   return (
-    <Page title={t('dashboard.products.title-page')}>
+    <Page title={t('dashboard.products.page-title')}>
       <Container>
         <HeaderBreadcrumbs
           heading={t('dashboard.products.heading')}

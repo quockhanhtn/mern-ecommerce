@@ -64,10 +64,38 @@ export const deleteProductVariants = async (req, res, next) => {
 //#region Product info
 export const getAllProducts = async (req, res, next) => {
   try {
-    let products = await productService.getAllProducts();
+    const fields = req.query.fields || null;
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+
+    let { list: products, total } = await productService.getAllProducts(fields, limit, page);
     products = products.map(p => formatProduct(p, req));
+
+    const pagination = {
+      total,
+      totalPages: Math.ceil(total / limit),
+      limit,
+      page,
+      hasNextPage: false,
+      nextPage: null,
+      hasPrevPage: false,
+      prevPage: null
+    };
+
+    // Set prev page
+    if (page > 1) {
+      pagination.hasPrevPage = true;
+      pagination.prevPage = page - 1;
+    }
+
+    // Set next page
+    if (page < pagination.totalPages) {
+      pagination.hasNextPage = true;
+      pagination.nextPage = page + 1;
+    }
+
     if (products && products.length > 0) {
-      resUtils.status200(res, 'Get all products successfully!', products);
+      resUtils.status200(res, 'Get all products successfully!', products, { pagination });
     } else {
       resUtils.status200(res, 'No products found', []);
     }

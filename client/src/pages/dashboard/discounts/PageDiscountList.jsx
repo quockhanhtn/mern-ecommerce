@@ -192,7 +192,7 @@ export default function PageDiscountList() {
   }
 
   return (
-    <Page title={t('dashboard.discounts.title-page')}>
+    <Page title={t('dashboard.discounts.page-title')}>
       <Container>
         {openForm && <DiscountForm open={openForm} setOpen={setOpenForm} currentId={currentId} />}
         <HeaderBreadcrumbs

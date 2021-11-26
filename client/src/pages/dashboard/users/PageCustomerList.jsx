@@ -127,7 +127,7 @@ export default function PageCustomerList() {
   }
 
   return (
-    <Page title={t('dashboard.users.title-page')}>
+    <Page title={t('dashboard.users.page-title')}>
       <Container>
         {openForm && (
           <DetailUser open={openForm} setOpen={setOpenForm} currentId={currentId} setCurrentId={setCurrentId} />

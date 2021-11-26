@@ -200,12 +200,38 @@ async function deleteProductVariants(identity, sku) {
 
 
 //#region Product info
-async function getAllProducts() {
-  return await Product.find()
-    .select(SELECT_FIELD)
+/**
+ * Get list product
+ * @param {string} fields - fields to select
+ * @param {number} limit - limit
+ * @param {number} page - page number
+ * @returns {object} - list of products, total count
+ */
+async function getAllProducts(fields, limit = 10, page = 1) {
+  if (fields === null || fields == '') { fields = SELECT_FIELD; }
+
+  if (fields.indexOf(',') > -1) {
+    fields = fields.split(',').join(' ');
+  }
+
+  const populateOpts = [];
+  if (fields.includes('category')) {
+    populateOpts.push({ path: 'category', select: 'name slug image _id -children', model: 'Category' },);
+  }
+  if (fields.includes('brand')) {
+    populateOpts.push({ path: 'brand', select: 'name slug image _id', model: 'Brand' },);
+  }
+
+  const total = await Product.countDocuments({}).exec();
+  const list = await Product.find()
+    .select(fields)
+    .limit(limit)
+    .skip(limit * (page - 1))
     .sort({ createdAt: -1 })
-    .populate(POPULATE_OPTS)
+    .populate(populateOpts)
     .lean().exec();
+
+  return { total, list };
 }
 
 async function createProduct(data) {

@@ -183,7 +183,7 @@ export default function PageCategoryList() {
   }
 
   return (
-    <Page title="Ecommerce: Category List | Minimal-UI">
+    <Page title={t('dashboard.categories.page-title')}>
       <Container>
         <CategoryForm open={openForm} setOpen={setOpenForm} currentId={currentId} setCurrentId={setCurrentId} />
 

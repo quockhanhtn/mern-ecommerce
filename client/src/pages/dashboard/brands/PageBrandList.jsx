@@ -179,7 +179,7 @@ export default function PageBrandList() {
   }
 
   return (
-    <Page title={t('dashboard.brands.title-page')}>
+    <Page title={t('dashboard.brands.page-title')}>
       <Container>
         {openForm && <BrandForm open={openForm} setOpen={setOpenForm} currentId={currentId} />}
         <HeaderBreadcrumbs
