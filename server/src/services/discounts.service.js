@@ -11,12 +11,21 @@ export default {
   remove
 };
 
+const SELECT_FIELD = '_id slug name desc code fromDate endDate quantity discount image isHide createdAt updatedAt';
+
 /**
  *
  * @returns all discounts
  */
-async function getAll() {
+async function getAll(fields) {
+  if (fields === null || fields == '') { fields = SELECT_FIELD; }
+
+  if (fields && fields.indexOf(',') > -1) {
+    fields = fields.split(',').join(' ');
+  }
+
   return await Discount.find()
+    .select(fields)
     .sort({ createdAt: -1 })
     .lean().exec();
 }

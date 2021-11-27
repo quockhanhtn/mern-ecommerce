@@ -128,7 +128,8 @@ export default function Router() {
       children: [
         { path: '/', element: <HomePage /> },
         { path: '/products', element: <ProductList /> },
-        { path: '/:category/:slug', element: <ProductDetailPage /> }
+        { path: '/:category/:slug', element: <ProductDetailPage /> },
+        { path: '/cart', element: <CartPage /> }
       ]
     },
     { path: '*', element: <Navigate to="/404" replace /> }
@@ -171,3 +172,6 @@ const NotFound = Loadable(lazy(() => import('../pages/error/Page404')));
 const HomePage = Loadable(lazy(() => import('../pages/main/HomePage')));
 const ProductList = Loadable(lazy(() => import('../pages/main/EcommerceShop')));
 const ProductDetailPage = Loadable(lazy(() => import('../pages/main/ProductDetails')));
+
+// Cart
+const CartPage = Loadable(lazy(() => import('../pages/main/cart/CartPage')));

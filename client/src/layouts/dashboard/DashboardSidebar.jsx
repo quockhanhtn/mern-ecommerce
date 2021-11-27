@@ -47,7 +47,10 @@ const ICONS = {
   dashboard: getIcon('ic_dashboard'),
   categories: getIcon('ic_categories'),
   brands: getIcon('ic_brands'),
-  discounts: getIcon('ic_discounts')
+  discounts: getIcon('ic_discounts'),
+  products: getIcon('ic_products'),
+  list: getIcon('ic_list'),
+  addNew: getIcon('ic_add-new')
 };
 
 // ----------------------------------------------------------------------
@@ -72,17 +75,17 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     // GENERAL
     // ----------------------------------------------------------------------
     {
-      subheader: 'general',
+      subheader: t('dashboard.general'),
       items: [
-        { title: 'Statics', path: PATH_DASHBOARD.general.statics, icon: ICONS.analytics },
-        { title: 'Config', path: PATH_DASHBOARD.general.config, icon: ICONS.config }
+        { title: t('dashboard.statics'), path: PATH_DASHBOARD.general.statics, icon: ICONS.analytics },
+        { title: t('dashboard.orders'), path: PATH_DASHBOARD.general.config, icon: ICONS.ecommerce }
       ]
     },
 
     // MANAGEMENT
     // ----------------------------------------------------------------------
     {
-      subheader: 'management',
+      subheader: t('dashboard.management'),
       items: [
         { title: t('dashboard.categories.title'), path: PATH_DASHBOARD.app.categories, icon: ICONS.categories },
         { title: t('dashboard.brands.title'), path: PATH_DASHBOARD.app.brands, icon: ICONS.brands },
@@ -90,10 +93,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         {
           title: 'Products',
           path: PATH_DASHBOARD.app.products.root,
-          icon: ICONS.ecommerce,
+          icon: ICONS.products,
           children: [
-            { title: 'Product List', path: PATH_DASHBOARD.app.products.list },
-            { title: 'Add Product', path: PATH_DASHBOARD.app.products.add }
+            { title: 'Product List', path: PATH_DASHBOARD.app.products.list, icon: ICONS.list },
+            { title: 'Add Product', path: PATH_DASHBOARD.app.products.add, icon: ICONS.addNew }
           ]
         },
         {

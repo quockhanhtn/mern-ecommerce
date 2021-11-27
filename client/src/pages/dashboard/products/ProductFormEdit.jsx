@@ -205,8 +205,8 @@ export default function PageProductEdit() {
           </Grid>
           <Grid item xs={12} md={4}>
             <Stack spacing={3}>
-              {currentProduct?.brand.name !== undefined &&
-                currentProduct?.category.name !== undefined &&
+              {currentProduct?.brand?.name !== undefined &&
+                currentProduct?.category?.name !== undefined &&
                 currentProduct?.origin && (
                   <Card sx={{ p: 3 }}>
                     <Stack spacing={3}>

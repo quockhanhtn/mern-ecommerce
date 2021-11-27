@@ -28,8 +28,8 @@ const productVariantSchema = new mongoose.Schema({
 const productSchema = mongoose.Schema({
   _id: mongoose.Types.ObjectId,
 
-  name: { type: String, trim: true, required: true },
-  code: { type: String, trim: true, required: true },
+  name: { type: String, trim: true, required: true, minLength: 6, maxLength: 255 },
+  // code: { type: String, trim: true, required: true },
   slug: { type: String, slug: "name", slugPaddingSize: 2, unique: true },
 
   desc: { type: String, required: false },

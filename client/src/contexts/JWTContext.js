@@ -11,7 +11,10 @@ const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 const initialState = {
   isAuthenticated: false,
   isInitialized: false,
-  errMessage: null,
+  errMessage: {
+    en: 'User not found',
+    vi: 'Tài khoản không tồn tại'
+  },
   user: null
 };
 
@@ -122,8 +125,8 @@ function AuthProvider({ children }) {
       setSession(token, refreshToken);
       dispatch({ type: 'LOGIN', payload: { user } });
     } catch (e) {
-      dispatch({ type: 'ERROR', payload: e.response.data.message });
       if (isDev) console.log('[JWTAuth][login] error', e.response);
+      dispatch({ type: 'ERROR', payload: e.response.data.message });
     }
   };
 

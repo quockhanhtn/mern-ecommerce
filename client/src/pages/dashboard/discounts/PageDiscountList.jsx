@@ -45,7 +45,7 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
 }));
 
 export default function PageDiscountList() {
-  const { t } = useLocales();
+  const { t, currentLang } = useLocales();
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
@@ -192,7 +192,7 @@ export default function PageDiscountList() {
   }
 
   return (
-    <Page title={t('dashboard.discounts.title-page')}>
+    <Page title={t('dashboard.discounts.page-title')}>
       <Container>
         {openForm && <DiscountForm open={openForm} setOpen={setOpenForm} currentId={currentId} />}
         <HeaderBreadcrumbs
@@ -200,8 +200,8 @@ export default function PageDiscountList() {
           links={[
             { name: t('dashboard.title'), href: PATH_DASHBOARD.root },
             {
-              name: t('dashboard.ecommerce'),
-              href: PATH_DASHBOARD.root
+              name: t('dashboard.management'),
+              href: PATH_DASHBOARD.app.root
             },
             { name: t('dashboard.discounts.heading') }
           ]}
@@ -290,10 +290,10 @@ export default function PageDiscountList() {
                               </Label>
                             </TableCell>
                             <TableCell align="right" style={{ minWidth: 160 }}>
-                              {fDateTime(fromDate)}
+                              {fDateTime(fromDate, currentLang.value)}
                             </TableCell>
                             <TableCell align="right" style={{ minWidth: 160 }}>
-                              {fDateTime(endDate)}
+                              {fDateTime(endDate, currentLang.value)}
                             </TableCell>
                             <TableCell align="right" onClick={(event) => event.stopPropagation()}>
                               <DiscountMoreMenu

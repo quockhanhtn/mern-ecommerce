@@ -53,12 +53,12 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function PageCategoryList() {
-  const { t } = useLocales();
+  const { t, currentLang } = useLocales();
   const theme = useTheme();
   const dispatch = useDispatch();
   const { list: categoriesList, isLoading, hasError } = useSelector((state) => state.category);
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('createdAt');
+  const [orderBy, setOrderBy] = useState('order');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [isCompact, setIsCompact] = useState(false);
@@ -183,19 +183,19 @@ export default function PageCategoryList() {
   }
 
   return (
-    <Page title="Ecommerce: Category List | Minimal-UI">
+    <Page title={t('dashboard.categories.page-title')}>
       <Container>
         <CategoryForm open={openForm} setOpen={setOpenForm} currentId={currentId} setCurrentId={setCurrentId} />
 
         <HeaderBreadcrumbs
-          heading="Category List"
+          heading={t('dashboard.categories.heading')}
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: t('dashboard.title'), href: PATH_DASHBOARD.root },
             {
-              name: 'E-Commerce',
-              href: PATH_DASHBOARD.root
+              name: t('dashboard.management'),
+              href: PATH_DASHBOARD.app.root
             },
-            { name: 'Category List' }
+            { name: t('dashboard.categories.heading') }
           ]}
           action={
             <Button variant="contained" startIcon={<Icon icon={plusFill} />} onClick={handleCreateNew}>
@@ -271,10 +271,10 @@ export default function PageCategoryList() {
                               </Label>
                             </TableCell>
                             <TableCell align="right" style={{ minWidth: 160 }}>
-                              {fDateTime(createdAt)}
+                              {fDateTime(createdAt, currentLang.value)}
                             </TableCell>
                             <TableCell align="right" style={{ minWidth: 160 }}>
-                              {fDateTime(updatedAt)}
+                              {fDateTime(updatedAt, currentLang.value)}
                             </TableCell>
                             <TableCell align="right" onClick={(e) => e.stopPropagation()}>
                               <CategoryMoreMenu

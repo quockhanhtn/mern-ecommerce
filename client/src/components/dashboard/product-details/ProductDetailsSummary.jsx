@@ -1,34 +1,21 @@
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import { useNavigate } from 'react-router-dom';
-import plusFill from '@iconify/icons-eva/plus-fill';
-import minusFill from '@iconify/icons-eva/minus-fill';
+import add12Filled from '@iconify/icons-fluent/add-12-filled';
+import subtract12Filled from '@iconify/icons-fluent/subtract-12-filled';
 import twitterFill from '@iconify/icons-eva/twitter-fill';
 import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
-import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
 import roundAddShoppingCart from '@iconify/icons-ic/round-add-shopping-cart';
 import { useFormik, Form, FormikProvider, useField } from 'formik';
 // material
 import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import {
-  Box,
-  Link,
-  Stack,
-  Button,
-  Rating,
-  Tooltip,
-  Divider,
-  TextField,
-  Typography,
-  FormHelperText
-} from '@material-ui/core';
+import { Box, Stack, Button, Rating, Divider, Typography, FormHelperText } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useSnackbar } from 'notistack';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { MButton, MIconButton } from '../../@material-extend';
-import Label from '../../Label';
-import { fCurrency, fNumber, fShortenNumber } from '../../../utils/formatNumber';
+import { fNumber, fShortenNumber } from '../../../utils/formatNumber';
+import useToCart from '../../../hooks/useToCart';
 // --------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -42,7 +29,6 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 const Incrementer = (props) => {
   const [field, , helpers] = useField(props);
-  // eslint-disable-next-line react/prop-types
   const { available } = props;
   const { value } = field;
   const { setValue } = helpers;
@@ -68,7 +54,7 @@ const Incrementer = (props) => {
       }}
     >
       <MIconButton size="small" color="inherit" disabled={value <= 1} onClick={decrementQuantity}>
-        <Icon icon={minusFill} width={16} height={16} />
+        <Icon icon={subtract12Filled} width={16} height={16} />
       </MIconButton>
       <Typography
         variant="body2"
@@ -82,7 +68,7 @@ const Incrementer = (props) => {
         {value}
       </Typography>
       <MIconButton size="small" color="inherit" disabled={value >= available} onClick={incrementQuantity}>
-        <Icon icon={plusFill} width={16} height={16} />
+        <Icon icon={add12Filled} width={16} height={16} />
       </MIconButton>
     </Box>
   );
@@ -90,18 +76,12 @@ const Incrementer = (props) => {
 
 export default function ProductDetailsSummary({ indexVariant, handleChangeIndexVariant }) {
   const theme = useTheme();
+  const { addToCart } = useToCart();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const { item: product } = useSelector((state) => state.product);
-  const { _id, name, price, cover, views, variants, available, rates, totalRating, totalReview, inventoryType } =
-    product;
-
-  // const alreadyProduct = checkout.cart.map((item) => item._id).includes(_id);
-  // const isMaxQuantity = checkout.cart.filter((item) => item._id === _id).map((item) => item.quantity)[0] >= available;
-
-  const onAddCart = (product) => {
-    // dispatch(addCart(product));
-  };
+  const { _id, name, price, cover, views, variants, rates } = product;
 
   const handleBuyNow = () => {
     // dispatch(onGotoStep(0));
@@ -113,10 +93,10 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
       _id,
       name,
       cover,
-      available,
+      available: variants[indexVariant].quantity,
       price,
       color: variants[0],
-      quantity: available < 1 ? 0 : 1
+      quantity: variants[indexVariant].quantity < 1 ? 0 : 1
     },
     onSubmit: async (values, { setSubmitting }) => {
       try {
@@ -138,9 +118,20 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
   const { values, touched, errors, getFieldProps, handleSubmit } = formik;
 
   const handleAddCart = () => {
-    onAddCart({
-      ...values,
-      subtotal: values.price * values.quantity
+    const productInCart = {
+      _id: product._id,
+      name: product.name,
+      variantName: product.variants[indexVariant].variantName,
+      skuVariant: product.variants[indexVariant].sku,
+      quantity: values.quantity,
+      price: product.variants[indexVariant].price,
+      quantityAvailable: product.variants[indexVariant].quantity,
+      thumbnail: product.variants[indexVariant].thumbnail
+    };
+    addToCart(productInCart).then(() => {
+      enqueueSnackbar('Add to cart successfully', {
+        variant: 'success'
+      });
     });
   };
 
@@ -198,7 +189,7 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
                 Quantity
               </Typography>
               <div>
-                <Incrementer name="quantity" available={available} />
+                <Incrementer name="quantity" available={variants[indexVariant].quantity} />
                 <Typography
                   variant="caption"
                   sx={{
@@ -220,7 +211,6 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
           <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 5 }}>
             <MButton
               fullWidth
-              // disabled={isMaxQuantity}
               size="large"
               type="button"
               color="warning"

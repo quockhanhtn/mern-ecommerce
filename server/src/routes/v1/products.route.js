@@ -7,6 +7,7 @@ import {
   updateProduct,
   deleteProduct,
   rateProduct,
+  getProductSpecifications,
   addProductVariants,
   updateProductVariants,
   deleteProductVariants
@@ -30,6 +31,7 @@ const uploadFields = [{ name: 'thumbnail', maxCount: 1 }, { name: 'pictures', ma
  */
 
 router.get('/', getAllProducts);
+router.get('/specs', getProductSpecifications);
 router.get('/:identity', getProductById);
 
 router.post('/',
@@ -55,6 +57,5 @@ router.patch('/:identity/variants/:sku',
   updateProductVariants
 );
 router.delete('/:identity/variants/:sku', isAdmin, deleteProductVariants);
-
 
 export default router;
