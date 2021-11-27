@@ -1,7 +1,6 @@
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import { useParams } from 'react-router-dom';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import clockFill from '@iconify/icons-eva/clock-fill';
 import roundVerified from '@iconify/icons-ic/round-verified';
 import roundVerifiedUser from '@iconify/icons-ic/round-verified-user';
@@ -11,14 +10,13 @@ import { Box, Tab, Card, Grid, Divider, Skeleton, Container, Typography } from '
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 import { useDispatch, useSelector } from 'react-redux';
 import Page from '../../components/Page';
-import { CartWidget } from '../../components/dashboard/e-commerce';
 import Markdown from '../../components/Markdown';
 import {
   ProductDetailsCarousel,
   ProductDetailsReview,
   ProductDetailsSummary
 } from '../../components/dashboard/product-details';
-import { getAllProducts, getProductById } from '../../actions/products';
+import { getProductById } from '../../actions/products';
 // ----------------------------------------------------------------------
 
 const PRODUCT_DESCRIPTION = [
@@ -94,6 +92,7 @@ export default function ProductDetails() {
   const handleGatherPicture = () => {
     if (product?.variants[indexVariant].pictures.length > 0) {
       const temp = [...product?.variants[indexVariant].pictures];
+      temp.push(product?.variants[indexVariant].thumbnail);
       setImages(temp);
     } else {
       const temp = [product?.variants[indexVariant].thumbnail];
@@ -106,9 +105,8 @@ export default function ProductDetails() {
   };
 
   return (
-    <Page title="Ecommerce: Product Details | Minimal-UI">
+    <Page title="HK-Mobile: Product Details">
       <Container>
-        <CartWidget />
         {product && (
           <>
             <Card>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 // icon
 import { Icon } from '@iconify/react';
@@ -20,9 +20,10 @@ import { MBadge, MButton, MHidden } from '../../components/@material-extend';
 import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';
 import SearchBar from './SearchBar';
+import useToCart from '../../hooks/useToCart';
 
 // ----------------------------------------------------------------------
-
+const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 110;
 
@@ -88,11 +89,20 @@ export default function MainNavbar() {
   const { t } = useLocales();
   const isOffset = useOffSetTop(100);
   const dispatch = useDispatch();
+  const { cart, quantityInCart, getCart } = useToCart();
   const { listSimple: categoryListRaw, isLoading } = useSelector((state) => state.category);
 
   useEffect(() => {
     dispatch(getAllCategories(true));
   }, [dispatch]);
+
+  useEffect(() => {
+    getCart().then(() => {
+      if (isDev) {
+        console.log('Get cart successfully');
+      }
+    });
+  }, []);
 
   if (isLoading) return null;
 
