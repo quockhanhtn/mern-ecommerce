@@ -18,6 +18,12 @@ const LinkStyle = styled(Link)(({ theme }) => ({
   transition: theme.transitions.create('opacity', {
     duration: theme.transitions.duration.shortest
   }),
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  display: 'flex',
+  cursor: 'pointer',
+  alignItems: 'center',
   '&:hover': {
     opacity: 0.48,
     textDecoration: 'none'
@@ -68,15 +74,12 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
         <LinkStyle
           onClick={onOpen}
           sx={{
-            display: 'flex',
-            cursor: 'pointer',
-            alignItems: 'center',
             ...(isHome && { color: 'common.white' }),
             ...(isOffset && { color: 'text.primary' }),
             ...(isOpen && { opacity: 0.48 })
           }}
         >
-          {title}
+          {title.length > 25 ? `${title.substring(0, 22)}...` : title}
           <Box
             component={Icon}
             icon={isOpen ? arrowIosUpwardFill : arrowIosDownwardFill}
@@ -190,15 +193,12 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
       to={path}
       component={RouterLink}
       sx={{
-        display: 'flex',
         height: '80%',
-        alignItems: 'center',
         ...(isHome && { color: 'common.white' }),
         ...(isOffset && { color: 'text.primary' }),
         ...(isActive && { color: 'common.white' })
       }}
     >
-      {/* {image && <Avatar src={image} sx={{ width: 22, height: 22, marginRight: 1 }} />} */}
       {image && (
         <Box
           component="span"
@@ -217,7 +217,7 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
           }}
         />
       )}
-      {title}
+      {title.length > 25 ? `${title.substring(0, 22)}...` : title}
     </LinkStyle>
   );
 }

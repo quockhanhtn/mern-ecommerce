@@ -21,6 +21,11 @@ export default {
       'thorough-your-machine': 'thorough your machine'
     }
   },
+  home: {
+    'page-title': 'Cell phones and accessories | HK Mobile',
+    cart: 'Cart',
+    'order-history': 'Order history'
+  },
   settings: {
     title: 'Setting',
     'full-screen': 'Fullscreen',
@@ -32,6 +37,8 @@ export default {
     'language-not-available': 'This language is not available'
   },
   auth: {
+    'page-login-title': 'Log in | HK Mobile',
+    'page-register-title': 'Register | HK Mobile',
     salutation: 'Hi, Welcome back',
     register: 'Register',
     'get-started': 'Get started',
@@ -60,15 +67,22 @@ export default {
   },
   dashboard: {
     title: 'Dashboard',
+    general: 'General',
+    management: 'Management',
+    statics: 'Statics',
+    orders: 'Orders',
     ecommerce: 'E-commerce',
     'created-at': 'Created at',
     'updated-at': 'Updated at',
     categories: {
+      'page-title': 'Category management | HK Mobile',
+      heading: 'Category List',
       title: 'Categories',
       'title-not-found': 'Category not found!',
       search: 'Search category ...',
       name: 'Category name',
       'name-validation': 'Category name is required',
+      'name-validation-len': 'Category name must be between 6 and 25 characters long',
       desc: 'Category description',
       'desc-validation': 'Category description is required',
       parent: 'Parent category',
@@ -83,7 +97,7 @@ export default {
       delete: 'Delete category'
     },
     brands: {
-      'title-page': 'Ecommerce: Brand List | HK-MOBILE',
+      'page-title': 'Brand management | HK Mobile',
       title: 'Brands',
       'title-not-found': 'Brand not found!',
       heading: 'Brand List',
@@ -107,7 +121,7 @@ export default {
       visible: 'Visible'
     },
     discounts: {
-      'title-page': 'Ecommerce: Discount List | HK-MOBILE',
+      'page-title': 'Discount management | HK Mobile',
       title: 'Discounts',
       'title-not-found': 'Discounts not found!',
       heading: 'Discount List',
@@ -140,7 +154,7 @@ export default {
       'date-end': 'Date end'
     },
     products: {
-      'title-page': 'Ecommerce: Product List | HK-MOBILE',
+      'page-title': 'Product management | HK Mobile',
       title: 'Products',
       'title-not-found': 'Products not found!',
       heading: 'Product List',
@@ -149,10 +163,10 @@ export default {
       add: 'Add product',
       create: 'Create product',
       save: 'Save Changes',
-      'add-title': 'Ecommerce: Add new product | HK-MOBILE',
+      'add-title': 'Ecommerce: Add new product | HK Mobile',
       'add-success': 'Successfully added product.',
       edit: 'Edit product',
-      'edit-title': 'Ecommerce: Edit new product | HK-MOBILE',
+      'edit-title': 'Ecommerce: Edit new product | HK Mobile',
       delete: 'Delete product',
       name: 'Product name',
       'name-validation': 'Product name is required',
@@ -189,7 +203,7 @@ export default {
       error: 'An error occurred, please try again.'
     },
     users: {
-      'title-page': 'Ecommerce: User List | HK-MOBILE',
+      'page-title': 'User management | HK Mobile',
       title: 'Users',
       heading: 'User List',
       'search-user-placeholder': 'Search user...',

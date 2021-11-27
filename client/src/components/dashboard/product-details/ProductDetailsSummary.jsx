@@ -1,7 +1,10 @@
 import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router-dom';
-import plusFill from '@iconify/icons-eva/plus-fill';
-import minusFill from '@iconify/icons-eva/minus-fill';
+import add12Filled from '@iconify/icons-fluent/add-12-filled';
+import subtract12Filled from '@iconify/icons-fluent/subtract-12-filled';
+import twitterFill from '@iconify/icons-eva/twitter-fill';
+import linkedinFill from '@iconify/icons-eva/linkedin-fill';
+import facebookFill from '@iconify/icons-eva/facebook-fill';
 import roundAddShoppingCart from '@iconify/icons-ic/round-add-shopping-cart';
 import { useFormik, Form, FormikProvider, useField } from 'formik';
 // material
@@ -51,7 +54,7 @@ const Incrementer = (props) => {
       }}
     >
       <MIconButton size="small" color="inherit" disabled={value <= 1} onClick={decrementQuantity}>
-        <Icon icon={minusFill} width={16} height={16} />
+        <Icon icon={subtract12Filled} width={16} height={16} />
       </MIconButton>
       <Typography
         variant="body2"
@@ -65,7 +68,7 @@ const Incrementer = (props) => {
         {value}
       </Typography>
       <MIconButton size="small" color="inherit" disabled={value >= available} onClick={incrementQuantity}>
-        <Icon icon={plusFill} width={16} height={16} />
+        <Icon icon={add12Filled} width={16} height={16} />
       </MIconButton>
     </Box>
   );

@@ -1,30 +1,24 @@
 import { format, formatDistanceToNow } from 'date-fns';
+import { enUS, vi } from 'date-fns/locale';
 
 // ----------------------------------------------------------------------
 
-const formatStr = {
-  en: {
-    date: 'dd MMMM yyyy',
-    dateTime: 'dd MMMM yyyy HH:mm',
-    dateTimeSuf: 'dd/MM/yyyy hh:mm p'
-  },
-  vi: {
-    date: 'dd MMMM yyyy',
-    dateTime: 'dd MMMM yyyy HH:mm',
-    dateTimeSuf: 'dd/MM/yyyy hh:mm p'
-  }
-};
+const locales = { vi, en: enUS };
 
-export function fDate(date, formatStr = 'dd MMMM yyyy') {
-  return format(new Date(date), formatStr);
+function formatLocale(date, formatStr, locale) {
+  return format(new Date(date), formatStr, { locale });
 }
 
-export function fDateTime(date, formatStr = 'dd MMMM yyyy HH:mm') {
-  return format(new Date(date), formatStr);
+export function fDate(date, lang = 'vi') {
+  return formatLocale(date, 'dd MMMM yyyy', locales[lang]);
 }
 
-export function fDateTimeSuffix(date, formatStr = 'dd/MM/yyyy hh:mm p') {
-  return format(new Date(date), formatStr);
+export function fDateTime(date, lang = 'vi') {
+  return formatLocale(date, 'dd MMMM yyyy HH:mm', locales[lang]);
+}
+
+export function fDateTimeSuffix(date, lang = 'vi') {
+  return formatLocale(date, 'dd/MM/yyyy hh:mm p', locales[lang]);
 }
 
 export function fToNow(date) {

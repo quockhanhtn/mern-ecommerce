@@ -178,15 +178,15 @@ export default function PageProductList() {
   }
 
   return (
-    <Page title={t('dashboard.products.title-page')}>
+    <Page title={t('dashboard.products.page-title')}>
       <Container>
         <HeaderBreadcrumbs
           heading={t('dashboard.products.heading')}
           links={[
             { name: t('dashboard.title'), href: PATH_DASHBOARD.root },
             {
-              name: t('dashboard.ecommerce'),
-              href: PATH_DASHBOARD.root
+              name: t('dashboard.management'),
+              href: PATH_DASHBOARD.app.root
             },
             { name: t('dashboard.products.heading') }
           ]}

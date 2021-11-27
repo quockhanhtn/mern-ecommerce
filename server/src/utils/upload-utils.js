@@ -86,7 +86,7 @@ export function clearUploadFile(req) {
   } else if (Array.isArray(field)) {  // multiple files upload 
     for (let i = 0; i < field.length; i++) {
       const f = field[i];
-      if (req.body[f.name] && req.body[f.name].length > 0) {
+      if (req.body[f.name] && req.body[f.name].length > 0 && Array.isArray(req.body[f.name])) {
         req.body[f.name].forEach(item => files.push(item));
       }
     }

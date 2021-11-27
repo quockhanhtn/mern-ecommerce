@@ -51,9 +51,8 @@ categorySchema
 
 categorySchema.statics.generateOrder = async function () {
   const item = await this.findOne().select('order').sort('-order').lean().exec();
-  if (item)
-    return item.order + 1;
-  return 1;
+  const order = item ? parseInt(item.order, 10) : 0;
+  return order + 1;
 }
 
 const categoryModel = mongoose.model('Category', categorySchema);
