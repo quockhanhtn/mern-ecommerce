@@ -8,10 +8,11 @@ import { useFormik, Form, FormikProvider, useField } from 'formik';
 import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Stack, Button, Rating, Divider, Typography, FormHelperText } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { MButton, MIconButton } from '../../@material-extend';
-import { fCurrency, fNumber, fShortenNumber } from '../../../utils/formatNumber';
-import * as Helper from '../../../helper/cartHelper';
+import { fNumber, fShortenNumber } from '../../../utils/formatNumber';
+import useToCart from '../../../hooks/useToCart';
 // --------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -25,7 +26,6 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 const Incrementer = (props) => {
   const [field, , helpers] = useField(props);
-  // eslint-disable-next-line react/prop-types
   const { available } = props;
   const { value } = field;
   const { setValue } = helpers;
@@ -73,7 +73,9 @@ const Incrementer = (props) => {
 
 export default function ProductDetailsSummary({ indexVariant, handleChangeIndexVariant }) {
   const theme = useTheme();
+  const { addToCart } = useToCart();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const { item: product } = useSelector((state) => state.product);
   const { _id, name, price, cover, views, variants, rates } = product;
@@ -115,10 +117,19 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
   const handleAddCart = () => {
     const productInCart = {
       _id: product._id,
+      name: product.name,
+      variantName: product.variants[indexVariant].variantName,
       skuVariant: product.variants[indexVariant].sku,
-      quantity: values.quantity
+      quantity: values.quantity,
+      price: product.variants[indexVariant].price,
+      quantityAvailable: product.variants[indexVariant].quantity,
+      thumbnail: product.variants[indexVariant].thumbnail
     };
-    Helper.addProductToCartByLocalStorage(productInCart);
+    addToCart(productInCart).then(() => {
+      enqueueSnackbar('Add to cart successfully', {
+        variant: 'success'
+      });
+    });
   };
 
   return (
