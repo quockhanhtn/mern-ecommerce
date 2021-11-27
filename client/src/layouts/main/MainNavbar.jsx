@@ -132,8 +132,8 @@ export default function MainNavbar() {
           </MHidden>
 
           <ButtonIcon text={t('home.order-history')} icon={history24Filled} color="inherit" href="/order-history" />
-          <MBadge badgeContent={10} color="primary">
-            <ButtonIcon text={t('home.cart')} icon={cart24Regular} color="primary" href="/products" />
+          <MBadge badgeContent={quantityInCart} color="primary">
+            <ButtonIcon text={t('home.cart')} icon={cart24Regular} color="primary" href="/cart" />
           </MBadge>
         </ContainerStyle>
         <MHidden width="mdDown">

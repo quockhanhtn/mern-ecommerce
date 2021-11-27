@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router-dom';
-import filePdfFilled from '@iconify/icons-ant-design/file-pdf-filled';
+import filePdfFilled from '@iconify/icons-fluent/document-pdf-16-filled';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';

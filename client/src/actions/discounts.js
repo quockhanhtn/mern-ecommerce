@@ -4,7 +4,7 @@ import * as api from '../api';
 export const getAllDiscounts = (isSimple) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
-    const { data } = await api.getAllDiscount(isSimple ? 'name slug image code' : null);
+    const { data } = await api.getAllDiscount(isSimple ? 'name slug image code desc' : null);
 
     dispatch({
       type: isSimple ? actionTypes.DISCOUNT.GET_ALL_SIMPLE : actionTypes.DISCOUNT.GET_ALL,
