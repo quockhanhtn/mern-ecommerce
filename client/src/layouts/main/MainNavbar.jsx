@@ -128,7 +128,7 @@ export default function MainNavbar() {
 
           <ButtonIcon text="Lịch sử đơn hàng" icon={history24Filled} color="inherit" href="/order-history" />
           <MBadge badgeContent={quantityInCart} color="primary">
-            <ButtonIcon text="Giỏ hàng" icon={cart24Regular} color="primary" href="/products" />
+            <ButtonIcon text="Giỏ hàng" icon={cart24Regular} color="primary" href="/cart" />
           </MBadge>
         </Container>
         <MHidden width="mdDown">

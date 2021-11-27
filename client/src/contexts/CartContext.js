@@ -21,8 +21,18 @@ const handlers = {
   }),
   REMOVE_TO_CART: (state, action) => ({
     ...state,
-    quantityInCart: action.payload,
-    cart: action.payload
+    quantityInCart: action.payload.cart.length,
+    cart: action.payload.cart
+  }),
+  INCREASE_PRODUCT_IN_CART: (state, action) => ({
+    ...state,
+    quantityInCart: action.payload.cart.length,
+    cart: action.payload.cart
+  }),
+  DECREASE_PRODUCT_IN_CART: (state, action) => ({
+    ...state,
+    quantityInCart: action.payload.cart.length,
+    cart: action.payload.cart
   })
 };
 
@@ -37,7 +47,9 @@ const CartContext = createContext({
   cart: [],
   getCart: () => Promise.resolve(),
   addToCart: () => Promise.resolve(),
-  removeToCart: () => Promise.resolve()
+  removeToCart: () => Promise.resolve(),
+  increaseProductInCart: () => Promise.resolve(),
+  decreaseProductInCart: () => Promise.resolve()
 });
 
 CartProvider.propTypes = {
@@ -49,7 +61,7 @@ function CartProvider({ children }) {
 
   const getCartAction = async () => {
     const cart = Helper.getCart();
-    dispatch({ type: 'ADD_TO_CART', payload: { cart } });
+    dispatch({ type: 'GET_CART', payload: { cart } });
   };
 
   const addToCartAction = async (productInCartInfo) => {
@@ -57,8 +69,19 @@ function CartProvider({ children }) {
     dispatch({ type: 'ADD_TO_CART', payload: { cart } });
   };
 
-  const removeToCartAction = async () => {
-    // handle
+  const removeToCartAction = async (_id, skuVariant) => {
+    const cart = Helper.removeProductInCartByLocalStorage(_id, skuVariant);
+    dispatch({ type: 'REMOVE_TO_CART', payload: { cart } });
+  };
+
+  const increaseProductInCartAction = async (_id, skuVariant) => {
+    const cart = Helper.increaseProductInCartLocalStorage(_id, skuVariant);
+    dispatch({ type: 'INCREASE_PRODUCT_IN_CART', payload: { cart } });
+  };
+
+  const decreaseProductInCartAction = async (_id, skuVariant) => {
+    const cart = Helper.decreaseProductInCartLocalStorage(_id, skuVariant);
+    dispatch({ type: 'DECREASE_PRODUCT_IN_CART', payload: { cart } });
   };
 
   return (
@@ -67,7 +90,9 @@ function CartProvider({ children }) {
         ...state,
         getCart: getCartAction,
         addToCart: addToCartAction,
-        removeToCart: removeToCartAction
+        removeToCart: removeToCartAction,
+        increaseProductInCart: increaseProductInCartAction,
+        decreaseProductInCart: decreaseProductInCartAction
       }}
     >
       {children}

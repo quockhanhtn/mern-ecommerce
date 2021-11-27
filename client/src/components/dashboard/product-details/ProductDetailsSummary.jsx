@@ -26,7 +26,6 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 const Incrementer = (props) => {
   const [field, , helpers] = useField(props);
-  // eslint-disable-next-line react/prop-types
   const { available } = props;
   const { value } = field;
   const { setValue } = helpers;
@@ -118,8 +117,13 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
   const handleAddCart = () => {
     const productInCart = {
       _id: product._id,
+      name: product.name,
+      variantName: product.variants[indexVariant].variantName,
       skuVariant: product.variants[indexVariant].sku,
-      quantity: values.quantity
+      quantity: values.quantity,
+      price: product.variants[indexVariant].price,
+      quantityAvailable: product.variants[indexVariant].quantity,
+      thumbnail: product.variants[indexVariant].thumbnail
     };
     addToCart(productInCart).then(() => {
       enqueueSnackbar('Add to cart successfully', {
