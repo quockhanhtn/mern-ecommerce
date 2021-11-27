@@ -57,7 +57,7 @@ export default function Login() {
   };
 
   return (
-    <RootStyle title="Login | HK Mobile">
+    <RootStyle title={t('auth.page-login-title')}>
       <AuthLayout>
         {t('auth.dont-have-account')} &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to={PATH_AUTH.register}>

@@ -45,7 +45,7 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
 }));
 
 export default function PageBrandList() {
-  const { t } = useLocales();
+  const { t, currentLang } = useLocales();
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
@@ -187,8 +187,8 @@ export default function PageBrandList() {
           links={[
             { name: t('dashboard.title'), href: PATH_DASHBOARD.root },
             {
-              name: t('dashboard.ecommerce'),
-              href: PATH_DASHBOARD.root
+              name: t('dashboard.management'),
+              href: PATH_DASHBOARD.app.root
             },
             { name: t('dashboard.brands.heading') }
           ]}
@@ -267,10 +267,10 @@ export default function PageBrandList() {
                               </Label>
                             </TableCell>
                             <TableCell align="right" style={{ minWidth: 160 }}>
-                              {fDateTime(createdAt)}
+                              {fDateTime(createdAt, currentLang.value)}
                             </TableCell>
                             <TableCell align="right" style={{ minWidth: 160 }}>
-                              {fDateTime(updatedAt)}
+                              {fDateTime(updatedAt, currentLang.value)}
                             </TableCell>
                             <TableCell align="right" onClick={(event) => event.stopPropagation()}>
                               <BrandMoreMenu

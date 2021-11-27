@@ -7,6 +7,7 @@ import { Container, Card, CardContent, CardHeader, Grid } from '@material-ui/cor
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllCategories } from '../../actions/categories';
 import { getAllBrands } from '../../actions/brands';
+import { getAllDiscounts } from '../../actions/discounts';
 // hooks
 import useLocales from '../../hooks/useLocales';
 // components
@@ -33,19 +34,28 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function HomePage() {
   const { t } = useLocales();
-  const discountList = discountMockData;
+
   const dispatch = useDispatch();
   const { listSimple: brandsListRaw, isLoading: isLoadingBrand } = useSelector((state) => state.brand);
+  const { listSimple: discountsListRaw, isLoading: isLoadingDiscount } = useSelector((state) => state.discount);
   const brandsList = brandsListRaw.map((x) => ({
     title: x.name,
     image: x.image,
     description: x.description,
     path: `/b/${x.slug}`
   }));
+  const discountList = discountsListRaw.map((x) => ({
+    _id: x._id,
+    image: x.image || 'https://source.unsplash.com/random/800x600',
+    title: x.name,
+    link: `/d/${x.code}`,
+    description: x.desc
+  }));
 
   useEffect(() => {
     dispatch(getAllCategories(true));
     dispatch(getAllBrands(true));
+    dispatch(getAllDiscounts(true));
   }, [dispatch]);
 
   return (
@@ -61,7 +71,7 @@ export default function HomePage() {
             {/* Brand List carousel */}
             <Grid item xs={12}>
               <Card>
-                <CardHeader title="Brand list" />
+                <CardHeader title={t('dashboard.brands.heading')} />
                 <CardContent>
                   <CarouselMiniList
                     items={brandsList}
@@ -100,7 +110,7 @@ export default function HomePage() {
             {/* Products List */}
             <Grid item xs={12}>
               <Card>
-                <CardHeader title="Products list" />
+                <CardHeader title={t('dashboard.products.heading')} />
                 <CardContent>
                   <ProductList />
                 </CardContent>

@@ -50,6 +50,14 @@ const ListItemIconStyle = styled(ListItemIcon)({
   justifyContent: 'center'
 });
 
+const ListSubItemIconStyle = styled(ListItemIcon)({
+  width: 22,
+  height: 10,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center'
+});
+
 // ----------------------------------------------------------------------
 
 NavItem.propTypes = {
@@ -82,12 +90,7 @@ function NavItem({ item, active }) {
   if (children) {
     return (
       <>
-        <ListItemStyle
-          onClick={handleOpen}
-          sx={{
-            ...(isActiveRoot && activeRootStyle)
-          }}
-        >
+        <ListItemStyle onClick={handleOpen} sx={{ ...(isActiveRoot && activeRootStyle) }}>
           <ListItemIconStyle>{icon && icon}</ListItemIconStyle>
           <ListItemText disableTypography primary={title} />
           {info && info}
@@ -112,25 +115,31 @@ function NavItem({ item, active }) {
                     ...(isActiveSub && activeSubStyle)
                   }}
                 >
-                  <ListItemIconStyle>
-                    <Box
-                      component="span"
-                      sx={{
-                        width: 4,
-                        height: 4,
-                        display: 'flex',
-                        borderRadius: '50%',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        bgcolor: 'text.disabled',
-                        transition: (theme) => theme.transitions.create('transform'),
-                        ...(isActiveSub && {
-                          transform: 'scale(2)',
-                          bgcolor: 'primary.main'
-                        })
-                      }}
-                    />
-                  </ListItemIconStyle>
+                  {item.icon ? (
+                    <ListSubItemIconStyle sx={{ ...(isActiveSub && { color: 'primary.main' }) }}>
+                      {item.icon}
+                    </ListSubItemIconStyle>
+                  ) : (
+                    <ListItemIconStyle>
+                      <Box
+                        component="span"
+                        sx={{
+                          width: 4,
+                          height: 4,
+                          display: 'flex',
+                          borderRadius: '50%',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          bgcolor: 'text.disabled',
+                          transition: (theme) => theme.transitions.create('transform'),
+                          ...(isActiveSub && {
+                            transform: 'scale(2)',
+                            bgcolor: 'primary.main'
+                          })
+                        }}
+                      />
+                    </ListItemIconStyle>
+                  )}
                   <ListItemText disableTypography primary={item.title} />
                 </ListItemStyle>
               );
@@ -142,13 +151,7 @@ function NavItem({ item, active }) {
   }
 
   return (
-    <ListItemStyle
-      component={RouterLink}
-      to={path}
-      sx={{
-        ...(isActiveRoot && activeRootStyle)
-      }}
-    >
+    <ListItemStyle component={RouterLink} to={path} sx={{ ...(isActiveRoot && activeRootStyle) }}>
       <ListItemIconStyle>{icon && icon}</ListItemIconStyle>
       <ListItemText disableTypography primary={item.title} />
       {info && info}

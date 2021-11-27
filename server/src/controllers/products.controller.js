@@ -179,3 +179,12 @@ export const rateProduct = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 //#endregion
+
+//#region Product extra info
+export const getProductSpecifications = async (req, res, next) => {
+  try {
+    const data = await productService.getSpecifications();
+    resUtils.status200(res, 'Get product specifications successfully!', data);
+  } catch (err) { next(err); }
+};
+//#endregion

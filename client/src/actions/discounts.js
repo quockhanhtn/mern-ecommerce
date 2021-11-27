@@ -1,11 +1,15 @@
 import * as actionTypes from '../constants/actionTypes';
 import * as api from '../api';
 
-export const getAllDiscounts = () => async (dispatch) => {
+export const getAllDiscounts = (isSimple) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
-    const { data } = await api.getAllDiscount();
-    dispatch({ type: actionTypes.DISCOUNT.GET_ALL, payload: data });
+    const { data } = await api.getAllDiscount(isSimple ? 'name slug image code' : null);
+
+    dispatch({
+      type: isSimple ? actionTypes.DISCOUNT.GET_ALL_SIMPLE : actionTypes.DISCOUNT.GET_ALL,
+      payload: data
+    });
     dispatch({ type: actionTypes.END_LOADING });
   } catch (e) {
     console.error('Error when get posts in actions/discounts/getAllDiscounts', e);

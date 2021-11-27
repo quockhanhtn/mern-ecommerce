@@ -3,7 +3,7 @@ import { useSnackbar } from 'notistack';
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
 import { useState, useCallback, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+
 // material
 import {
   Autocomplete,
@@ -20,17 +20,21 @@ import {
   Stack,
   Typography
 } from '@material-ui/core';
+// from validation
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
+// redux
+import { useSelector, useDispatch } from 'react-redux';
+import { createCategory, updateCategory } from '../../../actions/categories';
+// hooks
+import useLocales from '../../../hooks/useLocales';
+// components
 import { MRadio, MIconButton, MLabelTypo } from '../../../components/@material-extend';
-//
 import { UploadSingleFile } from '../../../components/upload';
 import { varFadeInUp, MotionInView } from '../../../components/animate';
-import useLocales from '../../../hooks/useLocales';
-import { createCategory, updateCategory } from '../../../actions/categories';
-import { firebaseUploadSingle } from '../../../helper/firebaseHelper';
 import LoadingScreen from '../../../components/LoadingScreen';
 import { allowImageMineTypes } from '../../../constants/imageMineTypes';
+import { firebaseUploadSingle } from '../../../helper/firebaseHelper';
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +56,8 @@ export default function CategoryForm({ currentId, open, setOpen }) {
   const [uploadImage, setUploadImage] = useState(null);
   const [uploadPercent, setUploadPercent] = useState(-1);
 
+  const orderList = categoriesList.map((c) => c.order);
+
   useEffect(() => {
     if (category) {
       setCategoryData({ ...categoryData, ...category });
@@ -63,6 +69,10 @@ export default function CategoryForm({ currentId, open, setOpen }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
+
+  const handleChangeOrder = (e, newValue) => {
+    setCategoryData({ ...categoryData, order: newValue });
+  };
 
   const handleDropSingleFile = useCallback((acceptedFiles) => {
     const uploadFile = acceptedFiles[0];
@@ -135,8 +145,12 @@ export default function CategoryForm({ currentId, open, setOpen }) {
   };
 
   const CategorySchema = Yup.object().shape({
-    name: Yup.string().required(t('dashboard.categories.name-validation')),
-    desc: Yup.string().required(t('dashboard.categories.desc-validation'))
+    name: Yup.string()
+      .trim()
+      .required(t('dashboard.categories.name-validation'))
+      .min(6, t('dashboard.categories.name-validation-len'))
+      .max(25, t('dashboard.categories.name-validation-len'))
+    // desc: Yup.string().required(t('dashboard.categories.desc-validation'))
   });
 
   const formik = useFormik({
@@ -170,9 +184,22 @@ export default function CategoryForm({ currentId, open, setOpen }) {
               <LoadingScreen />
             ) : (
               <Stack spacing={3}>
+                {currentId && (
+                  <MotionInView variants={varFadeInUp}>
+                    <Autocomplete
+                      fullWidth
+                      options={orderList}
+                      value={categoryData.order}
+                      renderInput={(params) => <TextField {...params} label={t('common.order')} margin="none" />}
+                      onChange={handleChangeOrder}
+                    />
+                  </MotionInView>
+                )}
+
                 <MotionInView variants={varFadeInUp}>
                   <TextField
                     fullWidth
+                    inputProps={{ minLength: 6, maxLength: 25 }}
                     label={t('dashboard.categories.name')}
                     {...getFieldProps('name')}
                     error={Boolean(touched.name && errors.name)}
@@ -194,7 +221,7 @@ export default function CategoryForm({ currentId, open, setOpen }) {
                   />
                 </MotionInView>
 
-                <MotionInView variants={varFadeInUp}>
+                {/* <MotionInView variants={varFadeInUp}>
                   <Autocomplete
                     fullWidth
                     options={categoriesList.filter((x) => !x.isHide && x._id !== currentId)}
@@ -205,7 +232,7 @@ export default function CategoryForm({ currentId, open, setOpen }) {
                       <TextField {...params} label={t('dashboard.categories.parent')} margin="none" />
                     )}
                   />
-                </MotionInView>
+                </MotionInView> */}
 
                 <MotionInView variants={varFadeInUp}>
                   <Grid>

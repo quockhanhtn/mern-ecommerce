@@ -185,8 +185,8 @@ export default function PageProductList() {
           links={[
             { name: t('dashboard.title'), href: PATH_DASHBOARD.root },
             {
-              name: t('dashboard.ecommerce'),
-              href: PATH_DASHBOARD.root
+              name: t('dashboard.management'),
+              href: PATH_DASHBOARD.app.root
             },
             { name: t('dashboard.products.heading') }
           ]}

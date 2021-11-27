@@ -8,12 +8,13 @@ const formatDiscount = (discount, req) => {
 
 export const getDiscounts = async (req, res, next) => {
   try {
-    let discounts = await discountService.getAll();
+    const fields = req.query.fields || null;
+    let discounts = await discountService.getAll(fields);
     discounts = discounts.map(discount => formatDiscount(discount, req));
     if (discounts && discounts.length > 0) {
       resUtils.status200(res, 'Gets all discounts successfully', discounts);
     } else {
-      resUtils.status200(res, 'No discounts found',[]);
+      resUtils.status200(res, 'No discounts found', []);
     }
   } catch (err) { next(err); }
 }

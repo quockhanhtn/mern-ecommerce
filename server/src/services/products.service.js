@@ -12,6 +12,7 @@ export default {
   updateProduct,
   removeProduct,
   rateProduct,
+  getSpecifications,
 
   addProductVariants,
   updateProductVariants,
@@ -267,4 +268,28 @@ async function rateProduct(identity, ip, rateStar) {
 
   await Product.findOneAndUpdate(filter, { $pull: { rates: { ip: ip } } }); // remove old rate if exist
   return Product.findOneAndUpdate(filter, { $addToSet: { rates: { ip: ip, star: rateStar } } }, { new: true });
+}
+
+async function getSpecifications() {
+  const mainSpecs = await Product.distinct('specifications').exec();
+  const variantSpecs = await Product.distinct('variants.addSpecifications').exec();
+  const allSpecs = [...new Set([...mainSpecs, ...variantSpecs])];
+
+  const groupObj = allSpecs.reduce((acc, cur) => {
+    const key = JSON.stringify({ key: cur.key, name: cur.name });
+    if (acc[key]) {
+      acc[key].push(cur.value);
+    } else {
+      acc[key] = [cur.value];
+    }
+    return acc;
+  }, {});
+
+  return Object.keys(groupObj).map(k => {
+    return {
+      key: JSON.parse(k).key,
+      name: JSON.parse(k).name,
+      values: groupObj[k]
+    };
+  });
 }

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
+import { useLocation } from 'react-router';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Button, Typography, Container } from '@material-ui/core';
@@ -21,6 +22,9 @@ const RootStyle = styled(Page)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Page404() {
+  const { pathname } = useLocation();
+  const isDashboard = pathname.includes('/dashboard');
+
   return (
     <RootStyle title="404 Page Not Found | Minimal-UI">
       <Container>
@@ -40,7 +44,7 @@ export default function Page404() {
               <PageNotFoundIllustration sx={{ height: 260, my: { xs: 5, sm: 10 } }} />
             </motion.div>
 
-            <Button to="/" size="large" variant="contained" component={RouterLink}>
+            <Button to={isDashboard ? '/dashboard' : '/'} size="large" variant="contained" component={RouterLink}>
               Go to Home
             </Button>
           </Box>

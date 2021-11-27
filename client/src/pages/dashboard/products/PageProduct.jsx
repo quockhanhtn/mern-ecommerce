@@ -16,7 +16,11 @@ export default function PageProduct() {
         <HeaderBreadcrumbs
           heading={t('dashboard.products.heading-create')}
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: t('dashboard.title'), href: PATH_DASHBOARD.root },
+            {
+              name: t('dashboard.management'),
+              href: PATH_DASHBOARD.app.root
+            },
             {
               name: t('dashboard.products.heading'),
               href: PATH_DASHBOARD.app.products.list
