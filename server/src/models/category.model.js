@@ -51,7 +51,7 @@ categorySchema
 
 categorySchema.statics.generateOrder = async function () {
   const item = await this.findOne().select('order').sort('-order').lean().exec();
-  const order = item ? parseInt(item.order, 10) : 0;
+  const order = parseInt(item?.order, 10) || 0;
   return order + 1;
 }
 
