@@ -68,8 +68,8 @@ async function create(data, createdBy = null) {
   });
 
   if (createdBy) {
-    category.createdBy = createdBy;
-    category.updatedBy = createdBy;
+    brand.createdBy = createdBy;
+    brand.updatedBy = createdBy;
   }
 
   return await brand.save();
@@ -83,7 +83,7 @@ async function create(data, createdBy = null) {
  */
 
 async function update(identity, updatedData, updatedBy = null) {
-  if (updatedBy) { updatedData = updatedBy; }
+  if (updatedBy) { updatedData.updatedBy = updatedBy; }
   const currentBrand = await getOne(identity);
 
   const updatedBrand = await Brand.findByIdAndUpdate(currentBrand._id, updatedData, { new: true });
