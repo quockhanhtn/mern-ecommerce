@@ -92,12 +92,6 @@ export default function CartPage() {
     }
   }, [dispatch, isMountedRef, cart]);
 
-  useEffect(() => {
-    if (activeStep === 1) {
-      // dispatch(createBilling(null));
-    }
-  }, [dispatch, activeStep]);
-
   return (
     <Page title="HK-Mobile: Cart">
       <Container>

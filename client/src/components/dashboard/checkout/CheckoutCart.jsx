@@ -16,6 +16,7 @@ import CheckoutSummary from './CheckoutSummary';
 import CheckoutProductList from './CheckoutProductList';
 import useToCart from '../../../hooks/useToCart';
 import * as Helper from '../../../helper/cartHelper';
+import useAuth from '../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +31,7 @@ export default function CheckoutCart() {
     decreaseProductInCart,
     nextStepPayment
   } = useToCart();
+  const { user } = useAuth();
   const [subTotal, setSubTotal] = useState(Helper.getSubTotal(cart));
   const discount = 50000;
   const [total, setTotal] = useState(Helper.getSubTotal(cart) - discount);
@@ -49,11 +51,17 @@ export default function CheckoutCart() {
   };
 
   const handleNextStep = () => {
-    nextStepPayment(activeStep).then(() => {
-      enqueueSnackbar('Next step to cart successfully', {
+    if (user) {
+      nextStepPayment(activeStep).then(() => {
+        enqueueSnackbar('Next step to cart successfully', {
+          variant: 'success'
+        });
+      });
+    } else {
+      enqueueSnackbar('Bạn phải đăng nhập để tiến hành thanh toán đơn hàng!', {
         variant: 'success'
       });
-    });
+    }
   };
 
   const handleApplyDiscount = () => {
