@@ -9,9 +9,12 @@ import { Box, Grid, Card, Button, Typography } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 //
+import { useSnackbar } from 'notistack';
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutNewAddressForm from './CheckoutNewAddressForm';
 import Label from '../../Label';
+import * as Helper from '../../../helper/cartHelper';
+import useToCart from '../../../hooks/useToCart';
 
 // ----------------------------------------------------------------------
 
@@ -106,8 +109,11 @@ function AddressItem({ address, onNextStep, onCreateBilling }) {
 export default function CheckoutBillingAddress() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-  const { checkout } = useSelector((state) => state.product);
-  const { total, discount, subtotal } = checkout;
+  const { enqueueSnackbar } = useSnackbar();
+  const { cart, activeStep, backStepPayment } = useToCart();
+  const [subTotal, setSubTotal] = useState(Helper.getSubTotal(cart));
+  const discount = 50000;
+  const [total, setTotal] = useState(Helper.getSubTotal(cart) - discount);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -122,7 +128,11 @@ export default function CheckoutBillingAddress() {
   };
 
   const handleBackStep = () => {
-    // dispatch(onBackStep());
+    backStepPayment(activeStep).then(() => {
+      enqueueSnackbar('Back step to cart successfully', {
+        variant: 'success'
+      });
+    });
   };
 
   const handleCreateBilling = (value) => {
@@ -152,7 +162,7 @@ export default function CheckoutBillingAddress() {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <CheckoutSummary subtotal={subtotal} total={total} discount={discount} />
+          <CheckoutSummary subtotal={subTotal} total={total} discount={discount} />
         </Grid>
       </Grid>
 
