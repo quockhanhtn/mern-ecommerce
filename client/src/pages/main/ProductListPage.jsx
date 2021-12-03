@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
 // material
@@ -7,6 +8,7 @@ import { experimentalStyled as styled } from '@material-ui/core/styles';
 import {
   Autocomplete,
   Box,
+  Button,
   Container,
   Card,
   CardContent,
@@ -18,7 +20,6 @@ import {
 } from '@material-ui/core';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllBrands } from '../../actions/brands';
 import { getAllProducts } from '../../actions/products';
 // hooks
 import useQuery from '../../hooks/useQuery';
@@ -50,45 +51,56 @@ export default function ProductListPage() {
   const query = useQuery();
   const { t } = useLocales();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const brandSlug = query.get('b');
   const categorySlug = query.get('c');
   const search = query.get('search');
 
-  const { list: products, isLoading: isLoadingProduct } = useSelector((state) => state.product);
+  const { list: products, isLoading: isLoadingProduct, pagination } = useSelector((state) => state.product);
 
   const { listSimple: categoryList } = useSelector((state) => state.category);
   const { listSimple: brandList } = useSelector((state) => state.brand);
 
   const [categoriesSelected, setCategoriesSelected] = useState([]);
   const [brandsSelected, setBrandsSelected] = useState([]);
-  const [searchText, setSearchText] = useState(decodeURIComponent(search) || '');
+  const [searchText, setSearchText] = useState(decodeURIComponent(search || ''));
 
   useEffect(() => {
-    if (!brandList || brandList.length === 0) {
-      dispatch(getAllBrands(true));
+    setCategoriesSelected([...categoryList.filter((x) => categorySlug?.split(',').includes(x.slug))]);
+    setBrandsSelected([...brandList.filter((x) => brandSlug?.split(',').includes(x.slug))]);
+
+    const b = brandsSelected.map((x) => x._id).join(',');
+    const c = categoriesSelected.map((x) => x._id).join(',');
+    dispatch(getAllProducts(searchText, b, c, 1, 100));
+  }, [categorySlug, brandSlug, search]);
+
+  const handleSearchTextKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
     }
-  }, []);
+  };
 
-  useEffect(() => {
-    const brands = brandSlug?.split(',');
-    const brandsId = [];
-    brands?.forEach((b) => {
-      const index = brandList.indexOf((x) => x.slug === b);
-      if (index > -1) {
-        brandsId.push(brandList[index]._id);
-      }
-    });
-    console.log('brandsId', brandsId);
-    setBrandsSelected(brandsId);
-  }, [brandList]);
-
-  useEffect(() => {
-    dispatch(getAllProducts());
-  }, [dispatch]);
-
-  const handleSearch = (e) => {
+  const handleSearchTextChange = (e) => {
     setSearchText(e.target.value);
+  };
+
+  const handleCategoriesChange = (e, value) => {
+    setCategoriesSelected(value);
+  };
+
+  const handleBrandsChange = (e, value) => {
+    setBrandsSelected(value);
+  };
+
+  const handleSearch = () => {
+    const b = brandsSelected.map((x) => x._id).join(',');
+    const bQuery = brandsSelected.map((x) => x.slug).join(',');
+    const c = categoriesSelected.map((x) => x._id).join(',');
+    const cQuery = categoriesSelected.map((x) => x.slug).join(',');
+
+    dispatch(getAllProducts(searchText, b, c, 1, 100));
+    navigate(`/q?c=${cQuery}&b=${bQuery}&search=${encodeURIComponent(searchText)}`);
   };
 
   return (
@@ -105,9 +117,10 @@ export default function ProductListPage() {
                     </Typography>
                     <TextField
                       fullWidth
-                      label="Filled"
+                      label={t('dashboard.products.name')}
                       value={searchText}
-                      onChange={handleSearch}
+                      onChange={handleSearchTextChange}
+                      onKeyDown={handleSearchTextKeyDown}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
@@ -124,9 +137,10 @@ export default function ProductListPage() {
                             fullWidth
                             options={categoryList}
                             getOptionLabel={(item) => item.name}
-                            defaultValue={[categoryList[0]]}
+                            value={categoriesSelected}
                             filterSelectedOptions
                             renderInput={(params) => <TextField {...params} label={t('dashboard.categories.title')} />}
+                            onChange={handleCategoriesChange}
                           />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -135,13 +149,22 @@ export default function ProductListPage() {
                             fullWidth
                             options={brandList}
                             getOptionLabel={(item) => item?.name}
-                            value={brandList.find((x) => brandsSelected.includes(x._id))}
+                            value={brandsSelected}
                             filterSelectedOptions
                             renderInput={(params) => <TextField {...params} label={t('dashboard.brands.title')} />}
+                            onChange={handleBrandsChange}
                           />
                         </Grid>
                       </Grid>
                     </Box>
+                    <Box>
+                      <Button variant="contained" color="primary" sx={{ paddingX: 5 }} onClick={handleSearch}>
+                        {t('home.search')}
+                      </Button>
+                    </Box>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                      {`Tìm thấy ${pagination?.total || 0}/${pagination?.countAll || 0} sản phẩm`}
+                    </Typography>
                   </Stack>
                 </CardContent>
               </Card>

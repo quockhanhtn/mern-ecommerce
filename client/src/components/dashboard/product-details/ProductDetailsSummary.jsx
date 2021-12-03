@@ -155,9 +155,9 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
 
           <Typography variant="h4" sx={{ mb: 3 }}>
             <Box component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>
-              {variants?.[indexVariant] && `${fNumber(variants?.[0]?.price)} ₫`}
+              {variants?.[indexVariant] && `${fNumber(variants?.[indexVariant]?.price)} ₫`}
             </Box>
-            &nbsp;{`${fNumber(variants?.[0]?.marketPrice)} ₫`}
+            &nbsp;{`${fNumber(variants?.[indexVariant]?.marketPrice)} ₫`}
           </Typography>
 
           <Divider sx={{ borderStyle: 'dashed' }} />

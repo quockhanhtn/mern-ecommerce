@@ -5,17 +5,25 @@ import { useState } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
-import { Box, Grid, Card, Button, Typography, TextField } from '@material-ui/core';
+import { Box, Grid, Card, Button, Typography, TextField, Stack, Link } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
+import { useTheme, withStyles } from '@material-ui/core/styles';
 //
 import { useSnackbar } from 'notistack';
+import { Form, FormikProvider, useFormik } from 'formik';
+import * as Yup from 'yup';
+import { Link as RouterLink } from 'react-router-dom';
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutNewAddressForm from './CheckoutNewAddressForm';
 import Label from '../../Label';
 import * as Helper from '../../../helper/cartHelper';
 import useToCart from '../../../hooks/useToCart';
 import useAuth from '../../../hooks/useAuth';
+import { PATH_DASHBOARD, PATH_AUTH } from '../../../routes/paths';
+import useLocales from '../../../hooks/useLocales';
+import { MotionInView, varFadeInUp } from '../../animate';
+import ProvincePicker from '../../ProvincePicker';
 
 // ----------------------------------------------------------------------
 
@@ -109,6 +117,8 @@ function AddressItem({ address, onNextStep, onCreateBilling }) {
 
 export default function CheckoutBillingAddress() {
   const dispatch = useDispatch();
+  const { t } = useLocales();
+  const theme = useTheme();
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -149,10 +159,134 @@ export default function CheckoutBillingAddress() {
     </div>
   );
 
+  const PersonInfo = Yup.object().shape({
+    fullName: Yup.string().required('Full Name is required'),
+    phone: Yup.string().required('Phone is required'),
+    email: Yup.string().required('Email is required'),
+    addressDetail: Yup.string().required('Address is required')
+  });
+
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      fullName: '',
+      phone: '',
+      email: '',
+      addressDetail: '',
+      province: '',
+      district: '',
+      subDistrict: '',
+      moreInfo: ''
+    },
+    validationSchema: PersonInfo,
+    onSubmit: async () => {
+      try {
+        // handleSave();
+      } catch (e) {
+        enqueueSnackbar('Lỗi', {
+          variant: 'error'
+        });
+      }
+    }
+  });
+
+  const { errors, values, touched, handleSubmit, setFieldValue, getFieldProps } = formik;
+
   const renderAddressOfNotUser = () => (
-    <div>
-      <TextField fullWidth label="sssss" size="small" />
-    </div>
+    <FormikProvider value={formik}>
+      <Form>
+        <Stack spacing={3}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="subtitle2">Thông tin thanh toán</Typography>
+            {!user && (
+              <Stack direction="row">
+                <Typography variant="subtitle2">Bạn đã có tài khoản?</Typography>
+                <Link to={PATH_AUTH.login} color="inherit" component={RouterLink} sx={{ textDecoration: '' }}>
+                  <Typography
+                    variant="subtitle2"
+                    component="span"
+                    sx={{ color: 'primary.main', textDecoration: 'none' }}
+                  >
+                    &nbsp;Đăng nhập ngay
+                  </Typography>
+                </Link>
+              </Stack>
+            )}
+          </Box>
+          <Stack direction="row" spacing={3} sx={{ marginBottom: theme.spacing(2) }}>
+            <TextField
+              fullWidth
+              label="Full Name"
+              {...getFieldProps('fullName')}
+              error={Boolean(touched.fullName && errors.fullName)}
+              helperText={touched.fullName && errors.fullName}
+              size="small"
+            />
+            <TextField
+              fullWidth
+              label="Phone"
+              {...getFieldProps('phone')}
+              error={Boolean(touched.phone && errors.phone)}
+              helperText={touched.phone && errors.phone}
+              size="small"
+            />
+          </Stack>
+          <TextField
+            fullWidth
+            label="Email"
+            {...getFieldProps('email')}
+            error={Boolean(touched.email && errors.email)}
+            helperText={touched.email && errors.email}
+            size="small"
+          />
+          <TextField
+            fullWidth
+            label="Address"
+            {...getFieldProps('addressDetail')}
+            error={Boolean(touched.addressDetail && errors.addressDetail)}
+            helperText={touched.addressDetail && errors.addressDetail}
+            size="small"
+          />
+          <Stack direction="row" spacing={3} sx={{ marginBottom: theme.spacing(2) }}>
+            <ProvincePicker
+              label="Tỉnh/Thành"
+              // onChange={(e, newValue) => setBrandData({ ...brandData, country: newValue.label })}
+              // value={brandData.country}
+              required
+              fullWidth
+              size="small"
+            />
+            <ProvincePicker
+              label="Quận/Huyện"
+              // onChange={(e, newValue) => setBrandData({ ...brandData, country: newValue.label })}
+              // value={brandData.country}
+              required
+              fullWidth
+              size="small"
+            />
+            <ProvincePicker
+              label="Phường/Xã"
+              // onChange={(e, newValue) => setBrandData({ ...brandData, country: newValue.label })}
+              // value={brandData.country}
+              required
+              fullWidth
+              size="small"
+            />
+          </Stack>
+          <TextField
+            fullWidth
+            label="More Info (Example: Delivery time)"
+            {...getFieldProps('moreInfo')}
+            error={Boolean(touched.moreInfo && errors.moreInfo)}
+            helperText={touched.moreInfo && errors.moreInfo}
+            size="small"
+          />
+          <Button fullWidth size="large" type="submit" variant="contained">
+            Tiếp tục
+          </Button>
+        </Stack>
+      </Form>
+    </FormikProvider>
   );
 
   return (
@@ -161,7 +295,7 @@ export default function CheckoutBillingAddress() {
         <Grid item xs={12} md={8}>
           {user && renderAddressOfUser()}
           {!user && renderAddressOfNotUser()}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
             <Button size="small" color="inherit" onClick={handleBackStep} startIcon={<Icon icon={arrowIosBackFill} />}>
               Back
             </Button>

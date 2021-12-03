@@ -77,7 +77,7 @@ const userSchema = mongoose.Schema(
       required: true
     },
 
-    addresses: { type: Array, required: false },
+    addresses: { type: addressSchema, required: false },
     status: {
       type: String,
       enum: Object.values(constants.USER.STATUS),
