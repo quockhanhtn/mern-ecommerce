@@ -25,7 +25,6 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 //
 import Label from '../../../components/Label';
 import { UploadAvatar } from '../../../components/upload';
-import countries from '../../../utils/countries';
 import useAuth from '../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
@@ -212,7 +211,7 @@ export default function UserForm() {
                     error={Boolean(touched.phoneNumber && errors.phoneNumber)}
                     helperText={touched.phoneNumber && errors.phoneNumber}
                   />
-                  <TextField
+                  {/* <TextField
                     select
                     fullWidth
                     label="Country"
@@ -228,7 +227,7 @@ export default function UserForm() {
                         {option.label}
                       </option>
                     ))}
-                  </TextField>
+                  </TextField> */}
                 </Stack>
 
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>

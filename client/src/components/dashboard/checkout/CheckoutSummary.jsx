@@ -15,7 +15,7 @@ import {
   InputAdornment
 } from '@material-ui/core';
 // utils
-import { fCurrency } from '../../../utils/formatNumber';
+import { fCurrency, fNumber } from '../../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
@@ -63,14 +63,14 @@ export default function CheckoutSummary({
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               Sub Total
             </Typography>
-            <Typography variant="subtitle2">{fCurrency(subtotal)}</Typography>
+            <Typography variant="subtitle2">{`${fNumber(subtotal)} ₫`}</Typography>
           </Stack>
 
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               Discount
             </Typography>
-            <Typography variant="subtitle2">{discount ? fCurrency(-discount) : '-'}</Typography>
+            <Typography variant="subtitle2">{discount ? `${fNumber(discount)} ₫` : '-'}</Typography>
           </Stack>
 
           <Stack direction="row" justifyContent="space-between">
@@ -86,7 +86,7 @@ export default function CheckoutSummary({
             <Typography variant="subtitle1">Total</Typography>
             <Box sx={{ textAlign: 'right' }}>
               <Typography variant="subtitle1" sx={{ color: 'error.main' }}>
-                {fCurrency(total)}
+                {`${fNumber(total)} ₫`}
               </Typography>
               <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
                 (VAT included if applicable)

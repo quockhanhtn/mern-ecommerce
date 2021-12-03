@@ -8,15 +8,21 @@ import roundVerifiedUser from '@iconify/icons-ic/round-verified-user';
 import { alpha, experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
 import { Box, Tab, Card, Grid, Divider, Skeleton, Container, Typography } from '@material-ui/core';
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
+// redux
 import { useDispatch, useSelector } from 'react-redux';
+import { getProductById } from '../../actions/products';
+// hooks
+import useLocales from '../../hooks/useLocales';
+// components
 import Page from '../../components/Page';
+import LoadingScreen from '../../components/LoadingScreen';
 import Markdown from '../../components/Markdown';
 import {
   ProductDetailsCarousel,
   ProductDetailsReview,
   ProductDetailsSummary
 } from '../../components/dashboard/product-details';
-import { getProductById } from '../../actions/products';
+
 // ----------------------------------------------------------------------
 
 const PRODUCT_DESCRIPTION = [
@@ -68,17 +74,18 @@ const SkeletonLoad = (
 );
 
 export default function ProductDetails() {
+  const { t } = useLocales();
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { slug } = useParams();
-  const [value, setValue] = useState('1');
-  const { item: product } = useSelector((state) => state.product);
+  const { slug: productSlug } = useParams();
+  const { item: product, isLoading } = useSelector((state) => state.product);
   const [images, setImages] = useState([]);
+  const [tab, setTab] = useState('1');
   const [indexVariant, setIndexVariant] = useState(0);
 
   useEffect(() => {
-    dispatch(getProductById(slug));
-  }, [slug]);
+    dispatch(getProductById(productSlug));
+  }, [productSlug]);
 
   useEffect(() => {
     setImages([]);
@@ -86,16 +93,16 @@ export default function ProductDetails() {
   }, [product, indexVariant]);
 
   const handleChangeTab = (event, newValue) => {
-    setValue(newValue);
+    setTab(newValue);
   };
 
   const handleGatherPicture = () => {
-    if (product?.variants[indexVariant].pictures.length > 0) {
+    if (product?.variants?.[indexVariant].pictures.length > 0) {
       const temp = [...product?.variants[indexVariant].pictures];
       temp.push(product?.variants[indexVariant].thumbnail);
       setImages(temp);
     } else {
-      const temp = [product?.variants[indexVariant].thumbnail];
+      const temp = [product?.variants?.[indexVariant].thumbnail];
       setImages(temp);
     }
   };
@@ -104,74 +111,77 @@ export default function ProductDetails() {
     setIndexVariant(index);
   };
 
-  return (
-    <Page title="HK-Mobile: Product Details">
-      <Container>
-        {product && (
-          <>
-            <Card>
-              <Grid container>
-                <Grid item xs={12} md={6} lg={7} sx={{ marginBottom: theme.spacing(1) }}>
-                  <ProductDetailsCarousel images={images} />
-                </Grid>
-                <Grid item xs={12} md={6} lg={5}>
-                  <ProductDetailsSummary
-                    indexVariant={indexVariant}
-                    handleChangeIndexVariant={handleChangeIndexVariant}
-                  />
-                </Grid>
-              </Grid>
-            </Card>
-            <Grid container sx={{ my: 8 }}>
-              {PRODUCT_DESCRIPTION.map((item) => (
-                <Grid item xs={12} md={4} key={item.title}>
-                  <Box
-                    sx={{
-                      my: 2,
-                      mx: 'auto',
-                      maxWidth: 280,
-                      textAlign: 'center'
-                    }}
-                  >
-                    <IconWrapperStyle>
-                      <Icon icon={item.icon} width={36} height={36} />
-                    </IconWrapperStyle>
-                    <Typography variant="subtitle1" gutterBottom>
-                      {item.title}
-                    </Typography>
-                    <Typography sx={{ color: 'text.secondary' }}>{item.description}</Typography>
-                  </Box>
-                </Grid>
-              ))}
-            </Grid>
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
-            <Card>
-              <TabContext value={value}>
-                <Box sx={{ px: 3, bgcolor: 'background.neutral' }}>
-                  <TabList onChange={handleChangeTab}>
-                    <Tab disableRipple value="1" label="Description" />
-                    <Tab
-                      disableRipple
-                      value="2"
-                      // label={`Review (${product?.c.length})`}
-                      label="Review"
-                      sx={{ '& .MuiTab-wrapper': { whiteSpace: 'nowrap' } }}
-                    />
-                  </TabList>
+  return (
+    <Page title={(product?.name?.concat(' - ') || '') + t('home.page-title')}>
+      <Container maxWidth="lg" sx={{ paddingY: 5 }}>
+        <>
+          <Card>
+            <Grid container>
+              <Grid item xs={12} md={6} lg={7} sx={{ marginBottom: theme.spacing(1) }}>
+                <ProductDetailsCarousel images={images} />
+              </Grid>
+              <Grid item xs={12} md={6} lg={5}>
+                <ProductDetailsSummary
+                  isLoading={isLoading}
+                  product={product}
+                  indexVariant={indexVariant}
+                  handleChangeIndexVariant={handleChangeIndexVariant}
+                />
+              </Grid>
+            </Grid>
+          </Card>
+          <Grid container sx={{ my: 8 }}>
+            {PRODUCT_DESCRIPTION.map((item) => (
+              <Grid item xs={12} md={4} key={item.title}>
+                <Box
+                  sx={{
+                    my: 2,
+                    mx: 'auto',
+                    maxWidth: 280,
+                    textAlign: 'center'
+                  }}
+                >
+                  <IconWrapperStyle>
+                    <Icon icon={item.icon} width={36} height={36} />
+                  </IconWrapperStyle>
+                  <Typography variant="subtitle1" gutterBottom>
+                    {item.title}
+                  </Typography>
+                  <Typography sx={{ color: 'text.secondary' }}>{item.description}</Typography>
                 </Box>
-                <Divider />
-                <TabPanel value="1">
-                  <Box sx={{ p: 3 }}>
-                    <Markdown children={product.desc} />
-                  </Box>
-                </TabPanel>
-                <TabPanel value="2">
-                  <ProductDetailsReview product={product} />
-                </TabPanel>
-              </TabContext>
-            </Card>
-          </>
-        )}
+              </Grid>
+            ))}
+          </Grid>
+
+          <Card>
+            <TabContext value={tab}>
+              <Box sx={{ px: 3, bgcolor: 'background.neutral' }}>
+                <TabList onChange={handleChangeTab}>
+                  <Tab disableRipple value="1" label={t('home.product-desc')} />
+                  <Tab
+                    disableRipple
+                    value="2"
+                    label={t('home.review')}
+                    sx={{ '& .MuiTab-wrapper': { whiteSpace: 'nowrap' } }}
+                  />
+                </TabList>
+              </Box>
+              <Divider />
+              <TabPanel value="1">
+                <Box sx={{ p: 3 }}>
+                  <Markdown children={product.desc} />
+                </Box>
+              </TabPanel>
+              <TabPanel value="2">
+                <ProductDetailsReview product={product} />
+              </TabPanel>
+            </TabContext>
+          </Card>
+        </>
       </Container>
     </Page>
   );

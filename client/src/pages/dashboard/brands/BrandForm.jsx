@@ -13,21 +13,26 @@ import {
   Grid,
   RadioGroup,
   FormControlLabel,
-  Radio,
-  Autocomplete
+  Radio
 } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { Form, FormikProvider, useFormik } from 'formik';
-import { useSnackbar } from 'notistack';
-import * as Yup from 'yup';
+// icons
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
-import { UploadSingleFile } from '../../../components/upload';
+// form validation
+import * as Yup from 'yup';
+import { Form, FormikProvider, useFormik } from 'formik';
+import { useSnackbar } from 'notistack';
+// redux
+import { useDispatch, useSelector } from 'react-redux';
+import { createBrand, updateBrand } from '../../../actions/brands';
+// hooks
 import useLocales from '../../../hooks/useLocales';
+// components
+import CountryPicker, { defaultCountryName } from '../../../components/CountryPicker';
+import { UploadSingleFile } from '../../../components/upload';
 import { MotionInView, varFadeInUp } from '../../../components/animate';
 import { MIconButton, MRadio } from '../../../components/@material-extend';
-import countries from '../../../utils/countries';
-import { createBrand, updateBrand } from '../../../actions/brands';
+// others
 import { allowImageMineTypes } from '../../../constants/imageMineTypes';
 import { firebaseUploadSingle } from '../../../helper/firebaseHelper';
 
@@ -51,7 +56,7 @@ export default function BrandForm({ currentId, open, setOpen }) {
     name: '',
     desc: '',
     isHide: false,
-    country: brand?.country || countries[0].label,
+    country: brand?.country || defaultCountryName,
     headQuarters: '',
     image: ''
   });
@@ -66,7 +71,7 @@ export default function BrandForm({ currentId, open, setOpen }) {
       setBrandData({
         name: '',
         desc: '',
-        country: countries[0].label,
+        country: 'Việt Nam',
         headQuarters: '',
         isHide: false,
         image: ''
@@ -229,18 +234,12 @@ export default function BrandForm({ currentId, open, setOpen }) {
                 </Grid>
               </MotionInView>
               <MotionInView variants={varFadeInUp}>
-                <Autocomplete
+                <CountryPicker
+                  label={t('dashboard.brands.country')}
+                  onChange={(e, newValue) => setBrandData({ ...brandData, country: newValue.label })}
+                  value={brandData.country}
                   required
                   fullWidth
-                  options={countries.map((country) => ({
-                    label: country.label
-                  }))}
-                  getOptionLabel={(option) => option.label}
-                  value={countries.find((c) => c.label === brandData.country)}
-                  onChange={(e, newValue) => setBrandData({ ...brandData, country: newValue.label })}
-                  renderInput={(params) => (
-                    <TextField {...params} label={t('dashboard.brands.country')} margin="none" />
-                  )}
                 />
               </MotionInView>
               <MotionInView variants={varFadeInUp}>

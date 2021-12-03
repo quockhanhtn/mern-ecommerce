@@ -20,12 +20,6 @@ export function getCart() {
   return cartJson;
 }
 
-export function getFullProductByCart() {
-  const cartLocalStorage = localStorage.getItem('cartLocalStorage');
-  const cartJson = JSON.parse(cartLocalStorage) || [];
-  return cartJson;
-}
-
 export function removeProductInCartByLocalStorage(_idProduct, skuVariantProduct) {
   const cartLocalStorage = localStorage.getItem('cartLocalStorage');
   const cartJson = JSON.parse(cartLocalStorage) || [];
@@ -60,4 +54,36 @@ export function decreaseProductInCartLocalStorage(_idProduct, skuVariantProduct)
   const cart = JSON.stringify(cartJson);
   localStorage.setItem('cartLocalStorage', cart);
   return cartJson;
+}
+
+export function getSubTotal(cart) {
+  let subTotal = 0;
+  cart.forEach((item) => {
+    subTotal += item.quantity * item.price;
+  });
+  return subTotal;
+}
+
+export function nextStepPayment(step) {
+  let activeStep = step;
+  if (step < 2) {
+    activeStep += 1;
+  }
+  localStorage.setItem('activeStep', activeStep);
+  return activeStep;
+}
+
+export function backStepPayment(step) {
+  let activeStep = step;
+  if (step > 0) {
+    activeStep -= 1;
+  }
+  localStorage.setItem('activeStep', activeStep);
+  return activeStep;
+}
+
+export function getStepPayment() {
+  const activeStep = localStorage.getItem('activeStep');
+  // Current I not handler it and remove 0
+  return 0;
 }

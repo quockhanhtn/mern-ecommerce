@@ -1,19 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 // components
-import { Container, Card, CardContent, CardHeader, Grid } from '@material-ui/core';
+import { Box, Container, Card, CardContent, CardHeader, Stack, Typography } from '@material-ui/core';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllCategories } from '../../actions/categories';
-import { getAllBrands } from '../../actions/brands';
-import { getAllDiscounts } from '../../actions/discounts';
+import { getAllProducts } from '../../actions/products';
 // hooks
 import useLocales from '../../hooks/useLocales';
 // components
 import Page from '../../components/Page';
+import Label from '../../components/Label';
 import { CarouselAnimation, CarouselMiniList } from '../../components/carousel';
-import ProductList from './home/ProductList';
+import ProductList from '../../components/e-commerce/ProductList';
+import { MButton } from '../../components/@material-extend';
+
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Page)(({ theme }) => ({
@@ -27,7 +28,8 @@ const ContentStyle = styled('div')(({ theme }) => ({
   position: 'relative',
   width: '100%',
   paddingTop: theme.spacing(2),
-  paddingBottom: theme.spacing(10)
+  paddingBottom: theme.spacing(10),
+  backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 100 : 800]
 }));
 
 // ----------------------------------------------------------------------
@@ -38,11 +40,18 @@ export default function HomePage() {
   const dispatch = useDispatch();
   const { listSimple: brandsListRaw, isLoading: isLoadingBrand } = useSelector((state) => state.brand);
   const { listSimple: discountsListRaw, isLoading: isLoadingDiscount } = useSelector((state) => state.discount);
+  const {
+    list: products,
+    isLoading: isLoadingProduct,
+    pagination: productPagination
+  } = useSelector((state) => state.product);
+  const productToShow = [];
+
   const brandsList = brandsListRaw.map((x) => ({
     title: x.name,
     image: x.image,
     description: x.description,
-    path: `/b/${x.slug}`
+    path: `/q?b=${x.slug}`
   }));
   const discountList = discountsListRaw.map((x) => ({
     _id: x._id,
@@ -53,111 +62,100 @@ export default function HomePage() {
   }));
 
   useEffect(() => {
-    dispatch(getAllCategories(true));
-    dispatch(getAllBrands(true));
-    dispatch(getAllDiscounts(true));
-  }, [dispatch]);
+    dispatch(getAllProducts());
+  }, []);
+
+  if (!isLoadingProduct) {
+    if (products) {
+      console.log('productToShow', productToShow);
+      console.log('productToShow', products);
+      productToShow.push(...products);
+      console.log('productToShow', productToShow);
+    }
+  }
+
+  const handleLoadMore = () => {
+    const { nextPage, hasNextPage } = productPagination;
+    if (hasNextPage) {
+      dispatch(getAllProducts('', '', '', nextPage));
+    }
+  };
 
   return (
     <RootStyle title={t('home.page-title')} id="move_top">
-      <ContentStyle sx={{ bgcolor: (theme) => (theme.palette.mode === 'light' ? 'grey.200' : 'grey.800') }}>
+      <ContentStyle>
         <Container maxWidth="lg">
-          <Grid container spacing={3}>
+          <Stack spacing={5}>
             {/* Discount carousel */}
-            <Grid item xs={12}>
-              <CarouselAnimation items={discountList} />
-            </Grid>
+            <CarouselAnimation items={discountList} />
 
             {/* Brand List carousel */}
-            <Grid item xs={12}>
-              <Card>
-                <CardHeader title={t('dashboard.brands.heading')} />
-                <CardContent>
-                  <CarouselMiniList
-                    items={brandsList}
-                    numberPerRow={2}
-                    numberShow={2}
-                    isLoading={isLoadingBrand}
-                    width={200}
-                    height={60}
-                    isShowTitle={false}
-                    imgObjectFit="contain"
-                    otherSlickSetting={{
-                      infinite: true,
-                      swipeToSlide: true,
-                      slidesPerRow: 2,
-                      rows: 2,
-                      responsive: [
-                        {
-                          breakpoint: 1024,
-                          settings: { slidesToShow: 3, slidesToScroll: 3, infinite: true, dots: true }
-                        },
-                        {
-                          breakpoint: 600,
-                          settings: { slidesToShow: 2, slidesToScroll: 2, initialSlide: 2 }
-                        },
-                        {
-                          breakpoint: 480,
-                          settings: { slidesToShow: 1, slidesToScroll: 1 }
-                        }
-                      ]
-                    }}
-                  />
-                </CardContent>
-              </Card>
-            </Grid>
+            <Card>
+              <CardHeader title={t('dashboard.brands.heading').toUpperCase()} />
+              <CardContent>
+                <CarouselMiniList
+                  items={brandsList}
+                  numberPerRow={2}
+                  numberShow={2}
+                  isLoading={isLoadingBrand}
+                  width={200}
+                  height={60}
+                  isShowTitle={false}
+                  imgObjectFit="contain"
+                  otherSlickSetting={{
+                    infinite: true,
+                    swipeToSlide: true,
+                    slidesPerRow: 2,
+                    rows: 2,
+                    responsive: [
+                      {
+                        breakpoint: 1024,
+                        settings: { slidesToShow: 3, slidesToScroll: 3, infinite: true, dots: true }
+                      },
+                      {
+                        breakpoint: 600,
+                        settings: { slidesToShow: 2, slidesToScroll: 2, initialSlide: 2 }
+                      },
+                      {
+                        breakpoint: 480,
+                        settings: { slidesToShow: 1, slidesToScroll: 1 }
+                      }
+                    ]
+                  }}
+                />
+              </CardContent>
+            </Card>
 
-            {/* Products List */}
-            <Grid item xs={12}>
-              <Card>
-                <CardHeader title={t('dashboard.products.heading')} />
-                <CardContent>
-                  <ProductList />
+            <Box>
+              <Card sx={{ marginBottom: 1.5, padding: 3 }}>
+                <CardContent sx={{ padding: 0, '&:last-child': { paddingBottom: 0 } }}>
+                  <Box sx={{ display: 'flex', marginBottom: -1 }}>
+                    <Typography variant="h5" component="h2" sx={{ padding: 0 }}>
+                      {t('dashboard.products.heading').toUpperCase()}
+                    </Typography>
+                    <Label color="info" sx={{ ml: 1 }}>
+                      {t('home.newest')}
+                    </Label>
+                  </Box>
                 </CardContent>
               </Card>
-            </Grid>
-          </Grid>
+              <ProductList products={productToShow} isLoading={isLoadingProduct} />
+            </Box>
+            {productPagination?.hasNextPage && (
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <MButton
+                  variant="outlined"
+                  sx={{ backgroundColor: 'white', width: '50%' }}
+                  onClick={handleLoadMore}
+                  isLoading={isLoadingProduct}
+                >
+                  Xem thêm
+                </MButton>
+              </Box>
+            )}
+          </Stack>
         </Container>
       </ContentStyle>
     </RootStyle>
   );
 }
-
-const discountMockData = [
-  {
-    _id: 1,
-    image: 'https://source.unsplash.com/random/800x600',
-    title: 'Discount 1',
-    link: 'https://facebook.com',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum quas animi ab deserunt tempora repellat maxime saepe tenetur eaque ipsum?'
-  },
-  {
-    _id: 2,
-    image: 'https://source.unsplash.com/random/800x600',
-    title: 'Discount 2',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum quas animi ab deserunt tempora repellat maxime saepe tenetur eaque ipsum?'
-  },
-  {
-    _id: 3,
-    image: 'https://source.unsplash.com/random/800x600',
-    title: 'Discount 3',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum quas animi ab deserunt tempora repellat maxime saepe tenetur eaque ipsum?'
-  },
-  {
-    _id: 4,
-    image: 'https://source.unsplash.com/random/800x600',
-    title: 'Discount 4',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum quas animi ab deserunt tempora repellat maxime saepe tenetur eaque ipsum?'
-  },
-  {
-    _id: 5,
-    image: 'https://source.unsplash.com/random/800x600',
-    title: 'Discount 5',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum quas animi ab deserunt tempora repellat maxime saepe tenetur eaque ipsum?'
-  }
-];

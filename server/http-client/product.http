@@ -1,0 +1,74 @@
+@BASE_URL = http://localhost:3001/api/v1
+@RESOURCE = products
+
+GET {{BASE_URL}}/{{RESOURCE}}
+
+###
+
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJhMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEiLCJpYXQiOjE2Mzc2NTg4OTUsImV4cCI6MTYzODI2MzY5NX0.YAoidwbFhi2-sJ2dwLVvcaaWZdLZuw34WQOq_UrUb80
+
+POST {{BASE_URL}}/{{RESOURCE}}
+authorization: Bearer {{TOKEN}}
+content-type: application/json
+
+{
+  "name": "Vsmart CShape 9.0",
+  "sku": "8600001",
+  "price": 1590000 ,
+  "marketPrice": 18690000 ,
+  "desc": "No desc",
+  "warrantyPeriod": 12,
+  "origin": "China",
+  "categoryId": "c00000000000000000000001",
+  "brandId": "b00000000000000000000001",
+  "views": 13,
+  "specifications": [
+    {
+      "name": "Kích thước màn hình",
+      "value": "6.39 inches"
+    },
+    {
+      "name": "Công nghệ màn hình",
+      "value": "LCD"
+    },
+    {
+      "name": "Camera sau",
+      "value": "12 MP"
+    },
+    {
+      "name": "Camera trước",
+      "value": "5 MP"
+    },
+    {
+      "name": "Chipset",
+      "value": "Mediatek Helio P60"
+    },
+    {
+      "name": "Dung lượng RAM",
+      "value": "3 GB"
+    },
+    {
+      "name": "Bộ nhớ trong",
+      "value": "64 GB"
+    },
+    {
+      "name": "Pin",
+      "value": "4020 mAh"
+    },
+    {
+      "name": "Hệ điều hành",
+      "value": "VOS 2.5"
+    }
+  ],
+  "variantName": "Xanh dương",
+  "quantity": 17,
+  "sold": 0,
+  "addSpecifications": [
+    {
+      "name": "Màu sắc",
+      "value": "Xanh dương"
+    }
+  ]
+  // "thumbnail": "https://cdn.cellphones.com.vn/media/catalog/product/cache/1/image/1000x/040ec09b1e35df139433887a97daa66f/v/s/vsmart-active-3_2_.png",
+  // "video": "https://youtu.be/bXPrwlX_A2o"
+}

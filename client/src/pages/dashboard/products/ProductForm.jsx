@@ -1,7 +1,8 @@
-import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
+// form validation
+import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
 import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
@@ -20,20 +21,24 @@ import {
   Link,
   Button
 } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
+// icons
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
-import { QuillEditor } from '../../../components/editor';
-import { UploadMultiFile, UploadSingleFile } from '../../../components/upload';
-import { PATH_DASHBOARD } from '../../../routes/paths';
-import useLocales from '../../../hooks/useLocales';
-import countries from '../../../utils/countries';
+// redux
+import { useDispatch, useSelector } from 'react-redux';
 import { getAllBrands } from '../../../actions/brands';
 import { getAllCategories } from '../../../actions/categories';
-import { allowImageMineTypes } from '../../../constants/imageMineTypes';
-import { MIconButton } from '../../../components/@material-extend';
-import { firebaseUploadMultiple, firebaseUploadSingle } from '../../../helper/firebaseHelper';
 import { createProduct } from '../../../actions/products';
+// components
+import CountryPicker from '../../../components/CountryPicker';
+import { QuillEditor } from '../../../components/editor';
+import { UploadMultiFile, UploadSingleFile } from '../../../components/upload';
+import { MIconButton } from '../../../components/@material-extend';
+// others
+import useLocales from '../../../hooks/useLocales';
+import { PATH_DASHBOARD } from '../../../routes/paths';
+import { allowImageMineTypes } from '../../../constants/imageMineTypes';
+import { firebaseUploadMultiple, firebaseUploadSingle } from '../../../helper/firebaseHelper';
 
 // ----------------------------------------------------------------------
 
@@ -281,6 +286,7 @@ export default function ProductForm() {
       name: values.name,
       variantName: values?.variantName,
       desc: values.description,
+      code: values.code,
       sku: values.sku,
       quantity: values.quantity,
       warrantyPeriod: values.warrantyPeriod,
@@ -307,6 +313,7 @@ export default function ProductForm() {
   const NewProductSchema = Yup.object().shape({
     name: Yup.string().required(t('dashboard.products.name-validation')),
     description: Yup.string().required(t('dashboard.products.desc-validation')),
+    code: Yup.string().required(t('dashboard.products.code-validation')),
     sku: Yup.string().required(t('dashboard.products.sku-validation')),
     price: Yup.number().required(t('dashboard.products.price-validation')),
     marketPrice: Yup.number().required(t('dashboard.products.market-price-validation'))
@@ -318,6 +325,7 @@ export default function ProductForm() {
       name: '',
       variantName: '',
       description: '',
+      code: '',
       sku: '',
       quantity: 1,
       warrantyPeriod: 12,
@@ -455,6 +463,13 @@ export default function ProductForm() {
                 <Stack spacing={3}>
                   <TextField
                     fullWidth
+                    label={t('dashboard.products.code')}
+                    {...getFieldProps('code')}
+                    error={Boolean(touched.code && errors.code)}
+                    helperText={touched.code && errors.code}
+                  />
+                  <TextField
+                    fullWidth
                     label={t('dashboard.products.sku')}
                     {...getFieldProps('sku')}
                     error={Boolean(touched.sku && errors.sku)}
@@ -481,20 +496,13 @@ export default function ProductForm() {
 
               <Card sx={{ p: 3 }}>
                 <Stack spacing={3}>
-                  <Autocomplete
-                    required
-                    fullWidth
-                    defaultValue={countries[0]}
-                    options={countries.map((country) => ({
-                      label: country.label
-                    }))}
+                  <CountryPicker
+                    label={t('dashboard.products.origin')}
                     onChange={(event, label) => {
                       setFieldValue('origin', label);
                     }}
-                    getOptionLabel={(option) => option.label}
-                    renderInput={(params) => (
-                      <TextField {...params} label={t('dashboard.products.origin')} margin="none" />
-                    )}
+                    required
+                    fullWidth
                   />
 
                   <Autocomplete

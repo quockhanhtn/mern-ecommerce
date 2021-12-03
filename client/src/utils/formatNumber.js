@@ -3,8 +3,11 @@ import numeral from 'numeral';
 
 // ----------------------------------------------------------------------
 
-export function fCurrency(number) {
-  return numeral(number).format(Number.isInteger(number) ? '$0,0' : '$0,0.00');
+export function fCurrency(number, language = 'vi') {
+  const suffix = language === 'vi' ? 'đ' : '$';
+  const price = language === 'vi' ? number : parseFloat(number) / 23000;
+  const format = language === 'vi' ? '0,0' : '0,0[.]00';
+  return `${numeral(price).format(format)} ${suffix}`;
 }
 
 export function fPercent(number) {

@@ -5,6 +5,7 @@ import searchFill from '@iconify/icons-eva/search-fill';
 import { experimentalStyled as styled, alpha } from '@material-ui/core/styles';
 import { Box, Input, Slide, Button, InputAdornment, ClickAwayListener } from '@material-ui/core';
 // hook
+import { useNavigate } from 'react-router-dom';
 import useLocales from '../../hooks/useLocales';
 // components
 import { MIconButton } from '../../components/@material-extend';
@@ -12,7 +13,7 @@ import { MIconButton } from '../../components/@material-extend';
 // ----------------------------------------------------------------------
 
 const APP_BAR_MOBILE = 64;
-const APP_BAR_DESKTOP = 88;
+const APP_BAR_DESKTOP = 110;
 
 const SearchBarStyle = styled('div')(({ theme }) => ({
   top: 0,
@@ -37,8 +38,14 @@ const SearchBarStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function SearchBar() {
-  const [isOpen, setOpen] = useState(false);
   const { t } = useLocales();
+  const navigate = useNavigate();
+  const [isOpen, setOpen] = useState(false);
+  const [keyWord, setKeyWord] = useState('');
+
+  const handleTextChange = (e) => {
+    setKeyWord(e.target.value);
+  };
 
   const handleOpen = () => {
     setOpen((prev) => !prev);
@@ -46,6 +53,11 @@ export default function SearchBar() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleNavigate = () => {
+    setOpen(false);
+    navigate(`/q?search=${encodeURIComponent(keyWord)}`);
   };
 
   return (
@@ -69,9 +81,16 @@ export default function SearchBar() {
                   <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled', width: 20, height: 20 }} />
                 </InputAdornment>
               }
+              value={keyWord}
+              onChange={handleTextChange}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  handleNavigate();
+                }
+              }}
               sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
             />
-            <Button style={{ textTransform: 'none' }} variant="contained" onClick={handleClose}>
+            <Button style={{ textTransform: 'none' }} variant="contained" onClick={handleNavigate}>
               {t('common.search-btn')}
             </Button>
           </SearchBarStyle>

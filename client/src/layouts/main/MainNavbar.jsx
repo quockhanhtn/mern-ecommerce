@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 // icon
 import { Icon } from '@iconify/react';
@@ -7,9 +7,6 @@ import history24Filled from '@iconify/icons-fluent/history-24-filled';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, IconButton, AppBar, Toolbar, Container } from '@material-ui/core';
-// redux
-import { useSelector, useDispatch } from 'react-redux';
-import { getAllCategories } from '../../actions/categories';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 import useLocales from '../../hooks/useLocales';
@@ -85,16 +82,10 @@ const ButtonIcon = ({ text, icon, color, ...other }) => (
 
 // ----------------------------------------------------------------------
 
-export default function MainNavbar() {
+export default function MainNavbar({ categoryList }) {
   const { t } = useLocales();
   const isOffset = useOffSetTop(100);
-  const dispatch = useDispatch();
-  const { cart, quantityInCart, getCart } = useToCart();
-  const { listSimple: categoryListRaw, isLoading } = useSelector((state) => state.category);
-
-  useEffect(() => {
-    dispatch(getAllCategories(true));
-  }, [dispatch]);
+  const { quantityInCart, getCart } = useToCart();
 
   useEffect(() => {
     getCart().then(() => {
@@ -102,16 +93,8 @@ export default function MainNavbar() {
         console.log('Get cart successfully');
       }
     });
+    // getStepPayment().then();
   }, []);
-
-  if (isLoading) return null;
-
-  const categoryList = categoryListRaw.map((item) => ({
-    title: item.name,
-    path: `/category/${item.slug}`,
-    image: item.image,
-    _id: item._id
-  }));
 
   return (
     <AppBar color="default" sx={{ boxShadow: 0 }}>

@@ -5,7 +5,8 @@ import * as Helper from '../helper/cartHelper';
 // ----------------------------------------------------------------------
 const initialState = {
   quantityInCart: 0,
-  cart: []
+  cart: [],
+  activeStep: 0
 };
 
 const handlers = {
@@ -33,6 +34,18 @@ const handlers = {
     ...state,
     quantityInCart: action.payload.cart.length,
     cart: action.payload.cart
+  }),
+  NEXT_STEP_PAYMENT: (state, action) => ({
+    ...state,
+    activeStep: action.payload.activeStep
+  }),
+  BACK_STEP_PAYMENT: (state, action) => ({
+    ...state,
+    activeStep: action.payload.activeStep
+  }),
+  GET_STEP_PAYMENT: (state, action) => ({
+    ...state,
+    activeStep: action.payload.activeStep
   })
 };
 
@@ -45,11 +58,15 @@ const reducer = (state, action) => (handlers[action.type] ? handlers[action.type
 const CartContext = createContext({
   quantityInCart: 0,
   cart: [],
+  activeStep: 0,
   getCart: () => Promise.resolve(),
   addToCart: () => Promise.resolve(),
   removeToCart: () => Promise.resolve(),
   increaseProductInCart: () => Promise.resolve(),
-  decreaseProductInCart: () => Promise.resolve()
+  decreaseProductInCart: () => Promise.resolve(),
+  nextStepPayment: () => Promise.resolve(),
+  backStepPayment: () => Promise.resolve(),
+  getStepPayment: () => Promise.resolve()
 });
 
 CartProvider.propTypes = {
@@ -84,6 +101,21 @@ function CartProvider({ children }) {
     dispatch({ type: 'DECREASE_PRODUCT_IN_CART', payload: { cart } });
   };
 
+  const nextStepPaymentAction = async (step) => {
+    const activeStep = Helper.nextStepPayment(step);
+    dispatch({ type: 'NEXT_STEP_PAYMENT', payload: { activeStep } });
+  };
+
+  const backStepPaymentAction = async (step) => {
+    const activeStep = Helper.backStepPayment(step);
+    dispatch({ type: 'BACK_STEP_PAYMENT', payload: { activeStep } });
+  };
+
+  const getStepPaymentAction = async () => {
+    const activeStep = Helper.getStepPayment();
+    dispatch({ type: 'GET_STEP_PAYMENT', payload: { activeStep } });
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -92,7 +124,10 @@ function CartProvider({ children }) {
         addToCart: addToCartAction,
         removeToCart: removeToCartAction,
         increaseProductInCart: increaseProductInCartAction,
-        decreaseProductInCart: decreaseProductInCartAction
+        decreaseProductInCart: decreaseProductInCartAction,
+        nextStepPayment: nextStepPaymentAction,
+        backStepPayment: backStepPaymentAction,
+        getStepPayment: getStepPaymentAction
       }}
     >
       {children}
