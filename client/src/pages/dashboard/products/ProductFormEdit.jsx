@@ -109,7 +109,6 @@ export default function PageProductEdit() {
     const product = {
       name: values.name,
       desc: values.description,
-      code: values.code,
       warrantyPeriod: values.warrantyPeriod,
       origin: values?.origin.label,
       brandId: values.brand,
@@ -122,8 +121,7 @@ export default function PageProductEdit() {
 
   const NewProductSchema = Yup.object().shape({
     name: Yup.string().required(t('dashboard.products.name-validation')),
-    description: Yup.string().required(t('dashboard.products.desc-validation')),
-    code: Yup.string().required(t('dashboard.products.code-validation'))
+    description: Yup.string().required(t('dashboard.products.desc-validation'))
   });
 
   const formik = useFormik({
@@ -131,7 +129,6 @@ export default function PageProductEdit() {
     initialValues: {
       name: currentProduct?.name || '',
       description: currentProduct?.desc || '',
-      code: currentProduct?.code || '',
       warrantyPeriod: currentProduct?.warrantyPeriod || 12,
       origin: currentProduct?.origin || '',
       brand: currentProduct?.brand || '',
@@ -167,22 +164,6 @@ export default function PageProductEdit() {
                     error={Boolean(touched.name && errors.name)}
                     helperText={touched.name && errors.name}
                   />
-                  <Stack direction="row" spacing={3} sx={{ marginBottom: theme.spacing(2) }}>
-                    <TextField
-                      fullWidth
-                      label={t('dashboard.products.code')}
-                      {...getFieldProps('code')}
-                      error={Boolean(touched.code && errors.code)}
-                      helperText={touched.code && errors.code}
-                    />
-                    <TextField
-                      type="number"
-                      fullWidth
-                      label={t('dashboard.products.warranty-period')}
-                      {...getFieldProps('warrantyPeriod')}
-                      defaultValue={12}
-                    />
-                  </Stack>
                   <div>
                     <LabelStyle>{t('dashboard.products.desc')}</LabelStyle>
                     <QuillEditor
@@ -210,6 +191,13 @@ export default function PageProductEdit() {
                 currentProduct?.origin && (
                   <Card sx={{ p: 3 }}>
                     <Stack spacing={3}>
+                      <TextField
+                        type="number"
+                        fullWidth
+                        label={t('dashboard.products.warranty-period')}
+                        {...getFieldProps('warrantyPeriod')}
+                        defaultValue={12}
+                      />
                       {/* <Autocomplete */}
                       {/*  required */}
                       {/*  fullWidth */}

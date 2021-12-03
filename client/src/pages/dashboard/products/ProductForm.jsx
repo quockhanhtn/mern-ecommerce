@@ -286,7 +286,6 @@ export default function ProductForm() {
       name: values.name,
       variantName: values?.variantName,
       desc: values.description,
-      code: values.code,
       sku: values.sku,
       quantity: values.quantity,
       warrantyPeriod: values.warrantyPeriod,
@@ -313,7 +312,6 @@ export default function ProductForm() {
   const NewProductSchema = Yup.object().shape({
     name: Yup.string().required(t('dashboard.products.name-validation')),
     description: Yup.string().required(t('dashboard.products.desc-validation')),
-    code: Yup.string().required(t('dashboard.products.code-validation')),
     sku: Yup.string().required(t('dashboard.products.sku-validation')),
     price: Yup.number().required(t('dashboard.products.price-validation')),
     marketPrice: Yup.number().required(t('dashboard.products.market-price-validation'))
@@ -325,7 +323,6 @@ export default function ProductForm() {
       name: '',
       variantName: '',
       description: '',
-      code: '',
       sku: '',
       quantity: 1,
       warrantyPeriod: 12,
@@ -461,13 +458,6 @@ export default function ProductForm() {
             <Stack spacing={3}>
               <Card sx={{ p: 3 }}>
                 <Stack spacing={3}>
-                  <TextField
-                    fullWidth
-                    label={t('dashboard.products.code')}
-                    {...getFieldProps('code')}
-                    error={Boolean(touched.code && errors.code)}
-                    helperText={touched.code && errors.code}
-                  />
                   <TextField
                     fullWidth
                     label={t('dashboard.products.sku')}
