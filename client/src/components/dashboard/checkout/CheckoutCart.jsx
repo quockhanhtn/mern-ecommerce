@@ -1,6 +1,4 @@
-import { sum } from 'lodash';
 import { Icon } from '@iconify/react';
-import { Link as RouterLink } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
@@ -8,7 +6,6 @@ import { Grid, Card, Button, CardHeader, Typography } from '@material-ui/core';
 // routes
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
-import { PATH_DASHBOARD } from '../../../routes/paths';
 //
 import Scrollbar from '../../Scrollbar';
 import EmptyContent from '../../EmptyContent';
@@ -51,17 +48,11 @@ export default function CheckoutCart() {
   };
 
   const handleNextStep = () => {
-    if (user) {
-      nextStepPayment(activeStep).then(() => {
-        enqueueSnackbar('Next step to cart successfully', {
-          variant: 'success'
-        });
-      });
-    } else {
-      enqueueSnackbar('Bạn phải đăng nhập để tiến hành thanh toán đơn hàng!', {
+    nextStepPayment(activeStep).then(() => {
+      enqueueSnackbar('Next step to cart successfully', {
         variant: 'success'
       });
-    }
+    });
   };
 
   const handleApplyDiscount = () => {
