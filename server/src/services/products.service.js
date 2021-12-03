@@ -216,14 +216,6 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}) {
     fields = fields.split(',').join(' ');
   }
 
-  if (filter.category) {
-    filter.category = await categoryService.getId(filter.category);
-  }
-
-  if (filter.brand) {
-    filter.brand = await brandService.getId(filter.brand);
-  }
-  
   const populateOpts = [];
   if (fields.includes('category')) {
     populateOpts.push({ path: 'category', select: 'name slug image _id -children', model: 'Category' },);
@@ -232,6 +224,7 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}) {
     populateOpts.push({ path: 'brand', select: 'name slug image _id', model: 'Brand' },);
   }
 
+  const countAll = await Product.estimatedDocumentCount();
   const total = await Product.countDocuments(JSON.parse(JSON.stringify(filter)), null).exec();
   const list = await Product.find(JSON.parse(JSON.stringify(filter)), fields, { skip: (page - 1) * limit, limit: limit })
     // .select(fields)
@@ -241,7 +234,7 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}) {
     // .populate(populateOpts)
     .lean().exec();
 
-  return { total, list };
+  return { countAll, total, list };
 }
 
 async function createProduct(data) {

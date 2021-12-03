@@ -91,47 +91,44 @@ export const deleteProductVariants = async (req, res, next) => {
 //#region Product info
 export const getAllProducts = async (req, res, next) => {
   try {
-    const category = req.query.c || null;
-    const brand = req.query.b || null;
-    const search = req.query.search || null;
+    const category = req.query.c || '';
+    const brand = req.query.b || '';
+    const search = req.query.search || '';
 
-    const fields = req.query.fields || null;
+    const fields = req.query.fields || '';
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
 
     let filters = {};
-    if (category) { filters.category = category; }
-    if (brand) { filters.brand = brand; }
+    if (category) { filters.category = [...category.split(',')]; }
+    if (brand) { filters.brand = [...brand.split(',')]; }
     if (search) { filters.name = { $regex: search, $options: 'i' }; }
 
-    let { list: products, total } = await productService.getAllProducts(fields, limit, page, filters);
+    let { list: products, total, countAll } = await productService.getAllProducts(fields, limit, page, filters);
     products = products.map(p => formatProduct(p, req));
 
     const pagination = initPagination(total, limit, page);
+    pagination.countAll = countAll;
 
-    if (products && products.length > 0) {
-      resUtils.status200(res, 'Get all products successfully!', products, { pagination });
-    } else {
-      resUtils.status200(res, 'No products found', []);
-    }
+    resUtils.status200(res, 'Get all products successfully!', products, { pagination });
   } catch (err) { next(err); }
 };
 
 export const getProductFilter = async (req, res, next) => {
   try {
     // url in format: /products/:category?b=brand&filter?fields=name,price&limit=10&page=1
-    const category = req.params.category || 'all';
-    const brand = req.params.b || 'all';
-    const q = req.params.q || null;
+    const category = req.params.category || '';
+    const brand = req.params.b || '';
+    const q = req.params.q || '';
 
     const fields = req.query.fields || null;
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
 
     let filters = {};
-    if (category !== 'all') { filters.category = category; }
-    if (brand !== 'all') { filters.brand = brand; }
-    if (q !== null) { filters.name = { $regex: q, $options: 'i' }; }
+    if (category) { filters.category = [...category.split(',')]; }
+    if (brand) { filters.brand = [...brand.split(',')]; }
+    if (q) { filters.name = { $regex: q, $options: 'i' }; }
 
     let { list: products, total } = await productService.getAllProducts(fields, limit, page, filters);
     products = products.map(p => formatProduct(p, req));

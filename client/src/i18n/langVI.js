@@ -29,7 +29,8 @@ export default {
     'product-spec': 'Thông số kỹ thuật',
     review: 'Đánh giá',
     contact: 'Liên hệ',
-    newest: 'mới nhất'
+    newest: 'mới nhất',
+    search: 'Tìm kiếm'
   },
   settings: {
     title: 'Cài đặt',
@@ -169,7 +170,7 @@ export default {
       edit: 'Edit product',
       'edit-title': 'Ecommerce: Edit new product | HK Mobile',
       delete: 'Delete product',
-      name: 'Product name',
+      name: 'Tên sản phẩm',
       'name-validation': 'Product name is required',
       desc: 'Product description',
       'desc-validation': 'Product Description is required',
