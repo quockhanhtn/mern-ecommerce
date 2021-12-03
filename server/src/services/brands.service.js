@@ -34,12 +34,16 @@ async function getAll(fields = SELECTED_FIELDS) {
  * @param {*} identity
  * @returns
  */
-async function getOne(identity) {
+async function getOne(identity, needLean = true) {
   const filter = strUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
 
-  return await Brand.findOne(filter).lean().exec();
+  if (needLean) {
+    return await Brand.findOne(filter).lean().exec();
+  } else {
+    return await Brand.findOne(filter).exec();
+  }
 }
 
 /**

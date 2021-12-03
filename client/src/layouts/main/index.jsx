@@ -1,10 +1,16 @@
+import { useEffect } from 'react';
 import { Link as ScrollLink } from 'react-scroll';
-import { useLocation, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 // material
 import { Box, Link, Container, Typography } from '@material-ui/core';
+// redux
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllCategories } from '../../actions/categories';
+import { getAllBrands } from '../../actions/brands';
+import { getAllDiscounts } from '../../actions/discounts';
 // components
-import Logo from '../../components/Logo';
+import LoadingScreen from '../../components/LoadingScreen';
 //
 import MainNavbar from './MainNavbar';
 import MainFooter from './MainFooter';
@@ -28,47 +34,45 @@ const MainStyle = styled('div')(({ theme }) => ({
   paddingBottom: theme.spacing(10),
   [theme.breakpoints.up('lg')]: {
     paddingTop: APP_BAR_DESKTOP + 24
-    // paddingLeft: theme.spacing(2),
-    // paddingRight: theme.spacing(2)
   }
 }));
 
 // ----------------------------------------------------------------------
 
 export default function MainLayout() {
-  // const { pathname } = useLocation();
-  // const isHome = pathname === '/';
+  const dispatch = useDispatch();
+
+  const { listSimple: categoryList, isLoading: isLoadingCategory } = useSelector((state) => state.category);
+
+  useEffect(() => {
+    dispatch(getAllCategories(true));
+    dispatch(getAllBrands(true));
+    dispatch(getAllDiscounts(true));
+  }, [dispatch]);
+
+  const navBarItems = categoryList.map((item) => ({
+    title: item.name,
+    path: `/q?c=${item.slug}`,
+    image: item.image,
+    _id: item._id
+  }));
+
+  // if (isLoadingCategory || isLoadingBrand) {
+  //   console.log('isLoadingCategory', isLoadingCategory);
+  //   console.log('isLoadingBrand', isLoadingBrand);
+  //   return <LoadingScreen />;
+  // }
+
+  // if (hasErrorCategory || hasErrorBrand) {
+  //   return <LoadingScreen />;
+  // }
 
   return (
     <RootStyle>
-      <MainNavbar />
+      <MainNavbar categoryList={navBarItems} />
       <MainStyle>
         <Outlet />
         <MainFooter />
-        {/* {!isHome ? (
-          <MainFooter />
-        ) : (
-          <Box
-            sx={{
-              py: 5,
-              textAlign: 'center',
-              position: 'relative',
-              bgcolor: (theme) => (theme.palette.mode === 'light' ? 'grey.200' : 'grey.800')
-            }}
-          >
-            <Container maxWidth="lg">
-              <ScrollLink to="move_top" spy smooth>
-                <Logo sx={{ mb: 1, mx: 'auto', cursor: 'pointer' }} />
-              </ScrollLink>
-
-              <Typography variant="caption" component="p">
-                &copy; 2021 HK Mobile. All rights reserved
-                <br /> Temple made by &nbsp;
-                <Link href="https://minimals.cc/">minimals.cc</Link>
-              </Typography>
-            </Container>
-          </Box>
-        )} */}
       </MainStyle>
     </RootStyle>
   );

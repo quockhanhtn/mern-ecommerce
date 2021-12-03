@@ -10,7 +10,6 @@ import { useFormik, Form, FormikProvider, useField } from 'formik';
 // material
 import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Stack, Button, Rating, Divider, Typography, FormHelperText } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { MButton, MIconButton } from '../../@material-extend';
@@ -74,13 +73,12 @@ const Incrementer = (props) => {
   );
 };
 
-export default function ProductDetailsSummary({ indexVariant, handleChangeIndexVariant }) {
+export default function ProductDetailsSummary({ isLoading, product, indexVariant, handleChangeIndexVariant }) {
   const theme = useTheme();
   const { addToCart } = useToCart();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const dispatch = useDispatch();
-  const { item: product } = useSelector((state) => state.product);
+
   const { _id, name, price, cover, views, variants, rates } = product;
 
   const handleBuyNow = () => {
@@ -93,10 +91,10 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
       _id,
       name,
       cover,
-      available: variants[indexVariant].quantity,
+      available: 0,
       price,
-      color: variants[0],
-      quantity: variants[indexVariant].quantity < 1 ? 0 : 1
+      color: variants?.[0] || '',
+      quantity: 1
     },
     onSubmit: async (values, { setSubmitting }) => {
       try {
@@ -135,6 +133,10 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
     });
   };
 
+  if (isLoading) {
+    return <></>;
+  }
+
   return (
     <RootStyle>
       <FormikProvider value={formik}>
@@ -153,9 +155,9 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
 
           <Typography variant="h4" sx={{ mb: 3 }}>
             <Box component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>
-              {variants[indexVariant] && `${fNumber(variants[0].price)} ₫`}
+              {variants?.[indexVariant] && `${fNumber(variants?.[0]?.price)} ₫`}
             </Box>
-            &nbsp;{`${fNumber(variants[0].marketPrice)} ₫`}
+            &nbsp;{`${fNumber(variants?.[0]?.marketPrice)} ₫`}
           </Typography>
 
           <Divider sx={{ borderStyle: 'dashed' }} />
@@ -166,21 +168,21 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
                 Variants
               </Typography>
               <div sx={{ justifyContent: 'flex-end' }}>
-                {variants.map((variant, index) => {
-                  const { _id } = variant;
-                  return (
+                {variants &&
+                  variants.length > 0 &&
+                  variants.map((variant, index) => (
                     <Button
                       clicked
+                      key={variant.sku}
                       onClick={() => {
                         handleChangeIndexVariant(index);
                       }}
                       variant={index === indexVariant ? 'contained' : ''}
                       color="info"
                     >
-                      {variant.sku}
+                      {variant.variantName}
                     </Button>
-                  );
-                })}
+                  ))}
               </div>
             </Stack>
 
@@ -189,7 +191,7 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
                 Quantity
               </Typography>
               <div>
-                <Incrementer name="quantity" available={variants[indexVariant].quantity} />
+                <Incrementer name="quantity" available={variants?.[indexVariant].quantity} />
                 <Typography
                   variant="caption"
                   sx={{
@@ -199,7 +201,7 @@ export default function ProductDetailsSummary({ indexVariant, handleChangeIndexV
                     color: 'text.secondary'
                   }}
                 >
-                  Available: {variants[indexVariant].quantity}
+                  Available: {variants?.[indexVariant].quantity}
                 </Typography>
 
                 <FormHelperText error>{touched.quantity && errors.quantity}</FormHelperText>

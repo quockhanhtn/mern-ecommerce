@@ -22,9 +22,14 @@ export default {
     }
   },
   home: {
-    'page-title': 'Cell phones and accessories | HK Mobile',
+    'page-title': 'Genuine cellphone and accessories | HK Mobile',
     cart: 'Cart',
-    'order-history': 'Order history'
+    'order-history': 'Order history',
+    'product-desc': 'Product description',
+    'product-spec': 'Product specification',
+    review: 'Review',
+    contact: 'Contact',
+    newest: 'Newest'
   },
   settings: {
     title: 'Setting',

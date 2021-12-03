@@ -24,7 +24,6 @@ import { UploadSingleFile } from '../../../components/upload';
 import useLocales from '../../../hooks/useLocales';
 import { MotionInView, varFadeInUp } from '../../../components/animate';
 import { MRadio } from '../../../components/@material-extend';
-import countries from '../../../utils/countries';
 import { createBrand, updateBrand } from '../../../actions/brands';
 
 // ----------------------------------------------------------------------
@@ -45,7 +44,7 @@ export default function DetailUser({ currentId, open, setOpen }) {
     name: '',
     desc: '',
     isHide: false,
-    country: brand?.country || countries[0].label,
+    country: brand?.country || 'Viet Nam',
     headQuarters: '',
     selectedFile: null,
     image: ''

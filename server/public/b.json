@@ -1,0 +1,168 @@
+{
+  "_id": {
+    "$oid": "61a3a7a84fc03fd4d1dad0c0"
+  },
+  "name": "Samsung Galaxy Note 20 Ultra 5G",
+  "desc": "No desc",
+  "video": "https://youtu.be/HbxgawS7IYY",
+  "specifications": [
+    {
+      "name": "Kích thước màn hình",
+      "key": "kich-thuoc-man-hinh",
+      "value": "6.9 inches"
+    },
+    {
+      "name": "Công nghệ màn hình",
+      "key": "cong-nghe-man-hinh",
+      "value": "Dynamic AMOLED"
+    },
+    {
+      "name": "Camera sau",
+      "key": "camera-sau",
+      "value": "108 MP, f/1.8, 26mm (wide), 1/1.33\", 0.8µm, PDAF, Laser AF, OIS"
+    },
+    {
+      "name": "Camera sau",
+      "key": "camera-sau",
+      "value": "12 MP, f/3.0, 103mm (periscope telephoto), 1.0µm, PDAF, OIS, 5x optical zoom, 50x hybrid zoom"
+    },
+    {
+      "name": "Camera sau",
+      "key": "camera-sau",
+      "value": "12 MP, f/2.2, 13mm (ultrawide), 1/2.55\", 1.4µm"
+    },
+    {
+      "name": "Camera trước",
+      "key": "camera-truoc",
+      "value": "10 MP, f/2.2, 26mm (wide)"
+    },
+    {
+      "name": "Camera trước",
+      "key": "camera-truoc",
+      "value": "1/3.2\", 1.22µm, Dual Pixel PDAF"
+    },
+    {
+      "name": "Chipset",
+      "key": "chipset",
+      "value": "Exynos 990"
+    },
+    {
+      "name": "Dung lượng RAM",
+      "key": "dung-luong-ram",
+      "value": "12 GB"
+    },
+    {
+      "name": "Bộ nhớ trong",
+      "value": "256 GB",
+      "key": "bo-nho-trong"
+    },
+    {
+      "name": "Pin",
+      "key": "pin",
+      "value": "4500 mAh"
+    },
+    {
+      "name": "Hệ điều hành",
+      "key": "he-dieu-hanh",
+      "value": "Android 10"
+    },
+    {
+      "name": "Kích thước",
+      "key": "kich-thuoc",
+      "value": "164.8 x 77.2 x 8.1 mm"
+    }
+  ],
+  "warrantyPeriod": 12,
+  "origin": "China",
+  "category": { "$oid": "c00000000000000000000001" },
+  "brand": {  "$oid": "b00000000000000000000002" },
+  "views": 17,
+  "variants": [
+    {
+      "sku": "0200001",
+      "variantName": "Đen",
+      "price": 22000000,
+      "marketPrice": 32990000,
+      "quantity": 25,
+      "sold": 0,
+      "addSpecifications": [
+        {
+          "name": "Màu sắc",
+          "value": "Đen",
+          "key": "mau-sac"
+        }
+      ],
+      "pictures": [],
+      "createdAt": {
+        "$date": "2021-11-28T16:00:40.425Z"
+      },
+      "updatedAt": {
+        "$date": "2021-11-28T16:02:52.806Z"
+      },
+      "slug": "den",
+      "thumbnail": "https://firebasestorage.googleapis.com/v0/b/mern-ecommerce-b848d.appspot.com/o/products%2F1638115339805_%5B20211128_225305392%5D%20black_final_1.jpg?alt=media&token=3d70c3e6-a66e-42e8-bbb5-93b1c1eede99"
+    },
+    {
+      "sku": "0200002",
+      "variantName": "Đồng",
+      "price": 22000000,
+      "marketPrice": 32990000,
+      "quantity": 20,
+      "sold": 0,
+      "addSpecifications": [
+        {
+          "name": "Màu sắc",
+          "value": "Đồng",
+          "key": "mau-sac"
+        }
+      ],
+      "thumbnail": "https://firebasestorage.googleapis.com/v0/b/mern-ecommerce-b848d.appspot.com/o/products%2F1638115412087_%5B20211128_225308985%5D%20yellow_final_2.jpg?alt=media&token=e5678955-0e07-465a-ac9a-fe1cfb2b51d3",
+      "pictures": [],
+      "createdAt": {
+        "$date": "2021-11-28T16:03:33.599Z"
+      },
+      "updatedAt": {
+        "$date": "2021-11-28T16:03:33.599Z"
+      },
+      "slug": "dong"
+    },
+    {
+      "sku": "0200003",
+      "variantName": "Trắng",
+      "price": 22000000,
+      "marketPrice": 32990000,
+      "quantity": 15,
+      "sold": 0,
+      "addSpecifications": [
+        {
+          "name": "Màu sắc",
+          "value": "Trắng",
+          "key": "mau-sac"
+        }
+      ],
+      "thumbnail": "https://firebasestorage.googleapis.com/v0/b/mern-ecommerce-b848d.appspot.com/o/products%2F1638115444187_%5B20211128_225312396%5D%20sm-n985_986_galaxynote20ultra_front_pen_mysticwhite_200529.jpg?alt=media&token=d0f30fb1-96d6-4f1c-9a18-1b9a2b62232a",
+      "pictures": [],
+      "createdAt": {
+        "$date": "2021-11-28T16:04:05.639Z"
+      },
+      "updatedAt": {
+        "$date": "2021-11-28T16:04:05.639Z"
+      },
+      "slug": "trang"
+    }
+  ],
+  "defaultVariant": "0100001",
+  "isHide": false,
+  "isOutOfStock": false,
+  "releaseTime": {
+    "$date": "2021-10-29T16:00:40.415Z"
+  },
+  "rates": [],
+  "createdAt": {
+    "$date": "2021-11-28T16:00:40.426Z"
+  },
+  "updatedAt": {
+    "$date": "2021-11-28T16:04:05.765Z"
+  },
+  "slug": "samsung-galaxy-note-20-ultra-5g"
+}

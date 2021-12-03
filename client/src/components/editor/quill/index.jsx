@@ -17,6 +17,7 @@ const RootStyle = styled('div')(({ theme }) => ({
   },
   '& .ql-editor': {
     minHeight: 200,
+    maxHeight: '70vh',
     '&.ql-blank::before': {
       fontStyle: 'normal',
       color: theme.palette.text.disabled

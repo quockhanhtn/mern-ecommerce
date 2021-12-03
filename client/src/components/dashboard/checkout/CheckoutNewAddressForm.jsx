@@ -16,8 +16,8 @@ import {
 } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
 //
+import CountryPicker from '../../CountryPicker';
 import { DialogAnimate } from '../../animate';
-import countries from '../../../utils/countries';
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ export default function CheckoutNewAddressForm({ open, onClose, onNextStep, onCr
       address: '',
       city: '',
       state: '',
-      country: countries[0].label,
+      country: 'Việt Nam',
       zipcode: '',
       isDefault: true
     },
@@ -133,22 +133,18 @@ export default function CheckoutNewAddressForm({ open, onClose, onNextStep, onCr
               />
             </Stack>
 
-            <TextField
-              select
+            <CountryPicker
               fullWidth
               label="Country"
-              placeholder="Country"
               {...getFieldProps('country')}
               SelectProps={{ native: true }}
               error={Boolean(touched.country && errors.country)}
               helperText={touched.country && errors.country}
-            >
-              {countries.map((option) => (
-                <option key={option.code} value={option.label}>
-                  {option.label}
-                </option>
-              ))}
-            </TextField>
+              onChange={(event, label) => {
+                // setFieldValue('origin', label);
+                // set value for country
+              }}
+            />
 
             <FormControlLabel
               control={<Checkbox checked={values.isDefault} {...getFieldProps('isDefault')} />}

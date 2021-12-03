@@ -22,9 +22,14 @@ export default {
     }
   },
   home: {
-    'page-title': 'Điện thoại di dộng và phụ kiện | HK Mobile',
+    'page-title': 'Điện thoại di dộng chính hãng và phụ kiện | HK Mobile',
     cart: 'Giỏ hàng',
-    'order-history': 'Lịch sử mua hàng'
+    'order-history': 'Lịch sử mua hàng',
+    'product-desc': 'Mô tả sản phẩm',
+    'product-spec': 'Thông số kỹ thuật',
+    review: 'Đánh giá',
+    contact: 'Liên hệ',
+    newest: 'mới nhất'
   },
   settings: {
     title: 'Cài đặt',

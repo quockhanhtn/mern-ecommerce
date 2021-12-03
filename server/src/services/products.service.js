@@ -206,15 +206,24 @@ async function deleteProductVariants(identity, sku) {
  * @param {string} fields - fields to select
  * @param {number} limit - limit
  * @param {number} page - page number
+ * @param {object} filter - filter
  * @returns {object} - list of products, total count
  */
-async function getAllProducts(fields, limit = 10, page = 1) {
+async function getAllProducts(fields, limit = 10, page = 1, filter = {}) {
   if (fields === null || fields == '') { fields = SELECT_FIELD; }
 
   if (fields.indexOf(',') > -1) {
     fields = fields.split(',').join(' ');
   }
 
+  if (filter.category) {
+    filter.category = await categoryService.getId(filter.category);
+  }
+
+  if (filter.brand) {
+    filter.brand = await brandService.getId(filter.brand);
+  }
+  
   const populateOpts = [];
   if (fields.includes('category')) {
     populateOpts.push({ path: 'category', select: 'name slug image _id -children', model: 'Category' },);
@@ -223,13 +232,13 @@ async function getAllProducts(fields, limit = 10, page = 1) {
     populateOpts.push({ path: 'brand', select: 'name slug image _id', model: 'Brand' },);
   }
 
-  const total = await Product.countDocuments({}).exec();
-  const list = await Product.find()
-    .select(fields)
-    .limit(limit)
-    .skip(limit * (page - 1))
-    .sort({ createdAt: -1 })
-    .populate(populateOpts)
+  const total = await Product.countDocuments(JSON.parse(JSON.stringify(filter)), null).exec();
+  const list = await Product.find(JSON.parse(JSON.stringify(filter)), fields, { skip: (page - 1) * limit, limit: limit })
+    // .select(fields)
+    // .limit(limit)
+    // .skip(limit * (page - 1))
+    // .sort({ createdAt: -1 })
+    // .populate(populateOpts)
     .lean().exec();
 
   return { total, list };
@@ -289,7 +298,7 @@ async function getSpecifications() {
     return {
       key: JSON.parse(k).key,
       name: JSON.parse(k).name,
-      values: groupObj[k]
+      values: [... new Set(groupObj[k])]
     };
   });
 }
