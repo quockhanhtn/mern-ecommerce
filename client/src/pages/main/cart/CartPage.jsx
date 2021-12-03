@@ -81,9 +81,9 @@ export default function CartPage() {
   const theme = useTheme();
   const dispatch = useDispatch();
   const isMountedRef = useIsMountedRef();
-  const { cart } = useToCart();
+  const { cart, activeStep } = useToCart();
+  console.log('activeStep', activeStep);
   // const { billing } = checkout;
-  const activeStep = 0;
   const isComplete = activeStep === STEPS.length;
 
   useEffect(() => {
@@ -91,12 +91,6 @@ export default function CartPage() {
       // dispatch(getCart(cart));
     }
   }, [dispatch, isMountedRef, cart]);
-
-  useEffect(() => {
-    if (activeStep === 1) {
-      // dispatch(createBilling(null));
-    }
-  }, [dispatch, activeStep]);
 
   return (
     <Page title="HK-Mobile: Cart">

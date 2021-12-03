@@ -5,13 +5,17 @@ import { useState } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
-import { Box, Grid, Card, Button, Typography } from '@material-ui/core';
+import { Box, Grid, Card, Button, Typography, TextField } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 //
+import { useSnackbar } from 'notistack';
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutNewAddressForm from './CheckoutNewAddressForm';
 import Label from '../../Label';
+import * as Helper from '../../../helper/cartHelper';
+import useToCart from '../../../hooks/useToCart';
+import useAuth from '../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -105,9 +109,13 @@ function AddressItem({ address, onNextStep, onCreateBilling }) {
 
 export default function CheckoutBillingAddress() {
   const dispatch = useDispatch();
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
-  const { checkout } = useSelector((state) => state.product);
-  const { total, discount, subtotal } = checkout;
+  const { enqueueSnackbar } = useSnackbar();
+  const { cart, activeStep, backStepPayment } = useToCart();
+  const [subTotal, setSubTotal] = useState(Helper.getSubTotal(cart));
+  const discount = 50000;
+  const [total, setTotal] = useState(Helper.getSubTotal(cart) - discount);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -122,37 +130,51 @@ export default function CheckoutBillingAddress() {
   };
 
   const handleBackStep = () => {
-    // dispatch(onBackStep());
+    backStepPayment(activeStep).then(() => {
+      enqueueSnackbar('Back step to cart successfully', {
+        variant: 'success'
+      });
+    });
   };
 
   const handleCreateBilling = (value) => {
     // dispatch(createBilling(value));
   };
 
+  const renderAddressOfUser = () => (
+    <div>
+      {ADDRESS_BOOKS.map((address, index) => (
+        <AddressItem key={index} address={address} onNextStep={handleNextStep} onCreateBilling={handleCreateBilling} />
+      ))}
+    </div>
+  );
+
+  const renderAddressOfNotUser = () => (
+    <div>
+      <TextField fullWidth label="sssss" size="small" />
+    </div>
+  );
+
   return (
     <>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
-          {ADDRESS_BOOKS.map((address, index) => (
-            <AddressItem
-              key={index}
-              address={address}
-              onNextStep={handleNextStep}
-              onCreateBilling={handleCreateBilling}
-            />
-          ))}
+          {user && renderAddressOfUser()}
+          {!user && renderAddressOfNotUser()}
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button size="small" color="inherit" onClick={handleBackStep} startIcon={<Icon icon={arrowIosBackFill} />}>
               Back
             </Button>
-            <Button size="small" onClick={handleClickOpen} startIcon={<Icon icon={plusFill} />}>
-              Add new address
-            </Button>
+            {user && (
+              <Button size="small" onClick={handleClickOpen} startIcon={<Icon icon={plusFill} />}>
+                Add new address
+              </Button>
+            )}
           </Box>
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <CheckoutSummary subtotal={subtotal} total={total} discount={discount} />
+          <CheckoutSummary subtotal={subTotal} total={total} discount={discount} />
         </Grid>
       </Grid>
 

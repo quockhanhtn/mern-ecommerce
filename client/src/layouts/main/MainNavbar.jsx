@@ -89,7 +89,7 @@ export default function MainNavbar() {
   const { t } = useLocales();
   const isOffset = useOffSetTop(100);
   const dispatch = useDispatch();
-  const { cart, quantityInCart, getCart } = useToCart();
+  const { cart, quantityInCart, getCart, getStepPayment } = useToCart();
   const { listSimple: categoryListRaw, isLoading } = useSelector((state) => state.category);
 
   useEffect(() => {
@@ -102,6 +102,7 @@ export default function MainNavbar() {
         console.log('Get cart successfully');
       }
     });
+    // getStepPayment().then();
   }, []);
 
   if (isLoading) return null;
