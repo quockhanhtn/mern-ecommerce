@@ -1,22 +1,33 @@
 import * as actionTypes from '../constants/actionTypes';
 import * as api from '../api';
 
-export const getAllProducts = () => async (dispatch) => {
-  try {
-    dispatch({ type: actionTypes.START_LOADING });
-    const { data } = await api.getAllProduct();
-    dispatch({ type: actionTypes.PRODUCT.GET_ALL, payload: data });
-    dispatch({ type: actionTypes.END_LOADING });
-  } catch (e) {
-    console.error('Error when get posts in actions/products/getAllProducts', e);
-    dispatch({ type: actionTypes.HAS_ERROR });
-  }
-};
+const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+
+export const getAllProducts =
+  (search = '', brand = '', category = '', page = 1, limit = 12) =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: actionTypes.START_LOADING });
+
+      const { data } = await api.getAllProduct('', search, brand, category, page, limit);
+      if (isDev) console.log('[actions][products][getAll] result', data);
+
+      dispatch({ type: actionTypes.PRODUCT.GET_ALL, payload: data });
+      dispatch({ type: actionTypes.END_LOADING });
+    } catch (e) {
+      console.error('[actions][products][getAll] error', e);
+      dispatch({ type: actionTypes.HAS_ERROR });
+    }
+  };
 
 export const getProductById = (id) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
+
+    if (isDev) console.log('[actions][products][getProductById] id', id);
     const { data } = await api.getOneProduct(id);
+    if (isDev) console.log('[actions][products][getOne] result', data);
+
     dispatch({ type: actionTypes.PRODUCT.GET_ONE, payload: data.data });
     dispatch({ type: actionTypes.END_LOADING });
   } catch (e) {
@@ -28,11 +39,15 @@ export const getProductById = (id) => async (dispatch) => {
 export const createProduct = (newProduct) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
+
+    if (isDev) console.log('[actions][products][create] dataInput', newProduct);
     const { data } = await api.createProduct(newProduct);
+    if (isDev) console.log('[actions][products][create] result', data);
+
     dispatch({ type: actionTypes.PRODUCT.CREATE, payload: data });
     dispatch({ type: actionTypes.END_LOADING });
   } catch (e) {
-    console.error('Error when get posts in actions/products/createProduct', e);
+    console.error('[actions][products][create] error', e);
     dispatch({ type: actionTypes.HAS_ERROR });
   }
 };
@@ -40,7 +55,11 @@ export const createProduct = (newProduct) => async (dispatch) => {
 export const updateProduct = (id, updateProduct) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
+
+    if (isDev) console.log('[actions][products][update] dataInput', updateProduct);
     const { data } = await api.updateProduct(id, updateProduct);
+    if (isDev) console.log('[actions][products][update] result', data);
+
     dispatch({ type: actionTypes.PRODUCT.UPDATE, payload: data.data });
     dispatch({ type: actionTypes.END_LOADING });
   } catch (e) {
@@ -64,7 +83,13 @@ export const deleteProduct = (id) => async (dispatch) => {
 export const createProductVariant = (id, productVariant) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
+
+    if (isDev) console.log('[actions][productVariants][create] dataInput', productVariant);
+
     const { data } = await api.createProductVariant(id, productVariant);
+
+    if (isDev) console.log('[actions][productVariants][create] result', data);
+
     dispatch({ type: actionTypes.PRODUCT.CREATE_VARIANT, payload: data.data });
     dispatch({ type: actionTypes.END_LOADING });
   } catch (e) {

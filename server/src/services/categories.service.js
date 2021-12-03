@@ -130,6 +130,8 @@ async function update(identity, updatedData, updatedBy = null) {
   if (updatedBy) { updatedData.updatedBy = updatedBy; }
   if (updatedData.order && updatedData.order !== currentCategory.order) {
     await Category.findOneAndUpdate({ order: updatedData.order }, { $set: { order: currentCategory.order } });
+  } else {
+    delete updatedData.order;
   }
 
   const updatedCategory = await Category.findByIdAndUpdate(

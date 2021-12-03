@@ -1,4 +1,44 @@
-const countries = [
+import PropTypes from 'prop-types';
+// material
+import { Autocomplete, TextField } from '@material-ui/core';
+
+// ----------------------------------------------------------------------
+
+CountryPicker.propTypes = {
+  label: PropTypes.string.isRequired,
+  defaultCountryCode: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func.isRequired
+};
+
+CountryPicker.defaultProps = {
+  defaultCountryCode: 'VN',
+  value: 'Viet Nam'
+};
+
+export const defaultCountryCode = 'VN';
+export const defaultCountryName = 'Viet Nam';
+
+export default function CountryPicker({ label, defaultCountryCode, value, onChange, ...other }) {
+  const defaultCountry = COUNTRIES.find((country) => country.code === defaultCountryCode);
+  return (
+    <Autocomplete
+      defaultValue={defaultCountry}
+      options={COUNTRIES.map((country) => ({
+        label: country.label
+      }))}
+      value={COUNTRIES.find((country) => country.label === value)}
+      onChange={onChange}
+      getOptionLabel={(option) => option.label}
+      renderInput={(params) => <TextField {...params} label={label} margin="none" />}
+      {...other}
+    />
+  );
+}
+
+/* cSpell:disable */
+// https://www.iso.org/iso-3166-country-codes.html
+const COUNTRIES = [
   { code: 'AD', label: 'Andorra', phone: '376' },
   { code: 'AE', label: 'United Arab Emirates', phone: '971' },
   { code: 'AF', label: 'Afghanistan', phone: '93' },
@@ -256,5 +296,3 @@ const countries = [
   { code: 'ZM', label: 'Zambia', phone: '260' },
   { code: 'ZW', label: 'Zimbabwe', phone: '263' }
 ];
-
-export default countries;

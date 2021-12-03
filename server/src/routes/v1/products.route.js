@@ -2,6 +2,7 @@ import express from 'express';
 import { allowImageMineTypes } from '../../constants.js';
 import {
   getAllProducts,
+  getProductFilter,
   getProductById,
   createProduct,
   updateProduct,
@@ -32,6 +33,7 @@ const uploadFields = [{ name: 'thumbnail', maxCount: 1 }, { name: 'pictures', ma
 
 router.get('/', getAllProducts);
 router.get('/specs', getProductSpecifications);
+router.get('/c/:category', getProductFilter);
 router.get('/:identity', getProductById);
 
 router.post('/',
