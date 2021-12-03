@@ -85,12 +85,10 @@ export default function ProductList({ formik, onDelete, onIncreaseQuantity, onDe
   const { products } = formik.values;
 
   const handleIncreaseQuantity = (_id, skuVariant) => {
-    console.log(_id);
     onIncreaseQuantity(_id, skuVariant);
   };
 
   const handleDecreaseQuantity = (_id, skuVariant) => {
-    console.log(_id);
     onDecreaseQuantity(_id, skuVariant);
   };
 

@@ -1,28 +1,43 @@
-import { sum } from 'lodash';
 import { Icon } from '@iconify/react';
-import { Link as RouterLink } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
 import { Grid, Card, Button, CardHeader, Typography } from '@material-ui/core';
 // routes
 import { useSnackbar } from 'notistack';
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { useEffect, useState } from 'react';
 //
 import Scrollbar from '../../Scrollbar';
 import EmptyContent from '../../EmptyContent';
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutProductList from './CheckoutProductList';
 import useToCart from '../../../hooks/useToCart';
+import * as Helper from '../../../helper/cartHelper';
+import useAuth from '../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
 export default function CheckoutCart() {
   const { enqueueSnackbar } = useSnackbar();
-  const { cart, quantityInCart, removeToCart, increaseProductInCart, decreaseProductInCart } = useToCart();
-  const discount = 50;
-  const subtotal = cart.length;
+  const {
+    cart,
+    quantityInCart,
+    activeStep,
+    removeToCart,
+    increaseProductInCart,
+    decreaseProductInCart,
+    nextStepPayment
+  } = useToCart();
+  const { user } = useAuth();
+  const [subTotal, setSubTotal] = useState(Helper.getSubTotal(cart));
+  const discount = 50000;
+  const [total, setTotal] = useState(Helper.getSubTotal(cart) - discount);
   const isEmptyCart = cart.length === 0;
+
+  useEffect(() => {
+    setSubTotal(Helper.getSubTotal(cart));
+    setTotal(Helper.getSubTotal(cart) - discount);
+  }, [cart]);
 
   const handleDeleteCart = (_id, skuVariant) => {
     removeToCart(_id, skuVariant).then(() => {
@@ -33,7 +48,11 @@ export default function CheckoutCart() {
   };
 
   const handleNextStep = () => {
-    // dispatch(onNextStep());
+    nextStepPayment(activeStep).then(() => {
+      enqueueSnackbar('Next step to cart successfully', {
+        variant: 'success'
+      });
+    });
   };
 
   const handleApplyDiscount = () => {
@@ -115,10 +134,10 @@ export default function CheckoutCart() {
 
           <Grid item xs={12} md={4}>
             <CheckoutSummary
-              total={quantityInCart}
-              enableDiscount
+              total={total}
+              // enableDiscount
               discount={discount}
-              subtotal={subtotal}
+              subtotal={subTotal}
               onApplyDiscount={handleApplyDiscount}
             />
             <Button fullWidth size="large" type="submit" variant="contained" disabled={values.products.length === 0}>
