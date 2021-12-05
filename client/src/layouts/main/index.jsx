@@ -88,7 +88,7 @@ export default function MainLayout() {
 
   return (
     <RootStyle>
-      <MainNavbar user={user} categoryList={navBarItems} />
+      <MainNavbar categoryList={navBarItems} />
       <MainStyle>
         <Outlet />
         <MainFooter />
