@@ -16,12 +16,11 @@ ProvincePicker.defaultProps = {
   value: ''
 };
 
-export default function ProvincePicker({ label, defaultProvinceCode, value, onChange, ...other }) {
+export default function ProvincePicker({ touched, errors, label, defaultProvinceCode, value, onChange, ...other }) {
   const handleOnChange = (option, value) => {
     const defaultValue = PROVINCES.find((province) => province?.name === value?.name);
     onChange(defaultValue);
   };
-
   return (
     <Autocomplete
       options={PROVINCES.map((province) => ({
@@ -30,7 +29,15 @@ export default function ProvincePicker({ label, defaultProvinceCode, value, onCh
       value={PROVINCES.find((province) => province.name === value)}
       onChange={(option, value) => handleOnChange(option, value)}
       getOptionLabel={(option) => option.name}
-      renderInput={(params) => <TextField {...params} label={label} margin="none" error={!value} />}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={label}
+          margin="none"
+          error={Boolean(touched.province && errors.province)}
+          helperText={touched.province && errors.province}
+        />
+      )}
       {...other}
     />
   );
