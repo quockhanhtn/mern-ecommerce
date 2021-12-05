@@ -77,7 +77,7 @@ const userSchema = mongoose.Schema(
       required: false,
       default: ''
     },
-    password: { type: String, trim: true, required: true },
+    password: { type: String, trim: true, required: false },
     needChangePassword: { type: Boolean, default: true },
 
     googleId: { type: String, trim: true, required: false },

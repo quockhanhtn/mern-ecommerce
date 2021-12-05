@@ -45,7 +45,7 @@ const MainStyle = styled('div')(({ theme }) => ({
 
 export default function MainLayout() {
   const dispatch = useDispatch();
-  // const { user, googleOAuth, errMessage } = useAuth();
+  const { user, googleOAuth, errMessage } = useAuth();
 
   const { listSimple: categoryList, isLoading: isLoadingCategory } = useSelector((state) => state.category);
 
@@ -63,15 +63,16 @@ export default function MainLayout() {
   }));
 
   useGoogleOneTapLogin({
+    disabled: !!user,
     onSuccess: (user) => console.log('Google One Tap Login success', user),
     onFailure: (error) => console.error('Google One Tap Login failure', error),
     googleAccountConfigs: {
-      client_id: '235569401328-lib09fjkc10r16r6mbscljl4ulb5049q.apps.googleusercontent.com'
-      // callback: (data) => {
-      //   console.log('Google One Tap Login callback', data);
-      //   const { credential } = data;
-      //   // await googleOAuth(credential);
-      // }
+      client_id: '235569401328-lib09fjkc10r16r6mbscljl4ulb5049q.apps.googleusercontent.com',
+      callback: async (data) => {
+        console.log('Google One Tap Login callback', data);
+        const { credential } = data;
+        await googleOAuth(credential);
+      }
     }
   });
 
@@ -87,7 +88,7 @@ export default function MainLayout() {
 
   return (
     <RootStyle>
-      <MainNavbar categoryList={navBarItems} />
+      <MainNavbar user={user} categoryList={navBarItems} />
       <MainStyle>
         <Outlet />
         <MainFooter />

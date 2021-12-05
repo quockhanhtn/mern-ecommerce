@@ -26,20 +26,13 @@ export const register = async (req, res, next) => {
 
 export const googleOAuth = async (req, res, next) => {
   try {
-    const { accessToken } = req.body;
+    const { googleCredential } = req.body;
     const ipAddress = req.ip;
 
-    const payload = await googleServices.verify(accessToken);
+    const payload = await googleServices.verify(googleCredential);
     if (!payload) {
       throw new Error('Google OAuth failed !');
     }
-
-    resUtils.status200(
-      res,
-      'Google OAuth successful !',
-      payload
-    );
-    return;
 
     const result = await authService.googleAuthenticate(payload, ipAddress);
     const userData = formatImageUrl(result.user, 'avatar', req);

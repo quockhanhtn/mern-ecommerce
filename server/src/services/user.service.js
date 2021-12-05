@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import constants from '../constants.js';
 import User from '../models/user.model.js';
 import strUtils from '../utils/str-utils.js';
 
@@ -62,7 +63,7 @@ async function getOneById(id, selectFields = null, needVirtuals = true) {
 }
 
 async function getOrCreateByGoogleId(googleId, email, firstName, lastName, avatar, selectFields = null, needVirtuals = true) {
- 
+
   const user = selectFields ?
     await User.findOne({ googleId }).select(selectFields).lean({ virtuals: needVirtuals }).exec() :
     await User.findOne({ googleId }).lean({ virtuals: needVirtuals }).exec();
@@ -78,9 +79,10 @@ async function getOrCreateByGoogleId(googleId, email, firstName, lastName, avata
     firstName,
     lastName,
     avatar,
-    role: 'user'
+    role: constants.USER.ROLE.CUSTOMER,
+    needChangePassword: true
   });
-  newUser.save();
+  await newUser.save();
   return getOneById(newUser._id, selectFields, needVirtuals);
 }
 
