@@ -7,8 +7,8 @@ import { Box, Stack, AppBar, Toolbar, IconButton } from '@material-ui/core';
 //
 import { MHidden } from '../../components/@material-extend';
 import DashboardSearchBar from './DashboardSearchBar';
-import AccountPopover from './AccountPopover';
-import LanguagePopover from './LanguagePopover';
+import AccountPopover from '../common/AccountPopover';
+import LanguagePopover from '../common/LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
 
 // ----------------------------------------------------------------------

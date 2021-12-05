@@ -28,7 +28,7 @@ import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
 import store from './store';
 // contexts
 import { SettingsProvider } from './contexts/SettingsContext';
-import { AuthProvider } from './contexts/JWTContext';
+import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 //
 import App from './App';

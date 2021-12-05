@@ -32,8 +32,7 @@ export default function CheckoutOrderComplete({ ...other }) {
   const dispatch = useDispatch();
 
   const handleResetStep = () => {
-    // dispatch(resetCart());
-    navigate(PATH_DASHBOARD.eCommerce.shop);
+    navigate('/');
   };
 
   return (
@@ -64,9 +63,9 @@ export default function CheckoutOrderComplete({ ...other }) {
           <Button color="inherit" onClick={handleResetStep} startIcon={<Icon icon={arrowIosBackFill} />}>
             Continue Shopping
           </Button>
-          <Button variant="contained" startIcon={<Icon icon={filePdfFilled} />} onClick={handleResetStep}>
-            Download as PDF
-          </Button>
+          {/* <Button variant="contained" startIcon={<Icon icon={filePdfFilled} />} onClick={handleResetStep}> */}
+          {/*  Download as PDF */}
+          {/* </Button> */}
         </Stack>
       </Box>
     </DialogStyle>

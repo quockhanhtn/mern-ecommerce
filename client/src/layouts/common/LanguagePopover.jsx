@@ -9,11 +9,11 @@ import { Box, MenuItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import useLocales from '../../hooks/useLocales';
 // components
 import MenuPopover from '../../components/MenuPopover';
-import { MIconButton } from '../../components/@material-extend';
+import { MButton, MIconButton } from '../../components/@material-extend';
 
 // ----------------------------------------------------------------------
 
-export default function LanguagePopover() {
+export default function LanguagePopover({ isShowTitle }) {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const { allLang, currentLang, t, onChangeLang } = useLocales();
@@ -45,20 +45,31 @@ export default function LanguagePopover() {
 
   return (
     <>
-      <MIconButton
-        ref={anchorRef}
-        onClick={handleOpen}
-        sx={{
-          padding: 0,
-          width: 44,
-          height: 44,
-          ...(open && {
-            bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.focusOpacity)
-          })
-        }}
-      >
-        <img src={currentLang.icon} alt={currentLang.label} />
-      </MIconButton>
+      {isShowTitle ? (
+        <MButton
+          ref={anchorRef}
+          onClick={handleOpen}
+          color="inherit"
+          startIcon={<img src={currentLang.icon} alt={currentLang.label} />}
+        >
+          {currentLang.label}
+        </MButton>
+      ) : (
+        <MIconButton
+          ref={anchorRef}
+          onClick={handleOpen}
+          sx={{
+            padding: 0,
+            width: 44,
+            height: 44,
+            ...(open && {
+              bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.focusOpacity)
+            })
+          }}
+        >
+          <img src={currentLang.icon} alt={currentLang.label} />
+        </MIconButton>
+      )}
 
       <MenuPopover open={open} onClose={handleClose} anchorEl={anchorRef.current} sx={{ py: 1 }}>
         {allLang.map((option) => (

@@ -4,11 +4,15 @@ import { Outlet } from 'react-router-dom';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 // material
 import { Box, Link, Container, Typography } from '@material-ui/core';
-// redux
+// hooks
+import { useGoogleOneTapLogin } from 'react-google-one-tap-login';
 import { useSelector, useDispatch } from 'react-redux';
+import useAuth from '../../hooks/useAuth';
+// actions
 import { getAllCategories } from '../../actions/categories';
 import { getAllBrands } from '../../actions/brands';
 import { getAllDiscounts } from '../../actions/discounts';
+
 // components
 import LoadingScreen from '../../components/LoadingScreen';
 //
@@ -41,6 +45,7 @@ const MainStyle = styled('div')(({ theme }) => ({
 
 export default function MainLayout() {
   const dispatch = useDispatch();
+  const { user, googleOAuth, errMessage } = useAuth();
 
   const { listSimple: categoryList, isLoading: isLoadingCategory } = useSelector((state) => state.category);
 
@@ -57,6 +62,20 @@ export default function MainLayout() {
     _id: item._id
   }));
 
+  useGoogleOneTapLogin({
+    disabled: !!user,
+    onSuccess: (user) => console.log('Google One Tap Login success', user),
+    onFailure: (error) => console.error('Google One Tap Login failure', error),
+    googleAccountConfigs: {
+      client_id: '235569401328-lib09fjkc10r16r6mbscljl4ulb5049q.apps.googleusercontent.com',
+      callback: async (data) => {
+        console.log('Google One Tap Login callback', data);
+        const { credential } = data;
+        await googleOAuth(credential);
+      }
+    }
+  });
+
   // if (isLoadingCategory || isLoadingBrand) {
   //   console.log('isLoadingCategory', isLoadingCategory);
   //   console.log('isLoadingBrand', isLoadingBrand);
@@ -69,7 +88,7 @@ export default function MainLayout() {
 
   return (
     <RootStyle>
-      <MainNavbar categoryList={navBarItems} />
+      <MainNavbar user={user} categoryList={navBarItems} />
       <MainStyle>
         <Outlet />
         <MainFooter />

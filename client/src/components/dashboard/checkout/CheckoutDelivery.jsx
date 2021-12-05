@@ -44,7 +44,7 @@ export default function CheckoutDelivery({ formik, deliveryOptions, onApplyShipp
       <CardContent>
         <RadioGroup
           name="delivery"
-          value={Number(values.delivery)}
+          value={Number(values.delivery) || 0}
           onChange={(event) => {
             const { value } = event.target;
             setFieldValue('delivery', Number(value));

@@ -1,5 +1,6 @@
 import userService from '../services/user.service.js';
 import authService from '../services/auth.service.js';
+import googleServices from '../services/google.services.js';
 import resUtils from '../utils/res-utils.js';
 import { formatImageUrl } from '../utils/format-utils.js';
 import { generateToken } from '../utils/jwt-utils.js';
@@ -22,6 +23,32 @@ export const register = async (req, res, next) => {
   } catch (err) { next(err) }
 };
 
+
+export const googleOAuth = async (req, res, next) => {
+  try {
+    const { googleCredential } = req.body;
+    const ipAddress = req.ip;
+
+    const payload = await googleServices.verify(googleCredential);
+    if (!payload) {
+      throw new Error('Google OAuth failed !');
+    }
+
+    const result = await authService.googleAuthenticate(payload, ipAddress);
+    const userData = formatImageUrl(result.user, 'avatar', req);
+    delete userData.password;
+
+    resUtils.status200(
+      res,
+      'Google OAuth successful !',
+      {
+        user: userData,
+        token: result.jwtToken,
+        refreshToken: result.refreshToken
+      }
+    );
+  } catch (err) { next(err) }
+};
 
 export const login = async (req, res, next) => {
   try {

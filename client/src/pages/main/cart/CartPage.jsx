@@ -82,8 +82,7 @@ export default function CartPage() {
   const dispatch = useDispatch();
   const isMountedRef = useIsMountedRef();
   const { cart, activeStep } = useToCart();
-  console.log('activeStep', activeStep);
-  // const { billing } = checkout;
+  const billing = true;
   const isComplete = activeStep === STEPS.length;
 
   useEffect(() => {
@@ -121,7 +120,7 @@ export default function CartPage() {
           <>
             {activeStep === 0 && <CheckoutCart />}
             {activeStep === 1 && <CheckoutBillingAddress />}
-            {/* {activeStep === 2 && billing && <CheckoutPayment />} */}
+            {activeStep === 2 && billing && <CheckoutPayment />}
           </>
         ) : (
           <CheckoutOrderComplete open={isComplete} />

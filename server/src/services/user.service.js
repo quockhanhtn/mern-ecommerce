@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import constants from '../constants.js';
 import User from '../models/user.model.js';
 import strUtils from '../utils/str-utils.js';
 
@@ -7,10 +8,14 @@ export default {
   getListByRole,
   getOne,
   getOneById,
+  getOrCreateByGoogleId,
   create,
   update,
   remove
 };
+
+const SELECTED_FIELDS =
+  '_id slug order name desc isHide image parent children createdAt updatedAt';
 
 /**
  *
@@ -55,6 +60,30 @@ async function getOneById(id, selectFields = null, needVirtuals = true) {
   return selectFields ?
     await User.findById(id).select(selectFields).lean({ virtuals: needVirtuals }).exec() :
     await User.findById(id).lean({ virtuals: needVirtuals }).exec();
+}
+
+async function getOrCreateByGoogleId(googleId, email, firstName, lastName, avatar, selectFields = null, needVirtuals = true) {
+
+  const user = selectFields ?
+    await User.findOne({ googleId }).select(selectFields).lean({ virtuals: needVirtuals }).exec() :
+    await User.findOne({ googleId }).lean({ virtuals: needVirtuals }).exec();
+
+  if (user) {
+    return user;
+  }
+
+  const newUser = new User({
+    _id: new mongoose.Types.ObjectId(),
+    googleId,
+    email,
+    firstName,
+    lastName,
+    avatar,
+    role: constants.USER.ROLE.CUSTOMER,
+    needChangePassword: true
+  });
+  await newUser.save();
+  return getOneById(newUser._id, selectFields, needVirtuals);
 }
 
 /**

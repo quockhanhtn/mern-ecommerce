@@ -8,10 +8,17 @@ import { LoadingButton } from '@material-ui/lab';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 //
+import { useTheme } from '@material-ui/core/styles';
+import { useState } from 'react';
+import { useSnackbar } from 'notistack';
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutDelivery from './CheckoutDelivery';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
+import useLocales from '../../../hooks/useLocales';
+import useAuth from '../../../hooks/useAuth';
+import useToCart from '../../../hooks/useToCart';
+import * as Helper from '../../../helper/cartHelper';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +41,12 @@ const PAYMENT_OPTIONS = [
     title: 'Pay with Paypal',
     description: 'You will be redirected to PayPal website to complete your purchase securely.',
     icons: ['/static/icons/ic_paypal.svg']
+  },
+  {
+    value: 'VnPay',
+    title: 'Pay with VnPay',
+    description: 'You will be redirected to VnPay website to complete your purchase securely.',
+    icons: ['/static/icons/ic_vnpay.svg']
   },
   {
     value: 'credit_card',
@@ -59,19 +72,44 @@ const CARDS_OPTIONS = [
 
 export default function CheckoutPayment() {
   const dispatch = useDispatch();
-  const { checkout } = useSelector((state) => state.product);
-  const { total, billing, discount, subtotal, shipping } = checkout;
+  const { t } = useLocales();
+  const theme = useTheme();
+  const { user } = useAuth();
+  const [open, setOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const { cart, activeStep, backStepPayment, nextStepPayment, getCart } = useToCart();
+  const [subTotal, setSubTotal] = useState(Helper.getSubTotal(cart));
+  const discount = cart.length > 0 ? 50000 : 0;
+  const [total, setTotal] = useState(Helper.getSubTotal(cart) - discount);
+  const [province, setProvince] = useState(null);
+  const [district, setDistrict] = useState(null);
+  const [subDistrict, setSubDistrict] = useState(null);
+  const initInfo = Helper.getBillingInfo();
 
-  const handleNextStep = () => {
-    // dispatch(onNextStep());
+  const handleCompleteOrder = () => {
+    nextStepPayment(activeStep).then(() => {
+      Helper.completeOrder();
+      getCart();
+      enqueueSnackbar('Next step to cart successfully', {
+        variant: 'success'
+      });
+    });
   };
 
   const handleBackStep = () => {
-    // dispatch(onBackStep());
+    backStepPayment(activeStep).then(() => {
+      enqueueSnackbar('Back step to cart successfully', {
+        variant: 'success'
+      });
+    });
   };
 
   const handleGotoStep = (step) => {
-    // dispatch(onGotoStep(step));
+    backStepPayment(step).then(() => {
+      enqueueSnackbar('Back step to cart successfully', {
+        variant: 'success'
+      });
+    });
   };
 
   const handleApplyShipping = (value) => {
@@ -84,13 +122,13 @@ export default function CheckoutPayment() {
 
   const formik = useFormik({
     initialValues: {
-      delivery: shipping,
+      delivery: initInfo,
       payment: ''
     },
     validationSchema: PaymentSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
-        handleNextStep();
+        handleCompleteOrder();
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -124,13 +162,13 @@ export default function CheckoutPayment() {
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <CheckoutBillingInfo billing={billing} onBackStep={handleBackStep} />
+            <CheckoutBillingInfo billingInfo={initInfo} onBackStep={handleBackStep} />
             <CheckoutSummary
               enableEdit
               total={total}
-              subtotal={subtotal}
+              subtotal={subTotal}
               discount={discount}
-              shipping={shipping}
+              // shipping={shipping}
               onEdit={() => handleGotoStep(0)}
             />
             <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>

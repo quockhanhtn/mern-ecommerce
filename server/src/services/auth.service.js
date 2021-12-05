@@ -8,9 +8,38 @@ import ApiError from '../utils/APIError.js';
 
 
 export default {
+  googleAuthenticate,
   authenticate,
   refreshToken,
   revokeToken
+};
+
+async function googleAuthenticate(payload, ipAddress) {
+  const {
+    sub: googleId,
+    email,
+    given_name: firstName,
+    family_name: lastName,
+    picture: avatar
+  } = payload;
+
+  const user = await userService.getOrCreateByGoogleId(googleId, email, firstName, lastName, avatar);
+  if (!user) {
+    throw ApiError.simple2(responseDef.AUTH.USER_NOT_FOUND);
+  }
+
+  // authentication successful so generate jwt and refresh tokens
+  const jwtToken = generateToken({ _id: user._id });
+  const refreshToken = generateRefreshToken(user._id, ipAddress);
+
+  // save refresh token
+  await refreshToken.save();
+
+  return {
+    user,
+    jwtToken,
+    refreshToken: refreshToken.token
+  };
 };
 
 
