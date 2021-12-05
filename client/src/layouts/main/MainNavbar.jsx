@@ -4,9 +4,10 @@ import { NavLink as RouterLink } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import cart24Regular from '@iconify/icons-fluent/cart-24-regular';
 import history24Filled from '@iconify/icons-fluent/history-24-filled';
+import login24Filled from '@iconify/icons-fluent/signature-16-filled';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Avatar, Box, IconButton, AppBar, Toolbar, Container } from '@material-ui/core';
+import { Avatar, Box, IconButton, AppBar, Toolbar, Container, Typography, Link } from '@material-ui/core';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 import useLocales from '../../hooks/useLocales';
@@ -20,6 +21,7 @@ import SearchBar from './SearchBar';
 import MainAccountPopover from './MainAccountPopover';
 import LanguagePopover from '../common/LanguagePopover';
 import useToCart from '../../hooks/useToCart';
+import { PATH_AUTH } from '../../routes/paths';
 
 // ----------------------------------------------------------------------
 const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
@@ -119,11 +121,15 @@ export default function MainNavbar({ user, categoryList }) {
           </MHidden>
 
           <ButtonIcon text={t('home.order-history')} icon={history24Filled} color="inherit" href="/order-history" />
-          <MBadge badgeContent={quantityInCart} color="primary">
+          <MBadge badgeContent={quantityInCart} color="primary" sx={{ marginRight: user ? 2 : 0 }}>
             <ButtonIcon text={t('home.cart')} icon={cart24Regular} color="primary" href="/cart" />
           </MBadge>
-
-          <MainAccountPopover />
+          {!user && (
+            <Link to={PATH_AUTH.login} color="inherit" component={RouterLink} sx={{ textDecoration: '' }}>
+              <ButtonIcon text="Đăng nhập" icon={login24Filled} color="inherit" />
+            </Link>
+          )}
+          <MainAccountPopover sx={{ marginLeft: 100 }} />
         </ContainerStyle>
         <MHidden width="mdDown">
           <ColorBar>
