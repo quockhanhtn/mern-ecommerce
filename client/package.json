@@ -106,6 +106,7 @@
     "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.2",
+    "react-google-login": "^5.2.2",
     "react-google-one-tap-login": "^0.1.0",
     "react-helmet-async": "^1.0.9",
     "react-i18next": "^11.8.13",

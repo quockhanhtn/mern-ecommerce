@@ -4,10 +4,11 @@ import { NavLink as RouterLink } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import cart24Regular from '@iconify/icons-fluent/cart-24-regular';
 import history24Filled from '@iconify/icons-fluent/history-24-filled';
-import login24Filled from '@iconify/icons-fluent/signature-16-filled';
+import googleFill from '@iconify/icons-eva/google-fill';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Avatar, Box, IconButton, AppBar, Toolbar, Container, Typography, Link } from '@material-ui/core';
+import { Box, IconButton, AppBar, Toolbar, Container } from '@material-ui/core';
+import { GoogleLogin } from 'react-google-login';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 import useLocales from '../../hooks/useLocales';
@@ -21,7 +22,7 @@ import SearchBar from './SearchBar';
 import MainAccountPopover from './MainAccountPopover';
 import LanguagePopover from '../common/LanguagePopover';
 import useToCart from '../../hooks/useToCart';
-import { PATH_AUTH } from '../../routes/paths';
+import useAuth from '../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
@@ -86,10 +87,11 @@ const ButtonIcon = ({ text, icon, color, ...other }) => (
 
 // ----------------------------------------------------------------------
 
-export default function MainNavbar({ user, categoryList }) {
+export default function MainNavbar({ categoryList }) {
   const { t } = useLocales();
   const isOffset = useOffSetTop(100);
   const { quantityInCart, getCart } = useToCart();
+  const { user, googleOAuth, errMessage } = useAuth();
 
   useEffect(() => {
     getCart().then(() => {
@@ -99,6 +101,15 @@ export default function MainNavbar({ user, categoryList }) {
     });
     // getStepPayment().then();
   }, []);
+
+  const handleGoogleLoginSuccess = async (res) => {
+    const tokenId = res?.tokenId;
+    await googleOAuth(tokenId);
+  };
+
+  const handleGoogleLoginFailure = (err) => {
+    console.log(err);
+  };
 
   return (
     <AppBar color="default" sx={{ boxShadow: 0 }}>
@@ -121,15 +132,29 @@ export default function MainNavbar({ user, categoryList }) {
           </MHidden>
 
           <ButtonIcon text={t('home.order-history')} icon={history24Filled} color="inherit" href="/order-history" />
-          <MBadge badgeContent={quantityInCart} color="primary" sx={{ marginRight: user ? 2 : 0 }}>
+          <MBadge badgeContent={quantityInCart} color="primary" sx={{ marginRight: user ? 3 : 0 }}>
             <ButtonIcon text={t('home.cart')} icon={cart24Regular} color="primary" href="/cart" />
           </MBadge>
+
           {!user && (
-            <Link to={PATH_AUTH.login} color="inherit" component={RouterLink} sx={{ textDecoration: '' }}>
-              <ButtonIcon text="Đăng nhập" icon={login24Filled} color="inherit" />
-            </Link>
+            <GoogleLogin
+              clientId="235569401328-lib09fjkc10r16r6mbscljl4ulb5049q.apps.googleusercontent.com"
+              render={(renderProps) => (
+                <ButtonIcon
+                  text={t('auth.sign-in')}
+                  icon={googleFill}
+                  color="inherit"
+                  onClick={renderProps.onClick}
+                  disabled={renderProps.disabled}
+                />
+              )}
+              onSuccess={handleGoogleLoginSuccess}
+              onFailure={handleGoogleLoginFailure}
+              cookiePolicy="single_host_origin"
+            />
           )}
-          <MainAccountPopover sx={{ marginLeft: 100 }} />
+
+          <MainAccountPopover />
         </ContainerStyle>
         <MHidden width="mdDown">
           <ColorBar>
