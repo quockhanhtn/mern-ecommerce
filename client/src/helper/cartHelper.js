@@ -58,15 +58,17 @@ export function decreaseProductInCartLocalStorage(_idProduct, skuVariantProduct)
 
 export function getSubTotal(cart) {
   let subTotal = 0;
-  cart.forEach((item) => {
-    subTotal += item.quantity * item.price;
-  });
+  if (cart.length > 0) {
+    cart.forEach((item) => {
+      subTotal += item.quantity * item.price;
+    });
+  }
   return subTotal;
 }
 
 export function nextStepPayment(step) {
   let activeStep = step;
-  if (step < 2) {
+  if (step < 3) {
     activeStep += 1;
   }
   localStorage.setItem('activeStep', activeStep);
@@ -86,4 +88,19 @@ export function getStepPayment() {
   const activeStep = localStorage.getItem('activeStep');
   // Current I not handler it and remove 0
   return 0;
+}
+
+export function saveBillingInfo(info) {
+  const infoJson = JSON.stringify(info);
+  localStorage.setItem('billingInfo', infoJson);
+}
+
+export function getBillingInfo() {
+  const info = localStorage.getItem('billingInfo');
+  const infoObject = JSON.parse(info) || {};
+  return infoObject;
+}
+
+export function completeOrder() {
+  localStorage.removeItem('cartLocalStorage');
 }

@@ -6,31 +6,31 @@ import { Autocomplete, TextField } from '@material-ui/core';
 
 ProvincePicker.propTypes = {
   label: PropTypes.string.isRequired,
-  defaultCountryCode: PropTypes.string,
+  defaultProvinceCode: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired
 };
 
 ProvincePicker.defaultProps = {
-  defaultCountryCode: -1,
-  value: 'Viet Nam'
+  defaultProvinceCode: null,
+  value: ''
 };
 
-export const defaultCountryCode = 'VN';
-export const defaultCountryName = 'Viet Nam';
+export default function ProvincePicker({ label, defaultProvinceCode, value, onChange, ...other }) {
+  const handleOnChange = (option, value) => {
+    const defaultValue = PROVINCES.find((province) => province?.name === value?.name);
+    onChange(defaultValue);
+  };
 
-export default function ProvincePicker({ label, defaultCountryCode, value, onChange, ...other }) {
-  const defaultCountry = PROVINCES.find((country) => country.code === defaultCountryCode);
   return (
     <Autocomplete
-      defaultValue={defaultCountry}
-      options={PROVINCES.map((country) => ({
-        name: country.name
+      options={PROVINCES.map((province) => ({
+        name: province.name
       }))}
-      value={PROVINCES.find((country) => country.name === value)}
-      onChange={onChange}
+      value={PROVINCES.find((province) => province.name === value)}
+      onChange={(option, value) => handleOnChange(option, value)}
       getOptionLabel={(option) => option.name}
-      renderInput={(params) => <TextField {...params} label={label} margin="none" />}
+      renderInput={(params) => <TextField {...params} label={label} margin="none" error={!value} />}
       {...other}
     />
   );
