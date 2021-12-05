@@ -65,7 +65,6 @@ const AuthContext = createContext({
   isAuthenticated: false,
   isInitialized: false,
   user: null,
-  method: 'jwt',
   register: () => Promise.resolve(),
   login: () => Promise.resolve(),
   logout: () => Promise.resolve()
@@ -116,6 +115,20 @@ function AuthProvider({ children }) {
     dispatch({ type: 'REGISTER', payload: { userData } });
   };
 
+  const googleOAuthAction = async (accessToken) => {
+    try {
+      if (isDev) console.log('[JWTAuth][googleOAuth] input', { accessToken });
+      const { data } = await api.googleOAuth(accessToken);
+      if (isDev) console.log('[JWTAuth][googleOAuth] result', data);
+      const { token, refreshToken, user } = data.data;
+      setSession(token, refreshToken);
+      dispatch({ type: 'LOGIN', payload: { user } });
+    } catch (e) {
+      if (isDev) console.log('[JWTAuth][googleOAuth] error', e.response);
+      dispatch({ type: 'ERROR', payload: e.response.data.message });
+    }
+  };
+
   const loginAction = async (username, password) => {
     try {
       if (isDev) console.log('[JWTAuth][login] input', { username, password });
@@ -139,10 +152,10 @@ function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         ...state,
-        method: 'jwt',
         register: registerAction,
         login: loginAction,
-        logout: logoutAction
+        logout: logoutAction,
+        googleOAuth: googleOAuthAction
       }}
     >
       {children}

@@ -10,7 +10,7 @@ import { CarouselControlsPaging1, CarouselControlsArrowsBasic2 } from './control
 
 // ----------------------------------------------------------------------
 
-CarouselBrandList.propTypes = {
+CarouselMiniList.propTypes = {
   isLoading: PropTypes.bool,
   items: PropTypes.array,
   numberShow: PropTypes.number,
@@ -21,7 +21,7 @@ CarouselBrandList.propTypes = {
   sx: PropTypes.object
 };
 
-CarouselBrandList.defaultProps = {
+CarouselMiniList.defaultProps = {
   isLoading: false,
   items: [],
   numberShow: 5,
@@ -31,7 +31,7 @@ CarouselBrandList.defaultProps = {
   sx: {}
 };
 
-export default function CarouselBrandList({
+export default function CarouselMiniList({
   isLoading,
   items,
   numberShow,
@@ -76,16 +76,16 @@ export default function CarouselBrandList({
   function renderSkeleton() {
     return [...Array(10).keys()].map((i) => (
       <>
-        <Skeleton key={i} variant="rect" width="100%" height={200} />
-        <Skeleton key={i} variant="rect" width="100%" height={200} />
+        <Skeleton key={`ske-${i}`} variant="rect" width="100%" height={200} />
       </>
     ));
   }
 
   function renderItems() {
     return items.map((item, index) => (
-      <Box key={index} sx={{ px: 1, textAlign: 'center', height: customHeight }}>
+      <Box key={`box-${index}`} sx={{ px: 1, textAlign: 'center', height: customHeight }}>
         <Link
+          key={`link-${index}`}
           component={RouterLink}
           color="inherit"
           underline="none"

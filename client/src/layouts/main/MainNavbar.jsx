@@ -82,7 +82,7 @@ const ButtonIcon = ({ text, icon, color, ...other }) => (
 
 // ----------------------------------------------------------------------
 
-export default function MainNavbar({ categoryList }) {
+export default function MainNavbar({ user, categoryList }) {
   const { t } = useLocales();
   const isOffset = useOffSetTop(100);
   const { quantityInCart, getCart } = useToCart();
@@ -118,6 +118,8 @@ export default function MainNavbar({ categoryList }) {
           <MBadge badgeContent={quantityInCart} color="primary">
             <ButtonIcon text={t('home.cart')} icon={cart24Regular} color="primary" href="/cart" />
           </MBadge>
+
+          {user && (user.fullName || user.email)}
         </ContainerStyle>
         <MHidden width="mdDown">
           <ColorBar>

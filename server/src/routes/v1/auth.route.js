@@ -1,7 +1,7 @@
 import express from 'express';
 import Joi from 'joi';
 import { allowImageMineTypes } from '../../constants.js';
-import { login, logout, refreshToken, register } from '../../controllers/auth.controller.js';
+import * as authController from '../../controllers/auth.controller.js';
 import validateRequest from '../../middlewares/validate-request.js';
 import uploadUtils from '../../utils/upload-utils.js';
 
@@ -25,13 +25,16 @@ const upload = uploadUtils.multerUpload('/users/', allowImageMineTypes);
 router.route('/register').post(
   upload.single('avatar'),
   uploadUtils.handleFilePath('avatar'),
-  register
+  authController.register
 );
 router.route('/login').post(
   validateRequest(loginSchema),
-  login
+  authController.login
 );
-router.route('/refresh-token').post(refreshToken);
-router.route('/logout').post(logout);
+router.route('/refresh-token').post(authController.refreshToken);
+router.route('/logout').post(authController.logout);
+
+// Google OAuth
+router.route('/google').post(authController.googleOAuth);
 
 export default router;

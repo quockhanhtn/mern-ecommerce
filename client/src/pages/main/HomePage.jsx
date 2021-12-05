@@ -143,12 +143,7 @@ export default function HomePage() {
             </Box>
             {productPagination?.hasNextPage && (
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <MButton
-                  variant="outlined"
-                  sx={{ backgroundColor: 'white', width: '50%' }}
-                  onClick={handleLoadMore}
-                  isLoading={isLoadingProduct}
-                >
+                <MButton variant="outlined" sx={{ backgroundColor: 'white', width: '50%' }} onClick={handleLoadMore}>
                   Xem thêm
                 </MButton>
               </Box>

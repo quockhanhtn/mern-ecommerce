@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import googleFill from '@iconify/icons-eva/google-fill';
 import twitterFill from '@iconify/icons-eva/twitter-fill';
@@ -8,6 +9,10 @@ import { Stack, Button, Divider, Typography } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
+
+AuthFirebaseSocials.propTypes = {
+  orText: PropTypes.string
+};
 
 export default function AuthFirebaseSocials({ orText }) {
   const { loginWithGoogle, loginWithFaceBook, loginWithTwitter } = useAuth();

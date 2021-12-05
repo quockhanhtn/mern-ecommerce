@@ -8,7 +8,7 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(1)
 }));
 
-MLabelTypo.prototype = {
+MLabelTypo.propTypes = {
   text: PropTypes.string.isRequired
 };
 

@@ -16,33 +16,6 @@ const formatProduct = (product, req) => {
   return product;
 }
 
-const initPagination = (total, limit, page) => {
-  const pagination = {
-    total,
-    totalPages: Math.ceil(total / limit),
-    limit,
-    page,
-    hasNextPage: false,
-    nextPage: null,
-    hasPrevPage: false,
-    prevPage: null
-  };
-
-  // Set prev page
-  if (page > 1) {
-    pagination.hasPrevPage = true;
-    pagination.prevPage = page - 1;
-  }
-
-  // Set next page
-  if (page < pagination.totalPages) {
-    pagination.hasNextPage = true;
-    pagination.nextPage = page + 1;
-  }
-
-  return pagination;
-};
-
 //#region Product variants
 export const addProductVariants = async (req, res, next) => {
   try {
@@ -107,38 +80,31 @@ export const getAllProducts = async (req, res, next) => {
     let { list: products, total, countAll } = await productService.getAllProducts(fields, limit, page, filters);
     products = products.map(p => formatProduct(p, req));
 
-    const pagination = initPagination(total, limit, page);
-    pagination.countAll = countAll;
+    const pagination = {
+      countAll,
+      total,
+      totalPages: Math.ceil(total / limit),
+      limit,
+      page,
+      hasNextPage: false,
+      nextPage: null,
+      hasPrevPage: false,
+      prevPage: null
+    };
+
+    // Set prev page
+    if (page > 1) {
+      pagination.hasPrevPage = true;
+      pagination.prevPage = page - 1;
+    }
+
+    // Set next page
+    if (page < pagination.totalPages) {
+      pagination.hasNextPage = true;
+      pagination.nextPage = page + 1;
+    }
 
     resUtils.status200(res, 'Get all products successfully!', products, { pagination });
-  } catch (err) { next(err); }
-};
-
-export const getProductFilter = async (req, res, next) => {
-  try {
-    // url in format: /products/:category?b=brand&filter?fields=name,price&limit=10&page=1
-    const category = req.params.category || '';
-    const brand = req.params.b || '';
-    const q = req.params.q || '';
-
-    const fields = req.query.fields || null;
-    const limit = parseInt(req.query.limit) || 10;
-    const page = parseInt(req.query.page) || 1;
-
-    let filters = {};
-    if (category) { filters.category = [...category.split(',')]; }
-    if (brand) { filters.brand = [...brand.split(',')]; }
-    if (q) { filters.name = { $regex: q, $options: 'i' }; }
-
-    let { list: products, total } = await productService.getAllProducts(fields, limit, page, filters);
-    products = products.map(p => formatProduct(p, req));
-    const pagination = initPagination(total, limit, page);
-
-    if (products && products.length > 0) {
-      resUtils.status200(res, 'Get all products successfully!', products, { pagination });
-    } else {
-      resUtils.status200(res, 'No products found', []);
-    }
   } catch (err) { next(err); }
 };
 
