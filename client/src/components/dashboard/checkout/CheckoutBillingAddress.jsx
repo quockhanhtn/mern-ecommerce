@@ -293,6 +293,8 @@ export default function CheckoutBillingAddress() {
               required
               fullWidth
               size="small"
+              touched={touched}
+              errors={errors}
             />
             <DistrictPicker
               label="Quận/Huyện"
@@ -302,6 +304,8 @@ export default function CheckoutBillingAddress() {
               required
               fullWidth
               size="small"
+              touched={touched}
+              errors={errors}
             />
             <SubDistrictPicker
               label="Phường/Xã"
@@ -311,6 +315,8 @@ export default function CheckoutBillingAddress() {
               required
               fullWidth
               size="small"
+              touched={touched}
+              errors={errors}
             />
           </Stack>
           <TextField

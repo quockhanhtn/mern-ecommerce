@@ -17,7 +17,7 @@ SubDistrictPicker.defaultProps = {
   value: ''
 };
 
-export default function SubDistrictPicker({ label, defaultDistrictCode, value, onChange, ...other }) {
+export default function SubDistrictPicker({ touched, errors, label, defaultDistrictCode, value, onChange, ...other }) {
   const [subDistrictsAll, setSubDistrictsAll] = useState([]);
   const [subDistricts, setSubDistricts] = useState([]);
 
@@ -51,7 +51,15 @@ export default function SubDistrictPicker({ label, defaultDistrictCode, value, o
       value={subDistricts.find((sub) => sub.name === value)}
       onChange={(option, value) => handleOnChange(option, value)}
       getOptionLabel={(option) => option.name}
-      renderInput={(params) => <TextField {...params} label={label} margin="none" error={!value} />}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={label}
+          margin="none"
+          error={Boolean(touched.subDistrict && errors.subDistrict)}
+          helperText={touched.subDistrict && errors.subDistrict}
+        />
+      )}
       {...other}
     />
   );

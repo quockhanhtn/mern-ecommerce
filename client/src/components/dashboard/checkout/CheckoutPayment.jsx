@@ -46,7 +46,7 @@ const PAYMENT_OPTIONS = [
     value: 'VnPay',
     title: 'Pay with VnPay',
     description: 'You will be redirected to VnPay website to complete your purchase securely.',
-    icons: ['/static/icons/ic_paypal.svg']
+    icons: ['/static/icons/ic_vnpay.svg']
   },
   {
     value: 'credit_card',

@@ -17,7 +17,7 @@ DistrictPicker.defaultProps = {
   value: ''
 };
 
-export default function DistrictPicker({ label, defaultProvinceCode, value, onChange, ...other }) {
+export default function DistrictPicker({ touched, errors, label, defaultProvinceCode, value, onChange, ...other }) {
   const listDistricts = DISTRICTS.filter((district) => district.province_code === defaultProvinceCode);
   const [districts, setDistricts] = useState(listDistricts);
 
@@ -40,7 +40,15 @@ export default function DistrictPicker({ label, defaultProvinceCode, value, onCh
       value={districts.find((district) => district.name === value)}
       onChange={(option, value) => handleOnChange(option, value)}
       getOptionLabel={(option) => option.name}
-      renderInput={(params) => <TextField {...params} label={label} margin="none" error={!value} />}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={label}
+          margin="none"
+          error={Boolean(touched.district && errors.district)}
+          helperText={touched.district && errors.district}
+        />
+      )}
       {...other}
     />
   );
