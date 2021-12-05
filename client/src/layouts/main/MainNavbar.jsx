@@ -6,7 +6,7 @@ import cart24Regular from '@iconify/icons-fluent/cart-24-regular';
 import history24Filled from '@iconify/icons-fluent/history-24-filled';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, IconButton, AppBar, Toolbar, Container } from '@material-ui/core';
+import { Avatar, Box, IconButton, AppBar, Toolbar, Container } from '@material-ui/core';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 import useLocales from '../../hooks/useLocales';
@@ -17,6 +17,8 @@ import { MBadge, MButton, MHidden } from '../../components/@material-extend';
 import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';
 import SearchBar from './SearchBar';
+import MainAccountPopover from './MainAccountPopover';
+import LanguagePopover from '../common/LanguagePopover';
 import useToCart from '../../hooks/useToCart';
 
 // ----------------------------------------------------------------------
@@ -110,6 +112,8 @@ export default function MainNavbar({ user, categoryList }) {
           <SearchBar sx={{ marginLeft: 10 }} />
           <Box sx={{ flexGrow: 1 }} />
 
+          <LanguagePopover isShowTitle />
+
           <MHidden width="mdUp">
             <MenuMobile isOffset={isOffset} isHome={false} navConfig={categoryList} />
           </MHidden>
@@ -119,7 +123,7 @@ export default function MainNavbar({ user, categoryList }) {
             <ButtonIcon text={t('home.cart')} icon={cart24Regular} color="primary" href="/cart" />
           </MBadge>
 
-          {user && (user.fullName || user.email)}
+          <MainAccountPopover />
         </ContainerStyle>
         <MHidden width="mdDown">
           <ColorBar>
