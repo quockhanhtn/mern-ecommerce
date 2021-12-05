@@ -12,8 +12,8 @@ CheckoutBillingInfo.propTypes = {
   sx: PropTypes.object
 };
 
-export default function CheckoutBillingInfo({ billing, onBackStep, sx }) {
-  const { receiver, phone, addressType, fullAddress } = billing;
+export default function CheckoutBillingInfo({ billingInfo, onBackStep, sx }) {
+  const { fullName, phone, addressDetail, province, district, subDistrict } = billingInfo;
 
   return (
     <Card sx={{ mb: 3, ...sx }}>
@@ -27,14 +27,14 @@ export default function CheckoutBillingInfo({ billing, onBackStep, sx }) {
       />
       <CardContent>
         <Typography variant="subtitle2" gutterBottom>
-          {receiver}&nbsp;
-          <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
-            ({addressType})
-          </Typography>
+          {fullName}&nbsp;
+          {/* <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}> */}
+          {/*  */}
+          {/* </Typography> */}
         </Typography>
 
         <Typography variant="body2" gutterBottom>
-          {fullAddress}
+          {`${addressDetail}, ${subDistrict}, ${district}, ${province}.`}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           {phone}

@@ -30,9 +30,9 @@ export default function CheckoutCart() {
   } = useToCart();
   const { user } = useAuth();
   const [subTotal, setSubTotal] = useState(Helper.getSubTotal(cart));
-  const discount = 50000;
+  const discount = cart.length > 0 ? 50000 : 0;
   const [total, setTotal] = useState(Helper.getSubTotal(cart) - discount);
-  const isEmptyCart = cart.length === 0;
+  const isEmptyCart = cart ? cart.length === 0 : true;
 
   useEffect(() => {
     setSubTotal(Helper.getSubTotal(cart));

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
-import { Box, Grid, Card, Button, Typography, TextField, Stack, Link } from '@material-ui/core';
+import { Box, Grid, Card, Button, Typography, TextField, Stack, Link, FormHelperText } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme, withStyles } from '@material-ui/core/styles';
@@ -24,6 +24,8 @@ import { PATH_DASHBOARD, PATH_AUTH } from '../../../routes/paths';
 import useLocales from '../../../hooks/useLocales';
 import { MotionInView, varFadeInUp } from '../../animate';
 import ProvincePicker from '../../ProvincePicker';
+import DistrictPicker from '../../DistrictPicker';
+import SubDistrictPicker from '../../SubDistrictPicker';
 
 // ----------------------------------------------------------------------
 
@@ -122,10 +124,14 @@ export default function CheckoutBillingAddress() {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const { cart, activeStep, backStepPayment } = useToCart();
+  const { cart, activeStep, backStepPayment, nextStepPayment } = useToCart();
   const [subTotal, setSubTotal] = useState(Helper.getSubTotal(cart));
-  const discount = 50000;
+  const discount = cart.length > 0 ? 50000 : 0;
   const [total, setTotal] = useState(Helper.getSubTotal(cart) - discount);
+  const [province, setProvince] = useState(null);
+  const [district, setDistrict] = useState(null);
+  const [subDistrict, setSubDistrict] = useState(null);
+  const initInfo = Helper.getBillingInfo();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -136,7 +142,19 @@ export default function CheckoutBillingAddress() {
   };
 
   const handleNextStep = () => {
-    // dispatch(onNextStep());
+    if (user) {
+      // TODD
+    } else if (!province || !district || !subDistrict) {
+      enqueueSnackbar('Vui lòng điền đầy đủ thông tin giao hàng!', {
+        variant: 'error'
+      });
+    } else {
+      nextStepPayment(activeStep).then(() => {
+        enqueueSnackbar('Next step to cart successfully', {
+          variant: 'success'
+        });
+      });
+    }
   };
 
   const handleBackStep = () => {
@@ -159,29 +177,34 @@ export default function CheckoutBillingAddress() {
     </div>
   );
 
+  const phoneRegExp = '(84|0[3|5|7|8|9])+([0-9]{8})\\b';
   const PersonInfo = Yup.object().shape({
     fullName: Yup.string().required('Full Name is required'),
-    phone: Yup.string().required('Phone is required'),
-    email: Yup.string().required('Email is required'),
-    addressDetail: Yup.string().required('Address is required')
+    phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid').required('Phone is required'),
+    email: Yup.string().email('Must be a valid email').required('Email is required'),
+    addressDetail: Yup.string().required('Address is required'),
+    province: Yup.string().required('Province is required'),
+    district: Yup.string().required('District is required'),
+    subDistrict: Yup.string().required('Sub District is required')
   });
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      fullName: '',
-      phone: '',
-      email: '',
-      addressDetail: '',
-      province: '',
-      district: '',
-      subDistrict: '',
-      moreInfo: ''
+      fullName: initInfo.fullName || '',
+      phone: initInfo.phone || '',
+      email: initInfo.email || '',
+      addressDetail: initInfo.addressDetail || '',
+      province: province?.name || '',
+      district: district?.name || '',
+      subDistrict: subDistrict?.name || '',
+      moreInfo: initInfo.moreInfo || ''
     },
     validationSchema: PersonInfo,
     onSubmit: async () => {
       try {
-        // handleSave();
+        Helper.saveBillingInfo(values);
+        handleNextStep();
       } catch (e) {
         enqueueSnackbar('Lỗi', {
           variant: 'error'
@@ -191,6 +214,21 @@ export default function CheckoutBillingAddress() {
   });
 
   const { errors, values, touched, handleSubmit, setFieldValue, getFieldProps } = formik;
+
+  const handleChangeProvince = (newValue) => {
+    setProvince(newValue);
+    setDistrict(null);
+    setSubDistrict(null);
+  };
+
+  const handleChangeDistrict = (newValue) => {
+    setDistrict(newValue);
+    setSubDistrict(null);
+  };
+
+  const handleChangeSubDistrict = (newValue) => {
+    setSubDistrict(newValue);
+  };
 
   const renderAddressOfNotUser = () => (
     <FormikProvider value={formik}>
@@ -250,24 +288,26 @@ export default function CheckoutBillingAddress() {
           <Stack direction="row" spacing={3} sx={{ marginBottom: theme.spacing(2) }}>
             <ProvincePicker
               label="Tỉnh/Thành"
-              // onChange={(e, newValue) => setBrandData({ ...brandData, country: newValue.label })}
-              // value={brandData.country}
+              onChange={(newValue) => handleChangeProvince(newValue)}
+              value={province?.name}
               required
               fullWidth
               size="small"
             />
-            <ProvincePicker
+            <DistrictPicker
               label="Quận/Huyện"
-              // onChange={(e, newValue) => setBrandData({ ...brandData, country: newValue.label })}
-              // value={brandData.country}
+              defaultProvinceCode={province?.code}
+              onChange={(newValue) => handleChangeDistrict(newValue)}
+              value={district?.name}
               required
               fullWidth
               size="small"
             />
-            <ProvincePicker
+            <SubDistrictPicker
               label="Phường/Xã"
-              // onChange={(e, newValue) => setBrandData({ ...brandData, country: newValue.label })}
-              // value={brandData.country}
+              defaultDistrictCode={district?.code}
+              onChange={(newValue) => handleChangeSubDistrict(newValue)}
+              value={subDistrict?.name}
               required
               fullWidth
               size="small"
