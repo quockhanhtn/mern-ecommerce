@@ -1,23 +1,60 @@
-import userServices from './users.services.js';
+import mongoose from 'mongoose';
 import User from '../models/user.model.js';
 import ApiError from '../utils/APIError.js';
 
 export default {
   getList,
-  create,
+  add,
   update,
-  hidden,
+  update,
   remove
 }
 
+async function getUser(userId, includeAddress = false) {
+  const projection = { _id: 1, phone: 1, firstName: 1, lastName: 1 };
+  if (includeAddress) { projection.address = 1; }
+
+  const user = await User.findById(userId, projection).lean().exec();
+  if (!user) {
+    throw new ApiError.simple(`User '${userId}' not found!`, 404);
+  }
+
+  return user;
+}
+
+function initAddress(data, user) {
+  let address = {};
+  if (!data.phone && user.phone) {
+    data.phone = user.phone;
+  } else if (!data.phone) {
+    throw ApiError.simple('Phone is required!', 400);
+  }
+
+  if (!data.name && (user.firstName || user.lastName)) {
+    data.name = `${user.firstName} ${user.lastName}`.trim();
+  } else if (!data.name) {
+    throw ApiError.simple('Name is required!', 400);
+  }
+
+  const missingFields = [];
+  ['street', 'ward', 'district', 'province'].forEach(field => {
+    if (!data?.[field]) {
+      missingFields.push(field);
+    }
+  });
+  if (missingFields.length) {
+    throw ApiError.simple(`${missingFields.join(', ')} is required!`, 400);
+  }
+
+  return { ...data, ...address };
+};
+
 /**
  * Get list addresses of user
- * @param {string | any} userId - uuid of user
+ * @param {string | object} userId - uuid of user
  */
 async function getList(userId) {
-  const filter = { _id: userId };
-  const projection = { addresses: 1 };
-  const result = await User.findOne(filter, projection)
+  const result = await User.findById(userId, { addresses: 1 })
     .lean({ virtuals: true }).exec();
 
   if (!result) {
@@ -31,109 +68,91 @@ async function getList(userId) {
 
 /**
  * Add address for user
- * @param {*} identity
+ * @param {*} userId
  * @param data
  * @returns
  */
-async function create(identity, data) {
-  // Get current user
-  let user = await getOne(identity);
+async function add(userId, data) {
+  const user = await getUser(userId);
 
-  // Check user null return
-  if (!user) {
-    throw new Error(`User '${identity}' not found!`);
+  const newId = new mongoose.Types.ObjectId();
+  const validData = initAddress(data, user);
+
+  // add data to db, mongoose will validate data
+  const result = await User.findByIdAndUpdate(
+    user._id,
+    { $push: { addresses: { _id: newId, ...validData } } },
+    { new: true, fields: 'addresses' }
+  );
+
+  if (result?.errors?.addresses) {
+    throw ApiError.simple(result.errors.addresses.message, 400);
   }
 
-  // Get list current address
-  const currentAddress = user.addresses;
-
-  // Create new address
-  const addressItemNew = {
-    _id: new mongoose.Types.ObjectId(),
-    ...data
-  };
-
-  //Check address
-  if (!addressItemNew?.stressName || !addressItemNew?.wardName || !addressItemNew?.districtName || !addressItemNew?.provinceName) {
-    throw new Error(`Address does not exist.`);
-  }
-
-  // Add address into list address
-  user.addresses = [...currentAddress, addressItemNew];
-  console.log(user.address);
-
-  // Save user
-  return User.findByIdAndUpdate(user._id, user, { new: true });
+  return result?.addresses?.find(address => address._id.equals(newId));
 }
 
 /**
  * Update address for user
- * @param {*} identity
- * @param identityAddress
+ * @param {*} userId
+ * @param addressId
  * @param updatedData
  * @returns
  */
-async function addressUpdate(identity, identityAddress, updatedData) {
-  // Get current user
-  let user = await getOne(identity);
+async function update(userId, addressId, updatedData) {
+  const user = await getUser(userId, true);
 
-  // Check user null return
-  if (!user) {
-    throw new Error(`User '${identity}' not found!`);
+  const addressList = user.addresses;
+  const updateIndex = addressList.findIndex(address => address._id.equals(addressId));
+  if (updateIndex === -1) {
+    throw ApiError.simple('Address not found!', 404);
   }
 
-  // Get list current address
-  let currentAddress = user.address;
+  const currentAddress = addressList[updateIndex];
+  addressList[updateIndex] = { ...currentAddress, ...updatedData };
 
-  // Create new address
-  const addressItemUpdated = {
-    _id: identityAddress,
-    ...updatedData
-  };
+  const result = await User.findByIdAndUpdate(
+    user._id,
+    { $set: { addresses: addressList } },
+    { new: true, fields: 'addresses' }
+  );
 
-  //Check address
-  if (!addressItemUpdated?.stressName || !addressItemUpdated?.wardName || !addressItemUpdated?.districtName || !addressItemUpdated?.provinceName) {
-    throw new Error(`Address does not exist.`);
+  if (result?.errors?.addresses) {
+    throw ApiError.simple(result.errors.addresses.message, 400);
   }
 
-  // Update
-  const foundIndex = currentAddress.findIndex(x => x._id.toString() === identityAddress);
-  if (foundIndex < 0) {
-    throw new Error(`Address does not exist.`);
-  }
-  currentAddress[foundIndex] = addressItemUpdated;
-  user.address = currentAddress;
-
-  // Save user
-  return User.findByIdAndUpdate(user._id, user, { new: true });
+  return result?.addresses?.find(address => address._id.equals(addressId));
 }
 
 /**
- * Update address for user
- * @param {*} identity
- * @param identityAddress
+ * Remove address for user
+ * @param {string|object} userId - uuid of user
+ * @param {string|object} addressId - uuid of address
  * @returns
  */
-async function addressDelete(identity, identityAddress) {
-  // Get current user
-  let user = await getOne(identity);
+async function remove(userId, addressId) {
+  const user = await getUser(userId, true);
 
-  // Check user null return
-  if (!user) {
-    throw new Error(`User '${identity}' not found!`);
+  const addressList = user.addresses;
+  const updateIndex = addressList.findIndex(address => address._id.equals(addressId));
+  if (updateIndex === -1) {
+    throw ApiError.simple('Address not found!', 404);
   }
 
-  // Get list current address
-  let currentAddress = user.address;
+  addressList.splice(updateIndex, 1);
+  const result = await User.findByIdAndUpdate(
+    user._id,
+    { $set: { addresses: addressList } },
+    { new: true, fields: 'addresses' }
+  );
 
-  // Update
-  const foundIndex = currentAddress.findIndex(x => x._id.toString() === identityAddress);
-  if (foundIndex < 0) {
-    throw new Error(`Address does not exist.`);
+  if (result?.errors?.addresses) {
+    throw ApiError.simple(result.errors.addresses.message, 400);
   }
-  currentAddress.splice(foundIndex, 1);
-  user.address = currentAddress;
 
-  // Save user
-  return User.findByIdAndUpdate(user._id, user, { new: true });
+  if (result?.addresses?.findIndex(a => address._id.equals(addressId)) === -1) {
+    return true;
+  }
+
+  return false;
 }

@@ -1,0 +1,45 @@
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJhMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEiLCJpYXQiOjE2Mzg4ODYxNDQsImV4cCI6MTYzOTQ5MDk0NH0.nrE03TUahjbjt2DAoj4nrL36fALqFEIgSvBstvsBNDk
+
+@BASE_URL = http://localhost:3001/api/v1
+@RESOURCE = me
+
+GET {{BASE_URL}}/{{RESOURCE}}
+Authorization: Bearer {{TOKEN}}
+
+###
+
+GET {{BASE_URL}}/{{RESOURCE}}/addresses
+Authorization: Bearer {{TOKEN}}
+
+###
+POST {{BASE_URL}}/{{RESOURCE}}/addresses
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+  
+{
+  "note": "My address",
+  "phone": "0987652315",
+  "name":"Khánh",
+  "type":"office",
+  "street": "123 Main St",
+  "ward": "Anytown",
+  "district": "CA",
+  "province": "CA"
+}
+
+###
+PATCH  {{BASE_URL}}/{{RESOURCE}}/addresses/61af7b0da14b7d4db2321fef
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+  
+{
+  "note": "My address updated yy",
+  "phone": "09999991",
+  "name":"Khánh update yyy",
+  "type":"office update yyy",
+  "street": "123 Main St update yyy"
+}
+
+###
+DELETE  {{BASE_URL}}/{{RESOURCE}}/addresses/61af7566da30aa1df12d3aeb
+Authorization: Bearer {{TOKEN}}

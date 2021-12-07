@@ -16,6 +16,27 @@ export const USER = {
   }
 }
 
+export const REGEX = {
+  /*
+    * Username regex validation explain
+    * Reference https://stackoverflow.com/a/12019115
+    * ^(?=.{5,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
+    * └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
+    *       │         │         │            │           no _ or . at the end
+    *       │         │         │            │
+    *       │         │         │            allowed characters
+    *       │         │         │
+    *       │         │         no __ or _. or ._ or .. inside
+    *       │         │
+    *       │         no _ or . at the beginning
+    *       │
+    *       username is 5-20 characters long
+   */
+  USERNAME: /^(?=.{5,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
+  PHONE: /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
+  EMAIL: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+};
+
 /* eslint-disable */
 export const allowImageMineTypes = [
   'image/bmp',                // .bmp       - Windows OS/2 Bitmap Graphics
@@ -30,5 +51,6 @@ export const allowImageMineTypes = [
 // read more at: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
 
 export default {
-  USER
+  USER,
+  REGEX
 }

@@ -63,7 +63,6 @@ async function getOneById(id, selectFields = null, needVirtuals = true) {
 }
 
 async function getOrCreateByGoogleId(googleId, email, firstName, lastName, avatar, selectFields = null, needVirtuals = true) {
-
   const user = selectFields ?
     await User.findOne({ googleId }).select(selectFields).lean({ virtuals: needVirtuals }).exec() :
     await User.findOne({ googleId }).lean({ virtuals: needVirtuals }).exec();
@@ -80,7 +79,8 @@ async function getOrCreateByGoogleId(googleId, email, firstName, lastName, avata
     lastName,
     avatar,
     role: constants.USER.ROLE.CUSTOMER,
-    needChangePassword: true
+    needChangePassword: true,
+    status: constants.USER.STATUS.ACTIVE
   });
   await newUser.save();
   return getOneById(newUser._id, selectFields, needVirtuals);

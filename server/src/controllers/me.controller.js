@@ -1,6 +1,6 @@
 import resUtils from '../utils/res-utils.js';
 import userService from '../services/user.service.js';
-import { formatImageUrl } from '../utils/format-utils.js';
+import addressService from '../services/addresses.services.js';
 
 export const getInfo = async (req, res, next) => {
   try {
@@ -28,37 +28,37 @@ export const updateInfo = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
-// Add address
-export const addressUserAdd = async (req, res, next) => {
+// Add address --------------------------------------------
+export const getAddresses = async (req, res, next) => {
   try {
-    const { identity } = req.params;
-    const address = await userService.addressAdd(identity, req.body);
-    resUtils.status201(
-      res,
-      `Create NEW address successfully!`,
-      address
-    );
+    const addresses = await addressService.getList(req.user._id);
+    resUtils.status200(res, `Get list addresses successfully!`, addresses);
   } catch (err) { next(err); }
-}
+};
 
-// Update address
-export const addressUserUpdate = async (req, res, next) => {
+export const addAddress = async (req, res, next) => {
   try {
-    const { identity, identityAddress } = req.params;
-    const updateAddressed = await userService.addressUpdate(identity, identityAddress, req.body);
-    resUtils.status201(
-      res,
-      `Update address successfully!`,
-      updateAddressed
-    );
+    const address = await addressService.add(req.user._id, req.body);
+    resUtils.status201(res, `Add address successfully!`, address);
   } catch (err) { next(err); }
-}
+};
 
-// Delete address
-export const addressUserDelete = async (req, res, next) => {
+export const updateAddress = async (req, res, next) => {
   try {
-    const { identity, identityAddress } = req.params;
-    await userService.addressDelete(identity, identityAddress);
-    resUtils.status200(res, `Deleted address successfully!`);
+    const { addressId } = req.params;
+    const address = await addressService.update(req.user._id, addressId, req.body);
+    resUtils.status200(res, `Update address successfully!`, address);
+  } catch (err) { next(err); }
+};
+
+export const deleteAddress = async (req, res, next) => {
+  try {
+    const { addressId } = req.params;
+    const isDeleted = await addressService.remove(req.user._id, addressId);
+    if (isDeleted) {
+      resUtils.status200(res, `Delete address successfully!`);
+    } else {
+      resUtils.status404(res, `Error when delete address!`);
+    }
   } catch (err) { next(err); }
 }
