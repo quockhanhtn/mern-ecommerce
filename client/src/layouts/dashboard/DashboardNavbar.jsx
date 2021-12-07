@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types';
+import { NavLink as RouterLink } from 'react-router-dom';
+// icons
 import { Icon } from '@iconify/react';
 import menu2Fill from '@iconify/icons-eva/menu-2-fill';
 // material
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton } from '@material-ui/core';
 //
+import Logo from '../../components/Logo';
 import { MHidden } from '../../components/@material-extend';
 import DashboardSearchBar from './DashboardSearchBar';
 import AccountPopover from '../common/AccountPopover';
@@ -46,7 +49,10 @@ export default function DashboardNavbar({ onOpenSidebar }) {
     <RootStyle>
       <ToolbarStyle>
         <MHidden width="lgUp">
-          <IconButton onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
+          <RouterLink to="/">
+            <Logo />
+          </RouterLink>
+          <IconButton onClick={onOpenSidebar} sx={{ marginX: 1, color: 'text.primary' }}>
             <Icon icon={menu2Fill} />
           </IconButton>
         </MHidden>

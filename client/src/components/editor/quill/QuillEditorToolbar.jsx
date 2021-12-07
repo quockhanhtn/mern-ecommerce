@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import { Quill } from 'react-quill';
-import { Icon } from '@iconify/react';
 import ReactDOMServer from 'react-dom/server';
+// icons
+import { Icon } from '@iconify/react';
 import codeFill from '@iconify/icons-eva/code-fill';
 import roundUndo from '@iconify/icons-ic/round-undo';
 import roundRedo from '@iconify/icons-ic/round-redo';
@@ -29,6 +30,7 @@ import roundFormatIndentDecrease from '@iconify/icons-ic/round-format-indent-dec
 import roundFormatIndentIncrease from '@iconify/icons-ic/round-format-indent-increase';
 import roundFormatTextdirectionLToR from '@iconify/icons-ic/round-format-textdirection-l-to-r';
 import roundFormatTextdirectionRToL from '@iconify/icons-ic/round-format-textdirection-r-to-l';
+// styles
 import QuillEditorToolbarStyle from './QuillEditorToolbarStyle';
 
 // ----------------------------------------------------------------------

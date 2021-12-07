@@ -1,7 +1,7 @@
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Card, Link, Container, Typography, Tooltip } from '@material-ui/core';
+import { Box, Card, Link, Container, Typography } from '@material-ui/core';
 // hooks
 import useAuth from '../../hooks/useAuth';
 // routes
@@ -12,7 +12,7 @@ import AuthLayout from '../../layouts/AuthLayout';
 import Page from '../../components/Page';
 import { MHidden } from '../../components/@material-extend';
 import { RegisterForm } from '../../components/authentication/register';
-import AuthFirebaseSocials from '../../components/authentication/AuthFirebaseSocial';
+import AuthWithSocial from '../../components/authentication/AuthWithSocial';
 
 // ----------------------------------------------------------------------
 
@@ -66,25 +66,14 @@ export default function Register() {
 
       <Container>
         <ContentStyle>
-          <Box sx={{ mb: 5, display: 'flex', alignItems: 'center' }}>
-            <Box sx={{ flexGrow: 1 }}>
-              <Typography variant="h4" gutterBottom>
-                Get started absolutely free.
-              </Typography>
-              <Typography sx={{ color: 'text.secondary' }}>Free forever. No credit card needed.</Typography>
-            </Box>
-            <Tooltip title={(method === 'firebase' && 'Firebase') || (method === 'cognito' && 'Cognito') || 'JWT'}>
-              <Box
-                component="img"
-                src={`/static/auth/${
-                  (method === 'firebase' && 'ic_firebase') || (method === 'cognito' && 'ic_cognito') || 'ic_jwt'
-                }.png`}
-                sx={{ width: 32, height: 32 }}
-              />
-            </Tooltip>
+          <Box sx={{ mb: 5 }}>
+            <Typography variant="h4" gutterBottom>
+              Get started absolutely free.
+            </Typography>
+            <Typography sx={{ color: 'text.secondary' }}>Free forever. No credit card needed.</Typography>
           </Box>
 
-          {method === 'firebase' && <AuthFirebaseSocials />}
+          <AuthWithSocial />
 
           <RegisterForm />
 

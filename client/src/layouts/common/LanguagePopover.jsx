@@ -9,7 +9,7 @@ import { Box, MenuItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import useLocales from '../../hooks/useLocales';
 // components
 import MenuPopover from '../../components/MenuPopover';
-import { MButton, MIconButton } from '../../components/@material-extend';
+import { MButton, MIconButton, MHidden } from '../../components/@material-extend';
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +33,10 @@ export default function LanguagePopover({ isShowTitle }) {
     } else {
       enqueueSnackbar(t('settings.language-not-available'), {
         variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right'
+        },
         action: (key) => (
           <MIconButton size="small" onClick={() => closeSnackbar(key)}>
             <Icon icon={closeFill} />
@@ -43,30 +47,36 @@ export default function LanguagePopover({ isShowTitle }) {
     handleClose();
   };
 
+  const iconButtonSx = {
+    padding: 0,
+    width: 44,
+    height: 44,
+    ...(open && {
+      bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.focusOpacity)
+    })
+  };
+
   return (
     <>
       {isShowTitle ? (
-        <MButton
-          ref={anchorRef}
-          onClick={handleOpen}
-          color="inherit"
-          startIcon={<img src={currentLang.icon} alt={currentLang.label} />}
-        >
-          {currentLang.label}
-        </MButton>
+        <Box ref={anchorRef}>
+          <MHidden width="mdUp">
+            <MIconButton onClick={handleOpen} sx={iconButtonSx}>
+              <img src={currentLang.icon} alt={currentLang.label} />
+            </MIconButton>
+          </MHidden>
+          <MHidden width="mdDown">
+            <MButton
+              onClick={handleOpen}
+              color="inherit"
+              startIcon={<img src={currentLang.icon} alt={currentLang.label} />}
+            >
+              {currentLang.label}
+            </MButton>
+          </MHidden>
+        </Box>
       ) : (
-        <MIconButton
-          ref={anchorRef}
-          onClick={handleOpen}
-          sx={{
-            padding: 0,
-            width: 44,
-            height: 44,
-            ...(open && {
-              bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.focusOpacity)
-            })
-          }}
-        >
+        <MIconButton ref={anchorRef} onClick={handleOpen} sx={iconButtonSx}>
           <img src={currentLang.icon} alt={currentLang.label} />
         </MIconButton>
       )}
