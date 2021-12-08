@@ -28,7 +28,7 @@ Content-Type: application/json
 }
 
 ###
-PATCH  {{BASE_URL}}/{{RESOURCE}}/addresses/61af7b0da14b7d4db2321fef
+PATCH  {{BASE_URL}}/{{RESOURCE}}/addresses/61b061f5159a70c0793dac56
 Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
   
@@ -41,5 +41,5 @@ Content-Type: application/json
 }
 
 ###
-DELETE  {{BASE_URL}}/{{RESOURCE}}/addresses/61af7566da30aa1df12d3aeb
+DELETE  {{BASE_URL}}/{{RESOURCE}}/addresses/61b061f5159a70c0793dac56
 Authorization: Bearer {{TOKEN}}

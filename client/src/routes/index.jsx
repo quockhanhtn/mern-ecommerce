@@ -127,6 +127,7 @@ export default function Router() {
       element: <MainLayout />,
       children: [
         { path: '/', element: <HomePage /> },
+        { path: '/account', element: <AccountPage /> },
         { path: '/q', element: <ProductListPage /> },
         { path: '/:category/:slug', element: <ProductDetailPage /> },
         { path: '/cart', element: <CartPage /> }
@@ -170,6 +171,7 @@ const NotFound = Loadable(lazy(() => import('../pages/error/Page404')));
 
 // Main
 const HomePage = Loadable(lazy(() => import('../pages/main/HomePage')));
+const AccountPage = Loadable(lazy(() => import('../pages/main/AccountPage')));
 const ProductListPage = Loadable(lazy(() => import('../pages/main/ProductListPage')));
 const ProductList = Loadable(lazy(() => import('../pages/main/EcommerceShop')));
 const ProductDetailPage = Loadable(lazy(() => import('../pages/main/ProductDetails')));

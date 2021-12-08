@@ -15,7 +15,7 @@ export default {
 };
 
 const SELECTED_FIELDS =
-  '_id slug order name desc isHide image parent children createdAt updatedAt';
+  '_id firstName lastName gender email phone username avatar role status createdAt updatedAt';
 
 /**
  *
@@ -43,7 +43,7 @@ async function getListByRole(role) {
  * @param {boolean} includeAddresses - include address or not, default is false
  * @returns
  */
-async function getOne(identity, includeAddresses = false) {
+async function getOne(identity, selectFields = null, needVirtuals = true) {
   const filter = {
     $or: [
       { email: identity },
@@ -51,18 +51,37 @@ async function getOne(identity, includeAddresses = false) {
       { username: identity }
     ]
   }
-  return includeAddresses ?
-    await User.findOne(filter).lean({ virtuals: true }).exec() :
-    await User.findOne(filter).select('-addresses').lean({ virtuals: true }).exec();
+
+  const user = await User.findOne(filter)
+    .select(selectFields)
+    .lean({ virtuals: needVirtuals })
+    .exec();
+
+  return user;
 }
 
 async function getOneById(id, selectFields = null, needVirtuals = true) {
-  return selectFields ?
-    await User.findById(id).select(selectFields).lean({ virtuals: needVirtuals }).exec() :
-    await User.findById(id).lean({ virtuals: needVirtuals }).exec();
+  if (!selectFields) {
+    selectFields = SELECTED_FIELDS;
+  }
+
+  const user = await User.findById(id)
+    .select(selectFields)
+    .lean({ virtuals: needVirtuals })
+    .exec();
+
+  return user;
 }
 
-async function getOrCreateByGoogleId(googleId, email, firstName, lastName, avatar, selectFields = null, needVirtuals = true) {
+async function getOrCreateByGoogleId(
+  googleId,
+  email,
+  firstName,
+  lastName,
+  avatar,
+  selectFields = null,
+  needVirtuals = true
+) {
   const user = selectFields ?
     await User.findOne({ googleId }).select(selectFields).lean({ virtuals: needVirtuals }).exec() :
     await User.findOne({ googleId }).lean({ virtuals: needVirtuals }).exec();

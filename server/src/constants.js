@@ -16,6 +16,16 @@ export const USER = {
   }
 }
 
+export const ORDER = {
+  STATUS: {
+    PENDING: 'pending',
+    CONFIRMED: 'confirmed',
+    SHIPPING: 'shipping',
+    COMPLETED: 'completed',
+    CANCELLED: 'cancelled'
+  }
+};
+
 export const REGEX = {
   /*
     * Username regex validation explain
@@ -52,5 +62,6 @@ export const allowImageMineTypes = [
 
 export default {
   USER,
+  ORDER,
   REGEX
 }

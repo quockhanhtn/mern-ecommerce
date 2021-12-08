@@ -31,6 +31,14 @@ export default {
     contact: 'Contact',
     newest: 'Newest'
   },
+  account: {
+    'page-title': 'Account | HK Mobile',
+    info: 'Info',
+    order: 'Order',
+    'address-book': 'Address book',
+    'change-password': 'Change password',
+    config: 'Config'
+  },
   settings: {
     title: 'Setting',
     'full-screen': 'Fullscreen',

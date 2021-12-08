@@ -6,13 +6,12 @@ export default {
   getList,
   add,
   update,
-  update,
   remove
 }
 
 async function getUser(userId, includeAddress = false) {
   const projection = { _id: 1, phone: 1, firstName: 1, lastName: 1 };
-  if (includeAddress) { projection.address = 1; }
+  if (includeAddress) { projection.addresses = 1; }
 
   const user = await User.findById(userId, projection).lean().exec();
   if (!user) {
@@ -150,7 +149,7 @@ async function remove(userId, addressId) {
     throw ApiError.simple(result.errors.addresses.message, 400);
   }
 
-  if (result?.addresses?.findIndex(a => address._id.equals(addressId)) === -1) {
+  if (result?.addresses?.findIndex(a => a._id.equals(addressId)) === -1) {
     return true;
   }
 

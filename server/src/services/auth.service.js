@@ -44,7 +44,7 @@ async function googleAuthenticate(payload, ipAddress) {
 
 
 async function authenticate(username, password, ipAddress) {
-  const user = await userService.getOne(username);
+  const user = await userService.getOne(username, '-addresses');
   if (!user) {
     throw ApiError.simple2(responseDef.AUTH.USER_NOT_FOUND);
   }

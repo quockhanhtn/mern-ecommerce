@@ -4,7 +4,7 @@ import addressService from '../services/addresses.services.js';
 
 export const getInfo = async (req, res, next) => {
   try {
-    const user = await userService.getOneById(req.user._id, '-addresses -password');
+    const user = await userService.getOneById(req.user._id);
     if (user) {
       resUtils.status200(res, `Get info successfully!`, user);
     } else {

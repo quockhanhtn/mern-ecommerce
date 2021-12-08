@@ -1,29 +1,9 @@
 import mongoose from 'mongoose';
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 import removeMultiSpace from './plugins/remove-multi-space.js';
+import addressSchema from './schemas/address.schema.js';
 import constants from '../constants.js';
 import { hashPassword } from '../utils/cipher-utils.js';
-
-const addressSchema = new mongoose.Schema(
-  {
-    name: { type: String, trim: true },
-    phone: {
-      type: String,
-      match: [constants.REGEX.PHONE, 'Please fill a valid phone number'],
-      trim: true,
-      required: [true, 'Please fill a phone number']
-    },
-    type: { type: String, trim: true }, // home, office, etc ...
-    note: { type: String, trim: true },
-
-    street: { type: String, trim: true, required: [true, 'Please fill a street'] },
-    ward: { type: String, trim: true, required: [true, 'Please fill a ward'] },
-    district: { type: String, trim: true, required: [true, 'Please fill a district'] },
-    province: { type: String, trim: true, required: [true, 'Please fill a city'] }
-  },
-  { _id: true, id: false, versionKey: false },
-);
-
 
 const userSchema = mongoose.Schema(
   {
@@ -89,7 +69,7 @@ const userSchema = mongoose.Schema(
 
     avatar: { type: String, trim: true, required: false },
   },
-  { timestamps: true, versionKey: false, }
+  { _id: true, id: false, timestamps: true, versionKey: false, }
 );
 // userSchema.index({ "email": 1 }, { unique: true });
 
@@ -122,5 +102,4 @@ userSchema.pre('save', function (next) {
 });
 
 const userModel = mongoose.model('User', userSchema);
-export { addressSchema }; // for re-use in other model
 export default userModel;
