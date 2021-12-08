@@ -19,6 +19,7 @@ import useLocales from '../../../hooks/useLocales';
 import useAuth from '../../../hooks/useAuth';
 import useToCart from '../../../hooks/useToCart';
 import * as Helper from '../../../helper/cartHelper';
+import * as HelperPayment from '../../../helper/paymentHelper';
 
 // ----------------------------------------------------------------------
 
@@ -116,6 +117,14 @@ export default function CheckoutPayment() {
     // dispatch(applyShipping(value));
   };
 
+  const handlePayment = (values) => {
+    if (values.payment === 'VnPay') {
+      HelperPayment.TestPayment(values);
+    } else {
+      // handleCompleteOrder();
+    }
+  };
+
   const PaymentSchema = Yup.object().shape({
     payment: Yup.mixed().required('Payment is required')
   });
@@ -128,7 +137,7 @@ export default function CheckoutPayment() {
     validationSchema: PaymentSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
-        handleCompleteOrder();
+        handlePayment(values);
       } catch (error) {
         console.error(error);
         setSubmitting(false);

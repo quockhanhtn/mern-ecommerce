@@ -42,7 +42,9 @@
     "mongoose-slug-updater": "^3.3.0",
     "multer": "^1.4.3",
     "sanitize-html": "^2.6.0",
-    "sharp": "^0.29.2"
+    "sharp": "^0.29.2",
+    "dateformat": "^2.2.0",
+    "config": "^1.31.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.14"
