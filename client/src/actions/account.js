@@ -7,16 +7,14 @@ export const getAllAddresses = () => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.START_LOADING });
 
-    const resp = await api.getAddresses();
-    console.log('[actions][account][addressed][getAll] result', resp);
     const { data } = await api.getAddresses();
     if (isDev) console.log('[actions][account][addressed][getAll] result', data);
 
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.GET_ALL, payload: data });
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.END_LOADING });
   } catch (e) {
-    console.error('[actions][account][addressed][getAll] error', e);
-    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e.data.message });
+    console.error('[actions][account][addressed][getAll] error', e.response.data);
+    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e.response.data });
   }
 };
 
@@ -31,8 +29,8 @@ export const createAddress = (newAddress) => async (dispatch) => {
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.CREATE, payload: data });
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.END_LOADING });
   } catch (e) {
-    console.error('[actions][account][addressed][create] error', e);
-    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e.data.message });
+    console.error('[actions][account][addressed][create] error', e.response.data);
+    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e.response.data });
   }
 };
 
@@ -47,8 +45,8 @@ export const updateAddress = (id, updateAddress) => async (dispatch) => {
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.UPDATE, payload: data.data });
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.END_LOADING });
   } catch (e) {
-    console.error('[actions][account][addressed][update] error', e);
-    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e.data.message });
+    console.error('[actions][account][addressed][update] error', e.response.data);
+    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e.response.data });
   }
 };
 
@@ -62,7 +60,7 @@ export const deleteAddress = (id) => async (dispatch) => {
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.DELETE, payload: id });
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.END_LOADING });
   } catch (e) {
-    if (isDev) console.error('[actions][account][addressed][delete] error', e);
-    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e.data.message });
+    if (isDev) console.error('[actions][account][addressed][delete] error', e.response.data);
+    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e.response.data });
   }
 };

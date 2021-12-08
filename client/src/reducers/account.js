@@ -20,9 +20,9 @@ const accountReducer = (state = initialState, action) => {
     case actionTypes.ACCOUNT.ADDRESS.ERROR:
       return { ...state, addresses: { ...state.addresses, error: payload } };
     case actionTypes.ACCOUNT.ADDRESS.GET_ALL:
-      return { ...state, addresses: { ...state.addresses, list: payload.data } };
+      return { ...state, addresses: { ...state.addresses, list: payload?.data || [] } };
     case actionTypes.ACCOUNT.ADDRESS.CREATE:
-      return { ...state, addresses: { ...state.addresses, list: [...state.addresses.list, payload.data] } };
+      return { ...state, addresses: { ...state.addresses, list: [...state.addresses.list, payload?.data] } };
     case actionTypes.ACCOUNT.ADDRESS.UPDATE:
       return {
         ...state,

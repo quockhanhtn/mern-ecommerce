@@ -73,7 +73,7 @@ const SkeletonLoad = (
   </Grid>
 );
 
-export default function ProductDetails() {
+export default function ProductDetailPage() {
   const { t } = useLocales();
   const theme = useTheme();
   const dispatch = useDispatch();

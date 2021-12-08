@@ -32,6 +32,14 @@ export default {
     newest: 'mới nhất',
     search: 'Tìm kiếm'
   },
+  account: {
+    'page-title': 'Account | HK Mobile',
+    info: 'Thông tin tài khoản',
+    order: 'Đơn hàng',
+    'address-book': 'Sổ địa chỉ',
+    'change-password': 'Đổi mật khẩu',
+    config: 'Cài đặt'
+  },
   settings: {
     title: 'Cài đặt',
     'full-screen': 'Toàn màn hình',

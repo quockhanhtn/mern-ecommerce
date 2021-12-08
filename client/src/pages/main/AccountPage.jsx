@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import faker from 'faker';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { LoadingButton } from '@material-ui/lab';
@@ -18,25 +17,24 @@ import {
 } from '@material-ui/core';
 // icons
 import { Icon } from '@iconify/react';
-import bellFill from '@iconify/icons-eva/bell-fill';
-import shareFill from '@iconify/icons-eva/share-fill';
+import baselineLocationOn from '@iconify/icons-ic/baseline-location-on';
 import roundVpnKey from '@iconify/icons-ic/round-vpn-key';
 import roundReceipt from '@iconify/icons-ic/round-receipt';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
+import baselineSettings from '@iconify/icons-ic/baseline-settings';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllProducts } from '../../actions/products';
 // hooks
 import useQuery from '../../hooks/useQuery';
 import useLocales from '../../hooks/useLocales';
-// components\
+// components
 import Page from '../../components/Page';
 import {
   AccountGeneral,
   AccountBilling,
-  AccountSocialLinks,
   AccountAddressBook,
-  AccountChangePassword
+  AccountChangePassword,
+  AccountNotifications
 } from '../../components/account';
 
 // ----------------------------------------------------------------------
@@ -69,17 +67,6 @@ export default function AccountPage() {
   //   dispatch(getProfile());
   // }, [dispatch]);
 
-  const addressBook = [...Array(4)].map(() => ({
-    id: faker.datatype.uuid(),
-    name: faker.name.findName(),
-    phone: faker.phone.phoneNumber(),
-    country: faker.address.country(),
-    state: faker.address.state(),
-    city: faker.address.city(),
-    street: faker.address.streetAddress(),
-    zipCode: faker.address.zipCode()
-  }));
-
   const tabOpts = [
     {
       label: t('account.info'),
@@ -96,20 +83,20 @@ export default function AccountPage() {
     {
       label: t('account.address-book'),
       value: 'address-book',
-      icon: <Icon icon={bellFill} width={20} height={20} />,
-      component: <AccountAddressBook addressBook={addressBook} />
+      icon: <Icon icon={baselineLocationOn} width={20} height={20} />,
+      component: <AccountAddressBook />
     },
     {
       label: t('account.change-password'),
       value: 'change-password',
-      icon: <Icon icon={shareFill} width={20} height={20} />,
-      component: <AccountSocialLinks />
+      icon: <Icon icon={roundVpnKey} width={20} height={20} />,
+      component: <AccountChangePassword />
     },
     {
       label: t('account.config'),
       value: 'config',
-      icon: <Icon icon={roundVpnKey} width={20} height={20} />,
-      component: <AccountChangePassword />
+      icon: <Icon icon={baselineSettings} width={20} height={20} />,
+      component: <AccountNotifications />
     }
   ];
 
@@ -130,14 +117,20 @@ export default function AccountPage() {
               orientation={isMobile ? 'horizontal' : 'vertical'}
               allowScrollButtonsMobile
               onChange={handleChangeTab}
-              sx={{ width: 200, float: 'left' }}
             >
               {tabOpts.map((tab) => (
                 <Tab
                   disableRipple
                   key={tab.value}
                   label={
-                    <Box sx={{ display: 'flex', justifyContent: 'start', alignContent: 'center', width: '100%' }}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: isMobile ? 'center' : 'start',
+                        alignContent: 'center',
+                        width: '100%'
+                      }}
+                    >
                       {tab.icon}
                       <Typography variant="body2" sx={{ ml: 2 }}>
                         {tab.label}
