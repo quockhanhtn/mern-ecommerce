@@ -33,10 +33,6 @@ export default function LanguagePopover({ isShowTitle }) {
     } else {
       enqueueSnackbar(t('settings.language-not-available'), {
         variant: 'error',
-        anchorOrigin: {
-          vertical: 'bottom',
-          horizontal: 'right'
-        },
         action: (key) => (
           <MIconButton size="small" onClick={() => closeSnackbar(key)}>
             <Icon icon={closeFill} />

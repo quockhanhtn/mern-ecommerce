@@ -52,10 +52,6 @@ export default function LoginForm() {
         } else {
           enqueueSnackbar('Login success', {
             variant: 'success',
-            anchorOrigin: {
-              vertical: 'bottom',
-              horizontal: 'right'
-            },
             action: (key) => (
               <MIconButton size="small" onClick={() => closeSnackbar(key)}>
                 <Icon icon={closeFill} />
