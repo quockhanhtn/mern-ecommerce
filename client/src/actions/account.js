@@ -7,6 +7,8 @@ export const getAllAddresses = () => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.START_LOADING });
 
+    const resp = await api.getAddresses();
+    console.log('[actions][account][addressed][getAll] result', resp);
     const { data } = await api.getAddresses();
     if (isDev) console.log('[actions][account][addressed][getAll] result', data);
 
@@ -34,7 +36,7 @@ export const createAddress = (newAddress) => async (dispatch) => {
   }
 };
 
-export const updateBrand = (id, updateAddress) => async (dispatch) => {
+export const updateAddress = (id, updateAddress) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.START_LOADING });
 
@@ -45,12 +47,12 @@ export const updateBrand = (id, updateAddress) => async (dispatch) => {
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.UPDATE, payload: data.data });
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.END_LOADING });
   } catch (e) {
-    console.error('Error when get posts in actions/brands/updateBrand', e);
+    console.error('[actions][account][addressed][update] error', e);
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e.data.message });
   }
 };
 
-export const deleteBrand = (id) => async (dispatch) => {
+export const deleteAddress = (id) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.START_LOADING });
 

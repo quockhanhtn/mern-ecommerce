@@ -10,7 +10,7 @@ import { Box, Grid, Card, Button, Typography, Stack } from '@material-ui/core';
 // // utils
 // import fakeRequest from '../../../../utils/fakeRequest';
 //
-import AccountBillingAddressBook from './AccountBillingAddressBook';
+import AccountAddressBook from './AccountAddressBook';
 import AccountBillingPaymentMethod from './AccountBillingPaymentMethod';
 import AccountBillingInvoiceHistory from './AccountBillingInvoiceHistory';
 
@@ -113,7 +113,7 @@ export default function AccountBilling() {
             onCancel={handleCancel}
           />
 
-          <AccountBillingAddressBook addressBook={addressBook} />
+          <AccountAddressBook addressBook={addressBook} />
         </Stack>
       </Grid>
 

@@ -35,7 +35,7 @@ import {
   AccountGeneral,
   AccountBilling,
   AccountSocialLinks,
-  AccountBillingAddressBook,
+  AccountAddressBook,
   AccountChangePassword
 } from '../../components/account';
 
@@ -97,7 +97,7 @@ export default function AccountPage() {
       label: t('account.address-book'),
       value: 'address-book',
       icon: <Icon icon={bellFill} width={20} height={20} />,
-      component: <AccountBillingAddressBook addressBook={addressBook} />
+      component: <AccountAddressBook addressBook={addressBook} />
     },
     {
       label: t('account.change-password'),

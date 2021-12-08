@@ -20,11 +20,11 @@ Content-Type: application/json
   "note": "My address",
   "phone": "0987652315",
   "name":"Khánh",
-  "type":"office",
-  "street": "123 Main St",
-  "ward": "Anytown",
-  "district": "CA",
-  "province": "CA"
+  "type":"room",
+  "street": "123 Hữu Nghị",
+  "ward": "Phường Bình Thọ",
+  "district": "Quận Thủ Đức",
+  "province": "TP Hồ Chí Minh"
 }
 
 ###
