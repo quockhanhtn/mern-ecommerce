@@ -1,5 +1,5 @@
 import express from 'express';
-import { createPaymentVnPay } from '../../controllers/payment.vnpay.controller.js';
+import { createPaymentVnPay } from '../../controllers/payment.controller.js';
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ router.route('/')
     console.log('xxxxx');
   });
 
-router.route('/vnpay/create')
+router.route('/vn_pay')
   .post(createPaymentVnPay);
 
 export default router;

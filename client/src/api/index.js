@@ -76,3 +76,6 @@ export const getOneUser = (identity) => API.get(`/users/customer/${identity}`);
 export const createUser = (newUser) => API.post('/users/customer', newUser);
 export const updateUser = (identity, updatedUser) => API.patch(`/users/customer/${identity}`, updatedUser);
 export const deleteUser = (identity) => API.delete(`/users/customer/${identity}`);
+
+// ----------------------------Payment -----------------------
+export const redirectVnPay = (paymentInfo) => API.post(`/payment/vn_pay`, paymentInfo);

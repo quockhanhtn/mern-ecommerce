@@ -10,7 +10,7 @@ import brandRoutes from './brands.route.js';
 import productRoutes from './products.route.js';
 import commentRoutes from './comments.route.js';
 import discountRoutes from './discounts.route.js';
-import paymenVnpayRoutes from './payment_vnpay.route.js';
+import paymenVnpayRoutes from './payment.route.js';
 
 
 const router = express.Router();

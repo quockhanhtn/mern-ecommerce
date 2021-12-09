@@ -44,7 +44,7 @@ const PAYMENT_OPTIONS = [
     icons: ['/static/icons/ic_paypal.svg']
   },
   {
-    value: 'VnPay',
+    value: 'vn_pay',
     title: 'Pay with VnPay',
     description: 'You will be redirected to VnPay website to complete your purchase securely.',
     icons: ['/static/icons/ic_vnpay.svg']
@@ -117,11 +117,23 @@ export default function CheckoutPayment() {
     // dispatch(applyShipping(value));
   };
 
-  const handlePayment = (values) => {
-    if (values.payment === 'VnPay') {
-      HelperPayment.TestPayment(values);
+  const handlePayment = async (values) => {
+    if (values.payment === 'vn_pay') {
+      const data = await HelperPayment.PaymentVnPay(values);
+      // window.open(data.data, '_blank')?.focus();
+      const openerWindow = window.open(
+        data.data,
+        '_blank',
+        'toolbar=yes,scrollbars=yes,resizable=yes, width=800,height=700'
+      );
+      const timer = setInterval(() => {
+        if (openerWindow.closed) {
+          clearInterval(timer);
+          window.location.reload(); // Refresh the parent page
+        }
+      }, 1000);
     } else {
-      // handleCompleteOrder();
+      handleCompleteOrder();
     }
   };
 

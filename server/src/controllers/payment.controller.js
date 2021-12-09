@@ -1,15 +1,20 @@
 import crypto from 'crypto';
 import queryString from 'query-string';
 import dateFormat from 'dateformat';
+import resUtils from "../utils/res-utils.js";
+
+const isDev = (process.env.NODE_ENV === 'dev');
+const baseURL = isDev ? 'http://localhost:3000' : 'https://mern-ecommerce-b848d.web.app';
 
 export const createPaymentVnPay = async (req, res, next) => {
   try {
     const ipAddr = req.ip;
+    console.log(isDev);
 
     const tmnCode = 'QL509E3K';
     const secretKey = 'OVOALYVDSIREXCICBCAANMFTAEDVNNCV';
     let vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    const returnUrl = 'http://localhost:8888/order/vnpay_return';
+    const returnUrl = baseURL;
 
     const date = new Date();
 
@@ -50,8 +55,8 @@ export const createPaymentVnPay = async (req, res, next) => {
     const signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
     vnp_Params['vnp_SecureHash'] = signed;
     vnpUrl += '?' + queryString.stringify(vnp_Params, { encode: false });
-    console.log(vnpUrl);
-    res.redirect(vnpUrl)
+    // res.redirect(vnpUrl)
+    resUtils.status200(res, 'Get link successfully', vnpUrl);
   } catch (err) {
     next(err);
   }
