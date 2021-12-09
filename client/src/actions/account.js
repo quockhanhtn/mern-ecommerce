@@ -13,8 +13,8 @@ export const getAllAddresses = () => async (dispatch) => {
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.GET_ALL, payload: data });
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.END_LOADING });
   } catch (e) {
-    console.error('[actions][account][addressed][getAll] error', e.response.data);
-    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e.response.data });
+    console.error('[actions][account][addressed][getAll] error', e?.response?.data || e);
+    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e?.response?.data || e });
   }
 };
 
@@ -29,8 +29,8 @@ export const createAddress = (newAddress) => async (dispatch) => {
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.CREATE, payload: data });
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.END_LOADING });
   } catch (e) {
-    console.error('[actions][account][addressed][create] error', e.response.data);
-    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e.response.data });
+    console.error('[actions][account][addressed][create] error', e?.response?.data || e);
+    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e?.response?.data || e });
   }
 };
 
@@ -42,11 +42,11 @@ export const updateAddress = (id, updateAddress) => async (dispatch) => {
     const { data } = await api.updateAddress(id, updateAddress);
     if (isDev) console.log('[actions][account][addressed][update] result', data);
 
-    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.UPDATE, payload: data.data });
+    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.UPDATE, payload: data });
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.END_LOADING });
   } catch (e) {
-    console.error('[actions][account][addressed][update] error', e.response.data);
-    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e.response.data });
+    console.error('[actions][account][addressed][update] error', e?.response?.data || e);
+    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e?.response?.data || e });
   }
 };
 
@@ -57,10 +57,10 @@ export const deleteAddress = (id) => async (dispatch) => {
     if (isDev) console.error('[actions][account][addressed][delete] dataInput', id);
     await api.deleteAddress(id);
 
-    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.DELETE, payload: id });
+    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.DELETE, payload: { _id: id } });
     dispatch({ type: actionTypes.ACCOUNT.ADDRESS.END_LOADING });
   } catch (e) {
-    if (isDev) console.error('[actions][account][addressed][delete] error', e.response.data);
-    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e.response.data });
+    if (isDev) console.error('[actions][account][addressed][delete] error', e?.response?.data || e);
+    dispatch({ type: actionTypes.ACCOUNT.ADDRESS.ERROR, payload: e?.response?.data || e });
   }
 };

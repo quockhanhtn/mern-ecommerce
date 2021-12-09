@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // form validation
 import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -9,7 +9,6 @@ import {
   Radio,
   Button,
   Divider,
-  Checkbox,
   TextField,
   RadioGroup,
   DialogTitle,
@@ -32,7 +31,7 @@ AddressForm.propTypes = {
   onSubmit: PropTypes.func
 };
 
-export default function AddressForm({ addressData, open, onClose, onSubmit }) {
+export default function AddressForm({ addressData, open, onClose, onSubmit, isLoading }) {
   const { t } = useLocales();
 
   const AddressSchema = Yup.object().shape({
@@ -42,7 +41,7 @@ export default function AddressForm({ addressData, open, onClose, onSubmit }) {
       .max(50, t('address.full-name-max')),
     phone: Yup.string()
       .required(t('address.phone-required'))
-      .matches(/^[0-9]{10,11}$/, t('address.phone-invalid')),
+      .matches(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, t('address.phone-invalid')),
 
     street: Yup.string().required(t('address.street-required')),
     ward: Yup.string().required(t('address.ward-required')),
@@ -69,8 +68,7 @@ export default function AddressForm({ addressData, open, onClose, onSubmit }) {
     validationSchema: AddressSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        console.log('submit', values);
-        onSubmit();
+        onSubmit(values);
         setSubmitting(true);
       } catch (error) {
         console.error(error);
@@ -80,6 +78,33 @@ export default function AddressForm({ addressData, open, onClose, onSubmit }) {
   });
 
   const { errors, values, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const [addressType, setAddressType] = useState('');
+
+  useEffect(() => {
+    if (addressData) {
+      formik.setFieldValue('name', addressData.name);
+      formik.setFieldValue('phone', addressData.phone);
+      formik.setFieldValue('street', addressData.street);
+      formik.setFieldValue('ward', addressData.ward);
+      formik.setFieldValue('district', addressData.district);
+      formik.setFieldValue('province', addressData.province);
+      formik.setFieldValue('type', addressData.type);
+      formik.setFieldValue('note', addressData.note);
+
+      if (addressData.type === t('address.type-home')) {
+        setAddressType(t('address.type-home'));
+      } else if (addressData.type === t('address.type-office')) {
+        setAddressType(t('address.type-office'));
+      } else {
+        setAddressType(t('address.type-other'));
+      }
+    }
+  }, [addressData]);
+
+  const handleChangeAddressType = (e) => {
+    setAddressType(e.target.value);
+    formik.setFieldValue('type', e.target.value);
+  };
 
   return (
     <DialogAnimate maxWidth="md" open={open} onClose={onClose}>
@@ -87,11 +112,6 @@ export default function AddressForm({ addressData, open, onClose, onSubmit }) {
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Stack spacing={{ xs: 2, sm: 3 }} sx={{ p: 3 }}>
-            <RadioGroup row {...getFieldProps('addressType')}>
-              <FormControlLabel value="Home" control={<Radio />} label="Home" sx={{ mr: 2 }} />
-              <FormControlLabel value="Office" control={<Radio />} label="Office" />
-            </RadioGroup>
-
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
               <TextField
                 fullWidth
@@ -109,9 +129,33 @@ export default function AddressForm({ addressData, open, onClose, onSubmit }) {
               />
             </Stack>
 
-            <AddressPicker getFieldProps={getFieldProps} touched={touched} errors={errors} />
+            <AddressPicker formik={formik} />
 
-            <MLabelTypo text={t('t.address.type')} />
+            <>
+              <MLabelTypo text={t('address.type')} />
+              <RadioGroup row value={addressType} onChange={handleChangeAddressType}>
+                <FormControlLabel
+                  value={t('address.type-home')}
+                  control={<Radio />}
+                  label={t('address.type-home')}
+                  sx={{ mr: 2 }}
+                />
+                <FormControlLabel
+                  value={t('address.type-office')}
+                  control={<Radio />}
+                  label={t('address.type-office')}
+                  sx={{ mr: 2 }}
+                />
+                <FormControlLabel value="Other" control={<Radio />} label={t('address.type-other')} />
+                <TextField
+                  label={t('address.type-other')}
+                  {...getFieldProps('type')}
+                  disabled={addressType !== 'Other'}
+                  sx={{ flex: 1 }}
+                />
+              </RadioGroup>
+            </>
+
             <TextField fullWidth label={t('address.note')} {...getFieldProps('note')} />
 
             {/* <FormControlLabel
@@ -124,11 +168,11 @@ export default function AddressForm({ addressData, open, onClose, onSubmit }) {
           <Divider />
 
           <DialogActions>
-            <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-              Deliver to this Address
+            <LoadingButton type="submit" variant="contained" loading={isLoading}>
+              {t('common.save')}
             </LoadingButton>
             <Button type="button" color="inherit" variant="outlined" onClick={onClose}>
-              Cancel
+              {t('common.cancel')}
             </Button>
           </DialogActions>
         </Form>

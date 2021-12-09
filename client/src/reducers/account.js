@@ -28,7 +28,7 @@ const accountReducer = (state = initialState, action) => {
         ...state,
         addresses: {
           ...state.addresses,
-          list: state.addresses.list.map((address) => (address.id === payload.data.id ? payload.data : address))
+          list: state.addresses.list.map((a) => (a._id === payload.data._id ? payload.data : a))
         }
       };
     case actionTypes.ACCOUNT.ADDRESS.DELETE:
@@ -36,7 +36,7 @@ const accountReducer = (state = initialState, action) => {
         ...state,
         addresses: {
           ...state.addresses,
-          list: state.addresses.list.filter((address) => address.id !== payload.data.id)
+          list: state.addresses.list.filter((address) => address._id !== payload._id)
         }
       };
 

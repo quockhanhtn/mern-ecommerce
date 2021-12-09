@@ -51,14 +51,15 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function AccountPage() {
   const { t } = useLocales();
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const query = useQuery();
-  const tagQuery = query.get('tag');
+  const tabSlug = query.get('tab');
 
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
 
-  const [currentTab, setCurrentTab] = useState(tagQuery || 'info');
-  const dispatch = useDispatch();
+  const [currentTab, setCurrentTab] = useState(tabSlug || 'info');
 
   // useEffect(() => {
   //   dispatch(getCards());
@@ -69,8 +70,10 @@ export default function AccountPage() {
   // }, [dispatch]);
 
   useEffect(() => {
-    setCurrentTab(tagQuery);
-  }, [tagQuery]);
+    if (tabSlug) {
+      setCurrentTab(tabSlug);
+    }
+  }, [tabSlug]);
 
   const tabOpts = [
     {
