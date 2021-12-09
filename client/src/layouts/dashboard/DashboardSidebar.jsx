@@ -10,7 +10,7 @@ import useAuth from '../../hooks/useAuth';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
-import Logo from '../../components/Logo';
+import LogoFull from '../../components/LogoFull';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 import SvgIconStyle from '../../components/SvgIconStyle';
@@ -117,8 +117,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       sx={{ height: '100%', '& .simplebar-content': { height: '100%', display: 'flex', flexDirection: 'column' } }}
     >
       <Box sx={{ px: 2.5, py: 3 }}>
-        <Box component={RouterLink} to="/" sx={{ display: 'inline-flex' }}>
-          <Logo />
+        <Box component={RouterLink} to="/" sx={{ display: 'inline-flex', justifyContent: 'center', width: '100%' }}>
+          <LogoFull />
         </Box>
       </Box>
 

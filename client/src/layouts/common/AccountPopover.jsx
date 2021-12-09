@@ -1,5 +1,7 @@
-import { Icon } from '@iconify/react';
+import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
+// icons
+import { Icon } from '@iconify/react';
 import homeFill from '@iconify/icons-eva/home-fill';
 import personFill from '@iconify/icons-eva/person-fill';
 import settings2Fill from '@iconify/icons-eva/settings-2-fill';
@@ -11,13 +13,14 @@ import { Avatar, Button, Box, Divider, MenuItem, Typography } from '@material-ui
 import useLocales from '../../hooks/useLocales';
 import useAuth from '../../hooks/useAuth';
 // components
-import { MIconButton } from '../../components/@material-extend';
+import { LoginIcon, LogoutIcon, UserIcon } from '../../assets';
+import { MButton, MIconButton, MHidden } from '../../components/@material-extend';
 import MenuPopover from '../../components/MenuPopover';
 import { PATH_DASHBOARD } from '../../routes/paths';
 
 // ----------------------------------------------------------------------
 
-const MENU_OPTIONS = [
+const DEFAULT_MENU_OPTIONS = [
   { label: 'Home', icon: homeFill, linkTo: PATH_DASHBOARD.app },
   { label: 'Profile', icon: personFill, linkTo: PATH_DASHBOARD.app.profile },
   { label: 'Settings', icon: settings2Fill, linkTo: PATH_DASHBOARD.app.account_setting }
@@ -25,7 +28,24 @@ const MENU_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function AccountPopover() {
+AccountPopover.propTypes = {
+  menuOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      icon: PropTypes.object,
+      linkTo: PropTypes.string,
+      isDevelop: PropTypes.bool
+    })
+  ),
+  isShowTitle: PropTypes.bool
+};
+
+AccountPopover.defaultProps = {
+  menuOptions: DEFAULT_MENU_OPTIONS,
+  isShowTitle: false
+};
+
+export default function AccountPopover({ menuOptions, isShowTitle }) {
   const anchorRef = useRef(null);
   const { t } = useLocales();
   const { user, logout } = useAuth();
@@ -41,30 +61,75 @@ export default function AccountPopover() {
     await logout();
   };
 
+  const iconBtnSx = {
+    padding: 0,
+    width: 44,
+    height: 44,
+    ...(open && {
+      '&:before': {
+        zIndex: 1,
+        content: "''",
+        width: '100%',
+        height: '100%',
+        borderRadius: '50%',
+        position: 'absolute',
+        bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72)
+      }
+    })
+  };
+
+  if (!user) {
+    return (
+      <>
+        <MHidden width="mdUp">
+          <MButton color="inherit" href="/auth/login">
+            <LoginIcon sx={{ width: 20, height: 20 }} />
+          </MButton>
+        </MHidden>
+        <MHidden width="mdDown">
+          <MButton color="inherit" href="/auth/login">
+            <LoginIcon sx={{ width: 20, height: 20, marginRight: 1 }} />
+            Đăng nhập / Đăng ký
+          </MButton>
+        </MHidden>
+      </>
+    );
+  }
+
   return (
     <>
-      <MIconButton
-        ref={anchorRef}
-        onClick={handleOpen}
-        sx={{
-          padding: 0,
-          width: 44,
-          height: 44,
-          ...(open && {
-            '&:before': {
-              zIndex: 1,
-              content: "''",
-              width: '100%',
-              height: '100%',
-              borderRadius: '50%',
-              position: 'absolute',
-              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72)
-            }
-          })
-        }}
-      >
-        <Avatar alt="Profile avatar" src={user?.avatar || '/static/mock-images/avatars/avatar_default.jpg'} />
-      </MIconButton>
+      {isShowTitle ? (
+        <Box ref={anchorRef}>
+          <MHidden width="mdUp">
+            <MIconButton onClick={handleOpen} sx={iconBtnSx}>
+              <Avatar
+                sx={{ width: 32, height: 32 }}
+                alt="Profile avatar"
+                src={user?.avatar || '/static/mock-images/avatars/avatar_default.jpg'}
+              />
+            </MIconButton>
+          </MHidden>
+          <MHidden width="mdDown">
+            <MButton
+              onClick={handleOpen}
+              color="inherit"
+              startIcon={
+                <Avatar
+                  sx={{ width: 32, height: 32 }}
+                  alt="Profile avatar"
+                  src={user?.avatar || '/static/mock-images/avatars/avatar_default.jpg'}
+                />
+              }
+            >
+              {user?.fullName || user?.email}
+            </MButton>
+          </MHidden>
+        </Box>
+      ) : (
+        <MIconButton ref={anchorRef} onClick={handleOpen} sx={iconBtnSx}>
+          <Avatar alt="Profile avatar" src={user?.avatar || '/static/mock-images/avatars/avatar_default.jpg'} />
+        </MIconButton>
+      )}
 
       <MenuPopover open={open} onClose={handleClose} anchorEl={anchorRef.current} sx={{ width: 220 }}>
         <Box sx={{ my: 1.5, px: 2.5 }}>
@@ -78,21 +143,22 @@ export default function AccountPopover() {
 
         <Divider sx={{ my: 1 }} />
 
-        {MENU_OPTIONS.map((option) => (
+        {menuOptions.map(({ label, linkTo, icon, isDevelop }, index) => (
           <MenuItem
-            key={option.label}
-            to={option.linkTo}
+            key={`menu-item-${index}-${label}`}
+            to={linkTo}
+            disabled={isDevelop || false}
             component={RouterLink}
             onClick={handleClose}
             sx={{ typography: 'body2', py: 1, px: 2.5 }}
           >
-            <Box component={Icon} icon={option.icon} sx={{ mr: 2, width: 24, height: 24 }} />
-            {option.label}
+            <Box component={Icon} icon={icon} sx={{ mr: 2, width: 24, height: 24 }} />
+            {label}
           </MenuItem>
         ))}
 
         <Box sx={{ p: 2, pt: 1.5 }}>
-          <Button fullWidth color="inherit" variant="outlined" onClick={handleLogout}>
+          <Button startIcon={<UserIcon />} fullWidth color="inherit" variant="outlined" onClick={handleLogout}>
             {t('auth.logout')}
           </Button>
         </Box>

@@ -127,6 +127,14 @@ export default function Router() {
       element: <MainLayout />,
       children: [
         { path: '/', element: <HomePage /> },
+        {
+          path: '/account',
+          element: (
+            <AuthGuard>
+              <AccountPage />
+            </AuthGuard>
+          )
+        },
         { path: '/q', element: <ProductListPage /> },
         { path: '/:category/:slug', element: <ProductDetailPage /> },
         { path: '/cart', element: <CartPage /> }
@@ -147,7 +155,6 @@ const Register = Loadable(lazy(() => import('../pages/authentication/Register'))
 // Dashboard
 const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
 const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));
-const EcommerceShop = Loadable(lazy(() => import('../pages/main/EcommerceShop')));
 
 // Category
 const PageCategoryList = Loadable(lazy(() => import('../pages/dashboard/categories/PageCategoryList')));
@@ -159,7 +166,6 @@ const PageDiscountList = Loadable(lazy(() => import('../pages/dashboard/discount
 const PageProductList = Loadable(lazy(() => import('../pages/dashboard/products/PageProductList')));
 const PageProduct = Loadable(lazy(() => import('../pages/dashboard/products/PageProduct')));
 const PageProductEdit = Loadable(lazy(() => import('../pages/dashboard/products/PageProductEdit')));
-const ProductDetails = Loadable(lazy(() => import('../pages/main/ProductDetails')));
 // User
 const PageCustomerList = Loadable(lazy(() => import('../pages/dashboard/users/PageCustomerList')));
 const PageStaffList = Loadable(lazy(() => import('../pages/dashboard/users/PageStaffList')));
@@ -170,9 +176,9 @@ const NotFound = Loadable(lazy(() => import('../pages/error/Page404')));
 
 // Main
 const HomePage = Loadable(lazy(() => import('../pages/main/HomePage')));
+const AccountPage = Loadable(lazy(() => import('../pages/main/AccountPage')));
 const ProductListPage = Loadable(lazy(() => import('../pages/main/ProductListPage')));
-const ProductList = Loadable(lazy(() => import('../pages/main/EcommerceShop')));
-const ProductDetailPage = Loadable(lazy(() => import('../pages/main/ProductDetails')));
+const ProductDetailPage = Loadable(lazy(() => import('../pages/main/ProductDetailPage')));
 
 // Cart
 const CartPage = Loadable(lazy(() => import('../pages/main/cart/CartPage')));

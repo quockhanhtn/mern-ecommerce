@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-// components
+import { LoadingButton } from '@material-ui/lab';
 import { Box, Container, Card, CardContent, CardHeader, Stack, Typography } from '@material-ui/core';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,16 +13,8 @@ import Page from '../../components/Page';
 import Label from '../../components/Label';
 import { CarouselAnimation, CarouselMiniList } from '../../components/carousel';
 import ProductList from '../../components/e-commerce/ProductList';
-import { MButton } from '../../components/@material-extend';
 
 // ----------------------------------------------------------------------
-
-const RootStyle = styled(Page)(({ theme }) => ({
-  // paddingTop: theme.spacing(0),
-  // paddingBottom: theme.spacing(0),
-  // paddingLeft: theme.spacing(0),
-  // paddingRight: theme.spacing(0)
-}));
 
 const ContentStyle = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -82,7 +74,7 @@ export default function HomePage() {
   };
 
   return (
-    <RootStyle title={t('home.page-title')} id="move_top">
+    <Page title={t('home.page-title')} id="move_top">
       <ContentStyle>
         <Container maxWidth="lg">
           <Stack spacing={5}>
@@ -143,14 +135,19 @@ export default function HomePage() {
             </Box>
             {productPagination?.hasNextPage && (
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <MButton variant="outlined" sx={{ backgroundColor: 'white', width: '50%' }} onClick={handleLoadMore}>
+                <LoadingButton
+                  variant="outlined"
+                  sx={{ backgroundColor: 'white', width: '50%' }}
+                  onClick={handleLoadMore}
+                  isLoading={isLoadingProduct}
+                >
                   Xem thêm
-                </MButton>
+                </LoadingButton>
               </Box>
             )}
           </Stack>
         </Container>
       </ContentStyle>
-    </RootStyle>
+    </Page>
   );
 }

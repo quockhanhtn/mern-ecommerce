@@ -26,6 +26,12 @@ export const logout = (refreshToken) => API.post('/auth/logout', { refreshToken 
 
 // ----------------------------Me--------------------------------------
 export const getInfo = () => API.get('/me');
+export const updateInfo = (data) => API.patch('/me', data);
+
+export const getAddresses = () => API.get('/me/addresses');
+export const addAddress = (data) => API.post('/me/addresses', data);
+export const updateAddress = (id, data) => API.patch(`/me/addresses/${id}`, data);
+export const deleteAddress = (id) => API.delete(`/me/addresses/${id}`);
 
 // ----------------------------Category--------------------------------
 export const getAllCategory = (fields) => (fields ? API.get(`/categories?fields=${fields}`) : API.get('/categories'));

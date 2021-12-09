@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Box, Card, Typography } from '@material-ui/core';
 import { MotionContainer, varBounceIn } from './animate';
-import EmptyBoxIcon from '../assets/icon_empty_box';
+import { EmptyBoxIcon } from '../assets';
 
 // ----------------------------------------------------------------------
 
