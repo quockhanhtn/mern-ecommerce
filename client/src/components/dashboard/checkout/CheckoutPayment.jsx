@@ -19,6 +19,7 @@ import useLocales from '../../../hooks/useLocales';
 import useAuth from '../../../hooks/useAuth';
 import useToCart from '../../../hooks/useToCart';
 import * as Helper from '../../../helper/cartHelper';
+import * as HelperPayment from '../../../helper/paymentHelper';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +44,7 @@ const PAYMENT_OPTIONS = [
     icons: ['/static/icons/ic_paypal.svg']
   },
   {
-    value: 'VnPay',
+    value: 'vn_pay',
     title: 'Pay with VnPay',
     description: 'You will be redirected to VnPay website to complete your purchase securely.',
     icons: ['/static/icons/ic_vnpay.svg']
@@ -116,6 +117,26 @@ export default function CheckoutPayment() {
     // dispatch(applyShipping(value));
   };
 
+  const handlePayment = async (values) => {
+    if (values.payment === 'vn_pay') {
+      const data = await HelperPayment.PaymentVnPay(values);
+      // window.open(data.data, '_blank')?.focus();
+      const openerWindow = window.open(
+        data.data,
+        '_blank',
+        'toolbar=yes,scrollbars=yes,resizable=yes, width=800,height=700'
+      );
+      const timer = setInterval(() => {
+        if (openerWindow.closed) {
+          clearInterval(timer);
+          window.location.reload(); // Refresh the parent page
+        }
+      }, 1000);
+    } else {
+      handleCompleteOrder();
+    }
+  };
+
   const PaymentSchema = Yup.object().shape({
     payment: Yup.mixed().required('Payment is required')
   });
@@ -128,7 +149,7 @@ export default function CheckoutPayment() {
     validationSchema: PaymentSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
-        handleCompleteOrder();
+        handlePayment(values);
       } catch (error) {
         console.error(error);
         setSubmitting(false);
