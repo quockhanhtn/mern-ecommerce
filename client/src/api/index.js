@@ -26,6 +26,12 @@ export const logout = (refreshToken) => API.post('/auth/logout', { refreshToken 
 
 // ----------------------------Me--------------------------------------
 export const getInfo = () => API.get('/me');
+export const updateInfo = (data) => API.patch('/me', data);
+
+export const getAddresses = () => API.get('/me/addresses');
+export const addAddress = (data) => API.post('/me/addresses', data);
+export const updateAddress = (id, data) => API.patch(`/me/addresses/${id}`, data);
+export const deleteAddress = (id) => API.delete(`/me/addresses/${id}`);
 
 // ----------------------------Category--------------------------------
 export const getAllCategory = (fields) => (fields ? API.get(`/categories?fields=${fields}`) : API.get('/categories'));
@@ -76,3 +82,6 @@ export const getOneUser = (identity) => API.get(`/users/customer/${identity}`);
 export const createUser = (newUser) => API.post('/users/customer', newUser);
 export const updateUser = (identity, updatedUser) => API.patch(`/users/customer/${identity}`, updatedUser);
 export const deleteUser = (identity) => API.delete(`/users/customer/${identity}`);
+
+// ----------------------------Payment -----------------------
+export const redirectVnPay = (paymentInfo) => API.post(`/payment/vn_pay`, paymentInfo);

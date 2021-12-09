@@ -10,3 +10,9 @@
   ```bash
   npm i && npm run start
   ```
+
+- Order document
+  - Create by customer
+    - Case 1: User has register and login to system
+      - User must add address to address list
+    - Case 2: Guest (just buy without login)

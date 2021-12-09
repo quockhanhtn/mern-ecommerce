@@ -96,7 +96,7 @@ export default function NotistackProvider({ children }) {
       preventDuplicate
       autoHideDuration={3000}
       anchorOrigin={{
-        vertical: 'top',
+        vertical: 'bottom',
         horizontal: 'right'
       }}
       iconVariant={{

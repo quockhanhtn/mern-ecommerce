@@ -1,28 +1,34 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 // icon
 import { Icon } from '@iconify/react';
 import cart24Regular from '@iconify/icons-fluent/cart-24-regular';
 import history24Filled from '@iconify/icons-fluent/history-24-filled';
-import googleFill from '@iconify/icons-eva/google-fill';
+import homeFill from '@iconify/icons-eva/home-fill';
+import personFill from '@iconify/icons-eva/person-fill';
+import settings2Fill from '@iconify/icons-eva/settings-2-fill';
+import baselineLocationOn from '@iconify/icons-ic/baseline-location-on';
+import roundVpnKey from '@iconify/icons-ic/round-vpn-key';
+import roundReceipt from '@iconify/icons-ic/round-receipt';
+import roundAccountBox from '@iconify/icons-ic/round-account-box';
+import baselineSettings from '@iconify/icons-ic/baseline-settings';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, IconButton, AppBar, Toolbar, Container } from '@material-ui/core';
-import { GoogleLogin } from 'react-google-login';
+import { Box, IconButton, AppBar, Toolbar, Container, Stack } from '@material-ui/core';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 import useLocales from '../../hooks/useLocales';
 // components
 import Logo from '../../components/Logo';
+import LogoFull from '../../components/LogoFull';
 import { MBadge, MButton, MHidden } from '../../components/@material-extend';
 //
 import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';
 import SearchBar from './SearchBar';
-import MainAccountPopover from './MainAccountPopover';
+import AccountPopover from '../common/AccountPopover';
 import LanguagePopover from '../common/LanguagePopover';
 import useToCart from '../../hooks/useToCart';
-import useAuth from '../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
@@ -70,20 +76,30 @@ const ContainerStyle = styled(Container)(() => ({
   justifyContent: 'space-between'
 }));
 
-const ButtonIcon = ({ text, icon, color, ...other }) => (
-  <>
-    <MHidden width="mdUp">
-      <IconButton color={color} {...other}>
-        <Icon icon={icon} />
-      </IconButton>
-    </MHidden>
-    <MHidden width="mdDown">
-      <MButton color={color} startIcon={<Icon icon={icon} />} sx={{ marginLeft: 2 }} {...other}>
-        {text}
-      </MButton>
-    </MHidden>
-  </>
-);
+const NavbarItem = ({ badgeContent, text, icon, color, ...other }) => {
+  if (badgeContent) {
+    return (
+      <MBadge badgeContent={badgeContent} color={color}>
+        <NavbarItem badgeContent={null} text={text} icon={icon} color={color} {...other} />
+      </MBadge>
+    );
+  }
+
+  return (
+    <>
+      <MHidden width="mdUp">
+        <IconButton color={color} {...other}>
+          <Icon icon={icon} />
+        </IconButton>
+      </MHidden>
+      <MHidden width="mdDown">
+        <MButton color={color} startIcon={<Icon icon={icon} />} {...other}>
+          {text}
+        </MButton>
+      </MHidden>
+    </>
+  );
+};
 
 // ----------------------------------------------------------------------
 
@@ -91,8 +107,6 @@ export default function MainNavbar({ categoryList }) {
   const { t } = useLocales();
   const isOffset = useOffSetTop(100);
   const { quantityInCart, getCart } = useToCart();
-  const { user, googleOAuth, errMessage } = useAuth();
-
   useEffect(() => {
     getCart().then(() => {
       if (isDev) {
@@ -102,14 +116,34 @@ export default function MainNavbar({ categoryList }) {
     // getStepPayment().then();
   }, []);
 
-  const handleGoogleLoginSuccess = async (res) => {
-    const tokenId = res?.tokenId;
-    await googleOAuth(tokenId);
-  };
-
-  const handleGoogleLoginFailure = (err) => {
-    console.log(err);
-  };
+  const accountMenus = [
+    {
+      label: t('account.info'),
+      icon: roundAccountBox,
+      linkTo: '/account?tab=info'
+    },
+    {
+      label: t('account.order'),
+      icon: roundReceipt,
+      linkTo: '/account?tab=order'
+    },
+    {
+      label: t('account.address-book'),
+      icon: baselineLocationOn,
+      linkTo: '/account?tab=address-book'
+    },
+    {
+      label: t('account.change-password'),
+      icon: roundVpnKey,
+      linkTo: '/account?tab=change-password'
+    },
+    {
+      label: t('account.config'),
+      icon: baselineSettings,
+      linkTo: '/account?tab=config',
+      isDevelop: true
+    }
+  ];
 
   return (
     <AppBar color="default" sx={{ boxShadow: 0 }}>
@@ -119,42 +153,35 @@ export default function MainNavbar({ categoryList }) {
       >
         <ContainerStyle maxWidth="lg">
           <RouterLink to="/">
-            <Logo />
+            <MHidden width="mdUp">
+              <Logo />
+            </MHidden>
+            <MHidden width="mdDown">
+              <LogoFull />
+            </MHidden>
           </RouterLink>
 
-          <SearchBar sx={{ marginLeft: 10 }} />
+          <SearchBar iconSx={{ marginLeft: 2 }} />
           <Box sx={{ flexGrow: 1 }} />
 
-          <LanguagePopover isShowTitle />
+          <Stack direction="row" spacing={{ xs: 0.5, sm: 5 }} sx={{ alignItems: 'center' }}>
+            <MHidden width="mdUp">
+              <MenuMobile isOffset={isOffset} isHome={false} navConfig={categoryList} />
+            </MHidden>
 
-          <MHidden width="mdUp">
-            <MenuMobile isOffset={isOffset} isHome={false} navConfig={categoryList} />
-          </MHidden>
+            <LanguagePopover isShowTitle />
 
-          <ButtonIcon text={t('home.order-history')} icon={history24Filled} color="inherit" href="/order-history" />
-          <MBadge badgeContent={quantityInCart} color="primary" sx={{ marginRight: user ? 3 : 0 }}>
-            <ButtonIcon text={t('home.cart')} icon={cart24Regular} color="primary" href="/cart" />
-          </MBadge>
-
-          {!user && (
-            <GoogleLogin
-              clientId="235569401328-lib09fjkc10r16r6mbscljl4ulb5049q.apps.googleusercontent.com"
-              render={(renderProps) => (
-                <ButtonIcon
-                  text={t('auth.sign-in')}
-                  icon={googleFill}
-                  color="inherit"
-                  onClick={renderProps.onClick}
-                  disabled={renderProps.disabled}
-                />
-              )}
-              onSuccess={handleGoogleLoginSuccess}
-              onFailure={handleGoogleLoginFailure}
-              cookiePolicy="single_host_origin"
+            <NavbarItem text={t('home.order-history')} icon={history24Filled} color="inherit" href="/order-history" />
+            <NavbarItem
+              badgeContent={quantityInCart}
+              text={t('home.cart')}
+              icon={cart24Regular}
+              color="primary"
+              href="/cart"
             />
-          )}
 
-          <MainAccountPopover />
+            <AccountPopover menuOptions={accountMenus} isShowTitle />
+          </Stack>
         </ContainerStyle>
         <MHidden width="mdDown">
           <ColorBar>

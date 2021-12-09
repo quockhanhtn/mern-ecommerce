@@ -1,7 +1,7 @@
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Card, Stack, Link, Alert, Tooltip, Container, Typography, Button } from '@material-ui/core';
+import { Box, Card, Link, Container, Typography, Button } from '@material-ui/core';
 // routes
 import { PATH_AUTH } from '../../routes/paths';
 // hooks
@@ -13,7 +13,7 @@ import AuthLayout from '../../layouts/AuthLayout';
 import Page from '../../components/Page';
 import { MHidden } from '../../components/@material-extend';
 import { LoginForm } from '../../components/authentication/login';
-import AuthFirebaseSocials from '../../components/authentication/AuthFirebaseSocial';
+import AuthWithSocial from '../../components/authentication/AuthWithSocial';
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Login() {
   const { t } = useLocales();
-  const { user, method, login, errMessage } = useAuth();
+  const { user, login, errMessage } = useAuth();
 
   const handleLoginAuth0 = async () => {
     try {
@@ -76,28 +76,16 @@ export default function Login() {
 
       <Container maxWidth="sm">
         <ContentStyle>
-          <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
-            <Box sx={{ flexGrow: 1 }}>
-              <Typography variant="h4" gutterBottom>
-                {t('auth.sign-in')}
-              </Typography>
-              <Typography sx={{ color: 'text.secondary' }}>{t('auth.sign-in-description')}</Typography>
-            </Box>
+          <Box sx={{ mb: 5 }}>
+            <Typography variant="h4" gutterBottom>
+              {t('auth.sign-in')}
+            </Typography>
+            <Typography sx={{ color: 'text.secondary' }}>{t('auth.sign-in-description')}</Typography>
+          </Box>
 
-            <Tooltip title={method}>
-              <Box component="img" src={`/static/auth/ic_${method}.png`} sx={{ width: 32, height: 32 }} />
-            </Tooltip>
-          </Stack>
+          <AuthWithSocial orText={t('auth.or')} />
 
-          <AuthFirebaseSocials orText={t('auth.or')} />
-
-          {method !== 'auth0' ? (
-            <LoginForm />
-          ) : (
-            <Button fullWidth size="large" type="submit" variant="contained" onClick={handleLoginAuth0}>
-              {t('auth.login')}
-            </Button>
-          )}
+          <LoginForm />
 
           <MHidden width="smUp">
             <Typography variant="body2" align="center" sx={{ mt: 3 }}>

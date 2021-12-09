@@ -1,6 +1,20 @@
 import express from 'express';
 import { allowImageMineTypes } from '../../constants.js';
-import { getInfo, updateInfo } from '../../controllers/me.controller.js';
+
+import {
+  getInfo,
+  updateInfo,
+  getAddresses,
+  addAddress,
+  updateAddress,
+  deleteAddress
+} from '../../controllers/me.controller.js';
+import {
+  getByUser,
+  createByUser,
+  updateByUser,
+} from '../../controllers/orders.controller.js';
+
 import { isAuthorized } from '../../middlewares/jwt-auth.js';
 import { handleFilePath, multerUpload } from '../../utils/upload-utils.js';
 
@@ -16,14 +30,23 @@ router.route('/')
     updateInfo
   );
 
+// Start defining routes for addresses
 router.route('/addresses')
-  .get(isAuthorized, getInfo)
-  .patch(
-    isAuthorized,
-    upload.single('avatar'),
-    handleFilePath('avatar'),
-    updateInfo
-  );
+  .get(isAuthorized, getAddresses)
+  .post(isAuthorized, addAddress);
+
+router.route('/addresses/:addressId')
+  .patch(isAuthorized, updateAddress)
+  .delete(isAuthorized, deleteAddress);
+// End defining routes for addresses
+
+// Start defining routes for orders
+router.route('/orders')
+  .get(isAuthorized, getByUser)
+  .post(isAuthorized, createByUser);
+router.route('/orders/:orderId')
+  .patch(isAuthorized, updateByUser);
+// End defining routes for orders
 
 
 export default router;

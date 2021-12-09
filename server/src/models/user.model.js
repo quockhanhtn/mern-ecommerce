@@ -1,19 +1,9 @@
 import mongoose from 'mongoose';
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 import removeMultiSpace from './plugins/remove-multi-space.js';
+import addressSchema from './schemas/address.schema.js';
 import constants from '../constants.js';
 import { hashPassword } from '../utils/cipher-utils.js';
-
-const addressSchema = new mongoose.Schema(
-  {
-    street: { type: String, required: true },
-    ward: { type: String, required: true },
-    district: { type: String, required: true },
-    province: { type: String, required: true },
-  },
-  { id: false, _id: false, versionKey: false },
-);
-
 
 const userSchema = mongoose.Schema(
   {
@@ -29,10 +19,7 @@ const userSchema = mongoose.Schema(
     birthDay: { type: Date, trim: true, required: false },
     email: {
       type: String,
-      match: [
-        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-        'Please fill a valid email address'
-      ],
+      match: [constants.REGEX.EMAIL, 'Please fill a valid email address'],
       trim: true,
       index: {
         unique: true,
@@ -41,10 +28,7 @@ const userSchema = mongoose.Schema(
     },
     phone: {
       type: String,
-      match: [
-        /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
-        'Please fill a valid phone number'
-      ],
+      match: [constants.REGEX.PHONE, 'Please fill a valid phone number'],
       trim: true,
       index: {
         unique: true,
@@ -52,26 +36,11 @@ const userSchema = mongoose.Schema(
       }
     },
 
-    /*
-     * Username regex validation explain
-     * Reference https://stackoverflow.com/a/12019115
-     * ^(?=.{5,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
-     * └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
-     *       │         │         │            │           no _ or . at the end
-     *       │         │         │            │
-     *       │         │         │            allowed characters
-     *       │         │         │
-     *       │         │         no __ or _. or ._ or .. inside
-     *       │         │
-     *       │         no _ or . at the beginning
-     *       │
-     *       username is 5-20 characters long
-    */
     username: {
       type: String,
       match: [
-        /^(?=.{5,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
-        'Please fill a valid username'
+        constants.REGEX.USERNAME,
+        'Please fill a valid username: 5-20 characters long; no _ or . at the beginning; no __ or _. or ._ or .. inside; no _ or . at the end'
       ],
       trim: true,
       required: false,
@@ -90,7 +59,7 @@ const userSchema = mongoose.Schema(
       required: true
     },
 
-    addresses: { type: addressSchema, required: false },
+    addresses: { type: [addressSchema], required: false },
     status: {
       type: String,
       enum: Object.values(constants.USER.STATUS),
@@ -100,7 +69,7 @@ const userSchema = mongoose.Schema(
 
     avatar: { type: String, trim: true, required: false },
   },
-  { timestamps: true, versionKey: false, }
+  { _id: true, id: false, timestamps: true, versionKey: false, }
 );
 // userSchema.index({ "email": 1 }, { unique: true });
 
@@ -133,5 +102,4 @@ userSchema.pre('save', function (next) {
 });
 
 const userModel = mongoose.model('User', userSchema);
-export { addressSchema }; // for re-use in other model
 export default userModel;

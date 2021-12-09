@@ -19,7 +19,8 @@ export default {
       'drop-files-here-or-click': 'Kéo thả hoặc chọn hình',
       browse: 'Tại đây',
       'thorough-your-machine': 'từ thiết bị của bạn'
-    }
+    },
+    'no-options': 'Không có tùy chọn'
   },
   home: {
     'page-title': 'Điện thoại di dộng chính hãng và phụ kiện | HK Mobile',
@@ -31,6 +32,40 @@ export default {
     contact: 'Liên hệ',
     newest: 'mới nhất',
     search: 'Tìm kiếm'
+  },
+  account: {
+    'page-title': 'Account | HK Mobile',
+    info: 'Thông tin tài khoản',
+    order: 'Đơn hàng',
+    'address-book': 'Sổ địa chỉ',
+    'change-password': 'Đổi mật khẩu',
+    config: 'Cài đặt'
+  },
+  address: {
+    title: 'Địa chỉ',
+    list: 'Danh sách địa chỉ',
+    'full-name': 'Họ tên',
+    'full-name-required': 'Họ tên không được để trống',
+    'full-name-min': 'Họ tên phải có ít nhất 3 ký tự',
+    'full-name-max': 'Họ tên không được vượt quá 50 ký tự',
+    phone: 'Số điện thoại',
+    'phone-required': 'Số điện thoại không được để trống',
+    'phone-invalid': 'Số điện thoại phải ở dạng 0xxxxxxxxx hoặc 0xx-xxx-xxxx (x từ 0 đến 9)',
+    street: 'Địa chỉ cụ thể',
+    'street-required': 'Địa chỉ cụ thể không được để trống',
+    province: 'Tỉnh/Thành phố',
+    'province-required': 'Tỉnh/Thành phố không được để trống',
+    district: 'Quận/Huyện',
+    'district-required': 'Quận/Huyện không được để trống',
+    ward: 'Phường/Xã',
+    'ward-required': 'Phường/Xã không được để trống',
+    type: 'Loại địa chỉ',
+    'type-home': 'Nhà riêng',
+    'type-office': 'Văn phòng',
+    'type-other': 'Khác',
+    note: 'Ghi chú',
+    'add-title': 'Thêm địa chỉ',
+    'edit-title': 'Chỉnh sửa địa chỉ'
   },
   settings: {
     title: 'Cài đặt',

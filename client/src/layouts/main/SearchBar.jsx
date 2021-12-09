@@ -1,5 +1,6 @@
-import { Icon } from '@iconify/react';
 import { useState } from 'react';
+// icons
+import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
 // material
 import { experimentalStyled as styled, alpha } from '@material-ui/core/styles';
@@ -37,7 +38,7 @@ const SearchBarStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function SearchBar() {
+export default function SearchBar({ iconSx }) {
   const { t } = useLocales();
   const navigate = useNavigate();
   const [isOpen, setOpen] = useState(false);
@@ -64,7 +65,7 @@ export default function SearchBar() {
     <ClickAwayListener onClickAway={handleClose}>
       <div>
         {!isOpen && (
-          <MIconButton onClick={handleOpen}>
+          <MIconButton onClick={handleOpen} sx={iconSx}>
             <Icon icon={searchFill} width={20} height={20} />
           </MIconButton>
         )}

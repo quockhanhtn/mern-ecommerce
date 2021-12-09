@@ -1,0 +1,45 @@
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJhMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEiLCJpYXQiOjE2Mzg4ODYxNDQsImV4cCI6MTYzOTQ5MDk0NH0.nrE03TUahjbjt2DAoj4nrL36fALqFEIgSvBstvsBNDk
+
+@BASE_URL = http://localhost:3001/api/v1
+@RESOURCE = me
+
+GET {{BASE_URL}}/{{RESOURCE}}
+Authorization: Bearer {{TOKEN}}
+
+###
+
+GET {{BASE_URL}}/{{RESOURCE}}/addresses
+Authorization: Bearer {{TOKEN}}
+
+###
+POST {{BASE_URL}}/{{RESOURCE}}/addresses
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+  
+{
+  "note": "My address",
+  "phone": "0987652315",
+  "name":"Khánh",
+  "type":"room",
+  "street": "123 Hữu Nghị",
+  "ward": "Phường Bình Thọ",
+  "district": "Quận Thủ Đức",
+  "province": "TP Hồ Chí Minh"
+}
+
+###
+PATCH  {{BASE_URL}}/{{RESOURCE}}/addresses/61b061f5159a70c0793dac56
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+  
+{
+  "note": "My address updated yy",
+  "phone": "09999991",
+  "name":"Khánh update yyy",
+  "type":"office update yyy",
+  "street": "123 Main St update yyy"
+}
+
+###
+DELETE  {{BASE_URL}}/{{RESOURCE}}/addresses/61b061f5159a70c0793dac56
+Authorization: Bearer {{TOKEN}}
