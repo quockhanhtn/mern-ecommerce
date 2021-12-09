@@ -40,6 +40,27 @@ export default {
     'change-password': 'Đổi mật khẩu',
     config: 'Cài đặt'
   },
+  address: {
+    'full-name': 'Họ tên',
+    'full-name-required': 'Họ tên không được để trống',
+    'full-name-min': 'Họ tên phải có ít nhất 3 ký tự',
+    'full-name-max': 'Họ tên không được vượt quá 50 ký tự',
+    phone: 'Số điện thoại',
+    'phone-required': 'Số điện thoại không được để trống',
+    'phone-invalid': 'Số điện thoại không hợp lệ',
+    street: 'Địa chỉ cụ thể',
+    'street-required': 'Địa chỉ cụ thể không được để trống',
+    province: 'Tỉnh/Thành phố',
+    'province-required': 'Tỉnh/Thành phố không được để trống',
+    district: 'Quận/Huyện',
+    'district-required': 'Quận/Huyện không được để trống',
+    ward: 'Phường/Xã',
+    'ward-required': 'Phường/Xã không được để trống',
+    type: 'Loại địa chỉ',
+    note: 'Ghi chú',
+    'add-title': 'Thêm địa chỉ',
+    'edit-title': 'Chỉnh sửa địa chỉ'
+  },
   settings: {
     title: 'Cài đặt',
     'full-screen': 'Toàn màn hình',

@@ -51,12 +51,13 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function AccountPage() {
   const { t } = useLocales();
-  const query = useQuery();
   const navigate = useNavigate();
+  const query = useQuery();
+  const tagQuery = query.get('tag');
 
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
 
-  const [currentTab, setCurrentTab] = useState(query.get('tab') || 'info');
+  const [currentTab, setCurrentTab] = useState(tagQuery || 'info');
   const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -66,6 +67,10 @@ export default function AccountPage() {
   //   dispatch(getNotifications());
   //   dispatch(getProfile());
   // }, [dispatch]);
+
+  useEffect(() => {
+    setCurrentTab(tagQuery);
+  }, [tagQuery]);
 
   const tabOpts = [
     {

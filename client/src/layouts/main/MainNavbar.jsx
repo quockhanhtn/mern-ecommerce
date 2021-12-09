@@ -7,6 +7,11 @@ import history24Filled from '@iconify/icons-fluent/history-24-filled';
 import homeFill from '@iconify/icons-eva/home-fill';
 import personFill from '@iconify/icons-eva/person-fill';
 import settings2Fill from '@iconify/icons-eva/settings-2-fill';
+import baselineLocationOn from '@iconify/icons-ic/baseline-location-on';
+import roundVpnKey from '@iconify/icons-ic/round-vpn-key';
+import roundReceipt from '@iconify/icons-ic/round-receipt';
+import roundAccountBox from '@iconify/icons-ic/round-account-box';
+import baselineSettings from '@iconify/icons-ic/baseline-settings';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, IconButton, AppBar, Toolbar, Container, Stack } from '@material-ui/core';
@@ -112,9 +117,32 @@ export default function MainNavbar({ categoryList }) {
   }, []);
 
   const accountMenus = [
-    { label: 'Home', icon: homeFill, linkTo: ' PATH_DASHBOARD.app' },
-    { label: 'Profile', icon: personFill, linkTo: 'PATH_DASHBOARD.app.profile' },
-    { label: 'Settings', icon: settings2Fill, linkTo: 'PATH_DASHBOARD.app.account_setting', isDevelop: true }
+    {
+      label: t('account.info'),
+      icon: roundAccountBox,
+      linkTo: '/account?tab=info'
+    },
+    {
+      label: t('account.order'),
+      icon: roundReceipt,
+      linkTo: '/account?tab=order'
+    },
+    {
+      label: t('account.address-book'),
+      icon: baselineLocationOn,
+      linkTo: '/account?tab=address-book'
+    },
+    {
+      label: t('account.change-password'),
+      icon: roundVpnKey,
+      linkTo: '/account?tab=change-password'
+    },
+    {
+      label: t('account.config'),
+      icon: baselineSettings,
+      linkTo: '/account?tab=config',
+      isDevelop: true
+    }
   ];
 
   return (

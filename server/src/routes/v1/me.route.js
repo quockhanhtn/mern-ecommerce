@@ -13,7 +13,7 @@ import {
   getByUser,
   createByUser,
   updateByUser,
-} from '../../controllers/order.controller.js';
+} from '../../controllers/orders.controller.js';
 
 import { isAuthorized } from '../../middlewares/jwt-auth.js';
 import { handleFilePath, multerUpload } from '../../utils/upload-utils.js';
