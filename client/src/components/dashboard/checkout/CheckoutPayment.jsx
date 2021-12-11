@@ -82,9 +82,6 @@ export default function CheckoutPayment() {
   const [subTotal, setSubTotal] = useState(Helper.getSubTotal(cart));
   const discount = cart.length > 0 ? 50000 : 0;
   const [total, setTotal] = useState(Helper.getSubTotal(cart) - discount);
-  const [province, setProvince] = useState(null);
-  const [district, setDistrict] = useState(null);
-  const [subDistrict, setSubDistrict] = useState(null);
   const initInfo = Helper.getBillingInfo();
 
   const handleCompleteOrder = () => {
@@ -119,19 +116,20 @@ export default function CheckoutPayment() {
 
   const handlePayment = async (values) => {
     if (values.payment === 'vn_pay') {
-      const data = await HelperPayment.PaymentVnPay(values);
-      // window.open(data.data, '_blank')?.focus();
-      const openerWindow = window.open(
-        data.data,
-        '_blank',
-        'toolbar=yes,scrollbars=yes,resizable=yes, width=800,height=700'
-      );
-      const timer = setInterval(() => {
-        if (openerWindow.closed) {
-          clearInterval(timer);
-          window.location.reload(); // Refresh the parent page
-        }
-      }, 1000);
+      const data = await HelperPayment.paymentVnPay(values);
+      window.open(data.data, '_blank')?.focus();
+      // const openerWindow = window.open(
+      //   data.data,
+      //   '_blank',
+      //   'toolbar=yes,scrollbars=yes,resizable=yes, width=800,height=700'
+      // );
+      // const timer = setInterval(() => {
+      //   if (openerWindow.closed) {
+      //     clearInterval(timer);
+      //     // window.location.reload();// Refresh the parent page
+      //     // handleCompleteOrder();
+      //   }
+      // }, 1000);
     } else {
       handleCompleteOrder();
     }

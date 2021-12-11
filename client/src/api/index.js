@@ -85,3 +85,4 @@ export const deleteUser = (identity) => API.delete(`/users/customer/${identity}`
 
 // ----------------------------Payment -----------------------
 export const redirectVnPay = (paymentInfo) => API.post(`/payment/vn_pay`, paymentInfo);
+export const paymentCallback = () => API.get(`/cart/payment`);

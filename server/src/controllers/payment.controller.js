@@ -4,17 +4,16 @@ import dateFormat from 'dateformat';
 import resUtils from "../utils/res-utils.js";
 
 const isDev = (process.env.NODE_ENV === 'dev');
-const baseURL = isDev ? 'http://localhost:3000' : 'https://mern-ecommerce-b848d.web.app';
+const baseURL = isDev ? 'http://localhost:3001/api/v1' : 'https://api-mobile7076.herokuapp.com/api/v1';
+const baseURLUI = isDev ? 'http://localhost:3000' : 'https://mern-ecommerce-b848d.web.app';
 
 export const createPaymentVnPay = async (req, res, next) => {
   try {
     const ipAddr = req.ip;
-    console.log(isDev);
-
     const tmnCode = 'QL509E3K';
     const secretKey = 'OVOALYVDSIREXCICBCAANMFTAEDVNNCV';
     let vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    const returnUrl = baseURL;
+    const returnUrl = `${baseURL}/payment/vn_pay/callback`;
 
     const date = new Date();
 
@@ -55,10 +54,33 @@ export const createPaymentVnPay = async (req, res, next) => {
     const signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
     vnp_Params['vnp_SecureHash'] = signed;
     vnpUrl += '?' + queryString.stringify(vnp_Params, { encode: false });
-    // res.redirect(vnpUrl)
     resUtils.status200(res, 'Get link successfully', vnpUrl);
   } catch (err) {
     next(err);
+  }
+};
+
+export const paymentVnPayCallBack = async (req, res, next) => {
+  let vnp_Params = req.query;
+  const secureHash = vnp_Params['vnp_SecureHash'];
+  delete vnp_Params['vnp_SecureHash'];
+  delete vnp_Params['vnp_SecureHashType'];
+
+  vnp_Params = sortObject(vnp_Params);
+
+  const tmnCode = 'QL509E3K';
+  const secretKey = 'OVOALYVDSIREXCICBCAANMFTAEDVNNCV';
+
+  const signData = queryString.stringify(vnp_Params, {encode: false});
+  const hmac = crypto.createHmac("sha512", secretKey);
+  const signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
+  
+  if (secureHash === signed) {
+    const urlSuccess = `${baseURLUI}/cart/payment`;
+    res.redirect(`${urlSuccess}/${vnp_Params['vnp_TxnRef']}?code=${vnp_Params['vnp_ResponseCode']}`);
+  } else {
+    const urlError = `${baseURLUI}/404`;
+    res.redirect(urlError);
   }
 };
 

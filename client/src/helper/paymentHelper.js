@@ -1,6 +1,6 @@
-import { redirectVnPay } from '../api';
+import { paymentCallback, redirectVnPay } from '../api';
 
-export async function PaymentVnPay(values) {
+export async function paymentVnPay(values) {
   const info = {
     amount: 10000,
     bankCode: '',
@@ -14,4 +14,13 @@ export async function PaymentVnPay(values) {
       // log
     });
   return data.data;
+}
+
+export async function checkPayment(s) {
+  const data = await paymentCallback()
+    .then((content) => content)
+    .catch(() => {
+      // log
+    });
+  return data;
 }

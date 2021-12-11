@@ -1,5 +1,5 @@
 import express from 'express';
-import { createPaymentVnPay } from '../../controllers/payment.controller.js';
+import { createPaymentVnPay, paymentVnPayCallBack } from '../../controllers/payment.controller.js';
 
 const router = express.Router();
 
@@ -10,5 +10,9 @@ router.route('/')
 
 router.route('/vn_pay')
   .post(createPaymentVnPay);
+
+router.route('/vn_pay/callback')
+  .get(paymentVnPayCallBack);
+
 
 export default router;

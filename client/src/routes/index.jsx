@@ -137,7 +137,8 @@ export default function Router() {
         },
         { path: '/q', element: <ProductListPage /> },
         { path: '/:category/:slug', element: <ProductDetailPage /> },
-        { path: '/cart', element: <CartPage /> }
+        { path: '/cart', element: <CartPage /> },
+        { path: '/cart/payment/:orderId', element: <CartPageResult /> }
       ]
     },
     { path: '*', element: <Navigate to="/404" replace /> }
@@ -182,3 +183,4 @@ const ProductDetailPage = Loadable(lazy(() => import('../pages/main/ProductDetai
 
 // Cart
 const CartPage = Loadable(lazy(() => import('../pages/main/cart/CartPage')));
+const CartPageResult = Loadable(lazy(() => import('../pages/main/cart/CartPageResult')));
