@@ -151,10 +151,11 @@ export default function BrandForm({ currentId, open, setOpen }) {
   };
 
   const BrandSchema = Yup.object().shape({
-    name: Yup.string().required(t('dashboard.brands.name-validation')),
-    desc: Yup.string().required(t('dashboard.brands.desc-validation')),
-    country: Yup.string().required(t('dashboard.brands.country-validation')),
-    headQuarters: Yup.string().required(t('dashboard.brands.headQuarters-validation'))
+    name: Yup.string()
+      .trim()
+      .required(t('dashboard.brands.name-validation'))
+      .min(6, t('dashboard.brands.name-validation-len'))
+      .max(25, t('dashboard.brands.name-validation-len'))
   });
   const formik = useFormik({
     enableReinitialize: true,
@@ -199,7 +200,6 @@ export default function BrandForm({ currentId, open, setOpen }) {
               </MotionInView>
               <MotionInView variants={varFadeInUp}>
                 <TextField
-                  required
                   fullWidth
                   label={t('dashboard.brands.desc')}
                   multiline
@@ -244,7 +244,6 @@ export default function BrandForm({ currentId, open, setOpen }) {
               </MotionInView>
               <MotionInView variants={varFadeInUp}>
                 <TextField
-                  required
                   fullWidth
                   label={t('dashboard.brands.headQuarters')}
                   {...getFieldProps('headQuarters')}

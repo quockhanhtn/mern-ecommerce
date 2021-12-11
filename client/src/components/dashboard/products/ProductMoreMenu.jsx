@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import editFill from '@iconify/icons-eva/edit-fill';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
@@ -10,6 +10,7 @@ import { paramCase } from 'change-case';
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
 import useLocales from '../../../hooks/useLocales';
 import { PATH_DASHBOARD } from '../../../routes/paths';
+import DialogConfirm from '../../dialog/DialogConfirm';
 
 // ----------------------------------------------------------------------
 
@@ -18,10 +19,21 @@ ProductMoreMenu.propTypes = {
   onDelete: PropTypes.func
 };
 
-export default function ProductMoreMenu({ productId, onDelete, currentIdProduct }) {
+export default function ProductMoreMenu({ productId, onDelete, currentIdProduct, nameInfo }) {
   const { t } = useLocales();
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [openDialogConfirm, setOpenDialogConfirm] = useState(false);
+  const [textConfirmDelete, setTextConfirmDelete] = useState('');
+
+  useEffect(() => {
+    const text = t('dashboard.products.confirm-delete', { nameInfo });
+    setTextConfirmDelete(text);
+  }, [nameInfo]);
+
+  const handleDelete = () => {
+    setOpenDialogConfirm(true);
+  };
 
   return (
     <>
@@ -49,7 +61,7 @@ export default function ProductMoreMenu({ productId, onDelete, currentIdProduct 
             </ListItemIcon>
             <ListItemText primary={t('common.edit')} primaryTypographyProps={{ variant: 'body2' }} />
           </MenuItem>
-          <MenuItem onClick={onDelete} sx={{ color: 'text.secondary' }}>
+          <MenuItem onClick={handleDelete} sx={{ color: 'text.secondary' }}>
             <ListItemIcon>
               <Icon icon={trash2Outline} width={24} height={24} />
             </ListItemIcon>
@@ -57,6 +69,12 @@ export default function ProductMoreMenu({ productId, onDelete, currentIdProduct 
           </MenuItem>
         </div>
       </Menu>
+      <DialogConfirm
+        open={openDialogConfirm}
+        setOpen={setOpenDialogConfirm}
+        handleSubmit={onDelete}
+        textContent={textConfirmDelete}
+      />
     </>
   );
 }
