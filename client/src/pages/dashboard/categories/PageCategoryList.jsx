@@ -282,6 +282,7 @@ export default function PageCategoryList() {
                                 onEdit={() => handleEdit(_id)}
                                 deleteTitle={t('common.delete')}
                                 onDelete={() => handleDeleteCategory(_id, slug)}
+                                nameInfo={name}
                               />
                             </TableCell>
                           </TableRow>

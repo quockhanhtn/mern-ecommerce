@@ -276,6 +276,7 @@ export default function PageBrandList() {
                               <BrandMoreMenu
                                 onEdit={() => handleEditBrand(_id)}
                                 onDelete={() => handleDeleteBrand(_id, slug)}
+                                nameInfo={name}
                               />
                             </TableCell>
                           </TableRow>
