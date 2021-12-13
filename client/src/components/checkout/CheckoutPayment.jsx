@@ -19,6 +19,7 @@ import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 
 import * as Helper from '../../helper/localStorageHelper';
+import * as API from '../../api';
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +38,7 @@ export default function CheckoutPayment() {
       icons: ['/static/icons/ic_paypal.svg']
     },
     {
-      value: 'vn_pay',
+      value: 'vnpay',
       title: 'Pay with VnPay',
       description: 'You will be redirected to VnPay website to complete your purchase securely.',
       icons: ['/static/icons/ic_vnpay.svg']
@@ -77,11 +78,34 @@ export default function CheckoutPayment() {
   };
 
   const handlePayment = async (values) => {
-    if (user) {
-      // creat order for customer
-    } else {
-      // creat order for guest
-    }
+    console.log('payment', values);
+    console.log('payment', orderInfo);
+
+    const customer = {
+      name: orderInfo.name,
+      phone: orderInfo.phone
+    };
+
+    const address = {
+      street: orderInfo.street,
+      ward: orderInfo.ward,
+      district: orderInfo.district,
+      province: orderInfo.province,
+      name: orderInfo.name,
+      phone: orderInfo.phone
+    };
+
+    API.createOrder({
+      ...values,
+      ...orderInfo,
+      customerInfo: customer,
+      address,
+      items: cart.map((item) => ({
+        product: item._id,
+        sku: item.skuVariant,
+        quantity: item.quantity
+      }))
+    });
   };
 
   const PaymentSchema = Yup.object().shape({

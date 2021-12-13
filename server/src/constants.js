@@ -27,7 +27,8 @@ export const ORDER = {
   PAYMENT_METHOD: {
     CASH: 'cash',             // paid at store
     COD: 'cod',               // paid at delivery (cash on delivery)
-    TRANSFER: 'transfer'      // paid by bank transfer, electric wallet, etc
+    TRANSFER: 'transfer',     // paid by bank transfer, electric wallet, etc
+    VNPAY: 'vnpay'            // paid by VNPAY
   },
   PAYMENT_STATUS: {
     PENDING: 'pending',       // payment is pending

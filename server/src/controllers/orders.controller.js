@@ -1,5 +1,6 @@
 import resUtils from '../utils/res-utils.js';
 import orderService from '../services/order.services.js';
+import vnpayService from '../services/vnpay.service.js';
 
 // Order manager by user
 export const getOne = async (req, res) => {
@@ -35,7 +36,7 @@ export const createByUser = async (req, res, next) => {
     if (userId) {
       customerInfo = userId
     } else {
-      customerInfo = req.body.customer;
+      customerInfo = req.body.customerInfo;
     }
 
     const order = await orderService.create(
@@ -43,6 +44,18 @@ export const createByUser = async (req, res, next) => {
       req.body,
       userId || null
     );
+
+    if (req.body.paymentMethod === 'vnpay') {
+      const apiUrl = `${req.protocol}://${req.get('host')}`
+      const vnpayServiceUrl = await vnpayService.createPaymentUrl(
+        req.ip,
+        apiUrl,
+        order._id.toString(),
+        order.total
+      );
+      res.redirect(vnpayServiceUrl);
+      return;
+    }
 
     if (order) {
       resUtils.status201(

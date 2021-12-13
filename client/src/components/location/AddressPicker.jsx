@@ -75,7 +75,7 @@ export default function AddressPicker({ formik, ...other }) {
           label={t('address.province')}
           onChange={handleChangeProvince}
           value={province?.name}
-          // defaultProvinceName={formik.values.province}
+          defaultProvinceName={formik.values.province}
           required
           fullWidth
           getFieldProps={getFieldProps}
@@ -87,6 +87,7 @@ export default function AddressPicker({ formik, ...other }) {
           label={t('address.district')}
           provinceCode={province?.code}
           onChange={handleChangeDistrict}
+          defaultDistrictName={formik.values.district}
           value={district?.name}
           required
           fullWidth

@@ -10,6 +10,7 @@ import brandRoutes from './brands.route.js';
 import productRoutes from './products.route.js';
 import commentRoutes from './comments.route.js';
 import discountRoutes from './discounts.route.js';
+import orderRoutes from './order.route.js';
 import paymenVnpayRoutes from './payment.route.js';
 
 
@@ -35,6 +36,7 @@ router.use('/brands', brandRoutes);
 router.use('/products', productRoutes);
 router.use('/comments', commentRoutes);
 router.use('/discounts', discountRoutes);
+router.use('/orders', orderRoutes);
 router.use('/payment', paymenVnpayRoutes);
 
 export default router;

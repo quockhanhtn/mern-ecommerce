@@ -16,11 +16,12 @@ export default {
 const SELECTED_FIELDS = '_id user address status items totalPrice totalShipping totalTax totalDiscount total createdAt updatedAt';
 
 async function createWithTransaction(orderData, createdBy) {
-  const session = await mongoose.startSession();
-  try {
-    session.startTransaction();
+  // const session = await mongoose.startSession();
+  // try {
+  //   session.startTransaction();
 
     const orderToSave = {
+      _id: new mongoose.Types.ObjectId(),
       ...orderData,
       items: [],
       createdBy,
@@ -35,7 +36,7 @@ async function createWithTransaction(orderData, createdBy) {
       await Product.findOneAndUpdate(
         { _id: element.product, 'variants.sku': element.sku },
         { $inc: { 'variants.$.sold': element.quantity } },
-        { session }
+        // { session }
       );
       const price = product?.variants?.[0].price;
 
@@ -47,7 +48,11 @@ async function createWithTransaction(orderData, createdBy) {
       });
     }
 
-    orderToSave.price = orderData.items.reduce((acc, cur) => {
+    orderToSave.price = orderToSave.items.reduce((acc, cur) => {
+      return acc + cur.quantity * cur.pricePerUnit;
+    }, 0);
+
+    orderToSave.total = orderToSave.items.reduce((acc, cur) => {
       return acc + cur.quantity * cur.pricePerUnit;
     }, 0);
 
@@ -58,17 +63,16 @@ async function createWithTransaction(orderData, createdBy) {
 
     orderToSave.status = constants.ORDER.STATUS.PENDING;
 
-
-    const order = await Order.create(orderToSave, { session });
-    await session.commitTransaction();
-    session.endSession();
+    const order = await Order.create(orderToSave,/* { session }*/);
+    // await session.commitTransaction();
+    // session.endSession();
 
     return order;
-  } catch (err) {
-    await session.abortTransaction();
-    session.endSession();
-    throw err;
-  }
+  // } catch (err) {
+  //   await session.abortTransaction();
+  //   session.endSession();
+  //   throw err;
+  // }
 }
 
 async function getList(userId, status, selectedFields = null) {
@@ -126,7 +130,7 @@ async function create(customerInfo, data, createdBy) {
     throw new ApiError('Missing address', 400);
   }
 
-  const order = await createWithTransaction(data, createdBy);
+  const order = await createWithTransaction(orderData, createdBy);
   return order;
 }
 

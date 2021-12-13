@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 // material
 import { Autocomplete, TextField } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-
 // ----------------------------------------------------------------------
 
 DistrictPicker.propTypes = {
@@ -28,6 +27,7 @@ export default function DistrictPicker({
   errors,
   label,
   value,
+  defaultDistrictName,
   provinceCode,
   onChange,
   ...other
@@ -39,6 +39,12 @@ export default function DistrictPicker({
     const listDistrictsTemp = DISTRICTS.filter((d) => d.province_code === provinceCode);
     setDistricts(listDistrictsTemp);
   }, [provinceCode]);
+
+  // useEffect(() => {
+  //   const defaultValue = districts.find((district) => district?.name === defaultDistrictName);
+  //   onChange(defaultValue);
+  //   console.log('defaultValue', defaultDistrictName);
+  // }, [defaultDistrictName]);
 
   const handleOnChange = (option, value) => {
     const defaultValue = districts.find((district) => district?.name === value?.name);
