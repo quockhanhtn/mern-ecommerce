@@ -11,6 +11,10 @@ const initialState = {
 };
 
 const handlers = {
+  UPDATE_ORDER_INFO: (state, action) => ({
+    ...state,
+    orderInfo: { ...state.orderInfo, ...action.payload }
+  }),
   GET_CART: (state, action) => ({
     ...state,
     quantityInCart: action.payload.cart.length,
@@ -62,6 +66,7 @@ OrderProvider.propTypes = {
 const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
 
 const OrderContext = createContext({
+  orderInfo: {},
   quantityInCart: 0,
   cart: [],
   activeStep: 0,
@@ -71,9 +76,9 @@ const OrderContext = createContext({
   removeToCart: () => Promise.resolve(),
   increaseProductInCart: () => Promise.resolve(),
   decreaseProductInCart: () => Promise.resolve(),
-  nextStepPayment: () => Promise.resolve(),
-  backStepPayment: () => Promise.resolve(),
-  getStepPayment: () => Promise.resolve()
+  nextStepOrder: () => Promise.resolve(),
+  backStepOrder: () => Promise.resolve(),
+  getStepOrder: () => Promise.resolve()
 });
 
 OrderProvider.propTypes = {
@@ -82,6 +87,10 @@ OrderProvider.propTypes = {
 
 function OrderProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const updateOrderAction = async (data) => {
+    dispatch({ type: 'UPDATE_ORDER_INFO', payload: data });
+  };
 
   const getCartAction = async () => {
     const cart = Helper.getCart();
@@ -113,18 +122,18 @@ function OrderProvider({ children }) {
     dispatch({ type: 'DECREASE_PRODUCT_IN_CART', payload: { cart, subTotal } });
   };
 
-  const nextStepPaymentAction = async (step) => {
-    const activeStep = Helper.nextStepPayment(step);
+  const nextStepOrderAction = async (step) => {
+    const activeStep = Helper.nextStepOrder(step);
     dispatch({ type: 'NEXT_STEP_PAYMENT', payload: { activeStep } });
   };
 
-  const backStepPaymentAction = async (step) => {
-    const activeStep = Helper.backStepPayment(step);
+  const backStepOrderAction = async (step) => {
+    const activeStep = Helper.backStepOrder(step);
     dispatch({ type: 'BACK_STEP_PAYMENT', payload: { activeStep } });
   };
 
-  const getStepPaymentAction = async () => {
-    const activeStep = Helper.getStepPayment();
+  const getStepOrderAction = async () => {
+    const activeStep = Helper.getStepOrder();
     dispatch({ type: 'GET_STEP_PAYMENT', payload: { activeStep } });
   };
 
@@ -132,14 +141,15 @@ function OrderProvider({ children }) {
     <OrderContext.Provider
       value={{
         ...state,
+        updateOrderInfo: updateOrderAction,
         getCart: getCartAction,
         addToCart: addToCartAction,
         removeToCart: removeToCartAction,
         increaseProductInCart: increaseProductInCartAction,
         decreaseProductInCart: decreaseProductInCartAction,
-        nextStepPayment: nextStepPaymentAction,
-        backStepPayment: backStepPaymentAction,
-        getStepPayment: getStepPaymentAction
+        nextStepOrder: nextStepOrderAction,
+        backStepOrder: backStepOrderAction,
+        getStepOrder: getStepOrderAction
       }}
     >
       {children}

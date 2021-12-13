@@ -6,6 +6,7 @@ import constants from '../constants.js';
 import ApiError from '../utils/APIError.js';
 
 export default {
+  getOne,
   getAlls,
   getListByUser,
   create,
@@ -81,9 +82,15 @@ async function getList(userId, status, selectedFields = null) {
   return lists;
 }
 
+async function getOne(orderId, selectedFields = null) {
+  if (!selectedFields) { selectedFields = SELECTED_FIELDS; }
+  const order = await Order.findById(orderId).select(selectedFields).lean().exec();
+  return order;
+}
+
 async function getAlls(status, selectedFields = null) {
   return await getList(null, status, selectedFields);
-};
+}
 
 async function getListByUser(userId, status, selectedFields = null) {
   return await getList(userId, status, selectedFields);

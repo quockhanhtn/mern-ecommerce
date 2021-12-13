@@ -40,3 +40,12 @@ export const isAdmin = authorized(roleAdmin);
 export const isStaff = authorized(roleStaff);
 export const isAdminOrStaff = authorized(roleAdminOrStaff);
 export const isCustomer = authorized(roleCustomer);
+
+// allow unauthenticated
+export const isGuestOrAuthorized = (req, res, next) => {
+  let token = req.headers['x-access-token'] || req.headers['authorization'];
+  if (token) {
+    return jwtMiddleware;
+  }
+  next();
+}

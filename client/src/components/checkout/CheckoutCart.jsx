@@ -29,7 +29,7 @@ export default function CheckoutCart() {
     removeToCart,
     increaseProductInCart,
     decreaseProductInCart,
-    nextStepPayment
+    nextStepOrder
   } = useOrderFlow();
   const { user } = useAuth();
   const discount = cart.length > 0 ? 50000 : 0;
@@ -42,7 +42,7 @@ export default function CheckoutCart() {
   };
 
   const handleNextStep = () => {
-    nextStepPayment(activeStep);
+    nextStepOrder(activeStep);
   };
 
   const handleApplyDiscount = () => {

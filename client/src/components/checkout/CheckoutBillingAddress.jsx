@@ -67,7 +67,7 @@ export default function CheckoutBillingAddress() {
   const [openForm, setOpenForm] = useState(false);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
 
-  const { cart, subTotal, activeStep, backStepPayment, nextStepPayment } = useOrderFlow();
+  const { cart, subTotal, activeStep, updateOrderInfo, backStepOrder, nextStepOrder } = useOrderFlow();
   const discount = cart.length > 0 ? 50000 : 0;
 
   const initInfo = cartHelper.getOrderInfo();
@@ -223,11 +223,12 @@ export default function CheckoutBillingAddress() {
       values,
       errors
     });
-    nextStepPayment(activeStep);
+    updateOrderInfo(formik.values);
+    nextStepOrder(activeStep);
   };
 
   const handleBackStep = () => {
-    backStepPayment(activeStep);
+    backStepOrder(activeStep);
   };
 
   const renderUserSelectAddress = () => (

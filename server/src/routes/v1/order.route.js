@@ -1,12 +1,19 @@
 import express from 'express';
 import {
+  getOne,
+  getByUser,
+  createByUser,
+  updateByUser,
   getAllOrders,
   createOrderByAdminOrStaff,
   updateOrderByAdminOrStaff
 } from '../../controllers/orders.controller.js';
-import { isAdminOrStaff } from '../../middlewares/jwt-auth.js';
+import { isGuestOrAuthorized, isAdminOrStaff } from '../../middlewares/jwt-auth.js';
 
 const router = express.Router();
+
+router.post('/', isGuestOrAuthorized, createByUser);
+router.get(':/orderId', getOne);
 
 /**
  * Authorization
@@ -15,13 +22,11 @@ const router = express.Router();
  * Delete               : not allowed
  */
 
-
-
-router.route('/')
+router.route('/manager')
   .get(isAdminOrStaff, getAllOrders)
   .post(isAdminOrStaff, createOrderByAdminOrStaff);
 
-router.route('/:orderId')
+router.route('/manager/:orderId')
   .patch(isAdminOrStaff, updateOrderByAdminOrStaff);
 
 export default router;

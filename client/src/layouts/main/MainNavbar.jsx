@@ -113,7 +113,7 @@ export default function MainNavbar({ categoryList }) {
         console.log('Get cart successfully');
       }
     });
-    // getStepPayment().then();
+    // getStepOrder().then();
   }, []);
 
   const accountMenus = [

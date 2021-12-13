@@ -2,6 +2,19 @@ import resUtils from '../utils/res-utils.js';
 import orderService from '../services/order.services.js';
 
 // Order manager by user
+export const getOne = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+
+    const order = await orderService.getOne(orderId);
+    resUtils.status200(
+      res,
+      'Get order info success',
+      order
+    );
+  } catch (err) { next(err); }
+};
+
 export const getByUser = async (req, res, next) => {
   try {
     const status = req.query.status;

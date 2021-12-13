@@ -38,18 +38,23 @@ const OptionStyle = styled('div')(({ theme }) => ({
 
 CheckoutPaymentMethods.propTypes = {
   formik: PropTypes.object,
-  paymentOptions: PropTypes.array,
-  cardOptions: PropTypes.array
+  paymentOptions: PropTypes.array
 };
 
-export default function CheckoutPaymentMethods({ paymentOptions, cardOptions, formik }) {
+export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
   const { errors, touched, values, getFieldProps } = formik;
+
+  const cardOptions = [
+    { value: 'ViSa1', label: '**** **** **** 1212 - Jimmy Holland' },
+    { value: 'ViSa2', label: '**** **** **** 2424 - Shawn Stokes' },
+    { value: 'MasterCard', label: '**** **** **** 4545 - Cole Armstrong' }
+  ];
 
   return (
     <Card>
-      <CardHeader title="Payment options" />
+      <CardHeader title="paymentMethod options" />
       <CardContent>
-        <RadioGroup row {...getFieldProps('payment')}>
+        <RadioGroup row {...getFieldProps('paymentMethod')}>
           <Grid container spacing={2}>
             {paymentOptions.map((method) => {
               const { value, title, icons, description } = method;
@@ -59,7 +64,7 @@ export default function CheckoutPaymentMethods({ paymentOptions, cardOptions, fo
                 <Grid key={title} item xs={12}>
                   <OptionStyle
                     sx={{
-                      ...(values.payment === value && {
+                      ...(values.paymentMethod === value && {
                         boxShadow: (theme) => theme.customShadows.z8
                       }),
                       ...(hasChildren && { flexWrap: 'wrap' })
@@ -93,7 +98,7 @@ export default function CheckoutPaymentMethods({ paymentOptions, cardOptions, fo
                     </MHidden>
 
                     {hasChildren && (
-                      <Collapse in={values.payment === 'credit_card'} sx={{ width: '100%' }}>
+                      <Collapse in={values.paymentMethod === 'credit_card'} sx={{ width: '100%' }}>
                         <TextField
                           select
                           fullWidth
@@ -126,10 +131,10 @@ export default function CheckoutPaymentMethods({ paymentOptions, cardOptions, fo
           </Grid>
         </RadioGroup>
 
-        {errors.payment && (
+        {errors.paymentMethod && (
           <FormHelperText error>
             <Box component="span" sx={{ px: 2 }}>
-              {touched.payment && errors.payment}
+              {touched.paymentMethod && errors.paymentMethod}
             </Box>
           </FormHelperText>
         )}

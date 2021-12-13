@@ -69,7 +69,7 @@ export function getSubTotal(cart) {
   return subTotal;
 }
 
-export function nextStepPayment(step) {
+export function nextStepOrder(step) {
   let activeStep = step;
   if (step < 3) {
     activeStep += 1;
@@ -78,7 +78,7 @@ export function nextStepPayment(step) {
   return activeStep;
 }
 
-export function backStepPayment(step) {
+export function backStepOrder(step) {
   let activeStep = step;
   if (step > 0) {
     activeStep -= 1;
@@ -87,7 +87,7 @@ export function backStepPayment(step) {
   return activeStep;
 }
 
-export function getStepPayment() {
+export function getStepOrder() {
   const activeStep = localStorage.getItem('activeStep');
   // Current I not handler it and remove 0
   return 0;
