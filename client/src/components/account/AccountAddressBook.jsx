@@ -9,7 +9,6 @@ import { Box, Card, Button, Typography, Stack, Paper } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllAddresses, createAddress, updateAddress, deleteAddress } from '../../actions/account';
-
 //
 import useLocales from '../../hooks/useLocales';
 //

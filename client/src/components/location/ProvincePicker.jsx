@@ -6,10 +6,10 @@ import { Autocomplete, TextField } from '@material-ui/core';
 
 ProvincePicker.propTypes = {
   getFieldProps: PropTypes.func.isRequired,
-  touched: PropTypes.bool,
+  touched: PropTypes.any,
   errors: PropTypes.object,
   label: PropTypes.string.isRequired,
-  defaultProvinceCode: PropTypes.string,
+  defaultProvinceName: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired
 };
@@ -17,7 +17,7 @@ ProvincePicker.propTypes = {
 ProvincePicker.defaultProps = {
   touched: false,
   errors: {},
-  defaultProvinceCode: null,
+  defaultProvinceName: '',
   value: ''
 };
 
@@ -26,7 +26,7 @@ export default function ProvincePicker({
   touched,
   errors,
   label,
-  defaultProvinceCode,
+  defaultProvinceName,
   value,
   onChange,
   ...other
@@ -40,7 +40,7 @@ export default function ProvincePicker({
     <Autocomplete
       options={PROVINCES.map((p) => ({ name: p.name }))}
       value={PROVINCES.find((p) => p.name === value)}
-      defaultValue={defaultProvinceCode}
+      defaultValue={PROVINCES.find((p) => p.name === defaultProvinceName)}
       onChange={handleOnChange}
       getOptionLabel={(option) => option.name}
       renderInput={(params) => (
@@ -57,6 +57,11 @@ export default function ProvincePicker({
     />
   );
 }
+
+export const getProvinceCode = (name) => {
+  const province = PROVINCES.find((p) => p.name === name);
+  return province?.code;
+};
 
 const PROVINCES = [
   {

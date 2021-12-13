@@ -20,7 +20,9 @@ export default {
       browse: 'Tại đây',
       'thorough-your-machine': 'từ thiết bị của bạn'
     },
-    'no-options': 'Không có tùy chọn'
+    'no-options': 'Không có tùy chọn',
+    continue: 'Tiếp tục',
+    back: 'Quay lại'
   },
   home: {
     'page-title': 'Điện thoại di dộng chính hãng và phụ kiện | HK Mobile',
@@ -97,7 +99,14 @@ export default {
     quantity: 'Số lượng',
     'unit-price': 'Đơn giá',
     'amount-price': 'Số tiền',
-    available: 'Còn {{available}} SP'
+    available: 'Còn {{available}} SP',
+    'payment-method': 'Phương thức thanh toán',
+    'receive-method': 'Phương thức nhận hàng',
+    'receive-method-required': 'Phương thức nhận hàng không được để trống',
+    'receive-at-store': 'Nhận tại cửa hàng',
+    'receive-at-store-desc': 'Nhận và trải nghiệm sản phẩm tại cửa hàng với sự hỗ trợ của nhân viên',
+    'delivery-to-home': 'Giao hàng tại nhà',
+    'delivery-to-home-desc': 'Cung cấp cho chúng tôi địa chỉ, đơn hàng sẽ được giao đến tận nhà cho bạn!'
   },
   settings: {
     title: 'Cài đặt',

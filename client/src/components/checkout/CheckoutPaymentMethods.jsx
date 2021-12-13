@@ -46,7 +46,7 @@ export default function CheckoutPaymentMethods({ paymentOptions, cardOptions, fo
   const { errors, touched, values, getFieldProps } = formik;
 
   return (
-    <Card sx={{ my: 3 }}>
+    <Card>
       <CardHeader title="Payment options" />
       <CardContent>
         <RadioGroup row {...getFieldProps('payment')}>

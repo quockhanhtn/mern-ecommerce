@@ -23,19 +23,6 @@ import * as HelperPayment from '../../helper/paymentHelper';
 
 // ----------------------------------------------------------------------
 
-const DELIVERY_OPTIONS = [
-  {
-    value: 0,
-    title: 'Standard delivery (Free)',
-    description: 'Delivered on Monday, August 12'
-  },
-  {
-    value: 2,
-    title: 'Fast delivery ($2,00)',
-    description: 'Delivered on Monday, August 5'
-  }
-];
-
 const PAYMENT_OPTIONS = [
   {
     value: 'paypal',
@@ -78,36 +65,23 @@ export default function CheckoutPayment() {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const { cart, activeStep, backStepPayment, nextStepPayment, getCart } = useToCart();
-  const [subTotal, setSubTotal] = useState(Helper.getSubTotal(cart));
+  const { cart, subTotal, activeStep, backStepPayment, nextStepPayment, getCart } = useToCart();
   const discount = cart.length > 0 ? 50000 : 0;
-  const [total, setTotal] = useState(Helper.getSubTotal(cart) - discount);
   const initInfo = Helper.getBillingInfo();
 
   const handleCompleteOrder = () => {
     nextStepPayment(activeStep).then(() => {
       Helper.completeOrder();
       getCart();
-      enqueueSnackbar('Next step to cart successfully', {
-        variant: 'success'
-      });
     });
   };
 
   const handleBackStep = () => {
-    backStepPayment(activeStep).then(() => {
-      enqueueSnackbar('Back step to cart successfully', {
-        variant: 'success'
-      });
-    });
+    backStepPayment(activeStep);
   };
 
   const handleGotoStep = (step) => {
-    backStepPayment(step).then(() => {
-      enqueueSnackbar('Back step to cart successfully', {
-        variant: 'success'
-      });
-    });
+    backStepPayment(step);
   };
 
   const handleApplyShipping = (value) => {
@@ -163,11 +137,6 @@ export default function CheckoutPayment() {
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
-            <CheckoutDelivery
-              formik={formik}
-              onApplyShipping={handleApplyShipping}
-              deliveryOptions={DELIVERY_OPTIONS}
-            />
             <CheckoutPaymentMethods formik={formik} cardOptions={CARDS_OPTIONS} paymentOptions={PAYMENT_OPTIONS} />
             <Button
               type="button"
@@ -175,21 +144,15 @@ export default function CheckoutPayment() {
               color="inherit"
               onClick={handleBackStep}
               startIcon={<Icon icon={arrowIosBackFill} />}
+              sx={{ mt: 3 }}
             >
-              Back
+              {t('common.back')}
             </Button>
           </Grid>
 
           <Grid item xs={12} md={4}>
             <CheckoutBillingInfo billingInfo={initInfo} onBackStep={handleBackStep} />
-            <CheckoutSummary
-              enableEdit
-              total={total}
-              subtotal={subTotal}
-              discount={discount}
-              // shipping={shipping}
-              onEdit={() => handleGotoStep(0)}
-            />
+            <CheckoutSummary subtotal={subTotal} total={subTotal} discount={discount} />
             <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
               Complete Order
             </LoadingButton>

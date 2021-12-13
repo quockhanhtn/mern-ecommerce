@@ -14,31 +14,31 @@ const handlers = {
     ...state,
     quantityInCart: action.payload.cart.length,
     cart: action.payload.cart,
-    totalPrice: action.payload.totalPrice
+    subTotal: action.payload.subTotal
   }),
   ADD_TO_CART: (state, action) => ({
     ...state,
     quantityInCart: action.payload.cart.length,
     cart: action.payload.cart,
-    totalPrice: action.payload.totalPrice
+    subTotal: action.payload.subTotal
   }),
   REMOVE_TO_CART: (state, action) => ({
     ...state,
     quantityInCart: action.payload.cart.length,
     cart: action.payload.cart,
-    totalPrice: action.payload.totalPrice
+    subTotal: action.payload.subTotal
   }),
   INCREASE_PRODUCT_IN_CART: (state, action) => ({
     ...state,
     quantityInCart: action.payload.cart.length,
     cart: action.payload.cart,
-    totalPrice: action.payload.totalPrice
+    subTotal: action.payload.subTotal
   }),
   DECREASE_PRODUCT_IN_CART: (state, action) => ({
     ...state,
     quantityInCart: action.payload.cart.length,
     cart: action.payload.cart,
-    totalPrice: action.payload.totalPrice
+    subTotal: action.payload.subTotal
   }),
   NEXT_STEP_PAYMENT: (state, action) => ({
     ...state,
@@ -64,7 +64,7 @@ const CartContext = createContext({
   quantityInCart: 0,
   cart: [],
   activeStep: 0,
-  totalPrice: 0,
+  subTotal: 0,
   getCart: () => Promise.resolve(),
   addToCart: () => Promise.resolve(),
   removeToCart: () => Promise.resolve(),
@@ -84,32 +84,32 @@ function CartProvider({ children }) {
 
   const getCartAction = async () => {
     const cart = Helper.getCart();
-    const totalPrice = Helper.getSubTotal(cart);
-    dispatch({ type: 'GET_CART', payload: { cart, totalPrice } });
+    const subTotal = Helper.getSubTotal(cart);
+    dispatch({ type: 'GET_CART', payload: { cart, subTotal } });
   };
 
   const addToCartAction = async (productInCartInfo) => {
     const cart = Helper.addProductToCartByLocalStorage(productInCartInfo);
-    const totalPrice = Helper.getSubTotal(cart);
-    dispatch({ type: 'ADD_TO_CART', payload: { cart, totalPrice } });
+    const subTotal = Helper.getSubTotal(cart);
+    dispatch({ type: 'ADD_TO_CART', payload: { cart, subTotal } });
   };
 
   const removeToCartAction = async (_id, skuVariant) => {
     const cart = Helper.removeProductInCartByLocalStorage(_id, skuVariant);
-    const totalPrice = Helper.getSubTotal(cart);
-    dispatch({ type: 'REMOVE_TO_CART', payload: { cart, totalPrice } });
+    const subTotal = Helper.getSubTotal(cart);
+    dispatch({ type: 'REMOVE_TO_CART', payload: { cart, subTotal } });
   };
 
   const increaseProductInCartAction = async (_id, skuVariant) => {
     const cart = Helper.increaseProductInCartLocalStorage(_id, skuVariant);
-    const totalPrice = Helper.getSubTotal(cart);
-    dispatch({ type: 'INCREASE_PRODUCT_IN_CART', payload: { cart, totalPrice } });
+    const subTotal = Helper.getSubTotal(cart);
+    dispatch({ type: 'INCREASE_PRODUCT_IN_CART', payload: { cart, subTotal } });
   };
 
   const decreaseProductInCartAction = async (_id, skuVariant) => {
     const cart = Helper.decreaseProductInCartLocalStorage(_id, skuVariant);
-    const totalPrice = Helper.getSubTotal(cart);
-    dispatch({ type: 'DECREASE_PRODUCT_IN_CART', payload: { cart, totalPrice } });
+    const subTotal = Helper.getSubTotal(cart);
+    dispatch({ type: 'DECREASE_PRODUCT_IN_CART', payload: { cart, subTotal } });
   };
 
   const nextStepPaymentAction = async (step) => {

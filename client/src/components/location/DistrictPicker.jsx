@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 DistrictPicker.propTypes = {
   getFieldProps: PropTypes.func,
-  touched: PropTypes.bool,
+  touched: PropTypes.any,
   errors: PropTypes.object,
   label: PropTypes.string.isRequired,
   value: PropTypes.string,
@@ -65,6 +65,11 @@ export default function DistrictPicker({
     />
   );
 }
+
+export const getDistrictCode = (name) => {
+  const district = DISTRICTS.find((d) => d.name === name);
+  return district?.code;
+};
 
 const DISTRICTS = [
   {

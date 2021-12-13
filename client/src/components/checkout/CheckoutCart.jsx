@@ -25,7 +25,7 @@ export default function CheckoutCart() {
     cart,
     quantityInCart,
     activeStep,
-    totalPrice,
+    subTotal,
     removeToCart,
     increaseProductInCart,
     decreaseProductInCart,
@@ -120,10 +120,10 @@ export default function CheckoutCart() {
 
           <Grid item xs={12} md={4}>
             <CheckoutSummary
-              total={totalPrice}
+              total={subTotal}
               // enableDiscount
               discount={discount}
-              subtotal={totalPrice}
+              subtotal={subTotal}
               onApplyDiscount={handleApplyDiscount}
             />
             <Button fullWidth size="large" type="submit" variant="contained" disabled={values.products.length === 0}>

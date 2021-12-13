@@ -99,6 +99,7 @@ export default function AddressForm({ addressData, open, onClose, onSubmit, isLo
         setAddressType(t('address.type-other'));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addressData]);
 
   const handleChangeAddressType = (e) => {

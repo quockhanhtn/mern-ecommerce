@@ -1,210 +1,179 @@
-import faker from 'faker';
-import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+// icons
 import { Icon } from '@iconify/react';
-import { useState } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
+import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
 // material
-import { Box, Grid, Card, Button, Typography, TextField, Stack, Link, FormHelperText } from '@material-ui/core';
-// redux
-import { useDispatch, useSelector } from 'react-redux';
-import { useTheme, withStyles } from '@material-ui/core/styles';
-//
-import { useSnackbar } from 'notistack';
+import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Collapse,
+  FormControlLabel,
+  FormHelperText,
+  Grid,
+  Radio,
+  RadioGroup,
+  Stack,
+  Typography,
+  TextField
+} from '@material-ui/core';
+// form validation
 import { Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Link as RouterLink } from 'react-router-dom';
-import CheckoutSummary from './CheckoutSummary';
-import CheckoutNewAddressForm from './CheckoutNewAddressForm';
-import Label from '../Label';
-import * as Helper from '../../helper/cartHelper';
+// hooks
+import { useDispatch, useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
+import useLocales from '../../hooks/useLocales';
 import useToCart from '../../hooks/useToCart';
 import useAuth from '../../hooks/useAuth';
-import { PATH_DASHBOARD, PATH_AUTH } from '../../routes/paths';
-import useLocales from '../../hooks/useLocales';
-import { MotionInView, varFadeInUp } from '../animate';
-import ProvincePicker from '../ProvincePicker';
-import DistrictPicker from '../DistrictPicker';
-import SubDistrictPicker from '../SubDistrictPicker';
+// components
+import { MHidden } from '../@material-extend';
+import Label from '../Label';
+import AddressPicker from '../location/AddressPicker';
+import AddressForm from '../account/AddressForm';
+import CheckoutSummary from './CheckoutSummary';
+import CheckoutDelivery from './CheckoutDelivery';
+// other
+import * as cartHelper from '../../helper/cartHelper';
+// actions
+import { getAllAddresses, createAddress } from '../../actions/account';
 
 // ----------------------------------------------------------------------
 
-const ADDRESS_BOOKS = [
-  {
-    receiver: faker.name.findName(),
-    fullAddress: faker.address.streetAddress(),
-    phone: faker.phone.phoneNumberFormat(),
-    addressType: 'Home',
-    isDefault: true
-  },
-  {
-    receiver: faker.name.findName(),
-    fullAddress: faker.address.streetAddress(),
-    phone: faker.phone.phoneNumberFormat(),
-    addressType: 'Office',
-    isDefault: false
-  },
-  {
-    receiver: faker.name.findName(),
-    fullAddress: faker.address.streetAddress(),
-    phone: faker.phone.phoneNumberFormat(),
-    addressType: 'Office',
-    isDefault: false
-  },
-  {
-    receiver: faker.name.findName(),
-    fullAddress: faker.address.streetAddress(),
-    phone: faker.phone.phoneNumberFormat(),
-    addressType: 'Office',
-    isDefault: false
-  }
-];
-
-AddressItem.propTypes = {
-  address: PropTypes.object,
-  onNextStep: PropTypes.func,
-  onCreateBilling: PropTypes.func
-};
-
-function AddressItem({ address, onNextStep, onCreateBilling }) {
-  const { receiver, fullAddress, addressType, phone, isDefault } = address;
-
-  const handleCreateBilling = () => {
-    onCreateBilling(address);
-    onNextStep();
-  };
-
-  return (
-    <Card sx={{ p: 3, mb: 3, position: 'relative' }}>
-      <Box sx={{ mb: 1, display: 'flex', alignItems: 'center' }}>
-        <Typography variant="subtitle1">{receiver}</Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          &nbsp;({addressType})
-        </Typography>
-        {isDefault && (
-          <Label color="info" sx={{ ml: 1 }}>
-            Default
-          </Label>
-        )}
-      </Box>
-      <Typography variant="body2" gutterBottom>
-        {fullAddress}
-      </Typography>
-      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-        {phone}
-      </Typography>
-
-      <Box
-        sx={{
-          mt: 3,
-          display: 'flex',
-          position: { sm: 'absolute' },
-          right: { sm: 24 },
-          bottom: { sm: 24 }
-        }}
-      >
-        {!isDefault && (
-          <Button variant="outlined" size="small" color="inherit">
-            Delete
-          </Button>
-        )}
-        <Box sx={{ mx: 0.5 }} />
-        <Button variant="outlined" size="small" onClick={handleCreateBilling}>
-          Deliver to this Address
-        </Button>
-      </Box>
-    </Card>
-  );
-}
+const OptionStyle = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 2.5),
+  justifyContent: 'space-between',
+  borderRadius: theme.shape.borderRadius,
+  transition: theme.transitions.create('all'),
+  border: `solid 1px ${theme.palette.grey[500_32]}`
+}));
 
 export default function CheckoutBillingAddress() {
-  const dispatch = useDispatch();
   const { t } = useLocales();
   const theme = useTheme();
-  const { user } = useAuth();
-  const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const { cart, activeStep, backStepPayment, nextStepPayment } = useToCart();
-  const [subTotal, setSubTotal] = useState(Helper.getSubTotal(cart));
+
+  const { user } = useAuth();
+  const dispatch = useDispatch();
+  const { list: addressList, isLoading, error } = useSelector((state) => state.account.addresses);
+
+  const [openForm, setOpenForm] = useState(false);
+  const [deliveryAddress, setDeliveryAddress] = useState(null);
+
+  const { cart, subTotal, activeStep, backStepPayment, nextStepPayment } = useToCart();
   const discount = cart.length > 0 ? 50000 : 0;
-  const [total, setTotal] = useState(Helper.getSubTotal(cart) - discount);
-  const [province, setProvince] = useState(null);
-  const [district, setDistrict] = useState(null);
-  const [subDistrict, setSubDistrict] = useState(null);
-  const initInfo = Helper.getBillingInfo();
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const initInfo = cartHelper.getBillingInfo();
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  useEffect(() => {
+    dispatch(getAllAddresses());
+  }, [user, dispatch]);
 
-  const handleNextStep = () => {
-    if (user) {
-      // TODD
-    } else if (!province || !district || !subDistrict) {
-      enqueueSnackbar('Vui lòng điền đầy đủ thông tin giao hàng!', {
-        variant: 'error'
-      });
-    } else {
-      nextStepPayment(activeStep).then(() => {
-        enqueueSnackbar('Next step to cart successfully', {
-          variant: 'success'
-        });
-      });
+  useEffect(() => {
+    if (addressList.length > 0) {
+      const add = addressList.find((item) => item._id === initInfo.addressId);
+      if (add) {
+        setDeliveryAddress(add);
+      }
     }
-  };
+  }, [addressList, initInfo.addressId]);
 
-  const handleBackStep = () => {
-    backStepPayment(activeStep).then(() => {
-      enqueueSnackbar('Back step to cart successfully', {
-        variant: 'success'
-      });
-    });
-  };
+  const receiveOpts = [
+    {
+      value: 'store',
+      title: t('cart.receive-at-store'),
+      description: t('cart.receive-at-store-desc'),
+      icons: ['/static/icons/ic_store.svg']
+    },
+    {
+      value: 'delivery',
+      title: t('cart.delivery-to-home'),
+      description: t('cart.delivery-to-home-desc'),
+      icons: ['/static/icons/ic_home-delivery.svg']
+    }
+  ];
 
-  const handleCreateBilling = (value) => {
-    // dispatch(createBilling(value));
-  };
+  const DELIVERY_OPTIONS = [
+    {
+      value: 0,
+      title: 'Standard delivery (Free)',
+      description: 'Delivered on Monday, August 12'
+    },
+    {
+      value: 2,
+      title: 'Fast delivery ($2,00)',
+      description: 'Delivered on Monday, August 5'
+    }
+  ];
 
-  const renderAddressOfUser = () => (
-    <div>
-      {ADDRESS_BOOKS.map((address, index) => (
-        <AddressItem key={index} address={address} onNextStep={handleNextStep} onCreateBilling={handleCreateBilling} />
-      ))}
-    </div>
-  );
+  const OrderInfoSchema = Yup.object().shape({
+    name: Yup.string()
+      .required(t('address.full-name-required'))
+      .min(3, t('address.full-name-min'))
+      .max(50, t('address.full-name-max')),
+    phone: Yup.string()
+      .required(t('address.phone-required'))
+      .matches(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, t('address.phone-invalid')),
 
-  const phoneRegExp = '(84|0[3|5|7|8|9])+([0-9]{8})\\b';
-  const PersonInfo = Yup.object().shape({
-    fullName: Yup.string().required('Full Name is required'),
-    phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid').required('Phone is required'),
-    email: Yup.string().email('Must be a valid email').required('Email is required'),
-    addressDetail: Yup.string().required('Address is required'),
-    province: Yup.string().required('Province is required'),
-    district: Yup.string().required('District is required'),
-    subDistrict: Yup.string().required('Sub District is required')
+    receiveMethod: Yup.string().required(t('cart.receive-method-required')),
+    isReceiveAtStore: Yup.boolean().required(),
+
+    // only for delivery
+    street: Yup.string().when('isReceiveAtStore', {
+      is: false,
+      then: Yup.string().required(t('address.street-required')),
+      otherwise: Yup.string().notRequired()
+    }),
+    ward: Yup.string().when('isReceiveAtStore', {
+      is: false,
+      then: Yup.string().required(t('address.ward-required')),
+      otherwise: Yup.string().notRequired()
+    }),
+    district: Yup.string().when('isReceiveAtStore', {
+      is: false,
+      then: Yup.string().required(t('address.district-required')),
+      otherwise: Yup.string().notRequired()
+    }),
+    province: Yup.string().when('isReceiveAtStore', {
+      is: false,
+      then: Yup.string().required(t('address.province-required')),
+      otherwise: Yup.string().notRequired()
+    }),
+    note: Yup.string()
   });
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      fullName: initInfo.fullName || '',
+      name: initInfo.name || '',
       phone: initInfo.phone || '',
-      email: initInfo.email || '',
-      addressDetail: initInfo.addressDetail || '',
-      province: province?.name || '',
-      district: district?.name || '',
-      subDistrict: subDistrict?.name || '',
-      moreInfo: initInfo.moreInfo || ''
+
+      receiveMethod: initInfo.receiveMethod || 'delivery',
+      isReceiveAtStore: initInfo.isReceiveAtStore || initInfo.receiveMethod === 'store',
+
+      street: initInfo.street || '',
+      ward: initInfo?.ward || '',
+      district: initInfo?.district || '',
+      province: initInfo?.province || '',
+      note: initInfo.note || ''
     },
-    validationSchema: PersonInfo,
-    onSubmit: async () => {
+    validationSchema: OrderInfoSchema,
+    onSubmit: async (values, { setSubmitting }) => {
+      console.log('Submit', {
+        values,
+        errors
+      });
       try {
-        Helper.saveBillingInfo(values);
+        cartHelper.saveBillingInfo(values);
         handleNextStep();
+        setSubmitting(true);
       } catch (e) {
         enqueueSnackbar('Lỗi', {
           variant: 'error'
@@ -215,154 +184,242 @@ export default function CheckoutBillingAddress() {
 
   const { errors, values, touched, handleSubmit, setFieldValue, getFieldProps } = formik;
 
-  const handleChangeProvince = (newValue) => {
-    setProvince(newValue);
-    setDistrict(null);
-    setSubDistrict(null);
+  const handleAddAddress = () => {
+    setOpenForm(true);
   };
 
-  const handleChangeDistrict = (newValue) => {
-    setDistrict(newValue);
-    setSubDistrict(null);
+  const handleSaveAddress = (data) => {
+    dispatch(createAddress(data)).then(() => {
+      setDeliveryAddress(addressList[addressList.length - 1]);
+    });
+    setOpenForm(false);
   };
 
-  const handleChangeSubDistrict = (newValue) => {
-    setSubDistrict(newValue);
+  const handleClose = () => {
+    setOpenForm(false);
   };
 
-  const renderAddressOfNotUser = () => (
-    <FormikProvider value={formik}>
-      <Form>
-        <Stack spacing={3}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="subtitle2">Thông tin thanh toán</Typography>
-            {!user && (
-              <Stack direction="row">
-                <Typography variant="subtitle2">Bạn đã có tài khoản?</Typography>
-                <Link to={PATH_AUTH.login} color="inherit" component={RouterLink} sx={{ textDecoration: '' }}>
-                  <Typography
-                    variant="subtitle2"
-                    component="span"
-                    sx={{ color: 'primary.main', textDecoration: 'none' }}
-                  >
-                    &nbsp;Đăng nhập ngay
-                  </Typography>
-                </Link>
-              </Stack>
-            )}
-          </Box>
-          <Stack direction="row" spacing={3} sx={{ marginBottom: theme.spacing(2) }}>
-            <TextField
-              fullWidth
-              label="Full Name"
-              {...getFieldProps('fullName')}
-              error={Boolean(touched.fullName && errors.fullName)}
-              helperText={touched.fullName && errors.fullName}
-              size="small"
-            />
-            <TextField
-              fullWidth
-              label="Phone"
-              {...getFieldProps('phone')}
-              error={Boolean(touched.phone && errors.phone)}
-              helperText={touched.phone && errors.phone}
-              size="small"
-            />
-          </Stack>
-          <TextField
-            fullWidth
-            label="Email"
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
-            size="small"
-          />
-          <TextField
-            fullWidth
-            label="Address"
-            {...getFieldProps('addressDetail')}
-            error={Boolean(touched.addressDetail && errors.addressDetail)}
-            helperText={touched.addressDetail && errors.addressDetail}
-            size="small"
-          />
-          <Stack direction="row" spacing={3} sx={{ marginBottom: theme.spacing(2) }}>
-            <ProvincePicker
-              label="Tỉnh/Thành"
-              onChange={(newValue) => handleChangeProvince(newValue)}
-              value={province?.name}
-              required
-              fullWidth
-              size="small"
-              touched={touched}
-              errors={errors}
-            />
-            <DistrictPicker
-              label="Quận/Huyện"
-              defaultProvinceCode={province?.code}
-              onChange={(newValue) => handleChangeDistrict(newValue)}
-              value={district?.name}
-              required
-              fullWidth
-              size="small"
-              touched={touched}
-              errors={errors}
-            />
-            <SubDistrictPicker
-              label="Phường/Xã"
-              defaultDistrictCode={district?.code}
-              onChange={(newValue) => handleChangeSubDistrict(newValue)}
-              value={subDistrict?.name}
-              required
-              fullWidth
-              size="small"
-              touched={touched}
-              errors={errors}
-            />
-          </Stack>
-          <TextField
-            fullWidth
-            label="More Info (Example: Delivery time)"
-            {...getFieldProps('moreInfo')}
-            error={Boolean(touched.moreInfo && errors.moreInfo)}
-            helperText={touched.moreInfo && errors.moreInfo}
-            size="small"
-          />
-          <Button fullWidth size="large" type="submit" variant="contained">
-            Tiếp tục
-          </Button>
-        </Stack>
-      </Form>
-    </FormikProvider>
+  // eslint-disable-next-line no-unused-vars
+  const handleChangeAddress = (e, value) => {
+    const selectedAddress = addressList.find((address) => address._id === e.target.value);
+    setDeliveryAddress(selectedAddress);
+  };
+
+  const handleChangeReceiveMethod = (_, value) => {
+    if (value === 'delivery') {
+      setFieldValue('isReceiveAtStore', false);
+    } else {
+      setFieldValue('isReceiveAtStore', true);
+    }
+    setFieldValue('receiveMethod', value);
+  };
+
+  const handleApplyShipping = () => {
+    //
+  };
+
+  const handleNextStep = () => {
+    console.log('Submit', {
+      values,
+      errors
+    });
+    nextStepPayment(activeStep);
+  };
+
+  const handleBackStep = () => {
+    backStepPayment(activeStep);
+  };
+
+  const renderUserSelectAddress = () => (
+    <>
+      <TextField
+        select
+        fullWidth
+        label={t('address.title')}
+        {...getFieldProps('addressId')}
+        SelectProps={{ native: true }}
+        onChange={handleChangeAddress}
+        value={deliveryAddress?._id || ''}
+      >
+        {addressList.map((add, index) => (
+          <option key={`address-item-${index}`} value={add._id}>
+            {`${add.name} ${add.phone} - ${add.street}, ${add.ward}, ${add.district}, ${add.province}`}
+          </option>
+        ))}
+      </TextField>
+
+      <Button
+        id="add-card"
+        type="button"
+        size="small"
+        startIcon={<Icon icon={plusFill} width={20} height={20} />}
+        onClick={handleAddAddress}
+        sx={{ my: 3 }}
+      >
+        {t('address.add-title')}
+      </Button>
+    </>
+  );
+
+  const renderInputAddressForGuest = () => (
+    <Stack spacing={{ xs: 2, sm: 3 }} sx={{ mb: 3 }}>
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+        <TextField
+          fullWidth
+          label={t('address.full-name')}
+          {...getFieldProps('name')}
+          error={Boolean(touched.name && errors.name)}
+          helperText={touched.name && errors.name}
+        />
+        <TextField
+          fullWidth
+          label={t('address.phone')}
+          {...getFieldProps('phone')}
+          error={Boolean(touched.phone && errors.phone)}
+          helperText={touched.phone && errors.phone}
+        />
+      </Stack>
+
+      <AddressPicker formik={formik} />
+
+      <TextField fullWidth label={t('address.note')} {...getFieldProps('note')} />
+    </Stack>
   );
 
   return (
     <>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={8}>
-          {user && renderAddressOfUser()}
-          {!user && renderAddressOfNotUser()}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-            <Button size="small" color="inherit" onClick={handleBackStep} startIcon={<Icon icon={arrowIosBackFill} />}>
-              Back
-            </Button>
-            {user && (
-              <Button size="small" onClick={handleClickOpen} startIcon={<Icon icon={plusFill} />}>
-                Add new address
+      <FormikProvider value={formik} noValidate onSubmit={handleSubmit}>
+        <Form autoComplete="off">
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={8}>
+              <Card>
+                <CardHeader title={t('cart.receive-method')} />
+                <CardContent>
+                  <RadioGroup row {...getFieldProps('receiveMethod')} onChange={handleChangeReceiveMethod}>
+                    <Grid container spacing={2}>
+                      {receiveOpts.map((method) => {
+                        const { value, title, icons, description } = method;
+                        const isDelivery = value === 'delivery';
+                        const isStore = value === 'store';
+
+                        return (
+                          <Grid key={title} item xs={12}>
+                            <OptionStyle
+                              sx={{
+                                ...(values.receiveMethod === value && {
+                                  boxShadow: (theme) => theme.customShadows.z8
+                                }),
+                                ...((isDelivery || isStore) && { flexWrap: 'wrap' })
+                              }}
+                            >
+                              <FormControlLabel
+                                value={value}
+                                control={<Radio checkedIcon={<Icon icon={checkmarkCircle2Fill} />} />}
+                                label={
+                                  <Box sx={{ ml: 1 }}>
+                                    <Typography variant="subtitle2">{title}</Typography>
+                                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                      {description}
+                                    </Typography>
+                                  </Box>
+                                }
+                                sx={{ flexGrow: 1, py: 3 }}
+                              />
+                              <MHidden width="smDown">
+                                <Box sx={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+                                  {icons.map((icon) => (
+                                    <Box
+                                      key={icon}
+                                      component="img"
+                                      alt="logo card"
+                                      src={icon}
+                                      sx={{ '&:last-child': { ml: 1 }, width: '70px' }}
+                                    />
+                                  ))}
+                                </Box>
+                              </MHidden>
+
+                              {isDelivery && (
+                                <Collapse in={values.receiveMethod === 'delivery'} sx={{ width: '100%' }}>
+                                  {user ? renderUserSelectAddress() : renderInputAddressForGuest()}
+                                </Collapse>
+                              )}
+                              {isStore && (
+                                <Collapse in={values.receiveMethod === 'store'} sx={{ width: '100%' }}>
+                                  <Stack spacing={{ xs: 2, sm: 3 }} sx={{ mb: 3 }}>
+                                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                                      <TextField
+                                        fullWidth
+                                        label={t('address.full-name')}
+                                        {...getFieldProps('name')}
+                                        error={Boolean(touched.name && errors.name)}
+                                        helperText={touched.name && errors.name}
+                                      />
+                                      <TextField
+                                        fullWidth
+                                        label={t('address.phone')}
+                                        {...getFieldProps('phone')}
+                                        error={Boolean(touched.phone && errors.phone)}
+                                        helperText={touched.phone && errors.phone}
+                                      />
+                                    </Stack>
+                                  </Stack>
+                                </Collapse>
+                              )}
+                            </OptionStyle>
+                          </Grid>
+                        );
+                      })}
+                    </Grid>
+                  </RadioGroup>
+
+                  {errors.receiveMethod && (
+                    <FormHelperText error>
+                      <Box component="span" sx={{ px: 2 }}>
+                        {touched.receiveMethod && errors.receiveMethod}
+                      </Box>
+                    </FormHelperText>
+                  )}
+                </CardContent>
+              </Card>
+
+              {values.receiveMethod === 'delivery' && (
+                <CheckoutDelivery
+                  formik={formik}
+                  onApplyShipping={handleApplyShipping}
+                  deliveryOptions={DELIVERY_OPTIONS}
+                  sx={{ mt: 3 }}
+                />
+              )}
+
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                <Button
+                  size="small"
+                  color="inherit"
+                  onClick={handleBackStep}
+                  startIcon={<Icon icon={arrowIosBackFill} />}
+                >
+                  {t('common.back')}
+                </Button>
+              </Box>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <CheckoutSummary subtotal={subTotal} total={subTotal} discount={discount} />
+              <Button type="submit" fullWidth size="large" variant="contained">
+                {t('common.continue')}
               </Button>
-            )}
-          </Box>
-        </Grid>
+            </Grid>
+          </Grid>
+        </Form>
+      </FormikProvider>
 
-        <Grid item xs={12} md={4}>
-          <CheckoutSummary subtotal={subTotal} total={total} discount={discount} />
-        </Grid>
-      </Grid>
-
-      <CheckoutNewAddressForm
-        open={open}
+      <AddressForm
+        addressData={null}
+        open={openForm}
         onClose={handleClose}
-        onNextStep={handleNextStep}
-        onCreateBilling={handleCreateBilling}
+        onSubmit={handleSaveAddress}
+        isLoading={isLoading}
       />
     </>
   );
