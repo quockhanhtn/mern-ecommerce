@@ -20,7 +20,7 @@ import {
   FormControlLabel
 } from '@material-ui/core';
 //
-import { MHidden } from '../../@material-extend';
+import { MHidden } from '../@material-extend';
 
 // ----------------------------------------------------------------------
 

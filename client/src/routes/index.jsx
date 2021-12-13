@@ -182,5 +182,5 @@ const ProductListPage = Loadable(lazy(() => import('../pages/main/ProductListPag
 const ProductDetailPage = Loadable(lazy(() => import('../pages/main/ProductDetailPage')));
 
 // Cart
-const CartPage = Loadable(lazy(() => import('../pages/main/cart/CartPage')));
+const CartPage = Loadable(lazy(() => import('../pages/main/CartPage')));
 const CartPageResult = Loadable(lazy(() => import('../pages/main/cart/CartPageResult')));

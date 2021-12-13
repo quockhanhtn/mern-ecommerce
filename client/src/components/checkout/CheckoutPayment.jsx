@@ -15,11 +15,11 @@ import CheckoutSummary from './CheckoutSummary';
 import CheckoutDelivery from './CheckoutDelivery';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
-import useLocales from '../../../hooks/useLocales';
-import useAuth from '../../../hooks/useAuth';
-import useToCart from '../../../hooks/useToCart';
-import * as Helper from '../../../helper/cartHelper';
-import * as HelperPayment from '../../../helper/paymentHelper';
+import useLocales from '../../hooks/useLocales';
+import useAuth from '../../hooks/useAuth';
+import useToCart from '../../hooks/useToCart';
+import * as Helper from '../../helper/cartHelper';
+import * as HelperPayment from '../../helper/paymentHelper';
 
 // ----------------------------------------------------------------------
 

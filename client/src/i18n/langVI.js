@@ -67,6 +67,38 @@ export default {
     'add-title': 'Thêm địa chỉ',
     'edit-title': 'Chỉnh sửa địa chỉ'
   },
+  cart: {
+    'page-title': 'Giỏ hàng | HK Mobile',
+    title: 'Giỏ hàng',
+    'title-detail': 'Chi tiết giỏ hàng',
+    item: 'sản phẩm',
+    notification: {
+      remove: 'Xóa sản phẩm khỏi giỏ hàng thành công !',
+      increase: 'Tăng số lượng sản phẩm thành công !',
+      decrease: 'Giảm số lượng sản phẩm thành công !'
+    },
+    empty: 'Giỏ hàng trống',
+    'empty-desc': 'Bạn chưa có sản phẩm nào trong giỏ hàng',
+    'empty-action': 'Tiếp tục mua hàng',
+    checkout: 'Thanh toán',
+    order: {
+      summary: 'Thông tin đơn hàng',
+      'sub-total': 'Tổng tiền hàng',
+      'shipping-fee': 'Phí vận chuyển',
+      discount: 'Giảm giá',
+      total: 'Tổng tiền',
+      'include-vat': 'Bao gồm thuế VAT'
+    },
+    step: {
+      1: 'Giỏ hàng',
+      2: 'Thông tin',
+      3: 'Thanh toán'
+    },
+    quantity: 'Số lượng',
+    'unit-price': 'Đơn giá',
+    'amount-price': 'Số tiền',
+    available: 'Còn {{available}} SP'
+  },
   settings: {
     title: 'Cài đặt',
     'full-screen': 'Toàn màn hình',
@@ -209,15 +241,13 @@ export default {
       'name-validation': 'Product name is required',
       desc: 'Product description',
       'desc-validation': 'Product Description is required',
-      price: 'Promotional price',
-      'price-validation': 'Price is required',
-      'market-price': 'Market price',
-      'market-price-validation': 'Market Price is required',
-      code: 'Product code',
-      'code-validation': 'Code is required',
+      price: 'Giá',
+      'price-validation': 'Vui lòng nhập giá tiền',
+      'market-price': 'Giá thị trường',
+      'market-price-validation': 'Vui lòng nhập giá thị trường',
       sku: 'Product sku',
       'sku-validation': 'Sku is required',
-      quantity: 'Quantity',
+      quantity: 'Số lượng',
       'warranty-period': 'Warranty Period',
       'specifications-name': 'Specifications name',
       'specifications-value': 'Specifications value',

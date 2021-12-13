@@ -16,16 +16,16 @@ import * as Yup from 'yup';
 import { Link as RouterLink } from 'react-router-dom';
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutNewAddressForm from './CheckoutNewAddressForm';
-import Label from '../../Label';
-import * as Helper from '../../../helper/cartHelper';
-import useToCart from '../../../hooks/useToCart';
-import useAuth from '../../../hooks/useAuth';
-import { PATH_DASHBOARD, PATH_AUTH } from '../../../routes/paths';
-import useLocales from '../../../hooks/useLocales';
-import { MotionInView, varFadeInUp } from '../../animate';
-import ProvincePicker from '../../ProvincePicker';
-import DistrictPicker from '../../DistrictPicker';
-import SubDistrictPicker from '../../SubDistrictPicker';
+import Label from '../Label';
+import * as Helper from '../../helper/cartHelper';
+import useToCart from '../../hooks/useToCart';
+import useAuth from '../../hooks/useAuth';
+import { PATH_DASHBOARD, PATH_AUTH } from '../../routes/paths';
+import useLocales from '../../hooks/useLocales';
+import { MotionInView, varFadeInUp } from '../animate';
+import ProvincePicker from '../ProvincePicker';
+import DistrictPicker from '../DistrictPicker';
+import SubDistrictPicker from '../SubDistrictPicker';
 
 // ----------------------------------------------------------------------
 
