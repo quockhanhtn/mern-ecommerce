@@ -17,8 +17,8 @@ import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 import useLocales from '../../hooks/useLocales';
 import useAuth from '../../hooks/useAuth';
-import useToCart from '../../hooks/useToCart';
-import * as Helper from '../../helper/cartHelper';
+import useOrderFlow from '../../hooks/useOrderFlow';
+import * as Helper from '../../helper/localStorageHelper';
 import * as HelperPayment from '../../helper/paymentHelper';
 
 // ----------------------------------------------------------------------
@@ -65,9 +65,9 @@ export default function CheckoutPayment() {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const { cart, subTotal, activeStep, backStepPayment, nextStepPayment, getCart } = useToCart();
+  const { cart, subTotal, activeStep, backStepPayment, nextStepPayment, getCart } = useOrderFlow();
   const discount = cart.length > 0 ? 50000 : 0;
-  const initInfo = Helper.getBillingInfo();
+  const initInfo = Helper.getOrderInfo();
 
   const handleCompleteOrder = () => {
     nextStepPayment(activeStep).then(() => {

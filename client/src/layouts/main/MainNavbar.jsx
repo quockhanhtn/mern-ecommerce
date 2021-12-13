@@ -28,7 +28,7 @@ import MenuMobile from './MenuMobile';
 import SearchBar from './SearchBar';
 import AccountPopover from '../common/AccountPopover';
 import LanguagePopover from '../common/LanguagePopover';
-import useToCart from '../../hooks/useToCart';
+import useOrderFlow from '../../hooks/useOrderFlow';
 
 // ----------------------------------------------------------------------
 const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
@@ -106,7 +106,7 @@ const NavbarItem = ({ badgeContent, text, icon, color, ...other }) => {
 export default function MainNavbar({ categoryList }) {
   const { t } = useLocales();
   const isOffset = useOffSetTop(100);
-  const { quantityInCart, getCart } = useToCart();
+  const { quantityInCart, getCart } = useOrderFlow();
   useEffect(() => {
     getCart().then(() => {
       if (isDev) {

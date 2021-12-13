@@ -17,7 +17,7 @@ import {
   CheckoutOrderComplete,
   CheckoutBillingAddress
 } from '../../components/checkout';
-import useToCart from '../../hooks/useToCart';
+import useOrderFlow from '../../hooks/useOrderFlow';
 
 // ----------------------------------------------------------------------
 
@@ -63,7 +63,7 @@ export default function CartPage() {
   const { t } = useLocales();
   const isMountedRef = useIsMountedRef();
 
-  const { cart, activeStep } = useToCart();
+  const { cart, activeStep } = useOrderFlow();
 
   const steps = [
     {

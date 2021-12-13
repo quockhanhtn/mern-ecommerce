@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 // hooks
 import useLocales from '../../hooks/useLocales';
 import useAuth from '../../hooks/useAuth';
-import useToCart from '../../hooks/useToCart';
+import useOrderFlow from '../../hooks/useOrderFlow';
 // components
 import Scrollbar from '../Scrollbar';
 import EmptyContent from '../EmptyContent';
@@ -30,7 +30,7 @@ export default function CheckoutCart() {
     increaseProductInCart,
     decreaseProductInCart,
     nextStepPayment
-  } = useToCart();
+  } = useOrderFlow();
   const { user } = useAuth();
   const discount = cart.length > 0 ? 50000 : 0;
   const isEmptyCart = cart ? cart.length === 0 : true;

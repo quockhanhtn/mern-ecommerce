@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import { createContext, useReducer } from 'react';
-import * as Helper from '../helper/cartHelper';
+import * as Helper from '../helper/localStorageHelper';
 
 // ----------------------------------------------------------------------
 const initialState = {
+  orderInfo: {},
   quantityInCart: 0,
   cart: [],
   activeStep: 0
@@ -54,13 +55,13 @@ const handlers = {
   })
 };
 
-CartProvider.propTypes = {
+OrderProvider.propTypes = {
   children: PropTypes.node.isRequired
 };
 
 const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
 
-const CartContext = createContext({
+const OrderContext = createContext({
   quantityInCart: 0,
   cart: [],
   activeStep: 0,
@@ -75,11 +76,11 @@ const CartContext = createContext({
   getStepPayment: () => Promise.resolve()
 });
 
-CartProvider.propTypes = {
+OrderProvider.propTypes = {
   children: PropTypes.node
 };
 
-function CartProvider({ children }) {
+function OrderProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const getCartAction = async () => {
@@ -89,25 +90,25 @@ function CartProvider({ children }) {
   };
 
   const addToCartAction = async (productInCartInfo) => {
-    const cart = Helper.addProductToCartByLocalStorage(productInCartInfo);
+    const cart = Helper.addProductToCart(productInCartInfo);
     const subTotal = Helper.getSubTotal(cart);
     dispatch({ type: 'ADD_TO_CART', payload: { cart, subTotal } });
   };
 
   const removeToCartAction = async (_id, skuVariant) => {
-    const cart = Helper.removeProductInCartByLocalStorage(_id, skuVariant);
+    const cart = Helper.removeProductInCart(_id, skuVariant);
     const subTotal = Helper.getSubTotal(cart);
     dispatch({ type: 'REMOVE_TO_CART', payload: { cart, subTotal } });
   };
 
   const increaseProductInCartAction = async (_id, skuVariant) => {
-    const cart = Helper.increaseProductInCartLocalStorage(_id, skuVariant);
+    const cart = Helper.increaseProductInCart(_id, skuVariant);
     const subTotal = Helper.getSubTotal(cart);
     dispatch({ type: 'INCREASE_PRODUCT_IN_CART', payload: { cart, subTotal } });
   };
 
   const decreaseProductInCartAction = async (_id, skuVariant) => {
-    const cart = Helper.decreaseProductInCartLocalStorage(_id, skuVariant);
+    const cart = Helper.decreaseProductInCart(_id, skuVariant);
     const subTotal = Helper.getSubTotal(cart);
     dispatch({ type: 'DECREASE_PRODUCT_IN_CART', payload: { cart, subTotal } });
   };
@@ -128,7 +129,7 @@ function CartProvider({ children }) {
   };
 
   return (
-    <CartContext.Provider
+    <OrderContext.Provider
       value={{
         ...state,
         getCart: getCartAction,
@@ -142,8 +143,8 @@ function CartProvider({ children }) {
       }}
     >
       {children}
-    </CartContext.Provider>
+    </OrderContext.Provider>
   );
 }
 
-export { CartContext, CartProvider };
+export { OrderContext, OrderProvider };

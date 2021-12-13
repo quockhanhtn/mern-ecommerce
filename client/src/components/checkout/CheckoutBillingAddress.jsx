@@ -29,7 +29,7 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import useLocales from '../../hooks/useLocales';
-import useToCart from '../../hooks/useToCart';
+import useOrderFlow from '../../hooks/useOrderFlow';
 import useAuth from '../../hooks/useAuth';
 // components
 import { MHidden } from '../@material-extend';
@@ -39,7 +39,7 @@ import AddressForm from '../account/AddressForm';
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutDelivery from './CheckoutDelivery';
 // other
-import * as cartHelper from '../../helper/cartHelper';
+import * as cartHelper from '../../helper/localStorageHelper';
 // actions
 import { getAllAddresses, createAddress } from '../../actions/account';
 
@@ -67,10 +67,10 @@ export default function CheckoutBillingAddress() {
   const [openForm, setOpenForm] = useState(false);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
 
-  const { cart, subTotal, activeStep, backStepPayment, nextStepPayment } = useToCart();
+  const { cart, subTotal, activeStep, backStepPayment, nextStepPayment } = useOrderFlow();
   const discount = cart.length > 0 ? 50000 : 0;
 
-  const initInfo = cartHelper.getBillingInfo();
+  const initInfo = cartHelper.getOrderInfo();
 
   useEffect(() => {
     dispatch(getAllAddresses());
