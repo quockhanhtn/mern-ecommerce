@@ -16,8 +16,8 @@ import {
 } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
 //
-import CountryPicker from '../../CountryPicker';
-import { DialogAnimate } from '../../animate';
+import CountryPicker from '../CountryPicker';
+import { DialogAnimate } from '../animate';
 
 // ----------------------------------------------------------------------
 

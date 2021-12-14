@@ -1,101 +1,59 @@
-import crypto from 'crypto';
-import queryString from 'query-string';
-import dateFormat from 'dateformat';
-import resUtils from "../utils/res-utils.js";
 
-const isDev = (process.env.NODE_ENV === 'dev');
-const baseURL = isDev ? 'http://localhost:3001/api/v1' : 'https://api-mobile7076.herokuapp.com/api/v1';
-const baseURLUI = isDev ? 'http://localhost:3000' : 'https://mern-ecommerce-b848d.web.app';
+import mongoose from 'mongoose';
+import vnpayService from '../services/vnpay.service.js';
+import Order from '../models/order.model.js';
+import Payment from '../models/payment.model.js';
+import constants from '../constants.js';
 
-export const createPaymentVnPay = async (req, res, next) => {
+
+export const payByVnpay = async (req, res, next) => {
   try {
-    const ipAddr = req.ip;
-    const tmnCode = 'QL509E3K';
-    const secretKey = 'OVOALYVDSIREXCICBCAANMFTAEDVNNCV';
-    let vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    const returnUrl = `${baseURL}/payment/vn_pay/callback`;
+    const result = await vnpayService.checkPaymentStatus(req.query);
+    let message = '';
 
-    const date = new Date();
+    if (result.isSuccess) {
+      const paidDate = new Date(
+        Number.parseInt(result.data.payDate.substring(0, 4)),
+        Number.parseInt(result.data.payDate.substring(4, 6)),
+        Number.parseInt(result.data.payDate.substring(6, 8)),
+        Number.parseInt(result.data.payDate.substring(8, 10)),
+        Number.parseInt(result.data.payDate.substring(10, 12)),
+        Number.parseInt(result.data.payDate.substring(12, 14))
+      );
 
-    const createDate = dateFormat(date, 'yyyymmddHHmmss');
-    const orderId = dateFormat(date, 'HHmmss');
-    const amount = req.body.amount;
-    const bankCode = req.body.bankCode;
+      const order = await Order.findById(result.data.orderId);
+      if (order.total === result.data.amount / 100) {
+        order.status = constants.ORDER.PAYMENT_STATUS.PAID;
+        order.paymentStatus = constants.ORDER.PAYMENT_STATUS.PAID;
+        await Order.updateOne({ _id: order._id }, order);
+      }
 
-    const orderInfo = req.body.orderDescription;
-    const orderType = req.body.orderType;
-    let locale = req.body.language;
-    if (locale === null || locale === '') {
-      locale = 'vn';
+      const payment = new Payment({
+        _id: new mongoose.Types.ObjectId(),
+        order: result.data.orderId,
+        amount: result.data.amount,
+        paidDate,
+        desc: `
+          Mã giao dịch VNPAY: ${result.data.transactionNo}
+          Số tiền: ${result.data.amount}
+          Mã Ngân hàng thanh toán: ${result.data.bankCode}
+          Mã giao dịch tại Ngân hàng: ${result.data.bankTranNo}
+          Loại tài khoản/thẻ khách hàng sử dụng: ${result.data.cardType}
+        `
+      });
+
+      await payment.save();
+      message = 'Thanh toán thành công';
+    } else {
+      message = 'Thanh toán thất bại';
     }
-    const currCode = 'VND';
-    let vnp_Params = {};
-    vnp_Params['vnp_Version'] = '2.1.0';
-    vnp_Params['vnp_Command'] = 'pay';
-    vnp_Params['vnp_TmnCode'] = tmnCode;
-    // vnp_Params['vnp_Merchant'] = ''
-    vnp_Params['vnp_Locale'] = locale;
-    vnp_Params['vnp_CurrCode'] = currCode;
-    vnp_Params['vnp_TxnRef'] = orderId;
-    vnp_Params['vnp_OrderInfo'] = orderInfo;
-    vnp_Params['vnp_OrderType'] = orderType;
-    vnp_Params['vnp_Amount'] = amount * 100;
-    vnp_Params['vnp_ReturnUrl'] = returnUrl;
-    vnp_Params['vnp_IpAddr'] = ipAddr;
-    vnp_Params['vnp_CreateDate'] = createDate;
-    if (bankCode !== null && bankCode !== '') {
-      vnp_Params['vnp_BankCode'] = bankCode;
-    }
 
-    vnp_Params = sortObject(vnp_Params);
-
-    const signData = queryString.stringify(vnp_Params, { encode: false });
-    const hmac = crypto.createHmac("sha512", secretKey);
-    const signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
-    vnp_Params['vnp_SecureHash'] = signed;
-    vnpUrl += '?' + queryString.stringify(vnp_Params, { encode: false });
-    resUtils.status200(res, 'Get link successfully', vnpUrl);
-  } catch (err) {
-    next(err);
-  }
+    // close window
+    res.send(`
+      <script>
+        alert('${message}');
+        window.open('${result.data.clientUrl}/order/${result.data.orderId}', '_self', '')
+      </script>
+    `);
+  } catch (err) { next(err); }
 };
-
-export const paymentVnPayCallBack = async (req, res, next) => {
-  let vnp_Params = req.query;
-  const secureHash = vnp_Params['vnp_SecureHash'];
-  delete vnp_Params['vnp_SecureHash'];
-  delete vnp_Params['vnp_SecureHashType'];
-
-  vnp_Params = sortObject(vnp_Params);
-
-  const tmnCode = 'QL509E3K';
-  const secretKey = 'OVOALYVDSIREXCICBCAANMFTAEDVNNCV';
-
-  const signData = queryString.stringify(vnp_Params, {encode: false});
-  const hmac = crypto.createHmac("sha512", secretKey);
-  const signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
-  
-  if (secureHash === signed) {
-    const urlSuccess = `${baseURLUI}/cart/payment`;
-    res.redirect(`${urlSuccess}/${vnp_Params['vnp_TxnRef']}?code=${vnp_Params['vnp_ResponseCode']}`);
-  } else {
-    const urlError = `${baseURLUI}/404`;
-    res.redirect(urlError);
-  }
-};
-
-function sortObject(obj) {
-  const sorted = {};
-  const str = [];
-  let key;
-  for (key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      str.push(encodeURIComponent(key));
-    }
-  }
-  str.sort();
-  for (key = 0; key < str.length; key++) {
-    sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
-  }
-  return sorted;
-}

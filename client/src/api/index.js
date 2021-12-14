@@ -83,6 +83,10 @@ export const createUser = (newUser) => API.post('/users/customer', newUser);
 export const updateUser = (identity, updatedUser) => API.patch(`/users/customer/${identity}`, updatedUser);
 export const deleteUser = (identity) => API.delete(`/users/customer/${identity}`);
 
-// ----------------------------Payment -----------------------
+// ----------------------------Payment--------------------------------
 export const redirectVnPay = (paymentInfo) => API.post(`/payment/vn_pay`, paymentInfo);
 export const paymentCallback = () => API.get(`/cart/payment`);
+
+// ----------------------------Order----------------------------------
+export const createOrder = (newOrder) => API.post('/orders', newOrder);
+export const getOrder = (id) => API.get(`/orders/${id}`);

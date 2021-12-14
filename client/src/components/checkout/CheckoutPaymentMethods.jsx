@@ -5,6 +5,7 @@ import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import {
+  Alert,
   Box,
   Card,
   Grid,
@@ -16,11 +17,12 @@ import {
   RadioGroup,
   CardHeader,
   CardContent,
-  FormHelperText,
   FormControlLabel
 } from '@material-ui/core';
 //
-import { MHidden } from '../../@material-extend';
+import { useSnackbar } from 'notistack';
+import useLocales from '../../hooks/useLocales';
+import { MHidden } from '../@material-extend';
 
 // ----------------------------------------------------------------------
 
@@ -38,28 +40,45 @@ const OptionStyle = styled('div')(({ theme }) => ({
 
 CheckoutPaymentMethods.propTypes = {
   formik: PropTypes.object,
-  paymentOptions: PropTypes.array,
-  cardOptions: PropTypes.array
+  paymentOptions: PropTypes.array
 };
 
-export default function CheckoutPaymentMethods({ paymentOptions, cardOptions, formik }) {
+export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
+  const { t } = useLocales();
+  const { enqueueSnackbar } = useSnackbar();
   const { errors, touched, values, getFieldProps } = formik;
 
+  const cardOptions = [
+    { value: 'ViSa1', label: '**** **** **** 1212 - Jimmy Holland' },
+    { value: 'ViSa2', label: '**** **** **** 2424 - Shawn Stokes' },
+    { value: 'MasterCard', label: '**** **** **** 4545 - Cole Armstrong' }
+  ];
+
+  if (errors.paymentMethod && touched.paymentMethod) {
+    enqueueSnackbar(errors.paymentMethod, { variant: 'error' });
+  }
+
   return (
-    <Card sx={{ my: 3 }}>
-      <CardHeader title="Payment options" />
+    <Card>
+      <CardHeader title={t('cart.payment-method')} />
       <CardContent>
-        <RadioGroup row {...getFieldProps('payment')}>
+        {errors.paymentMethod && touched.paymentMethod && (
+          <Alert sx={{ mb: 2 }} severity="error">
+            {errors.paymentMethod}
+          </Alert>
+        )}
+
+        <RadioGroup row {...getFieldProps('paymentMethod')}>
           <Grid container spacing={2}>
             {paymentOptions.map((method) => {
-              const { value, title, icons, description } = method;
+              const { value, title, icons, description, isDevelop } = method;
               const hasChildren = value === 'credit_card';
 
               return (
                 <Grid key={title} item xs={12}>
                   <OptionStyle
                     sx={{
-                      ...(values.payment === value && {
+                      ...(values.paymentMethod === value && {
                         boxShadow: (theme) => theme.customShadows.z8
                       }),
                       ...(hasChildren && { flexWrap: 'wrap' })
@@ -67,6 +86,7 @@ export default function CheckoutPaymentMethods({ paymentOptions, cardOptions, fo
                   >
                     <FormControlLabel
                       value={value}
+                      disabled={isDevelop}
                       control={<Radio checkedIcon={<Icon icon={checkmarkCircle2Fill} />} />}
                       label={
                         <Box sx={{ ml: 1 }}>
@@ -86,14 +106,14 @@ export default function CheckoutPaymentMethods({ paymentOptions, cardOptions, fo
                             component="img"
                             alt="logo card"
                             src={icon}
-                            sx={{ '&:last-child': { ml: 1 } }}
+                            sx={{ '&:last-child': { ml: 1 }, width: 'auto', height: '32px' }}
                           />
                         ))}
                       </Box>
                     </MHidden>
 
                     {hasChildren && (
-                      <Collapse in={values.payment === 'credit_card'} sx={{ width: '100%' }}>
+                      <Collapse in={values.paymentMethod === 'credit_card'} sx={{ width: '100%' }}>
                         <TextField
                           select
                           fullWidth
@@ -126,13 +146,13 @@ export default function CheckoutPaymentMethods({ paymentOptions, cardOptions, fo
           </Grid>
         </RadioGroup>
 
-        {errors.payment && (
+        {/* {errors.paymentMethod && (
           <FormHelperText error>
-            <Box component="span" sx={{ px: 2 }}>
-              {touched.payment && errors.payment}
+            <Box component="span" sx={{ backgroundPositionX: 2 }}>
+              {touched.paymentMethod && errors.paymentMethod}
             </Box>
           </FormHelperText>
-        )}
+        )} */}
       </CardContent>
     </Card>
   );

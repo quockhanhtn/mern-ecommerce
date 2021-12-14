@@ -14,8 +14,9 @@ import {
   CardContent,
   InputAdornment
 } from '@material-ui/core';
+import useLocales from '../../hooks/useLocales';
 // utils
-import { fCurrency, fNumber } from '../../../utils/formatNumber';
+import { fCurrency, fNumber } from '../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
@@ -24,8 +25,6 @@ CheckoutSummary.propTypes = {
   discount: PropTypes.number,
   subtotal: PropTypes.number,
   shipping: PropTypes.number,
-  onEdit: PropTypes.func,
-  enableEdit: PropTypes.bool,
   onApplyDiscount: PropTypes.func,
   enableDiscount: PropTypes.bool,
   sx: PropTypes.object
@@ -33,63 +32,52 @@ CheckoutSummary.propTypes = {
 
 export default function CheckoutSummary({
   total,
-  onEdit,
   discount,
   subtotal,
-  shipping = null,
+  shipping = 0,
   onApplyDiscount,
-  enableEdit = false,
   enableDiscount = false,
   sx
 }) {
-  const displayShipping = shipping !== null ? 'Free' : '-';
+  const { t, currentLang } = useLocales();
 
   return (
     <Card sx={{ mb: 3, ...sx }}>
-      <CardHeader
-        title="Order Summary"
-        action={
-          enableEdit && (
-            <Button size="small" type="button" onClick={onEdit} startIcon={<Icon icon={editFill} />}>
-              Edit
-            </Button>
-          )
-        }
-      />
+      <CardHeader title={t('cart.order.summary')} />
 
       <CardContent>
         <Stack spacing={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Sub Total
+              {t('cart.order.sub-total')}
             </Typography>
             <Typography variant="subtitle2">{`${fNumber(subtotal)} ₫`}</Typography>
           </Stack>
 
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Discount
+              {t('cart.order.discount')}
             </Typography>
-            <Typography variant="subtitle2">{discount ? `${fNumber(discount)} ₫` : '-'}</Typography>
+            <Typography variant="subtitle2">{fCurrency(discount, currentLang.value)}</Typography>
           </Stack>
 
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Shipping
+              {t('cart.order.shipping-fee')}
             </Typography>
-            <Typography variant="subtitle2">{shipping ? fCurrency(shipping) : displayShipping}</Typography>
+            <Typography variant="subtitle2">{fCurrency(shipping, currentLang.value)}</Typography>
           </Stack>
 
           <Divider />
 
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="subtitle1">Total</Typography>
+            <Typography variant="subtitle1">{t('cart.order.total')}</Typography>
             <Box sx={{ textAlign: 'right' }}>
               <Typography variant="subtitle1" sx={{ color: 'error.main' }}>
-                {`${fNumber(total)} ₫`}
+                {fCurrency(total, currentLang.value)}
               </Typography>
               <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
-                (VAT included if applicable)
+                {`(${t('cart.order.include-vat')})`}
               </Typography>
             </Box>
           </Stack>

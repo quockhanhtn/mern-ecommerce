@@ -21,7 +21,9 @@ export default {
       browse: 'Tại đây',
       'thorough-your-machine': 'từ thiết bị của bạn'
     },
-    'no-options': 'Không có tùy chọn'
+    'no-options': 'Không có tùy chọn',
+    continue: 'Tiếp tục',
+    back: 'Quay lại'
   },
   home: {
     'page-title': 'Điện thoại di dộng chính hãng và phụ kiện | HK Mobile',
@@ -67,6 +69,85 @@ export default {
     note: 'Ghi chú',
     'add-title': 'Thêm địa chỉ',
     'edit-title': 'Chỉnh sửa địa chỉ'
+  },
+  cart: {
+    'page-title': 'Giỏ hàng | HK Mobile',
+    title: 'Giỏ hàng',
+    'title-detail': 'Chi tiết giỏ hàng',
+    item: 'sản phẩm',
+    notification: {
+      remove: 'Xóa sản phẩm khỏi giỏ hàng thành công !',
+      increase: 'Tăng số lượng sản phẩm thành công !',
+      decrease: 'Giảm số lượng sản phẩm thành công !'
+    },
+    empty: 'Giỏ hàng trống',
+    'empty-desc': 'Bạn chưa có sản phẩm nào trong giỏ hàng',
+    'empty-action': 'Tiếp tục mua hàng',
+    checkout: 'Thanh toán',
+    order: {
+      summary: 'Thông tin đơn hàng',
+      'sub-total': 'Tổng tiền hàng',
+      'shipping-fee': 'Phí vận chuyển',
+      discount: 'Giảm giá',
+      total: 'Tổng tiền',
+      'include-vat': 'Bao gồm thuế VAT',
+      action: 'Đặt hàng'
+    },
+    step: {
+      1: 'Giỏ hàng',
+      2: 'Thông tin',
+      3: 'Thanh toán'
+    },
+    quantity: 'Số lượng',
+    'unit-price': 'Đơn giá',
+    'amount-price': 'Số tiền',
+    available: 'Còn {{available}} SP',
+    // payment-method
+    'payment-method': 'Phương thức thanh toán',
+    'payment-method-required': 'Vui lòng chọn phương thức thanh toán',
+    'payment-method-cash': 'Tiền mặt',
+    'payment-method-cash-desc': 'Thanh toán bằng tiền mặt tại cửa hàng',
+    'payment-method-cod': 'Thanh toán khi nhận hàng',
+    'payment-method-cod-desc': 'Được kiểm tra và thanh toán khi nhận hàng',
+    'payment-method-vnpay': 'Thanh toán qua VNPAY',
+    'payment-method-vnpay-desc': 'Thanh toán qua VNPAY an toàn và nhanh chóng',
+    'payment-method-paypal': 'Thanh toán qua PayPal',
+    'payment-method-paypal-desc': 'Thanh toán qua PayPal an toàn và nhanh chóng',
+    'payment-method-momo': 'Thanh toán qua ví Momo',
+    'payment-method-momo-desc': 'Thanh toán qua ví Momo an toàn và nhanh chóng',
+    'payment-method-zalopay': 'Thanh toán qua ví ZaloPay',
+    'payment-method-zalopay-desc': 'Thanh toán qua ví ZaloPay an toàn và nhanh chóng',
+    // receive-method
+    'receive-method': 'Phương thức nhận hàng',
+    'receive-method-required': 'Phương thức nhận hàng không được để trống',
+    'receive-at-store': 'Nhận tại cửa hàng',
+    'receive-at-store-desc': 'Nhận và trải nghiệm sản phẩm tại cửa hàng với sự hỗ trợ của nhân viên',
+    'delivery-to-home': 'Giao hàng tại nhà',
+    'delivery-to-home-desc': 'Cung cấp cho chúng tôi địa chỉ, đơn hàng sẽ được giao đến tận nhà cho bạn!'
+  },
+  order: {
+    'page-title': 'Đơn hàng | HK Mobile',
+    title: 'Đơn hàng',
+    // order-status
+    'order-status': 'Trạng thái đơn hàng',
+    'status-pending': 'Chờ xử lý',
+    'status-confirmed': 'Đã xác nhận',
+    'status-shipping': 'Đang giao hàng',
+    'status-cancelled': 'Đã hủy',
+    'status-completed': 'Đã hoàn thành',
+    // payement-method
+    'payment-method': 'Phương thức thanh toán',
+    'payment-method-cash': 'Tiền mặt',
+    'payment-method-cod': 'Thanh toán khi nhận hàng',
+    'payment-method-vnpay': 'Thanh toán qua VNPAY',
+    'payment-method-paypal': 'Thanh toán qua PayPal',
+    'payment-method-momo': 'Thanh toán qua ví Momo',
+    'payment-method-zalopay': 'Thanh toán qua ví ZaloPay',
+    // payment-status
+    'payment-status': 'Trạng thái thanh toán',
+    'payment-status-pending': 'Chưa thanh toán',
+    'payment-status-paid': 'Đã thanh toán',
+    'payment-status-cancelled': 'Hủy thanh toán'
   },
   settings: {
     title: 'Cài đặt',
@@ -215,15 +296,13 @@ export default {
       'name-validation': 'Product name is required',
       desc: 'Product description',
       'desc-validation': 'Product Description is required',
-      price: 'Promotional price',
-      'price-validation': 'Price is required',
-      'market-price': 'Market price',
-      'market-price-validation': 'Market Price is required',
-      code: 'Product code',
-      'code-validation': 'Code is required',
+      price: 'Giá',
+      'price-validation': 'Vui lòng nhập giá tiền',
+      'market-price': 'Giá thị trường',
+      'market-price-validation': 'Vui lòng nhập giá thị trường',
       sku: 'Product sku',
       'sku-validation': 'Sku is required',
-      quantity: 'Quantity',
+      quantity: 'Số lượng',
       'warranty-period': 'Warranty Period',
       'specifications-name': 'Specifications name',
       'specifications-value': 'Specifications value',

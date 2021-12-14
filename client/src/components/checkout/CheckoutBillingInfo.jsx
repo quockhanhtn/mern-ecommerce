@@ -1,40 +1,43 @@
 import PropTypes from 'prop-types';
+// icons
 import { Icon } from '@iconify/react';
 import editFill from '@iconify/icons-eva/edit-fill';
 // material
 import { Card, Button, Typography, CardHeader, CardContent } from '@material-ui/core';
+import useLocales from '../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
 CheckoutBillingInfo.propTypes = {
-  billing: PropTypes.object,
+  orderInfo: PropTypes.object,
   onBackStep: PropTypes.func,
   sx: PropTypes.object
 };
 
-export default function CheckoutBillingInfo({ billingInfo, onBackStep, sx }) {
-  const { fullName, phone, addressDetail, province, district, subDistrict } = billingInfo;
+export default function CheckoutBillingInfo({ orderInfo, onBackStep, sx }) {
+  const { t } = useLocales();
+  const { name, phone, street, province, district, ward } = orderInfo;
 
   return (
     <Card sx={{ mb: 3, ...sx }}>
       <CardHeader
-        title="Billing Address"
+        title={t('address.title')}
         action={
           <Button size="small" type="button" startIcon={<Icon icon={editFill} />} onClick={onBackStep}>
-            Edit
+            {t('common.edit')}
           </Button>
         }
       />
       <CardContent>
         <Typography variant="subtitle2" gutterBottom>
-          {fullName}&nbsp;
+          {name}&nbsp;
           {/* <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}> */}
           {/*  */}
           {/* </Typography> */}
         </Typography>
 
         <Typography variant="body2" gutterBottom>
-          {`${addressDetail}, ${subDistrict}, ${district}, ${province}.`}
+          {`${street}, ${ward}, ${district}, ${province}.`}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           {phone}

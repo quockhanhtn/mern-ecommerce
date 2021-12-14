@@ -14,7 +14,7 @@ import { useSnackbar } from 'notistack';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { MButton, MIconButton } from '../../@material-extend';
 import { fNumber, fShortenNumber } from '../../../utils/formatNumber';
-import useToCart from '../../../hooks/useToCart';
+import useOrderFlow from '../../../hooks/useOrderFlow';
 // --------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -75,7 +75,7 @@ const Incrementer = (props) => {
 
 export default function ProductDetailsSummary({ isLoading, product, indexVariant, handleChangeIndexVariant }) {
   const theme = useTheme();
-  const { addToCart } = useToCart();
+  const { addToCart } = useOrderFlow();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 

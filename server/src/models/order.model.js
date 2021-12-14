@@ -9,6 +9,7 @@ const orderSchema = mongoose.Schema(
   {
     _id: mongoose.Types.ObjectId,
 
+    // get name and phone from address instead
     customer: {
       type: {
         name: { type: String, trim: true, required: true },
@@ -16,7 +17,7 @@ const orderSchema = mongoose.Schema(
       },
       required: false
     },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 
     address: { type: addressSchema, required: false },
     isReceiveAtStore: { type: Boolean, default: false },
@@ -46,11 +47,10 @@ const orderSchema = mongoose.Schema(
       pricePerUnit: { type: Number, required: true }
     }],
 
-    totalPrice: { type: Number, required: true },
-    totalShipping: { type: Number, required: true },
-    totalTax: { type: Number, required: true },
-    totalDiscount: { type: Number, required: true },
-    total: { type: Number, required: true },
+    subTotal: { type: Number, required: true },     // Tổng tiền hàng
+    shippingFee: { type: Number, required: true },  // Phí vận chuyển
+    discount: { type: Number, required: true },     // Giảm giá
+    total: { type: Number, required: true },        // Tổng tiền
 
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -66,7 +66,7 @@ orderSchema.pre('save', function (next) {
     return next(new Error('Invalid customer or user'));
   }
 
-  if(!this.isReceiveAtStore && !this.address) {
+  if (!this.isReceiveAtStore && !this.address) {
     return next(new Error('Missing address'));
   }
 

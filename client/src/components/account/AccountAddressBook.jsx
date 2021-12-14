@@ -9,7 +9,6 @@ import { Box, Card, Button, Typography, Stack, Paper } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllAddresses, createAddress, updateAddress, deleteAddress } from '../../actions/account';
-
 //
 import useLocales from '../../hooks/useLocales';
 //
@@ -21,10 +20,7 @@ import { MButton } from '../@material-extend';
 
 const LEFT_WIDTH = 200;
 
-// InfoItem.defaultProps = {
-//   valueVariant: 'body2'
-// };
-
+// eslint-disable-next-line react/prop-types
 const InfoItem = ({ label, value, valueVariant }) => {
   let display = (
     <Typography variant={valueVariant} sx={{ flex: 1, marginLeft: 3 }}>

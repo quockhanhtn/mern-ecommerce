@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+// icons
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import minusFill from '@iconify/icons-eva/minus-fill';
@@ -17,14 +18,11 @@ import {
   Typography,
   TableContainer
 } from '@material-ui/core';
+import useLocales from '../../hooks/useLocales';
 // utils
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import getColorName from '../../../utils/getColorName';
-import { fCurrency, fNumber } from '../../../utils/formatNumber';
+import { fCurrency } from '../../utils/formatNumber';
 //
-import { MIconButton } from '../../@material-extend';
-import { getAllProducts } from '../../../actions/products';
+import { MIconButton } from '../@material-extend';
 
 // ----------------------------------------------------------------------
 
@@ -50,14 +48,15 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
 
 Incrementer.propTypes = {
   available: PropTypes.number,
+  availableText: PropTypes.string,
   quantity: PropTypes.number,
   onIncrease: PropTypes.func,
   onDecrease: PropTypes.func
 };
 
-function Incrementer({ available, quantity, onIncrease, onDecrease }) {
+function Incrementer({ available, availableText, quantity, onIncrease, onDecrease }) {
   return (
-    <Box sx={{ width: 96, textAlign: 'right' }}>
+    <Box sx={{ width: 96, textAlign: 'center', margin: '0 auto' }}>
       <IncrementerStyle>
         <MIconButton size="small" color="inherit" onClick={onDecrease} disabled={quantity <= 1}>
           <Icon icon={minusFill} width={16} height={16} />
@@ -68,7 +67,7 @@ function Incrementer({ available, quantity, onIncrease, onDecrease }) {
         </MIconButton>
       </IncrementerStyle>
       <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-        available: {available}
+        {availableText}
       </Typography>
     </Box>
   );
@@ -82,6 +81,7 @@ ProductList.propTypes = {
 };
 
 export default function ProductList({ formik, onDelete, onIncreaseQuantity, onDecreaseQuantity }) {
+  const { t, currentLang } = useLocales();
   const { products } = formik.values;
 
   const handleIncreaseQuantity = (_id, skuVariant) => {
@@ -97,10 +97,10 @@ export default function ProductList({ formik, onDelete, onIncreaseQuantity, onDe
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Product</TableCell>
-            <TableCell align="left">Price</TableCell>
-            <TableCell align="left">Quantity</TableCell>
-            <TableCell align="right">Total Price</TableCell>
+            <TableCell>{t('dashboard.products.title')}</TableCell>
+            <TableCell align="left">{t('cart.unit-price')}</TableCell>
+            <TableCell align="center">{t('dashboard.products.quantity')}</TableCell>
+            <TableCell align="right">{t('cart.amount-price')}</TableCell>
             <TableCell align="right" />
           </TableRow>
         </TableHead>
@@ -125,9 +125,9 @@ export default function ProductList({ formik, onDelete, onIncreaseQuantity, onDe
                         divider={<Divider orientation="vertical" sx={{ height: 14, alignSelf: 'center' }} />}
                       >
                         <Typography variant="body2">
-                          <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
+                          {/* <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
                             Variant Name:&nbsp;
-                          </Typography>
+                          </Typography> */}
                           {variantName}
                         </Typography>
                       </Stack>
@@ -135,18 +135,19 @@ export default function ProductList({ formik, onDelete, onIncreaseQuantity, onDe
                   </Box>
                 </TableCell>
 
-                <TableCell align="left">{`${fNumber(price)} ₫`}</TableCell>
+                <TableCell align="left">{fCurrency(price, currentLang.value)}</TableCell>
 
-                <TableCell align="left">
+                <TableCell align="center">
                   <Incrementer
                     quantity={quantity}
                     available={quantityAvailable}
+                    availableText={t('cart.available', { available: quantityAvailable })}
                     onDecrease={() => handleDecreaseQuantity(_id, skuVariant)}
                     onIncrease={() => handleIncreaseQuantity(_id, skuVariant)}
                   />
                 </TableCell>
 
-                <TableCell align="right">&nbsp;{`${fNumber(price * quantity)} ₫`}</TableCell>
+                <TableCell align="right">{fCurrency(price * quantity, currentLang.value)}</TableCell>
 
                 <TableCell align="right">
                   <MIconButton onClick={() => onDelete(_id, skuVariant)}>
