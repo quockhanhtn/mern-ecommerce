@@ -35,10 +35,12 @@ export default function CheckoutPayment() {
 
   useEffect(() => {
     if (orderError) {
-      enqueueSnackbar(t('order.error'), { variant: 'error' });
+      console.log('orderError', orderError);
+      enqueueSnackbar(orderError?.message || 'Có lỗi', { variant: 'error' });
     }
 
     if (orderCreated) {
+      Helper.clearAfterOrder();
       let redirect = `/order/${orderCreated._id}`;
       if (orderCreated.paymentUrl) {
         redirect = orderCreated.paymentUrl;

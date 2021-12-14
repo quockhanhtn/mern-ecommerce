@@ -104,6 +104,7 @@ export function getOrderInfo() {
   return infoObject;
 }
 
-export function completeOrder() {
+export function clearAfterOrder() {
   localStorage.removeItem(CART_LOCAL_STORAGE_KEY);
+  localStorage.removeItem(ORDER_LOCAL_STORAGE_KEY);
 }

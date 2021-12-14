@@ -13,7 +13,7 @@ import { isGuestOrAuthorized, isAdminOrStaff } from '../../middlewares/jwt-auth.
 const router = express.Router();
 
 router.post('/', isGuestOrAuthorized, createByUser);
-router.get(':/orderId', getOne);
+router.get('/:orderId', getOne);
 
 /**
  * Authorization

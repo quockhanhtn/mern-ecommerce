@@ -11,7 +11,7 @@ export default {
   checkPaymentStatus,
 };
 
-async function createPaymentUrl(ipAddress, apiUrl, orderId, orderPayAmount, language = 'vn', bankCode = '') {
+async function createPaymentUrl(ipAddress, apiUrl, clientUrl, orderId, orderPayAmount, language = 'vn', bankCode = '') {
   const returnUrl = `${apiUrl}/api/v1/payment/vnpay/callback`;
 
   const date = new Date();
@@ -32,7 +32,7 @@ async function createPaymentUrl(ipAddress, apiUrl, orderId, orderPayAmount, lang
   vnp_Params['vnp_Locale'] = locale;
   vnp_Params['vnp_CurrCode'] = currCode;
   vnp_Params['vnp_TxnRef'] = txnRef;
-  vnp_Params['vnp_OrderInfo'] = orderId;
+  vnp_Params['vnp_OrderInfo'] = JSON.stringify({ orderId, clientUrl });
   vnp_Params['vnp_OrderType'] = 'topup';
   vnp_Params['vnp_Amount'] = orderPayAmount * 100;
   vnp_Params['vnp_ReturnUrl'] = returnUrl;
@@ -68,7 +68,9 @@ async function checkPaymentStatus(vnpayResponse) {
   if (secureHash === signed) {
     const amount = vnp_Params['vnp_Amount'];
     const txnRef = vnp_Params['vnp_TxnRef'];
-    const orderId = vnp_Params['vnp_OrderInfo'];
+    const { orderId, clientUrl } = JSON.parse(
+      Object.keys(queryString.parse(vnp_Params['vnp_OrderInfo']))[0]
+    );
     const payDate = vnp_Params['vnp_PayDate']; // yyyyMMddHHmmss
     const bankCode = vnp_Params['vnp_BankCode'];
     const bankTranNo = vnp_Params['vnp_BankTranNo'];
@@ -82,6 +84,7 @@ async function checkPaymentStatus(vnpayResponse) {
         amount,
         txnRef,
         orderId,
+        clientUrl,
         payDate,
         bankCode,
         bankTranNo,

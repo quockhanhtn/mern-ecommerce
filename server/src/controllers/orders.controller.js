@@ -8,7 +8,9 @@ export const getOne = async (req, res) => {
   try {
     const { orderId } = req.params;
 
-    const order = await orderService.getOne(orderId);
+    const fields = '_id customer user address isReceiveAtStore status paymentMethod paymentStatus items subTotal shippingFee discount total';
+
+    const order = await orderService.getOne(orderId, fields);
     resUtils.status200(
       res,
       'Get order info success',
@@ -45,6 +47,7 @@ export const createByUser = async (req, res, next) => {
       paymentUrl = await vnpayService.createPaymentUrl(
         req.ip,
         apiUrl,
+        req.headers.origin,
         order._id.toString(),
         order.total
       );

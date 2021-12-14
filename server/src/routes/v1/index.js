@@ -11,7 +11,7 @@ import productRoutes from './products.route.js';
 import commentRoutes from './comments.route.js';
 import discountRoutes from './discounts.route.js';
 import orderRoutes from './order.route.js';
-import paymenVnpayRoutes from './payment.route.js';
+import paymentRoutes from './payment.route.js';
 
 
 const router = express.Router();
@@ -37,6 +37,6 @@ router.use('/products', productRoutes);
 router.use('/comments', commentRoutes);
 router.use('/discounts', discountRoutes);
 router.use('/orders', orderRoutes);
-router.use('/payment', paymenVnpayRoutes);
+router.use('/payment', paymentRoutes);
 
 export default router;

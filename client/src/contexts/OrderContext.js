@@ -8,7 +8,7 @@ const initialState = {
   orderInfo: {},
   isCreatingOrder: false,
   orderCreated: null,
-  orderError: {},
+  orderError: null,
 
   quantityInCart: 0,
   cart: [],

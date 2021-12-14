@@ -24,6 +24,7 @@ export const payByVnpay = async (req, res, next) => {
       const order = await Order.findById(result.data.orderId);
       if (order.total === result.data.amount / 100) {
         order.status = constants.ORDER.PAYMENT_STATUS.PAID;
+        order.paymentStatus = constants.ORDER.PAYMENT_STATUS.PAID;
         await Order.updateOne({ _id: order._id }, order);
       }
 
@@ -51,7 +52,7 @@ export const payByVnpay = async (req, res, next) => {
     res.send(`
       <script>
         alert('${message}');
-        window.open('http://localhost:3000/order/${result.data.orderId}', '_self', '')
+        window.open('${result.data.clientUrl}/order/${result.data.orderId}', '_self', '')
       </script>
     `);
   } catch (err) { next(err); }

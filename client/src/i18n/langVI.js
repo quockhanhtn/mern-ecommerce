@@ -126,7 +126,27 @@ export default {
   },
   order: {
     'page-title': 'Đơn hàng | HK Mobile',
-    title: 'Đơn hàng'
+    title: 'Đơn hàng',
+    // order-status
+    'order-status': 'Trạng thái đơn hàng',
+    'status-pending': 'Chờ xử lý',
+    'status-confirmed': 'Đã xác nhận',
+    'status-shipping': 'Đang giao hàng',
+    'status-cancelled': 'Đã hủy',
+    'status-completed': 'Đã hoàn thành',
+    // payement-method
+    'payment-method': 'Phương thức thanh toán',
+    'payment-method-cash': 'Tiền mặt',
+    'payment-method-cod': 'Thanh toán khi nhận hàng',
+    'payment-method-vnpay': 'Thanh toán qua VNPAY',
+    'payment-method-paypal': 'Thanh toán qua PayPal',
+    'payment-method-momo': 'Thanh toán qua ví Momo',
+    'payment-method-zalopay': 'Thanh toán qua ví ZaloPay',
+    // payment-status
+    'payment-status': 'Trạng thái thanh toán',
+    'payment-status-pending': 'Chưa thanh toán',
+    'payment-status-paid': 'Đã thanh toán',
+    'payment-status-cancelled': 'Hủy thanh toán'
   },
   settings: {
     title: 'Cài đặt',
