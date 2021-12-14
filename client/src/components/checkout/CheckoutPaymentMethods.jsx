@@ -20,6 +20,7 @@ import {
   FormControlLabel
 } from '@material-ui/core';
 //
+import useLocales from '../../hooks/useLocales';
 import { MHidden } from '../@material-extend';
 
 // ----------------------------------------------------------------------
@@ -42,6 +43,7 @@ CheckoutPaymentMethods.propTypes = {
 };
 
 export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
+  const { t } = useLocales();
   const { errors, touched, values, getFieldProps } = formik;
 
   const cardOptions = [
@@ -52,12 +54,12 @@ export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
 
   return (
     <Card>
-      <CardHeader title="paymentMethod options" />
+      <CardHeader title={t('cart.payment-method')} />
       <CardContent>
         <RadioGroup row {...getFieldProps('paymentMethod')}>
           <Grid container spacing={2}>
             {paymentOptions.map((method) => {
-              const { value, title, icons, description } = method;
+              const { value, title, icons, description, isDevelop } = method;
               const hasChildren = value === 'credit_card';
 
               return (
@@ -72,6 +74,7 @@ export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
                   >
                     <FormControlLabel
                       value={value}
+                      disabled={isDevelop}
                       control={<Radio checkedIcon={<Icon icon={checkmarkCircle2Fill} />} />}
                       label={
                         <Box sx={{ ml: 1 }}>
@@ -91,7 +94,7 @@ export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
                             component="img"
                             alt="logo card"
                             src={icon}
-                            sx={{ '&:last-child': { ml: 1 } }}
+                            sx={{ '&:last-child': { ml: 1 }, width: 'auto', height: '32px' }}
                           />
                         ))}
                       </Box>

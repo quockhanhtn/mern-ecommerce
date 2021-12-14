@@ -1,9 +1,8 @@
 import express from 'express';
-import { paymentVnPayCallBack } from '../../controllers/payment.controller.js';
+import { payByVnpay } from '../../controllers/payment.controller.js';
 
 const router = express.Router();
 
-router.route('/vnpay/callback')
-  .get(paymentVnPayCallBack);
+router.route('/vnpay/callback').get(payByVnpay);
 
 export default router;

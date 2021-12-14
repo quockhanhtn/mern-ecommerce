@@ -4,35 +4,43 @@ import dateFormat from 'dateformat';
 
 const tmnCode = process.env.VNPAY_TMN_CODE;
 const secretKey = process.env.VNPAY_SECRET;
-let vnpUrl = process.env.VNPAY_URL;
-const orderType = '110000'; // https://sandbox.vnpayment.vn/apis/docs/loai-hang-hoa/
+const vnpUrl = process.env.VNPAY_URL;
 
 export default {
   createPaymentUrl,
   checkPaymentStatus,
 };
 
-async function createPaymentUrl(ipAddress, apiUrl, orderId, orderPayAmount, language = 'vn') {
-  const returnUrl = `${apiUrl}/payment/vnpay/callback`;
+async function createPaymentUrl(ipAddress, apiUrl, orderId, orderPayAmount, language = 'vn', bankCode = '') {
+  const returnUrl = `${apiUrl}/api/v1/payment/vnpay/callback`;
 
   const date = new Date();
   const createDate = dateFormat(date, 'yyyymmddHHmmss');
   const txnRef = dateFormat(date, 'HHmmss');
 
-  let vnp_Params = {}
+  let locale = 'vn';
+  if (language && ['vn', 'en'].indexOf(language) >= 0) {
+    locale = language;
+  }
+  const currCode = 'VND';
+
+  let vnp_Params = {};
   vnp_Params['vnp_Version'] = '2.1.0';
   vnp_Params['vnp_Command'] = 'pay';
   vnp_Params['vnp_TmnCode'] = tmnCode;
-  vnp_Params['vnp_Amount'] = orderPayAmount * 100;
-  vnp_Params['vnp_CreateDate'] = createDate;
-  vnp_Params['vnp_CurrCode'] = 'VND';
-  vnp_Params['vnp_Locale'] = language;
-  vnp_Params['vnp_IpAddr'] = ipAddress;
-  vnp_Params['vnp_OrderInfo'] = orderId;
-  vnp_Params['vnp_ReturnUrl'] = returnUrl;
-  vnp_Params['vnp_TxnRef'] = txnRef;
   // vnp_Params['vnp_Merchant'] = ''
-  vnp_Params['vnp_OrderType'] = orderType;
+  vnp_Params['vnp_Locale'] = locale;
+  vnp_Params['vnp_CurrCode'] = currCode;
+  vnp_Params['vnp_TxnRef'] = txnRef;
+  vnp_Params['vnp_OrderInfo'] = orderId;
+  vnp_Params['vnp_OrderType'] = 'topup';
+  vnp_Params['vnp_Amount'] = orderPayAmount * 100;
+  vnp_Params['vnp_ReturnUrl'] = returnUrl;
+  vnp_Params['vnp_IpAddr'] = ipAddress;
+  vnp_Params['vnp_CreateDate'] = createDate;
+  if (bankCode !== null && bankCode !== '') {
+    vnp_Params['vnp_BankCode'] = bankCode;
+  }
 
   vnp_Params = sortObject(vnp_Params);
 
@@ -41,12 +49,12 @@ async function createPaymentUrl(ipAddress, apiUrl, orderId, orderPayAmount, lang
   const signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
   vnp_Params['vnp_SecureHash'] = signed;
 
-  const paymentUrl = vnpUrl + '?' + queryString.stringify(vnp_Params);
+  const paymentUrl = vnpUrl + '?' + queryString.stringify(vnp_Params, { encode: false });
   return paymentUrl;
 }
 
-async function checkPaymentStatus(req, res) {
-  let vnp_Params = req.query;
+async function checkPaymentStatus(vnpayResponse) {
+  let vnp_Params = vnpayResponse;
   const secureHash = vnp_Params['vnp_SecureHash'];
   delete vnp_Params['vnp_SecureHash'];
   delete vnp_Params['vnp_SecureHashType'];
@@ -54,16 +62,41 @@ async function checkPaymentStatus(req, res) {
   vnp_Params = sortObject(vnp_Params);
 
   const signData = queryString.stringify(vnp_Params, { encode: false });
-  const hmac = crypto.createHmac("sha512", secretKey);
-  const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
+  const hmac = crypto.createHmac('sha512', secretKey);
+  const signed = hmac.update(new Buffer(signData, 'utf-8')).digest('hex');
 
-  // if (secureHash === signed) {
-  //   const urlSuccess = `${baseURLUI}/cart/payment`;
-  //   res.redirect(`${urlSuccess}/${vnp_Params['vnp_TxnRef']}?code=${vnp_Params['vnp_ResponseCode']}`);
-  // } else {
-  //   const urlError = `${baseURLUI}/404`;
-  //   res.redirect(urlError);
-  // }
+  if (secureHash === signed) {
+    const amount = vnp_Params['vnp_Amount'];
+    const txnRef = vnp_Params['vnp_TxnRef'];
+    const orderId = vnp_Params['vnp_OrderInfo'];
+    const payDate = vnp_Params['vnp_PayDate']; // yyyyMMddHHmmss
+    const bankCode = vnp_Params['vnp_BankCode'];
+    const bankTranNo = vnp_Params['vnp_BankTranNo'];
+    const cartType = vnp_Params['vnp_CardType'];
+    const transactionNo = vnp_Params['vnp_TransactionNo'];
+    const transactionStatus = vnp_Params['vnp_TransactionStatus'];
+
+    return {
+      isSuccess: transactionStatus === '00',
+      data: {
+        amount,
+        txnRef,
+        orderId,
+        payDate,
+        bankCode,
+        bankTranNo,
+        cartType,
+        transactionNo,
+        transactionStatus
+      },
+      message: transactionStatus === '00' ? 'Payment success' : 'Payment failed'
+    }
+  } else {
+    return {
+      isSuccess: false,
+      message: 'Invalid secure hash',
+    }
+  }
 }
 
 function sortObject(obj) {

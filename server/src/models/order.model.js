@@ -9,6 +9,7 @@ const orderSchema = mongoose.Schema(
   {
     _id: mongoose.Types.ObjectId,
 
+    // get name and phone from address instead
     customer: {
       type: {
         name: { type: String, trim: true, required: true },
@@ -46,11 +47,10 @@ const orderSchema = mongoose.Schema(
       pricePerUnit: { type: Number, required: true }
     }],
 
-    totalPrice: { type: Number, required: false },
-    totalShipping: { type: Number, required: false },
-    totalTax: { type: Number, required: false },
-    totalDiscount: { type: Number, required: false },
-    total: { type: Number, required: false },
+    subTotal: { type: Number, required: true },     // Tổng tiền hàng
+    shippingFee: { type: Number, required: true },  // Phí vận chuyển
+    discount: { type: Number, required: true },     // Giảm giá
+    total: { type: Number, required: true },        // Tổng tiền
 
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

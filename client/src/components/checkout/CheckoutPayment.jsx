@@ -32,36 +32,53 @@ export default function CheckoutPayment() {
 
   const paymentOpts = [
     {
-      value: 'paypal',
-      title: 'Pay with Paypal',
-      description: 'You will be redirected to PayPal website to complete your purchase securely.',
-      icons: ['/static/icons/ic_paypal.svg']
+      value: 'vnpay',
+      title: t('cart.payment-method-vnpay'),
+      description: t('cart.payment-method-vnpay-desc'),
+      icons: ['/static/icons/ic_vnpay.svg']
     },
     {
-      value: 'vnpay',
-      title: 'Pay with VnPay',
-      description: 'You will be redirected to VnPay website to complete your purchase securely.',
-      icons: ['/static/icons/ic_vnpay.svg']
+      value: 'paypal',
+      title: t('cart.payment-method-paypal'),
+      description: t('cart.payment-method-paypal-desc'),
+      icons: ['/static/icons/ic_paypal.svg'],
+      isDevelop: true
+    },
+    {
+      value: 'momo',
+      title: t('cart.payment-method-momo'),
+      description: t('cart.payment-method-momo-desc'),
+      icons: ['/static/icons/ic_momo.svg'],
+      isDevelop: true
+    },
+    {
+      value: 'zalopay',
+      title: t('cart.payment-method-zalopay'),
+      description: t('cart.payment-method-zalopay-desc'),
+      icons: ['/static/icons/ic_zalopay.svg'],
+      isDevelop: true
     },
     {
       value: 'credit_card',
       title: 'Credit / Debit Card',
       description: 'We support Mastercard, Visa, Discover and Stripe.',
-      icons: ['/static/icons/ic_mastercard.svg', '/static/icons/ic_visa.svg']
-    },
-    {
-      value: 'cash',
-      title: 'Cash on CheckoutDelivery',
-      description: 'Pay with cash when your order is delivered.',
-      icons: []
+      icons: ['/static/icons/ic_mastercard.svg', '/static/icons/ic_visa.svg'],
+      isDevelop: true
     }
   ];
 
   if (orderInfo.isReceiveAtStore) {
-    paymentOpts.push({
-      value: 'at_store',
-      title: 'Paid at Store',
-      description: 'You will receive your order at store.',
+    paymentOpts.splice(0, 0, {
+      value: 'cash',
+      title: t('cart.payment-method-cash'),
+      description: t('cart.payment-method-cash-desc'),
+      icons: []
+    });
+  } else {
+    paymentOpts.splice(0, 0, {
+      value: 'cod',
+      title: t('cart.payment-method-cod'),
+      description: t('cart.payment-method-cod-desc'),
       icons: []
     });
   }
@@ -109,7 +126,7 @@ export default function CheckoutPayment() {
   };
 
   const PaymentSchema = Yup.object().shape({
-    paymentMethod: Yup.mixed().required('Payment is required')
+    paymentMethod: Yup.mixed().required(t('cart.payment-method-required'))
   });
 
   const formik = useFormik({

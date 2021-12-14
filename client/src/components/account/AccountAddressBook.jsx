@@ -20,10 +20,7 @@ import { MButton } from '../@material-extend';
 
 const LEFT_WIDTH = 200;
 
-// InfoItem.defaultProps = {
-//   valueVariant: 'body2'
-// };
-
+// eslint-disable-next-line react/prop-types
 const InfoItem = ({ label, value, valueVariant }) => {
   let display = (
     <Typography variant={valueVariant} sx={{ flex: 1, marginLeft: 3 }}>
