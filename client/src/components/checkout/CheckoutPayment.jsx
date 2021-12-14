@@ -8,18 +8,19 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import { Grid, Button } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
 // hooks
+import { useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
 import useLocales from '../../hooks/useLocales';
 import useAuth from '../../hooks/useAuth';
 import useOrderFlow from '../../hooks/useOrderFlow';
+import useLocalStorage from '../../hooks/useLocalStorage';
 // components
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 
 import * as Helper from '../../helper/localStorageHelper';
-import * as API from '../../api';
 
 // ----------------------------------------------------------------------
 
@@ -27,8 +28,24 @@ export default function CheckoutPayment() {
   const { t } = useLocales();
   const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
-  const { orderInfo, cart, subTotal, activeStep, backStepOrder, nextStepOrder, getCart } = useOrderFlow();
-  const discount = cart.length > 0 ? 50000 : 0;
+  const { orderInfo, isCreatingOrder, orderCreated, orderError, subTotal, activeStep, createOrder, backStepOrder } =
+    useOrderFlow();
+
+  const discount = 0;
+
+  useEffect(() => {
+    if (orderError) {
+      enqueueSnackbar(t('order.error'), { variant: 'error' });
+    }
+
+    if (orderCreated) {
+      let redirect = `/order/${orderCreated._id}`;
+      if (orderCreated.paymentUrl) {
+        redirect = orderCreated.paymentUrl;
+      }
+      window.open(redirect, '_self');
+    }
+  }, [orderCreated, orderError]);
 
   const paymentOpts = [
     {
@@ -83,46 +100,12 @@ export default function CheckoutPayment() {
     });
   }
 
-  const handleCompleteOrder = () => {
-    nextStepOrder(activeStep).then(() => {
-      Helper.completeOrder();
-      getCart();
-    });
-  };
-
   const handleBackStep = () => {
     backStepOrder(activeStep);
   };
 
   const handlePayment = async (values) => {
-    console.log('payment', values);
-    console.log('payment', orderInfo);
-
-    const customer = {
-      name: orderInfo.name,
-      phone: orderInfo.phone
-    };
-
-    const address = {
-      street: orderInfo.street,
-      ward: orderInfo.ward,
-      district: orderInfo.district,
-      province: orderInfo.province,
-      name: orderInfo.name,
-      phone: orderInfo.phone
-    };
-
-    API.createOrder({
-      ...values,
-      ...orderInfo,
-      customerInfo: customer,
-      address,
-      items: cart.map((item) => ({
-        product: item._id,
-        sku: item.skuVariant,
-        quantity: item.quantity
-      }))
-    });
+    await createOrder(values);
   };
 
   const PaymentSchema = Yup.object().shape({
@@ -145,7 +128,17 @@ export default function CheckoutPayment() {
     }
   });
 
-  const { isSubmitting, handleSubmit } = formik;
+  const { handleSubmit } = formik;
+
+  // if (isCreateOrdered) {
+  //   return (
+  //     <>
+  //       <CheckoutSummary />
+  //       <p>Sucesss</p>
+  //       <p>{JSON.stringify(orderCreated)}</p>
+  //     </>
+  //   );
+  // }
 
   return (
     <FormikProvider value={formik}>
@@ -168,8 +161,8 @@ export default function CheckoutPayment() {
           <Grid item xs={12} md={4}>
             <CheckoutBillingInfo orderInfo={orderInfo} onBackStep={handleBackStep} />
             <CheckoutSummary subtotal={subTotal} total={subTotal} discount={discount} />
-            <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
-              Complete Order
+            <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isCreatingOrder}>
+              {t('cart.order.action')}
             </LoadingButton>
           </Grid>
         </Grid>

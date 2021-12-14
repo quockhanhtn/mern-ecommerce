@@ -5,6 +5,7 @@ import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import {
+  Alert,
   Box,
   Card,
   Grid,
@@ -16,10 +17,10 @@ import {
   RadioGroup,
   CardHeader,
   CardContent,
-  FormHelperText,
   FormControlLabel
 } from '@material-ui/core';
 //
+import { useSnackbar } from 'notistack';
 import useLocales from '../../hooks/useLocales';
 import { MHidden } from '../@material-extend';
 
@@ -44,6 +45,7 @@ CheckoutPaymentMethods.propTypes = {
 
 export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
   const { t } = useLocales();
+  const { enqueueSnackbar } = useSnackbar();
   const { errors, touched, values, getFieldProps } = formik;
 
   const cardOptions = [
@@ -52,10 +54,20 @@ export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
     { value: 'MasterCard', label: '**** **** **** 4545 - Cole Armstrong' }
   ];
 
+  if (errors.paymentMethod && touched.paymentMethod) {
+    enqueueSnackbar(errors.paymentMethod, { variant: 'error' });
+  }
+
   return (
     <Card>
       <CardHeader title={t('cart.payment-method')} />
       <CardContent>
+        {errors.paymentMethod && touched.paymentMethod && (
+          <Alert sx={{ mb: 2 }} severity="error">
+            {errors.paymentMethod}
+          </Alert>
+        )}
+
         <RadioGroup row {...getFieldProps('paymentMethod')}>
           <Grid container spacing={2}>
             {paymentOptions.map((method) => {
@@ -134,13 +146,13 @@ export default function CheckoutPaymentMethods({ paymentOptions, formik }) {
           </Grid>
         </RadioGroup>
 
-        {errors.paymentMethod && (
+        {/* {errors.paymentMethod && (
           <FormHelperText error>
-            <Box component="span" sx={{ px: 2 }}>
+            <Box component="span" sx={{ backgroundPositionX: 2 }}>
               {touched.paymentMethod && errors.paymentMethod}
             </Box>
           </FormHelperText>
-        )}
+        )} */}
       </CardContent>
     </Card>
   );

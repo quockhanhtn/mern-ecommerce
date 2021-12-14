@@ -1,10 +1,15 @@
 import PropTypes from 'prop-types';
 import { createContext, useReducer } from 'react';
+import * as Api from '../api';
 import * as Helper from '../helper/localStorageHelper';
 
 // ----------------------------------------------------------------------
 const initialState = {
   orderInfo: {},
+  isCreatingOrder: false,
+  orderCreated: null,
+  orderError: {},
+
   quantityInCart: 0,
   cart: [],
   activeStep: 0
@@ -15,6 +20,26 @@ const handlers = {
     ...state,
     orderInfo: { ...state.orderInfo, ...action.payload }
   }),
+
+  CREATING_ORDER: (state, action) => ({
+    ...state,
+    isCreatingOrder: true,
+    orderError: null
+  }),
+
+  CREATED_ORDER: (state, action) => ({
+    ...state,
+    isCreatingOrder: false,
+    orderCreated: action.payload,
+    orderError: null
+  }),
+
+  ERROR_ORDER: (state, action) => ({
+    ...state,
+    isCreatingOrder: false,
+    orderError: action.payload
+  }),
+
   GET_CART: (state, action) => ({
     ...state,
     quantityInCart: action.payload.cart.length,
@@ -67,6 +92,10 @@ const reducer = (state, action) => (handlers[action.type] ? handlers[action.type
 
 const OrderContext = createContext({
   orderInfo: {},
+  isCreatingOrder: false,
+  orderCreated: null,
+  orderError: null,
+
   quantityInCart: 0,
   cart: [],
   activeStep: 0,
@@ -90,6 +119,51 @@ function OrderProvider({ children }) {
 
   const updateOrderAction = async (data) => {
     dispatch({ type: 'UPDATE_ORDER_INFO', payload: data });
+  };
+
+  const createOrderAction = async (orderData) => {
+    try {
+      dispatch({ type: 'CREATING_ORDER' });
+
+      const customer = {
+        name: state.orderInfo.name,
+        phone: state.orderInfo.phone
+      };
+
+      const address = {
+        street: state.orderInfo.street,
+        ward: state.orderInfo.ward,
+        district: state.orderInfo.district,
+        province: state.orderInfo.province,
+        name: state.orderInfo.name,
+        phone: state.orderInfo.phone
+      };
+
+      const dataToSend = {
+        ...orderData,
+        ...state.orderInfo,
+        customerInfo: customer,
+        address,
+        items: state.cart.map((item) => ({
+          product: item._id,
+          sku: item.skuVariant,
+          quantity: item.quantity
+        }))
+      };
+      console.log('[OrderContext] createOrderAction', dataToSend);
+      const { data } = await Api.createOrder(dataToSend);
+      console.log('[OrderContext] createOrderAction', data);
+
+      dispatch({
+        type: 'CREATED_ORDER',
+        payload: {
+          ...data.data,
+          paymentUrl: data.paymentUrl
+        }
+      });
+    } catch (e) {
+      dispatch({ type: 'ERROR_ORDER', payload: e?.response?.data || e });
+    }
   };
 
   const getCartAction = async () => {
@@ -142,6 +216,8 @@ function OrderProvider({ children }) {
       value={{
         ...state,
         updateOrderInfo: updateOrderAction,
+        createOrder: createOrderAction,
+
         getCart: getCartAction,
         addToCart: addToCartAction,
         removeToCart: removeToCartAction,

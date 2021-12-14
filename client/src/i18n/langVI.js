@@ -89,7 +89,8 @@ export default {
       'shipping-fee': 'Phí vận chuyển',
       discount: 'Giảm giá',
       total: 'Tổng tiền',
-      'include-vat': 'Bao gồm thuế VAT'
+      'include-vat': 'Bao gồm thuế VAT',
+      action: 'Đặt hàng'
     },
     step: {
       1: 'Giỏ hàng',
@@ -122,6 +123,10 @@ export default {
     'receive-at-store-desc': 'Nhận và trải nghiệm sản phẩm tại cửa hàng với sự hỗ trợ của nhân viên',
     'delivery-to-home': 'Giao hàng tại nhà',
     'delivery-to-home-desc': 'Cung cấp cho chúng tôi địa chỉ, đơn hàng sẽ được giao đến tận nhà cho bạn!'
+  },
+  order: {
+    'page-title': 'Đơn hàng | HK Mobile',
+    title: 'Đơn hàng'
   },
   settings: {
     title: 'Cài đặt',

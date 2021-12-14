@@ -98,11 +98,16 @@ async function createWithTransaction(orderData, createdBy) {
   } catch (err) {
     await session.abortTransaction();
     session.endSession();
-    throw new ApiError({
-      message: 'Create order failed: ' + err.message,
-      errors: err,
-      status: 500
-    });
+
+    if (err instanceof ApiError) {
+      throw err;
+    } else {
+      throw new ApiError({
+        message: 'Create order failed: ' + err.message,
+        errors: err,
+        status: 500
+      });
+    }
   }
 }
 
