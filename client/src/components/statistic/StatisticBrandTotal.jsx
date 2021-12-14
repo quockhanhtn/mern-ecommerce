@@ -13,6 +13,7 @@ import { fNumber, fPercent } from '../../utils/formatNumber';
 //
 import BaseOptionChart from '../charts/BaseOptionChart';
 import { getAllBrands } from '../../actions/brands';
+import useLocales from '../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +35,7 @@ const PERCENT = 5.6;
 const CHART_DATA = [{ data: [12, 14, 2, 47, 42, 15, 47, 75, 65, 19, 14] }];
 
 export default function StatisticBrandTotal() {
+  const { t } = useLocales();
   const dispatch = useDispatch();
   const { list: brandsList } = useSelector((state) => state.brand);
 
@@ -60,7 +62,7 @@ export default function StatisticBrandTotal() {
     <Card sx={{ display: 'flex', alignItems: 'center', p: 3 }}>
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="subtitle2" paragraph>
-          Brand Toal
+          {t('dashboard.statistics.brand-total')}
         </Typography>
         <Typography variant="h3" gutterBottom>
           {fNumber(brandsList?.length)}

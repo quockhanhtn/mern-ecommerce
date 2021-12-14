@@ -149,10 +149,13 @@ export default {
       edit: 'Edit discount',
       'edit-title': 'Edit discount',
       delete: 'Delete discount',
+      'confirm-delete': 'Do you want to remove the discount - {{nameInfo}}?',
       name: 'Discount name',
       'name-validation': 'Discount name is required',
+      'name-validation-len': 'Discount name must be between 6 and 50 characters long',
       code: 'Code',
       'code-validation': 'Code is required',
+      'code-validation-len': 'Discount code must be between 5 and 20 characters long',
       desc: 'Discount description',
       'desc-validation': 'Discount is required',
       discount: 'Percentage',
@@ -236,6 +239,14 @@ export default {
       status: 'Status',
       hidden: 'Hidden',
       visible: 'Visible'
+    },
+    statistics: {
+      title: 'Congratulations,',
+      'title-detail': 'Best seller of the month You have done 57.6% more sales today.',
+      go: 'go now',
+      'product-total': 'Product total',
+      'brand-total': 'Brand total',
+      'category-total': 'Category total'
     }
   }
 };

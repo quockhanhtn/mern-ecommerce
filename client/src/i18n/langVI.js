@@ -255,10 +255,13 @@ export default {
       edit: 'Chỉnh sửa khuyến mãi',
       'edit-title': 'Chỉnh sửa khuyến mãi',
       delete: 'Xoá mã khuyến mãi',
+      'confirm-delete': 'Bạn có muốn xoá khuyến mãi - {{nameInfo}}?',
       name: 'Tên mã khuyến mãi',
       'name-validation': 'Tên mã khuyến mãi là bắt buộc',
+      'name-validation-len': 'Tên mã khuyến mãi từ 6 đến 50 kí tự',
       code: 'Mã',
       'code-validation': 'Mã là bắt buộc',
+      'code-validation-len': 'Mã mã khuyến mãi từ 5 đến 20 kí tự',
       desc: 'Mô tả chiết khấu',
       'desc-validation': 'Mô tả chiết khấu là bắt buộc',
       discount: 'Phần trăm khuyến mại',
@@ -339,6 +342,14 @@ export default {
       status: 'Status',
       hidden: 'Hidden',
       visible: 'Visible'
+    },
+    statistics: {
+      title: 'Xin chúc mừng,',
+      'title-detail': 'Bán chạy nhất của tháng Bạn đã bán được nhiều hơn 57,6% hôm nay.',
+      go: 'Tiếp tục mua hàng',
+      'product-total': 'Tổng số sản phẩm',
+      'brand-total': 'Tổng số thương hiệu',
+      'category-total': 'Tổng số danh mục'
     }
   }
 };

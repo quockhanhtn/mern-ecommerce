@@ -3,6 +3,7 @@ import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Typography, Button, Card, CardContent } from '@material-ui/core';
 //
 import MotivationIllustration from '../../assets/illustration_motivation';
+import useLocales from '../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -22,6 +23,8 @@ const RootStyle = styled(Card)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function StatisticWelcome() {
+  const { t } = useLocales();
+
   return (
     <RootStyle>
       <CardContent
@@ -32,15 +35,15 @@ export default function StatisticWelcome() {
         }}
       >
         <Typography gutterBottom variant="h4">
-          Congratulations,
+          {t('dashboard.statistics.title')}
           <br /> HK - Mobile
         </Typography>
 
         <Typography variant="body2" sx={{ pb: { xs: 3, xl: 5 }, maxWidth: 480, mx: 'auto' }}>
-          Best seller of the month You have done 57.6% more sales today.
+          {t('dashboard.statistics.title-detail')}
         </Typography>
 
-        <Button variant="contained">Go Now</Button>
+        <Button variant="contained">{t('dashboard.statistics.go')}</Button>
       </CardContent>
 
       <MotivationIllustration

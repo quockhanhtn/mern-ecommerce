@@ -13,6 +13,7 @@ import { fNumber, fPercent } from '../../utils/formatNumber';
 //
 import BaseOptionChart from '../charts/BaseOptionChart';
 import { getAllCategories } from '../../actions/categories';
+import useLocales from '../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +35,7 @@ const PERCENT = 2.6;
 const CHART_DATA = [{ data: [12, 14, 2, 47, 42, 15, 47, 75, 65, 19, 14] }];
 
 export default function StatisticCategoryTotal() {
+  const { t } = useLocales();
   const dispatch = useDispatch();
   const { list: categoriesList } = useSelector((state) => state.category);
 
@@ -60,7 +62,7 @@ export default function StatisticCategoryTotal() {
     <Card sx={{ display: 'flex', alignItems: 'center', p: 3 }}>
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="subtitle2" paragraph>
-          Category Toal
+          {t('dashboard.statistics.category-total')}
         </Typography>
         <Typography variant="h3" gutterBottom>
           {fNumber(categoriesList?.length)}

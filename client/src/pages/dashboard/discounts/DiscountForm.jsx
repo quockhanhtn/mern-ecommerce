@@ -172,9 +172,17 @@ export default function DiscountForm({ currentId, open, setOpen }) {
   };
 
   const DiscountSchema = Yup.object().shape({
-    name: Yup.string().required(t('dashboard.discounts.name-validation')),
-    desc: Yup.string().required(t('dashboard.discounts.desc-validation')),
-    code: Yup.string().required(t('dashboard.discounts.code-validation')),
+    name: Yup.string()
+      .trim()
+      .required(t('dashboard.discounts.name-validation'))
+      .min(6, t('dashboard.discounts.name-validation-len'))
+      .max(50, t('dashboard.discounts.name-validation-len')),
+    // desc: Yup.string().required(t('dashboard.discounts.desc-validation')),
+    code: Yup.string()
+      .trim()
+      .required(t('dashboard.discounts.code-validation'))
+      .min(5, t('dashboard.discounts.code-validation-len'))
+      .max(20, t('dashboard.discounts.code-validation-len')),
     fromDate: Yup.date(),
     endDate: Yup.date().when(
       'fromDate',
@@ -225,7 +233,6 @@ export default function DiscountForm({ currentId, open, setOpen }) {
                 </MotionInView>
                 <MotionInView variants={varFadeInUp}>
                   <TextField
-                    required
                     fullWidth
                     label={t('dashboard.discounts.desc')}
                     multiline
@@ -266,6 +273,7 @@ export default function DiscountForm({ currentId, open, setOpen }) {
                     {...getFieldProps('code')}
                     error={Boolean(touched.code && errors.code)}
                     helperText={touched.code && errors.code}
+                    disabled={!!currentId}
                   />
                 </MotionInView>
                 <MotionInView variants={varFadeInUp}>
