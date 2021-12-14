@@ -78,7 +78,7 @@ export default function Router() {
       ),
       children: [
         { path: '/', element: <Navigate to="/dashboard/statics" replace /> },
-        { path: 'statics', element: <PageOne /> },
+        { path: 'statics', element: <PageStatistic /> },
         { path: 'config', element: <PageTwo /> },
         {
           path: 'app',
@@ -103,7 +103,8 @@ export default function Router() {
               path: 'users',
               children: [
                 { path: '/', element: <Navigate to="/dashboard/users/user_list" replace /> },
-                { path: 'customer/list', element: <PageCustomerList /> }
+                { path: 'customer/list', element: <PageCustomerList /> },
+                { path: 'staff/list', element: <PageStaffList /> }
               ]
             },
             { path: 'setting', element: <PageAccountSetting /> },
@@ -155,6 +156,7 @@ const Register = Loadable(lazy(() => import('../pages/authentication/Register'))
 
 // Dashboard
 const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
+const PageStatistic = Loadable(lazy(() => import('../pages/dashboard/statistic/PageStatistic')));
 const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));
 
 // Category
