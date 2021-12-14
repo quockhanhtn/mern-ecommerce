@@ -13,6 +13,7 @@ import { fNumber, fPercent } from '../../utils/formatNumber';
 //
 import BaseOptionChart from '../charts/BaseOptionChart';
 import { getAllProducts } from '../../actions/products';
+import useLocales from '../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -31,10 +32,10 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 const PERCENT = 2.6;
-const TOTAL_SOLD = 765;
 const CHART_DATA = [{ data: [12, 14, 2, 47, 42, 15, 47, 75, 65, 19, 14] }];
 
 export default function StatisticProductTotal() {
+  const { t } = useLocales();
   const dispatch = useDispatch();
   const { list: productsList } = useSelector((state) => state.product);
 
@@ -61,7 +62,7 @@ export default function StatisticProductTotal() {
     <Card sx={{ display: 'flex', alignItems: 'center', p: 3 }}>
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="subtitle2" paragraph>
-          Product Toal
+          {t('dashboard.statistics.product-total')}
         </Typography>
         <Typography variant="h3" gutterBottom>
           {fNumber(productsList?.length)}

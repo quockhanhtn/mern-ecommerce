@@ -299,6 +299,7 @@ export default function PageDiscountList() {
                               <DiscountMoreMenu
                                 onEdit={() => handleEditBrand(_id)}
                                 onDelete={() => handleDeleteDiscount(_id, slug)}
+                                nameInfo={name}
                               />
                             </TableCell>
                           </TableRow>
