@@ -13,7 +13,7 @@ AuthGuard.propTypes = {
 };
 
 export default function AuthGuard({ children }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { pathname } = useLocation();
   const [requestedLocation, setRequestedLocation] = useState(null);
 
@@ -28,6 +28,8 @@ export default function AuthGuard({ children }) {
     setRequestedLocation(null);
     return <Navigate to={requestedLocation} />;
   }
-
-  return <>{children}</>;
+  if (user.role === 'admin') {
+    return <>{children}</>;
+  }
+  return <Navigate to="/" />;
 }

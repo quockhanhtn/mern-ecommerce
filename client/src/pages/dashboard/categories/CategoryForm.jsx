@@ -144,7 +144,7 @@ export default function CategoryForm({ currentId, open, setOpen }) {
     setOpen(false);
   };
 
-  const CategorySchema = Yup.object().shape({
+  let CategorySchema = Yup.object().shape({
     name: Yup.string()
       .trim()
       .required(t('dashboard.categories.name-validation'))
@@ -152,12 +152,24 @@ export default function CategoryForm({ currentId, open, setOpen }) {
       .max(25, t('dashboard.categories.name-validation-len'))
     // desc: Yup.string().required(t('dashboard.categories.desc-validation'))
   });
+  if (currentId) {
+    CategorySchema = Yup.object().shape({
+      name: Yup.string()
+        .trim()
+        .required(t('dashboard.categories.name-validation'))
+        .min(6, t('dashboard.categories.name-validation-len'))
+        .max(25, t('dashboard.categories.name-validation-len')),
+      order: Yup.number().required(t('dashboard.categories.order-validation'))
+      // desc: Yup.string().required(t('dashboard.categories.desc-validation'))
+    });
+  }
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       name: categoryData?.name || '',
-      desc: categoryData?.desc || ''
+      desc: categoryData?.desc || '',
+      order: categoryData.order || ''
     },
     validationSchema: CategorySchema,
     onSubmit: async () => {
@@ -187,10 +199,19 @@ export default function CategoryForm({ currentId, open, setOpen }) {
                 {currentId && (
                   <MotionInView variants={varFadeInUp}>
                     <Autocomplete
+                      defaultValue={orderList[0]}
                       fullWidth
                       options={orderList}
                       value={categoryData.order}
-                      renderInput={(params) => <TextField {...params} label={t('common.order')} margin="none" />}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label={t('common.order')}
+                          margin="none"
+                          error={Boolean(touched.order && errors.order)}
+                          helperText={touched.order && errors.order}
+                        />
+                      )}
                       onChange={handleChangeOrder}
                     />
                   </MotionInView>

@@ -12,7 +12,7 @@ const resJson = (res, statusCode, message, data = null, extras = {}) => {
 const status200 = (res, message = null, data = null, extras = {}) => resJson(res, 200, message, data, extras);
 
 // Send **201 Created** success status response
-const status201 = (res, message, data = null) => resJson(res, 201, message, data);
+const status201 = (res, message, data = null, extras = {}) => resJson(res, 201, message, data, extras);
 
 // Send **203 No Content** success status response
 const status203 = (res, message) => resJson(res, 204, message);

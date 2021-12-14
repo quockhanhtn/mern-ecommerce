@@ -27,7 +27,10 @@ export const ORDER = {
   PAYMENT_METHOD: {
     CASH: 'cash',             // paid at store
     COD: 'cod',               // paid at delivery (cash on delivery)
-    TRANSFER: 'transfer'      // paid by bank transfer, electric wallet, etc
+    VNPAY: 'vnpay',           // paid by VNPAY
+    MOMO: 'momo',             // paid by Momo
+    PAYPAL: 'paypal',         // paid by Paypal
+    ZALO_PAY: 'zalopay'       // paid by Zalo PAY
   },
   PAYMENT_STATUS: {
     PENDING: 'pending',       // payment is pending

@@ -7,11 +7,9 @@ import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Link, Button, Divider, Typography, Stack } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-// routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
 //
-import { DialogAnimate } from '../../animate';
-import { OrderCompleteIllustration } from '../../../assets';
+import { DialogAnimate } from '../animate';
+import { OrderCompleteIllustration } from '../../assets';
 
 // ----------------------------------------------------------------------
 

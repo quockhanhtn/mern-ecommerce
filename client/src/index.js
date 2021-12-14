@@ -29,7 +29,7 @@ import store from './store';
 // contexts
 import { SettingsProvider } from './contexts/SettingsContext';
 import { AuthProvider } from './contexts/AuthContext';
-import { CartProvider } from './contexts/CartContext';
+import { OrderProvider } from './contexts/OrderContext';
 //
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -44,11 +44,11 @@ ReactDOM.render(
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <SettingsProvider>
             <BrowserRouter>
-              <CartProvider>
-                <AuthProvider>
+              <AuthProvider>
+                <OrderProvider>
                   <App />
-                </AuthProvider>
-              </CartProvider>
+                </OrderProvider>
+              </AuthProvider>
             </BrowserRouter>
           </SettingsProvider>
         </LocalizationProvider>

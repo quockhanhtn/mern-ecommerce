@@ -281,7 +281,11 @@ export default function PageProductList() {
                               </Label>
                             </TableCell>
                             <TableCell align="right" onClick={(event) => event.stopPropagation()}>
-                              <ProductMoreMenu onDelete={() => handleDeleteProduct(_id, slug)} productId={_id} />
+                              <ProductMoreMenu
+                                onDelete={() => handleDeleteProduct(_id, slug)}
+                                productId={_id}
+                                nameInfo={name}
+                              />
                             </TableCell>
                           </TableRow>
                         );
