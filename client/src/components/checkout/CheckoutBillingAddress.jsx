@@ -308,7 +308,7 @@ export default function CheckoutBillingAddress() {
 
   return (
     <>
-      {errors && <p>{JSON.stringify(errors)}</p>}
+      {(!process.env.NODE_ENV || process.env.NODE_ENV === 'development') && errors && <p>{JSON.stringify(errors)}</p>}
       <FormikProvider value={formik} noValidate onSubmit={handleSubmit}>
         <Form autoComplete="off">
           <Grid container spacing={3}>

@@ -187,8 +187,16 @@ export default function ViewOrderPage() {
               <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
                 Khách hàng
               </Typography>
-              <InfoItem label={t('address.full-name')} value={order?.address.name} valueVariant="subtitle1" />
-              <InfoItem label={t('address.phone')} value={order?.address?.phone} valueVariant="body2" />
+              <InfoItem
+                label={t('address.full-name')}
+                value={order?.address?.name || order?.customer?.name}
+                valueVariant="subtitle1"
+              />
+              <InfoItem
+                label={t('address.phone')}
+                value={order?.address?.phone || order?.customer?.phone}
+                valueVariant="body2"
+              />
               {order?.isReceiveAtStore ? (
                 // <InfoItem label={t('cart.receive-at-store')} value="" valueVariant="body2" />
                 <Typography align="left" variant="body2" component="span" sx={{ color: 'text.secondary' }}>

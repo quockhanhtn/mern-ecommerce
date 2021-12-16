@@ -19,7 +19,7 @@ const orderSchema = mongoose.Schema(
     },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 
-    address: { type: addressSchema, required: false },
+    address: { type: addressSchema, required: false, default: null },
     isReceiveAtStore: { type: Boolean, default: false },
 
     status: {
