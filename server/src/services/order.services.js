@@ -89,6 +89,10 @@ async function createWithTransaction(orderData, createdBy) {
     orderToSave.status = constants.ORDER.STATUS.PENDING;
     orderToSave.paymentStatus = constants.ORDER.PAYMENT_STATUS.PENDING;
 
+    if (orderToSave.isReceiveAtStore) {
+      orderToSave.address = null;
+    }
+
     const order = await orderToSave.save({ session });
 
     await session.commitTransaction();
