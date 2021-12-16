@@ -66,8 +66,12 @@ orderSchema.pre('save', function (next) {
     return next(new Error('Invalid customer or user'));
   }
 
-  if (!this.isReceiveAtStore && !this.address) {
-    return next(new Error('Missing address'));
+  if (this.isReceiveAtStore) {
+    this.address = null;
+  } else {
+    if (!this.address) {
+      return next(new Error('Missing address'));
+    }
   }
 
   next();

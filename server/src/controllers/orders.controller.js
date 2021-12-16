@@ -4,13 +4,17 @@ import vnpayService from '../services/vnpay.service.js';
 import constants from '../constants.js';
 
 // Order manager by user
-export const getOne = async (req, res) => {
+export const getOne = async (req, res, next) => {
   try {
     const { orderId } = req.params;
 
     const fields = '_id customer user address isReceiveAtStore status paymentMethod paymentStatus items subTotal shippingFee discount total';
+    const populateOpt = {
+      path: 'items.product',
+      select: '_id name variants.variantName variants.price variants.marketPrice variants.thumbnail variants.sku',
+    };
 
-    const order = await orderService.getOne(orderId, fields);
+    const order = await orderService.getOne(orderId, fields, populateOpt);
     resUtils.status200(
       res,
       'Get order info success',
@@ -64,6 +68,38 @@ export const createByUser = async (req, res, next) => {
       resUtils.status400(
         res,
         'Create order fail'
+      );
+    }
+  } catch (err) { next(err); }
+};
+
+export const rePayOrder = async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const order = await orderService.getOne(orderId,'_id paymentMethod paymentStatus total');
+    if (!order) {
+      resUtils.status400(
+        res,
+        'Order not found'
+      );
+    } else if (order.paymentStatus === constants.ORDER.PAYMENT_STATUS.PAID) {
+      resUtils.status400(
+        res,
+        'Order has been paid'
+      );
+    } else if (order.paymentMethod === constants.ORDER.PAYMENT_METHOD.VNPAY) {
+      const apiUrl = `${req.protocol}://${req.get('host')}`
+      const paymentUrl = await vnpayService.createPaymentUrl(
+        req.ip,
+        apiUrl,
+        req.headers.origin,
+        order._id.toString(),
+        order.total
+      );
+      resUtils.status200(
+        res,
+        'Create payment url success',
+        paymentUrl
       );
     }
   } catch (err) { next(err); }

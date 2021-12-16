@@ -67,6 +67,7 @@ export default {
     'type-office': 'Văn phòng',
     'type-other': 'Khác',
     note: 'Ghi chú',
+    'note-empty': '(không có ghi chú)',
     'add-title': 'Thêm địa chỉ',
     'edit-title': 'Chỉnh sửa địa chỉ'
   },
@@ -147,7 +148,10 @@ export default {
     'payment-status': 'Trạng thái thanh toán',
     'payment-status-pending': 'Chưa thanh toán',
     'payment-status-paid': 'Đã thanh toán',
-    'payment-status-cancelled': 'Hủy thanh toán'
+    'payment-status-cancelled': 'Hủy thanh toán',
+    //
+    'order-id': 'Mã đơn hàng',
+    'order-date': 'Ngày đặt hàng'
   },
   settings: {
     title: 'Cài đặt',

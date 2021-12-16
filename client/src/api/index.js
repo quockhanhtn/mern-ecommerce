@@ -90,3 +90,4 @@ export const paymentCallback = () => API.get(`/cart/payment`);
 // ----------------------------Order----------------------------------
 export const createOrder = (newOrder) => API.post('/orders', newOrder);
 export const getOrder = (id) => API.get(`/orders/${id}`);
+export const rePayOrder = (id) => API.get(`/orders/re-pay/${id}`);
