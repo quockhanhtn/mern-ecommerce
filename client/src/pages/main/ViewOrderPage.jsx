@@ -96,8 +96,15 @@ export default function ViewOrderPage() {
     navigate('/');
   };
 
-  const handleRePay = () => {
-    console.log('handleRePay');
+  const handleRePay = async () => {
+    try {
+      const { data } = await Api.rePayOrder(orderId);
+      if (data.data) {
+        window.location.href = data.data;
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const renderPaymentSuccess = () => (

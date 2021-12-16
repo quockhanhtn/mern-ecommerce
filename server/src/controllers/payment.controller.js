@@ -6,7 +6,7 @@ import Payment from '../models/payment.model.js';
 import constants from '../constants.js';
 
 
-export const payByVnpay = async (req, res, next) => {
+export const getVnpayResult = async (req, res, next) => {
   try {
     const result = await vnpayService.checkPaymentStatus(req.query);
     let message = '';

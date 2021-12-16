@@ -100,7 +100,7 @@ export default function CheckoutBillingAddress() {
     }
   ];
 
-  const DELIVERY_OPTIONS = [
+  const deliveryOpts = [
     {
       value: 0,
       title: 'Standard delivery (Free)',
@@ -184,6 +184,18 @@ export default function CheckoutBillingAddress() {
 
   const { errors, values, touched, handleSubmit, setFieldValue, getFieldProps } = formik;
 
+  useEffect(() => {
+    if (deliveryAddress) {
+      setFieldValue('name', deliveryAddress.name);
+      setFieldValue('phone', deliveryAddress.phone);
+
+      setFieldValue('street', deliveryAddress.street);
+      setFieldValue('ward', deliveryAddress.ward);
+      setFieldValue('district', deliveryAddress.district);
+      setFieldValue('province', deliveryAddress.province);
+    }
+  }, [deliveryAddress]);
+
   const handleAddAddress = () => {
     setOpenForm(true);
   };
@@ -219,6 +231,13 @@ export default function CheckoutBillingAddress() {
   };
 
   const handleNextStep = () => {
+    if (deliveryAddress) {
+      setFieldValue('street', deliveryAddress.street);
+      setFieldValue('ward', deliveryAddress.ward);
+      setFieldValue('district', deliveryAddress.district);
+      setFieldValue('province', deliveryAddress.province);
+    }
+
     console.log('Submit', {
       values,
       errors
@@ -289,6 +308,7 @@ export default function CheckoutBillingAddress() {
 
   return (
     <>
+      {errors && <p>{JSON.stringify(errors)}</p>}
       <FormikProvider value={formik} noValidate onSubmit={handleSubmit}>
         <Form autoComplete="off">
           <Grid container spacing={3}>
@@ -388,7 +408,7 @@ export default function CheckoutBillingAddress() {
                 <CheckoutDelivery
                   formik={formik}
                   onApplyShipping={handleApplyShipping}
-                  deliveryOptions={DELIVERY_OPTIONS}
+                  deliveryOptions={deliveryOpts}
                   sx={{ mt: 3 }}
                 />
               )}

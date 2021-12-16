@@ -4,6 +4,7 @@ import {
   getByUser,
   createByUser,
   updateByUser,
+  rePayOrder,
   getAllOrders,
   createOrderByAdminOrStaff,
   updateOrderByAdminOrStaff
@@ -13,6 +14,7 @@ import { isGuestOrAuthorized, isAdminOrStaff } from '../../middlewares/jwt-auth.
 const router = express.Router();
 
 router.post('/', isGuestOrAuthorized, createByUser);
+router.get('/re-pay/:orderId', rePayOrder);
 router.get('/:orderId', getOne);
 
 /**

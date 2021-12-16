@@ -73,6 +73,38 @@ export const createByUser = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+export const rePayOrder = async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const order = await orderService.getOne(orderId,'_id paymentMethod paymentStatus total');
+    if (!order) {
+      resUtils.status400(
+        res,
+        'Order not found'
+      );
+    } else if (order.paymentStatus === constants.ORDER.PAYMENT_STATUS.PAID) {
+      resUtils.status400(
+        res,
+        'Order has been paid'
+      );
+    } else if (order.paymentMethod === constants.ORDER.PAYMENT_METHOD.VNPAY) {
+      const apiUrl = `${req.protocol}://${req.get('host')}`
+      const paymentUrl = await vnpayService.createPaymentUrl(
+        req.ip,
+        apiUrl,
+        req.headers.origin,
+        order._id.toString(),
+        order.total
+      );
+      resUtils.status200(
+        res,
+        'Create payment url success',
+        paymentUrl
+      );
+    }
+  } catch (err) { next(err); }
+};
+
 export const updateByUser = async (req, res, next) => {
   try {
     const { orderId } = req.params;
