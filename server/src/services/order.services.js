@@ -122,10 +122,30 @@ async function getList(userId, status, selectedFields = null) {
   return lists;
 }
 
-async function getOne(orderId, selectedFields = null) {
+async function getOne(orderId, selectedFields = null, populate = null) {
   if (!selectedFields) { selectedFields = SELECTED_FIELDS; }
-  const order = await Order.findById(orderId).select(selectedFields).lean().exec();
-  return order;
+
+  let result = null;
+  if (populate) {
+    result = await Order.findById(orderId)
+      .select(selectedFields)
+      .populate(populate)
+      .lean().exec();
+
+    result.items = result.items.map(item => {
+      return {
+        product: item.product._id,
+        productName: item.product.name,
+        sku: item.sku,
+        quantity: item.quantity,
+        pricePerUnit: item.pricePerUnit,
+        variant: item.product.variants.find(variant => variant.sku === item.sku)
+      };
+    });
+  } else {
+    result = await Order.findById(orderId).select(selectedFields).lean().exec();
+  }
+  return result;
 }
 
 async function getAlls(status, selectedFields = null) {

@@ -1,23 +1,16 @@
-import { useEffect } from 'react';
 import PropTypes from 'prop-types';
+// icons
 import { Icon } from '@iconify/react';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 // material
 import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector } from '@material-ui/core';
 import { useTheme, withStyles } from '@material-ui/core/styles';
 // hooks
-import { useDispatch, useSelector } from 'react-redux';
 import useLocales from '../../hooks/useLocales';
-import useIsMountedRef from '../../hooks/useIsMountedRef';
+import useOrderFlow from '../../hooks/useOrderFlow';
 // components
 import Page from '../../components/Page';
-import {
-  CheckoutCart,
-  CheckoutPayment,
-  CheckoutOrderComplete,
-  CheckoutBillingAddress
-} from '../../components/checkout';
-import useOrderFlow from '../../hooks/useOrderFlow';
+import { CheckoutCart, CheckoutPayment, CheckoutBillingAddress } from '../../components/checkout';
 
 // ----------------------------------------------------------------------
 
@@ -58,12 +51,10 @@ function QontoStepIcon({ active, completed }) {
 
 export default function CartPage() {
   const theme = useTheme();
-  const dispatch = useDispatch();
 
   const { t } = useLocales();
-  const isMountedRef = useIsMountedRef();
 
-  const { cart, activeStep } = useOrderFlow();
+  const { activeStep } = useOrderFlow();
 
   const steps = [
     {
@@ -78,20 +69,18 @@ export default function CartPage() {
       label: t('cart.step.3'),
       component: <CheckoutPayment />
     }
-    // 'Cart', 'Billing & address', 'Payment'
   ];
-  const isComplete = activeStep === steps.length;
 
-  useEffect(() => {
-    if (isMountedRef.current) {
-      // dispatch(getCart(cart));
-    }
-  }, [dispatch, isMountedRef, cart]);
+  // useEffect(() => {
+  //   if (isMountedRef.current) {
+  //     // dispatch(getCart(cart));
+  //   }
+  // }, [dispatch, isMountedRef, cart]);
 
   return (
     <Page title={t('cart.page-title')}>
       <Container sx={{ marginY: theme.spacing(5) }}>
-        <Grid container justifyContent={isComplete ? 'center' : 'flex-start'}>
+        <Grid container justifyContent="flex-start">
           <Grid item xs={12} md={8} sx={{ mb: 5 }}>
             <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
               {steps.map((s) => (
@@ -108,7 +97,7 @@ export default function CartPage() {
           </Grid>
         </Grid>
 
-        {!isComplete ? steps[activeStep].component : <CheckoutOrderComplete open={isComplete} />}
+        {steps[activeStep].component}
       </Container>
     </Page>
   );

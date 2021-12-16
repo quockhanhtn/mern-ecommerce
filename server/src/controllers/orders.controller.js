@@ -4,13 +4,17 @@ import vnpayService from '../services/vnpay.service.js';
 import constants from '../constants.js';
 
 // Order manager by user
-export const getOne = async (req, res) => {
+export const getOne = async (req, res, next) => {
   try {
     const { orderId } = req.params;
 
     const fields = '_id customer user address isReceiveAtStore status paymentMethod paymentStatus items subTotal shippingFee discount total';
+    const populateOpt = {
+      path: 'items.product',
+      select: '_id name variants.variantName variants.price variants.marketPrice variants.thumbnail variants.sku',
+    };
 
-    const order = await orderService.getOne(orderId, fields);
+    const order = await orderService.getOne(orderId, fields, populateOpt);
     resUtils.status200(
       res,
       'Get order info success',
