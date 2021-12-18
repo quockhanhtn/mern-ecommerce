@@ -69,6 +69,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     if (isOpenSidebar) {
       onCloseSidebar();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const sidebarConfig = [
@@ -78,7 +79,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       subheader: t('dashboard.general'),
       items: [
         { title: t('dashboard.statics'), path: PATH_DASHBOARD.general.statics, icon: ICONS.analytics },
-        { title: t('dashboard.orders'), path: PATH_DASHBOARD.general.config, icon: ICONS.ecommerce }
+        { title: t('dashboard.orders'), path: PATH_DASHBOARD.general.orders, icon: ICONS.ecommerce }
       ]
     },
 

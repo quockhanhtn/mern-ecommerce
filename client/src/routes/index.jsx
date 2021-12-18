@@ -78,8 +78,8 @@ export default function Router() {
       ),
       children: [
         { path: '/', element: <Navigate to="/dashboard/statics" replace /> },
+        { path: 'orders', element: <PageOrderList /> },
         { path: 'statics', element: <PageStatistic /> },
-        { path: 'config', element: <PageTwo /> },
         {
           path: 'app',
           children: [
@@ -139,7 +139,6 @@ export default function Router() {
         { path: '/q', element: <ProductListPage /> },
         { path: '/:category/:slug', element: <ProductDetailPage /> },
         { path: '/cart', element: <CartPage /> },
-        { path: '/cart/payment/:orderId', element: <CartPageResult /> },
         { path: '/order/:orderId', element: <ViewOrderPage /> }
       ]
     },
@@ -156,10 +155,9 @@ const Register = Loadable(lazy(() => import('../pages/authentication/Register'))
 // const VerifyCode = Loadable(lazy(() => import('../pages/authentication/VerifyCode')));
 
 // Dashboard
-const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
 const PageStatistic = Loadable(lazy(() => import('../pages/dashboard/statistic/PageStatistic')));
-const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));
-
+// Orders
+const PageOrderList = Loadable(lazy(() => import('../pages/dashboard/orders/PageOrderList')));
 // Category
 const PageCategoryList = Loadable(lazy(() => import('../pages/dashboard/categories/PageCategoryList')));
 // Brand
@@ -185,5 +183,3 @@ const ProductListPage = Loadable(lazy(() => import('../pages/main/ProductListPag
 const ProductDetailPage = Loadable(lazy(() => import('../pages/main/ProductDetailPage')));
 const CartPage = Loadable(lazy(() => import('../pages/main/CartPage')));
 const ViewOrderPage = Loadable(lazy(() => import('../pages/main/ViewOrderPage')));
-
-const CartPageResult = Loadable(lazy(() => import('../pages/main/cart/CartPageResult')));

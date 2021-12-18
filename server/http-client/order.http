@@ -1,0 +1,13 @@
+@BASE_URL = http://localhost:3001/api/v1
+@RESOURCE = orders
+
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJhMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEiLCJpYXQiOjE2Mzk3OTM1NDEsImV4cCI6MTY0MDM5ODM0MX0.KTpXBiSbaLI-7ssLQQ_LoiAduGkckaS-9UAoaxRObuI
+
+GET {{BASE_URL}}/{{RESOURCE}}/manager
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "page": 1,
+  "limit": 10
+}
