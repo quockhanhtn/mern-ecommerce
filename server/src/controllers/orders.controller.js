@@ -8,7 +8,7 @@ export const getOne = async (req, res, next) => {
   try {
     const { orderId } = req.params;
 
-    const fields = '_id customer user address isReceiveAtStore status paymentMethod paymentStatus items subTotal shippingFee discount total';
+    const fields = '_id numericId customer user address isReceiveAtStore status paymentMethod paymentStatus items subTotal shippingFee discount total';
     const populateOpt = {
       path: 'items.product',
       select: '_id name variants.variantName variants.price variants.marketPrice variants.thumbnail variants.sku',

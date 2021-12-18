@@ -13,7 +13,7 @@ export default {
   update,
 }
 
-const SELECTED_FIELDS = '_id user address status items totalPrice totalShipping totalTax totalDiscount total createdAt updatedAt';
+const SELECTED_FIELDS = '_id numericId user address status items totalPrice totalShipping totalTax totalDiscount total createdAt updatedAt';
 
 /**
  * Create new order with transaction
@@ -127,11 +127,18 @@ async function getList(userId, status, selectedFields = null) {
 }
 
 async function getOne(orderId, selectedFields = null, populate = null) {
+  let filter = {};
+  if (!mongoose.Types.ObjectId.isValid(orderId)) {
+    filter = { numericId: orderId };
+  } else {
+    filter = { _id: orderId };
+  }
+
   if (!selectedFields) { selectedFields = SELECTED_FIELDS; }
 
   let result = null;
   if (populate) {
-    result = await Order.findById(orderId)
+    result = await Order.findOne(filter)
       .select(selectedFields)
       .populate(populate)
       .lean().exec();
@@ -147,7 +154,7 @@ async function getOne(orderId, selectedFields = null, populate = null) {
       };
     });
   } else {
-    result = await Order.findById(orderId).select(selectedFields).lean().exec();
+    result = await Order.findOne(filter).select(selectedFields).lean().exec();
   }
   return result;
 }

@@ -170,7 +170,9 @@ export default function ViewOrderPage() {
               <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}>
                 {t('order.title')}
               </Typography>
-              <Typography variant="h6">{order?._id}</Typography>
+              <Typography variant="h6" sx={{ display: 'inline-block', ml: 2 }}>
+                {`#${order?.numericId || order?._id}`}
+              </Typography>
               {/* <Box component="img" alt="logo" src="/static/brand/logo_full.svg" sx={{ height: 48 }} /> */}
             </Grid>
 
