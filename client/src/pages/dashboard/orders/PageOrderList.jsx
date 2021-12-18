@@ -8,11 +8,9 @@ import {
   Table,
   Button,
   TableRow,
-  Checkbox,
   TableBody,
   TableCell,
   Container,
-  Typography,
   TableContainer,
   TablePagination
 } from '@material-ui/core';
@@ -24,27 +22,19 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import useLocales from '../../../hooks/useLocales';
 // components
 import Page from '../../../components/Page';
-import Label from '../../../components/Label';
 import Scrollbar from '../../../components/Scrollbar';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
 import LoadingScreen from '../../../components/LoadingScreen';
 import EmptyCard from '../../../components/EmptyCard';
-import {
-  OrderDetailForm,
-  OrderListHead,
-  OrderListToolbar,
-  OrderMoreMenu,
-  OrderTableRow
-} from '../../../components/dashboard/order';
+import { OrderDetailForm, OrderListHead, OrderListToolbar, OrderTableRow } from '../../../components/dashboard/order';
 import CategoryForm from '../categories/CategoryForm';
 //
 import { stableSort, getComparator } from '../../../helper/listHelper';
-import { getOrderStatusColor, getPaymentStatusColor } from '../../../utils/labelColor';
 
 // ----------------------------------------------------------------------
 
 export default function PageOrderList() {
-  const { t, currentLang } = useLocales();
+  const { t } = useLocales();
   const dispatch = useDispatch();
   const { list: orderList, isLoading, error } = useSelector((state) => state.order);
 
@@ -251,15 +241,8 @@ export default function PageOrderList() {
         />
 
         <HeaderBreadcrumbs
-          heading={t('dashboard.categories.heading')}
-          links={[
-            { name: t('dashboard.title'), href: PATH_DASHBOARD.root },
-            {
-              name: t('dashboard.management'),
-              href: PATH_DASHBOARD.app.root
-            },
-            { name: t('dashboard.categories.heading') }
-          ]}
+          heading={t('order.heading')}
+          links={[{ name: t('dashboard.general'), href: PATH_DASHBOARD.general }, { name: t('order.title') }]}
           action={
             <Button variant="contained" startIcon={<Icon icon={plusFill} />} onClick={handleCreateNew}>
               {t('dashboard.categories.add')}

@@ -129,8 +129,9 @@ export default {
   order: {
     'page-title': 'Đơn hàng | HK Mobile',
     'dashboard-page-title': 'Quản lý Đơn hàng | HK Mobile',
+    heading: 'Danh sách Đơn hàng',
     title: 'Đơn hàng',
-    'search-placeholder': 'Tìm kiếm đơn hàng bằng mã hoặc số điện thoại',
+    'search-placeholder': 'Tìm kiếm đơn hàng ...',
     'search-placeholder-desc': 'Nhập mã đơn hàng hoặc số điện thoại để tìm kiếm',
     // order-status
     'order-status': 'Trạng thái đơn hàng',
