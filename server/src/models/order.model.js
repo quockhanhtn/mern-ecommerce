@@ -8,6 +8,7 @@ import addressSchema from './schemas/address.schema.js';
 const orderSchema = mongoose.Schema(
   {
     _id: mongoose.Types.ObjectId,
+    numericId: { type: Number, unique: true, min: 10000 },
 
     // get name and phone from address instead
     customer: {
@@ -61,7 +62,15 @@ const orderSchema = mongoose.Schema(
 orderSchema.plugin(mongooseLeanVirtuals);
 orderSchema.plugin(removeMultiSpace);
 
-orderSchema.pre('save', function (next) {
+orderSchema.statics.generateNumericId = async function () {
+  const item = await this.findOne().select('numericId').sort('-numericId').lean().exec();
+  const id = parseInt(item?.numericId, 10) || 9999;
+  return id + 1;
+}
+
+orderSchema.pre('save', async function (next) {
+  this.numericId = this.numericId || await this.constructor.generateNumericId();
+
   if (!this?.customer && !this?.user) {
     return next(new Error('Invalid customer or user'));
   }

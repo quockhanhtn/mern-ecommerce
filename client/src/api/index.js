@@ -91,3 +91,13 @@ export const paymentCallback = () => API.get(`/cart/payment`);
 export const createOrder = (newOrder) => API.post('/orders', newOrder);
 export const getOrder = (id) => API.get(`/orders/${id}`);
 export const rePayOrder = (id) => API.get(`/orders/re-pay/${id}`);
+
+// ----------------------------Order manager---------------------------
+export const orderManager = {
+  getAll: (search, orderStatus, paymentStatus, page, limit) =>
+    API.get(
+      `/orders/manager/?search=${search}&status=${orderStatus}&paymentStatus=${paymentStatus}&page=${page}&limit=${limit}`
+    ),
+  create: (newOrder) => API.post('/orders/manager', newOrder),
+  update: (id, updatedOrder) => API.patch(`/orders/manager/${id}`, updatedOrder)
+};

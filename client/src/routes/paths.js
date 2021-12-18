@@ -23,7 +23,7 @@ export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   general: {
     statics: path(ROOTS_DASHBOARD, '/statics'),
-    config: path(ROOTS_DASHBOARD, '/config')
+    orders: path(ROOTS_DASHBOARD, '/orders')
   },
   app: {
     root: path(ROOTS_DASHBOARD, '/app'),

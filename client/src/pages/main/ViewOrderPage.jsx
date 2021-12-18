@@ -38,6 +38,7 @@ import { InvoiceToolbar } from '../../components/invoice';
 import * as Api from '../../api';
 // utils
 import { fCurrency } from '../../utils/formatNumber';
+import { getOrderStatusColor, getPaymentStatusColor } from '../../utils/labelColor';
 
 // ----------------------------------------------------------------------
 
@@ -130,33 +131,6 @@ export default function ViewOrderPage() {
     </>
   );
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'pending':
-        return 'warning';
-      case 'completed':
-        return 'success';
-      case 'cancelled':
-        return 'error';
-      default:
-        // confirmed, shipping
-        return 'info';
-    }
-  };
-
-  const getPaymentStatusColor = (status) => {
-    switch (status) {
-      case 'pending':
-        return 'warning';
-      case 'paid':
-        return 'success';
-      case 'cancelled':
-        return 'error';
-      default:
-        return 'info';
-    }
-  };
-
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -170,13 +144,15 @@ export default function ViewOrderPage() {
               <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}>
                 {t('order.title')}
               </Typography>
-              <Typography variant="h6">{order?._id}</Typography>
+              <Typography variant="h6" sx={{ display: 'inline-block', ml: 2 }}>
+                {`#${order?.numericId || order?._id}`}
+              </Typography>
               {/* <Box component="img" alt="logo" src="/static/brand/logo_full.svg" sx={{ height: 48 }} /> */}
             </Grid>
 
             <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
               <Box sx={{ textAlign: { sm: 'right' } }}>
-                <Label color={getStatusColor(order?.status)} sx={{ textTransform: 'uppercase', mb: 1 }}>
+                <Label color={getOrderStatusColor(order?.status)} sx={{ textTransform: 'uppercase', mb: 1 }}>
                   {t(`order.status-${order?.status}`)}
                 </Label>
                 {/* <Typography variant="h6">{order?._id}</Typography> */}
@@ -228,7 +204,7 @@ export default function ViewOrderPage() {
                   <Typography variant="body2" component="span" sx={{ color: 'text.secondary', mr: 2, width: 200 }}>
                     {t('order.order-status')}
                   </Typography>
-                  <Label color={getStatusColor(order?.status)} sx={{ textTransform: 'uppercase' }}>
+                  <Label color={getOrderStatusColor(order?.status)} sx={{ textTransform: 'uppercase' }}>
                     {t(`order.status-${order?.status}`)}
                   </Label>
                 </Box>

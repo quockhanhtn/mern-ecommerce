@@ -8,18 +8,19 @@ export const getOne = async (req, res, next) => {
   try {
     const { orderId } = req.params;
 
-    const fields = '_id customer user address isReceiveAtStore status paymentMethod paymentStatus items subTotal shippingFee discount total';
-    const populateOpt = {
-      path: 'items.product',
-      select: '_id name variants.variantName variants.price variants.marketPrice variants.thumbnail variants.sku',
-    };
-
-    const order = await orderService.getOne(orderId, fields, populateOpt);
-    resUtils.status200(
-      res,
-      'Get order info success',
-      order
-    );
+    const order = await orderService.getOne(orderId);
+    if (order) {
+      resUtils.status200(
+        res,
+        'Get order info success',
+        order
+      );
+    } else {
+      resUtils.status404(
+        res,
+        'Order not found'
+      );
+    }
   } catch (err) { next(err); }
 };
 
@@ -76,7 +77,7 @@ export const createByUser = async (req, res, next) => {
 export const rePayOrder = async (req, res, next) => {
   try {
     const { orderId } = req.params;
-    const order = await orderService.getOne(orderId,'_id paymentMethod paymentStatus total');
+    const order = await orderService.getOne(orderId, '_id paymentMethod paymentStatus total');
     if (!order) {
       resUtils.status400(
         res,
@@ -129,8 +130,11 @@ export const updateByUser = async (req, res, next) => {
 // Order manager by admin/staff
 export const getAllOrders = async (req, res, next) => {
   try {
-    const status = req.query.status;
-    const orders = await orderService.getAlls(status);
+    const search = req.query.search || '';
+    const status = req.query.status || null;
+    const paymentStatus = req.query.paymentStatus || null;
+
+    const orders = await orderService.getAlls(search, status, paymentStatus);
     resUtils.status200(
       res,
       'Get list order success',
@@ -174,5 +178,33 @@ export const createOrderByAdminOrStaff = async (req, res, next) => {
 export const updateOrderByAdminOrStaff = async (req, res, next) => {
   try {
     const { orderId } = req.params;
+    const userId = req.user._id;
+
+    let updateData = {};
+    if (req.body.status) {
+      updateData.status = req.body.status;
+    }
+    if (req.body.paymentStatus) {
+      updateData.paymentStatus = req.body.paymentStatus;
+    }
+    if (req.body.paymentMethod) {
+      updateData.paymentMethod = req.body.paymentMethod;
+    }
+
+    const order = await orderService.update(userId, orderId, updateData);
+
+    if (order) {
+      const result = await orderService.getOne(order._id);
+      resUtils.status200(
+        res,
+        'Update order success',
+        result
+      );
+    } else {
+      resUtils.status400(
+        res,
+        'Update order fail'
+      );
+    }
   } catch (err) { next(err); }
 };

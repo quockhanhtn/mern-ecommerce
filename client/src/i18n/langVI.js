@@ -128,9 +128,14 @@ export default {
   },
   order: {
     'page-title': 'Đơn hàng | HK Mobile',
+    'dashboard-page-title': 'Quản lý Đơn hàng | HK Mobile',
+    heading: 'Danh sách Đơn hàng',
     title: 'Đơn hàng',
+    'search-placeholder': 'Tìm kiếm đơn hàng ...',
+    'search-placeholder-desc': 'Nhập mã đơn hàng hoặc số điện thoại để tìm kiếm',
     // order-status
     'order-status': 'Trạng thái đơn hàng',
+    'status-all': 'Tất cả',
     'status-pending': 'Chờ xử lý',
     'status-confirmed': 'Đã xác nhận',
     'status-shipping': 'Đang giao hàng',
@@ -146,6 +151,7 @@ export default {
     'payment-method-zalopay': 'Thanh toán qua ví ZaloPay',
     // payment-status
     'payment-status': 'Trạng thái thanh toán',
+    'payment-status-all': 'Tất cả',
     'payment-status-pending': 'Chưa thanh toán',
     'payment-status-paid': 'Đã thanh toán',
     'payment-status-cancelled': 'Hủy thanh toán',

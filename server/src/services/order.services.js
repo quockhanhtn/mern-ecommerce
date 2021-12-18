@@ -13,7 +13,36 @@ export default {
   update,
 }
 
-const SELECTED_FIELDS = '_id user address status items totalPrice totalShipping totalTax totalDiscount total createdAt updatedAt';
+const SELECTED_FIELDS = '_id numericId customer user address isReceiveAtStore status paymentMethod paymentStatus items subTotal shippingFee discount total createdAt updatedAt';
+
+const POPULATE_OPT = {
+  path: 'items.product',
+  select: '_id name variants.variantName variants.price variants.marketPrice variants.thumbnail variants.sku',
+};
+
+function formatResult(record) {
+  if (!record) { return null; }
+
+  if (Array.isArray(record)) {
+    return record.map(item => formatResult(item));
+  }
+
+  let itemsToShow = record.items.map(item => {
+    return {
+      product: item.product._id,
+      productName: item.product.name,
+      sku: item.sku,
+      quantity: item.quantity,
+      pricePerUnit: item.pricePerUnit,
+      variant: item.product.variants.find(variant => variant.sku === item.sku)
+    };
+  });
+
+  return {
+    ...record,
+    items: itemsToShow,
+  };
+}
 
 /**
  * Create new order with transaction
@@ -115,49 +144,58 @@ async function createWithTransaction(orderData, createdBy) {
   }
 }
 
-async function getList(userId, status, selectedFields = null) {
+async function getList(userId, search, status, paymentStatus, selectedFields = null) {
   if (!selectedFields) { selectedFields = SELECTED_FIELDS; }
 
   const filter = {};
   if (userId) { filter.user = userId; }
-  if (status || status !== 'all') { filter.status = status; }
+  if (search) {
+    if (mongoose.Types.ObjectId.isValid(search)) {
+      filter._id = mongoose.Types.ObjectId(search);
+    } else if (!search.startsWith('0') && Number.parseInt(search)) {
+      filter.numericId = Number.parseInt(search);
+    } else {
+      filter.$or = [
+        { 'customer.name': { $regex: search, $options: 'i' } },
+        { 'customer.phone': { $regex: search, $options: 'i' } }
+      ];
+    }
+  }
+  if (status && status !== 'all') { filter.status = status; }
+  if (paymentStatus && paymentStatus !== 'all') { filter.paymentStatus = paymentStatus; }
 
-  const lists = await Order.find(filter).lean().exec();
-  return lists;
+  let lists = await Order.find(filter)
+    .select(selectedFields)
+    .populate(POPULATE_OPT)
+    .lean().exec();
+
+  return formatResult(lists);
 }
 
-async function getOne(orderId, selectedFields = null, populate = null) {
+async function getOne(orderId, selectedFields = null) {
+  let filter = {};
+  if (!mongoose.Types.ObjectId.isValid(orderId)) {
+    filter = { numericId: Number.parseInt(orderId) || 0 };
+  } else {
+    filter = { _id: orderId };
+  }
+
   if (!selectedFields) { selectedFields = SELECTED_FIELDS; }
 
-  let result = null;
-  if (populate) {
-    result = await Order.findById(orderId)
-      .select(selectedFields)
-      .populate(populate)
-      .lean().exec();
+  let result = await Order.findOne(filter)
+    .select(selectedFields)
+    .populate(POPULATE_OPT)
+    .lean().exec();
 
-    result.items = result.items.map(item => {
-      return {
-        product: item.product._id,
-        productName: item.product.name,
-        sku: item.sku,
-        quantity: item.quantity,
-        pricePerUnit: item.pricePerUnit,
-        variant: item.product.variants.find(variant => variant.sku === item.sku)
-      };
-    });
-  } else {
-    result = await Order.findById(orderId).select(selectedFields).lean().exec();
-  }
-  return result;
+  return formatResult(result);
 }
 
-async function getAlls(status, selectedFields = null) {
-  return await getList(null, status, selectedFields);
+async function getAlls(search, status, paymentStatus, selectedFields = null) {
+  return await getList(null, search, status, paymentStatus, selectedFields);
 }
 
-async function getListByUser(userId, status, selectedFields = null) {
-  return await getList(userId, status, selectedFields);
+async function getListByUser(userId, search, status, paymentStatus, selectedFields = null) {
+  return await getList(userId, search, status, paymentStatus, selectedFields);
 }
 
 /**
@@ -209,6 +247,9 @@ async function update(userId, orderId, data) {
   if (!mongoose.Types.ObjectId.isValid(orderId)) {
     throw new ApiError('Invalid order id', 400);
   }
-  const order = await Order.findOneAndUpdate({ _id: orderId, user: userId }, data, { new: true }).lean().exec();
+
+  data.updatedBy = userId;
+
+  const order = await Order.findOneAndUpdate({ _id: orderId }, data, { new: true }).lean().exec();
   return order;
 }
