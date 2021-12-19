@@ -246,7 +246,15 @@ export default {
       go: 'go now',
       'product-total': 'Product total',
       'brand-total': 'Brand total',
-      'category-total': 'Category total'
+      'category-total': 'Category total',
+      'product-sold-total': 'Product sold total',
+      'user-has-account-total': 'User total',
+      'order-total': 'Order total / paid',
+      'turnover-total': 'Turnover total',
+      'best-seller': 'Best seller',
+      'product-name': 'Product name',
+      total: 'Total',
+      top: 'Top'
     }
   }
 };

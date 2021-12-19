@@ -10,7 +10,8 @@ import {
   getProductSpecifications,
   addProductVariants,
   updateProductVariants,
-  deleteProductVariants
+  deleteProductVariants,
+  getFullAllProducts
 } from '../../controllers/products.controller.js';
 import { isAdmin, isAdminOrStaff } from '../../middlewares/jwt-auth.js';
 import { handleFilePath, multerUpload } from '../../utils/upload-utils.js';
@@ -31,6 +32,7 @@ const uploadFields = [{ name: 'thumbnail', maxCount: 1 }, { name: 'pictures', ma
  */
 
 router.get('/', getAllProducts);
+router.get('/all', getFullAllProducts);
 router.get('/specs', getProductSpecifications);
 router.get('/:identity', getProductById);
 
