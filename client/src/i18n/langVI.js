@@ -359,7 +359,15 @@ export default {
       go: 'Tiếp tục mua hàng',
       'product-total': 'Tổng số sản phẩm',
       'brand-total': 'Tổng số thương hiệu',
-      'category-total': 'Tổng số danh mục'
+      'category-total': 'Tổng số danh mục',
+      'product-sold-total': 'Tổng số sản phẩm đã bán',
+      'user-has-account-total': 'Tổng số khách hàng - Đã có tài khoản',
+      'order-total': 'Số đơn hàng / đã thanh toán',
+      'turnover-total': 'Tổng số doanh thu',
+      'best-seller': 'Sản phẩm bán chạy',
+      'product-name': 'Tên sản phẩm',
+      total: 'Số lượng',
+      top: 'Top'
     }
   }
 };

@@ -193,3 +193,16 @@ export const getProductSpecifications = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 //#endregion
+
+export const getFullAllProducts = async (req, res, next) => {
+  try {
+    const { fields } = req.query;
+    let products = await productService.getFullAll(fields);
+    products = products.map(product => formatProduct(product, req));
+    if (products && products.length > 0) {
+      resUtils.status200(res, 'Gets all products successfully', products);
+    } else {
+      resUtils.status200(res, 'No products found', []);
+    }
+  } catch (err) { next(err); }
+}

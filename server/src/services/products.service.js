@@ -13,7 +13,7 @@ export default {
   removeProduct,
   rateProduct,
   getSpecifications,
-
+  getFullAll,
   addProductVariants,
   updateProductVariants,
   deleteProductVariants,
@@ -294,4 +294,19 @@ async function getSpecifications() {
       values: [... new Set(groupObj[k])]
     };
   });
+}
+
+/**
+ *
+ * @returns all product
+ */
+async function getFullAll(fields = SELECT_FIELD) {
+  if (fields.indexOf(',') > -1) {
+    fields = fields.split(',').join(' ');
+  }
+  
+  return await Product.find()
+    .select(fields)
+    .sort({ createdAt: -1 })
+    .lean().exec();
 }
