@@ -1,7 +1,6 @@
-import * as Yup from 'yup';
-import { useState } from 'react';
-import { useSnackbar } from 'notistack';
 import { Link as RouterLink } from 'react-router-dom';
+// form validation
+import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
 // icons
 import { Icon } from '@iconify/react';
@@ -11,66 +10,75 @@ import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 // material
 import { Link, Stack, Alert, TextField, IconButton, InputAdornment } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
-// routes
-import { PATH_AUTH } from '../../../routes/paths';
 // hooks
+import { useEffect, useState } from 'react';
+import { useSnackbar } from 'notistack';
 import useAuth from '../../../hooks/useAuth';
 import useLocales from '../../../hooks/useLocales';
-import useIsMountedRef from '../../../hooks/useIsMountedRef';
+// import useIsMountedRef from '../../../hooks/useIsMountedRef';
+// routes
+import { PATH_AUTH } from '../../../routes/paths';
 //
 import { MIconButton } from '../../@material-extend';
 
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
-  const { login, errMessage } = useAuth();
+  const { login, errMessage, isAuthenticated } = useAuth();
   const { t, currentLang } = useLocales();
-  const isMountedRef = useIsMountedRef();
+  // const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [showPassword, setShowPassword] = useState(false);
+  const [messageDisplay, setMessageDisplay] = useState('');
 
   const LoginSchema = Yup.object().shape({
     account: Yup.string().required(t('auth.account-invalid')),
     password: Yup.string().required(t('auth.password-invalid'))
   });
 
-  const formik = useFormik({
-    initialValues: {
-      account: '',
-      password: '',
-      remember: true
-    },
-    validationSchema: LoginSchema,
-    onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
-      try {
-        await login(values.account, values.password);
+  useEffect(() => {
+    if (errMessage) {
+      setMessageDisplay(errMessage?.[currentLang.value] || errMessage);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errMessage]);
 
-        if (isMountedRef.current) {
-          setSubmitting(false);
-          const messageDisplay = errMessage?.[currentLang.value] || errMessage;
-          setErrors({ afterSubmit: messageDisplay });
-        } else {
-          enqueueSnackbar('Login success', {
-            variant: 'success',
-            action: (key) => (
-              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-                <Icon icon={closeFill} />
-              </MIconButton>
-            )
-          });
-        }
-      } catch (error) {
-        console.error(error);
-        resetForm();
-        if (isMountedRef.current) {
-          setSubmitting(false);
-          setErrors({ afterSubmit: error.message });
-        }
+  const formik = useFormik({
+    initialValues: { account: '', password: '' },
+    validationSchema: LoginSchema,
+    onSubmit: async (values, { setSubmitting }) => {
+      await login(values.account, values.password);
+
+      if (!isAuthenticated && errMessage) {
+        setSubmitting(false);
+      } else if (isAuthenticated && !errMessage) {
+        enqueueSnackbar('Login success', {
+          variant: 'success',
+          action: (key) => (
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          )
+        });
       }
+      // if (isMountedRef.current) {
+      //   setSubmitting(false);
+      //   const messageDisplay = errMessage?.[currentLang.value] || errMessage;
+      //   setErrors({ afterSubmit: messageDisplay });
+      // } else {
+      //   enqueueSnackbar('Login success', {
+      //     variant: 'success',
+      //     action: (key) => (
+      //       <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+      //         <Icon icon={closeFill} />
+      //       </MIconButton>
+      //     )
+      //   });
+      // }
     }
   });
 
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -80,7 +88,8 @@ export default function LoginForm() {
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
-          {errors.afterSubmit && <Alert severity="error">{errors.afterSubmit}</Alert>}
+          {/* {errors.afterSubmit && <Alert severity="error">{errors.afterSubmit}</Alert>} */}
+          {messageDisplay && <Alert severity="error">{messageDisplay}</Alert>}
 
           <TextField
             fullWidth

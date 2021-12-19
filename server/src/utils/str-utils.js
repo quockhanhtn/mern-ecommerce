@@ -3,7 +3,9 @@ export default {
   removeMultiSpace,
   replaceAll,
   removeAccents,
-  isUUID
+  isUUID,
+  isEmailAddress,
+  isPhoneNumber 
 }
 
 /**

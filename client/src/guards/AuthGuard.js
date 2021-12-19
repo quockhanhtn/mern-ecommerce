@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 // hooks
+import { Navigate, useLocation } from 'react-router-dom';
+import { useState } from 'react';
 import useAuth from '../hooks/useAuth';
 // pages
 import Login from '../pages/authentication/Login';
@@ -28,8 +28,11 @@ export default function AuthGuard({ children }) {
     setRequestedLocation(null);
     return <Navigate to={requestedLocation} />;
   }
-  if (user.role === 'admin') {
-    return <>{children}</>;
+
+  if (requestedLocation?.startsWith('/dashboard') && !['admin', 'staff'].includes(user.role)) {
+    setRequestedLocation(null);
+    return <Navigate to="/" />;
   }
-  return <Navigate to="/" />;
+
+  return <>{children}</>;
 }

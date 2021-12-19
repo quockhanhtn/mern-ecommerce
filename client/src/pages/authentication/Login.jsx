@@ -1,12 +1,11 @@
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Card, Link, Container, Typography, Button } from '@material-ui/core';
+import { Box, Card, Link, Container, Typography } from '@material-ui/core';
 // routes
 import { PATH_AUTH } from '../../routes/paths';
 // hooks
 import useLocales from '../../hooks/useLocales';
-import useAuth from '../../hooks/useAuth';
 // layouts
 import AuthLayout from '../../layouts/AuthLayout';
 // components
@@ -18,9 +17,7 @@ import AuthWithSocial from '../../components/authentication/AuthWithSocial';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Page)(({ theme }) => ({
-  [theme.breakpoints.up('md')]: {
-    display: 'flex'
-  }
+  [theme.breakpoints.up('md')]: { display: 'flex' }
 }));
 
 const SectionStyle = styled(Card)(({ theme }) => ({
@@ -46,16 +43,6 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Login() {
   const { t } = useLocales();
-  const { user, login, errMessage } = useAuth();
-
-  const handleLoginAuth0 = async () => {
-    try {
-      await login();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <RootStyle title={t('auth.page-login-title')}>
       <AuthLayout>
