@@ -44,12 +44,14 @@ async function getListByRole(role) {
  * @returns
  */
 async function getOne(identity, selectFields = null, needVirtuals = true) {
-  const filter = {
-    $or: [
-      { email: identity },
-      { phone: identity },
-      { username: identity }
-    ]
+  const filter = {};
+  
+  if (strUtils.isEmailAddress(identity)) {
+    filter.email = identity;
+  } else if (strUtils.isPhoneNumber(identity)) {
+    filter.phone = identity;
+  } else {
+    filter.username = identity;
   }
 
   const user = await User.findOne(filter)

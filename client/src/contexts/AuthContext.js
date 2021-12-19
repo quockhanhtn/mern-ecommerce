@@ -11,10 +11,7 @@ const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 const initialState = {
   isAuthenticated: false,
   isInitialized: false,
-  errMessage: {
-    en: 'User not found',
-    vi: 'Tài khoản không tồn tại'
-  },
+  errMessage: null,
   user: null
 };
 
@@ -28,6 +25,13 @@ const handlers = {
       user
     };
   },
+  CLEAR: (state) => ({
+    ...state,
+    isAuthenticated: false,
+    isInitialized: true,
+    user: null,
+    errMessage: null
+  }),
   LOGIN: (state, action) => ({
     ...state,
     isAuthenticated: true,
@@ -108,6 +112,11 @@ function AuthProvider({ children }) {
     initialize();
   }, []);
 
+  const handleError = (e, logTag) => {
+    if (isDev) console.log(`[Auth][${logTag}] error`, e?.response?.data || e);
+    dispatch({ type: 'ERROR', payload: e?.response?.data?.message || e?.response?.data || e });
+  };
+
   const registerAction = async (registerInfo) => {
     const { data } = await api.register(registerInfo);
     const { accessToken, userData } = data;
@@ -117,29 +126,35 @@ function AuthProvider({ children }) {
 
   const googleOAuthAction = async (accessToken) => {
     try {
-      if (isDev) console.log('[JWTAuth][googleOAuth] input', { accessToken });
+      dispatch({ type: 'CLEAR' });
+      if (isDev) console.log('[Auth][googleOAuth] input', { accessToken });
+
       const { data } = await api.googleOAuth(accessToken);
-      if (isDev) console.log('[JWTAuth][googleOAuth] result', data);
+      if (isDev) console.log('[Auth][googleOAuth] result', data);
+
       const { token, refreshToken, user } = data.data;
       setSession(token, refreshToken);
+
       dispatch({ type: 'LOGIN', payload: { user } });
     } catch (e) {
-      if (isDev) console.log('[JWTAuth][googleOAuth] error', e.response);
-      dispatch({ type: 'ERROR', payload: e.response.data.message });
+      handleError(e, 'googleOAuth');
     }
   };
 
   const loginAction = async (username, password) => {
     try {
-      if (isDev) console.log('[JWTAuth][login] input', { username, password });
+      dispatch({ type: 'CLEAR' });
+      if (isDev) console.log('[Auth][login] input', { username, password });
+
       const { data } = await api.login(username, password);
-      if (isDev) console.log('[JWTAuth][login] result', data);
+      if (isDev) console.log('[Auth][login] result', data);
+
       const { token, refreshToken, user } = data.data;
       setSession(token, refreshToken);
+
       dispatch({ type: 'LOGIN', payload: { user } });
     } catch (e) {
-      if (isDev) console.log('[JWTAuth][login] error', e.response);
-      dispatch({ type: 'ERROR', payload: e.response.data.message });
+      handleError(e, 'login');
     }
   };
 
