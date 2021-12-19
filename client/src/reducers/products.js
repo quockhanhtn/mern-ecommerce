@@ -1,6 +1,6 @@
 import * as actionTypes from '../constants/actionTypes';
 
-const initialState = { isLoading: true, hasError: false, list: [], item: {}, pagination: {} };
+const initialState = { isLoading: true, hasError: false, list: [], listFull: [], item: {}, pagination: {} };
 
 const productsReducer = (state = initialState, action) => {
   const { type, payload } = action;
@@ -17,6 +17,9 @@ const productsReducer = (state = initialState, action) => {
 
     case actionTypes.PRODUCT.GET_ALL:
       return { ...state, list: payload.data, hasError: false, pagination: payload.pagination };
+
+    case actionTypes.PRODUCT.GET_FULL_ALL:
+      return { ...state, listFull: payload.data, hasError: false };
 
     case actionTypes.PRODUCT.GET_ONE:
       return { ...state, item: payload, hasError: false };

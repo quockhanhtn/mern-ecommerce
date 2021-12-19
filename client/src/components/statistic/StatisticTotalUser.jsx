@@ -7,9 +7,13 @@ import trendingDownFill from '@iconify/icons-eva/trending-down-fill';
 import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Card, Typography, Stack } from '@material-ui/core';
 // utils
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { fNumber, fPercent } from '../../utils/formatNumber';
 //
 import BaseOptionChart from '../charts/BaseOptionChart';
+import useLocales from '../../hooks/useLocales';
+import { getAllUsers } from '../../actions/users';
 
 // ----------------------------------------------------------------------
 
@@ -27,12 +31,19 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const PERCENT = -0.06;
-const TOTAL_BALANCE = 18765.093383;
+const PERCENT = 26.3;
 const CHART_DATA = [{ data: [12, 14, 2, 47, 42, 15, 47, 75, 65, 19, 14] }];
 
-export default function StatisticTotalBalance() {
+export default function StatisticTotalUser() {
+  const { t } = useLocales();
+  const dispatch = useDispatch();
   const theme = useTheme();
+  const { list: usersList } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, [dispatch]);
+
   const chartOptions = merge(BaseOptionChart(), {
     colors: [theme.palette.info.main],
     chart: { animations: { enabled: true }, sparkline: { enabled: true } },
@@ -53,10 +64,10 @@ export default function StatisticTotalBalance() {
     <Card sx={{ display: 'flex', alignItems: 'center', p: 3 }}>
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="subtitle2" paragraph>
-          Total Balance
+          {t('dashboard.statistics.user-has-account-total')}
         </Typography>
         <Typography variant="h3" gutterBottom>
-          {fNumber(TOTAL_BALANCE)}
+          {fNumber(usersList?.length)}
         </Typography>
 
         <Stack direction="row" alignItems="center" flexWrap="wrap">

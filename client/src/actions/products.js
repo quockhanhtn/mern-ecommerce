@@ -20,6 +20,24 @@ export const getAllProducts =
     }
   };
 
+export const getFullAllProducts = () => async (dispatch) => {
+  try {
+    dispatch({ type: actionTypes.START_LOADING });
+
+    const { data } = await api.getFullAllProduct();
+    if (isDev) console.log('[actions][products][getFullAll] result', data);
+
+    dispatch({
+      type: actionTypes.PRODUCT.GET_FULL_ALL,
+      payload: data.data
+    });
+    dispatch({ type: actionTypes.END_LOADING });
+  } catch (e) {
+    console.error('[actions][products][getFullAll] error', e);
+    dispatch({ type: actionTypes.HAS_ERROR });
+  }
+};
+
 export const getProductById = (id) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });

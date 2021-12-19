@@ -7,9 +7,13 @@ import trendingDownFill from '@iconify/icons-eva/trending-down-fill';
 import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Card, Typography, Stack } from '@material-ui/core';
 // utils
-import { fNumber, fPercent } from '../../utils/formatNumber';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { fCurrency, fNumber, fPercent } from '../../utils/formatNumber';
 //
 import BaseOptionChart from '../charts/BaseOptionChart';
+import useLocales from '../../hooks/useLocales';
+import { getAllOrders } from '../../actions/orders';
 
 // ----------------------------------------------------------------------
 
@@ -27,12 +31,30 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const PERCENT = 0.06;
-const TOTAL_SALES = 4876;
+const PERCENT = 28.5;
 const CHART_DATA = [{ data: [12, 14, 2, 47, 42, 15, 47, 75, 65, 19, 14] }];
 
-export default function StatisticSalesProfit() {
+export default function StatisticTurnover() {
+  const { t, currentLang } = useLocales();
+  const dispatch = useDispatch();
   const theme = useTheme();
+  const { list: orderList } = useSelector((state) => state.order);
+  const [turnover, setTurnover] = useState(0);
+
+  useEffect(() => {
+    dispatch(getAllOrders('', '', '', 1, 100000));
+  }, [dispatch]);
+
+  useEffect(() => {
+    let subTotal = 0;
+    const paid = orderList.filter((order) => order.paymentStatus === 'paid');
+    // eslint-disable-next-line guard-for-in,no-restricted-syntax
+    for (const order of paid) {
+      subTotal += order.subTotal;
+    }
+    setTurnover(subTotal);
+  }, [orderList]);
+
   const chartOptions = merge(BaseOptionChart(), {
     colors: [theme.palette.error.main],
     chart: { animations: { enabled: true }, sparkline: { enabled: true } },
@@ -53,10 +75,10 @@ export default function StatisticSalesProfit() {
     <Card sx={{ display: 'flex', alignItems: 'center', p: 3 }}>
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="subtitle2" paragraph>
-          Sales Profit
+          {t('dashboard.statistics.turnover-total')}
         </Typography>
         <Typography variant="h3" gutterBottom>
-          {fNumber(TOTAL_SALES)}
+          {fCurrency(turnover, currentLang.value)}
         </Typography>
 
         <Stack direction="row" alignItems="center" flexWrap="wrap">

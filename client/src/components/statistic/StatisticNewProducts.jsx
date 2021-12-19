@@ -12,11 +12,12 @@ import { CarouselControlsPaging1 } from '../carousel/controls';
 // ----------------------------------------------------------------------
 
 const PRODUCTS = [
-  'Nike Air Max 97',
-  'Nike Zoom Gravity',
-  'Nike DBreak-Type',
-  'Kyrie Flytrap 3 EP Basketball Shoe',
-  'Nike Air Max Fusion Men'
+  'IPhone 13 Promax',
+  'Air Pod Pro',
+  'Samsung Galaxy Z Flip',
+  'Apple watch series 7',
+  'Macbook Air',
+  'Oppo find X'
 ].map((product, index) => {
   const setIndex = index + 1;
   return {
