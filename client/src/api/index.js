@@ -27,6 +27,7 @@ export const logout = (refreshToken) => API.post('/auth/logout', { refreshToken 
 // ----------------------------Account----------------------------------
 export const getInfo = () => API.get('/account');
 export const updateInfo = (data) => API.patch('/account', data);
+export const changePassword = (data) => API.patch('/account/change-password', data);
 
 export const getAddresses = () => API.get('/account/addresses');
 export const addAddress = (data) => API.post('/account/addresses', data);

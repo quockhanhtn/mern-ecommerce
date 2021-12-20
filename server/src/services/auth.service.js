@@ -2,16 +2,17 @@ import RefreshToken from '../models/refresh-token.model.js';
 import userService from './user.service.js';
 import { randomBytes } from 'crypto';
 import { generateToken } from '../utils/jwt-utils.js';
-import { comparePassword } from '../utils/cipher-utils.js';
-import responseDef from '../responseCode.js';
+import { hashPassword, comparePassword } from '../utils/cipher-utils.js';
 import ApiError from '../utils/APIError.js';
+import responseDef from '../responseCode.js';
 
 
 export default {
   googleAuthenticate,
   authenticate,
   refreshToken,
-  revokeToken
+  revokeToken,
+  changePassword
 };
 
 async function googleAuthenticate(payload, ipAddress) {
@@ -41,7 +42,6 @@ async function googleAuthenticate(payload, ipAddress) {
     refreshToken: refreshToken.token
   };
 };
-
 
 async function authenticate(username, password, ipAddress) {
   const user = await userService.getOne(username, '-addresses');
@@ -112,6 +112,28 @@ async function getRefreshToken(token) {
     throw ApiError.simple2(responseDef.AUTH.INVALID_TOKEN);
   }
   return refreshToken;
+}
+
+async function changePassword(userId, oldPassword, newPassword) {
+  const user = await userService.getOneById(userId, '_id password emptyPassword googleId email');
+  if (!user) {
+    throw ApiError.simple2(responseDef.AUTH.USER_NOT_FOUND);
+  }
+
+  const updateData = {};
+  if (user.emptyPassword) {
+    // user created with google/facebook sign-in
+    updateData.emptyPassword = false;
+  } else {
+    const isMatch = comparePassword(oldPassword, user.password);
+    if (!isMatch) {
+      throw ApiError.simple2(responseDef.AUTH.INVALID_PASSWORD);
+    }
+  }
+
+  updateData.password = hashPassword(newPassword);
+  const result = await userService.updateById(user._id, updateData);
+  return result;
 }
 
 function generateRefreshToken(userId, ipAddress) {

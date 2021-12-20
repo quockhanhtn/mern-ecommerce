@@ -47,7 +47,7 @@ const userSchema = mongoose.Schema(
       default: ''
     },
     password: { type: String, trim: true, required: false },
-    needChangePassword: { type: Boolean, default: true },
+    emptyPassword: { type: Boolean, default: false },
 
     googleId: { type: String, trim: true, required: false },
     facebookId: { type: String, trim: true, required: false },

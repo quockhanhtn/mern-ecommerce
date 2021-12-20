@@ -4,6 +4,7 @@ import { allowImageMineTypes } from '../../constants.js';
 import {
   getInfo,
   updateInfo,
+  changePassword,
   getAddresses,
   addAddress,
   updateAddress,
@@ -29,6 +30,9 @@ router.route('/')
     handleFilePath('avatar'),
     updateInfo
   );
+
+router.route('/change-password')
+  .patch(isAuthorized, changePassword);
 
 // Start defining routes for addresses
 router.route('/addresses')

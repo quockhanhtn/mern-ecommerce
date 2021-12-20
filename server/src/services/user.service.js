@@ -11,11 +11,12 @@ export default {
   getOrCreateByGoogleId,
   create,
   update,
+  updateById,
   remove
 };
 
 const SELECTED_FIELDS =
-  '_id firstName lastName gender email phone username avatar role status createdAt updatedAt';
+  '_id firstName lastName gender email phone username avatar role status emptyPassword createdAt updatedAt';
 
 /**
  *
@@ -45,7 +46,7 @@ async function getListByRole(role) {
  */
 async function getOne(identity, selectFields = null, needVirtuals = true) {
   const filter = {};
-  
+
   if (strUtils.isEmailAddress(identity)) {
     filter.email = identity;
   } else if (strUtils.isPhoneNumber(identity)) {
@@ -100,7 +101,7 @@ async function getOrCreateByGoogleId(
     lastName,
     avatar,
     role: constants.USER.ROLE.CUSTOMER,
-    needChangePassword: true,
+    emptyPassword: true,
     status: constants.USER.STATUS.ACTIVE
   });
   await newUser.save();
@@ -148,6 +149,18 @@ async function update(identity, updatedData) {
   } else {
     throw new Error(`User '${identity}' not found!`);
   }
+}
+
+async function updateById(id, updated, selectFields = null) {
+  if (!selectFields) { selectFields = SELECTED_FIELDS; }
+
+  const user = await User.findByIdAndUpdate(
+    id,
+    updated,
+    { new: true, select: SELECTED_FIELDS }
+  );
+
+  return user;
 }
 
 /**

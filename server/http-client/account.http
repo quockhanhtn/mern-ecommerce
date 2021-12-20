@@ -1,10 +1,22 @@
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJhMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEiLCJpYXQiOjE2Mzg4ODYxNDQsImV4cCI6MTYzOTQ5MDk0NH0.nrE03TUahjbjt2DAoj4nrL36fALqFEIgSvBstvsBNDk
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJhMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEiLCJpYXQiOjE2Mzk5ODk4NTUsImV4cCI6MTY0MDU5NDY1NX0.PycqaPhkoFMGbMCaDP7xjbqB-hVTfAOqkKkIQEd9qIw
+
 
 @BASE_URL = http://localhost:3001/api/v1
-@RESOURCE = me
+@RESOURCE = account
 
 GET {{BASE_URL}}/{{RESOURCE}}
 Authorization: Bearer {{TOKEN}}
+
+###
+
+PATCH {{BASE_URL}}/{{RESOURCE}}/change-password
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "currentPassword": "123",
+  "newPassword": "12"
+}
 
 ###
 
