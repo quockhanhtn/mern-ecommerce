@@ -8,7 +8,7 @@ import {
   addAddress,
   updateAddress,
   deleteAddress
-} from '../../controllers/me.controller.js';
+} from '../../controllers/account.controller.js';
 import {
   getByUser,
   createByUser,

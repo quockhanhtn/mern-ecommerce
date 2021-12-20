@@ -24,14 +24,14 @@ export const register = (data) => API.post('/auth/login', data);
 export const login = (username, password) => API.post('/auth/login', { username, password });
 export const logout = (refreshToken) => API.post('/auth/logout', { refreshToken });
 
-// ----------------------------Me--------------------------------------
-export const getInfo = () => API.get('/me');
-export const updateInfo = (data) => API.patch('/me', data);
+// ----------------------------Account----------------------------------
+export const getInfo = () => API.get('/account');
+export const updateInfo = (data) => API.patch('/account', data);
 
-export const getAddresses = () => API.get('/me/addresses');
-export const addAddress = (data) => API.post('/me/addresses', data);
-export const updateAddress = (id, data) => API.patch(`/me/addresses/${id}`, data);
-export const deleteAddress = (id) => API.delete(`/me/addresses/${id}`);
+export const getAddresses = () => API.get('/account/addresses');
+export const addAddress = (data) => API.post('/account/addresses', data);
+export const updateAddress = (id, data) => API.patch(`/account/addresses/${id}`, data);
+export const deleteAddress = (id) => API.delete(`/account/addresses/${id}`);
 
 // ----------------------------Category--------------------------------
 export const getAllCategory = (fields) => (fields ? API.get(`/categories?fields=${fields}`) : API.get('/categories'));
