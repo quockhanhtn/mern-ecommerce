@@ -35,7 +35,9 @@ export default function AccountChangePassword() {
       .min(6, t('auth.new-password-min'))
       .max(32, t('auth.new-password-max'))
       .required(t('auth.new-password-required')),
-    confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], t('auth.confirm-password-not-match'))
+    confirmNewPassword: Yup.string()
+      .required(t('auth.confirm-password-required'))
+      .oneOf([Yup.ref('newPassword'), null], t('auth.confirm-password-not-match'))
   });
 
   const formik = useFormik({

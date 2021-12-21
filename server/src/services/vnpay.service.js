@@ -76,23 +76,22 @@ async function checkPaymentStatus(vnpayResponse) {
     const bankTranNo = vnp_Params['vnp_BankTranNo'];
     const cartType = vnp_Params['vnp_CardType'];
     const transactionNo = vnp_Params['vnp_TransactionNo'];
-    const transactionStatus = vnp_Params['vnp_TransactionStatus'];
+
+    let isSuccess = false, message = 'Payment failed';
+
+    if (vnp_Params['vnp_TransactionStatus'] === '00') {
+      isSuccess = true;
+      message = 'Payment success';
+    }
 
     return {
-      isSuccess: transactionStatus === '00',
+      isSuccess,
       data: {
-        amount,
-        txnRef,
-        orderId,
-        clientUrl,
-        payDate,
-        bankCode,
-        bankTranNo,
-        cartType,
-        transactionNo,
-        transactionStatus
+        amount, txnRef, orderId, clientUrl,
+        payDate, bankCode, bankTranNo,
+        cartType, transactionNo
       },
-      message: transactionStatus === '00' ? 'Payment success' : 'Payment failed'
+      message
     }
   } else {
     return {

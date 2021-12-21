@@ -38,6 +38,38 @@ export const responseDef = {
       status: 401,
       message: 'Token revoked',
     },
+    PASSWORD_NOT_CHANGED: {
+      status: 400,
+      code: 400004,
+      message: {
+        en: 'Password not changed',
+        vi: 'Mật khẩu chưa được thay đổi'
+      }
+    },
+    PASSWORD_EMPTY: {
+      status: 400,
+      code: 400001,
+      message: {
+        en: 'Password is empty',
+        vi: 'Mật khẩu không được để trống'
+      }
+    },
+    PASSWORD_TOO_SHORT: {
+      status: 400,
+      code: 400002,
+      message: {
+        en: 'Password too short',
+        vi: 'Mật khẩu quá ngắn'
+      }
+    },
+    PASSWORD_TOO_LONG: {
+      status: 400,
+      code: 400003,
+      message: {
+        en: 'Password too long',
+        vi: 'Mật khẩu quá dài'
+      }
+    },
     401001: 'Unauthorized',
     401002: 'Invalid token',
   }

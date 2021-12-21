@@ -207,6 +207,7 @@ export default {
     'new-password-max': 'Mật khẩu mới không được vượt quá 32 ký tự',
     'new-password-required': 'Mật khẩu mới không thể bỏ trống',
     'confirm-password': 'Xác nhận mật khẩu',
+    'confirm-password-required': 'Vui lòng xác nhận mật khẩu mới',
     'confirm-password-not-match': 'Xác nhận mật khẩu không khớp',
     'change-password-success': 'Đổi mật khẩu thành công !',
     'acc-no-pass': 'Tài khoản của bạn chưa được đặt mật khẩu. Đặt mật khẩu giúp bạn có thể đăng nhập vào hệ thống',

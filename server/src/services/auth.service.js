@@ -131,6 +131,21 @@ async function changePassword(userId, oldPassword, newPassword) {
     }
   }
 
+  if (oldPassword === newPassword) {
+    throw ApiError.simple2(responseDef.AUTH.PASSWORD_NOT_CHANGED);
+  }
+
+  if (newPassword === '' || newPassword === null) {
+    throw ApiError.simple2(responseDef.AUTH.PASSWORD_EMPTY);
+  }
+
+  if (newPassword.length < 6) {
+    throw ApiError.simple2(responseDef.AUTH.PASSWORD_TOO_SHORT);
+  }
+  if (newPassword.length > 32) {
+    throw ApiError.simple2(responseDef.AUTH.PASSWORD_TOO_LONG);
+  }
+
   updateData.password = hashPassword(newPassword);
   const result = await userService.updateById(user._id, updateData);
   return result;
