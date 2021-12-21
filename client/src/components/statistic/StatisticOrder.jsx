@@ -88,13 +88,13 @@ export default function StatisticOrder() {
             <Icon width={16} height={16} icon={PERCENT >= 0 ? trendingUpFill : trendingDownFill} />
           </IconWrapperStyle>
 
-          <Typography variant="subtitle2" component="span">
-            {PERCENT > 0 && '+'}
-            {fPercent(PERCENT)}
-          </Typography>
-          <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}>
-            &nbsp;than last week
-          </Typography>
+          {/* <Typography variant="subtitle2" component="span"> */}
+          {/*  {PERCENT > 0 && '+'} */}
+          {/*  {fPercent(PERCENT)} */}
+          {/* </Typography> */}
+          {/* <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}> */}
+          {/*  &nbsp;than last week */}
+          {/* </Typography> */}
         </Stack>
       </Box>
 

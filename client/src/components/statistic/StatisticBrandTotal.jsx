@@ -8,7 +8,7 @@ import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Card, Typography, Stack } from '@material-ui/core';
 // utils
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fNumber, fPercent } from '../../utils/formatNumber';
 //
 import BaseOptionChart from '../charts/BaseOptionChart';
@@ -31,17 +31,44 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const PERCENT = 5.6;
 const CHART_DATA = [{ data: [12, 14, 2, 47, 42, 15, 47, 75, 65, 19, 14] }];
 
 export default function StatisticBrandTotal() {
   const { t } = useLocales();
   const dispatch = useDispatch();
   const { list: brandsList } = useSelector((state) => state.brand);
+  const [percent, setPercent] = useState(0);
 
   useEffect(() => {
     dispatch(getAllBrands());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (brandsList) {
+      const currentDate = new Date();
+      const currentDateInWeek = new Date();
+      const currentDateLastWeek = new Date();
+      currentDateInWeek.setDate(currentDateInWeek.getDate() - 7);
+      currentDateLastWeek.setDate(currentDateLastWeek.getDate() - 14);
+
+      const brandsInWeek = brandsList.filter(
+        (item) =>
+          new Date(item?.createdAt).getTime() <= currentDate.getTime() &&
+          new Date(item?.createdAt).getTime() >= currentDateInWeek.getTime()
+      );
+
+      const brandsLastWeek = brandsList.filter(
+        (item) =>
+          new Date(item?.createdAt).getTime() <= currentDateInWeek.getTime() &&
+          new Date(item?.createdAt).getTime() >= currentDateLastWeek.getTime()
+      );
+      if (brandsLastWeek.length !== 0) {
+        setPercent((brandsInWeek.length / brandsLastWeek.length) * 100);
+      } else {
+        setPercent(100);
+      }
+    }
+  }, [brandsList]);
 
   const chartOptions = merge(BaseOptionChart(), {
     chart: { animations: { enabled: true }, sparkline: { enabled: true } },
@@ -71,18 +98,18 @@ export default function StatisticBrandTotal() {
         <Stack direction="row" alignItems="center" flexWrap="wrap">
           <IconWrapperStyle
             sx={{
-              ...(PERCENT < 0 && {
+              ...(percent < 0 && {
                 color: 'error.main',
                 bgcolor: (theme) => alpha(theme.palette.error.main, 0.16)
               })
             }}
           >
-            <Icon width={16} height={16} icon={PERCENT >= 0 ? trendingUpFill : trendingDownFill} />
+            <Icon width={16} height={16} icon={percent >= 0 ? trendingUpFill : trendingDownFill} />
           </IconWrapperStyle>
 
           <Typography variant="subtitle2" component="span">
-            {PERCENT > 0 && '+'}
-            {fPercent(PERCENT)}
+            {percent > 0 && '+'}
+            {fPercent(percent)}
           </Typography>
           <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}>
             &nbsp;than last week
