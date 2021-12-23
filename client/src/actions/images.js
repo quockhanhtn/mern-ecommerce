@@ -1,5 +1,5 @@
 import * as actionTypes from '../constants/actionTypes';
-import { storage } from '../services/firebase';
+import { storage } from '../firebase';
 
 /*
  * Not use
