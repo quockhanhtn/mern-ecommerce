@@ -83,7 +83,8 @@ export default function ProductDetailsReviewOverview({ product, onOpen }) {
       star += Number(comments[i].star);
     }
     star /= comments?.length;
-    setTotalStar(star);
+    const starTemp = Math.round(star * 10) / 10;
+    setTotalStar(starTemp);
   }, [comments]);
 
   const total = sumBy(ratings, (star) => star.starCount);
