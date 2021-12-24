@@ -6,7 +6,11 @@ import edit2Fill from '@iconify/icons-eva/edit-2-fill';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Grid, Rating, Button, Typography, LinearProgress, Stack } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import { fShortenNumber } from '../../../utils/formatNumber';
+import useLocales from '../../../hooks/useLocales';
+import { getAllComments } from '../../../actions/comments';
 
 // ----------------------------------------------------------------------
 
@@ -62,7 +66,25 @@ ProductDetailsReviewOverview.propTypes = {
 };
 
 export default function ProductDetailsReviewOverview({ product, onOpen }) {
+  const { t } = useLocales();
+  const dispatch = useDispatch();
+  const { list: comments, isLoading } = useSelector((state) => state.comment);
   const { rates, views, ratings } = product;
+  const [totalStar, setTotalStar] = useState(0);
+
+  useEffect(() => {
+    dispatch(getAllComments(product._id));
+  }, [dispatch]);
+
+  useEffect(() => {
+    let star = 0;
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < comments?.length; i++) {
+      star += Number(comments[i].star);
+    }
+    star /= comments?.length;
+    setTotalStar(star);
+  }, [comments]);
 
   const total = sumBy(ratings, (star) => star.starCount);
 
@@ -70,15 +92,15 @@ export default function ProductDetailsReviewOverview({ product, onOpen }) {
     <Grid container>
       <GridStyle item xs={12} md={4}>
         <Typography variant="subtitle1" gutterBottom>
-          Average rating
+          {t('dashboard.comments.average-rating')}
         </Typography>
         <Typography variant="h2" gutterBottom sx={{ color: 'error.main' }}>
-          {rates?.length || 0}/5
+          {totalStar || 0}/5
         </Typography>
-        <RatingStyle readOnly value={rates?.length} precision={0.1} />
+        <RatingStyle readOnly value={totalStar} precision={0.1} />
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           ({fShortenNumber(views)}
-          &nbsp;views)
+          &nbsp;{t('dashboard.comments.views')})
         </Typography>
       </GridStyle>
 
@@ -96,7 +118,7 @@ export default function ProductDetailsReviewOverview({ product, onOpen }) {
       <GridStyle item xs={12} md={4}>
         <ScrollLink to="move_add_review" spy smooth offset={-200}>
           <Button size="large" onClick={onOpen} variant="outlined" startIcon={<Icon icon={edit2Fill} />}>
-            Write your review
+            {t('dashboard.comments.write-comment')}
           </Button>
         </ScrollLink>
       </GridStyle>

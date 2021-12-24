@@ -3,9 +3,9 @@ import commentService from '../services/comments.service.js'
 
 export const getComments = async (req, res, next) => {
   try {
-    let comments = await commentService.getAllCommentsService(req.body);
+    let comments = await commentService.getAllCommentsService(req.params);
     if (comments && comments.length > 0) {
-      resUtils.status200(res, null, comments);
+      resUtils.status200(res, 'Get all comments', comments);
     } else {
       resUtils.status404(res, 'No comments found');
     }
