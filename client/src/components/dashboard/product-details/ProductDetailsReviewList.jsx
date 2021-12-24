@@ -1,13 +1,16 @@
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import roundThumbUp from '@iconify/icons-ic/round-thumb-up';
 import roundVerified from '@iconify/icons-ic/round-verified';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 // material
 import { Box, List, Button, Rating, Avatar, ListItem, Pagination, Typography, Stack } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
 import { fDate } from '../../../utils/formatTime';
 import { fShortenNumber } from '../../../utils/formatNumber';
+import { getAllComments } from '../../../actions/comments';
+import useLocales from '../../../hooks/useLocales';
 // utils
 
 // ----------------------------------------------------------------------
@@ -17,8 +20,9 @@ ReviewItem.propTypes = {
 };
 
 function ReviewItem({ review }) {
+  const { t } = useLocales();
   const [isHelpful, setHelpfuls] = useState(false);
-  const { name, rating, comment, helpful, postedAt, avatarUrl, isPurchased } = review;
+  const { author, content, star, anonymousAuthor, createdAt } = review;
 
   const handleClickHelpful = () => {
     setHelpfuls((prev) => !prev);
@@ -46,7 +50,7 @@ function ReviewItem({ review }) {
           }}
         >
           <Avatar
-            src={avatarUrl}
+            src={author?.avatar || '/static/mock-images/avatars/avatar_default.jpg'}
             sx={{
               mr: { xs: 2, sm: 0 },
               mb: { sm: 2 },
@@ -56,30 +60,30 @@ function ReviewItem({ review }) {
           />
           <div>
             <Typography variant="subtitle2" noWrap>
-              {name}
+              {author ? `${author?.lastName} ${author?.firstName}` : anonymousAuthor.name}
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.secondary' }} noWrap>
-              {fDate(postedAt)}
+              {fDate(createdAt)}
             </Typography>
           </div>
         </Box>
 
         <div>
-          <Rating size="small" value={rating} precision={0.1} readOnly />
+          <Rating size="small" value={star} precision={0.1} readOnly />
 
-          {isPurchased && (
+          {content && (
             <Typography variant="caption" sx={{ my: 1, display: 'flex', alignItems: 'center', color: 'primary.main' }}>
               <Icon icon={roundVerified} width={16} height={16} />
               &nbsp;Verified purchase
             </Typography>
           )}
 
-          <Typography variant="body2">{comment}</Typography>
+          <Typography variant="body2">{content}</Typography>
 
           <Stack mt={1} direction="row" alignItems="center" flexWrap="wrap">
             {!isHelpful && (
               <Typography variant="body2" sx={{ mr: 1 }}>
-                Was this review helpful to you?
+                {t('dashboard.comments.helpful')}
               </Typography>
             )}
 
@@ -89,7 +93,7 @@ function ReviewItem({ review }) {
               startIcon={<Icon icon={!isHelpful ? roundThumbUp : checkmarkFill} />}
               onClick={handleClickHelpful}
             >
-              {isHelpful ? 'Helpful' : 'Thank'}({fShortenNumber(!isHelpful ? helpful : helpful + 1)})
+              {isHelpful ? 'Helpful' : 'Thank'}({fShortenNumber(!isHelpful ? 256 : 123 + 1)})
             </Button>
           </Stack>
         </div>
@@ -103,12 +107,22 @@ ProductDetailsReviewList.propTypes = {
 };
 
 export default function ProductDetailsReviewList({ product }) {
-  const { reviews } = product;
+  const { t } = useLocales();
+  const dispatch = useDispatch();
+  const { list: comments, isLoading } = useSelector((state) => state.comment);
+
+  useEffect(() => {
+    dispatch(getAllComments(product._id));
+  }, [dispatch]);
+
+  useEffect(() => {
+    // console.log('comments', comments);
+  }, [comments]);
 
   return (
     <Box sx={{ pt: 3, px: 2, pb: 5 }}>
       <List disablePadding>
-        {reviews.map((review) => (
+        {comments.map((review) => (
           <ReviewItem key={review.id} review={review} />
         ))}
       </List>

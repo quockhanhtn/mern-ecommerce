@@ -385,6 +385,19 @@ export default {
       'product-name': 'Tên sản phẩm',
       total: 'Số lượng',
       top: 'Top'
+    },
+    comments: {
+      title: 'Thêm bình luận',
+      'title-review': 'Nhận xét của bạn về sản phẩm này:',
+      content: 'Nội dung *',
+      name: 'Tên *',
+      email: 'Email *',
+      cancel: 'Huỷ',
+      'add-comment': 'Thêm bình luận',
+      'write-comment': 'Viết bình luận của bạn',
+      'average-rating': 'Đánh giá trung bình',
+      views: 'lượt xem',
+      helpful: 'Nhận xét này có hữu ích cho bạn?'
     }
   }
 };

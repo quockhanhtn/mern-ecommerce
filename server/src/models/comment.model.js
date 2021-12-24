@@ -24,6 +24,7 @@ const commentSchema = mongoose.Schema(
       phone: { type: String, trim: true }
     },
     content: { type: String, trim: true, required: true },
+    star: { type: String, default: 0, min: 1, max: 5 },
     replies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
     likes: { type: Number, default: 0 },
     disLikes: { type: Number, default: 0 },
