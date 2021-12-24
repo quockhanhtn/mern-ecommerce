@@ -23,7 +23,8 @@ export default {
     },
     'no-options': 'Không có tùy chọn',
     continue: 'Tiếp tục',
-    back: 'Quay lại'
+    back: 'Quay lại',
+    'save-change': 'Lưu thay đổi'
   },
   home: {
     'page-title': 'Điện thoại di dộng chính hãng và phụ kiện | HK Mobile',
@@ -176,6 +177,10 @@ export default {
     register: 'Đăng ký',
     'get-started': 'Đăng ký',
     login: 'Đăng nhập',
+    'login-sucess': 'Đăng nhập thành công !',
+    'login-sucess-with': 'Đăng nhập với {{provider}} thành công !',
+    'login-failed': 'Đăng nhập thất bại !',
+    'login-failed-with': 'Đăng nhập với {{provider}} thất bại: {{message}} !',
     logout: 'Đăng xuất',
     'sign-in': 'Đăng nhập',
     'sign-up': 'Đăng ký',
@@ -192,11 +197,23 @@ export default {
     'remember-me': 'Ghi nhớ đăng nhập',
     'forgot-password': 'Quên mật khẩu ?',
     'reset-password': 'Đặt lại mật khẩu',
-    'confirm-password': 'Xác nhận mật khẩu',
     'enter-new-password': 'Nhập mật khẩu mới',
     'confirm-new-password': 'Xác nhận mật khẩu mới',
+
+    'current-password': 'Mật khẩu hiện tại',
+    'current-password-required': 'Mật khẩu hiện tại không thể bỏ trống',
+    'new-password': 'Mật khẩu mới',
+    'new-password-min': 'Mật khẩu mới phải có ít nhất 6 ký tự',
+    'new-password-max': 'Mật khẩu mới không được vượt quá 32 ký tự',
+    'new-password-required': 'Mật khẩu mới không thể bỏ trống',
+    'confirm-password': 'Xác nhận mật khẩu',
+    'confirm-password-required': 'Vui lòng xác nhận mật khẩu mới',
+    'confirm-password-not-match': 'Xác nhận mật khẩu không khớp',
+    'change-password-success': 'Đổi mật khẩu thành công !',
+    'acc-no-pass': 'Tài khoản của bạn chưa được đặt mật khẩu. Đặt mật khẩu giúp bạn có thể đăng nhập vào hệ thống',
     'role-admin': 'Quản trị viên',
-    'role-staff': 'Nhân viên'
+    'role-staff': 'Nhân viên',
+    'role-customer': 'Khách hàng'
   },
   dashboard: {
     title: 'Bảng điều khiển',

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { storage } from '../services/firebase';
+import { storage } from '../firebase';
 
 export default function useFirebaseStorage(file, uploadDir = 'images') {
   const [progress, setProgress] = useState(0);

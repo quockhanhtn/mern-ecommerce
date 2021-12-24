@@ -1,4 +1,4 @@
-import { storage } from '../services/firebase';
+import { storage } from '../firebase';
 
 export function firebaseUploadSingle(uploadImage, uploadDir, setUploadPercent, onError, doAfterGetUrl) {
   const uploadFileName = `${Date.now()}_${uploadImage.name}`;

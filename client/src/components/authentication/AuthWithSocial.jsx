@@ -1,23 +1,19 @@
-import PropTypes from 'prop-types';
 // material
 import { Stack, Button, Divider, Typography } from '@material-ui/core';
 import { GoogleLogin } from 'react-google-login';
-import { FacebookIcon, GoogleIcon, TwitterIcon } from '../../assets';
 // hooks
+import { useSnackbar } from 'notistack';
 import useAuth from '../../hooks/useAuth';
+import useLocales from '../../hooks/useLocales';
+// icons
+import { FacebookIcon, GoogleIcon, TwitterIcon } from '../../assets';
 
 // ----------------------------------------------------------------------
 
-AuthWithSocial.propTypes = {
-  orText: PropTypes.string
-};
-
-AuthWithSocial.defaultProps = {
-  orText: 'or'
-};
-
-export default function AuthWithSocial({ orText }) {
+export default function AuthWithSocial() {
+  const { t } = useLocales();
   const { googleOAuth, loginWithFaceBook, loginWithTwitter } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleGoogleLoginSuccess = async (res) => {
     const tokenId = res?.tokenId;
@@ -25,7 +21,9 @@ export default function AuthWithSocial({ orText }) {
   };
 
   const handleGoogleLoginFailure = (err) => {
-    console.log(err);
+    console.log('Google login failed', err);
+    const mess = t('auth.login-failed-with', { provider: 'Google', message: err.error });
+    enqueueSnackbar(mess, { variant: 'error' });
   };
 
   const handleLoginFaceBook = async () => {
@@ -77,7 +75,7 @@ export default function AuthWithSocial({ orText }) {
 
       <Divider sx={{ my: 3 }}>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {orText.toUpperCase()}
+          {t('auth.or').toUpperCase()}
         </Typography>
       </Divider>
     </>

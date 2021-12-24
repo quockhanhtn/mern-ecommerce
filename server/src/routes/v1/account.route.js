@@ -4,11 +4,12 @@ import { allowImageMineTypes } from '../../constants.js';
 import {
   getInfo,
   updateInfo,
+  changePassword,
   getAddresses,
   addAddress,
   updateAddress,
   deleteAddress
-} from '../../controllers/me.controller.js';
+} from '../../controllers/account.controller.js';
 import {
   getByUser,
   createByUser,
@@ -29,6 +30,9 @@ router.route('/')
     handleFilePath('avatar'),
     updateInfo
   );
+
+router.route('/change-password')
+  .patch(isAuthorized, changePassword);
 
 // Start defining routes for addresses
 router.route('/addresses')

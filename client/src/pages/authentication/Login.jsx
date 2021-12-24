@@ -70,7 +70,7 @@ export default function Login() {
             <Typography sx={{ color: 'text.secondary' }}>{t('auth.sign-in-description')}</Typography>
           </Box>
 
-          <AuthWithSocial orText={t('auth.or')} />
+          <AuthWithSocial />
 
           <LoginForm />
 

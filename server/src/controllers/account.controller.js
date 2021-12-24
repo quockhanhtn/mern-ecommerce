@@ -1,6 +1,7 @@
 import resUtils from '../utils/res-utils.js';
 import userService from '../services/user.service.js';
 import addressService from '../services/addresses.services.js';
+import authServices from '../services/auth.service.js';
 
 export const getInfo = async (req, res, next) => {
   try {
@@ -27,6 +28,22 @@ export const updateInfo = async (req, res, next) => {
     }
   } catch (err) { next(err); }
 }
+
+export const changePassword = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const currentPassword = req.body.currentPassword;
+    const newPassword = req.body.newPassword;
+
+    const result = await authServices.changePassword(userId, currentPassword, newPassword);
+    if (result) {
+      resUtils.status200(res, `Change password successfully!`, result);
+    } else {
+      resUtils.status404(res, `Change password failed`);
+    }
+  } catch (err) { next(err); }
+};
+
 
 // Add address --------------------------------------------
 export const getAddresses = async (req, res, next) => {
