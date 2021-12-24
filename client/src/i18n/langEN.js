@@ -255,6 +255,19 @@ export default {
       'product-name': 'Product name',
       total: 'Total',
       top: 'Top'
+    },
+    comments: {
+      title: 'Add review',
+      'title-review': 'Your review about this product:',
+      content: 'Content *',
+      name: 'Name *',
+      email: 'Email *',
+      cancel: 'Cancel',
+      'add-comment': 'Post comment',
+      'write-comment': 'Write your review',
+      'average-rating': 'Average rating',
+      views: 'views',
+      helpful: 'Was this review helpful to you?'
     }
   }
 };

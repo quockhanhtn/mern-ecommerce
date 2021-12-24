@@ -103,3 +103,6 @@ export const orderManager = {
   create: (newOrder) => API.post('/orders/manager', newOrder),
   update: (id, updatedOrder) => API.patch(`/orders/manager/${id}`, updatedOrder)
 };
+// ----------------------------Comment ---------------------------
+export const getAllComment = (product) => API.get(`/comments/${product}`);
+export const createComment = (newComment) => API.post(`/comments`, newComment);

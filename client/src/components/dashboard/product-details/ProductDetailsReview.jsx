@@ -31,11 +31,11 @@ export default function ProductDetailsReview({ product }) {
       <Divider />
 
       <Collapse in={reviewBox}>
-        <ProductDetailsReviewForm onClose={handleCloseReviewBox} id="move_add_review" />
+        <ProductDetailsReviewForm onClose={handleCloseReviewBox} product={product} id="move_add_review" />
         <Divider />
       </Collapse>
 
-      {/* <ProductDetailsReviewList product={product} /> */}
+      <ProductDetailsReviewList product={product} />
     </>
   );
 }
