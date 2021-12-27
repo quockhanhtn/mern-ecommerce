@@ -16,8 +16,7 @@ import {
   TableCell,
   Container,
   Typography,
-  TableContainer,
-  TablePagination
+  TableContainer
 } from '@material-ui/core';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -27,6 +26,7 @@ import { fDateTime } from '../../../utils/formatTime';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
+import { MTablePagination } from '../../../components/@material-extend';
 import Page from '../../../components/Page';
 import Label from '../../../components/Label';
 import Scrollbar from '../../../components/Scrollbar';
@@ -299,11 +299,7 @@ export default function PageCategoryList() {
             </Scrollbar>
 
             <Box sx={{ position: 'relative' }}>
-              <TablePagination
-                labelRowsPerPage={t('common.rows-per-page')}
-                // labelDisplayedRows : todo
-                rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                component="div"
+              <MTablePagination
                 count={categoriesList.length}
                 rowsPerPage={rowsPerPage}
                 page={page}

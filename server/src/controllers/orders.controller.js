@@ -1,6 +1,7 @@
 import resUtils from '../utils/res-utils.js';
 import orderService from '../services/order.services.js';
 import vnpayService from '../services/vnpay.service.js';
+import firebaseService from '../services/firebase.service.js';
 import constants from '../constants.js';
 
 // Order manager by user
@@ -24,11 +25,63 @@ export const getOne = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+export const getList = async (req, res, next) => {
+  /**
+   * If user is authenticated, get list of orders by userId
+   * If user is guest, get list of orders by firebase access token (using phone number)
+   */
+  try {
+    const search = req.query.search || '';
+    const status = req.query.status || null;
+    const paymentStatus = req.query.paymentStatus || null;
+    const userId = req?.user?._id || null;
+
+    let result;
+    if (userId) {
+      result = await orderService.getListByUser(userId, search, status, paymentStatus);
+    } else {
+      const accessToken = req.query?.accessToken || null;
+      if (!accessToken) {
+        resUtils.status401(
+          res,
+          'Access token is required'
+        );
+        return;
+      }
+
+      const decodeData = await firebaseService.verifyToken(accessToken);
+      if (!decodeData) {
+        resUtils.status401(
+          res,
+          'Access token is invalid'
+        );
+        return;
+      }
+
+      if (decodeData.exp < Date.now() / 1000) {
+        resUtils.status401(
+          res,
+          'Access token is expired'
+        );
+        return;
+      }
+
+      const phoneNumber = decodeData.phone_number.replace('+84', '0');
+      result = await orderService.getAlls(phoneNumber, status, paymentStatus);
+    }
+
+    resUtils.status200(
+      res,
+      'Get order list success',
+      result
+    );
+  } catch (err) { next(err); }
+};
+
 export const getByUser = async (req, res, next) => {
   try {
     const status = req.query.status;
     const userId = req.user._id;
-    const orders = await orderService.getListByUser(userId, status);
     resUtils.status200(
       res,
       'Get list order success',

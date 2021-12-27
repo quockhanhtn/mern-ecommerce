@@ -1,14 +1,13 @@
+import PropTypes from 'prop-types';
+import { useState } from 'react';
+// form validation
 import * as Yup from 'yup';
-import { useSnackbar } from 'notistack';
-import { useNavigate } from 'react-router-dom';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
-import { OutlinedInput, FormHelperText, Stack } from '@material-ui/core';
+import { Button, Box, Link, OutlinedInput, FormHelperText, Stack } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
-// routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
-// utils
-import fakeRequest from '../../../utils/fakeRequest';
+// hooks
+import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -19,9 +18,31 @@ function maxLength(object) {
   }
 }
 
-export default function VerifyCodeForm() {
-  const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
+VerifyCodeForm.propTypes = {
+  confirmResult: PropTypes.object.isRequired,
+  onResentOtp: PropTypes.func,
+  onGoBack: PropTypes.func,
+  onSuccess: PropTypes.func,
+  sx: PropTypes.object
+};
+
+VerifyCodeForm.defaultProps = {
+  onResentOtp: () => {
+    console.log('onResentOtp');
+  },
+  onGoBack: () => {
+    console.log('onGoBack');
+  },
+  onSuccess: () => {
+    console.log('onSuccess');
+  }
+};
+
+// ----------------------------------------------------------------------
+
+export default function VerifyCodeForm({ confirmResult, onResentOtp, onGoBack, onSuccess, sx }) {
+  const { t } = useLocales();
+  const [isLoading, setIsLoading] = useState(false);
 
   const VerifyCodeSchema = Yup.object().shape({
     code1: Yup.number().required('Code is required'),
@@ -42,48 +63,78 @@ export default function VerifyCodeForm() {
       code6: ''
     },
     validationSchema: VerifyCodeSchema,
-    onSubmit: async () => {
-      await fakeRequest(500);
-      enqueueSnackbar('Verify success', { variant: 'success' });
-      navigate(PATH_DASHBOARD.root);
+    onSubmit: async (values, { setErrors }) => {
+      setIsLoading(true);
+      confirmResult
+        // eslint-disable-next-line react/prop-types
+        .confirm(Object.values(values).join(''))
+        .then((res) => {
+          const accessToken = res?.user?.za || null;
+          const expirationTime = res?.user?.b?.c || null;
+
+          if (accessToken && expirationTime) {
+            sessionStorage.setItem('otpVerification', JSON.stringify({ accessToken, expirationTime }));
+          }
+          onSuccess();
+        })
+        .catch((err) => {
+          console.log(err);
+          setErrors({ verifyResult: 'Mã OTP không đúng' });
+        });
+      setIsLoading(false);
     }
   });
 
-  const { values, errors, isValid, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { values, errors, isValid, touched, handleSubmit, getFieldProps } = formik;
 
   return (
-    <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Stack direction="row" spacing={2} justifyContent="center">
-          {Object.keys(values).map((item) => (
-            <OutlinedInput
-              key={item}
-              {...getFieldProps(item)}
-              type="number"
-              placeholder="-"
-              onInput={maxLength}
-              error={Boolean(touched[item] && errors[item])}
-              inputProps={{
-                maxLength: 1,
-                sx: {
-                  p: 0,
-                  textAlign: 'center',
-                  width: { xs: 36, sm: 56 },
-                  height: { xs: 36, sm: 56 }
-                }
-              }}
-            />
-          ))}
-        </Stack>
+    <Box sx={sx}>
+      <FormikProvider value={formik}>
+        <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+          <Stack direction="column" spacing={3} justifyContent="center">
+            <Stack direction="row" spacing={2} justifyContent="center">
+              {Object.keys(values).map((item) => (
+                <OutlinedInput
+                  key={item}
+                  {...getFieldProps(item)}
+                  type="number"
+                  placeholder="-"
+                  onInput={maxLength}
+                  error={Boolean(touched[item] && errors[item])}
+                  inputProps={{
+                    maxLength: 1,
+                    sx: {
+                      p: 0,
+                      textAlign: 'center',
+                      width: { xs: 36, sm: 56 },
+                      height: { xs: 36, sm: 56 }
+                    }
+                  }}
+                />
+              ))}
+            </Stack>
 
-        <FormHelperText error={!isValid} style={{ textAlign: 'right' }}>
-          {!isValid && 'Code is required'}
-        </FormHelperText>
+            <Box display="flex" justifyContent="space-between">
+              <Link component="button" variant="subtitle2" onClick={onResentOtp}>
+                Gửi lại mã OTP
+              </Link>
 
-        <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting} sx={{ mt: 3 }}>
-          Verify
-        </LoadingButton>
-      </Form>
-    </FormikProvider>
+              <FormHelperText error={!isValid} style={{ textAlign: 'right', marginTop: 0 }}>
+                {errors?.verifyResult || (!isValid && 'Vui lòng nhập mã OTP gồm 6 chữ số')}
+              </FormHelperText>
+            </Box>
+
+            <Box display="flex" justifyContent="center">
+              <Button fullWidth onClick={onGoBack} color="inherit" sx={{ m: 1 }}>
+                Trở lại
+              </Button>
+              <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading} sx={{ m: 1 }}>
+                Xác nhận
+              </LoadingButton>
+            </Box>
+          </Stack>
+        </Form>
+      </FormikProvider>
+    </Box>
   );
 }

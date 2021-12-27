@@ -90,6 +90,7 @@ export const redirectVnPay = (paymentInfo) => API.post(`/payment/vn_pay`, paymen
 export const paymentCallback = () => API.get(`/cart/payment`);
 
 // ----------------------------Order----------------------------------
+export const getListOrders = (data = {}) => API.get('/orders', { params: data });
 export const createOrder = (newOrder) => API.post('/orders', newOrder);
 export const getOrder = (id) => API.get(`/orders/${id}`);
 export const rePayOrder = (id) => API.get(`/orders/re-pay/${id}`);
