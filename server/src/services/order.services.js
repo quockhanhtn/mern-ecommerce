@@ -167,6 +167,7 @@ async function getList(userId, search, status, paymentStatus, selectedFields = n
   let lists = await Order.find(filter)
     .select(selectedFields)
     .populate(POPULATE_OPT)
+    .sort({ createdAt: -1 })
     .lean().exec();
 
   return formatResult(lists);
