@@ -89,10 +89,11 @@ export const redirectVnPay = (paymentInfo) => API.post(`/payment/vn_pay`, paymen
 export const paymentCallback = () => API.get(`/cart/payment`);
 
 // ----------------------------Order----------------------------------
-export const getListOrders = (data = {}) => API.get('/orders', { params: data });
+export const getListOrders = (params = {}) => API.get('/orders', { params });
 export const createOrder = (newOrder) => API.post('/orders', newOrder);
 export const getOrder = (id) => API.get(`/orders/${id}`);
 export const rePayOrder = (id) => API.get(`/orders/re-pay/${id}`);
+export const cancelOrder = (id, params) => API.patch(`/orders/cancel/${id}`, { params });
 
 // ----------------------------Order manager---------------------------
 export const orderManager = {

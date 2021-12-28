@@ -2,18 +2,7 @@ import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 // material
-import {
-  Box,
-  Card,
-  Table,
-  Button,
-  TableRow,
-  TableBody,
-  TableCell,
-  Container,
-  TableContainer,
-  TablePagination
-} from '@material-ui/core';
+import { Card, Table, Button, TableRow, TableBody, TableCell, Container, TableContainer } from '@material-ui/core';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllOrders, updateOrder } from '../../../actions/orders';
@@ -28,6 +17,7 @@ import LoadingScreen from '../../../components/LoadingScreen';
 import EmptyCard from '../../../components/EmptyCard';
 import { OrderDetailForm, OrderListHead, OrderListToolbar, OrderTableRow } from '../../../components/dashboard/order';
 import CategoryForm from '../categories/CategoryForm';
+import { MTablePagination } from '../../../components/@material-extend';
 //
 import { stableSort, getComparator } from '../../../helper/listHelper';
 
@@ -56,7 +46,7 @@ export default function PageOrderList() {
   useEffect(() => {
     dispatch(getAllOrders(search, orderStatus, paymentStatus, 1, 100000));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [dispatch, orderStatus, paymentStatus]);
 
   const tableHeads = [
     {
@@ -125,16 +115,13 @@ export default function PageOrderList() {
 
   const handleChangeStatusFilter = (event, value) => {
     if (value) {
-      console.log('orderStatus', orderStatus);
       setOrderStatus(value.value);
-      dispatch(getAllOrders(search, value.value, paymentStatus, 1, 100000));
     }
   };
 
   const handleChangePaymentStatusFilter = (event, value) => {
     if (value) {
       setPaymentStatus(value.value);
-      dispatch(getAllOrders(search, orderStatus, value.value, 1, 100000));
     }
   };
 
@@ -212,17 +199,12 @@ export default function PageOrderList() {
           </TableContainer>
         </Scrollbar>
 
-        <TablePagination
-          labelRowsPerPage={t('common.rows-per-page')}
-          // labelDisplayedRows : todo
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
-          component="div"
+        <MTablePagination
           count={orderList.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          sx={{ position: 'relative' }}
         />
       </>
     );

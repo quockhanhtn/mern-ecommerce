@@ -1,15 +1,4 @@
-import {
-  Box,
-  Card,
-  Container,
-  Table,
-  Button,
-  TableRow,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TablePagination
-} from '@material-ui/core';
+import { Card, Container, Table, TableRow, TableBody, TableCell, TableContainer } from '@material-ui/core';
 // hooks
 import { useEffect, useState } from 'react';
 import useLocales from '../../hooks/useLocales';
@@ -17,8 +6,8 @@ import useAuth from '../../hooks/useAuth';
 // components
 import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
-import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { OrderDetailForm, OrderListHead, OrderListToolbar, OrderTableRow } from '../../components/dashboard/order';
+import { MTablePagination } from '../../components/@material-extend';
 import { PhoneVerifyDialog } from '../../components/authentication/phone-verify';
 import { stableSort, getComparator } from '../../helper/listHelper';
 //
@@ -41,6 +30,7 @@ export default function OrderHistoryPage() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [list, setList] = useState([]);
+  const [listToShow, setListToShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -98,7 +88,7 @@ export default function OrderHistoryPage() {
       id: 'name',
       numeric: false,
       disablePadding: true,
-      label: 'Khách hàng'
+      label: 'Họ tên'
     },
     {
       id: 'phone',
@@ -147,7 +137,14 @@ export default function OrderHistoryPage() {
     if (canGetList) {
       fetchData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canGetList, orderStatus, paymentStatus]);
+
+  useEffect(() => {
+    const newList = list.filter((item) => item.numericId.toString().includes(search));
+    setListToShow(newList);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search, list]);
 
   const handleVerifySuccess = () => {
     setOpenVerify(false);
@@ -192,17 +189,22 @@ export default function OrderHistoryPage() {
   };
 
   // Avoid a layout jump when reaching the last page with empty categoriesList.
-  const emptyRows = Math.max(0, (1 + page) * rowsPerPage - list.length);
+  const emptyRows = Math.max(0, (1 + page) * rowsPerPage - listToShow.length);
 
   const renderContent = () => {
     if (isLoading) {
-      return <div>Loading...</div>;
+      return <div style={{ padding: '5px 20px 20px 20px' }}>Đang tải...</div>;
     }
     if (error) {
-      return <div>{error}</div>;
+      return (
+        <>
+          <div style={{ padding: '5px 20px 20px 20px', color: 'red' }}>Có lỗi xãy ra, vui lòng thử lại</div>
+          <div style={{ padding: '5px 20px 20px 20px' }}>{JSON.stringify(error)}</div>;
+        </>
+      );
     }
-    if (list.length === 0) {
-      return <div>{t('No data')}</div>;
+    if (listToShow.length === 0) {
+      return <div style={{ padding: '5px 20px 20px 20px' }}>Không tìm thấy đơn hàng</div>;
     }
     return (
       <>
@@ -215,10 +217,10 @@ export default function OrderHistoryPage() {
                 headLabel={tableHeads}
                 numSelected={0}
                 onRequestSort={handleRequestSort}
-                rowCount={list.length}
+                rowCount={listToShow.length}
               />
               <TableBody>
-                {stableSort(list, getComparator(order, orderBy))
+                {stableSort(listToShow, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (
                     <OrderTableRow
@@ -240,17 +242,12 @@ export default function OrderHistoryPage() {
           </TableContainer>
         </Scrollbar>
 
-        <TablePagination
-          labelRowsPerPage={t('common.rows-per-page')}
-          // labelDisplayedRows : todo
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
-          component="div"
-          count={list.length}
+        <MTablePagination
+          count={listToShow.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          sx={{ position: 'relative' }}
         />
       </>
     );
