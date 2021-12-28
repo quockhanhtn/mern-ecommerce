@@ -1,1 +1,1 @@
-export { default as OTPPhoneInput } from './OTPPhoneInput';
+export { default as PhoneVerifyDialog } from './PhoneVerifyDialog';

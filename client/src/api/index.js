@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
-const baseURL = isDev ? 'http://localhost:3001/api/v1' : 'https://api-mobile7076.herokuapp.com/api/v1';
+const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api/v1';
 const API = axios.create({ baseURL });
 
 // Add Header Authorization
@@ -90,6 +89,7 @@ export const redirectVnPay = (paymentInfo) => API.post(`/payment/vn_pay`, paymen
 export const paymentCallback = () => API.get(`/cart/payment`);
 
 // ----------------------------Order----------------------------------
+export const getListOrders = (data = {}) => API.get('/orders', { params: data });
 export const createOrder = (newOrder) => API.post('/orders', newOrder);
 export const getOrder = (id) => API.get(`/orders/${id}`);
 export const rePayOrder = (id) => API.get(`/orders/re-pay/${id}`);

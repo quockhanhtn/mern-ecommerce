@@ -6,7 +6,7 @@ import { Button, Card, TextField, Stack } from '@material-ui/core';
 // firebase
 import firebase, { auth as firebaseAuth } from '../../../firebase';
 
-export default function OTPPhoneInput() {
+export default function PhoneInput(setConfirmResult) {
   const [result, setResult] = useState(null);
 
   useEffect(() => {
@@ -34,12 +34,21 @@ export default function OTPPhoneInput() {
       firebaseAuth
         .signInWithPhoneNumber(values.phone, appVerifier)
         .then((confirmationResult) => {
+          console.log('OTP is sent');
           setResult(confirmationResult);
           // SMS sent. Prompt user to type the code from the message, then sign the
           // user in with confirmationResult.confirm(code).
           window.confirmationResult = confirmationResult;
-          // console.log(confirmationResult);
-          console.log('OTP is sent');
+          confirmationResult
+            .confirm('123456')
+            .then((user) => {
+              // User signed in successfully.
+              console.log('user', user);
+            })
+            .catch((err) => {
+              // User couldn't sign in (bad verification code?)
+              console.log('error', err);
+            });
         })
         .catch((error) => {
           console.log(error);
@@ -50,24 +59,22 @@ export default function OTPPhoneInput() {
   const { errors, touched, getFieldProps, handleSubmit } = formik;
 
   return (
-    <Card sx={{ p: 5 }}>
-      <FormikProvider value={formik}>
-        <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-          <Stack direction="row" spacing={2} justifyContent="center">
-            <TextField
-              required
-              fullWidth
-              label="Phone"
-              {...getFieldProps('phone')}
-              error={Boolean(touched.phone && errors.phone)}
-              helperText={touched.phone && errors.phone}
-            />
-            <Button type="submit" variant="contained" color="primary">
-              Submit
-            </Button>
-          </Stack>
-        </Form>
-      </FormikProvider>
-    </Card>
+    <FormikProvider value={formik}>
+      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+        <Stack direction="row" spacing={2} justifyContent="center">
+          <TextField
+            required
+            fullWidth
+            label="Phone"
+            {...getFieldProps('phone')}
+            error={Boolean(touched.phone && errors.phone)}
+            helperText={touched.phone && errors.phone}
+          />
+          <Button type="submit" variant="contained" color="primary">
+            Gửi mã
+          </Button>
+        </Stack>
+      </Form>
+    </FormikProvider>
   );
 }

@@ -4,6 +4,8 @@ export default {
     'search-placeholder': 'Tìm kiếm...',
     'search-btn': 'Tìm',
     'rows-per-page': 'Số hàng trên trang',
+    of: 'trên',
+    'more- than': 'hơn',
     'small-padding': 'Thu gọn khoảng cách',
     'confirm-action-delete': 'Bạn có muốn tiếp tục xoá?',
     order: 'Thứ tự',
