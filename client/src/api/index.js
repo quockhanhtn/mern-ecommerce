@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
-const baseURL = isDev ? 'http://localhost:3001/api/v1' : 'https://api-mobile7076.herokuapp.com/api/v1';
+const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api/v1';
 const API = axios.create({ baseURL });
 
 // Add Header Authorization

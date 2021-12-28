@@ -18,6 +18,8 @@ jobs:
         env:
           CI: false
           NODE_OPTIONS: "--max-old-space-size=8192"
+          REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL }}
+          REACT_APP_FIREBASE_CONFIG: ${{ secrets.REACT_APP_FIREBASE_CONFIG }}
         run: |
           set -x
           npm -v
