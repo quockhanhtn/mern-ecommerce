@@ -127,7 +127,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
       thumbnail: product.variants[indexVariant].thumbnail
     };
     addToCart(productInCart).then(() => {
-      enqueueSnackbar('Add to cart successfully', {
+      enqueueSnackbar('Thêm sản phẩm vào giỏ hàng thành công', {
         variant: 'success'
       });
     });

@@ -27,6 +27,13 @@ function formatResult(record) {
     return record.map(item => formatResult(item));
   }
 
+  if (!record.customer) {
+    record.customer = {
+      name: record.address.name,
+      phone: record.address.phone,
+    };
+  }
+
   let itemsToShow = record.items.map(item => {
     return {
       product: item.product._id,

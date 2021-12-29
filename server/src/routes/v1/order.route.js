@@ -33,7 +33,7 @@ router.route('/manager/:orderId')
  * No Authorization
  */
 
-router.get('/', getList);
+router.get('/', isGuestOrAuthorized, getList);
 router.post('/', isGuestOrAuthorized, createByUser);
 router.get('/re-pay/:orderId', rePayOrder);
 router.get('/:orderId', getOne);
