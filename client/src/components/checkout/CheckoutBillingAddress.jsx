@@ -7,6 +7,7 @@ import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
 // material
 import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -60,12 +61,11 @@ export default function CheckoutBillingAddress() {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const dispatch = useDispatch();
   const { list: addressList, isLoading, error } = useSelector((state) => state.account.addresses);
 
   const [openForm, setOpenForm] = useState(false);
-  const [deliveryAddress, setDeliveryAddress] = useState(null);
 
   const { cart, subTotal, activeStep, updateOrderInfo, backStepOrder, nextStepOrder } = useOrderFlow();
   const discount = cart.length > 0 ? 50000 : 0;
@@ -76,14 +76,14 @@ export default function CheckoutBillingAddress() {
     dispatch(getAllAddresses());
   }, [user, dispatch]);
 
-  useEffect(() => {
-    if (addressList.length > 0) {
-      const add = addressList.find((item) => item._id === initInfo.addressId);
-      if (add) {
-        setDeliveryAddress(add);
-      }
-    }
-  }, [addressList, initInfo.addressId]);
+  // useEffect(() => {
+  //   if (addressList.length > 0) {
+  //     const add = addressList.find((item) => item._id === initInfo.addressId);
+  //     if (add) {
+  //       setDeliveryAddress(add);
+  //     }
+  //   }
+  // }, [addressList, initInfo.addressId]);
 
   const receiveOpts = [
     {
@@ -122,26 +122,33 @@ export default function CheckoutBillingAddress() {
       .required(t('address.phone-required'))
       .matches(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, t('address.phone-invalid')),
 
+    isAuthenticated: Yup.boolean(),
     receiveMethod: Yup.string().required(t('cart.receive-method-required')),
     isReceiveAtStore: Yup.boolean().required(),
 
+    userAddressId: Yup.string().when('isAuthenticated', {
+      is: true,
+      then: Yup.string().required('Vui lòng chọn địa chỉ nhận hàng'),
+      otherwise: Yup.string().notRequired()
+    }),
+
     // only for delivery
-    street: Yup.string().when('isReceiveAtStore', {
+    street: Yup.string().when(['isReceiveAtStore', 'isAuthenticated'], {
       is: false,
       then: Yup.string().required(t('address.street-required')),
       otherwise: Yup.string().notRequired()
     }),
-    ward: Yup.string().when('isReceiveAtStore', {
+    ward: Yup.string().when(['isReceiveAtStore', 'isAuthenticated'], {
       is: false,
       then: Yup.string().required(t('address.ward-required')),
       otherwise: Yup.string().notRequired()
     }),
-    district: Yup.string().when('isReceiveAtStore', {
+    district: Yup.string().when(['isReceiveAtStore', 'isAuthenticated'], {
       is: false,
       then: Yup.string().required(t('address.district-required')),
       otherwise: Yup.string().notRequired()
     }),
-    province: Yup.string().when('isReceiveAtStore', {
+    province: Yup.string().when(['isReceiveAtStore', 'isAuthenticated'], {
       is: false,
       then: Yup.string().required(t('address.province-required')),
       otherwise: Yup.string().notRequired()
@@ -157,12 +164,15 @@ export default function CheckoutBillingAddress() {
 
       receiveMethod: initInfo.receiveMethod || 'delivery',
       isReceiveAtStore: initInfo.isReceiveAtStore || initInfo.receiveMethod === 'store',
+      isAuthenticated,
 
       street: initInfo.street || '',
       ward: initInfo?.ward || '',
       district: initInfo?.district || '',
       province: initInfo?.province || '',
-      note: initInfo.note || ''
+      note: initInfo.note || '',
+
+      userAddressId: initInfo.userAddressId || ''
     },
     validationSchema: OrderInfoSchema,
     onSubmit: async (values, { setSubmitting }) => {
@@ -185,25 +195,16 @@ export default function CheckoutBillingAddress() {
   const { errors, values, touched, handleSubmit, setFieldValue, getFieldProps } = formik;
 
   useEffect(() => {
-    if (deliveryAddress) {
-      setFieldValue('name', deliveryAddress.name);
-      setFieldValue('phone', deliveryAddress.phone);
-
-      setFieldValue('street', deliveryAddress.street);
-      setFieldValue('ward', deliveryAddress.ward);
-      setFieldValue('district', deliveryAddress.district);
-      setFieldValue('province', deliveryAddress.province);
-    }
-  }, [deliveryAddress]);
+    formik.setFieldValue('isAuthenticated', isAuthenticated);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
 
   const handleAddAddress = () => {
     setOpenForm(true);
   };
 
   const handleSaveAddress = (data) => {
-    dispatch(createAddress(data)).then(() => {
-      setDeliveryAddress(addressList[addressList.length - 1]);
-    });
+    dispatch(createAddress(data));
     setOpenForm(false);
   };
 
@@ -212,9 +213,17 @@ export default function CheckoutBillingAddress() {
   };
 
   // eslint-disable-next-line no-unused-vars
-  const handleChangeAddress = (e, value) => {
-    const selectedAddress = addressList.find((address) => address._id === e.target.value);
-    setDeliveryAddress(selectedAddress);
+  const handleChangeAddress = (e) => {
+    setFieldValue('userAddressId', e.target.value);
+    const add = addressList.find((item) => item._id === e.target.value);
+    if (add) {
+      setFieldValue('name', add.name);
+      setFieldValue('phone', add.phone);
+      setFieldValue('street', add.street);
+      setFieldValue('ward', add.ward);
+      setFieldValue('district', add.district);
+      setFieldValue('province', add.province);
+    }
   };
 
   const handleChangeReceiveMethod = (_, value) => {
@@ -224,6 +233,14 @@ export default function CheckoutBillingAddress() {
       setFieldValue('isReceiveAtStore', true);
     }
     setFieldValue('receiveMethod', value);
+    if (user && isAuthenticated) {
+      if (!values.name) {
+        setFieldValue('name', user.fullName);
+      }
+      if (!values.phone) {
+        setFieldValue('phone', user.phone);
+      }
+    }
   };
 
   const handleApplyShipping = () => {
@@ -231,13 +248,6 @@ export default function CheckoutBillingAddress() {
   };
 
   const handleNextStep = () => {
-    if (deliveryAddress) {
-      setFieldValue('street', deliveryAddress.street);
-      setFieldValue('ward', deliveryAddress.ward);
-      setFieldValue('district', deliveryAddress.district);
-      setFieldValue('province', deliveryAddress.province);
-    }
-
     console.log('Submit', {
       values,
       errors
@@ -250,61 +260,90 @@ export default function CheckoutBillingAddress() {
     backStepOrder(activeStep);
   };
 
-  const renderUserSelectAddress = () => (
-    <>
-      <TextField
-        select
-        fullWidth
-        label={t('address.title')}
-        {...getFieldProps('addressId')}
-        SelectProps={{ native: true }}
-        onChange={handleChangeAddress}
-        value={deliveryAddress?._id || ''}
-      >
-        {addressList.map((add, index) => (
-          <option key={`address-item-${index}`} value={add._id}>
-            {`${add.name} ${add.phone} - ${add.street}, ${add.ward}, ${add.district}, ${add.province}`}
-          </option>
-        ))}
-      </TextField>
+  const renderAddressInput = () => {
+    if (isAuthenticated) {
+      return (
+        <>
+          {errors.userAddressId && touched.userAddressId && (
+            <Alert sx={{ mb: 2 }} severity="error">
+              {errors.userAddressId}
+            </Alert>
+          )}
+          <RadioGroup name="userAddressId">
+            <Grid container spacing={2}>
+              {addressList.map((add) => {
+                const { _id, name, phone, street, ward, district, province, type } = add;
+                return (
+                  <Grid key={_id} item xs={12} md={12}>
+                    <OptionStyle
+                      sx={{
+                        ...(values.userAddressId === _id && {
+                          boxShadow: (theme) => theme.customShadows.z8
+                        })
+                      }}
+                    >
+                      <FormControlLabel
+                        value={_id}
+                        onChange={handleChangeAddress}
+                        control={<Radio checkedIcon={<Icon icon={checkmarkCircle2Fill} />} />}
+                        label={
+                          <Box sx={{ mx: 1 }}>
+                            <Typography variant="subtitle2">{name}</Typography>
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              {`Điện thoại: ${phone}`}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              {`${street}, ${ward}, ${district}, ${province}`}
+                            </Typography>
+                          </Box>
+                        }
+                        sx={{ py: 3, flexGrow: 1, mr: 0 }}
+                      />
+                    </OptionStyle>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </RadioGroup>
 
-      <Button
-        id="add-card"
-        type="button"
-        size="small"
-        startIcon={<Icon icon={plusFill} width={20} height={20} />}
-        onClick={handleAddAddress}
-        sx={{ my: 3 }}
-      >
-        {t('address.add-title')}
-      </Button>
-    </>
-  );
+          <Button
+            id="add-card"
+            type="button"
+            size="small"
+            startIcon={<Icon icon={plusFill} width={20} height={20} />}
+            onClick={handleAddAddress}
+            sx={{ my: 3 }}
+          >
+            {t('address.add-title')}
+          </Button>
+        </>
+      );
+    }
+    return (
+      <Stack spacing={{ xs: 2, sm: 3 }} sx={{ mb: 3 }}>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <TextField
+            fullWidth
+            label={t('address.full-name')}
+            {...getFieldProps('name')}
+            error={Boolean(touched.name && errors.name)}
+            helperText={touched.name && errors.name}
+          />
+          <TextField
+            fullWidth
+            label={t('address.phone')}
+            {...getFieldProps('phone')}
+            error={Boolean(touched.phone && errors.phone)}
+            helperText={touched.phone && errors.phone}
+          />
+        </Stack>
 
-  const renderInputAddressForGuest = () => (
-    <Stack spacing={{ xs: 2, sm: 3 }} sx={{ mb: 3 }}>
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <TextField
-          fullWidth
-          label={t('address.full-name')}
-          {...getFieldProps('name')}
-          error={Boolean(touched.name && errors.name)}
-          helperText={touched.name && errors.name}
-        />
-        <TextField
-          fullWidth
-          label={t('address.phone')}
-          {...getFieldProps('phone')}
-          error={Boolean(touched.phone && errors.phone)}
-          helperText={touched.phone && errors.phone}
-        />
+        <AddressPicker formik={formik} />
+
+        <TextField fullWidth label={t('address.note')} {...getFieldProps('note')} />
       </Stack>
-
-      <AddressPicker formik={formik} />
-
-      <TextField fullWidth label={t('address.note')} {...getFieldProps('note')} />
-    </Stack>
-  );
+    );
+  };
 
   return (
     <>
@@ -360,11 +399,11 @@ export default function CheckoutBillingAddress() {
                                 </Box>
                               </MHidden>
 
-                              {isDelivery && (
+                              {/* {isDelivery && (
                                 <Collapse in={values.receiveMethod === 'delivery'} sx={{ width: '100%' }}>
                                   {user ? renderUserSelectAddress() : renderInputAddressForGuest()}
                                 </Collapse>
-                              )}
+                              )} */}
                               {isStore && (
                                 <Collapse in={values.receiveMethod === 'store'} sx={{ width: '100%' }}>
                                   <Stack spacing={{ xs: 2, sm: 3 }} sx={{ mb: 3 }}>
@@ -405,13 +444,20 @@ export default function CheckoutBillingAddress() {
               </Card>
 
               {values.receiveMethod === 'delivery' && (
+                <Card sx={{ mt: 3 }}>
+                  <CardHeader title="Địa chỉ nhận hàng" />
+                  <CardContent>{renderAddressInput()}</CardContent>
+                </Card>
+              )}
+
+              {/* {values.receiveMethod === 'delivery' && (
                 <CheckoutDelivery
                   formik={formik}
                   onApplyShipping={handleApplyShipping}
                   deliveryOptions={deliveryOpts}
                   sx={{ mt: 3 }}
                 />
-              )}
+              )} */}
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
                 <Button

@@ -45,7 +45,7 @@ export const isCustomer = authorized(roleCustomer);
 export const isGuestOrAuthorized = (req, res, next) => {
   let token = req.headers['x-access-token'] || req.headers['authorization'];
   if (token) {
-    return jwtMiddleware;
+    return jwtMiddleware(req, res, next);
   }
   next();
 }
