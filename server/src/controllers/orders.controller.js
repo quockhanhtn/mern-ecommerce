@@ -130,7 +130,7 @@ export const createByUser = async (req, res, next) => {
 export const rePayOrder = async (req, res, next) => {
   try {
     const { orderId } = req.params;
-    const order = await orderService.getOne(orderId, '_id paymentMethod paymentStatus total');
+    const order = await orderService.getOne(orderId);
     if (!order) {
       resUtils.status400(
         res,
