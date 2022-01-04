@@ -1,0 +1,23 @@
+@startuml login
+
+actor       User       as u
+participant LoginPage as lp
+participant Server as s
+participant Database as d
+
+u   -> lp: Nhập thông tin, Click Đăng nhập
+lp  -> lp: ValidateInput()
+
+lp  -> s: Request()
+s   -> d: Query()
+d   -> s: Result()
+
+alt Thành công
+  s   -> lp: SuccessRespone()
+  lp  -> u: Chuyển đến trang chủ
+else Thất bại
+  s   -> lp: ErrorRespone()
+  lp  -> u: Thông báo lỗi
+end
+
+@enduml
