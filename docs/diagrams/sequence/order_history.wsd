@@ -1,0 +1,46 @@
+@startuml order history
+!theme cerulean
+
+actor       User       as u
+participant OTP_Form as otp
+participant OrderHistoryPage as ohp
+participant Server as s
+participant Firebase as f
+participant Database as d
+
+alt Đã đăng nhập
+  u -> ohp: Xem lịch sử đơn hàng
+  ohp -> s: Request()
+  s -> d: Query()
+  d -> s: Result()
+
+  alt Lấy danh sách thành công
+    s -> ohp: SuccessResponse()
+    ohp -> u: Hiển thị danh sách đơn hàng
+  else Lấy danh sách thất bại
+    s -> ohp: ErrorResponse()
+    ohp -> u: Hiển thị lỗi
+  end
+else Chưa đăng nhập
+  u -> otp: Nhập số điện thoại
+  otp -> otp: ValidatePhone()
+  otp -> f: GenerateOTP()
+  otp -> u: Hiển thị form nhập OTP
+  u -> otp: Nhập OTP
+  otp -> s: Request()
+  s -> f: verifyOTP()
+  alt OTP đúng
+    f -> s: Data()
+    s -> d: Query()
+    d -> s: Result()
+    s -> otp: SuccessResponse()
+    otp -> u: Hiển thị danh sách đơn hàng
+  else OTP sai
+    f -> s: ErrorMessage()
+    s -> otp: ErrorResponse()
+    otp -> u: Hiển thị lỗi
+  end
+end
+
+
+@enduml
