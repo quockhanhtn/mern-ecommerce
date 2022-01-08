@@ -1,9 +1,9 @@
 # Dockerfile for client
 
-# Stage 1: Build react client
-FROM node:14.15.3-alpine3.12
+ARG NODE_IMAGE=node:14.15.3-alpine3.12
 
-# Working directory be app
+# Stage 1: Build Node.js
+FROM $NODE_IMAGE AS BUILD_IMAGE
 WORKDIR /usr/app
 
 COPY package*.json ./
@@ -11,6 +11,15 @@ COPY package*.json ./
 # Install dependencies
 RUN npm ci
 
+
+# Stage 2: Build Docker image
+FROM $NODE_IMAGE
+WORKDIR /usr/app
+
+## copy from build image
+COPY --from=BUILD_IMAGE /usr/app/node_modules ./node_modules
+
+COPY package*.json ./
 # copy local files to app folder
 COPY . .
 

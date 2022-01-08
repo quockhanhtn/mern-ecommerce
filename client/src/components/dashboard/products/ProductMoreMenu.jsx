@@ -50,7 +50,7 @@ export default function ProductMoreMenu({ productId, onDelete, currentIdProduct,
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <div onMouseLeave={() => setIsOpen(false)}>
+        <div>
           <MenuItem
             component={RouterLink}
             to={`${PATH_DASHBOARD.app.products.root}/${paramCase(productId)}/edit`}

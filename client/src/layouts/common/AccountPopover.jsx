@@ -21,9 +21,9 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // ----------------------------------------------------------------------
 
 const DEFAULT_MENU_OPTIONS = [
-  { label: 'Home', icon: homeFill, linkTo: PATH_DASHBOARD.app },
-  { label: 'Profile', icon: personFill, linkTo: PATH_DASHBOARD.app.profile },
-  { label: 'Settings', icon: settings2Fill, linkTo: PATH_DASHBOARD.app.account_setting }
+  { label: 'Trang chủ', icon: homeFill, linkTo: PATH_DASHBOARD.app },
+  { label: 'Tài khoản', icon: personFill, linkTo: PATH_DASHBOARD.app.profile },
+  { label: 'Cài đặt', icon: settings2Fill, linkTo: PATH_DASHBOARD.app.account_setting }
 ];
 
 // ----------------------------------------------------------------------

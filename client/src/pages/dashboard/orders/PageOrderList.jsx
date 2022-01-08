@@ -227,7 +227,7 @@ export default function PageOrderList() {
           links={[{ name: t('dashboard.general'), href: PATH_DASHBOARD.general }, { name: t('order.title') }]}
           action={
             <Button variant="contained" startIcon={<Icon icon={plusFill} />} onClick={handleCreateNew}>
-              {t('dashboard.categories.add')}
+              {t('dashboard.orders.add')}
             </Button>
           }
         />

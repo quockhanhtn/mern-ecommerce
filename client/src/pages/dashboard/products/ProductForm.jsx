@@ -145,7 +145,7 @@ export default function ProductForm() {
             onChange={(event) => handleChangeInput(inputField.id, event)}
           />
           <Button disabled={specifications.length === 1} onClick={() => handleRemoveFields(inputField.id)}>
-            Remove
+            Xóa
           </Button>
         </Stack>
       ))}
@@ -384,7 +384,7 @@ export default function ProductForm() {
                     helperText={touched.name && errors.name}
                   />
 
-                  <TextField fullWidth label="Variant Name" {...getFieldProps('variantName')} />
+                  <TextField fullWidth label="Loại sản phẩm" {...getFieldProps('variantName')} />
 
                   <div>
                     <LabelStyle>{t('dashboard.products.desc')}</LabelStyle>
@@ -407,7 +407,7 @@ export default function ProductForm() {
               <Card sx={{ p: 3 }}>
                 {renderSpecificationsForm()}
                 <Button variant="outlined" onClick={handleAddFields}>
-                  Add
+                  Thêm
                 </Button>
               </Card>
 
@@ -593,7 +593,7 @@ export default function ProductForm() {
                     label={t('dashboard.products.price')}
                     {...getFieldProps('price')}
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                      startAdornment: <InputAdornment position="start">đ</InputAdornment>,
                       type: 'number'
                     }}
                     error={Boolean(touched.price && errors.price)}
@@ -606,7 +606,7 @@ export default function ProductForm() {
                     label={t('dashboard.products.market-price')}
                     {...getFieldProps('marketPrice')}
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                      startAdornment: <InputAdornment position="start">đ</InputAdornment>,
                       type: 'number'
                     }}
                     error={Boolean(touched.marketPrice && errors.marketPrice)}

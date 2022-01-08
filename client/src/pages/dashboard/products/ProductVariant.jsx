@@ -62,8 +62,8 @@ export default function ProductVariant() {
     {
       id: 'variantName',
       numeric: false,
-      disablePadding: true,
-      label: 'Variant Name'
+      disablePadding: false,
+      label: 'Loại sản phẩm'
     },
     {
       id: 'price',
@@ -87,7 +87,7 @@ export default function ProductVariant() {
       id: 'sold',
       numeric: true,
       disablePadding: false,
-      label: 'Sold'
+      label: 'Đã bán'
     },
     {
       id: 'action',
@@ -142,10 +142,10 @@ export default function ProductVariant() {
             <Stack spacing={3}>
               <Stack direction="row" spacing={3} sx={{ justifyContent: 'space-between' }}>
                 <Typography variant="h4" gutterBottom>
-                  Product Variant
+                  Phân loại
                 </Typography>
                 <Button variant="contained" startIcon={<Icon icon={plusFill} />} onClick={handleOpenForm}>
-                  New Variant
+                  Thêm loại mới
                 </Button>
               </Stack>
               <Scrollbar>

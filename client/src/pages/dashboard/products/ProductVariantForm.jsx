@@ -112,7 +112,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
           <TextField
             fullWidth
             name="name"
-            label="Specifications name"
+            label={t('dashboard.products.specifications-name')}
             size="small"
             value={inputField.name}
             error={isErrorSpecifications && inputField.name === ''}
@@ -121,14 +121,14 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
           <TextField
             fullWidth
             name="value"
-            label="Specifications value"
+            label={t('dashboard.products.specifications-value')}
             size="small"
             value={inputField.value}
             error={isErrorSpecifications && inputField.value === ''}
             onChange={(event) => handleChangeInput(inputField.id, event)}
           />
           <Button disabled={specifications.length === 1} onClick={() => handleRemoveFields(inputField.id)}>
-            Remove
+            Xóa
           </Button>
         </Stack>
       ))}
@@ -356,7 +356,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
     <Dialog open={open} maxWidth="md" fullWidth>
       <DialogTitle>
         <Typography variant="h4" marginBottom={2} sx={{ textTransform: 'uppercase' }}>
-          Create variant
+          Thêm loại sản phẩm
         </Typography>
       </DialogTitle>
       <DialogContent>
@@ -365,7 +365,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
             <Stack spacing={3}>
               <TextField
                 fullWidth
-                label="Variant Name"
+                label="Loại"
                 {...getFieldProps('variantName')}
                 error={Boolean(touched.variantName && errors.variantName)}
                 helperText={touched.variantName && errors.variantName}
@@ -374,7 +374,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
                 <TextField
                   fullWidth
                   disabled={currentVariant}
-                  label="Product SKU"
+                  label={t('dashboard.products.sku')}
                   {...getFieldProps('sku')}
                   error={Boolean(touched.sku && errors.sku)}
                   helperText={touched.sku && errors.sku}
@@ -382,7 +382,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
                 <TextField
                   type="number"
                   fullWidth
-                  label="Quantity"
+                  label={t('dashboard.products.quantity')}
                   {...getFieldProps('quantity')}
                   defaultValue={1}
                   error={Boolean(touched.quantity && errors.quantity)}
@@ -393,10 +393,10 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
                 <TextField
                   fullWidth
                   placeholder="0.00"
-                  label="Price"
+                  label={t('dashboard.products.price')}
                   {...getFieldProps('price')}
                   InputProps={{
-                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                    startAdornment: <InputAdornment position="start">đ</InputAdornment>,
                     type: 'number'
                   }}
                   error={Boolean(touched.price && errors.price)}
@@ -405,10 +405,10 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
                 <TextField
                   fullWidth
                   placeholder="0.00"
-                  label="Market Price"
+                  label={t('dashboard.products.market-price')}
                   {...getFieldProps('marketPrice')}
                   InputProps={{
-                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                    startAdornment: <InputAdornment position="start">đ</InputAdornment>,
                     type: 'number'
                   }}
                   error={Boolean(touched.marketPrice && errors.marketPrice)}
@@ -418,7 +418,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
               <Card sx={{ p: 3 }}>
                 {renderSpecificationsForm()}
                 <Button variant="outlined" onClick={handleAddFields}>
-                  Add
+                  Thêm
                 </Button>
               </Card>
 
@@ -426,7 +426,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
                 <Stack spacing={3}>
                   <div onChange={() => setValidationThumbnail(false)}>
                     <UploadSingleFile
-                      label="Thumbnail"
+                      label="Ảnh bìa"
                       file={uploadImage}
                       setFile={setUploadImage}
                       onDrop={handleDropSingleFile}
@@ -443,7 +443,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
                   </div>
                   <div>
                     <LabelStyle>
-                      Add more picture.
+                      Hình ảnh khác
                       <Typography component="span" variant="subtitle4" sx={{ color: 'primary.main' }}>
                         &nbsp;Note: must upload more pictures before saving.
                       </Typography>

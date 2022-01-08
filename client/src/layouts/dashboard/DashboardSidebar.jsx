@@ -79,7 +79,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       subheader: t('dashboard.general'),
       items: [
         { title: t('dashboard.statics'), path: PATH_DASHBOARD.general.statics, icon: ICONS.analytics },
-        { title: t('dashboard.orders'), path: PATH_DASHBOARD.general.orders, icon: ICONS.ecommerce }
+        { title: t('dashboard.orders.title'), path: PATH_DASHBOARD.general.orders, icon: ICONS.ecommerce }
       ]
     },
 
@@ -92,21 +92,21 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         { title: t('dashboard.brands.title'), path: PATH_DASHBOARD.app.brands, icon: ICONS.brands },
         { title: t('dashboard.discounts.title'), path: PATH_DASHBOARD.app.discounts, icon: ICONS.discounts },
         {
-          title: 'Products',
+          title: t('dashboard.products.title'),
           path: PATH_DASHBOARD.app.products.root,
           icon: ICONS.products,
           children: [
-            { title: 'Product List', path: PATH_DASHBOARD.app.products.list, icon: ICONS.list },
-            { title: 'Add Product', path: PATH_DASHBOARD.app.products.add, icon: ICONS.addNew }
+            { title: t('dashboard.products.list'), path: PATH_DASHBOARD.app.products.list, icon: ICONS.list },
+            { title: t('dashboard.products.add'), path: PATH_DASHBOARD.app.products.add, icon: ICONS.addNew }
           ]
         },
         {
-          title: 'Users',
+          title: t('dashboard.users.title'),
           path: PATH_DASHBOARD.app.users.root,
           icon: ICONS.user,
           children: [
-            { title: 'Customer List', path: PATH_DASHBOARD.app.users.customer_list },
-            { title: 'Staff List', path: PATH_DASHBOARD.app.users.staff_list }
+            { title: t('dashboard.users.customer-list'), path: PATH_DASHBOARD.app.users.customer_list },
+            { title: t('dashboard.users.staff-list'), path: PATH_DASHBOARD.app.users.staff_list }
           ]
         }
       ]
