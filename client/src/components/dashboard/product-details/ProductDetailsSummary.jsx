@@ -2,9 +2,6 @@ import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router-dom';
 import add12Filled from '@iconify/icons-fluent/add-12-filled';
 import subtract12Filled from '@iconify/icons-fluent/subtract-12-filled';
-import twitterFill from '@iconify/icons-eva/twitter-fill';
-import linkedinFill from '@iconify/icons-eva/linkedin-fill';
-import facebookFill from '@iconify/icons-eva/facebook-fill';
 import roundAddShoppingCart from '@iconify/icons-ic/round-add-shopping-cart';
 import { useFormik, Form, FormikProvider, useField } from 'formik';
 // material
@@ -81,10 +78,6 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
 
   const { _id, name, price, cover, views, variants, rates } = product;
 
-  const handleBuyNow = () => {
-    // dispatch(onGotoStep(0));
-  };
-
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -98,15 +91,8 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
     },
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        // if (!alreadyProduct) {
-        //   onAddCart({
-        //     ...values,
-        //     subtotal: values.price * values.quantity
-        //   });
-        // }
-        setSubmitting(false);
-        handleBuyNow();
-        navigate(PATH_DASHBOARD);
+        handleAddCart();
+        navigate('/cart');
       } catch (error) {
         setSubmitting(false);
       }
@@ -146,10 +132,10 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
           </Typography>
 
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ mb: 2 }}>
-            <Rating value={rates?.length} precision={0.1} readOnly />
+            <Rating value={rates?.length || 4.5} precision={0.1} readOnly />
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               ({fShortenNumber(views)}
-              &nbsp;reviews)
+              &nbsp;lượt xem)
             </Typography>
           </Stack>
 
@@ -165,7 +151,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
           <Stack spacing={3} sx={{ my: 3 }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
-                Variants
+                Loại
               </Typography>
               <div sx={{ justifyContent: 'flex-end' }}>
                 {variants &&
@@ -188,7 +174,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
 
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
-                Quantity
+                Số lượng
               </Typography>
               <div>
                 <Incrementer name="quantity" available={variants?.[indexVariant].quantity} />
@@ -201,7 +187,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
                     color: 'text.secondary'
                   }}
                 >
-                  Available: {variants?.[indexVariant].quantity}
+                  Còn: {variants?.[indexVariant].quantity} SP
                 </Typography>
 
                 <FormHelperText error>{touched.quantity && errors.quantity}</FormHelperText>
@@ -221,10 +207,10 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
               onClick={handleAddCart}
               sx={{ whiteSpace: 'nowrap' }}
             >
-              Add to Cart
+              Thêm vào giỏ hàng
             </MButton>
             <Button fullWidth size="large" type="submit" variant="contained">
-              Buy Now
+              Mua ngay
             </Button>
           </Stack>
         </Form>

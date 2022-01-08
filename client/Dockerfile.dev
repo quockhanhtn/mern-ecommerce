@@ -1,0 +1,28 @@
+# Dockerfile for client
+
+ARG NODE_IMAGE=node:14.15.3-alpine3.12
+
+# Stage 1: Build Node.js
+FROM $NODE_IMAGE AS BUILD_IMAGE
+WORKDIR /usr/app
+
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+
+# Stage 2: Build Docker image
+FROM $NODE_IMAGE
+WORKDIR /usr/app
+
+## copy from build image
+COPY --from=BUILD_IMAGE /usr/app/node_modules ./node_modules
+
+COPY package*.json ./
+# copy local files to app folder
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm","start"]

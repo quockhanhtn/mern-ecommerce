@@ -35,8 +35,8 @@ router.route('/manager/:orderId')
 
 router.get('/', isGuestOrAuthorized, getList);
 router.post('/', isGuestOrAuthorized, createByUser);
-router.get('/re-pay/:orderId', rePayOrder);
-router.get('/:orderId', getOne);
+router.get('/re-pay/:orderId', isGuestOrAuthorized, rePayOrder);
+router.get('/:orderId', isGuestOrAuthorized, getOne);
 
 
 export default router;

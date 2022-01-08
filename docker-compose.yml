@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: mern-ecommerce-server
+    container_name: mern-ecommerce-server-production
+    command: npm run start
+    ports:
+      - "3001:3001"
+    env_file: ./server/.env
+    networks:
+      - app-network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: mern-ecommerce-client
+    container_name: mern-ecommerce-client-production
+    command: serve -s build -l 3000
+    depends_on:
+      - server
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+networks:
+    app-network:
+        driver: bridge

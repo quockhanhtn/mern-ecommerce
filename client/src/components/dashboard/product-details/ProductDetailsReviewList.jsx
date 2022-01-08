@@ -11,6 +11,7 @@ import { fDate } from '../../../utils/formatTime';
 import { fShortenNumber } from '../../../utils/formatNumber';
 import { getAllComments } from '../../../actions/comments';
 import useLocales from '../../../hooks/useLocales';
+
 // utils
 
 // ----------------------------------------------------------------------
@@ -74,7 +75,7 @@ function ReviewItem({ review }) {
           {content && (
             <Typography variant="caption" sx={{ my: 1, display: 'flex', alignItems: 'center', color: 'primary.main' }}>
               <Icon icon={roundVerified} width={16} height={16} />
-              &nbsp;Verified purchase
+              &nbsp;Đã mua hàng
             </Typography>
           )}
 
@@ -93,7 +94,8 @@ function ReviewItem({ review }) {
               startIcon={<Icon icon={!isHelpful ? roundThumbUp : checkmarkFill} />}
               onClick={handleClickHelpful}
             >
-              {isHelpful ? 'Helpful' : 'Thank'}({fShortenNumber(!isHelpful ? 256 : 123 + 1)})
+              {isHelpful ? 'Thích' : 'Thích'}&nbsp;(
+              {fShortenNumber(!isHelpful ? 1 + Math.floor(Math.random() * 10) : 11 + 1)})
             </Button>
           </Stack>
         </div>
@@ -126,9 +128,9 @@ export default function ProductDetailsReviewList({ product }) {
           <ReviewItem key={review.id} review={review} />
         ))}
       </List>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Pagination count={10} color="primary" />
-      </Box>
+      </Box> */}
     </Box>
   );
 }

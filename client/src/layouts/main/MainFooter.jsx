@@ -33,18 +33,18 @@ export default function MainFooter() {
 
   const LINKS = [
     {
-      headline: 'HK Mobile',
+      headline: 'VỀ CHÚNG TÔI',
       children: [
-        { name: 'About us', href: '#' },
-        { name: 'Contact us', href: '#' },
-        { name: 'FAQs', href: '#' }
+        { name: 'Khách hàng đánh gia', href: '#' },
+        { name: 'Liên hệ', href: '#' },
+        { name: 'Hỏi đáp', href: '#' }
       ]
     },
     {
-      headline: 'Legal',
+      headline: 'Chính sách',
       children: [
-        { name: 'Terms and Condition', href: '#' },
-        { name: 'Privacy Policy', href: '#' }
+        { name: 'Chính sách vận chuyển', href: '#' },
+        { name: 'Chính sách bảo hàng', href: '#' }
       ]
     },
     {

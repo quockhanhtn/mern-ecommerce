@@ -74,7 +74,7 @@ export default function QuillEditor({ id, error, value, onChange, simple = false
         onChange={onChange}
         modules={modules}
         formats={formats}
-        placeholder="Write something awesome..."
+        placeholder="Nhập nội dung"
         {...other}
       />
     </RootStyle>

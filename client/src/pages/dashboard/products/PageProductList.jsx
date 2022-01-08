@@ -197,7 +197,7 @@ export default function PageProductList() {
               to={PATH_DASHBOARD.app.products.add}
               startIcon={<Icon icon={plusFill} />}
             >
-              New Product
+              {t('dashboard.products.add')}
             </Button>
           }
         />

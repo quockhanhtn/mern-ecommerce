@@ -226,13 +226,15 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}) {
 
   const countAll = await Product.estimatedDocumentCount();
   const total = await Product.countDocuments(JSON.parse(JSON.stringify(filter)), null).exec();
-  const list = await Product.find(JSON.parse(JSON.stringify(filter)), fields, { skip: (page - 1) * limit, limit: limit })
-    // .select(fields)
-    // .limit(limit)
-    // .skip(limit * (page - 1))
-    // .sort({ createdAt: -1 })
-    // .populate(populateOpts)
+  const list = await Product.find(filter)
+    .select(fields)
+    .populate(populateOpts)
+    .skip((page - 1) * limit)
+    .limit(limit)
     .lean().exec();
+
+  // const list = await Product.find(JSON.parse(JSON.stringify(filter)), fields, { skip: (page - 1) * limit, limit: limit })
+  //   .lean().exec();
 
   return { countAll, total, list };
 }
@@ -304,7 +306,7 @@ async function getFullAll(fields = SELECT_FIELD) {
   if (fields.indexOf(',') > -1) {
     fields = fields.split(',').join(' ');
   }
-  
+
   return await Product.find()
     .select(fields)
     .sort({ createdAt: -1 })

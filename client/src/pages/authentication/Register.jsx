@@ -4,6 +4,7 @@ import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Card, Link, Container, Typography } from '@material-ui/core';
 // hooks
 import useAuth from '../../hooks/useAuth';
+import useLocales from '../../hooks/useLocales';
 // routes
 import { PATH_AUTH } from '../../routes/paths';
 // layouts
@@ -45,20 +46,21 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Register() {
   const { method } = useAuth();
+  const { t } = useLocales();
 
   return (
     <RootStyle title="Register | Minimal-UI">
       <AuthLayout>
-        Already have an account? &nbsp;
+        {t('auth.already-have-account')} &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to={PATH_AUTH.login}>
-          Login
+          {t('auth.login')}
         </Link>
       </AuthLayout>
 
       <MHidden width="mdDown">
         <SectionStyle>
           <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-            Manage the job more effectively with Minimal
+            {t('auth.register-salutation')}
           </Typography>
           <img alt="register" src="/static/illustrations/illustration_register.png" />
         </SectionStyle>
@@ -68,9 +70,9 @@ export default function Register() {
         <ContentStyle>
           <Box sx={{ mb: 5 }}>
             <Typography variant="h4" gutterBottom>
-              Get started absolutely free.
+              {t('auth.register-title')}
             </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>Free forever. No credit card needed.</Typography>
+            <Typography sx={{ color: 'text.secondary' }}>{t('auth.register-subtitle')}</Typography>
           </Box>
 
           <AuthWithSocial />
@@ -78,22 +80,22 @@ export default function Register() {
           <RegisterForm />
 
           <Typography variant="body2" align="center" sx={{ color: 'text.secondary', mt: 3 }}>
-            By registering, I agree to Minimal&nbsp;
+            {t('auth.accept-terms')}&nbsp;
             <Link underline="always" sx={{ color: 'text.primary' }}>
-              Terms of Service
+              {t('auth.tos')}
             </Link>
-            &nbsp;and&nbsp;
+            &nbsp;{t('common.and')}&nbsp;
             <Link underline="always" sx={{ color: 'text.primary' }}>
-              Privacy Policy
+              {t('auth.privacy-policy')}
             </Link>
             .
           </Typography>
 
           <MHidden width="smUp">
             <Typography variant="subtitle2" sx={{ mt: 3, textAlign: 'center' }}>
-              Already have an account?&nbsp;
+              {t('auth.already-have-account')}&nbsp;
               <Link to={PATH_AUTH.login} component={RouterLink}>
-                Login
+                {t('auth.login')}
               </Link>
             </Typography>
           </MHidden>

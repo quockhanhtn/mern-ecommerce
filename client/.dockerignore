@@ -1,0 +1,7 @@
+node_modules
+.dockerignore
+Dockerfile
+Dockerfile.production
+package-lock-20211022.json
+.env.sample
+.env

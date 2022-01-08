@@ -3,6 +3,9 @@ export default {
     'search-placeholder': 'Search...',
     'search-btn': 'Search',
     'rows-per-page': 'Rows per page',
+    of: 'of',
+    and: 'and',
+    'more-than': 'more than',
     'small-padding': 'Small padding',
     'confirm-action-delete': 'Do you want to continue deleting?',
     'filter-list': 'Filter list',
@@ -77,7 +80,12 @@ export default {
     'enter-new-password': 'Enter new password',
     'confirm-new-password': 'Confirm new password',
     'role-admin': 'Admin',
-    'role-staff': 'Staff'
+    'role-staff': 'Staff',
+
+    'accept-terms': 'By registering, I agree to HK Mobile',
+    tos: 'Terms of Service',
+    'privacy-policy': 'Privacy Policy',
+    'register-success': 'Register success'
   },
   dashboard: {
     title: 'Dashboard',
@@ -177,6 +185,7 @@ export default {
     products: {
       'page-title': 'Product management | HK Mobile',
       title: 'Products',
+      list: 'Product list',
       'title-not-found': 'Products not found!',
       heading: 'Product List',
       'heading-create': 'Create a new product',
