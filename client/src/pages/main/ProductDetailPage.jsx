@@ -6,7 +6,7 @@ import roundVerified from '@iconify/icons-ic/round-verified';
 import roundVerifiedUser from '@iconify/icons-ic/round-verified-user';
 // material
 import { alpha, experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
-import { Box, Tab, Card, Grid, Divider, Skeleton, Container, Typography } from '@material-ui/core';
+import { Box, Tab, Card, Grid, Divider, Container, Typography } from '@material-ui/core';
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -58,20 +58,20 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const SkeletonLoad = (
-  <Grid container spacing={3}>
-    <Grid item xs={12} md={6} lg={7}>
-      <Skeleton variant="rectangular" width="100%" sx={{ paddingTop: '100%', borderRadius: 2 }} />
-    </Grid>
-    <Grid item xs={12} md={6} lg={5}>
-      <Skeleton variant="circular" width={80} height={80} />
-      <Skeleton variant="text" height={240} />
-      <Skeleton variant="text" height={40} />
-      <Skeleton variant="text" height={40} />
-      <Skeleton variant="text" height={40} />
-    </Grid>
-  </Grid>
-);
+// const SkeletonLoad = (
+//   <Grid container spacing={3}>
+//     <Grid item xs={12} md={6} lg={7}>
+//       <Skeleton variant="rectangular" width="100%" sx={{ paddingTop: '100%', borderRadius: 2 }} />
+//     </Grid>
+//     <Grid item xs={12} md={6} lg={5}>
+//       <Skeleton variant="circular" width={80} height={80} />
+//       <Skeleton variant="text" height={240} />
+//       <Skeleton variant="text" height={40} />
+//       <Skeleton variant="text" height={40} />
+//       <Skeleton variant="text" height={40} />
+//     </Grid>
+//   </Grid>
+// );
 
 export default function ProductDetailPage() {
   const { t } = useLocales();
@@ -85,11 +85,13 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     dispatch(getProductById(productSlug));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productSlug]);
 
   useEffect(() => {
     setImages([]);
     handleGatherPicture();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product, indexVariant]);
 
   const handleChangeTab = (event, newValue) => {
@@ -118,70 +120,69 @@ export default function ProductDetailPage() {
   return (
     <Page title={(product?.name?.concat(' - ') || '') + t('home.page-title')}>
       <Container maxWidth="lg" sx={{ paddingY: 5 }}>
-        <>
-          <Card>
-            <Grid container>
-              <Grid item xs={12} md={6} lg={7} sx={{ marginBottom: theme.spacing(1) }}>
-                <ProductDetailsCarousel images={images} />
-              </Grid>
-              <Grid item xs={12} md={6} lg={5}>
-                <ProductDetailsSummary
-                  isLoading={isLoading}
-                  product={product}
-                  indexVariant={indexVariant}
-                  handleChangeIndexVariant={handleChangeIndexVariant}
-                />
-              </Grid>
+        <Card>
+          <Grid container>
+            <Grid item xs={12} md={6} lg={7} sx={{ marginBottom: theme.spacing(1) }}>
+              <ProductDetailsCarousel images={images} />
             </Grid>
-          </Card>
-          <Grid container sx={{ my: 8 }}>
-            {PRODUCT_DESCRIPTION.map((item) => (
-              <Grid item xs={12} md={4} key={item.title}>
-                <Box
-                  sx={{
-                    my: 2,
-                    mx: 'auto',
-                    maxWidth: 280,
-                    textAlign: 'center'
-                  }}
-                >
-                  <IconWrapperStyle>
-                    <Icon icon={item.icon} width={36} height={36} />
-                  </IconWrapperStyle>
-                  <Typography variant="subtitle1" gutterBottom>
-                    {item.title}
-                  </Typography>
-                  <Typography sx={{ color: 'text.secondary' }}>{item.description}</Typography>
-                </Box>
-              </Grid>
-            ))}
+            <Grid item xs={12} md={6} lg={5}>
+              <ProductDetailsSummary
+                isLoading={isLoading}
+                product={product}
+                indexVariant={indexVariant}
+                handleChangeIndexVariant={handleChangeIndexVariant}
+              />
+            </Grid>
           </Grid>
+        </Card>
 
-          <Card>
-            <TabContext value={tab}>
-              <Box sx={{ px: 3, bgcolor: 'background.neutral' }}>
-                <TabList onChange={handleChangeTab}>
-                  <Tab disableRipple value="1" label={t('home.product-desc')} />
-                  <Tab
-                    disableRipple
-                    value="2"
-                    label={t('home.review')}
-                    sx={{ '& .MuiTab-wrapper': { whiteSpace: 'nowrap' } }}
-                  />
-                </TabList>
+        <Grid container sx={{ my: 8 }}>
+          {PRODUCT_DESCRIPTION.map((item) => (
+            <Grid item xs={12} md={4} key={item.title}>
+              <Box
+                sx={{
+                  my: 2,
+                  mx: 'auto',
+                  maxWidth: 280,
+                  textAlign: 'center'
+                }}
+              >
+                <IconWrapperStyle>
+                  <Icon icon={item.icon} width={36} height={36} />
+                </IconWrapperStyle>
+                <Typography variant="subtitle1" gutterBottom>
+                  {item.title}
+                </Typography>
+                <Typography sx={{ color: 'text.secondary' }}>{item.description}</Typography>
               </Box>
-              <Divider />
-              <TabPanel value="1">
-                <Box sx={{ p: 3 }}>
-                  <Markdown children={product.desc} />
-                </Box>
-              </TabPanel>
-              <TabPanel value="2">
-                <ProductDetailsReview product={product} />
-              </TabPanel>
-            </TabContext>
-          </Card>
-        </>
+            </Grid>
+          ))}
+        </Grid>
+
+        <Card>
+          <TabContext value={tab}>
+            <Box sx={{ px: 3, bgcolor: 'background.neutral' }}>
+              <TabList onChange={handleChangeTab}>
+                <Tab disableRipple value="1" label={t('home.product-desc')} />
+                <Tab
+                  disableRipple
+                  value="2"
+                  label={t('home.review')}
+                  sx={{ '& .MuiTab-wrapper': { whiteSpace: 'nowrap' } }}
+                />
+              </TabList>
+            </Box>
+            <Divider />
+            <TabPanel value="1">
+              <Box sx={{ p: 3 }}>
+                <Markdown children={product.desc} />
+              </Box>
+            </TabPanel>
+            <TabPanel value="2">
+              <ProductDetailsReview product={product} />
+            </TabPanel>
+          </TabContext>
+        </Card>
       </Container>
     </Page>
   );

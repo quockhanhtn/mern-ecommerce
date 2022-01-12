@@ -30,13 +30,6 @@ import ProductList from '../../components/e-commerce/ProductList';
 
 // ----------------------------------------------------------------------
 
-const RootStyle = styled(Page)(({ theme }) => ({
-  // paddingTop: theme.spacing(0),
-  // paddingBottom: theme.spacing(0),
-  // paddingLeft: theme.spacing(0),
-  // paddingRight: theme.spacing(0)
-}));
-
 const ContentStyle = styled('div')(({ theme }) => ({
   position: 'relative',
   width: '100%',
@@ -73,6 +66,7 @@ export default function ProductListPage() {
     const b = brandsSelected.map((x) => x._id).join(',');
     const c = categoriesSelected.map((x) => x._id).join(',');
     dispatch(getAllProducts(searchText, b, c, 1, 100));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categorySlug, brandSlug, search]);
 
   const handleSearchTextKeyDown = (e) => {
@@ -104,7 +98,7 @@ export default function ProductListPage() {
   };
 
   return (
-    <RootStyle title={t('home.page-title')} id="move_top">
+    <Page title={t('home.page-title')} id="move_top">
       <ContentStyle>
         <Container maxWidth="lg">
           <Stack spacing={5}>
@@ -173,6 +167,6 @@ export default function ProductListPage() {
           </Stack>
         </Container>
       </ContentStyle>
-    </RootStyle>
+    </Page>
   );
 }

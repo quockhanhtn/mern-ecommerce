@@ -2,19 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { LoadingButton } from '@material-ui/lab';
-import {
-  useMediaQuery,
-  Box,
-  Container,
-  Card,
-  CardContent,
-  CardHeader,
-  Stack,
-  Tab,
-  Tabs,
-  Typography
-} from '@material-ui/core';
+import { useMediaQuery, Box, Container, Stack, Tab, Tabs, Typography } from '@material-ui/core';
 // icons
 import { Icon } from '@iconify/react';
 import baselineLocationOn from '@iconify/icons-ic/baseline-location-on';
@@ -22,8 +10,6 @@ import roundVpnKey from '@iconify/icons-ic/round-vpn-key';
 import roundReceipt from '@iconify/icons-ic/round-receipt';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
 import baselineSettings from '@iconify/icons-ic/baseline-settings';
-// redux
-import { useSelector, useDispatch } from 'react-redux';
 // hooks
 import useQuery from '../../hooks/useQuery';
 import useLocales from '../../hooks/useLocales';
@@ -51,7 +37,6 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function AccountPage() {
   const { t } = useLocales();
-  const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const query = useQuery();
