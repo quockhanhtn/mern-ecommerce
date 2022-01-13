@@ -230,6 +230,7 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}) {
     .select(fields)
     .populate(populateOpts)
     .skip((page - 1) * limit)
+    .sort({ createdAt: -1 })
     .limit(limit)
     .lean().exec();
 

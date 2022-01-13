@@ -60,11 +60,11 @@ export default function OrderHistoryPage() {
   }
 
   async function actionReOrder(id) {
-    //
+    console.log('actionReOrder', id);
   }
 
   async function actionCancelOrder(id) {
-    //
+    console.log('actionCancelOrder', id);
   }
 
   useEffect(() => {

@@ -1,17 +1,11 @@
-// icons
-import { Icon } from '@iconify/react';
-import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 import { useEffect, useState } from 'react';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import {
   Box,
-  Button,
   Link,
   Grid,
   Card,
-  CardHeader,
-  CardContent,
   Table,
   Divider,
   TableRow,
@@ -24,15 +18,14 @@ import {
   TableContainer
 } from '@material-ui/core';
 // hooks
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import useLocales from '../../hooks/useLocales';
 // components
 import Page from '../../components/Page';
 import Label from '../../components/Label';
 import LoadingScreen from '../../components/LoadingScreen';
-import LogoFull from '../../components/LogoFull';
 import Scrollbar from '../../components/Scrollbar';
-import { OrderCompleteIllustration, ImageBrokenIcon } from '../../assets';
+import { ImageBrokenIcon } from '../../assets';
 import { InvoiceToolbar } from '../../components/invoice';
 //
 import * as Api from '../../api';
@@ -77,7 +70,6 @@ const InfoItem = ({ label, value, valueVariant }) => (
 export default function ViewOrderPage() {
   const { t } = useLocales();
   const { orderId } = useParams();
-  const navigate = useNavigate();
 
   const [order, setOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -91,11 +83,8 @@ export default function ViewOrderPage() {
 
   useEffect(() => {
     fetchOrder();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
-
-  const handleNavigateToHome = () => {
-    navigate('/');
-  };
 
   const handleRePay = async () => {
     try {
@@ -107,29 +96,6 @@ export default function ViewOrderPage() {
       console.log(error);
     }
   };
-
-  const renderPaymentSuccess = () => (
-    <>
-      <Typography variant="h4" paragraph sx={{ textAlign: 'center' }}>
-        Thank you for your purchase!
-      </Typography>
-
-      <OrderCompleteIllustration sx={{ height: 260, my: 10 }} />
-
-      <Typography align="left" paragraph>
-        Thanks for placing order &nbsp;
-        <Link href="#">01dc1370-3df6-11eb-b378-0242ac130002</Link>
-      </Typography>
-
-      <Typography align="left" sx={{ color: 'text.secondary' }}>
-        We will send you a notification within 5 days when it ships.
-        <br /> <br /> If you have any question or queries then fell to get in contact us. <br /> <br /> All the best,
-      </Typography>
-      <Button color="inherit" onClick={handleNavigateToHome} startIcon={<Icon icon={arrowIosBackFill} />}>
-        Continue Shopping
-      </Button>
-    </>
-  );
 
   if (isLoading) {
     return <LoadingScreen />;

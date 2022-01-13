@@ -55,11 +55,11 @@ export default function PageProductList() {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [isCompact, setIsCompact] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentId, setCurrentId] = useState(null);
 
   useEffect(() => {
-    dispatch(getAllProducts());
+    dispatch(getAllProducts('', '', '', 1, 10000));
   }, [dispatch]);
 
   const tableHeads = [
@@ -167,7 +167,7 @@ export default function PageProductList() {
   const isSelected = (slug) => selected.indexOf(slug) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty productsList.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productsList.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productsList?.length) : 0;
 
   if (isLoading) {
     return <LoadingScreen />;

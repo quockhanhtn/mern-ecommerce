@@ -29,6 +29,7 @@ export default function OrderMoreMenu({ editTitle, onEdit, deleteTitle, onDelete
   useEffect(() => {
     const text = t('dashboard.categories.confirm-delete', { nameInfo });
     setTextConfirmDelete(text);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nameInfo]);
 
   const handleDelete = () => {

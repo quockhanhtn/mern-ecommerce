@@ -46,7 +46,6 @@
 		"FIREBASE_PROJECT_ID": "fb-pro-10",
 		"FIREBASE_PRIVATE_KEY": "-----BEGIN PRIVATE KEY-----\n{YOUR_KEY}==\n-----END PRIVATE KEY-----\n",
 		"FIREBASE_CLIENT_EMAIL": "firebase-adminsdk-@fb-pro-10.iam.gserviceaccount.com"
-	  }
 	}
 	```
 - Dùng lệnh để chạy server với các biến trong file `nodemon.json`
@@ -72,7 +71,7 @@
 	
 	Ví dụ:
 	```json
-	objecConfig = {
+	objectConfig = {
     "databaseURL": "gs://fb-pro-10.appspot.com",
     "apiKey": "xxx",
     "authDomain": "fb-pro-10.firebaseapp.com",

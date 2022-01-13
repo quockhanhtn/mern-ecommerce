@@ -31,13 +31,14 @@ export default function HomePage() {
 
   const dispatch = useDispatch();
   const { listSimple: brandsListRaw, isLoading: isLoadingBrand } = useSelector((state) => state.brand);
-  const { listSimple: discountsListRaw, isLoading: isLoadingDiscount } = useSelector((state) => state.discount);
+  const { listSimple: discountsListRaw } = useSelector((state) => state.discount);
   const {
-    list: products,
+    list: productsApi,
     isLoading: isLoadingProduct,
     pagination: productPagination
   } = useSelector((state) => state.product);
-  const productToShow = [];
+  const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
 
   const brandsList = brandsListRaw.map((x) => ({
     title: x.name,
@@ -54,23 +55,16 @@ export default function HomePage() {
   }));
 
   useEffect(() => {
-    dispatch(getAllProducts());
-  }, []);
+    dispatch(getAllProducts('', '', '', page, 8));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
-  if (!isLoadingProduct) {
-    if (products) {
-      console.log('productToShow', productToShow);
-      console.log('productToShow', products);
-      productToShow.push(...products);
-      console.log('productToShow', productToShow);
-    }
-  }
+  useEffect(() => {
+    setProducts((prev) => [...prev, ...productsApi]);
+  }, [productsApi]);
 
   const handleLoadMore = () => {
-    const { nextPage, hasNextPage } = productPagination;
-    if (hasNextPage) {
-      dispatch(getAllProducts('', '', '', nextPage));
-    }
+    setPage((page) => page + 1);
   };
 
   return (
@@ -131,7 +125,7 @@ export default function HomePage() {
                   </Box>
                 </CardContent>
               </Card>
-              <ProductList products={productToShow} isLoading={isLoadingProduct} />
+              <ProductList products={products} isLoading={isLoadingProduct} />
             </Box>
             {productPagination?.hasNextPage && (
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
