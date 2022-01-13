@@ -186,122 +186,119 @@ export default function PageProductEdit() {
           </Grid>
           <Grid item xs={12} md={4}>
             <Stack spacing={3}>
-              {currentProduct?.brand?.name !== undefined &&
-                currentProduct?.category?.name !== undefined &&
-                currentProduct?.origin && (
-                  <Card sx={{ p: 3 }}>
-                    <Stack spacing={3}>
-                      <TextField
-                        type="number"
-                        fullWidth
-                        label={t('dashboard.products.warranty-period')}
-                        {...getFieldProps('warrantyPeriod')}
-                        defaultValue={12}
-                      />
-                      {/* <Autocomplete */}
-                      {/*  required */}
-                      {/*  fullWidth */}
-                      {/*  // defaultValue={{ code: 'CN', label: 'China', phone: '86' }} */}
-                      {/*  defaultValue={countries.find((c) => c.label === currentProduct.origin)} */}
-                      {/*  options={countries.map((country) => ({ */}
-                      {/*    label: country.label */}
-                      {/*  }))} */}
-                      {/*  onChange={(event, label) => { */}
-                      {/*    setFieldValue('origin', label); */}
-                      {/*  }} */}
-                      {/*  getOptionLabel={(option) => option.label} */}
-                      {/*  renderInput={(params) => <TextField {...params} label="Origin" margin="none" />} */}
-                      {/* /> */}
-                      <Autocomplete
-                        required
-                        fullWidth
-                        defaultValue={currentProduct.brand}
-                        options={brandsList.filter((x) => !x.isHide && x._id !== currentProduct?.brand)}
-                        getOptionLabel={(option) => option.name}
-                        value={brandsList.find((c) => c.slug === currentProduct?.brand)}
-                        onChange={(e, newValue) => {
-                          setFieldValue('brand', newValue?._id);
-                          setValidationBrand(false);
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label={t('dashboard.products.brand')}
-                            margin="none"
-                            error={Boolean(validationBrand)}
-                          />
-                        )}
-                        error={Boolean(true)}
-                      />
-                      <Link to={PATH_DASHBOARD.app.brands} color="inherit" component={RouterLink}>
-                        <Typography
-                          variant="inherit"
-                          sx={{
-                            marginTop: theme.spacing(-2),
-                            marginLeft: theme.spacing(1),
-                            fontSize: 'small'
-                          }}
-                        >
-                          <a>
-                            <Typography component="span" variant="subtitle4" sx={{ color: 'primary.main' }}>
-                              &nbsp;{t('dashboard.products.brand-add')}
-                            </Typography>
-                          </a>
-                        </Typography>
-                      </Link>
-                      <Autocomplete
-                        fullWidth
-                        defaultValue={currentProduct.category}
-                        options={categoriesList.filter((x) => !x.isHide && x._id !== currentProduct?.category)}
-                        getOptionLabel={(option) => option.name}
-                        value={categoriesList.find((c) => c.slug === currentProduct?.category)}
-                        onChange={(e, newValue) => {
-                          setFieldValue('category', newValue?._id);
-                          setValidationCategory(false);
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label={t('dashboard.products.category')}
-                            margin="none"
-                            error={Boolean(validationCategory)}
-                          />
-                        )}
-                      />
-                      <Link to={PATH_DASHBOARD.app.brands} color="inherit" component={RouterLink}>
-                        <Typography
-                          variant="inherit"
-                          sx={{
-                            marginTop: theme.spacing(-2),
-                            marginLeft: theme.spacing(1),
-                            fontSize: 'small'
-                          }}
-                        >
-                          <a>
-                            <Typography component="span" variant="subtitle4" sx={{ color: 'primary.main' }}>
-                              &nbsp;{t('dashboard.products.category-add')}
-                            </Typography>
-                          </a>
-                        </Typography>
-                      </Link>
-                      <Autocomplete
-                        multiple
-                        freeSolo
-                        value={values.tags}
-                        onChange={(event, newValue) => {
-                          setFieldValue('tags', newValue);
-                        }}
-                        options={TAGS_OPTION.map((option) => option)}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip key={option} size="small" label={option} {...getTagProps({ index })} />
-                          ))
-                        }
-                        renderInput={(params) => <TextField label="Tags" {...params} />}
-                      />
-                    </Stack>
-                  </Card>
-                )}
+              <Card sx={{ p: 3 }}>
+                <Stack spacing={3}>
+                  <TextField
+                    type="number"
+                    fullWidth
+                    label={t('dashboard.products.warranty-period')}
+                    {...getFieldProps('warrantyPeriod')}
+                    defaultValue={12}
+                  />
+                  {/* <Autocomplete */}
+                  {/*  required */}
+                  {/*  fullWidth */}
+                  {/*  // defaultValue={{ code: 'CN', label: 'China', phone: '86' }} */}
+                  {/*  defaultValue={countries.find((c) => c.label === currentProduct.origin)} */}
+                  {/*  options={countries.map((country) => ({ */}
+                  {/*    label: country.label */}
+                  {/*  }))} */}
+                  {/*  onChange={(event, label) => { */}
+                  {/*    setFieldValue('origin', label); */}
+                  {/*  }} */}
+                  {/*  getOptionLabel={(option) => option.label} */}
+                  {/*  renderInput={(params) => <TextField {...params} label="Origin" margin="none" />} */}
+                  {/* /> */}
+                  {currentProduct?.brand?.name !== undefined && (
+                    <Autocomplete
+                      required
+                      fullWidth
+                      defaultValue={currentProduct.brand}
+                      options={brandsList.filter((x) => !x.isHide && x._id !== currentProduct?.brand)}
+                      getOptionLabel={(option) => option.name}
+                      value={brandsList.find((c) => c.slug === currentProduct?.brand)}
+                      onChange={(e, newValue) => {
+                        setFieldValue('brand', newValue?._id);
+                        setValidationBrand(false);
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label={t('dashboard.products.brand')}
+                          margin="none"
+                          error={Boolean(validationBrand)}
+                        />
+                      )}
+                      error={Boolean(true)}
+                    />
+                  )}
+                  <Link to={PATH_DASHBOARD.app.brands} color="inherit" component={RouterLink}>
+                    <Typography
+                      variant="inherit"
+                      sx={{
+                        marginTop: theme.spacing(-2),
+                        marginLeft: theme.spacing(1),
+                        fontSize: 'small'
+                      }}
+                    >
+                      <Typography component="a" variant="subtitle4" sx={{ color: 'primary.main' }}>
+                        &nbsp;{t('dashboard.products.brand-add')}
+                      </Typography>
+                    </Typography>
+                  </Link>
+
+                  {currentProduct?.category?.name !== undefined && (
+                    <Autocomplete
+                      fullWidth
+                      defaultValue={currentProduct.category}
+                      options={categoriesList.filter((x) => !x.isHide && x._id !== currentProduct?.category)}
+                      getOptionLabel={(option) => option.name}
+                      value={categoriesList.find((c) => c.slug === currentProduct?.category)}
+                      onChange={(e, newValue) => {
+                        setFieldValue('category', newValue?._id);
+                        setValidationCategory(false);
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label={t('dashboard.products.category')}
+                          margin="none"
+                          error={Boolean(validationCategory)}
+                        />
+                      )}
+                    />
+                  )}
+                  <Link to={PATH_DASHBOARD.app.categories} color="inherit" component={RouterLink}>
+                    <Typography
+                      variant="inherit"
+                      sx={{
+                        marginTop: theme.spacing(-2),
+                        marginLeft: theme.spacing(1),
+                        fontSize: 'small'
+                      }}
+                    >
+                      <Typography component="a" variant="subtitle4" sx={{ color: 'primary.main' }}>
+                        &nbsp;{t('dashboard.products.category-add')}
+                      </Typography>
+                    </Typography>
+                  </Link>
+                  <Autocomplete
+                    multiple
+                    freeSolo
+                    value={values.tags}
+                    onChange={(event, newValue) => {
+                      setFieldValue('tags', newValue);
+                    }}
+                    options={TAGS_OPTION.map((option) => option)}
+                    renderTags={(value, getTagProps) =>
+                      value.map((option, index) => (
+                        <Chip key={option} size="small" label={option} {...getTagProps({ index })} />
+                      ))
+                    }
+                    renderInput={(params) => <TextField label="Tags" {...params} />}
+                  />
+                </Stack>
+              </Card>
               <Button fullWidth variant="contained" size="large" onClick={handleSubmit}>
                 {t('dashboard.products.save')}
               </Button>

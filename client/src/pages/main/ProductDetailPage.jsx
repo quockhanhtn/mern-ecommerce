@@ -25,23 +25,12 @@ import {
 
 // ----------------------------------------------------------------------
 
-const PRODUCT_DESCRIPTION = [
-  {
-    title: '100% Genuine',
-    description: 'All products in the store are genuine products.',
-    icon: roundVerified
-  },
-  {
-    title: '10 Day Replacement',
-    description: '10 days free product return for any reason.',
-    icon: clockFill
-  },
-  {
-    title: 'Year Warranty',
-    description: 'Genuine warranty from the manufacturer.',
-    icon: roundVerifiedUser
-  }
-];
+const formatVideoYoutubeEmbed = (link) => {
+  if (link.includes('://www.youtube.com/')) return link.replace('://www.youtube.com/', '://www.youtube.com/embed/');
+  if (link.includes('://youtube.com/')) return link.replace('://youtube.com/', '://www.youtube.com/embed/');
+  if (link.includes('://youtu.be/')) return link.replace('://youtu.be/', '://www.youtube.com/embed/');
+  return link;
+};
 
 const IconWrapperStyle = styled('div')(({ theme }) => ({
   margin: 'auto',
@@ -117,6 +106,27 @@ export default function ProductDetailPage() {
     return <LoadingScreen />;
   }
 
+  const productMoreInfos = [
+    {
+      title: '100% Chính hãng',
+      description: 'Tất cả các sản phẩm tại HK Mobile đều là hàng chính hãng tại Việt Nam',
+      icon: roundVerified
+    },
+    {
+      title: '15 ngày đổi trả',
+      description: 'Cam kết đổi trả trong vòng 15 ngày nếu xảy ra lỗi',
+      icon: clockFill
+    }
+  ];
+
+  if (product?.warrantyPeriod) {
+    productMoreInfos.push({
+      title: 'Bảo hành chính hãng',
+      description: `Sản phẩm được bảo hành chính hãng ${product?.warrantyPeriod} tháng`,
+      icon: roundVerifiedUser
+    });
+  }
+
   return (
     <Page title={(product?.name?.concat(' - ') || '') + t('home.page-title')}>
       <Container maxWidth="lg" sx={{ paddingY: 5 }}>
@@ -137,7 +147,7 @@ export default function ProductDetailPage() {
         </Card>
 
         <Grid container sx={{ my: 8 }}>
-          {PRODUCT_DESCRIPTION.map((item) => (
+          {productMoreInfos.map((item) => (
             <Grid item xs={12} md={4} key={item.title}>
               <Box
                 sx={{
@@ -164,9 +174,12 @@ export default function ProductDetailPage() {
             <Box sx={{ px: 3, bgcolor: 'background.neutral' }}>
               <TabList onChange={handleChangeTab}>
                 <Tab disableRipple value="1" label={t('home.product-desc')} />
+                {product?.video && (
+                  <Tab disableRipple value="2" label="Video" sx={{ '& .MuiTab-wrapper': { whiteSpace: 'nowrap' } }} />
+                )}
                 <Tab
                   disableRipple
-                  value="2"
+                  value="3"
                   label={t('home.review')}
                   sx={{ '& .MuiTab-wrapper': { whiteSpace: 'nowrap' } }}
                 />
@@ -178,7 +191,20 @@ export default function ProductDetailPage() {
                 <Markdown children={product.desc} />
               </Box>
             </TabPanel>
-            <TabPanel value="2">
+            {product?.video && (
+              <TabPanel value="2">
+                <iframe
+                  width="1280"
+                  height="720"
+                  src={formatVideoYoutubeEmbed(product?.video)}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </TabPanel>
+            )}
+            <TabPanel value="3">
               <ProductDetailsReview product={product} />
             </TabPanel>
           </TabContext>
