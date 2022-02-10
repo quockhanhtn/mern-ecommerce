@@ -5,7 +5,7 @@ import plusFill from '@iconify/icons-eva/plus-fill';
 import { Card, Table, Button, TableRow, TableBody, TableCell, Container, TableContainer } from '@material-ui/core';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllOrders, updateOrder } from '../../../actions/orders';
+import { getAllOrders, updateOrder } from '../../../redux/actions/orders';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import useLocales from '../../../hooks/useLocales';

@@ -20,7 +20,7 @@ import {
 import { LoadingButton } from '@material-ui/lab';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllProducts } from '../../actions/products';
+import { getAllProducts } from '../../redux/actions/products';
 // hooks
 import useQuery from '../../hooks/useQuery';
 import useLocales from '../../hooks/useLocales';

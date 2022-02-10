@@ -10,8 +10,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import useAuth from '../../hooks/useAuth';
 // actions
 import { getAllCategories } from '../../redux/slices/categorySlice';
-import { getAllBrands } from '../../actions/brands';
-import { getAllDiscounts } from '../../actions/discounts';
+import { getAllBrands } from '../../redux/actions/brands';
+import { getAllDiscounts } from '../../redux/actions/discounts';
 
 // components
 import LoadingScreen from '../../components/LoadingScreen';

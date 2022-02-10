@@ -26,9 +26,9 @@ import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllBrands } from '../../../actions/brands';
+import { getAllBrands } from '../../../redux/actions/brands';
 import { getAllCategories } from '../../../redux/slices/categorySlice';
-import { createProduct } from '../../../actions/products';
+import { createProduct } from '../../../redux/actions/products';
 // components
 import CountryPicker from '../../../components/CountryPicker';
 import { QuillEditor } from '../../../components/editor';

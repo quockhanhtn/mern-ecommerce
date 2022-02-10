@@ -17,6 +17,8 @@ import logger from 'redux-logger';
 import rootReducer from './rootReducer';
 
 const middleware = (getDefaultMiddleware) => {
+  console.log('getDefaultMiddleware', getDefaultMiddleware());
+
   if (process.env.NODE_ENV === `development`) {
     return getDefaultMiddleware().concat(logger);
   }
@@ -27,4 +29,5 @@ const store = configureStore({
   middleware,
   reducer: rootReducer
 });
+
 export default store;

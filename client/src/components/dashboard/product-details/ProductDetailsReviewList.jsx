@@ -9,7 +9,7 @@ import { Box, List, Button, Rating, Avatar, ListItem, Pagination, Typography, St
 import { useDispatch, useSelector } from 'react-redux';
 import { fDate } from '../../../utils/formatTime';
 import { fShortenNumber } from '../../../utils/formatNumber';
-import { getAllComments } from '../../../actions/comments';
+import { getAllComments } from '../../../redux/actions/comments';
 import useLocales from '../../../hooks/useLocales';
 
 // utils

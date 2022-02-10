@@ -13,7 +13,7 @@ import { fNumber, fPercent } from '../../utils/formatNumber';
 //
 import BaseOptionChart from '../charts/BaseOptionChart';
 import useLocales from '../../hooks/useLocales';
-import { getAllOrders } from '../../actions/orders';
+import { getAllOrders } from '../../redux/actions/orders';
 
 // ----------------------------------------------------------------------
 

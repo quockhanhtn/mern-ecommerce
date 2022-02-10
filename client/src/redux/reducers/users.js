@@ -1,8 +1,8 @@
-import * as actionTypes from '../constants/actionTypes';
+import * as actionTypes from '../../constants/actionTypes';
 
-const initialState = { isLoading: true, hasError: false, list: [], listSimple: [] };
+const initialState = { isLoading: true, hasError: false, list: [] };
 
-const categoriesReducer = (state = initialState, action) => {
+const usersReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -15,31 +15,28 @@ const categoriesReducer = (state = initialState, action) => {
     case actionTypes.HAS_ERROR:
       return { ...state, isLoading: false, hasError: true };
 
-    case actionTypes.CATEGORY.GET_ALL:
+    case actionTypes.USER.GET_ALL:
       return { ...state, list: payload.data, hasError: false };
 
-    case actionTypes.CATEGORY.GET_ALL_SIMPLE:
-      return { ...state, listSimple: payload.data, hasError: false };
-
-    case actionTypes.CATEGORY.GET_ONE:
+    case actionTypes.USER.GET_ONE:
       return { ...state, item: payload, hasError: false };
 
-    case actionTypes.CATEGORY.CREATE:
+    case actionTypes.USER.CREATE:
       return { ...state, list: [payload.data, ...state.list], hasError: false };
 
-    case actionTypes.CATEGORY.UPDATE:
+    case actionTypes.USER.UPDATE:
       return {
         ...state,
         list: state.list.map((cat) => (cat._id === payload._id ? payload : cat)),
         hasError: false
       };
 
-    case actionTypes.CATEGORY.DELETE:
-      return { ...state, list: state.list.filter((cat) => cat._id !== payload._id), hasError: false };
+    case actionTypes.USER.DELETE:
+      return { ...state, list: state.list.filter((cat) => cat._id !== payload), hasError: false };
 
     default:
       return state;
   }
 };
 
-export default categoriesReducer;
+export default usersReducer;
