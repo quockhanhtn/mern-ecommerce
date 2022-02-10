@@ -9,7 +9,7 @@ import { useGoogleOneTapLogin } from 'react-google-one-tap-login';
 import { useSelector, useDispatch } from 'react-redux';
 import useAuth from '../../hooks/useAuth';
 // actions
-import { getAllCategories } from '../../actions/categories';
+import { getAllCategories } from '../../redux/slices/categorySlice';
 import { getAllBrands } from '../../actions/brands';
 import { getAllDiscounts } from '../../actions/discounts';
 

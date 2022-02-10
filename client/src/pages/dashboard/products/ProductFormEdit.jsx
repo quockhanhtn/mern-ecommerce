@@ -24,7 +24,7 @@ import { QuillEditor } from '../../../components/editor';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import useLocales from '../../../hooks/useLocales';
 import { getAllBrands } from '../../../actions/brands';
-import { getAllCategories } from '../../../actions/categories';
+import { getAllCategories } from '../../../redux/slices/categorySlice';
 import { getProductById, updateProduct } from '../../../actions/products';
 // ----------------------------------------------------------------------
 

@@ -20,7 +20,7 @@ import {
 } from '@material-ui/core';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllCategories, deleteCategory } from '../../../actions/categories';
+import { getAllCategories, deleteCategory } from '../../../redux/slices/categorySlice';
 // utils
 import { fDateTime } from '../../../utils/formatTime';
 // routes
