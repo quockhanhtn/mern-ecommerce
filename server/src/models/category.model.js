@@ -36,6 +36,7 @@ const categorySchema = mongoose.Schema(
     parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null },
     children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
     isHide: { type: Boolean, required: true, default: false },
+    countProduct: { type: Number, required: true, default: 0, min: 0 },
 
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null }

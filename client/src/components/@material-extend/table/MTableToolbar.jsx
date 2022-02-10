@@ -1,14 +1,13 @@
-import PropTypes from 'prop-types';
-import { Icon } from '@iconify/react';
-import searchFill from '@iconify/icons-eva/search-fill';
-import eyeFill from '@iconify/icons-eva/eye-fill';
-import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 import editFill from '@iconify/icons-eva/edit-fill';
+import eyeFill from '@iconify/icons-eva/eye-fill';
+import searchFill from '@iconify/icons-eva/search-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
+import { Icon } from '@iconify/react';
+import { Box, IconButton, InputAdornment, OutlinedInput, Toolbar, Tooltip, Typography } from '@material-ui/core';
 // material
-import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Toolbar, Tooltip, Typography, IconButton, OutlinedInput, InputAdornment } from '@material-ui/core';
+import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
 // ----------------------------------------------------------------------
 
@@ -34,12 +33,12 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-CategoryListToolbar.propTypes = {
+MTableToolbar.propTypes = {
   searchPlaceHolder: PropTypes.string.isRequired,
   numSelected: PropTypes.number.isRequired
 };
 
-export default function CategoryListToolbar({ searchPlaceHolder, numSelected, filterName, onFilterName }) {
+export default function MTableToolbar({ searchPlaceHolder, numSelected, filterName, onFilterName }) {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
 

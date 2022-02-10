@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import slugGenerator from 'mongoose-slug-updater';
 import removeMultiSpace from './plugins/remove-multi-space.js';
+import constants from '../constants.js';
 
 const autoPopulateReplies = function (next) {
   this.populate('replies');
@@ -16,12 +17,8 @@ const commentSchema = mongoose.Schema(
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false, default: null },
     anonymousAuthor: {
       name: { type: String, trim: true },
-      email: {
-        type: String,
-        match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-        trim: true
-      },
-      phone: { type: String, trim: true }
+      email: { type: String, match: constants.REGEX.EMAIL, trim: true },
+      phone: { type: String, match: constants.REGEX.PHONE, trim: true }
     },
     content: { type: String, trim: true, required: true },
     star: { type: String, default: 0, min: 1, max: 5 },

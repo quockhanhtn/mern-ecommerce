@@ -17,6 +17,9 @@ import 'react-image-lightbox/style.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+// simplebar-react
+import 'simplebar/dist/simplebar.min.css';
+
 import ReactDOM from 'react-dom';
 import { StrictMode } from 'react';
 import { BrowserRouter } from 'react-router-dom';

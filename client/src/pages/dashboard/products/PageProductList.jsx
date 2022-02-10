@@ -201,7 +201,7 @@ export default function PageProductList() {
             </Button>
           }
         />
-        {productsList.length > 0 ? (
+        {productsList?.length > 0 ? (
           <Card>
             <ProductListToolbar numSelected={selected.length} />
             <Scrollbar>

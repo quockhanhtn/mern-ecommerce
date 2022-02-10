@@ -17,6 +17,7 @@ const brandSchema = mongoose.Schema(
     image: { type: String, trim: true, required: false },
 
     isHide: { type: Boolean, required: true, default: false },
+    countProduct: { type: Number, required: true, default: 0, min: 0 },
 
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null }
