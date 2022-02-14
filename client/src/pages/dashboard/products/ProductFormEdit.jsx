@@ -23,9 +23,9 @@ import { useParams } from 'react-router';
 import { QuillEditor } from '../../../components/editor';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import useLocales from '../../../hooks/useLocales';
-import { getAllBrands } from '../../../actions/brands';
-import { getAllCategories } from '../../../actions/categories';
-import { getProductById, updateProduct } from '../../../actions/products';
+import { getAllBrands } from '../../../redux/actions/brands';
+import { getAllCategories } from '../../../redux/slices/categorySlice';
+import { getProductById, updateProduct } from '../../../redux/actions/products';
 // ----------------------------------------------------------------------
 
 const TAGS_OPTION = [

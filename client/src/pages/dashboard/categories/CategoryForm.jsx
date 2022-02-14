@@ -24,7 +24,7 @@ import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { createCategory, updateCategory } from '../../../actions/categories';
+import { createCategory, updateCategory } from '../../../redux/slices/categorySlice';
 // hooks
 import useLocales from '../../../hooks/useLocales';
 // components

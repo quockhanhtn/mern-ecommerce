@@ -27,7 +27,7 @@ import { MRadio, MIconButton, MLabelTypo } from '../../../components/@material-e
 import { UploadSingleFile } from '../../../components/upload';
 import { varFadeInUp, MotionInView } from '../../../components/animate';
 import useLocales from '../../../hooks/useLocales';
-import { createCategory, updateCategory } from '../../../actions/categories';
+import { createCategory, updateCategory } from '../../../redux/slices/categorySlice';
 import { firebaseUploadSingle } from '../../../helper/firebaseHelper';
 import LoadingScreen from '../../../components/LoadingScreen';
 import { allowImageMineTypes } from '../../../constants/imageMineTypes';

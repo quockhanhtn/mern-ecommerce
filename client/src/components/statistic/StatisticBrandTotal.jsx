@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { fNumber, fPercent } from '../../utils/formatNumber';
 //
 import BaseOptionChart from '../charts/BaseOptionChart';
-import { getAllBrands } from '../../actions/brands';
+import { getAllBrands } from '../../redux/actions/brands';
 import useLocales from '../../hooks/useLocales';
 
 // ----------------------------------------------------------------------

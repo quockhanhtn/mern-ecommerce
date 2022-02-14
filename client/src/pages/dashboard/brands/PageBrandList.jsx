@@ -25,7 +25,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
 import useLocales from '../../../hooks/useLocales';
 import LoadingScreen from '../../../components/LoadingScreen';
-import { deleteBrand, getAllBrands } from '../../../actions/brands';
+import { deleteBrand, getAllBrands } from '../../../redux/actions/brands';
 import Label from '../../../components/Label';
 import { fDateTime } from '../../../utils/formatTime';
 import Scrollbar from '../../../components/Scrollbar';

@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { fShortenNumber } from '../../../utils/formatNumber';
 import useLocales from '../../../hooks/useLocales';
-import { getAllComments } from '../../../actions/comments';
+import { getAllComments } from '../../../redux/actions/comments';
 
 // ----------------------------------------------------------------------
 

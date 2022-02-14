@@ -26,7 +26,7 @@ import Scrollbar from '../../../components/Scrollbar';
 import * as Helper from '../../../helper/listHelper';
 import { ImageBrokenIcon } from '../../../assets';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../../components/dashboard/users';
-import { getAllUsers } from '../../../actions/users';
+import { getAllUsers } from '../../../redux/actions/users';
 import DetailUser from './DetailUser';
 // ----------------------------------------------------------------------
 const ThumbImgStyle = styled('img')(({ theme }) => ({

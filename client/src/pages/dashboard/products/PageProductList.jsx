@@ -26,7 +26,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
 import useLocales from '../../../hooks/useLocales';
 import LoadingScreen from '../../../components/LoadingScreen';
-import { deleteProduct, getAllProducts } from '../../../actions/products';
+import { deleteProduct, getAllProducts } from '../../../redux/actions/products';
 import Label from '../../../components/Label';
 import Scrollbar from '../../../components/Scrollbar';
 import * as Helper from '../../../helper/listHelper';
@@ -201,7 +201,7 @@ export default function PageProductList() {
             </Button>
           }
         />
-        {productsList.length > 0 ? (
+        {productsList?.length > 0 ? (
           <Card>
             <ProductListToolbar numSelected={selected.length} />
             <Scrollbar>

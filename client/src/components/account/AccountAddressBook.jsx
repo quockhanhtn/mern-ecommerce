@@ -8,7 +8,7 @@ import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import { Box, Card, Button, Typography, Stack, Paper } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllAddresses, createAddress, updateAddress, deleteAddress } from '../../actions/account';
+import { getAllAddresses, createAddress, updateAddress, deleteAddress } from '../../redux/actions/account';
 //
 import useLocales from '../../hooks/useLocales';
 //

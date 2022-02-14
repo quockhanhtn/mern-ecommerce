@@ -42,7 +42,7 @@ import CheckoutDelivery from './CheckoutDelivery';
 // other
 import * as cartHelper from '../../helper/localStorageHelper';
 // actions
-import { getAllAddresses, createAddress } from '../../actions/account';
+import { getAllAddresses, createAddress } from '../../redux/actions/account';
 
 // ----------------------------------------------------------------------
 

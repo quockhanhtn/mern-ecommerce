@@ -30,7 +30,7 @@ import { fDateTime } from '../../../utils/formatTime';
 import Scrollbar from '../../../components/Scrollbar';
 import * as Helper from '../../../helper/listHelper';
 import { DiscountListToolbar, DiscountListHead, DiscountMoreMenu } from '../../../components/dashboard/discount-list';
-import { deleteDiscount, getAllDiscounts } from '../../../actions/discounts';
+import { deleteDiscount, getAllDiscounts } from '../../../redux/actions/discounts';
 import DiscountForm from './DiscountForm';
 import EmptyCard from '../../../components/EmptyCard';
 import SearchNotFound from '../../../components/SearchNotFound';
