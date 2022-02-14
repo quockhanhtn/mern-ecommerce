@@ -9,7 +9,7 @@ import { LoadingButton } from '@material-ui/lab';
 import { useDispatch, useSelector } from 'react-redux';
 import useLocales from '../../../hooks/useLocales';
 import useAuth from '../../../hooks/useAuth';
-import { createComment } from '../../../actions/comments';
+import { createComment } from '../../../redux/actions/comments';
 // utils
 
 // ----------------------------------------------------------------------

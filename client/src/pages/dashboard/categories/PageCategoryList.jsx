@@ -5,22 +5,22 @@ import plusFill from '@iconify/icons-eva/plus-fill';
 import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
 import {
   Box,
-  Card,
-  Table,
   Button,
-  Switch,
-  FormControlLabel,
-  TableRow,
+  Card,
   Checkbox,
+  Container,
+  FormControlLabel,
+  Switch,
+  Table,
   TableBody,
   TableCell,
-  Container,
-  Typography,
-  TableContainer
+  TableContainer,
+  TableRow,
+  Typography
 } from '@material-ui/core';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllCategories, deleteCategory } from '../../../actions/categories';
+import { getAllCategories, deleteCategory } from '../../../redux/slices/categorySlice';
 // utils
 import { fDateTime } from '../../../utils/formatTime';
 // routes
@@ -34,11 +34,13 @@ import SearchNotFound from '../../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
 import LoadingScreen from '../../../components/LoadingScreen';
 import EmptyCard from '../../../components/EmptyCard';
-import { CategoryListHead, CategoryListToolbar, CategoryMoreMenu } from '../../../components/dashboard/category-list';
+import { CategoryMoreMenu } from '../../../components/dashboard/category-list';
 import CategoryForm from './CategoryForm';
 import useLocales from '../../../hooks/useLocales';
 import { ImageBrokenIcon } from '../../../assets';
 import { stableSort, getComparator } from '../../../helper/listHelper';
+
+import { MTableHead, MTableToolbar } from '../../../components/@material-extend/table';
 
 // ----------------------------------------------------------------------
 
@@ -69,43 +71,6 @@ export default function PageCategoryList() {
   useEffect(() => {
     dispatch(getAllCategories());
   }, [dispatch]);
-
-  const tableHeads = [
-    {
-      id: 'order',
-      disablePadding: true,
-      label: t('common.order')
-    },
-    {
-      id: 'name',
-      numeric: false,
-      disablePadding: true,
-      label: t('dashboard.categories.name')
-    },
-    {
-      id: 'isHide',
-      numeric: false,
-      disablePadding: false,
-      label: t('dashboard.categories.status')
-    },
-    {
-      id: 'createdAt',
-      numeric: true,
-      disablePadding: false,
-      label: t('dashboard.created-at')
-    },
-    {
-      id: 'updatedAt',
-      numeric: true,
-      disablePadding: false,
-      label: t('dashboard.updated-at')
-    },
-    {
-      id: 'action',
-      numeric: false,
-      disablePadding: false
-    }
-  ];
 
   const handleDeleteCategory = (id, slug) => {
     dispatch(deleteCategory(id));
@@ -171,6 +136,44 @@ export default function PageCategoryList() {
 
   const isSelected = (slug) => selected.indexOf(slug) !== -1;
 
+  const tableHeads = [
+    {
+      id: 'order',
+      align: 'center',
+      disablePadding: true,
+      label: t('common.order')
+    },
+    {
+      id: 'name',
+      align: 'right',
+      disablePadding: true,
+      label: t('dashboard.categories.name')
+    },
+    {
+      id: 'isHide',
+      align: 'right',
+      disablePadding: false,
+      label: t('dashboard.categories.status')
+    },
+    {
+      id: 'createdAt',
+      numeric: true,
+      disablePadding: false,
+      label: t('dashboard.created-at')
+    },
+    {
+      id: 'updatedAt',
+      numeric: true,
+      disablePadding: false,
+      label: t('dashboard.updated-at')
+    },
+    {
+      id: 'action',
+      align: 'right',
+      disablePadding: false
+    }
+  ];
+
   // Avoid a layout jump when reaching the last page with empty categoriesList.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - categoriesList.length) : 0;
 
@@ -206,12 +209,12 @@ export default function PageCategoryList() {
 
         {categoriesList.length > 0 ? (
           <Card>
-            <CategoryListToolbar searchPlaceHolder={t('dashboard.categories.search')} numSelected={selected.length} />
+            <MTableToolbar searchPlaceHolder={t('dashboard.categories.search')} numSelected={selected.length} />
 
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800 }}>
                 <Table size={isCompact ? 'small' : 'medium'}>
-                  <CategoryListHead
+                  <MTableHead
                     order={order}
                     orderBy={orderBy}
                     headLabel={tableHeads}

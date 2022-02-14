@@ -5,6 +5,7 @@ import cors from './middlewares/cors.js';
 import error from './middlewares/error.js';
 import logger from './middlewares/logger.js';
 import routesV1 from './routes/v1/index.js';
+import routesV2 from './routes/v2/index.js';
 import logging from './utils/logging.js';
 
 
@@ -36,6 +37,7 @@ app.use(cors);
 // Routes which should handle requests
 app.get('/', (_, res) => res.render("public/index")); // home page
 app.use('/api/v1', routesV1);                           // api v1 routes
+app.use('/api/v2', routesV2);                           // api v2 routes
 
 
 // Error handling

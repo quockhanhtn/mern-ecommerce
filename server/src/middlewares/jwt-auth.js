@@ -33,7 +33,7 @@ function authorized(roles = []) {
       next();
     }
   ];
-};
+}
 
 export const isAuthorized = authorized();
 export const isAdmin = authorized(roleAdmin);

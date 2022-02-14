@@ -1,8 +1,8 @@
-const removeMultiSpace = (schema, options) => {
+const removeMultiSpace = (schema, _options) => {
   let fields = [];
 
   schema.eachPath(function (pathname, schemaType) {
-    if (schemaType.instance == 'String' && schemaType.options.trim) {
+    if (schemaType.instance === 'String' && schemaType.options.trim) {
       fields.push(pathname);
     }
   });
