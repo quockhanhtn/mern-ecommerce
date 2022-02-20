@@ -22,7 +22,7 @@ content-type: application/json
   "categoryId": "c00000000000000000000001",
   "brandId": "b00000000000000000000001",
   "views": 13,
-  "specifications": [
+  "overSpecs": [
     {
       "name": "Kích thước màn hình",
       "value": "6.39 inches"
@@ -63,7 +63,7 @@ content-type: application/json
   "variantName": "Xanh dương",
   "quantity": 17,
   "sold": 0,
-  "addSpecifications": [
+  "addOverSpecs": [
     {
       "name": "Màu sắc",
       "value": "Xanh dương"

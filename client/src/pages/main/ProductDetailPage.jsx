@@ -89,8 +89,7 @@ export default function ProductDetailPage() {
 
   const handleGatherPicture = () => {
     if (product?.variants?.[indexVariant].pictures.length > 0) {
-      const temp = [...product?.variants[indexVariant].pictures];
-      temp.push(product?.variants[indexVariant].thumbnail);
+      const temp = [product?.variants[indexVariant].thumbnail, ...product?.variants[indexVariant].pictures];
       setImages(temp);
     } else {
       const temp = [product?.variants?.[indexVariant].thumbnail];
