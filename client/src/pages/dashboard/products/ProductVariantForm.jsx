@@ -45,7 +45,6 @@ ProductVariantForm.propTypes = {
 
 export default function ProductVariantForm({ currentVariant, currentProductId, open, handleClose, handleCreateDone }) {
   const { t } = useLocales();
-  const navigate = useNavigate();
   const theme = useTheme();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const dispatch = useDispatch();
@@ -55,7 +54,6 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
   const [uploadPercent, setUploadPercent] = useState(-1);
   const [validationThumbnail, setValidationThumbnail] = useState(false);
   const [urlsPictures, setUrlsPictures] = useState([]);
-  const [isShowButton, setIsShowButton] = useState(false);
   const { item: currentProduct } = useSelector((state) => state.product);
 
   useEffect(() => {
