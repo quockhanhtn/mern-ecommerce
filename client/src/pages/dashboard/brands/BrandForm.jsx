@@ -48,7 +48,7 @@ export default function BrandForm({ currentId, open, setOpen }) {
   const { t } = useLocales();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const { list: brandsList, isLoading, hasError } = useSelector((state) => state.brand);
+  const { list: brandsList } = useSelector((state) => state.brand);
   const brand = brandsList.find((c) => c._id === currentId);
   const [uploadImage, setUploadImage] = useState(null);
   const [uploadPercent, setUploadPercent] = useState(-1);

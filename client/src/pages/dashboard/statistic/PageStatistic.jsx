@@ -6,16 +6,12 @@ import {
   StatisticBestSeller,
   StatisticBrandTotal,
   StatisticCategoryTotal,
-  StatisticCurrentBalance,
-  StatisticLatestProducts,
   StatisticNewProducts,
   StatisticProductSold,
   StatisticProductTotal,
-  StatisticSalesOverview,
   StatisticOrder,
   StatisticTotalUser,
   StatisticWelcome,
-  StatisticYearlySales,
   StatisticTurnover
 } from '../../../components/statistic';
 

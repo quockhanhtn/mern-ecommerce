@@ -5,10 +5,9 @@ import subtract12Filled from '@iconify/icons-fluent/subtract-12-filled';
 import roundAddShoppingCart from '@iconify/icons-ic/round-add-shopping-cart';
 import { useFormik, Form, FormikProvider, useField } from 'formik';
 // material
-import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
+import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Stack, Button, Rating, Divider, Typography, FormHelperText } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
-import { PATH_DASHBOARD } from '../../../routes/paths';
 import { MButton, MIconButton } from '../../@material-extend';
 import { fNumber, fShortenNumber } from '../../../utils/formatNumber';
 import useOrderFlow from '../../../hooks/useOrderFlow';
@@ -71,7 +70,6 @@ const Incrementer = (props) => {
 };
 
 export default function ProductDetailsSummary({ isLoading, product, indexVariant, handleChangeIndexVariant }) {
-  const theme = useTheme();
   const { addToCart } = useOrderFlow();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();

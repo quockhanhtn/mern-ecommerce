@@ -1,12 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 // icon
 import { Icon } from '@iconify/react';
 import cart24Regular from '@iconify/icons-fluent/cart-24-regular';
 import history24Filled from '@iconify/icons-fluent/history-24-filled';
-import homeFill from '@iconify/icons-eva/home-fill';
-import personFill from '@iconify/icons-eva/person-fill';
-import settings2Fill from '@iconify/icons-eva/settings-2-fill';
 import baselineLocationOn from '@iconify/icons-ic/baseline-location-on';
 import roundVpnKey from '@iconify/icons-ic/round-vpn-key';
 import roundReceipt from '@iconify/icons-ic/round-receipt';
@@ -113,7 +110,6 @@ export default function MainNavbar({ categoryList }) {
         console.log('Get cart successfully');
       }
     });
-    // getStepOrder().then();
   }, []);
 
   const accountMenus = [
