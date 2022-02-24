@@ -57,7 +57,7 @@ export default function ProductListToolbar({ numSelected, filterName, onFilterNa
         <SearchStyle
           value={filterName}
           onChange={onFilterName}
-          placeholder={t('dashboard.products.search-product-placeholder')}
+          placeholder={t('products.search-product-placeholder')}
           startAdornment={
             <InputAdornment position="start">
               <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />

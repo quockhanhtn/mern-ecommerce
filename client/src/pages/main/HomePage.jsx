@@ -55,7 +55,7 @@ export default function HomePage() {
   }));
 
   useEffect(() => {
-    dispatch(getAllProducts('', '', '', page, 8));
+    dispatch(getAllProducts('', '', '', page, 16));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
@@ -117,7 +117,7 @@ export default function HomePage() {
                 <CardContent sx={{ padding: 0, '&:last-child': { paddingBottom: 0 } }}>
                   <Box sx={{ display: 'flex', marginBottom: -1 }}>
                     <Typography variant="h5" component="h2" sx={{ padding: 0 }}>
-                      {t('dashboard.products.heading').toUpperCase()}
+                      {t('products.heading').toUpperCase()}
                     </Typography>
                     <Label color="info" sx={{ ml: 1 }}>
                       {t('home.newest')}
@@ -135,7 +135,7 @@ export default function HomePage() {
                   onClick={handleLoadMore}
                   isLoading={isLoadingProduct}
                 >
-                  Xem thêm
+                  {`Xem thêm ${productPagination.countAll - productPagination.page * 16} sản phẩm`}
                 </LoadingButton>
               </Box>
             )}

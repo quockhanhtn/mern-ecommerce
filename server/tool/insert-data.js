@@ -651,8 +651,8 @@ function splitProductName(name) {
 }
 
 async function insertProduct() {
-  const filePath = process.cwd() + '/tool/product.01.json';
-  const filePath2 = process.cwd() + '/tool/product.02.json';
+  const filePath = process.cwd() + '/tool/product.00.json';
+  const filePath2 = process.cwd() + '/tool/product.01.json';
 
   let listProduct = [
     ...JSON.parse(fs.readFileSync(filePath)),

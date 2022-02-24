@@ -11,10 +11,10 @@ import useLocales from '../../../hooks/useLocales';
 export default function PageProduct() {
   const { t } = useLocales();
   return (
-    <Page title={t('dashboard.products.add-title')}>
-      <Container>
+    <Page title={t('products.add-title')}>
+      <Container maxWidth={false}>
         <HeaderBreadcrumbs
-          heading={t('dashboard.products.heading-create')}
+          heading={t('products.heading-create')}
           links={[
             { name: t('dashboard.title'), href: PATH_DASHBOARD.root },
             {
@@ -22,10 +22,10 @@ export default function PageProduct() {
               href: PATH_DASHBOARD.app.root
             },
             {
-              name: t('dashboard.products.heading'),
+              name: t('products.heading'),
               href: PATH_DASHBOARD.app.products.list
             },
-            { name: t('dashboard.products.add') }
+            { name: t('products.add') }
           ]}
         />
         <ProductForm />

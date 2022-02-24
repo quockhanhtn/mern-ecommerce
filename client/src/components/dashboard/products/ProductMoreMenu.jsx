@@ -27,7 +27,7 @@ export default function ProductMoreMenu({ productId, onDelete, currentIdProduct,
   const [textConfirmDelete, setTextConfirmDelete] = useState('');
 
   useEffect(() => {
-    const text = t('dashboard.products.confirm-delete', { nameInfo });
+    const text = t('products.confirm-delete', { nameInfo });
     setTextConfirmDelete(text);
   }, [nameInfo]);
 

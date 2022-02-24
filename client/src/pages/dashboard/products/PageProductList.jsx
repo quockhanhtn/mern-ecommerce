@@ -1,3 +1,7 @@
+// icons
+import { Icon } from '@iconify/react';
+import plusFill from '@iconify/icons-eva/plus-fill';
+// material-ui
 import {
   Box,
   Button,
@@ -14,13 +18,14 @@ import {
   TableRow,
   Typography
 } from '@material-ui/core';
-import { Icon } from '@iconify/react';
-import plusFill from '@iconify/icons-eva/plus-fill';
+import { useTheme } from '@material-ui/core/styles';
+//
 import { useEffect, useState } from 'react';
-import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { Link as RouterLink } from 'react-router-dom';
+//
 import Page from '../../../components/Page';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
@@ -29,19 +34,15 @@ import LoadingScreen from '../../../components/LoadingScreen';
 import { deleteProduct, getAllProducts } from '../../../redux/actions/products';
 import Label from '../../../components/Label';
 import Scrollbar from '../../../components/Scrollbar';
-import * as Helper from '../../../helper/listHelper';
+import { stableSort, getComparator } from '../../../helper/listHelper';
 import SearchNotFound from '../../../components/SearchNotFound';
 import { ProductListHead, ProductListToolbar, ProductMoreMenu } from '../../../components/dashboard/products';
 import { ImageBrokenIcon } from '../../../assets';
 import EmptyCard from '../../../components/EmptyCard';
-// ----------------------------------------------------------------------
-const ThumbImgStyle = styled('img')(({ theme }) => ({
-  width: 64,
-  height: 64,
-  objectFit: 'cover',
-  margin: theme.spacing(0, 2, 0, 0),
-  borderRadius: theme.shape.borderRadiusSm
-}));
+import { ThumbImgStyle } from '../../../components/@styled';
+
+import { MTableHead, MTableToolbar } from '../../../components/@material-extend/table';
+
 // ----------------------------------------------------------------------
 
 export default function PageProductList() {
@@ -67,37 +68,37 @@ export default function PageProductList() {
       id: 'name',
       numeric: false,
       disablePadding: true,
-      label: t('dashboard.products.name')
+      label: t('products.name')
     },
     {
-      id: 'brand',
-      numeric: false,
-      disablePadding: false,
-      label: t('dashboard.products.brand')
+      id: 'brand.name',
+      align: 'left',
+      disablePadding: true,
+      label: t('products.brand')
     },
     {
-      id: 'category',
-      numeric: false,
-      disablePadding: false,
-      label: t('dashboard.products.category')
+      id: 'category.name',
+      align: 'left',
+      disablePadding: true,
+      label: t('products.category')
     },
-    {
-      id: 'origin',
-      numeric: false,
-      disablePadding: false,
-      label: t('dashboard.products.origin')
-    },
-    {
-      id: 'warrantyPeriod',
-      numeric: false,
-      disablePadding: false,
-      label: t('dashboard.products.warrantyPeriod')
-    },
+    // {
+    //   id: 'origin',
+    //   numeric: false,
+    //   disablePadding: false,
+    //   label: t('products.origin')
+    // },
+    // {
+    //   id: 'warrantyPeriod',
+    //   numeric: false,
+    //   disablePadding: false,
+    //   label: t('products.warrantyPeriod')
+    // },
     {
       id: 'isHide',
       numeric: false,
       disablePadding: false,
-      label: t('dashboard.products.status')
+      label: t('products.status')
     },
     {
       id: 'action',
@@ -109,11 +110,11 @@ export default function PageProductList() {
   const handleDeleteProduct = (id, slug) => {
     try {
       dispatch(deleteProduct(id));
-      enqueueSnackbar(t('dashboard.products.delete'), { variant: 'success' });
+      enqueueSnackbar(t('products.delete'), { variant: 'success' });
       const index = selected.indexOf(slug);
       selected.splice(index, 1);
     } catch (e) {
-      enqueueSnackbar(t('dashboard.products.error'), { variant: 'error' });
+      enqueueSnackbar(t('products.error'), { variant: 'error' });
     }
   };
 
@@ -178,17 +179,17 @@ export default function PageProductList() {
   }
 
   return (
-    <Page title={t('dashboard.products.page-title')}>
-      <Container>
+    <Page title={t('products.page-title')}>
+      <Container maxWidth={false}>
         <HeaderBreadcrumbs
-          heading={t('dashboard.products.heading')}
+          heading={t('products.heading')}
           links={[
             { name: t('dashboard.title'), href: PATH_DASHBOARD.root },
             {
               name: t('dashboard.management'),
               href: PATH_DASHBOARD.app.root
             },
-            { name: t('dashboard.products.heading') }
+            { name: t('products.heading') }
           ]}
           action={
             <Button
@@ -197,17 +198,17 @@ export default function PageProductList() {
               to={PATH_DASHBOARD.app.products.add}
               startIcon={<Icon icon={plusFill} />}
             >
-              {t('dashboard.products.add')}
+              {t('products.add')}
             </Button>
           }
         />
         {productsList?.length > 0 ? (
           <Card>
-            <ProductListToolbar numSelected={selected.length} />
+            <MTableToolbar searchPlaceHolder={t('dashboard.categories.search')} numSelected={selected.length} />
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800 }}>
                 <Table size={isCompact ? 'small' : 'medium'}>
-                  <ProductListHead
+                  <MTableHead
                     order={order}
                     orderBy={orderBy}
                     headLabel={tableHeads}
@@ -217,10 +218,10 @@ export default function PageProductList() {
                     onSelectAllClick={handleSelectAllClick}
                   />
                   <TableBody>
-                    {Helper.stableSort(productsList, Helper.getComparator(order, orderBy))
+                    {stableSort(productsList, getComparator(order, orderBy))
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row, index) => {
-                        const { _id, slug, name, brand, category, origin, warrantyPeriod, isHide } = row;
+                        const { _id, slug, name, brand, category, isHide } = row;
                         const thumbnail = row?.variants[0]?.thumbnail;
                         const isItemSelected = isSelected(slug);
                         const labelId = `enhanced-table-checkbox-${index}`;
@@ -256,28 +257,28 @@ export default function PageProductList() {
                                 </Box>
                               </TableCell>
                             )}
-                            <TableCell align="left" style={{ minWidth: 100 }}>
+                            <TableCell align="left" padding="none">
                               <Typography variant="subtitle4" noWrap>
                                 {brand?.name}
                               </Typography>
                             </TableCell>
-                            <TableCell align="left" style={{ minWidth: 100 }}>
+                            <TableCell align="left" padding="none">
                               <Typography variant="subtitle4" noWrap>
                                 {category?.name}
                               </Typography>
                             </TableCell>
-                            <TableCell align="left" style={{ minWidth: 100 }}>
+                            {/* <TableCell align="left" style={{ minWidth: 100 }}>
                               {origin}
                             </TableCell>
                             <TableCell align="left" style={{ minWidth: 100 }}>
                               {warrantyPeriod}
-                            </TableCell>
-                            <TableCell align="left">
+                            </TableCell> */}
+                            <TableCell align="left" padding="none">
                               <Label
                                 variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
                                 color={isHide ? 'default' : 'success'}
                               >
-                                {t(`dashboard.products.${isHide ? 'hidden' : 'visible'}`)}
+                                {t(`products.${isHide ? 'hidden' : 'visible'}`)}
                               </Label>
                             </TableCell>
                             <TableCell align="right" onClick={(event) => event.stopPropagation()}>
@@ -311,14 +312,7 @@ export default function PageProductList() {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
-              <Box
-                sx={{
-                  px: 3,
-                  py: 1.5,
-                  top: 0,
-                  position: { md: 'absolute' }
-                }}
-              >
+              <Box sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}>
                 <FormControlLabel
                   control={<Switch checked={isCompact} onChange={handleChangeDense} />}
                   label={t('common.small-padding')}
@@ -327,7 +321,7 @@ export default function PageProductList() {
             </Box>
           </Card>
         ) : (
-          <EmptyCard title={t('dashboard.products.title-not-found')} />
+          <EmptyCard title={t('products.title-not-found')} />
         )}
       </Container>
     </Page>
