@@ -9,6 +9,8 @@ export default {
   getId,
   create,
   update,
+  incCountProduct,
+  decCountProduct,
   hidden,
   remove,
 };
@@ -32,7 +34,7 @@ async function getAll(fields = SELECTED_FIELDS) {
     fields = fields.split(',').join(' ');
   }
 
-  return await Category.find({ parent: null })
+  return Category.find({ parent: null })
     .select(fields)
     // .populate(POPULATE_OPTS)
     .sort({ order: 1 })
@@ -50,7 +52,7 @@ async function getOne(identity) {
     ? { _id: identity }
     : { slug: identity };
 
-  return await Category.findOne(filter).lean().exec();
+  return Category.findOne(filter).lean().exec();
 }
 
 /**
@@ -146,6 +148,20 @@ async function update(identity, updatedData, updatedBy = null) {
   }
 }
 
+async function incCountProduct(identity) {
+  const filter = strUtils.isUUID(identity)
+    ? { _id: identity }
+    : { slug: identity };
+  await Category.findOneAndUpdate(filter, { $inc: { countProduct: 1 } }, { new: false, timestamps: null });
+}
+
+async function decCountProduct(identity) {
+  const filter = strUtils.isUUID(identity)
+    ? { _id: identity }
+    : { slug: identity };
+  await Category.findOneAndUpdate(filter, { $inc: { countProduct: -1 } }, { new: false, timestamps: null });
+}
+
 /**
  * Toggle category isHide
  * @param {*} identity slug or id
@@ -172,5 +188,5 @@ async function remove(identity) {
   let filter = strUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
-  return await Category.findOneAndDelete(filter);
+  return Category.findOneAndDelete(filter);
 }

@@ -13,6 +13,7 @@ const brandSchema = mongoose.Schema(
 
     headQuarters: { type: String, trim: true, required: false },
     country: { type: String, trim: true, required: false },
+    founded: { type: Number, required: false }, // year founded
 
     image: { type: String, trim: true, required: false },
 

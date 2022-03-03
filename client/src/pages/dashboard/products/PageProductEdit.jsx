@@ -15,17 +15,17 @@ import useLocales from '../../../hooks/useLocales';
 export default function PageProductEdit() {
   const { t } = useLocales();
   return (
-    <Page title={t('dashboard.products.edit-title')}>
-      <Container>
+    <Page title={t('products.edit-title')}>
+      <Container maxWidth={false}>
         <HeaderBreadcrumbs
-          heading={t('dashboard.products.edit')}
+          heading={t('products.edit')}
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
-              name: t('dashboard.products.heading'),
+              name: t('products.heading'),
               href: PATH_DASHBOARD.app.products.list
             },
-            { name: t('dashboard.products.edit') }
+            { name: t('products.edit') }
           ]}
         />
         <ProductFormEdit />

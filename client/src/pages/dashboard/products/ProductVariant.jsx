@@ -57,7 +57,7 @@ export default function ProductVariant() {
       id: 'sku',
       numeric: false,
       disablePadding: true,
-      label: t('dashboard.products.sku')
+      label: t('products.sku')
     },
     {
       id: 'variantName',
@@ -69,19 +69,19 @@ export default function ProductVariant() {
       id: 'price',
       numeric: false,
       disablePadding: false,
-      label: t('dashboard.products.price')
+      label: t('products.price')
     },
     {
       id: 'marketPrice',
       numeric: true,
       disablePadding: false,
-      label: t('dashboard.products.market-price')
+      label: t('products.market-price')
     },
     {
       id: 'quantity',
       numeric: true,
       disablePadding: false,
-      label: t('dashboard.products.quantity')
+      label: t('products.quantity')
     },
     {
       id: 'sold',

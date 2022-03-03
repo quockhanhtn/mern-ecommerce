@@ -92,12 +92,12 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         { title: t('dashboard.brands.title'), path: PATH_DASHBOARD.app.brands, icon: ICONS.brands },
         { title: t('dashboard.discounts.title'), path: PATH_DASHBOARD.app.discounts, icon: ICONS.discounts },
         {
-          title: t('dashboard.products.title'),
+          title: t('products.title'),
           path: PATH_DASHBOARD.app.products.root,
           icon: ICONS.products,
           children: [
-            { title: t('dashboard.products.list'), path: PATH_DASHBOARD.app.products.list, icon: ICONS.list },
-            { title: t('dashboard.products.add'), path: PATH_DASHBOARD.app.products.add, icon: ICONS.addNew }
+            { title: t('products.list'), path: PATH_DASHBOARD.app.products.list, icon: ICONS.list },
+            { title: t('products.add'), path: PATH_DASHBOARD.app.products.add, icon: ICONS.addNew }
           ]
         },
         {

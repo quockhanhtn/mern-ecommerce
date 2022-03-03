@@ -145,11 +145,11 @@ export default function ProductListPage() {
                 <CardContent>
                   <Stack spacing={2}>
                     <Typography variant="h5" component="h2">
-                      {t('dashboard.products.heading').toUpperCase()}
+                      {t('products.heading').toUpperCase()}
                     </Typography>
                     <TextField
                       fullWidth
-                      label={t('dashboard.products.name')}
+                      label={t('products.name')}
                       value={searchText}
                       onChange={handleSearchTextChange}
                       onKeyDown={handleSearchTextKeyDown}

@@ -12,10 +12,10 @@ import PropTypes from 'prop-types';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Toolbar)(({ theme }) => ({
-  height: 96,
+  height: 64,
   display: 'flex',
   justifyContent: 'space-between',
-  padding: theme.spacing(0, 1, 0, 3)
+  padding: theme.spacing(0, 1, 0, 1)
 }));
 
 const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
@@ -60,6 +60,7 @@ export default function MTableToolbar({ searchPlaceHolder, numSelected, filterNa
           value={filterName}
           onChange={onFilterName}
           placeholder={searchPlaceHolder}
+          size="small"
           startAdornment={
             <InputAdornment position="start">
               <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />

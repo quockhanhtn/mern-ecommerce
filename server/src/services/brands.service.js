@@ -8,6 +8,8 @@ export default {
   getId,
   create,
   update,
+  incCountProduct,
+  decCountProduct,
   hidden,
   remove
 };
@@ -23,7 +25,7 @@ async function getAll(fields = SELECTED_FIELDS) {
     fields = fields.split(',').join(' ');
   }
 
-  return await Brand.find()
+  return Brand.find()
     .select(fields)
     .sort({ createdAt: -1 })
     .lean().exec();
@@ -40,9 +42,9 @@ async function getOne(identity, needLean = true) {
     : { slug: identity };
 
   if (needLean) {
-    return await Brand.findOne(filter).lean().exec();
+    return Brand.findOne(filter).lean().exec();
   } else {
-    return await Brand.findOne(filter).exec();
+    return Brand.findOne(filter).exec();
   }
 }
 
@@ -76,7 +78,7 @@ async function create(data, createdBy = null) {
     brand.updatedBy = createdBy;
   }
 
-  return await brand.save();
+  return brand.save();
 }
 
 /**
@@ -96,6 +98,20 @@ async function update(identity, updatedData, updatedBy = null) {
   } else {
     throw new Error(`Brand '${identity}' not found!`);
   }
+}
+
+async function incCountProduct(identity) {
+  const filter = strUtils.isUUID(identity)
+    ? { _id: identity }
+    : { slug: identity };
+  await Brand.findOneAndUpdate(filter, { $inc: { countProduct: 1 } }, { new: false, timestamps: null });
+}
+
+async function decCountProduct(identity) {
+  const filter = strUtils.isUUID(identity)
+    ? { _id: identity }
+    : { slug: identity };
+  await Brand.findOneAndUpdate(filter, { $inc: { countProduct: -1 } }, { new: false, timestamps: null });
 }
 
 /**

@@ -189,7 +189,7 @@ export const rateProduct = async (req, res, next) => {
 export const getProductSpecifications = async (req, res, next) => {
   try {
     const data = await productService.getSpecifications();
-    resUtils.status200(res, 'Get product specifications successfully!', data);
+    resUtils.status200(res, 'Get product overSpecs successfully!', data);
   } catch (err) { next(err); }
 };
 //#endregion

@@ -97,9 +97,9 @@ export default function ProductList({ formik, onDelete, onIncreaseQuantity, onDe
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>{t('dashboard.products.title')}</TableCell>
+            <TableCell>{t('products.title')}</TableCell>
             <TableCell align="left">{t('cart.unit-price')}</TableCell>
-            <TableCell align="center">{t('dashboard.products.quantity')}</TableCell>
+            <TableCell align="center">{t('products.quantity')}</TableCell>
             <TableCell align="right">{t('cart.amount-price')}</TableCell>
             <TableCell align="right" />
           </TableRow>
