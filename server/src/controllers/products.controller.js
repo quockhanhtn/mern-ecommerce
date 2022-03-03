@@ -121,6 +121,14 @@ export const getProductById = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
+export const getSuggestProducts = async (req, res, next) => {
+  try {
+    const { keyword } = req.query;
+    const products = await productService.getSuggestProducts(keyword);
+    resUtils.status200(res, 'Get suggest products successfully!', products.map(p => formatProduct(p, req)));
+  } catch (err) { next(err); }
+};
+
 export const createProduct = async (req, res, next) => {
   try {
     const newProduct = await productService.createProduct(req.body);

@@ -88,7 +88,22 @@ const productSchema = mongoose.Schema({
 ].forEach((s) => {
   s.plugin(slugGenerator);
   s.plugin(removeMultiSpace);
-})
+});
+
+productSchema.index(
+  {
+    name: 'text',
+    desc: 'text',
+    'variants.variantName': 'text',
+  },
+  {
+    weights: {
+      name: 10,
+      'variants.variantName': 2,
+      desc: 1,
+    }
+  }
+);
 
 productSchema.pre('validate', function (next) {
   if (!this.isModified('desc')) {

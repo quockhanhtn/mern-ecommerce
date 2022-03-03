@@ -8,6 +8,7 @@ import ApiError from '../utils/APIError.js';
 export default {
   getAllProducts,
   getOneProduct,
+  getSuggestProducts,
   createProduct,
   updateProduct,
   removeProduct,
@@ -247,6 +248,19 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}) {
 
   return { countAll, total, list };
 }
+
+async function getSuggestProducts(keyword) {
+  const result = await Product.find(
+    { $text: { $search: keyword } },
+    {
+      score: { $meta: "textScore" }
+    }
+  ).select('name variants.variantName')
+    .sort(
+      { score: { $meta: 'textScore' } }
+    ).exec();
+  return result;
+};
 
 async function createProduct(data) {
   const categoryId = await categoryService.getId(data.categoryId);
