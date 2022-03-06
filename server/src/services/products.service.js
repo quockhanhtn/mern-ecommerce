@@ -255,12 +255,12 @@ async function getSuggestProducts(keyword) {
     {
       score: { $meta: "textScore" }
     }
-  ).select('name variants.variantName')
-    .sort(
-      { score: { $meta: 'textScore' } }
-    ).exec();
+  ).select('slug name variants.variantName variants.sku variants.price variants.marketPrice variants.thumbnail')
+    .sort({ score: { $meta: 'textScore' } })
+    .limit(10)
+    .lean().exec();
   return result;
-};
+}
 
 async function createProduct(data) {
   const categoryId = await categoryService.getId(data.categoryId);
