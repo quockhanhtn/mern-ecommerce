@@ -74,10 +74,7 @@ export default function MainFooter() {
           </Grid>
           <Grid item xs={8} md={3}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate ipsa dicta illo voluptatum, sit
-              repellat tempore voluptas, quisquam nulla similique, hic iure facere obcaecati cumque id laboriosam neque?
-              Quas ipsa necessitatibus et veritatis velit aliquam, maxime labore recusandae non libero sit enim iusto
-              nobis odit cumque quam culpa ipsam atque.
+              Thành công hay thất bại trong kinh doanh là do thái độ trong suy nghĩ nhiều hơn là khả năng suy nghĩ.
             </Typography>
 
             <Stack
