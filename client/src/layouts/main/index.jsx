@@ -71,16 +71,6 @@ export default function MainLayout() {
     }
   });
 
-  // if (isLoadingCategory || isLoadingBrand) {
-  //   console.log('isLoadingCategory', isLoadingCategory);
-  //   console.log('isLoadingBrand', isLoadingBrand);
-  //   return <LoadingScreen />;
-  // }
-
-  // if (hasErrorCategory || hasErrorBrand) {
-  //   return <LoadingScreen />;
-  // }
-
   return (
     <RootStyle>
       <MainNavbar categoryList={navBarItems} />

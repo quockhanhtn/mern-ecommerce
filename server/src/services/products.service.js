@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import Product from '../models/product.model.js';
 import categoryService from './categories.service.js'
 import brandService from './brands.service.js'
@@ -177,7 +176,7 @@ async function addProductVariants(productIdentity, variantData) {
       message: `Product ${productIdentity} not found !`,
       status: 404
     })
-  };
+  }
 
   const newVariant = initialProductVariant(variantData);
   product.variants.push(newVariant);
@@ -251,7 +250,7 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}) {
 
 async function getSuggestProducts(keyword) {
   const result = await Product.find(
-    { $text: { $search: keyword } },
+    { $text: { $search: new RegExp(keyword, 'g') } },
     {
       score: { $meta: "textScore" }
     }
