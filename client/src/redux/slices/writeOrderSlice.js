@@ -5,12 +5,11 @@ const initialState = {
   isLoading: true,
   error: null,
   item: null,
-  list: [],
-  listSimple: []
+  list: []
 };
 
-const categorySlice = createSlice({
-  name: 'category',
+const writeOrderSlice = createSlice({
+  name: 'writeOrder',
   initialState,
   reducers: {
     startLoading(state) {
@@ -20,18 +19,8 @@ const categorySlice = createSlice({
       state.error = action.payload;
       state.isLoading = false;
     },
-    getSimpleSuccess(state, action) {
-      state.listSimple = action.payload;
-      state.isLoading = false;
-      state.error = null;
-    },
     getAllSuccess(state, action) {
       state.list = action.payload;
-      state.isLoading = false;
-      state.error = null;
-    },
-    getOneSuccess(state, action) {
-      state.item = action.payload;
       state.isLoading = false;
       state.error = null;
     },
@@ -59,49 +48,45 @@ const categorySlice = createSlice({
   }
 });
 
-const { actions, reducer } = categorySlice;
+const { actions, reducer } = writeOrderSlice;
 
 export default reducer;
 
-export const getAllCategories = (isSimple) => async (dispatch) => {
+export const addProductToCartDB = (newProduct) => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    const { data } = await api.getAllCategory(isSimple ? 'name slug image' : null);
-    if (isSimple) {
-      dispatch(actions.getSimpleSuccess(data.data));
-    } else {
-      dispatch(actions.getAllSuccess(data.data));
-    }
-  } catch (e) {
-    dispatch(actions.hasError(e?.response?.data || e));
-  }
-};
-
-export const createCategory = (newCategory) => async (dispatch) => {
-  try {
-    dispatch(actions.startLoading());
-    const { data } = await api.createCategory(newCategory);
+    const { data } = await api.addProductToCartDB(newProduct);
     dispatch(actions.create(data.data));
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
   }
 };
 
-export const updateCategory = (id, updatedCategory) => async (dispatch) => {
+export const increaseProductToCartDB = (productInfo) => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    const { data } = await api.updateCategory(id, updatedCategory);
+    const { data } = await api.increaseProductToCartDB(productInfo);
     dispatch(actions.update(data.data));
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
   }
 };
 
-export const deleteCategory = (id) => async (dispatch) => {
+export const decreaseProductToCartDB = (productInfo) => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    await api.deleteCategory(id);
-    dispatch(actions.delete({ _id: id }));
+    const { data } = await api.decreaseProductToCartDB(productInfo);
+    dispatch(actions.update(data.data));
+  } catch (e) {
+    dispatch(actions.hasError(e?.response?.data || e));
+  }
+};
+
+export const deleteProductToCartDB = (productInfo) => async (dispatch) => {
+  try {
+    dispatch(actions.startLoading());
+    await api.deleteProductToCartDB(productInfo);
+    dispatch(actions.delete({ _id: productInfo.productId }));
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
   }

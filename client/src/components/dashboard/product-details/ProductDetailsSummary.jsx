@@ -8,9 +8,13 @@ import { useFormik, Form, FormikProvider, useField } from 'formik';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Stack, Button, Rating, Divider, Typography, FormHelperText } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { MButton, MIconButton } from '../../@material-extend';
 import { fNumber, fShortenNumber } from '../../../utils/formatNumber';
 import useOrderFlow from '../../../hooks/useOrderFlow';
+import { addProductToCartDB } from '../../../redux/slices/writeOrderSlice';
+import useAuth from '../../../hooks/useAuth';
 // --------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -72,7 +76,10 @@ const Incrementer = (props) => {
 export default function ProductDetailsSummary({ isLoading, product, indexVariant, handleChangeIndexVariant }) {
   const { addToCart } = useOrderFlow();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const [isAddToCart, setIsAddToCart] = useState(false);
+  const { user, isAuthenticated } = useAuth();
 
   const { _id, name, price, cover, views, variants, rates } = product;
 
@@ -115,6 +122,13 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
         variant: 'success'
       });
     });
+    // Add to DB
+    if (isAuthenticated) {
+      setIsAddToCart(true);
+      dispatch(addProductToCartDB(productInCart)).then(() => {
+        setIsAddToCart(false);
+      });
+    }
   };
 
   if (isLoading) {
@@ -204,6 +218,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
               startIcon={<Icon icon={roundAddShoppingCart} />}
               onClick={handleAddCart}
               sx={{ whiteSpace: 'nowrap' }}
+              disabled={isAddToCart}
             >
               Thêm vào giỏ hàng
             </MButton>

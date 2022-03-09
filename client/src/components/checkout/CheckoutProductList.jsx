@@ -54,15 +54,28 @@ Incrementer.propTypes = {
   onDecrease: PropTypes.func
 };
 
-function Incrementer({ available, availableText, quantity, onIncrease, onDecrease }) {
+function Incrementer({
+  available,
+  availableText,
+  quantity,
+  onIncrease,
+  onDecrease,
+  isIncreaseToCart,
+  isDecreaseToCart
+}) {
   return (
     <Box sx={{ width: 96, textAlign: 'center', margin: '0 auto' }}>
       <IncrementerStyle>
-        <MIconButton size="small" color="inherit" onClick={onDecrease} disabled={quantity <= 1}>
+        <MIconButton size="small" color="inherit" onClick={onDecrease} disabled={quantity <= 1 || isDecreaseToCart}>
           <Icon icon={minusFill} width={16} height={16} />
         </MIconButton>
         {quantity}
-        <MIconButton size="small" color="inherit" onClick={onIncrease} disabled={quantity >= available}>
+        <MIconButton
+          size="small"
+          color="inherit"
+          onClick={onIncrease}
+          disabled={quantity >= available || isIncreaseToCart}
+        >
           <Icon icon={plusFill} width={16} height={16} />
         </MIconButton>
       </IncrementerStyle>
@@ -80,7 +93,14 @@ ProductList.propTypes = {
   onIncreaseQuantity: PropTypes.func
 };
 
-export default function ProductList({ formik, onDelete, onIncreaseQuantity, onDecreaseQuantity }) {
+export default function ProductList({
+  formik,
+  onDelete,
+  onIncreaseQuantity,
+  onDecreaseQuantity,
+  isIncreaseToCart,
+  isDecreaseToCart
+}) {
   const { t, currentLang } = useLocales();
   const { products } = formik.values;
 
@@ -144,6 +164,8 @@ export default function ProductList({ formik, onDelete, onIncreaseQuantity, onDe
                     availableText={t('cart.available', { available: quantityAvailable })}
                     onDecrease={() => handleDecreaseQuantity(_id, skuVariant)}
                     onIncrease={() => handleIncreaseQuantity(_id, skuVariant)}
+                    isDecreaseToCart={isDecreaseToCart}
+                    isIncreaseToCart={isIncreaseToCart}
                   />
                 </TableCell>
 
