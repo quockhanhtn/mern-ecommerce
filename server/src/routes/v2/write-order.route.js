@@ -16,8 +16,10 @@ router.route('/')
   .post(
     isAuthorized,
     addProductToCartDB
-  )
-  .delete(
+  );
+
+router.route('/delete')
+  .post(
     isAuthorized,
     deleteProductInCartDB
   );

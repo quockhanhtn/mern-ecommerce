@@ -107,3 +107,10 @@ export const orderManager = {
 // ----------------------------Comment ---------------------------
 export const getAllComment = (product) => API.get(`/comments/${product}`);
 export const createComment = (newComment) => API.post(`/comments`, newComment);
+
+// ----------------------------Write DB for Cart ---------------------------
+export const getProductToCartDB = () => API.get(`/write-order`);
+export const addProductToCartDB = (newProduct) => API.post(`/write-order`, newProduct);
+export const deleteProductToCartDB = (productInfo) => API.post(`/write-order/delete`, productInfo);
+export const increaseProductToCartDB = (productInfo) => API.patch(`/write-order/increase`, productInfo);
+export const decreaseProductToCartDB = (productInfo) => API.patch(`/write-order/decrease`, productInfo);

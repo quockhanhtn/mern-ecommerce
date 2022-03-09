@@ -105,7 +105,6 @@ async function deleteProduct(userId, productInfo) {
   const currentField = await getOne(userId);
   const productInDB = await productService.getOneProduct(productInfo.productId, true);
   const productDelete = productInDB?.variants.find((variant) => variant.sku === productInfo.skuVariant);
-  console.log(productInDB);
   if (productInDB && productDelete) {
     if (currentField) { // Exits Field
       // Current list products
