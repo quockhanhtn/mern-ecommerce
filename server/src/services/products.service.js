@@ -250,10 +250,10 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}) {
 
 async function getSuggestProducts(keyword) {
   const result = await Product.find(
-    { $text: { $search: new RegExp(keyword, 'g') } },
-    {
-      score: { $meta: "textScore" }
-    }
+    { $text: { $search: new RegExp(keyword, 'gmi') } },
+    { score: { $meta: "textScore" } },
+    null,
+    null
   ).select('slug name variants.variantName variants.sku variants.price variants.marketPrice variants.thumbnail')
     .sort({ score: { $meta: 'textScore' } })
     .limit(10)

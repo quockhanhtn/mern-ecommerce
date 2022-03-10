@@ -12,21 +12,23 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
+  Link,
   Paper,
-  Typography
+  Typography,
+  OutlinedInput
 } from '@material-ui/core';
 // hook
 import { useNavigate } from 'react-router-dom';
 import useLocales from '../../hooks/useLocales';
+import useLocalStorage from '../../hooks/useLocalStorage';
 //
 import { getSearchSuggest } from '../../api';
 // components
-import { MIconButton } from '../../components/@material-extend';
+import { MIconButton, MCircularProgress } from '../../components/@material-extend';
 import { ThumbImgStyle } from '../../components/@styled';
 import AutoFocusTextField from '../../components/AutoFocusTextField';
 // utils
 import { fCurrency } from '../../utils/formatNumber';
-import { getPaymentStatusColor } from '../../utils/labelColor';
 import Label from '../../components/Label';
 
 // ----------------------------------------------------------------------
@@ -36,21 +38,29 @@ export default function SearchBar({ iconSx }) {
   const navigate = useNavigate();
   const [isOpen, setOpen] = useState(false);
   const [keyWord, setKeyWord] = useState('');
+  const [searchHistory, setSearchHistory] = useLocalStorage('searchHistory', []);
 
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   async function fetchData(keyword) {
     try {
+      setIsLoading(true);
       const { data } = await getSearchSuggest(keyword);
       setResults((prev) => [...data.data]);
     } catch (e) {
       console.log(e);
     }
+    setIsLoading(false);
   }
 
   useEffect(() => {
-    fetchData(keyWord);
+    if (keyWord.trim()) {
+      fetchData(keyWord);
+    } else {
+      setKeyWord('');
+      setResults([]);
+    }
   }, [keyWord]);
 
   const handleTextChange = (e) => {
@@ -71,7 +81,14 @@ export default function SearchBar({ iconSx }) {
   };
 
   const handleOnClickResultItem = (product) => {
-    navigate(`/ddd/${product.slug}`);
+    const index = searchHistory?.findIndex((x) => x.slug === product.slug) || -1;
+    if (index >= 0) {
+      setSearchHistory((prev) => [prev[index], ...prev.slice(0, index), ...prev.slice(index + 1)]);
+    } else {
+      setSearchHistory((prev) => [{ slug: product.slug, name: product.name }, ...prev].slice(0, 10));
+    }
+
+    navigate(`/p/${product.slug}`);
     setOpen(false);
   };
 
@@ -119,6 +136,24 @@ export default function SearchBar({ iconSx }) {
     );
   };
 
+  const renderSearchHistory = () => {
+    if (!searchHistory?.length > 0 || results?.length > 0) {
+      return null;
+    }
+    return (
+      <Box sx={{ alignItems: 'flex-start', width: '100%' }}>
+        <Label sx={{ mb: 2 }}>Lịch sử tìm kiếm</Label>
+        <Grid container spacing={1.5}>
+          {searchHistory.map(({ name, slug }) => (
+            <Grid key={slug} item sm={12} md={6} sx={{ cursor: 'pointer' }}>
+              <Link href={`/p/${slug}`}>{name}</Link>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    );
+  };
+
   return (
     <ClickAwayListener onClickAway={handleClose}>
       <div>
@@ -131,6 +166,7 @@ export default function SearchBar({ iconSx }) {
         <Dialog open={isOpen} maxWidth="lg" onClose={handleClose} fullWidth>
           <DialogTitle>
             <AutoFocusTextField
+              InputComponent={OutlinedInput}
               fullWidth
               placeholder="Tìm kiếm sản phẩm ..."
               value={keyWord}
@@ -143,10 +179,12 @@ export default function SearchBar({ iconSx }) {
             />
           </DialogTitle>
           <DialogContent sx={{ minHeight: '50vh' }}>
-            <Box>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Grid container spacing={1.5}>
                 {results.map((product) => renderResultItem(product))}
               </Grid>
+              {isLoading && <MCircularProgress size={48} sx={{ my: 3 }} />}
+              {renderSearchHistory()}
             </Box>
           </DialogContent>
           <DialogActions>

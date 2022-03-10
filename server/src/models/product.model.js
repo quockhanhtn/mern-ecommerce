@@ -98,7 +98,7 @@ productSchema.index(
   },
   {
     weights: {
-      name: 10,
+      name: 20,
       'variants.variantName': 2,
       desc: 1,
     }

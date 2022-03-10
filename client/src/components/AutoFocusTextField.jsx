@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
 import { TextField } from '@material-ui/core';
 
-function AutoFocusTextField(props) {
+function AutoFocusTextField({ InputComponent, ...other }) {
   const inputRef = useRef();
 
   useEffect(() => {
@@ -14,7 +15,15 @@ function AutoFocusTextField(props) {
     };
   }, []);
 
-  return <TextField inputRef={inputRef} {...props} />;
+  return <InputComponent inputRef={inputRef} {...other} />;
 }
+
+AutoFocusTextField.propTypes = {
+  InputComponent: PropTypes.node
+};
+
+AutoFocusTextField.defaultProps = {
+  InputComponent: TextField
+};
 
 export default AutoFocusTextField;
