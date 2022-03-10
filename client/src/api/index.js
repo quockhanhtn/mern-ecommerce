@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api/v1';
+const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api/v2';
 const API = axios.create({ baseURL });
 
 // Add Header Authorization
