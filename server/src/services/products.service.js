@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import Product from '../models/product.model.js';
 import categoryService from './categories.service.js'
 import brandService from './brands.service.js'
@@ -8,6 +7,7 @@ import ApiError from '../utils/APIError.js';
 export default {
   getAllProducts,
   getOneProduct,
+  getSuggestProducts,
   createProduct,
   updateProduct,
   removeProduct,
@@ -176,7 +176,7 @@ async function addProductVariants(productIdentity, variantData) {
       message: `Product ${productIdentity} not found !`,
       status: 404
     })
-  };
+  }
 
   const newVariant = initialProductVariant(variantData);
   product.variants.push(newVariant);
@@ -246,6 +246,19 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}) {
   //   .lean().exec();
 
   return { countAll, total, list };
+}
+
+async function getSuggestProducts(keyword) {
+  const result = await Product.find(
+    { $text: { $search: new RegExp(keyword, 'gmi') } },
+    { score: { $meta: "textScore" } },
+    null,
+    null
+  ).select('slug name variants.variantName variants.sku variants.price variants.marketPrice variants.thumbnail')
+    .sort({ score: { $meta: 'textScore' } })
+    .limit(10)
+    .lean().exec();
+  return result;
 }
 
 async function createProduct(data) {

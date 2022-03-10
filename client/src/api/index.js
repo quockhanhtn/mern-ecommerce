@@ -57,6 +57,7 @@ export const deleteDiscount = (identity) => API.delete(`/discounts/${identity}`)
 // ----------------------------Product---------------------------------
 export const getAllProduct = (fields, search, brand, category, page, limit) =>
   API.get(`/products?fields=${fields}&search=${search}&b=${brand}&c=${category}&page=${page}&limit=${limit}`);
+export const getSearchSuggest = (keyword) => API.get(`/products/search/suggest?keyword==${keyword}`);
 export const getFullAllProduct = () => API.get('/products/all');
 export const getOneProduct = (identity) => API.get(`/products/${identity}`);
 export const createProduct = (newProduct) => API.post('/products', newProduct);
