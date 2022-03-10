@@ -177,7 +177,6 @@ export default function DiscountForm({ currentId, open, setOpen }) {
       .required(t('dashboard.discounts.name-validation'))
       .min(6, t('dashboard.discounts.name-validation-len'))
       .max(50, t('dashboard.discounts.name-validation-len')),
-    // desc: Yup.string().required(t('dashboard.discounts.desc-validation')),
     code: Yup.string()
       .trim()
       .required(t('dashboard.discounts.code-validation'))
@@ -197,7 +196,7 @@ export default function DiscountForm({ currentId, open, setOpen }) {
   const formik = useFormik({
     initialValues: getInitialValues(discount),
     validationSchema: DiscountSchema,
-    onSubmit: async (values) => {
+    onSubmit: async () => {
       try {
         handleSave();
       } catch (error) {

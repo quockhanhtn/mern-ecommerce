@@ -8,7 +8,6 @@ export default function LoginIcon({ ...other }) {
   const theme = useTheme();
   const PRIMARY_LIGHT = theme.palette.primary.light;
   const PRIMARY_MAIN = theme.palette.primary.main;
-  const PRIMARY_DARK = theme.palette.primary.dark;
 
   return (
     <Box {...other}>

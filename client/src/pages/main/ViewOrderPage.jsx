@@ -204,8 +204,8 @@ export default function ViewOrderPage() {
                 >
                   <TableRow>
                     <TableCell width={30}>#</TableCell>
-                    <TableCell align="left">{t('dashboard.products.title')}</TableCell>
-                    <TableCell align="center">{t('dashboard.products.quantity')}</TableCell>
+                    <TableCell align="left">{t('products.title')}</TableCell>
+                    <TableCell align="center">{t('products.quantity')}</TableCell>
                     <TableCell align="right">{t('cart.unit-price')}</TableCell>
                     <TableCell align="right">{t('cart.amount-price')}</TableCell>
                   </TableRow>

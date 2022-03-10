@@ -44,11 +44,13 @@ export default function StatisticProductTotal() {
     dispatch(getAllProducts());
   }, [dispatch]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const { data } = await api.getFullAllProduct();
     setProducts(data.data);
   }, [productsList]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     if (products) {
       const currentDate = new Date();

@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
-import { Link as ScrollLink } from 'react-scroll';
 import { Outlet } from 'react-router-dom';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 // material
-import { Box, Link, Container, Typography } from '@material-ui/core';
 // hooks
 import { useGoogleOneTapLogin } from 'react-google-one-tap-login';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,9 +10,6 @@ import useAuth from '../../hooks/useAuth';
 import { getAllCategories } from '../../redux/slices/categorySlice';
 import { getAllBrands } from '../../redux/actions/brands';
 import { getAllDiscounts } from '../../redux/actions/discounts';
-
-// components
-import LoadingScreen from '../../components/LoadingScreen';
 //
 import MainNavbar from './MainNavbar';
 import MainFooter from './MainFooter';
@@ -45,9 +40,9 @@ const MainStyle = styled('div')(({ theme }) => ({
 
 export default function MainLayout() {
   const dispatch = useDispatch();
-  const { user, googleOAuth, errMessage } = useAuth();
+  const { user, googleOAuth } = useAuth();
 
-  const { listSimple: categoryList, isLoading: isLoadingCategory } = useSelector((state) => state.category);
+  const { listSimple: categoryList } = useSelector((state) => state.category);
 
   useEffect(() => {
     dispatch(getAllCategories(true));
@@ -75,16 +70,6 @@ export default function MainLayout() {
       }
     }
   });
-
-  // if (isLoadingCategory || isLoadingBrand) {
-  //   console.log('isLoadingCategory', isLoadingCategory);
-  //   console.log('isLoadingBrand', isLoadingBrand);
-  //   return <LoadingScreen />;
-  // }
-
-  // if (hasErrorCategory || hasErrorBrand) {
-  //   return <LoadingScreen />;
-  // }
 
   return (
     <RootStyle>

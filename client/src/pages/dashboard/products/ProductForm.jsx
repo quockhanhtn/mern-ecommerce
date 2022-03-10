@@ -129,7 +129,7 @@ export default function ProductForm() {
           <TextField
             fullWidth
             name="name"
-            label={t('dashboard.products.specifications-name')}
+            label={t('products.specifications-name')}
             size="small"
             value={inputField.name}
             error={isErrorSpecifications && inputField.name === ''}
@@ -138,7 +138,7 @@ export default function ProductForm() {
           <TextField
             fullWidth
             name="value"
-            label={t('dashboard.products.specifications-value')}
+            label={t('products.specifications-value')}
             size="small"
             value={inputField.value}
             error={isErrorSpecifications && inputField.value === ''}
@@ -213,12 +213,12 @@ export default function ProductForm() {
           try {
             const productData = handleAddDataForProduct(uploadImage);
             dispatch(createProduct(productData));
-            enqueueSnackbar(t('dashboard.products.add-success'), {
+            enqueueSnackbar(t('products.add-success'), {
               variant: 'success'
             });
             navigate(PATH_DASHBOARD.app.products.list);
           } catch (e) {
-            enqueueSnackbar(t('dashboard.products.error'), {
+            enqueueSnackbar(t('products.error'), {
               variant: 'error'
             });
           }
@@ -242,12 +242,12 @@ export default function ProductForm() {
           try {
             const productData = handleAddDataForProduct(url);
             dispatch(createProduct(productData));
-            enqueueSnackbar(t('dashboard.products.add-success'), {
+            enqueueSnackbar(t('products.add-success'), {
               variant: 'success'
             });
             navigate(PATH_DASHBOARD.app.products.list);
           } catch (e) {
-            enqueueSnackbar(t('dashboard.products.error'), {
+            enqueueSnackbar(t('products.error'), {
               variant: 'error'
             });
           }
@@ -310,11 +310,11 @@ export default function ProductForm() {
   };
 
   const NewProductSchema = Yup.object().shape({
-    name: Yup.string().required(t('dashboard.products.name-validation')),
-    description: Yup.string().required(t('dashboard.products.desc-validation')),
-    sku: Yup.string().required(t('dashboard.products.sku-validation')),
-    price: Yup.number().required(t('dashboard.products.price-validation')),
-    marketPrice: Yup.number().required(t('dashboard.products.market-price-validation'))
+    name: Yup.string().required(t('products.name-validation')),
+    description: Yup.string().required(t('products.desc-validation')),
+    sku: Yup.string().required(t('products.sku-validation')),
+    price: Yup.number().required(t('products.price-validation')),
+    marketPrice: Yup.number().required(t('products.market-price-validation'))
   });
 
   const formik = useFormik({
@@ -378,7 +378,7 @@ export default function ProductForm() {
                 <Stack spacing={3}>
                   <TextField
                     fullWidth
-                    label={t('dashboard.products.name')}
+                    label={t('products.name')}
                     {...getFieldProps('name')}
                     error={Boolean(touched.name && errors.name)}
                     helperText={touched.name && errors.name}
@@ -387,7 +387,7 @@ export default function ProductForm() {
                   <TextField fullWidth label="Loại sản phẩm" {...getFieldProps('variantName')} />
 
                   <div>
-                    <LabelStyle>{t('dashboard.products.desc')}</LabelStyle>
+                    <LabelStyle>{t('products.desc')}</LabelStyle>
                     <QuillEditor
                       simple
                       id="product-description"
@@ -415,7 +415,7 @@ export default function ProductForm() {
                 <Stack spacing={3}>
                   <div onChange={() => setValidationThumbnail(false)}>
                     <UploadSingleFile
-                      label={t('dashboard.products.thumbnail')}
+                      label={t('products.thumbnail')}
                       file={uploadImage}
                       setFile={setUploadImage}
                       onDrop={handleDropSingleFile}
@@ -432,9 +432,9 @@ export default function ProductForm() {
                   </div>
                   <div>
                     <LabelStyle>
-                      {t('dashboard.products.pictures')}
+                      {t('products.pictures')}
                       <Typography component="span" variant="subtitle4" sx={{ color: 'primary.main' }}>
-                        &nbsp;{t('dashboard.products.pictures-note')}
+                        &nbsp;{t('products.pictures-note')}
                       </Typography>
                     </LabelStyle>
                     <UploadMultiFile
@@ -448,7 +448,7 @@ export default function ProductForm() {
                       uploadAll={handleUploadMultiple}
                     />
                   </div>
-                  <TextField fullWidth label={t('dashboard.products.video')} {...getFieldProps('video')} />
+                  <TextField fullWidth label={t('products.video')} {...getFieldProps('video')} />
                 </Stack>
               </Card>
             </Stack>
@@ -460,7 +460,7 @@ export default function ProductForm() {
                 <Stack spacing={3}>
                   <TextField
                     fullWidth
-                    label={t('dashboard.products.sku')}
+                    label={t('products.sku')}
                     {...getFieldProps('sku')}
                     error={Boolean(touched.sku && errors.sku)}
                     helperText={touched.sku && errors.sku}
@@ -468,7 +468,7 @@ export default function ProductForm() {
                   <TextField
                     type="number"
                     fullWidth
-                    label={t('dashboard.products.quantity')}
+                    label={t('products.quantity')}
                     {...getFieldProps('quantity')}
                     defaultValue={1}
                     error={Boolean(touched.quantity && errors.quantity)}
@@ -477,7 +477,7 @@ export default function ProductForm() {
                   <TextField
                     type="number"
                     fullWidth
-                    label={t('dashboard.products.warranty-period')}
+                    label={t('products.warranty-period')}
                     {...getFieldProps('warrantyPeriod')}
                     defaultValue={12}
                   />
@@ -487,7 +487,7 @@ export default function ProductForm() {
               <Card sx={{ p: 3 }}>
                 <Stack spacing={3}>
                   <CountryPicker
-                    label={t('dashboard.products.origin')}
+                    label={t('products.origin')}
                     onChange={(event, label) => {
                       setFieldValue('origin', label);
                     }}
@@ -508,7 +508,7 @@ export default function ProductForm() {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={t('dashboard.products.brand')}
+                        label={t('products.brand')}
                         margin="none"
                         error={Boolean(validationBrand)}
                       />
@@ -526,7 +526,7 @@ export default function ProductForm() {
                     >
                       <a>
                         <Typography component="span" variant="subtitle4" sx={{ color: 'primary.main' }}>
-                          &nbsp;{t('dashboard.products.brand-add')}
+                          &nbsp;{t('products.brand-add')}
                         </Typography>
                       </a>
                     </Typography>
@@ -544,7 +544,7 @@ export default function ProductForm() {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={t('dashboard.products.category')}
+                        label={t('products.category')}
                         margin="none"
                         error={Boolean(validationCategory)}
                       />
@@ -561,7 +561,7 @@ export default function ProductForm() {
                     >
                       <a>
                         <Typography component="span" variant="subtitle4" sx={{ color: 'primary.main' }}>
-                          &nbsp;{t('dashboard.products.category-add')}
+                          &nbsp;{t('products.category-add')}
                         </Typography>
                       </a>
                     </Typography>
@@ -590,7 +590,7 @@ export default function ProductForm() {
                   <TextField
                     fullWidth
                     placeholder="0.00"
-                    label={t('dashboard.products.price')}
+                    label={t('products.price')}
                     {...getFieldProps('price')}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">đ</InputAdornment>,
@@ -603,7 +603,7 @@ export default function ProductForm() {
                   <TextField
                     fullWidth
                     placeholder="0.00"
-                    label={t('dashboard.products.market-price')}
+                    label={t('products.market-price')}
                     {...getFieldProps('marketPrice')}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">đ</InputAdornment>,
@@ -616,13 +616,13 @@ export default function ProductForm() {
 
                 <FormControlLabel
                   control={<Switch {...getFieldProps('taxes')} checked={values.taxes} />}
-                  label={t('dashboard.products.price-includes-taxes')}
+                  label={t('products.price-includes-taxes')}
                   sx={{ mt: 2 }}
                 />
               </Card>
 
               <Button fullWidth variant="contained" size="large" onClick={handleSubmit}>
-                {t('dashboard.products.create')}
+                {t('products.create')}
               </Button>
             </Stack>
           </Grid>

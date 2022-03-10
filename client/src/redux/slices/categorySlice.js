@@ -61,7 +61,6 @@ const categorySlice = createSlice({
 
 const { actions, reducer } = categorySlice;
 
-export const { getAlls } = actions;
 export default reducer;
 
 export const getAllCategories = (isSimple) => async (dispatch) => {

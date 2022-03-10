@@ -121,6 +121,14 @@ export const getProductById = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
+export const getSuggestProducts = async (req, res, next) => {
+  try {
+    const { keyword } = req.query;
+    const products = await productService.getSuggestProducts(keyword);
+    resUtils.status200(res, 'Get suggest products successfully!', products.map(p => formatProduct(p, req)));
+  } catch (err) { next(err); }
+};
+
 export const createProduct = async (req, res, next) => {
   try {
     const newProduct = await productService.createProduct(req.body);
@@ -189,7 +197,7 @@ export const rateProduct = async (req, res, next) => {
 export const getProductSpecifications = async (req, res, next) => {
   try {
     const data = await productService.getSpecifications();
-    resUtils.status200(res, 'Get product specifications successfully!', data);
+    resUtils.status200(res, 'Get product overSpecs successfully!', data);
   } catch (err) { next(err); }
 };
 //#endregion
