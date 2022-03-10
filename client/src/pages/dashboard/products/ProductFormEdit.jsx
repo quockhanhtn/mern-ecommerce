@@ -120,8 +120,8 @@ export default function PageProductEdit() {
   };
 
   const NewProductSchema = Yup.object().shape({
-    name: Yup.string().required(t('dashboard.products.name-validation')),
-    description: Yup.string().required(t('dashboard.products.desc-validation'))
+    name: Yup.string().required(t('products.name-validation')),
+    description: Yup.string().required(t('products.desc-validation'))
   });
 
   const formik = useFormik({
@@ -149,7 +149,7 @@ export default function PageProductEdit() {
       <Form noValidate autoComplete="off">
         <Stack direction="row" spacing={3} sx={{ justifyContent: 'space-between', marginBottom: theme.spacing(2) }}>
           <Typography variant="h4" gutterBottom>
-            {t('dashboard.products.general-info')}
+            {t('products.general-info')}
           </Typography>
         </Stack>
         <Grid container spacing={3}>
@@ -159,13 +159,13 @@ export default function PageProductEdit() {
                 <Stack spacing={3}>
                   <TextField
                     fullWidth
-                    label={t('dashboard.products.name')}
+                    label={t('products.name')}
                     {...getFieldProps('name')}
                     error={Boolean(touched.name && errors.name)}
                     helperText={touched.name && errors.name}
                   />
                   <div>
-                    <LabelStyle>{t('dashboard.products.desc')}</LabelStyle>
+                    <LabelStyle>{t('products.desc')}</LabelStyle>
                     <QuillEditor
                       simple
                       id="product-description"
@@ -179,7 +179,7 @@ export default function PageProductEdit() {
                       </FormHelperText>
                     )}
                   </div>
-                  <TextField fullWidth label={t('dashboard.products.video')} {...getFieldProps('video')} />
+                  <TextField fullWidth label={t('products.video')} {...getFieldProps('video')} />
                 </Stack>
               </Card>
             </Stack>
@@ -191,7 +191,7 @@ export default function PageProductEdit() {
                   <TextField
                     type="number"
                     fullWidth
-                    label={t('dashboard.products.warranty-period')}
+                    label={t('products.warranty-period')}
                     {...getFieldProps('warrantyPeriod')}
                     defaultValue={12}
                   />
@@ -224,7 +224,7 @@ export default function PageProductEdit() {
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          label={t('dashboard.products.brand')}
+                          label={t('products.brand')}
                           margin="none"
                           error={Boolean(validationBrand)}
                         />
@@ -242,7 +242,7 @@ export default function PageProductEdit() {
                       }}
                     >
                       <Typography component="a" variant="subtitle4" sx={{ color: 'primary.main' }}>
-                        &nbsp;{t('dashboard.products.brand-add')}
+                        &nbsp;{t('products.brand-add')}
                       </Typography>
                     </Typography>
                   </Link>
@@ -261,7 +261,7 @@ export default function PageProductEdit() {
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          label={t('dashboard.products.category')}
+                          label={t('products.category')}
                           margin="none"
                           error={Boolean(validationCategory)}
                         />
@@ -278,7 +278,7 @@ export default function PageProductEdit() {
                       }}
                     >
                       <Typography component="a" variant="subtitle4" sx={{ color: 'primary.main' }}>
-                        &nbsp;{t('dashboard.products.category-add')}
+                        &nbsp;{t('products.category-add')}
                       </Typography>
                     </Typography>
                   </Link>
@@ -300,7 +300,7 @@ export default function PageProductEdit() {
                 </Stack>
               </Card>
               <Button fullWidth variant="contained" size="large" onClick={handleSubmit}>
-                {t('dashboard.products.save')}
+                {t('products.save')}
               </Button>
             </Stack>
           </Grid>

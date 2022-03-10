@@ -7,6 +7,7 @@ import { Grid, Card, Button, CardHeader, Typography } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 // hooks
+import { useDispatch } from 'react-redux';
 import useLocales from '../../hooks/useLocales';
 import useAuth from '../../hooks/useAuth';
 import useOrderFlow from '../../hooks/useOrderFlow';
@@ -15,12 +16,19 @@ import Scrollbar from '../Scrollbar';
 import EmptyContent from '../EmptyContent';
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutProductList from './CheckoutProductList';
+import {
+  decreaseProductToCartDB,
+  deleteProductToCartDB,
+  increaseProductToCartDB
+} from '../../redux/slices/writeOrderSlice';
 
 // ----------------------------------------------------------------------
 
 export default function CheckoutCart() {
   const { t } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
+  const { user, isAuthenticated } = useAuth();
+  const dispatch = useDispatch();
   const {
     cart,
     quantityInCart,
@@ -31,7 +39,8 @@ export default function CheckoutCart() {
     decreaseProductInCart,
     nextStepOrder
   } = useOrderFlow();
-  const { user } = useAuth();
+  const [isIncreaseToCart, setIsIncreaseToCart] = useState(false);
+  const [isDecreaseToCart, setIsDecreaseToCart] = useState(false);
   const discount = cart.length > 0 ? 50000 : 0;
   const isEmptyCart = cart ? cart.length === 0 : true;
 
@@ -39,6 +48,13 @@ export default function CheckoutCart() {
     removeToCart(_id, skuVariant).then(() => {
       enqueueSnackbar(t('cart.notification.remove'), { variant: 'success' });
     });
+    const productInfo = {
+      productId: _id,
+      skuVariant
+    };
+    if (isAuthenticated) {
+      dispatch(deleteProductToCartDB(productInfo));
+    }
   };
 
   const handleNextStep = () => {
@@ -53,12 +69,32 @@ export default function CheckoutCart() {
     increaseProductInCart(_id, skuVariant).then(() => {
       enqueueSnackbar(t('cart.notification.increase'), { variant: 'success' });
     });
+    if (isAuthenticated) {
+      const productInfo = {
+        productId: _id,
+        skuVariant
+      };
+      setIsIncreaseToCart(true);
+      dispatch(increaseProductToCartDB(productInfo)).then(() => {
+        setIsIncreaseToCart(false);
+      });
+    }
   };
 
   const handleDecreaseQuantity = (_id, skuVariant) => {
     decreaseProductInCart(_id, skuVariant).then(() => {
       enqueueSnackbar(t('cart.notification.decrease'), { variant: 'success' });
     });
+    if (isAuthenticated) {
+      const productInfo = {
+        productId: _id,
+        skuVariant
+      };
+      setIsDecreaseToCart(true);
+      dispatch(decreaseProductToCartDB(productInfo)).then(() => {
+        setIsDecreaseToCart(false);
+      });
+    }
   };
 
   const formik = useFormik({
@@ -102,6 +138,8 @@ export default function CheckoutCart() {
                     onDelete={handleDeleteCart}
                     onIncreaseQuantity={handleIncreaseQuantity}
                     onDecreaseQuantity={handleDecreaseQuantity}
+                    isDecreaseToCart={isDecreaseToCart}
+                    isIncreaseToCart={isIncreaseToCart}
                   />
                 </Scrollbar>
               ) : (

@@ -18,7 +18,7 @@ import NotificationsPopover from './NotificationsPopover';
 
 const DRAWER_WIDTH = 280;
 const APP_BAR_MOBILE = 64;
-const APP_BAR_DESKTOP = 92;
+const APP_BAR_DESKTOP = 64;
 
 const RootStyle = styled(AppBar)(({ theme }) => ({
   boxShadow: 'none',

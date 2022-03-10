@@ -15,7 +15,6 @@ import {
 import { useEffect, useState } from 'react';
 import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSnackbar } from 'notistack';
 import Page from '../../../components/Page';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
@@ -40,9 +39,8 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
 export default function PageCustomerList() {
   const { t } = useLocales();
   const theme = useTheme();
-  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const { list: usersList, isLoading, hasError } = useSelector((state) => state.user);
+  const { list: usersList, isLoading } = useSelector((state) => state.user);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('createdAt');
   const [page, setPage] = useState(0);
@@ -117,7 +115,7 @@ export default function PageCustomerList() {
     setDense(event.target.checked);
   };
 
-  const handleLockAccount = (userId) => {};
+  const handleLockAccount = () => {};
 
   // Avoid a layout jump when reaching the last page with empty brandsList.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - usersList.length) : 0;

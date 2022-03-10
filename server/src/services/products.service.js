@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import Product from '../models/product.model.js';
 import categoryService from './categories.service.js'
 import brandService from './brands.service.js'
@@ -8,6 +7,7 @@ import ApiError from '../utils/APIError.js';
 export default {
   getAllProducts,
   getOneProduct,
+  getSuggestProducts,
   createProduct,
   updateProduct,
   removeProduct,
@@ -19,7 +19,7 @@ export default {
   deleteProductVariants,
 };
 
-const SELECT_FIELD = '_id name slug desc video specifications origin category brand tags views rate variants quantity warrantyPeriod code createdAt updatedAt';
+const SELECT_FIELD = '_id name slug desc video overSpecs origin category brand tags views rate variants quantity warrantyPeriod code createdAt updatedAt';
 const POPULATE_OPTS = [
   {
     path: 'category',
@@ -48,11 +48,18 @@ function initialProductVariant(data) {
   if (data.marketPrice) { variant.marketPrice = Number.parseInt(data.marketPrice); }
   if (data.quantity) { variant.quantity = Number.parseInt(data.quantity); }
 
-  if (data.addSpecifications) {
-    if (typeof data.addSpecifications === 'string') {
-      variant.addSpecifications = JSON.parse(data.addSpecifications);
-    } else if (data.addSpecifications) {
-      variant.addSpecifications = data.addSpecifications;
+  if (data.addOverSpecs) {
+    if (typeof data.addOverSpecs === 'string') {
+      variant.addOverSpecs = JSON.parse(data.addOverSpecs);
+    } else if (data.addOverSpecs) {
+      variant.addOverSpecs = data.addOverSpecs;
+    }
+  }
+  if (data.addDetailSpecs) {
+    if (typeof data.addDetailSpecs === 'string') {
+      variant.addDetailSpecs = JSON.parse(data.addDetailSpecs);
+    } else if (data.addDetailSpecs) {
+      variant.addDetailSpecs = data.addDetailSpecs;
     }
   }
 
@@ -65,8 +72,12 @@ function initialProductVariant(data) {
     }
   }
   // product pictures
-  if (data.pictures && data.pictures.length > 0) {
-    variant.pictures = data.pictures;
+  if (data.pictures) {
+    if (typeof data.pictures === 'string') {
+      variant.pictures = strUtils.splitsAndTrim(data.pictures, ',');
+    } else if (Array.isArray(data.pictures)) {
+      variant.pictures = data.pictures;
+    }
   }
   return variant;
 }
@@ -105,11 +116,11 @@ async function initialProduct(data, isAddNew = false) {
   if (data.code) { product.code = data.code; }
   if (data.desc) { product.desc = data.desc; }
   if (data.video) { product.video = data.video; }
-  if (data.specifications) {
-    if (typeof data.specifications === 'string') {
-      product.specifications = JSON.parse(data.specifications);
-    } else if (data.specifications) {
-      product.specifications = data.specifications;
+  if (data.overSpecs) {
+    if (typeof data.overSpecs === 'string') {
+      product.overSpecs = JSON.parse(data.overSpecs);
+    } else if (data.overSpecs) {
+      product.overSpecs = data.overSpecs;
     }
   }
   if (data.tags) {
@@ -120,7 +131,7 @@ async function initialProduct(data, isAddNew = false) {
     }
   }
 
-  if (data.releaseTime) { product.releaseTime = new Date(Date.parse(data.releaseTime)); }
+  // if (data.releaseTime) { product.releaseTime = new Date(Date.parse(data.releaseTime)); }
   if (data.warrantyPeriod) { product.warrantyPeriod = Number.parseInt(data.warrantyPeriod); }
   if (data.origin) { product.origin = data.origin }
 
@@ -147,7 +158,7 @@ async function getOneProduct(identity, needIncView = false, notLean = false) {
     : { slug: identity };
 
   if (needIncView) {
-    return await Product.findOneAndUpdate(filter, { $inc: { views: 1 } }, { new: true })
+    return Product.findOneAndUpdate(filter, { $inc: { views: 1 } }, { new: true })
       .select(SELECT_FIELD)
       .populate(POPULATE_OPTS)
       .lean().exec();
@@ -165,22 +176,19 @@ async function addProductVariants(productIdentity, variantData) {
       message: `Product ${productIdentity} not found !`,
       status: 404
     })
-  };
+  }
 
   const newVariant = initialProductVariant(variantData);
   product.variants.push(newVariant);
   product.markModified('variants');
-  return await product.save();
+  return product.save();
 }
 
 async function updateProductVariants(productIdentity, sku, variantData) {
   const product = await getOneProduct(productIdentity, false, true);
   if (!product) {
-    throw new ApiError({
-      message: `Product ${productIdentity} not found !`,
-      status: 404
-    })
-  };
+    throw ApiError.simple(`Product ${productIdentity} not found !`, 404);
+  }
 
   let variantUpdate = initialProductVariant(variantData);
 
@@ -189,7 +197,7 @@ async function updateProductVariants(productIdentity, sku, variantData) {
     product.variants[index][property] = variantUpdate[property];
   }
   product.markModified('variants');
-  return await product.save();
+  return product.save();
 }
 
 async function deleteProductVariants(identity, sku) {
@@ -240,14 +248,90 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}) {
   return { countAll, total, list };
 }
 
+async function getSuggestProducts(keyword) {
+  const result = await Product.find(
+    { $text: { $search: new RegExp(keyword, 'gmi') } },
+    { score: { $meta: "textScore" } },
+    null,
+    null
+  ).select('slug name variants.variantName variants.sku variants.price variants.marketPrice variants.thumbnail')
+    .sort({ score: { $meta: 'textScore' } })
+    .limit(10)
+    .lean().exec();
+  return result;
+}
+
 async function createProduct(data) {
-  const product = await initialProduct(data, true);
-  const newProduct = new Product({
-    _id: new mongoose.Types.ObjectId(),
-    ...product,
+  const categoryId = await categoryService.getId(data.categoryId);
+  if (!categoryId) {
+    throw ApiError.simple(`Category '${data.categoryId}' not found!`, 404);
+  }
+  const brandId = await brandService.getId(data.brandId);
+  if (!brandId) {
+    throw ApiError.simple(`Brand '${data.brandId}' not found!`, 404);
+  }
+
+  const product = new Product({
+    category: categoryId,
+    brand: brandId
   });
-  const productSearch = await newProduct.save();
-  return Product.findById(productSearch._id).populate(POPULATE_OPTS).lean().exec();
+  if (data.name) { product.name = data.name; }
+  if (data.desc) { product.desc = data.desc; }
+  if (data.video) { product.video = data.video; }
+
+  if (data.overSpecs) {
+    if (typeof data.overSpecs === 'string') {
+      product.overSpecs = JSON.parse(data.overSpecs);
+    } else if (data.overSpecs) {
+      product.overSpecs = data.overSpecs;
+    }
+  }
+  if (data.detailSpecs) {
+    if (typeof data.detailSpecs === 'string') {
+      product.detailSpecs = JSON.parse(data.detailSpecs);
+    } else if (data.overSpecs) {
+      product.detailSpecs = data.detailSpecs;
+    }
+  }
+  if (data.specPicture) { product.specPicture = data.specPicture; }
+  if (data.tags) {
+    if (typeof data.tags === 'string') {
+      product.tags = strUtils.splitsAndTrim(data.tags, ',');
+    } else if (Array.isArray(data.tags)) {
+      product.tags = data.tags;
+    }
+  }
+
+  // if (data.releaseTime) { product.releaseTime = new Date(Date.parse(data.releaseTime)); }
+  if (data.warrantyPeriod) { product.warrantyPeriod = Number.parseInt(data.warrantyPeriod); }
+  if (data.origin) { product.origin = data.origin }
+
+  if (data.policies) {
+    if (typeof data.policies === 'string') {
+      product.policies = strUtils.splitsAndTrim(data.policies, ',');
+    } else if (Array.isArray(data.policies)) {
+      product.policies = data.policies;
+    }
+  }
+  if (data.hightLightPics) {
+    if (typeof data.hightLightPics === 'string') {
+      product.hightLightPics = strUtils.splitsAndTrim(data.hightLightPics, ',');
+    } else if (Array.isArray(data.hightLightPics)) {
+      product.hightLightPics = data.hightLightPics;
+    }
+  }
+  product.variants = [initialProductVariant(data)];
+
+  categoryService.incCountProduct(categoryId);
+  brandService.incCountProduct(brandId);
+  return product.save().then(p => p.populate(POPULATE_OPTS).lean().exec());
+
+  // const newProduct = new Product({
+  //   _id: new mongoose.Types.ObjectId(),
+  //   ...product,
+  // });
+  // const productSearch = await newProduct.save();
+  // return Product.findById(productSearch._id).populate(POPULATE_OPTS).lean().exec();
 }
 
 async function updateProduct(identity, data) {
@@ -276,8 +360,8 @@ async function rateProduct(identity, ip, rateStar) {
 }
 
 async function getSpecifications() {
-  const mainSpecs = await Product.distinct('specifications').exec();
-  const variantSpecs = await Product.distinct('variants.addSpecifications').exec();
+  const mainSpecs = await Product.distinct('overSpecs').exec();
+  const variantSpecs = await Product.distinct('variants.addOverSpecs').exec();
   const allSpecs = [...new Set([...mainSpecs, ...variantSpecs])];
 
   const groupObj = allSpecs.reduce((acc, cur) => {
@@ -308,7 +392,7 @@ async function getFullAll(fields = SELECT_FIELD) {
     fields = fields.split(',').join(' ');
   }
 
-  return await Product.find()
+  return Product.find()
     .select(fields)
     .sort({ createdAt: -1 })
     .lean().exec();

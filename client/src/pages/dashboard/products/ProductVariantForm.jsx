@@ -45,7 +45,6 @@ ProductVariantForm.propTypes = {
 
 export default function ProductVariantForm({ currentVariant, currentProductId, open, handleClose, handleCreateDone }) {
   const { t } = useLocales();
-  const navigate = useNavigate();
   const theme = useTheme();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const dispatch = useDispatch();
@@ -55,18 +54,17 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
   const [uploadPercent, setUploadPercent] = useState(-1);
   const [validationThumbnail, setValidationThumbnail] = useState(false);
   const [urlsPictures, setUrlsPictures] = useState([]);
-  const [isShowButton, setIsShowButton] = useState(false);
   const { item: currentProduct } = useSelector((state) => state.product);
 
   useEffect(() => {
     let id = 1;
-    currentVariant?.addSpecifications.map((item) => {
+    currentVariant?.addSpecifications?.map((item) => {
       delete item.key;
       item.id = id;
       id += 1;
       return item;
     });
-    if (currentVariant?.addSpecifications.length > 0) {
+    if (currentVariant?.addSpecifications?.length > 0) {
       setSpecifications(currentVariant?.addSpecifications);
     }
     setUploadImage(currentVariant?.thumbnail);
@@ -112,7 +110,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
           <TextField
             fullWidth
             name="name"
-            label={t('dashboard.products.specifications-name')}
+            label={t('products.specifications-name')}
             size="small"
             value={inputField.name}
             error={isErrorSpecifications && inputField.name === ''}
@@ -121,7 +119,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
           <TextField
             fullWidth
             name="value"
-            label={t('dashboard.products.specifications-value')}
+            label={t('products.specifications-value')}
             size="small"
             value={inputField.value}
             error={isErrorSpecifications && inputField.value === ''}
@@ -374,7 +372,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
                 <TextField
                   fullWidth
                   disabled={currentVariant}
-                  label={t('dashboard.products.sku')}
+                  label={t('products.sku')}
                   {...getFieldProps('sku')}
                   error={Boolean(touched.sku && errors.sku)}
                   helperText={touched.sku && errors.sku}
@@ -382,7 +380,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
                 <TextField
                   type="number"
                   fullWidth
-                  label={t('dashboard.products.quantity')}
+                  label={t('products.quantity')}
                   {...getFieldProps('quantity')}
                   defaultValue={1}
                   error={Boolean(touched.quantity && errors.quantity)}
@@ -393,7 +391,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
                 <TextField
                   fullWidth
                   placeholder="0.00"
-                  label={t('dashboard.products.price')}
+                  label={t('products.price')}
                   {...getFieldProps('price')}
                   InputProps={{
                     startAdornment: <InputAdornment position="start">đ</InputAdornment>,
@@ -405,7 +403,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
                 <TextField
                   fullWidth
                   placeholder="0.00"
-                  label={t('dashboard.products.market-price')}
+                  label={t('products.market-price')}
                   {...getFieldProps('marketPrice')}
                   InputProps={{
                     startAdornment: <InputAdornment position="start">đ</InputAdornment>,

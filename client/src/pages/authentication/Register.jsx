@@ -3,7 +3,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Card, Link, Container, Typography } from '@material-ui/core';
 // hooks
-import useAuth from '../../hooks/useAuth';
 import useLocales from '../../hooks/useLocales';
 // routes
 import { PATH_AUTH } from '../../routes/paths';
@@ -45,7 +44,6 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Register() {
-  const { method } = useAuth();
   const { t } = useLocales();
 
   return (

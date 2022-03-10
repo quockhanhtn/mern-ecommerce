@@ -159,7 +159,6 @@ export default function CategoryForm({ currentId, open, setOpen }) {
         .min(6, t('dashboard.categories.name-validation-len'))
         .max(25, t('dashboard.categories.name-validation-len')),
       order: Yup.number().required(t('dashboard.categories.order-validation'))
-      // desc: Yup.string().required(t('dashboard.categories.desc-validation'))
     });
   }
 
