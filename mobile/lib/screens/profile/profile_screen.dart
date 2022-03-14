@@ -14,7 +14,7 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Profile"),
       ),
-      body: Body(),
+      body: const Body(),
       bottomNavigationBar: const CustomBottomNavBar(selectedMenu: MenuState.profile),
     );
   }

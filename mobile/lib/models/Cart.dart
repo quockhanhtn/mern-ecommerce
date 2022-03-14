@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: file_names
 
-import 'Product.dart';
 import 'Product.dart';
 
 class Cart {
