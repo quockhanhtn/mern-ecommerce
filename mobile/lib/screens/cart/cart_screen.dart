@@ -20,13 +20,14 @@ class CartScreen extends StatelessWidget {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       title: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Text(
-            "Your Cart",
+            "Giỏ hàng",
             style: TextStyle(color: Colors.black),
           ),
           Text(
-            "${demoCarts.length} items",
+            "${demoCarts.length} sản phẩm",
             style: Theme.of(context).textTheme.caption,
           ),
         ],

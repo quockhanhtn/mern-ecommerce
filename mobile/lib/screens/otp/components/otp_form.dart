@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/components/default_button.dart';
+import 'package:mobile/screens/home/home_screen.dart';
 import 'package:mobile/size_config.dart';
 
 import '../../../constants.dart';
@@ -108,8 +109,10 @@ class _OtpFormState extends State<OtpForm> {
           ),
           SizedBox(height: SizeConfig.screenHeight * 0.15),
           DefaultButton(
-            text: "Continue",
-            press: () {},
+            text: "Tiếp tục",
+            press: () {
+              Navigator.pushNamed(context, HomeScreen.routeName);
+            },
           )
         ],
       ),

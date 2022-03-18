@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants.dart';
-import 'package:mobile/screens/sign_in/sign_in_screen.dart';
-import 'package:mobile/size_config.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mobile/constants.dart';
+import 'package:mobile/screens/home/home_screen.dart';
+import 'package:mobile/size_config.dart';
 
-// This is the best practice
-import '../components/splash_content.dart';
-import '../../../components/default_button.dart';
+import 'package:mobile/components/default_button.dart';
+import 'package:mobile/utils/preference_utils.dart';
+import 'intro_content.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -17,23 +17,27 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   int currentPage = 0;
-  List<Map<String, String>> splashData = [
-    {
-      "text": "Welcome to Tokoto, Let’s shop!",
-      "image": "assets/images/splash_1.png"
-    },
-    {
-      "text":
-          "We help people conect with store \naround United State of America",
-      "image": "assets/images/splash_2.png"
-    },
-    {
-      "text": "We show the easy way to shop. \nJust stay at home with us",
-      "image": "assets/images/splash_3.png"
-    },
-  ];
+
   @override
   Widget build(BuildContext context) {
+    List<Map<String, String>> splashData = [
+      {
+        "title": AppLocalizations.of(context)!.introTitle00,
+        "text": AppLocalizations.of(context)!.introText00,
+        "lottieSrc": "assets/lotties/78619-verified.json"
+      },
+      {
+        "title": AppLocalizations.of(context)!.introTitle01,
+        "text": AppLocalizations.of(context)!.introText01,
+        "lottieSrc": "assets/lotties/57404-time-animation.json"
+      },
+      {
+        "title": AppLocalizations.of(context)!.introTitle02,
+        "text": AppLocalizations.of(context)!.introText02,
+        "lottieSrc": "assets/lotties/96305-device-insurance.json"
+      },
+    ];
+
     return SafeArea(
       child: SizedBox(
         width: double.infinity,
@@ -48,8 +52,9 @@ class _BodyState extends State<Body> {
                   });
                 },
                 itemCount: splashData.length,
-                itemBuilder: (context, index) => SplashContent(
-                  image: splashData[index]["image"],
+                itemBuilder: (context, index) => IntroContent(
+                  lottieSrc: splashData[index]['lottieSrc'],
+                  title: splashData[index]['title'],
                   text: splashData[index]['text'],
                 ),
               ),
@@ -71,9 +76,10 @@ class _BodyState extends State<Body> {
                     ),
                     const Spacer(flex: 3),
                     DefaultButton(
-                      text: AppLocalizations.of(context)!.continueText + 'a',
+                      text: AppLocalizations.of(context)!.next,
                       press: () {
-                        Navigator.pushNamed(context, SignInScreen.routeName);
+                        PreferenceUtils.setBool('seen', true);
+                        Navigator.pushNamed(context, HomeScreen.routeName);
                       },
                     ),
                     const Spacer(),

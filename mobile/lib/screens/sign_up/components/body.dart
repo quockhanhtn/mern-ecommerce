@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/components/socal_card.dart';
+import 'package:mobile/components/social_card.dart';
 import 'package:mobile/constants.dart';
 import 'package:mobile/size_config.dart';
 
 import 'sign_up_form.dart';
 
 class Body extends StatelessWidget {
+  const Body({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -18,13 +20,13 @@ class Body extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: SizeConfig.screenHeight * 0.04), // 4%
-                Text("Register Account", style: headingStyle),
-                Text(
-                  "Complete your details or continue \nwith social media",
+                Text("Tạo tài khoản", style: headingStyle),
+                const Text(
+                  "Tạo tài khoản để nhận được ưu đãi hấp dẫn",
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: SizeConfig.screenHeight * 0.08),
-                SignUpForm(),
+                const SignUpForm(),
                 SizedBox(height: SizeConfig.screenHeight * 0.08),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -45,7 +47,7 @@ class Body extends StatelessWidget {
                 ),
                 SizedBox(height: getProportionateScreenHeight(20)),
                 Text(
-                  'By continuing your confirm that you agree \nwith our Term and Condition',
+                  'Khi nhấn tiếp tục, bạn đồng ý với \nđiều khoản và điều kiện của chúng tôi',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.caption,
                 )

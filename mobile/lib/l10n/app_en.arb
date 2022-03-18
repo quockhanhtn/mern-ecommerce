@@ -1,4 +1,13 @@
 {
+  "@@locale": "en",
   "language": "English",
-  "continueText": "Continue Eng"
+  "title": "HK Mobile",
+  "next": "Next",
+  "start": "Start",
+  "introTitle00": "Title 01",
+  "introText00": "Content 01",
+  "introTitle01": "Title 02",
+  "introText01": "Content 02",
+  "introTitle02": "Title 03",
+  "introText02": "Content 03"
 }

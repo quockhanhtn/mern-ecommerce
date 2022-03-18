@@ -39,6 +39,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   provider: ^6.0.2 # for State management
   flutter_svg: ^1.0.3 # help us to use SVG in our app
+  lottie: ^1.2.2 # add lottie animation
+  shared_preferences: ^2.0.13
+  after_layout: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +53,20 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+
+  flutter_native_splash: ^2.1.1 # generate real splash screen
+
+# run: flutter clean && flutter pub get && flutter pub run flutter_native_splash:create
+# details: https://youtu.be/8ME8Czqc-Oc
+flutter_native_splash:
+  color: '#F9FAFB'
+  color_dark: "#212B36"
+  image: assets/logo/hk_splash_512.png
+  # image_dark: assets/splash_full.png
+  android: true
+  ios: true
+  android_gravity: center
+  ios_content_mode: center
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -65,8 +82,13 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   # assets:
   assets:
-    - assets/images/
     - assets/icons/
+    - assets/images/
+    - assets/images/ip13/
+    - assets/images/s22/
+    - assets/images/mi11/
+    - assets/logo/
+    - assets/lotties/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

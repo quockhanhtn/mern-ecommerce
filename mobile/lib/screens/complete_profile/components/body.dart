@@ -19,16 +19,16 @@ class Body extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: SizeConfig.screenHeight * 0.03),
-                Text("Complete Profile", style: headingStyle),
+                Text("Cập nhật thông tin", style: headingStyle),
                 const Text(
-                  "Complete your details or continue  \nwith social media",
+                  "",
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: SizeConfig.screenHeight * 0.06),
                 const CompleteProfileForm(),
                 SizedBox(height: getProportionateScreenHeight(30)),
                 Text(
-                  "By continuing your confirm that you agree \nwith our Term and Condition",
+                  'Khi nhấn tiếp tục, bạn đồng ý với \nđiều khoản và điều kiện của chúng tôi',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.caption,
                 ),

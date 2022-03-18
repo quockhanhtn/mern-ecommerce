@@ -91,7 +91,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
             },
             decoration: const InputDecoration(
               labelText: "Email",
-              hintText: "Enter your email",
+              hintText: "Nhập địa chỉ email của bạn",
               // If  you are using latest version of flutter then label text and hint text shown like this
               // if you r using flutter less then 1.20.* then maybe this is not working properly
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -102,7 +102,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
           FormError(errors: errors),
           SizedBox(height: SizeConfig.screenHeight * 0.1),
           DefaultButton(
-            text: "Continue",
+            text: "Tiếp tục",
             press: () {
               if (_formKey.currentState!.validate()) {
                 // Do what you want to do

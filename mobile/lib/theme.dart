@@ -22,9 +22,9 @@ InputDecorationTheme inputDecorationTheme() {
   return InputDecorationTheme(
     // If  you are using latest version of flutter then label text and hint text shown like this
     // if you r using flutter less then 1.20.* then maybe this is not working properly
-    // if we are define our floatingLabelBehavior in our theme then it's not applayed
+    // if we are define our floatingLabelBehavior in our theme then it's not applied
     floatingLabelBehavior: FloatingLabelBehavior.always,
-    contentPadding: EdgeInsets.symmetric(horizontal: 42, vertical: 20),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 42, vertical: 20),
     enabledBorder: outlineInputBorder,
     focusedBorder: outlineInputBorder,
     border: outlineInputBorder,
