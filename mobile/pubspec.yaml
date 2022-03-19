@@ -42,6 +42,8 @@ dependencies:
   lottie: ^1.2.2 # add lottie animation
   shared_preferences: ^2.0.13
   after_layout: ^1.1.0
+  http: ^0.13.4
+  json_annotation: ^4.4.0
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +55,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+  build_runner: ^2.1.8
+  json_serializable: ^6.1.5
 
   flutter_native_splash: ^2.1.1 # generate real splash screen
 

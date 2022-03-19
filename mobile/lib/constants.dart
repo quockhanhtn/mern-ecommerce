@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/size_config.dart';
 
+const kApiBaseUrl = 'https://api-mobile7076.herokuapp.com/api/v2/';
+
 const kPrimaryColor = Color(0xFF00AB55);
 const kPrimaryLightColor = Color(0xFFFFECDF);
 const kPrimaryGradientColor = LinearGradient(
