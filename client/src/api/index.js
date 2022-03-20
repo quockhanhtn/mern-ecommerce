@@ -115,3 +115,4 @@ export const addProductToCartDB = (newProduct) => API.post(`/write-order`, newPr
 export const deleteProductToCartDB = (productInfo) => API.post(`/write-order/delete`, productInfo);
 export const increaseProductToCartDB = (productInfo) => API.patch(`/write-order/increase`, productInfo);
 export const decreaseProductToCartDB = (productInfo) => API.patch(`/write-order/decrease`, productInfo);
+export const cleanProductToCartDB = () => API.delete(`/write-order/delete-all`);

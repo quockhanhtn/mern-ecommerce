@@ -1,14 +1,15 @@
 import WriteOrder from "../models/write-order.model.js";
-import strUtils from "../utils/str-utils.js";
 import mongoose from "mongoose";
 import productService from "./products.service.js";
+import strUtils from "../utils/str-utils.js";
 
 export  default {
   addProduct,
   getOne,
   deleteProduct,
   increaseProduct,
-  decreaseProduct
+  decreaseProduct,
+  cleanProducts
 };
 
 /**
@@ -196,4 +197,17 @@ async function decreaseProduct(userId, productInfo) {
   } else {
     throw new Error(`Product  not found!`);
   }
+}
+
+/**
+ * Clean all product after order
+ * @param {*} identity
+ * @returns
+ */
+async function cleanProducts(identity, needLean = true) {
+  const filter = strUtils.isUUID(identity)
+    ? { userId: identity }
+    : { slug: identity };
+  const deleteOrder = await WriteOrder.findOneAndDelete(filter);
+  return !!deleteOrder;
 }

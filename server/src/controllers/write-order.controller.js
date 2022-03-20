@@ -62,9 +62,9 @@ export const increaseProductInCartDB = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const productInfo = req.body;
-    const deleteProduct = await writeOrderService.increaseProduct(userId, productInfo);
+    const increaseProduct = await writeOrderService.increaseProduct(userId, productInfo);
     
-    if (deleteProduct) {
+    if (increaseProduct) {
       resUtils.status200(res, 'Increase successfully');
     } else {
       resUtils.status200(res, 'Increase not successfully');
@@ -80,12 +80,29 @@ export const decreaseProductInCartDB = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const productInfo = req.body;
-    const deleteProduct = await writeOrderService.decreaseProduct(userId, productInfo);
+    const decreaseProduct = await writeOrderService.decreaseProduct(userId, productInfo);
     
-    if (deleteProduct) {
+    if (decreaseProduct) {
       resUtils.status200(res, 'Decrease successfully');
     } else {
       resUtils.status200(res, 'Decrease not successfully');
+    }
+  } catch (err) { next(err); }
+}
+
+/**
+ * Clean all product after order
+ * @returns item
+ */
+export const cleanProductInCartDB = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const cleaned = await writeOrderService.cleanProducts(userId);
+    
+    if (cleaned) {
+      resUtils.status200(res, 'Clean list successfully');
+    } else {
+      resUtils.status200(res, 'Clean list not successfully');
     }
   } catch (err) { next(err); }
 }

@@ -8,32 +8,32 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import { Grid, Button } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
 // hooks
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { useSnackbar } from 'notistack';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import useLocales from '../../hooks/useLocales';
 import useAuth from '../../hooks/useAuth';
 import useOrderFlow from '../../hooks/useOrderFlow';
-import useLocalStorage from '../../hooks/useLocalStorage';
 // components
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 
 import * as Helper from '../../helper/localStorageHelper';
+import { cleanProductToCartDB } from '../../redux/slices/writeOrderSlice';
 
 // ----------------------------------------------------------------------
 
 export default function CheckoutPayment() {
   const { t } = useLocales();
-  const { user } = useAuth();
+  const { isAuthenticated } = useAuth();
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { orderInfo, isCreatingOrder, orderCreated, orderError, subTotal, activeStep, createOrder, backStepOrder } =
     useOrderFlow();
 
   const discount = 0;
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (orderError) {
       console.log('orderError', orderError);
       enqueueSnackbar(orderError?.message || 'Có lỗi', { variant: 'error' });
@@ -41,6 +41,9 @@ export default function CheckoutPayment() {
 
     if (orderCreated) {
       Helper.clearAfterOrder();
+      if (isAuthenticated) {
+        dispatch(cleanProductToCartDB());
+      }
       let redirect = `/order/${orderCreated._id}`;
       if (orderCreated.paymentUrl) {
         redirect = orderCreated.paymentUrl;
@@ -121,7 +124,7 @@ export default function CheckoutPayment() {
     validationSchema: PaymentSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
-        handlePayment(values);
+        await handlePayment(values);
       } catch (error) {
         console.error(error);
         setSubmitting(false);

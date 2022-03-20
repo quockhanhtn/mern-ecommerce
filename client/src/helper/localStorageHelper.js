@@ -61,7 +61,7 @@ export function decreaseProductInCart(_idProduct, skuVariantProduct) {
 
 export function getSubTotal(cart) {
   let subTotal = 0;
-  if (cart.length > 0) {
+  if (cart?.length > 0) {
     cart.forEach((item) => {
       subTotal += item.quantity * item.price;
     });
