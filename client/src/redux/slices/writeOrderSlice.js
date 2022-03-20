@@ -91,3 +91,13 @@ export const deleteProductToCartDB = (productInfo) => async (dispatch) => {
     dispatch(actions.hasError(e?.response?.data || e));
   }
 };
+
+export const getProductToCartDB = () => async (dispatch) => {
+  try {
+    dispatch(actions.startLoading());
+    const { data } = await api.getProductToCartDB();
+    dispatch(actions.getAllSuccess(data.data));
+  } catch (e) {
+    dispatch(actions.hasError(e?.response?.data || e));
+  }
+};

@@ -7,7 +7,7 @@ import { Grid, Card, Button, CardHeader, Typography } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 // hooks
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useLocales from '../../hooks/useLocales';
 import useAuth from '../../hooks/useAuth';
 import useOrderFlow from '../../hooks/useOrderFlow';
@@ -19,8 +19,10 @@ import CheckoutProductList from './CheckoutProductList';
 import {
   decreaseProductToCartDB,
   deleteProductToCartDB,
+  getProductToCartDB,
   increaseProductToCartDB
 } from '../../redux/slices/writeOrderSlice';
+import { getSubTotal } from '../../helper/localStorageHelper';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +44,25 @@ export default function CheckoutCart() {
   const [isIncreaseToCart, setIsIncreaseToCart] = useState(false);
   const [isDecreaseToCart, setIsDecreaseToCart] = useState(false);
   const discount = cart.length > 0 ? 50000 : 0;
-  const isEmptyCart = cart ? cart.length === 0 : true;
+  const { list: listProducts } = useSelector((state) => state.writeOrder);
+  let isEmptyCart = !(listProducts && listProducts.length > 0);
+  const [subTotalDB, setSubTotalDB] = useState(0);
+
+  // Set cart
+  if (!user) {
+    isEmptyCart = cart ? cart.length === 0 : true;
+  }
+
+  useEffect(() => {
+    if (user) {
+      dispatch(getProductToCartDB());
+    }
+  }, [dispatch, cart, isIncreaseToCart, isDecreaseToCart]);
+
+  useEffect(() => {
+    setSubTotalDB(getSubTotal(listProducts));
+    isEmptyCart = !(listProducts && listProducts.length > 0);
+  }, [listProducts]);
 
   const handleDeleteCart = (_id, skuVariant) => {
     removeToCart(_id, skuVariant).then(() => {
@@ -53,7 +73,9 @@ export default function CheckoutCart() {
       skuVariant
     };
     if (isAuthenticated) {
-      dispatch(deleteProductToCartDB(productInfo));
+      dispatch(deleteProductToCartDB(productInfo)).then(() => {
+        dispatch(getProductToCartDB());
+      });
     }
   };
 
@@ -99,7 +121,7 @@ export default function CheckoutCart() {
 
   const formik = useFormik({
     enableReinitialize: true,
-    initialValues: { products: cart },
+    initialValues: { products: user ? listProducts : cart },
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
         setSubmitting(true);
@@ -124,7 +146,7 @@ export default function CheckoutCart() {
                   <Typography variant="h6">
                     {t('cart.title-detail')}
                     <Typography component="span" sx={{ ml: 2, color: 'text.secondary' }}>
-                      ({quantityInCart} {t('cart.item')})
+                      ({user ? listProducts.length : quantityInCart} {t('cart.item')})
                     </Typography>
                   </Typography>
                 }
@@ -158,10 +180,10 @@ export default function CheckoutCart() {
 
           <Grid item xs={12} md={4}>
             <CheckoutSummary
-              total={subTotal}
+              total={user ? subTotalDB : subTotal}
               // enableDiscount
               discount={discount}
-              subtotal={subTotal}
+              subtotal={user ? subTotalDB : subTotal}
               onApplyDiscount={handleApplyDiscount}
             />
             <Button fullWidth size="large" type="submit" variant="contained" disabled={values.products.length === 0}>
