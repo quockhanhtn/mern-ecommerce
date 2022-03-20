@@ -96,7 +96,17 @@ export const getProductToCartDB = () => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
     const { data } = await api.getProductToCartDB();
-    dispatch(actions.getAllSuccess(data.data));
+    dispatch(actions.getAllSuccess(data.data || []));
+  } catch (e) {
+    dispatch(actions.hasError(e?.response?.data || e));
+  }
+};
+
+export const cleanProductToCartDB = () => async (dispatch) => {
+  try {
+    dispatch(actions.startLoading());
+    await api.cleanProductToCartDB();
+    dispatch(actions.delete([]));
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
   }

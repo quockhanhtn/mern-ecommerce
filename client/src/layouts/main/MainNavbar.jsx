@@ -181,7 +181,7 @@ export default function MainNavbar({ categoryList }) {
 
             <NavbarItem text={t('home.order-history')} icon={history24Filled} color="inherit" href="/order-history" />
             <NavbarItem
-              badgeContent={isAuthenticated ? listProducts.length : quantityInCart}
+              badgeContent={isAuthenticated && listProducts ? listProducts?.length : quantityInCart}
               text={t('home.cart')}
               icon={cart24Regular}
               color="primary"

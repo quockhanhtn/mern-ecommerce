@@ -1,6 +1,11 @@
 import express from 'express';
 import {
-  addProductToCartDB, getListProductOfUser, deleteProductInCartDB, increaseProductInCartDB, decreaseProductInCartDB
+  addProductToCartDB,
+  getListProductOfUser,
+  deleteProductInCartDB,
+  increaseProductInCartDB,
+  decreaseProductInCartDB,
+  cleanProductInCartDB
 } from '../../controllers/write-order.controller.js';
 import { isAuthorized } from '../../middlewares/jwt-auth.js';
 
@@ -22,6 +27,12 @@ router.route('/delete')
   .post(
     isAuthorized,
     deleteProductInCartDB
+  );
+
+router.route('/delete-all')
+  .delete(
+    isAuthorized,
+    cleanProductInCartDB
   );
 
 router.route('/increase')

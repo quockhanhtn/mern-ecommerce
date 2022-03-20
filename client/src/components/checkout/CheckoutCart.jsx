@@ -146,7 +146,7 @@ export default function CheckoutCart() {
                   <Typography variant="h6">
                     {t('cart.title-detail')}
                     <Typography component="span" sx={{ ml: 2, color: 'text.secondary' }}>
-                      ({user ? listProducts.length : quantityInCart} {t('cart.item')})
+                      ({user ? listProducts?.length : quantityInCart} {t('cart.item')})
                     </Typography>
                   </Typography>
                 }
@@ -186,7 +186,7 @@ export default function CheckoutCart() {
               subtotal={user ? subTotalDB : subTotal}
               onApplyDiscount={handleApplyDiscount}
             />
-            <Button fullWidth size="large" type="submit" variant="contained" disabled={values.products.length === 0}>
+            <Button fullWidth size="large" type="submit" variant="contained" disabled={values.products?.length === 0}>
               {t('cart.checkout')}
             </Button>
           </Grid>
