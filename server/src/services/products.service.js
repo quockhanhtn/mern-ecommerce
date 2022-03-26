@@ -217,7 +217,7 @@ async function deleteProductVariants(identity, sku) {
  * @param {object} filter - filter
  * @returns {object} - list of products, total count
  */
-async function getAllProducts(fields, limit = 10, page = 1, filter = {}) {
+async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy = 'createdAt', sortType = -1) {
   if (fields === null || fields == '') { fields = SELECT_FIELD; }
 
   if (fields.indexOf(',') > -1) {
@@ -238,7 +238,7 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}) {
     .select(fields)
     .populate(populateOpts)
     .skip((page - 1) * limit)
-    .sort({ createdAt: -1 })
+    .sort({ [sortBy]: sortType })
     .limit(limit)
     .lean().exec();
 

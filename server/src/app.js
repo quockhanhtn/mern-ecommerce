@@ -16,6 +16,7 @@ const __dirname = process.cwd();
 // share uploads resource
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/public/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
+app.use('/public/logs', express.static(path.join(__dirname, 'public', 'logs')));
 
 
 // User middleware
