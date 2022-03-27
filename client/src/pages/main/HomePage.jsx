@@ -26,6 +26,8 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
+const LIMIT = 15;
+
 export default function HomePage() {
   const { t } = useLocales();
 
@@ -55,7 +57,7 @@ export default function HomePage() {
   }));
 
   useEffect(() => {
-    dispatch(getAllProducts('', '', '', page, 16));
+    dispatch(getAllProducts('', '', '', page, LIMIT));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
@@ -125,7 +127,7 @@ export default function HomePage() {
                   </Box>
                 </CardContent>
               </Card>
-              <ProductList products={products} isLoading={isLoadingProduct} />
+              <ProductList products={products} isLoading={isLoadingProduct} limit={LIMIT} />
             </Box>
             {productPagination?.hasNextPage && (
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -135,7 +137,7 @@ export default function HomePage() {
                   onClick={handleLoadMore}
                   isLoading={isLoadingProduct}
                 >
-                  {`Xem thêm ${productPagination.countAll - productPagination.page * 16} sản phẩm`}
+                  {`Xem thêm ${productPagination.countAll - productPagination.page * LIMIT} sản phẩm`}
                 </LoadingButton>
               </Box>
             )}

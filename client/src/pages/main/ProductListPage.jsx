@@ -61,7 +61,7 @@ export default function ProductListPage() {
 
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
-  const limit = 8;
+  const limit = 10;
 
   useEffect(() => {
     setCategoriesSelected([...categoryList.filter((x) => categorySlug?.split(',').includes(x.slug))]);

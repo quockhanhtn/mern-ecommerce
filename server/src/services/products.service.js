@@ -232,13 +232,16 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy 
     populateOpts.push({ path: 'brand', select: 'name slug image _id', model: 'Brand' },);
   }
 
+  const sortOtp = {};
+  sortOtp[sortBy] = sortType;
+
   const countAll = await Product.estimatedDocumentCount();
   const total = await Product.countDocuments(JSON.parse(JSON.stringify(filter)), null).exec();
   const list = await Product.find(filter)
     .select(fields)
     .populate(populateOpts)
     .skip((page - 1) * limit)
-    .sort({ [sortBy]: sortType })
+    .sort(sortOtp)
     .limit(limit)
     .lean().exec();
 
