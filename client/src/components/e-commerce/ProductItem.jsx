@@ -28,7 +28,7 @@ export default function ProductItem({ product }) {
   const { t, currentLang } = useLocales();
   const { name, slug, variants, category } = product;
   const image = variants?.[0]?.thumbnail || null;
-  const linkTo = `/${category.slug}/${slug}`;
+  const linkTo = `/${category?.slug || 'c'}/${slug}`;
 
   return (
     <Card>

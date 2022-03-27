@@ -897,10 +897,12 @@ function splitProductName(name) {
 
 async function insertProduct() {
   const filePath = process.cwd() + '/tool/product.00.json';
-  const filePath2 = process.cwd() + '/tool/product.01.json';
+  const filePath1 = process.cwd() + '/tool/product.01.json';
+  const filePath2 = process.cwd() + '/tool/product.02.json';
 
   let listProduct = [
     ...JSON.parse(fs.readFileSync(filePath)),
+    ...JSON.parse(fs.readFileSync(filePath1)),
     ...JSON.parse(fs.readFileSync(filePath2)),
   ];
   const listBrand = await Brand.find({}).lean().exec();
