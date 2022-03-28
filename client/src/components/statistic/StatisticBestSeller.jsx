@@ -21,7 +21,7 @@ import { useEffect, useState } from 'react';
 import Label from '../Label';
 import Scrollbar from '../Scrollbar';
 import useLocales from '../../hooks/useLocales';
-import { getFullAllProducts } from '../../redux/actions/products';
+import { getFullAllProducts } from '../../redux/slices/productSlice';
 import * as api from '../../api';
 
 // ----------------------------------------------------------------------

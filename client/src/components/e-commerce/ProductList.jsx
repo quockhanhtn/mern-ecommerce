@@ -14,7 +14,7 @@ export default function ProductList(props) {
   const { products = [], isLoading = true, limit = 10, ...other } = props;
 
   return (
-    <Box display="grid" gridTemplateColumns="repeat(15, 1fr)" gap={1} {...other}>
+    <Box display="grid" gridTemplateColumns="repeat(15, 1fr)" gap={1.5} {...other}>
       {products.map((product) => (
         <Box key={product._id} gridColumn="span 3">
           <ProductItem product={product} />

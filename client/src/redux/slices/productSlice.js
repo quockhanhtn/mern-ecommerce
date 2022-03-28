@@ -6,7 +6,8 @@ const initialState = {
   error: null,
   item: null,
   list: [],
-  listSimple: []
+  listFull: [],
+  pagination: {}
 };
 
 const productSlice = createSlice({
@@ -20,41 +21,55 @@ const productSlice = createSlice({
       state.error = action.payload;
       state.isLoading = false;
     },
-    getSimpleSuccess(state, action) {
-      state.listSimple = action.payload;
+    getAllSuccess(state, action) {
+      state.list = action.payload.data;
       state.isLoading = false;
       state.error = null;
+      state.pagination = action.payload.pagination;
     },
-    getAllSuccess(state, action) {
-      state.list = action.payload;
+    getAllFullSuccess(state, action) {
+      state.listFull = action.payload.data;
       state.isLoading = false;
       state.error = null;
     },
     getOneSuccess(state, action) {
-      state.item = action.payload;
+      state.item = action.payload.data;
       state.isLoading = false;
       state.error = null;
     },
-    create(state, action) {
-      state.list.push(action.payload);
+    createSuccess(state, action) {
+      state.list.push(action.payload.data);
       state.isLoading = false;
       state.error = null;
     },
-    update(state, action) {
+    updateSuccess(state, action) {
       return {
         ...state,
-        list: state.list.map((cat) => (cat._id === action.payload._id ? action.payload : cat)),
+        list: state.list.map((p) => (p._id === action.payload._id ? action.payload : p)),
         isLoading: false,
         error: null
       };
     },
-    delete(state, action) {
+    deleteSuccess(state, action) {
       return {
         ...state,
-        list: state.list.filter((cat) => cat._id !== action.payload._id),
+        list: state.list.filter((p) => p._id !== action.payload._id),
         isLoading: false,
         error: null
       };
+    },
+    createVariantSuccess(state, action) {
+      return { ...state, list: [action.payload.data, ...state.list], error: null };
+    },
+    updateVariantSuccess(state, action) {
+      return {
+        ...state,
+        list: state.list.map((p) => (p._id === action.payload._id ? action.payload : p)),
+        error: null
+      };
+    },
+    deleteVariantSuccess(state, action) {
+      return { ...state, list: state.list.variants.filter((cat) => cat.sku !== action.payload), hasError: false };
     }
   }
 });
@@ -64,46 +79,95 @@ const { actions, reducer } = productSlice;
 export const { getAlls } = actions;
 export default reducer;
 
-export const getAllCategories = (isSimple) => async (dispatch) => {
-  try {
-    dispatch(actions.startLoading());
-    const { data } = await api.getAllCategory(isSimple ? 'name slug image' : null);
-    if (isSimple) {
-      dispatch(actions.getSimpleSuccess(data.data));
-    } else {
-      dispatch(actions.getAllSuccess(data.data));
+export const getAllProducts =
+  (search = '', brand = '', category = '', page = 1, limit = 12) =>
+  async (dispatch) => {
+    try {
+      dispatch(actions.startLoading());
+
+      const { data } = await api.getAllProduct('', search, brand, category, page, limit);
+      dispatch(actions.getAllSuccess(data));
+    } catch (e) {
+      dispatch(actions.hasError(e));
     }
+  };
+
+export const getFullAllProducts = () => async (dispatch) => {
+  try {
+    dispatch(actions.startLoading());
+    const { data } = await api.getFullAllProduct();
+    dispatch(actions.getAllFullSuccess(data));
   } catch (e) {
-    dispatch(actions.hasError(e?.response?.data || e));
+    dispatch(actions.hasError(e));
   }
 };
 
-export const createCategory = (newCategory) => async (dispatch) => {
+export const getProductById = (id) => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    const { data } = await api.createCategory(newCategory);
-    dispatch(actions.create(data.data));
+    const { data } = await api.getOneProduct(id);
+    dispatch(actions.getOneSuccess(data));
   } catch (e) {
-    dispatch(actions.hasError(e?.response?.data || e));
+    dispatch(actions.hasError(e));
   }
 };
 
-export const updateCategory = (id, updatedCategory) => async (dispatch) => {
+export const createProduct = (newProduct) => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    const { data } = await api.updateCategory(id, updatedCategory);
-    dispatch(actions.update(data.data));
+    const { data } = await api.createProduct(newProduct);
+    dispatch(actions.createSuccess(data));
   } catch (e) {
-    dispatch(actions.hasError(e?.response?.data || e));
+    dispatch(actions.hasError(e));
   }
 };
 
-export const deleteCategory = (id) => async (dispatch) => {
+export const updateProduct = (id, updateProduct) => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    await api.deleteCategory(id);
-    dispatch(actions.delete({ _id: id }));
+    const { data } = await api.updateProduct(id, updateProduct);
+    dispatch(actions.updateSuccess(data));
   } catch (e) {
-    dispatch(actions.hasError(e?.response?.data || e));
+    dispatch(actions.hasError(e));
+  }
+};
+
+export const deleteProduct = (id) => async (dispatch) => {
+  try {
+    dispatch(actions.startLoading());
+    await api.deleteProduct(id);
+    dispatch(actions.deleteSuccess(id));
+  } catch (e) {
+    dispatch(actions.hasError(e));
+  }
+};
+
+export const createProductVariant = (id, productVariant) => async (dispatch) => {
+  try {
+    dispatch(actions.startLoading());
+    const { data } = await api.createProductVariant(id, productVariant);
+    dispatch(actions.createVariantSuccess(data));
+  } catch (e) {
+    dispatch(actions.hasError(e));
+  }
+};
+
+export const updateProductVariant = (id, sku, productVariant) => async (dispatch) => {
+  try {
+    dispatch(actions.startLoading());
+    const { data } = await api.updateProductVariant(id, sku, productVariant);
+    dispatch(actions.updateVariantSuccess(data));
+  } catch (e) {
+    dispatch(actions.hasError(e));
+  }
+};
+
+export const deleteProductVariant = (productId, sku) => async (dispatch) => {
+  try {
+    dispatch(actions.startLoading());
+    await api.deleteProductVariant(productId, sku);
+    dispatch(actions.deleteVariantSuccess(sku));
+  } catch (e) {
+    dispatch(actions.hasError(e));
   }
 };

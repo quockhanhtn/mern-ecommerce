@@ -5,7 +5,7 @@ import { LoadingButton } from '@material-ui/lab';
 import { Box, Container, Card, CardContent, CardHeader, Stack, Typography } from '@material-ui/core';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllProducts } from '../../redux/actions/products';
+import { getAllProducts } from '../../redux/slices/productSlice';
 // hooks
 import useLocales from '../../hooks/useLocales';
 // components

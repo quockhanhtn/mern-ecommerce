@@ -10,7 +10,7 @@ import { Box, Tab, Card, Grid, Divider, Container, Typography } from '@material-
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { getProductById } from '../../redux/actions/products';
+import { getProductById } from '../../redux/slices/productSlice';
 // hooks
 import useLocales from '../../hooks/useLocales';
 // components

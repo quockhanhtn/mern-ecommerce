@@ -31,7 +31,7 @@ export default function ProductItem({ product }) {
   const linkTo = `/${category?.slug || 'c'}/${slug}`;
 
   return (
-    <Card>
+    <Card sx={{ '&:hover': { transform: 'scale(1.02)', boxShadow: (theme) => theme.customShadows.z8 } }}>
       <Box sx={{ pt: '90%', position: 'relative' }}>
         {image ? (
           <ProductImgStyle alt={name} src={variants[0].thumbnail} />
@@ -40,9 +40,18 @@ export default function ProductItem({ product }) {
         )}
       </Box>
 
-      <Stack spacing={2} sx={{ p: 3 }}>
+      <Stack spacing={2} sx={{ p: 2 }}>
         <Link to={linkTo} color="inherit" component={RouterLink}>
-          <Typography variant="subtitle2" noWrap>
+          <Typography
+            variant="subtitle2"
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical'
+            }}
+          >
             {name}
           </Typography>
         </Link>
