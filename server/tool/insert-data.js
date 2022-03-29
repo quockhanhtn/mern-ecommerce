@@ -49,33 +49,93 @@ const categoryData = [
     order: 1,
     name: 'Điện thoại',
     image: '/public/uploads/categories/phone.svg',
-  }, {
+  },
+  {
     _id: mongoose.Types.ObjectId('c00000000000000000000002'),
     order: 2,
     name: 'Máy tính bảng',
     image: '/public/uploads/categories/tablet.svg',
-  }, {
+  },
+  {
     _id: mongoose.Types.ObjectId('c00000000000000000000003'),
     order: 3,
     name: 'Đồng hồ',
     image: '/public/uploads/categories/watch.svg',
-  }, {
+  },
+  {
     _id: mongoose.Types.ObjectId('c00000000000000000000004'),
     order: 4,
     name: 'Laptop',
     image: '/public/uploads/categories/laptop.svg',
-  }, {
+  },
+  //#region Âm thanh
+  {
     _id: mongoose.Types.ObjectId('c00000000000000000000005'),
     order: 5,
-    name: 'Máy ảnh',
-    image: '/public/uploads/categories/camera.svg',
+    name: 'Âm thanh',
+    image: '/public/uploads/categories/airpods.svg',
   },
-  // Phụ kiện
+  // Âm thanh -> Tai nghe
+  {
+    _id: mongoose.Types.ObjectId('c00000000000000000000030'),
+    order: 5.01,
+    name: 'Tai nghe',
+    parent: mongoose.Types.ObjectId('c00000000000000000000005'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000031'),
+    order: 5.0101,
+    name: 'Không dây - True Wireles',
+    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000032'),
+    order: 5.0102,
+    name: 'Bluetooth',
+    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000033'),
+    order: 5.0103,
+    name: 'Chụp tai',
+    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000034'),
+    order: 5.0104,
+    name: 'Có dây',
+    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000035'),
+    order: 5.0105,
+    name: 'Gaming',
+    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
+  },
+  // Âm thanh -> Loa
+  {
+    _id: mongoose.Types.ObjectId('c00000000000000000000036'),
+    order: 5.02,
+    name: 'Loa',
+    parent: mongoose.Types.ObjectId('c00000000000000000000005'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000037'),
+    order: 5.0201,
+    name: 'Loa bluetooth',
+    parent: mongoose.Types.ObjectId('c00000000000000000000036'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000038'),
+    order: 5.0202,
+    name: 'Loa vi tính',
+    parent: mongoose.Types.ObjectId('c00000000000000000000036'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000039'),
+    order: 5.0203,
+    name: 'Loa kéo',
+    parent: mongoose.Types.ObjectId('c00000000000000000000036'),
+  },
+  //#endregion
+  //#region Phụ kiện
   {
     _id: mongoose.Types.ObjectId('c00000000000000000000006'),
     order: 6,
     name: 'Phụ kiện',
-    image: '/public/uploads/categories/airpods.svg',
+    image: '/public/uploads/categories/camera.svg',
   },
   // Phụ kiện -> Sạc, cáp
   {
@@ -90,44 +150,32 @@ const categoryData = [
     order: 6.0101,
     name: 'Adapter sạc, chuyển đổi',
     parent: mongoose.Types.ObjectId('c00000000000000000000007'),
-  },
-  // Phụ kiện -> Sạc, cáp -> Adapter sạc, chuyển đổi -> Adapter sạc USB"
-  {
+  }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000009'),
     order: 6.010101,
     name: 'Adapter sạc USB',
     parent: mongoose.Types.ObjectId('c00000000000000000000008'),
-  },
-  // Phụ kiện -> Sạc, cáp -> Adapter sạc, chuyển đổi -> Adapter sạc Type C"
-  {
+  }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000010'),
     order: 6.010102,
     name: 'Adapter sạc Type C',
     parent: mongoose.Types.ObjectId('c00000000000000000000008'),
-  },
-  // Phụ kiện -> Sạc, cáp -> Adapter sạc, chuyển đổi -> Adapter sạc"
-  {
+  }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000011'),
     order: 6.010103,
     name: 'Adapter sạc',
     parent: mongoose.Types.ObjectId('c00000000000000000000008'),
-  },
-  // Phụ kiện -> Sạc, cáp -> Adapter sạc, chuyển đổi -> Adapter chuyển đổi
-  {
+  }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000012'),
     order: 6.010104,
     name: 'Adapter chuyển đổi',
     parent: mongoose.Types.ObjectId('c00000000000000000000008'),
-  },
-  // Phụ kiện -> Sạc, cáp -> Adapter sạc, chuyển đổi -> Sạc không dây
-  {
+  }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000013'),
     order: 6.010105,
     name: 'Sạc không dây',
     parent: mongoose.Types.ObjectId('c00000000000000000000008'),
-  },
-  // Phụ kiện -> Sạc, cáp -> Adapter sạc, chuyển đổi -> Sạc xe hơi
-  {
+  }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000014'),
     order: 6.010106,
     name: 'Sạc xe hơi',
@@ -213,137 +261,89 @@ const categoryData = [
   }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000029'),
     order: 6.0403,
+    name: 'Bao da',
+    parent: mongoose.Types.ObjectId('c00000000000000000000026'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000053'),
+    order: 6.0404,
     name: 'Phụ kiện tablet',
     parent: mongoose.Types.ObjectId('c00000000000000000000026'),
-  },
-  // Phụ kiện -> Tai nghe
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000030'),
-    order: 6.05,
-    name: 'Tai nghe',
-    parent: mongoose.Types.ObjectId('c00000000000000000000006'),
-  }, {
-    _id: mongoose.Types.ObjectId('c00000000000000000000031'),
-    order: 6.0501,
-    name: 'Không dây - True Wireles',
-    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
-  }, {
-    _id: mongoose.Types.ObjectId('c00000000000000000000032'),
-    order: 6.0502,
-    name: 'Bluetooth',
-    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
-  }, {
-    _id: mongoose.Types.ObjectId('c00000000000000000000033'),
-    order: 6.0503,
-    name: 'Chụp tai',
-    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
-  }, {
-    _id: mongoose.Types.ObjectId('c00000000000000000000034'),
-    order: 6.0504,
-    name: 'Có dây',
-    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
-  }, {
-    _id: mongoose.Types.ObjectId('c00000000000000000000035'),
-    order: 6.0505,
-    name: 'Gaming',
-    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
-  },
-  // Phụ kiện -> Loa
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000036'),
-    order: 6.06,
-    name: 'Loa',
-    parent: mongoose.Types.ObjectId('c00000000000000000000006'),
-  }, {
-    _id: mongoose.Types.ObjectId('c00000000000000000000037'),
-    order: 6.0601,
-    name: 'Loa bluetooth',
-    parent: mongoose.Types.ObjectId('c00000000000000000000036'),
-  }, {
-    _id: mongoose.Types.ObjectId('c00000000000000000000038'),
-    order: 6.0602,
-    name: 'Loa vi tính',
-    parent: mongoose.Types.ObjectId('c00000000000000000000036'),
-  }, {
-    _id: mongoose.Types.ObjectId('c00000000000000000000039'),
-    order: 6.0603,
-    name: 'Loa kéo',
-    parent: mongoose.Types.ObjectId('c00000000000000000000036'),
   },
   // Phụ kiện -> Phụ kiện laptop
   {
     _id: mongoose.Types.ObjectId('c00000000000000000000040'),
-    order: 6.07,
+    order: 6.05,
     name: 'Phụ kiện laptop',
     parent: mongoose.Types.ObjectId('c00000000000000000000006'),
   }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000041'),
-    order: 6.0701,
+    order: 6.0501,
     name: 'Chuột máy tính',
     parent: mongoose.Types.ObjectId('c00000000000000000000040'),
   }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000042'),
-    order: 6.0702,
+    order: 6.0502,
     name: 'Bàn phím',
     parent: mongoose.Types.ObjectId('c00000000000000000000040'),
   }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000043'),
-    order: 6.0703,
+    order: 6.0503,
     name: 'Miếng lót chuột',
     parent: mongoose.Types.ObjectId('c00000000000000000000040'),
   }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000044'),
-    order: 6.0704,
+    order: 6.0504,
     name: 'Phần mềm',
     parent: mongoose.Types.ObjectId('c00000000000000000000040'),
   },
   // Phụ kiện -> Thiết bị mạng
   {
     _id: mongoose.Types.ObjectId('c00000000000000000000045'),
-    order: 6.08,
+    order: 6.06,
     name: 'Thiết bị mạng',
     parent: mongoose.Types.ObjectId('c00000000000000000000006'),
   },
   // Phụ kiện -> Thiết bị lưu trữ
   {
     _id: mongoose.Types.ObjectId('c00000000000000000000046'),
-    order: 6.09,
+    order: 6.07,
     name: 'Thiết bị lưu trữ',
     parent: mongoose.Types.ObjectId('c00000000000000000000006'),
   }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000047'),
-    order: 6.0901,
+    order: 6.0701,
     name: 'Thẻ nhớ',
     parent: mongoose.Types.ObjectId('c00000000000000000000046'),
   }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000048'),
-    order: 6.0902,
+    order: 6.0702,
     name: 'USB Type C',
     parent: mongoose.Types.ObjectId('c00000000000000000000046'),
   }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000049'),
-    order: 6.0903,
+    order: 6.0703,
     name: 'USB 3.1',
     parent: mongoose.Types.ObjectId('c00000000000000000000046'),
   }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000050'),
-    order: 6.0904,
+    order: 6.0704,
     name: 'USB 3.0',
     parent: mongoose.Types.ObjectId('c00000000000000000000046'),
   }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000051'),
-    order: 6.0905,
+    order: 6.0705,
     name: 'USB 2.0',
     parent: mongoose.Types.ObjectId('c00000000000000000000046'),
   },
   // Phụ kiện -> Phụ kiện khác
   {
     _id: mongoose.Types.ObjectId('c00000000000000000000052'),
-    order: 6.10,
+    order: 6.08,
     name: 'Phụ kiện khác',
     image: '/public/uploads/categories/others.svg',
     parent: mongoose.Types.ObjectId('c00000000000000000000006'),
   }
+  //#endregion
 ];
 
 const brandData = [
@@ -866,6 +866,8 @@ const categoryMap = {
   'may-tinh-bang': mongoose.Types.ObjectId('c00000000000000000000002'),
   'dong-ho-thong-minh': mongoose.Types.ObjectId('c00000000000000000000003'),
   'laptop': mongoose.Types.ObjectId('c00000000000000000000004'),
+  'am-thanh': mongoose.Types.ObjectId('c00000000000000000000005'),
+  'phu-kien': mongoose.Types.ObjectId('c00000000000000000000006'),
 };
 function escapeRegExp(str) {
   return str.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
@@ -944,6 +946,7 @@ async function insertProduct() {
     if (element.productPolicies) { product.policies = element.productPolicies.map(item => standardPolicy(item)); }
     if (element.hightLightImgs) { product.hightLightPics = element.hightLightImgs; }
     if (element.specThumb) { product.specPicture = element.specThumb; }
+    if (element.key) { product.crawlKey = element.key; }
 
     product.variants = element.variants.map(v => ({
       variantName: v.variantName,
