@@ -187,7 +187,7 @@ export default function ProductDetailPage() {
             <Divider />
             <TabPanel value="1">
               <Box sx={{ p: 3 }}>
-                <Markdown children={product.desc} />
+                <Markdown children={product?.desc} />
               </Box>
             </TabPanel>
             {product?.video && (

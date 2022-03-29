@@ -16,7 +16,7 @@ export default function ProductList(props) {
   return (
     <Box display="grid" gridTemplateColumns="repeat(15, 1fr)" gap={1.5} {...other}>
       {products.map((product) => (
-        <Box key={product._id} gridColumn="span 3">
+        <Box key={product._id} gridColumn="span 3" sx={{ display: 'flex' }}>
           <ProductItem product={product} />
         </Box>
       ))}

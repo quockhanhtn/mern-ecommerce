@@ -81,8 +81,13 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
   const [isAddToCart, setIsAddToCart] = useState(false);
   const { user, isAuthenticated } = useAuth();
 
+  if (!product) {
+    return null;
+  }
+
   const { _id, name, price, cover, views, variants, rates } = product;
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
