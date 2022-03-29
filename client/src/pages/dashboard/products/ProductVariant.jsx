@@ -23,7 +23,7 @@ import * as Helper from '../../../helper/listHelper';
 import Scrollbar from '../../../components/Scrollbar';
 import ProductVariantForm from './ProductVariantForm';
 import { ImageBrokenIcon } from '../../../assets';
-import { deleteProductVariant, getProductById } from '../../../redux/actions/products';
+import { deleteProductVariant, getProductById } from '../../../redux/slices/productSlice';
 import { ProductVariantListHead, ProductVariantMoreMenu } from '../../../components/dashboard/products';
 // ----------------------------------------------------------------------
 const ThumbImgStyle = styled('img')(({ theme }) => ({

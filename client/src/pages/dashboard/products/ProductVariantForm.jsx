@@ -27,7 +27,7 @@ import useLocales from '../../../hooks/useLocales';
 import { MIconButton } from '../../../components/@material-extend';
 import { allowImageMineTypes } from '../../../constants/imageMineTypes';
 import { firebaseUploadMultiple, firebaseUploadSingle } from '../../../helper/firebaseHelper';
-import { createProductVariant, getProductById, updateProductVariant } from '../../../redux/actions/products';
+import { createProductVariant, getProductById, updateProductVariant } from '../../../redux/slices/productSlice';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,

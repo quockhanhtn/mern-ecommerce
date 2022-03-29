@@ -28,7 +28,7 @@ import closeFill from '@iconify/icons-eva/close-fill';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllBrands } from '../../../redux/actions/brands';
 import { getAllCategories } from '../../../redux/slices/categorySlice';
-import { createProduct } from '../../../redux/actions/products';
+import { createProduct } from '../../../redux/slices/productSlice';
 // components
 import CountryPicker from '../../../components/CountryPicker';
 import { QuillEditor } from '../../../components/editor';
