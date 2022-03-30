@@ -12,7 +12,7 @@ mongoose.connect(process.env.MONGO_URI)
   })
   .catch(err => console.log('Connect to MongoDB failed', err));
 
-const DATSET_NAME = 'TEST_DATASET';
+const DATSET_NAME = 'CellphonesDataset';
 const REQ_CONFIG = { headers: { Authorization: "a3fa7034b71ae0741665767fd902193e" } };
 const REQ_URL = `https://recom.fpt.vn/api/v0.1/recommendation/dataset/${DATSET_NAME}/append`;
 

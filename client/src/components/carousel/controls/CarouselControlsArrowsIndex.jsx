@@ -35,26 +35,36 @@ CarouselControlsArrowsIndex.propTypes = {
   index: PropTypes.number,
   total: PropTypes.number,
   onNext: PropTypes.func,
-  onPrevious: PropTypes.func
+  onPrevious: PropTypes.func,
+  showArrow: PropTypes.bool
 };
 
-export default function CarouselControlsArrowsIndex({ index, total, onNext, onPrevious, ...other }) {
+export default function CarouselControlsArrowsIndex(props) {
+  const { index, total, onNext, onPrevious, showArrow = true, ...other } = props;
   const theme = useTheme();
   const isRTL = theme.direction === 'rtl';
 
   return (
     <RootStyle {...other}>
-      <ArrowStyle size="small" onClick={onPrevious}>
-        <Icon width={20} height={20} icon={isRTL ? arrowRightFill : arrowLeftFill} />
-      </ArrowStyle>
+      {showArrow ? (
+        <ArrowStyle size="small" onClick={onPrevious}>
+          <Icon width={20} height={20} icon={isRTL ? arrowRightFill : arrowLeftFill} />
+        </ArrowStyle>
+      ) : (
+        <ArrowStyle size="small" />
+      )}
 
       <Typography variant="subtitle2">
         {index + 1}/{total}
       </Typography>
 
-      <ArrowStyle size="small" onClick={onNext}>
-        <Icon width={20} height={20} icon={isRTL ? arrowLeftFill : arrowRightFill} />
-      </ArrowStyle>
+      {showArrow ? (
+        <ArrowStyle size="small" onClick={onNext}>
+          <Icon width={20} height={20} icon={isRTL ? arrowLeftFill : arrowRightFill} />
+        </ArrowStyle>
+      ) : (
+        <ArrowStyle size="small" />
+      )}
     </RootStyle>
   );
 }

@@ -11,10 +11,10 @@ import { useSnackbar } from 'notistack';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { MButton, MIconButton } from '../../@material-extend';
-import { fNumber, fShortenNumber } from '../../../utils/formatNumber';
+import { fNumber, fCurrency } from '../../../utils/formatNumber';
 import useOrderFlow from '../../../hooks/useOrderFlow';
 import { addProductToCartDB } from '../../../redux/slices/writeOrderSlice';
-import useAuth from '../../../hooks/useAuth';
+import { useAuth, useLocales } from '../../../hooks';
 // --------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -79,7 +79,8 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [isAddToCart, setIsAddToCart] = useState(false);
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
+  const { t, currentLang } = useLocales();
 
   if (!product) {
     return null;
@@ -144,23 +145,14 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
     <RootStyle>
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-          <Typography variant="h5" paragraph>
-            {name}
-          </Typography>
-
-          <Stack spacing={0.5} direction="row" alignItems="center" sx={{ mb: 2 }}>
-            <Rating value={rates?.length || 4.5} precision={0.1} readOnly />
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              ({fShortenNumber(views)}
-              &nbsp;lượt xem)
-            </Typography>
-          </Stack>
-
-          <Typography variant="h4" sx={{ mb: 3 }}>
-            <Box component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>
-              {variants?.[indexVariant] && `${fNumber(variants?.[indexVariant]?.marketPrice)} ₫`}
+          <Typography variant="h3" component="span">
+            {variants[0].price ? fCurrency(variants[0].price, currentLang.value) : t('product.free')}
+            <Box
+              component="span"
+              sx={{ ml: 3, color: 'text.disabled', textDecoration: 'line-through', fontSize: '75%' }}
+            >
+              {variants[0].marketPrice && fCurrency(variants[0].marketPrice, currentLang.value)}
             </Box>
-            &nbsp;{`${fNumber(variants?.[indexVariant]?.price)} ₫`}
           </Typography>
 
           <Divider sx={{ borderStyle: 'dashed' }} />
@@ -211,6 +203,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
               </div>
             </Stack>
           </Stack>
+
           <Divider sx={{ borderStyle: 'dashed' }} />
 
           <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 5 }}>

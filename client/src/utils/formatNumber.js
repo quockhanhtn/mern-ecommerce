@@ -4,10 +4,12 @@ import numeral from 'numeral';
 // ----------------------------------------------------------------------
 
 export function fCurrency(number, language = 'vi') {
-  const suffix = language === 'vi' ? 'đ' : '$';
-  const price = language === 'vi' ? number : parseFloat(number) / 23000;
   const format = language === 'vi' ? '0,0' : '0,0[.]00';
-  return `${numeral(price).format(format)} ${suffix}`;
+  const price = language === 'vi' ? number : parseFloat(number) / 23000;
+  if (language === 'en') {
+    return `$ ${numeral(price).format(format)}`;
+  }
+  return `${numeral(price).format(format)} đ`.replace(/,+/g, '.');
 }
 
 export function fPercent(number) {
