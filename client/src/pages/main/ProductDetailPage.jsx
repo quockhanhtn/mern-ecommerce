@@ -1,16 +1,22 @@
+// icon
 import { Icon } from '@iconify/react';
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill';
 import clockFill from '@iconify/icons-eva/clock-fill';
 import roundVerified from '@iconify/icons-ic/round-verified';
 import roundVerifiedUser from '@iconify/icons-ic/round-verified-user';
+//
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import SimpleBarReact from 'simplebar-react';
 // material
 import { alpha, experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
-import { Box, Tab, Card, Grid, Divider, Container, Typography, Rating, Stack } from '@material-ui/core';
+import { Box, Button, Tab, Card, Grid, Divider, Container, Typography, Rating, Stack } from '@material-ui/core';
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductById } from '../../redux/slices/productSlice';
+import * as api from '../../api';
+import { getRecommendation } from '../../api/fpt';
 // hooks
 import useLocales from '../../hooks/useLocales';
 // components
@@ -19,6 +25,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 import Markdown from '../../components/Markdown';
 import { ProductDetailsReview, ProductDetailsSummary } from '../../components/dashboard/product-details';
 import { CarouselThumbnail } from '../../components/carousel';
+import ProductList from '../../components/e-commerce/ProductList';
 //
 import { fShortenNumber } from '../../utils/formatNumber';
 
@@ -57,6 +64,22 @@ export default function ProductDetailPage() {
   const [tab, setTab] = useState('1');
   const [selectedVariant, setSelectedVariant] = useState(0);
 
+  const [isLoadingRelated, setIsLoadingRelated] = useState(false);
+  const [relatedItems, setRelatedItems] = useState([]);
+
+  async function fetchRelatedItems(productId) {
+    setIsLoadingRelated(true);
+    try {
+      const fptRes = await getRecommendation(productId);
+      const listIds = fptRes.data.data.map((x) => x.replace('{', '').replace('}', ''));
+      const { data } = await api.getRelatedProduct(listIds.slice(0, 10));
+      setRelatedItems(data.data);
+    } catch (e) {
+      console.log('error when fetch related products', e);
+    }
+    setIsLoadingRelated(false);
+  }
+
   useEffect(() => {
     dispatch(getProductById(productSlug));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,7 +91,11 @@ export default function ProductDetailPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product, selectedVariant]);
 
-  const handleChangeTab = (event, newValue) => {
+  useEffect(() => {
+    fetchRelatedItems(product?._id);
+  }, [product?._id]);
+
+  const handleChangeTab = (e, newValue) => {
     setTab(newValue);
   };
 
@@ -113,7 +140,7 @@ export default function ProductDetailPage() {
 
   return (
     <Page title={(product?.name?.concat(' - ') || '') + t('home.page-title')}>
-      <Container maxWidth="lg" sx={{ paddingY: 2 }}>
+      <Container maxWidth="lg" sx={{ paddingTop: 2, paddingBottom: 5 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <Typography component="h2" variant="h4">
             {product?.name}
@@ -142,7 +169,7 @@ export default function ProductDetailPage() {
           </Grid>
         </Card>
 
-        <Grid container sx={{ my: 8 }}>
+        <Grid container sx={{ my: 4 }}>
           {productMoreInfos.map((item) => (
             <Grid item xs={12} md={4} key={item.title}>
               <Box
@@ -183,9 +210,11 @@ export default function ProductDetailPage() {
             </Box>
             <Divider />
             <TabPanel value="1">
-              <Box sx={{ p: 3 }}>
-                <Markdown children={product?.desc} />
-              </Box>
+              <SimpleBarReact style={{ maxHeight: '600px' }}>
+                <Box sx={{ p: 3 }}>
+                  <Markdown children={product?.desc} />
+                </Box>
+              </SimpleBarReact>
             </TabPanel>
             {product?.video && (
               <TabPanel value="2">
@@ -205,6 +234,16 @@ export default function ProductDetailPage() {
             </TabPanel>
           </TabContext>
         </Card>
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant="h5" component="h2" sx={{ padding: 0, mt: 5, mb: 2 }}>
+            SẢN PHẨM TƯƠNG TỰ
+          </Typography>
+          <Button color="inherit" href={`/related/${product?.slug}`} endIcon={<Icon icon={arrowIosForwardFill} />}>
+            Xem thêm
+          </Button>
+        </Box>
+        <ProductList products={relatedItems} isLoading={isLoadingRelated} limit={5} />
       </Container>
     </Page>
   );

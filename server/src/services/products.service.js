@@ -19,7 +19,7 @@ export default {
   deleteProductVariants,
 };
 
-const SELECT_FIELD = '_id name slug video overSpecs origin category brand tags views rate variants quantity warrantyPeriod createdAt updatedAt';
+const SELECT_FIELD = '_id name slug desc video overSpecs origin category brand tags views rate variants quantity warrantyPeriod createdAt updatedAt';
 const POPULATE_OPTS = [
   {
     path: 'category',

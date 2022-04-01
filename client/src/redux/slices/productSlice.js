@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import * as api from '../../api';
+import { getRecommendation } from '../../api/fpt';
 
 const initialState = {
   isLoading: true,
@@ -7,7 +8,13 @@ const initialState = {
   item: null,
   list: [],
   listFull: [],
-  pagination: {}
+  pagination: {},
+  related: {
+    isLoading: false,
+    error: null,
+    result: [],
+    map: {}
+  }
 };
 
 const productSlice = createSlice({
@@ -70,6 +77,26 @@ const productSlice = createSlice({
     },
     deleteVariantSuccess(state, action) {
       return { ...state, list: state.list.variants.filter((cat) => cat.sku !== action.payload), hasError: false };
+    },
+    // recommendations
+    startRelatedLoading(state) {
+      state.related.isLoading = true;
+    },
+    hasRelatedError(state, action) {
+      state.related.error = action.payload;
+      state.related.isLoading = false;
+    },
+    getRelatedSuccess(state, action) {
+      state.related.isLoading = false;
+      state.related.error = null;
+      state.related[action.payload._id] = {
+        listIds: action.payload.listIds,
+        products: action.payload.products
+      };
+    },
+    relatedExists(state, action) {
+      state.related.isLoading = false;
+      state.related.error = null;
     }
   }
 });
@@ -167,6 +194,28 @@ export const deleteProductVariant = (productId, sku) => async (dispatch) => {
     dispatch(actions.startLoading());
     await api.deleteProductVariant(productId, sku);
     dispatch(actions.deleteVariantSuccess(sku));
+  } catch (e) {
+    dispatch(actions.hasError(e));
+  }
+};
+
+export const getRelatedProducts = (id) => async (dispatch) => {
+  try {
+    dispatch(actions.startLoading());
+    if (reducer.related?.[id]) {
+      dispatch(actions.relatedExists(id));
+    } else {
+      const fptRes = await getRecommendation(id);
+      const listIds = fptRes.data.data.map((x) => x.replace('{', '').replace('}', ''));
+      const { data } = await api.getRelatedProduct(listIds.slice(0, 5));
+      dispatch(
+        actions.getRelatedSuccess({
+          _id: id,
+          listIds: fptRes.data.data,
+          products: data.data
+        })
+      );
+    }
   } catch (e) {
     dispatch(actions.hasError(e));
   }
