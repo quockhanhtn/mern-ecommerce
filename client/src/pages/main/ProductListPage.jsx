@@ -20,7 +20,7 @@ import {
 import { LoadingButton } from '@material-ui/lab';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllProducts } from '../../redux/actions/products';
+import { getAllProducts } from '../../redux/slices/productSlice';
 // hooks
 import useQuery from '../../hooks/useQuery';
 import useLocales from '../../hooks/useLocales';
@@ -61,7 +61,7 @@ export default function ProductListPage() {
 
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
-  const limit = 8;
+  const limit = 10;
 
   useEffect(() => {
     setCategoriesSelected([...categoryList.filter((x) => categorySlug?.split(',').includes(x.slug))]);

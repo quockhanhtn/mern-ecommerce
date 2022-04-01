@@ -3,6 +3,7 @@ import { allowImageMineTypes } from '../../constants.js';
 import {
   getAllProducts,
   getProductById,
+  getListProductsByIds,
   getSuggestProducts,
   createProduct,
   updateProduct,
@@ -37,6 +38,7 @@ router.get('/all', getFullAllProducts);
 router.get('/specs', getProductSpecifications);
 router.get('/search/suggest', getSuggestProducts);
 router.get('/:identity', getProductById);
+router.post('/get-by-ids', getListProductsByIds);
 
 router.post('/',
   isAdminOrStaff,

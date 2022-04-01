@@ -13,6 +13,7 @@ import baselineSettings from '@iconify/icons-ic/baseline-settings';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, IconButton, AppBar, Toolbar, Container, Stack } from '@material-ui/core';
 // hooks
+import { useDispatch, useSelector } from 'react-redux';
 import useOffSetTop from '../../hooks/useOffSetTop';
 import useLocales from '../../hooks/useLocales';
 // components
@@ -26,6 +27,8 @@ import SearchBar from './SearchBar';
 import AccountPopover from '../common/AccountPopover';
 import LanguagePopover from '../common/LanguagePopover';
 import useOrderFlow from '../../hooks/useOrderFlow';
+import useAuth from '../../hooks/useAuth';
+import { getProductToCartDB } from '../../redux/slices/writeOrderSlice';
 
 // ----------------------------------------------------------------------
 const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
@@ -104,6 +107,9 @@ export default function MainNavbar({ categoryList }) {
   const { t } = useLocales();
   const isOffset = useOffSetTop(100);
   const { quantityInCart, getCart } = useOrderFlow();
+  const { isAuthenticated } = useAuth();
+  const dispatch = useDispatch();
+  const { list: listProducts } = useSelector((state) => state.writeOrder);
   useEffect(() => {
     getCart().then(() => {
       if (isDev) {
@@ -111,6 +117,12 @@ export default function MainNavbar({ categoryList }) {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(getProductToCartDB());
+    }
+  }, [dispatch]);
 
   const accountMenus = [
     {
@@ -169,7 +181,7 @@ export default function MainNavbar({ categoryList }) {
 
             <NavbarItem text={t('home.order-history')} icon={history24Filled} color="inherit" href="/order-history" />
             <NavbarItem
-              badgeContent={quantityInCart}
+              badgeContent={isAuthenticated && listProducts ? listProducts?.length : quantityInCart}
               text={t('home.cart')}
               icon={cart24Regular}
               color="primary"

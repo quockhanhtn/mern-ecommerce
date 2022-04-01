@@ -76,6 +76,7 @@ const productSchema = mongoose.Schema({
   isHide: { type: Boolean, default: false },
   isOutOfStock: { type: Boolean, default: false },
 
+  crawlKey: { type: String, trim: true, required: false }, // use for detect crawl product
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, { timestamps: true, versionKey: false });
