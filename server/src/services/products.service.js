@@ -19,7 +19,7 @@ export default {
   deleteProductVariants,
 };
 
-const SELECT_FIELD = '_id name slug desc video overSpecs origin category brand tags views rate variants quantity warrantyPeriod code createdAt updatedAt';
+const SELECT_FIELD = '_id name slug desc video overSpecs origin category brand tags views rate variants quantity warrantyPeriod createdAt updatedAt';
 const POPULATE_OPTS = [
   {
     path: 'category',
@@ -218,7 +218,7 @@ async function deleteProductVariants(identity, sku) {
  * @returns {object} - list of products, total count
  */
 async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy = 'createdAt', sortType = -1) {
-  if (fields === null || fields == '') { fields = SELECT_FIELD; }
+  if (fields === null || fields == '' || fields === undefined) { fields = SELECT_FIELD; }
 
   if (fields.indexOf(',') > -1) {
     fields = fields.split(',').join(' ');
@@ -232,13 +232,16 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy 
     populateOpts.push({ path: 'brand', select: 'name slug image _id', model: 'Brand' },);
   }
 
+  const sortOtp = {};
+  sortOtp[sortBy] = sortType;
+
   const countAll = await Product.estimatedDocumentCount();
   const total = await Product.countDocuments(JSON.parse(JSON.stringify(filter)), null).exec();
   const list = await Product.find(filter)
     .select(fields)
     .populate(populateOpts)
     .skip((page - 1) * limit)
-    .sort({ [sortBy]: sortType })
+    .sort(sortOtp)
     .limit(limit)
     .lean().exec();
 

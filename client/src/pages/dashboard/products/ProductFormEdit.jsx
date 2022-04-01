@@ -25,7 +25,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import useLocales from '../../../hooks/useLocales';
 import { getAllBrands } from '../../../redux/actions/brands';
 import { getAllCategories } from '../../../redux/slices/categorySlice';
-import { getProductById, updateProduct } from '../../../redux/actions/products';
+import { getProductById, updateProduct } from '../../../redux/slices/productSlice';
 // ----------------------------------------------------------------------
 
 const TAGS_OPTION = [

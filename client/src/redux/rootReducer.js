@@ -3,7 +3,7 @@ import categoryReducer from './slices/categorySlice';
 import writeOrderReducer from './slices/writeOrderSlice';
 import brandsReducer from './reducers/brands';
 import discountsReducer from './reducers/discounts';
-import productsReducer from './reducers/products';
+import productsReducer from './slices/productSlice';
 import usersReducer from './reducers/users';
 import accountReducer from './reducers/account';
 import ordersReducer from './reducers/orders';
