@@ -41,7 +41,7 @@ class ApiError extends ExtendableError {
   }
 
   /**
-   * Simple helper method to create an error of type APIError.  
+   * Simple helper method to create an error ins of type APIError.  
    * @param {string} message  - Error message.
    * @param {number} status   - HTTP status code of error.
    * @returns 

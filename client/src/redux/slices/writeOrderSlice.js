@@ -8,8 +8,8 @@ const initialState = {
   list: []
 };
 
-const writeOrderSlice = createSlice({
-  name: 'writeOrder',
+const cartSlice = createSlice({
+  name: 'cart',
   initialState,
   reducers: {
     startLoading(state) {
@@ -48,14 +48,14 @@ const writeOrderSlice = createSlice({
   }
 });
 
-const { actions, reducer } = writeOrderSlice;
+const { actions, reducer } = cartSlice;
 
 export default reducer;
 
-export const addProductToCartDB = (newProduct) => async (dispatch) => {
+export const addItemToCart = (item) => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    const { data } = await api.addProductToCartDB(newProduct);
+    const { data } = await api.addItemToCart(item);
     dispatch(actions.create(data.data));
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
@@ -65,7 +65,7 @@ export const addProductToCartDB = (newProduct) => async (dispatch) => {
 export const increaseProductToCartDB = (productInfo) => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    const { data } = await api.increaseProductToCartDB(productInfo);
+    const { data } = await api.increaseQty(productInfo);
     dispatch(actions.update(data.data));
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
@@ -75,7 +75,7 @@ export const increaseProductToCartDB = (productInfo) => async (dispatch) => {
 export const decreaseProductToCartDB = (productInfo) => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    const { data } = await api.decreaseProductToCartDB(productInfo);
+    const { data } = await api.decreaseQty(productInfo);
     dispatch(actions.update(data.data));
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
@@ -85,7 +85,7 @@ export const decreaseProductToCartDB = (productInfo) => async (dispatch) => {
 export const deleteProductToCartDB = (productInfo) => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    await api.deleteProductToCartDB(productInfo);
+    await api.removeItem(productInfo);
     dispatch(actions.delete({ _id: productInfo.productId }));
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
@@ -95,7 +95,7 @@ export const deleteProductToCartDB = (productInfo) => async (dispatch) => {
 export const getProductToCartDB = () => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    const { data } = await api.getProductToCartDB();
+    const { data } = await api.getCartItems();
     dispatch(actions.getAllSuccess(data.data || []));
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
@@ -105,7 +105,7 @@ export const getProductToCartDB = () => async (dispatch) => {
 export const cleanProductToCartDB = () => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    await api.cleanProductToCartDB();
+    await api.cleanCart();
     dispatch(actions.delete([]));
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));

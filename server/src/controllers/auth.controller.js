@@ -1,6 +1,6 @@
 import userService from '../services/user.service.js';
 import authService from '../services/auth.service.js';
-import googleServices from '../services/google.services.js';
+import googleServices from '../services/google.service.js';
 import resUtils from '../utils/res-utils.js';
 import { formatImageUrl } from '../utils/format-utils.js';
 import { generateToken } from '../utils/jwt-utils.js';

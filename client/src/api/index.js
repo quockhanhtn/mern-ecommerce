@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api/v1';
+const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api/v2';
 const API = axios.create({ baseURL });
 
 // Add Header Authorization
@@ -107,14 +107,14 @@ export const orderManager = {
   create: (newOrder) => API.post('/orders/manager', newOrder),
   update: (id, updatedOrder) => API.patch(`/orders/manager/${id}`, updatedOrder)
 };
-// ----------------------------Comment ---------------------------
+// ----------------------------Comment --------------------------------
 export const getAllComment = (product) => API.get(`/comments/${product}`);
 export const createComment = (newComment) => API.post(`/comments`, newComment);
 
-// ----------------------------Write DB for Cart ---------------------------
-export const getProductToCartDB = () => API.get(`/write-order`);
-export const addProductToCartDB = (newProduct) => API.post(`/write-order`, newProduct);
-export const deleteProductToCartDB = (productInfo) => API.post(`/write-order/delete`, productInfo);
-export const increaseProductToCartDB = (productInfo) => API.patch(`/write-order/increase`, productInfo);
-export const decreaseProductToCartDB = (productInfo) => API.patch(`/write-order/decrease`, productInfo);
-export const cleanProductToCartDB = () => API.delete(`/write-order/delete-all`);
+// ----------------------------Cart------------------------------------
+export const getCartItems = () => API.get(`/cart`);
+export const addItemToCart = (item) => API.post(`/cart`, item);
+export const increaseQty = (item) => API.put(`/cart`, { ...item, delta: 1 });
+export const decreaseQty = (item) => API.put(`/cart`, { ...item, delta: -1 });
+export const removeItem = (productInfo) => API.delete(`/cart/delete`, productInfo);
+export const cleanCart = () => API.delete(`/cart/clean`);

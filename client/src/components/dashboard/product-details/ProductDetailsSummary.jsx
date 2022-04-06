@@ -1,20 +1,23 @@
+// icons
 import { Icon } from '@iconify/react';
-import { useNavigate } from 'react-router-dom';
 import add12Filled from '@iconify/icons-fluent/add-12-filled';
 import subtract12Filled from '@iconify/icons-fluent/subtract-12-filled';
 import roundAddShoppingCart from '@iconify/icons-ic/round-add-shopping-cart';
-import { useFormik, Form, FormikProvider, useField } from 'formik';
-// material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Stack, Button, Rating, Divider, Typography, FormHelperText } from '@material-ui/core';
+//
+
 import { useSnackbar } from 'notistack';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useFormik, Form, FormikProvider, useField } from 'formik';
+// material
+import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { Box, Stack, Button, Divider, Typography, FormHelperText } from '@material-ui/core';
+// components
 import { MButton, MIconButton } from '../../@material-extend';
-import { fNumber, fCurrency } from '../../../utils/formatNumber';
-import useOrderFlow from '../../../hooks/useOrderFlow';
-import { addProductToCartDB } from '../../../redux/slices/writeOrderSlice';
-import { useAuth, useLocales } from '../../../hooks';
+import { fCurrency } from '../../../utils/formatNumber';
+import { addItemToCart } from '../../../redux/slices/writeOrderSlice';
+import { useAuth, useLocales, useOrderFlow } from '../../../hooks';
 // --------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -131,7 +134,9 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
     // Add to DB
     if (isAuthenticated) {
       setIsAddToCart(true);
-      dispatch(addProductToCartDB(productInCart)).then(() => {
+      dispatch(
+        addItemToCart({ productId: product._id, sku: product.variants[indexVariant].sku, qty: values.quantity })
+      ).then(() => {
         setIsAddToCart(false);
       });
     }

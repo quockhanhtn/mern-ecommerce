@@ -1,6 +1,6 @@
 import resUtils from '../utils/res-utils.js';
 import userService from '../services/user.service.js';
-import addressService from '../services/addresses.services.js';
+import addressService from '../services/addresses.service.js';
 import authServices from '../services/auth.service.js';
 
 export const getInfo = async (req, res, next) => {

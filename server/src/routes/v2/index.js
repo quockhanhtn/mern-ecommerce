@@ -12,7 +12,7 @@ import commentRoutes from './comments.route.js';
 import discountRoutes from './discounts.route.js';
 import orderRoutes from './order.route.js';
 import paymentRoutes from './payment.route.js';
-import writeOrderRoutes from './write-order.route.js';
+import cartRoutes from './cart.route.js';
 
 
 const router = express.Router();
@@ -39,6 +39,6 @@ router.use('/comments', commentRoutes);
 router.use('/discounts', discountRoutes);
 router.use('/orders', orderRoutes);
 router.use('/payment', paymentRoutes);
-router.use('/write-order', writeOrderRoutes);
+router.use('/cart', cartRoutes);
 
 export default router;

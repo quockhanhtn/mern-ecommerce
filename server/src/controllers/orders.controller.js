@@ -1,5 +1,5 @@
 import resUtils from '../utils/res-utils.js';
-import orderService from '../services/order.services.js';
+import orderService from '../services/order.service.js';
 import vnpayService from '../services/vnpay.service.js';
 import firebaseService from '../services/firebase.service.js';
 import constants from '../constants.js';

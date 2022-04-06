@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import { allowImageMineTypes } from '../../constants.js';
 
 import {
@@ -19,7 +19,7 @@ import {
 import { isAuthorized } from '../../middlewares/jwt-auth.js';
 import { handleFilePath, multerUpload } from '../../utils/upload-utils.js';
 
-const router = express.Router();
+const router = Router();
 const upload = multerUpload('/users/', allowImageMineTypes);
 
 router.route('/')
