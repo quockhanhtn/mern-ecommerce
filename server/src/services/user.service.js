@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import constants from '../constants.js';
 import User from '../models/user.model.js';
-import strUtils from '../utils/str-utils.js';
+import StringUtils from '../utils/StringUtils.js';
 
 export default {
   getAll,
@@ -23,7 +23,7 @@ const SELECTED_FIELDS =
  * @returns all users
  */
 async function getAll() {
-  return await User.find()
+  return User.find()
     .sort({ createdAt: -1 })
     .lean({ virtuals: true }).exec();
 }
@@ -33,7 +33,7 @@ async function getAll() {
  * @returns all users
  */
 async function getListByRole(role) {
-  return await User.find({ role })
+  return User.find({ role })
     .sort({ createdAt: -1 })
     .lean({ virtuals: true }).exec();
 }
@@ -47,20 +47,18 @@ async function getListByRole(role) {
 async function getOne(identity, selectFields = null, needVirtuals = true) {
   const filter = {};
 
-  if (strUtils.isEmailAddress(identity)) {
+  if (StringUtils.isEmailAddress(identity)) {
     filter.email = identity;
-  } else if (strUtils.isPhoneNumber(identity)) {
+  } else if (StringUtils.isPhoneNumber(identity)) {
     filter.phone = identity;
   } else {
     filter.username = identity;
   }
 
-  const user = await User.findOne(filter)
+  return User.findOne(filter)
     .select(selectFields)
     .lean({ virtuals: needVirtuals })
     .exec();
-
-  return user;
 }
 
 async function getOneById(id, selectFields = null, needVirtuals = true) {
@@ -68,12 +66,10 @@ async function getOneById(id, selectFields = null, needVirtuals = true) {
     selectFields = SELECTED_FIELDS;
   }
 
-  const user = await User.findById(id)
+  return User.findById(id)
     .select(selectFields)
     .lean({ virtuals: needVirtuals })
     .exec();
-
-  return user;
 }
 
 async function getOrCreateByGoogleId(
@@ -119,7 +115,7 @@ async function create(data) {
     _id: new mongoose.Types.ObjectId(),
     ...data
   });
-  return await user.save();
+  return user.save();
 }
 
 /**
@@ -154,13 +150,11 @@ async function update(identity, updatedData) {
 async function updateById(id, updated, selectFields = null) {
   if (!selectFields) { selectFields = SELECTED_FIELDS; }
 
-  const user = await User.findByIdAndUpdate(
+  return User.findByIdAndUpdate(
     id,
     updated,
     { new: true, select: SELECTED_FIELDS }
   );
-
-  return user;
 }
 
 /**
@@ -169,7 +163,7 @@ async function updateById(id, updated, selectFields = null) {
  * @returns true if delete successfully else false
  */
 async function remove(identity) {
-  let filter = strUtils.isUUID(identity)
+  let filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
   const deletedUser = await User.findOneAndDelete(filter);

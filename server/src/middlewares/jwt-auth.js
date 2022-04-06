@@ -1,7 +1,7 @@
 import constants from '../constants.js';
 import userService from '../services/user.service.js';
 import ApiError from '../utils/APIError.js';
-import { jwtMiddleware } from '../utils/jwt-utils.js';
+import JwtUtils from '../utils/JwtUtils.js';
 
 const roleAdmin = constants.USER.ROLE.ADMIN;
 const roleStaff = constants.USER.ROLE.STAFF;
@@ -17,7 +17,7 @@ function authorized(roles = []) {
 
   return [
     // authenticate JWT token and attach user to request object (req.user)
-    jwtMiddleware,
+    JwtUtils.jwtMiddleware,
 
     async (req, _, next) => {
       const user = await userService.getOneById(req.user._id, '_id role', false);
@@ -45,7 +45,7 @@ export const isCustomer = authorized(roleCustomer);
 export const isGuestOrAuthorized = (req, res, next) => {
   let token = req.headers['x-access-token'] || req.headers['authorization'];
   if (token) {
-    return jwtMiddleware(req, res, next);
+    return JwtUtils.jwtMiddleware(req, res, next);
   }
   next();
 }

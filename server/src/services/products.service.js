@@ -1,7 +1,7 @@
 import Product from '../models/product.model.js';
 import categoryService from './categories.service.js'
 import brandService from './brands.service.js'
-import strUtils from '../utils/str-utils.js';
+import StringUtils from '../utils/StringUtils.js';
 import ApiError from '../utils/APIError.js';
 
 export default {
@@ -74,7 +74,7 @@ function initialProductVariant(data) {
   // product pictures
   if (data.pictures) {
     if (typeof data.pictures === 'string') {
-      variant.pictures = strUtils.splitsAndTrim(data.pictures, ',');
+      variant.pictures = StringUtils.splitsAndTrim(data.pictures, ',');
     } else if (Array.isArray(data.pictures)) {
       variant.pictures = data.pictures;
     }
@@ -125,7 +125,7 @@ async function initialProduct(data, isAddNew = false) {
   }
   if (data.tags) {
     if (typeof data.tags === 'string') {
-      product.tags = strUtils.splitsAndTrim(data.tags, ',');
+      product.tags = StringUtils.splitsAndTrim(data.tags, ',');
     } else if (Array.isArray(data.tags)) {
       product.tags = data.tags;
     }
@@ -153,7 +153,7 @@ async function initialProduct(data, isAddNew = false) {
  * @returns
  */
 async function getOneProduct(identity, needIncView = false, notLean = false) {
-  const filter = strUtils.isUUID(identity)
+  const filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
 
@@ -201,7 +201,7 @@ async function updateProductVariants(productIdentity, sku, variantData) {
 }
 
 async function deleteProductVariants(identity, sku) {
-  const filter = strUtils.isUUID(identity)
+  const filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
   await Product.findOneAndUpdate(filter, { $pull: { variants: { sku: sku } } });
@@ -299,7 +299,7 @@ async function createProduct(data) {
   if (data.specPicture) { product.specPicture = data.specPicture; }
   if (data.tags) {
     if (typeof data.tags === 'string') {
-      product.tags = strUtils.splitsAndTrim(data.tags, ',');
+      product.tags = StringUtils.splitsAndTrim(data.tags, ',');
     } else if (Array.isArray(data.tags)) {
       product.tags = data.tags;
     }
@@ -311,14 +311,14 @@ async function createProduct(data) {
 
   if (data.policies) {
     if (typeof data.policies === 'string') {
-      product.policies = strUtils.splitsAndTrim(data.policies, ',');
+      product.policies = StringUtils.splitsAndTrim(data.policies, ',');
     } else if (Array.isArray(data.policies)) {
       product.policies = data.policies;
     }
   }
   if (data.hightLightPics) {
     if (typeof data.hightLightPics === 'string') {
-      product.hightLightPics = strUtils.splitsAndTrim(data.hightLightPics, ',');
+      product.hightLightPics = StringUtils.splitsAndTrim(data.hightLightPics, ',');
     } else if (Array.isArray(data.hightLightPics)) {
       product.hightLightPics = data.hightLightPics;
     }
@@ -338,7 +338,7 @@ async function createProduct(data) {
 }
 
 async function updateProduct(identity, data) {
-  const filter = strUtils.isUUID(identity)
+  const filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
 
@@ -347,14 +347,14 @@ async function updateProduct(identity, data) {
 }
 
 async function removeProduct(identity) {
-  const filter = strUtils.isUUID(identity)
+  const filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
   return Product.findOneAndDelete(filter);
 }
 
 async function rateProduct(identity, ip, rateStar) {
-  const filter = strUtils.isUUID(identity)
+  const filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
 

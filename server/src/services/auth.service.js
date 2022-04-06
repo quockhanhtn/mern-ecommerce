@@ -1,8 +1,8 @@
 import RefreshToken from '../models/refresh-token.model.js';
 import userService from './user.service.js';
 import { randomBytes } from 'crypto';
-import { generateToken } from '../utils/jwt-utils.js';
-import { hashPassword, comparePassword } from '../utils/cipher-utils.js';
+import JwtUtils from '../utils/JwtUtils.js';
+import CipherUtils from '../utils/CipherUtils.js';
 import ApiError from '../utils/APIError.js';
 import responseDef from '../responseCode.js';
 
@@ -30,7 +30,7 @@ async function googleAuthenticate(payload, ipAddress) {
   }
 
   // authentication successful so generate jwt and refresh tokens
-  const jwtToken = generateToken({ _id: user._id });
+  const jwtToken = JwtUtils.generateToken({ _id: user._id });
   const refreshToken = generateRefreshToken(user._id, ipAddress);
 
   // save refresh token
@@ -49,7 +49,7 @@ async function authenticate(username, password, ipAddress) {
     throw ApiError.simple2(responseDef.AUTH.USER_NOT_FOUND);
   }
 
-  const isMatch = comparePassword(password, user.password);
+  const isMatch = CipherUtils.comparePassword(password, user.password);
   if (!isMatch) {
     throw ApiError.simple2(responseDef.AUTH.INVALID_PASSWORD);
   }
@@ -125,7 +125,7 @@ async function changePassword(userId, oldPassword, newPassword) {
     // user created with google/facebook sign-in
     updateData.emptyPassword = false;
   } else {
-    const isMatch = comparePassword(oldPassword, user.password);
+    const isMatch = CipherUtils.comparePassword(oldPassword, user.password);
     if (!isMatch) {
       throw ApiError.simple2(responseDef.AUTH.INVALID_PASSWORD);
     }
@@ -146,7 +146,7 @@ async function changePassword(userId, oldPassword, newPassword) {
     throw ApiError.simple2(responseDef.AUTH.PASSWORD_TOO_LONG);
   }
 
-  updateData.password = hashPassword(newPassword);
+  updateData.password = CipherUtils.hashPassword(newPassword);
   const result = await userService.updateById(user._id, updateData);
   return result;
 }

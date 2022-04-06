@@ -1,7 +1,7 @@
-import express from 'express';
+import { Router } from 'express';
 import { getVnpayResult } from '../../controllers/payment.controller.js';
 
-const router = express.Router();
+const router = Router();
 
 router.route('/vnpay/callback').get(getVnpayResult);
 

@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "predev": "cls",
     "dev": "nodemon ./src/index.js --trace-warnings --unhandled-rejections=strict",
     "start": "node ./src/index.js",
     "insert-data": "nodemon ./tool/insert-data.js",

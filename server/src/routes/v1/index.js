@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 
 // import all the routes here
 import authRoutes from './auth.route.js';
@@ -14,7 +14,7 @@ import orderRoutes from './order.route.js';
 import paymentRoutes from './payment.route.js';
 
 
-const router = express.Router();
+const router = Router();
 
 /**
  * GET v1/status

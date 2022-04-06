@@ -1,9 +1,9 @@
-import express from 'express';
+import { Router } from 'express';
 import Joi from 'joi';
 import { allowImageMineTypes } from '../../constants.js';
 import * as authController from '../../controllers/auth.controller.js';
 import validateRequest from '../../middlewares/validate-request.js';
-import uploadUtils from '../../utils/upload-utils.js';
+import UploadUtils from '../../utils/UploadUtils.js';
 
 //#region Define schema for request validation
 const loginSchema = Joi.object().keys({
@@ -19,12 +19,12 @@ const registerSchema = Joi.object().keys({
 });
 //#endregion
 
-const router = express.Router();
-const upload = uploadUtils.multerUpload('/users/', allowImageMineTypes);
+const router = Router();
+const upload = UploadUtils.multerUpload('/users/', allowImageMineTypes);
 
 router.route('/register').post(
   upload.single('avatar'),
-  uploadUtils.handleFilePath('avatar'),
+  UploadUtils.handleFilePath('avatar'),
   authController.register
 );
 router.route('/login').post(

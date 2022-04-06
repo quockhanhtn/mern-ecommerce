@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import Discount from '../models/discount.model.js';
-import strUtils from '../utils/str-utils.js';
+import StringUtils from '../utils/StringUtils.js';
 
 export default {
   getAll,
@@ -36,7 +36,7 @@ async function getAll(fields) {
  * @returns
  */
 async function getOne(identity) {
-  const filter = strUtils.isUUID(identity)
+  const filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
   return Discount.findOne(filter).lean().exec();
@@ -97,7 +97,7 @@ async function hidden(identity) {
  * @returns true if delete successfully else false
  */
 async function remove(identity) {
-  let filter = strUtils.isUUID(identity)
+  let filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
   const deletedDiscount = await Discount.findOneAndDelete(filter);

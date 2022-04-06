@@ -1,8 +1,7 @@
 import categoryService from '../services/categories.service.js';
 // import imagesService from '../services/images.service.js';
-import resUtils from '../utils/res-utils.js';
-import strUtils from '../utils/str-utils.js';
-import { formatImageUrl } from '../utils/format-utils.js';
+import ResponseUtils from '../utils/ResponseUtils.js';
+import FormatUtils from '../utils/FormatUtils.js';
 
 const formatCategory = (category, req) => {
   // if (category.image && category.image.startsWith('/')) {
@@ -10,7 +9,7 @@ const formatCategory = (category, req) => {
   //   // category.image = imagesService.formatPath(category.image, `${req.protocol}://${req.get('host')}`);
   //   category.image = `${req.protocol}://${req.get('host')}` + category.image;
   // }
-  category = formatImageUrl(category, 'image', req);
+  category = FormatUtils.imageUrl(category, 'image', req);
 
   if (category.children && category.children.length > 0) {
     category.children = category.children.map((child) =>
@@ -29,9 +28,9 @@ export const getCategories = async (req, res, next) => {
     categories = categories.map((category) => formatCategory(category, req));
 
     if (categories && categories.length > 0) {
-      resUtils.status200(res, 'Gets all categories successfully', categories);
+      ResponseUtils.status200(res, 'Gets all categories successfully', categories);
     } else {
-      resUtils.status200(res, 'No categories found', []);
+      ResponseUtils.status200(res, 'No categories found', []);
     }
   } catch (err) { next(err); }
 };
@@ -42,13 +41,13 @@ export const getCategory = async (req, res, next) => {
     const { identity } = req.params;
     const category = await categoryService.getOne(identity);
     if (category) {
-      resUtils.status200(
+      ResponseUtils.status200(
         res,
         `Get category '${category.name}' successfully!`,
         formatCategory(category, req)
       );
     } else {
-      resUtils.status404(res, `Category '${identity}' not found!`);
+      ResponseUtils.status404(res, `Category '${identity}' not found!`);
     }
   } catch (err) { next(err); }
 };
@@ -60,7 +59,7 @@ export const createCategory = async (req, res, next) => {
       req.body,
       req.user._id
     );
-    resUtils.status201(
+    ResponseUtils.status201(
       res,
       `Create NEW category '${newCategory.name}' successfully!`,
       formatCategory(newCategory, req)
@@ -78,13 +77,13 @@ export const updateCategory = async (req, res, next) => {
       req.user._id
     );
     if (updatedCategory) {
-      resUtils.status200(
+      ResponseUtils.status200(
         res,
         `Update category '${updatedCategory.name}' successfully!`,
         formatCategory(updatedCategory, req)
       );
     } else {
-      resUtils.status404(res, `Category '${identity}' not found!`);
+      ResponseUtils.status404(res, `Category '${identity}' not found!`);
     }
   } catch (err) { next(err); }
 };
@@ -96,14 +95,14 @@ export const hiddenCategory = async (req, res, next) => {
     const result = await categoryService.hidden(identity);
 
     if (result) {
-      resUtils.status200(
+      ResponseUtils.status200(
         res,
         `${result.isHide ? 'Show' : 'Hide'} category '${result.name
         }' successfully!`,
         formatCategory(result, req)
       );
     } else {
-      resUtils.status404(res, `Category '${identity}' not found!`);
+      ResponseUtils.status404(res, `Category '${identity}' not found!`);
     }
   } catch (err) { next(err); }
 };
@@ -115,9 +114,9 @@ export const deleteCategory = async (req, res, next) => {
     let result = await categoryService.remove(identity);
 
     if (result) {
-      resUtils.status200(res, `Deleted category '${identity}' successfully!`);
+      ResponseUtils.status200(res, `Deleted category '${identity}' successfully!`);
     } else {
-      resUtils.status404(res, `Category '${identity}' not found!`);
+      ResponseUtils.status404(res, `Category '${identity}' not found!`);
     }
   } catch (err) { next(err); }
 };

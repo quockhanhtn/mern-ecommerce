@@ -1,4 +1,4 @@
-import resUtils from '../utils/res-utils.js';
+import ResponseUtils from '../utils/ResponseUtils.js';
 
 const options = {
   abortEarly: false,    // include all errors
@@ -10,7 +10,7 @@ function validateRequest(schema) {
   return (req, res, next) => {
     const { error, value } = schema.validate(req.body, options);
     if (error) {
-      resUtils.status400(
+      ResponseUtils.status400(
         res,
         `Validation error: ${error.details.map(x => x.message).join(', ')}`
       );

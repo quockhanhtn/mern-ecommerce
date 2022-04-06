@@ -1,7 +1,7 @@
 import { ValidationError } from 'express-validation';
 import httpStatus from 'http-status';
 import APIError from '../utils/APIError.js';
-import uploadUtils from '../utils/upload-utils.js';
+import UploadUtils from '../utils/UploadUtils.js';
 
 export default {
   converter,
@@ -77,7 +77,7 @@ function handler(err, req, res, _) {
     console.log(response);
   }
   // clear uploaded files
-  uploadUtils.clearUploadFile(req);
+  UploadUtils.clearUploadFile(req);
 
   res.status(response.code);
   res.json(response);

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import Cart from '../models/cart.model.js';
 import ApiError from '../utils/APIError.js';
-import strUtils from '../utils/str-utils.js';
+import StringUtils from '../utils/StringUtils.js';
 import productService from './products.service.js';
 
 export default {

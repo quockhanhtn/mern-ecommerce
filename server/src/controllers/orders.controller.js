@@ -1,4 +1,4 @@
-import resUtils from '../utils/res-utils.js';
+import ResponseUtils from '../utils/ResponseUtils.js';
 import orderService from '../services/order.service.js';
 import vnpayService from '../services/vnpay.service.js';
 import firebaseService from '../services/firebase.service.js';
@@ -11,13 +11,13 @@ export const getOne = async (req, res, next) => {
 
     const order = await orderService.getOne(orderId);
     if (order) {
-      resUtils.status200(
+      ResponseUtils.status200(
         res,
         'Get order info success',
         order
       );
     } else {
-      resUtils.status404(
+      ResponseUtils.status404(
         res,
         'Order not found'
       );
@@ -42,7 +42,7 @@ export const getList = async (req, res, next) => {
     } else {
       const accessToken = req.query?.accessToken || null;
       if (!accessToken) {
-        resUtils.status401(
+        ResponseUtils.status401(
           res,
           'Access token is required'
         );
@@ -51,7 +51,7 @@ export const getList = async (req, res, next) => {
 
       const decodeData = await firebaseService.verifyToken(accessToken);
       if (!decodeData) {
-        resUtils.status401(
+        ResponseUtils.status401(
           res,
           'Access token is invalid'
         );
@@ -59,7 +59,7 @@ export const getList = async (req, res, next) => {
       }
 
       if (decodeData.exp < Date.now() / 1000) {
-        resUtils.status401(
+        ResponseUtils.status401(
           res,
           'Access token is expired'
         );
@@ -70,7 +70,7 @@ export const getList = async (req, res, next) => {
       result = await orderService.getAlls(phoneNumber, status, paymentStatus);
     }
 
-    resUtils.status200(
+    ResponseUtils.status200(
       res,
       'Get order list success',
       result
@@ -82,7 +82,7 @@ export const getByUser = async (req, res, next) => {
   try {
     const status = req.query.status;
     const userId = req.user._id;
-    resUtils.status200(
+    ResponseUtils.status200(
       res,
       'Get list order success',
       orders
@@ -112,14 +112,14 @@ export const createByUser = async (req, res, next) => {
     }
 
     if (order) {
-      resUtils.status201(
+      ResponseUtils.status201(
         res,
         'Create order success',
         order,
         { paymentUrl }
       );
     } else {
-      resUtils.status400(
+      ResponseUtils.status400(
         res,
         'Create order fail'
       );
@@ -132,12 +132,12 @@ export const rePayOrder = async (req, res, next) => {
     const { orderId } = req.params;
     const order = await orderService.getOne(orderId);
     if (!order) {
-      resUtils.status400(
+      ResponseUtils.status400(
         res,
         'Order not found'
       );
     } else if (order.paymentStatus === constants.ORDER.PAYMENT_STATUS.PAID) {
-      resUtils.status400(
+      ResponseUtils.status400(
         res,
         'Order has been paid'
       );
@@ -150,7 +150,7 @@ export const rePayOrder = async (req, res, next) => {
         order._id.toString(),
         order.total
       );
-      resUtils.status200(
+      ResponseUtils.status200(
         res,
         'Create payment url success',
         paymentUrl
@@ -165,13 +165,13 @@ export const updateByUser = async (req, res, next) => {
 
     const order = await orderService.updateByUserId(req.user._id, orderId, req.body);
     if (order) {
-      resUtils.status200(
+      ResponseUtils.status200(
         res,
         'Update order success',
         order
       );
     } else {
-      resUtils.status400(
+      ResponseUtils.status400(
         res,
         'Update order fail'
       );
@@ -188,7 +188,7 @@ export const getAllOrders = async (req, res, next) => {
     const paymentStatus = req.query.paymentStatus || null;
 
     const orders = await orderService.getAlls(search, status, paymentStatus);
-    resUtils.status200(
+    ResponseUtils.status200(
       res,
       'Get list order success',
       orders
@@ -214,13 +214,13 @@ export const createOrderByAdminOrStaff = async (req, res, next) => {
     );
 
     if (order) {
-      resUtils.status201(
+      ResponseUtils.status201(
         res,
         'Create order success',
         order
       );
     } else {
-      resUtils.status400(
+      ResponseUtils.status400(
         res,
         'Create order fail'
       );
@@ -248,13 +248,13 @@ export const updateOrderByAdminOrStaff = async (req, res, next) => {
 
     if (order) {
       const result = await orderService.getOne(order._id);
-      resUtils.status200(
+      ResponseUtils.status200(
         res,
         'Update order success',
         result
       );
     } else {
-      resUtils.status400(
+      ResponseUtils.status400(
         res,
         'Update order fail'
       );
