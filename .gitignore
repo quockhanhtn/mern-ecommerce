@@ -162,3 +162,7 @@ server/yarn.lock
 # ssl certificate
 client/certificate/ssl.key
 client/certificate/ssl.crt
+
+
+# flutter
+mobile/windows/*

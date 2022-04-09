@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mobile/models/Product.dart';
+import 'package:mobile/dto/Product.dart';
 import 'package:mobile/screens/details/details_screen.dart';
 
 import '../constants.dart';

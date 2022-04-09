@@ -47,3 +47,5 @@ app.*.map.json
 /android/app/src/main/res
 /ios/Runner
 /web/splash
+
+/windows
