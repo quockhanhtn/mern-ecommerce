@@ -1,1 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="24" viewBox="0 0 16 24"><g fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" transform="translate(1 1)"><circle cx="7" cy="11" r="7"/><path d="M7 8v3l1.5 1.5M11.51 16.35l-.35 3.83a2 2 0 01-2 1.82H4.83a2 2 0 01-2-1.82l-.35-3.83m.01-10.7l.35-3.83A2 2 0 014.83 0h4.35a2 2 0 012 1.82l.35 3.83"/></g></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 21.5 21.5" style="enable-background:new 0 0 21.5 21.5;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#231F20;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#231F20;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;}
+</style>
+<g id="Layer_2_1_">
+	<g id="Layer_1-2">
+		<path class="st0" d="M6.4,4.6h7.8c1.3,0,2.3,1,2.3,2.3v7.8c0,1.3-1,2.3-2.3,2.3H6.4c-1.3,0-2.3-1-2.3-2.3V6.9
+			C4.1,5.6,5.1,4.6,6.4,4.6z"/>
+		<path class="st0" d="M8,0.5h4.6c0.8,0,1.5,0.6,1.5,1.4c0,0,0,0,0,0.1v2.6l0,0H6.5l0,0V2C6.5,1.2,7.2,0.5,8,0.5C8,0.5,8,0.5,8,0.5z
+			"/>
+		<path class="st0" d="M12.6,21H8c-0.8,0-1.5-0.7-1.5-1.5V17l0,0h7.6l0,0v2.5C14.1,20.4,13.4,21,12.6,21z"/>
+		<rect x="16.6" y="7.7" class="st1" width="0.7" height="1.7"/>
+	</g>
+</g>
+</svg>

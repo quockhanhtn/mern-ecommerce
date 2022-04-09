@@ -24,8 +24,8 @@ router.get('/status', (req, res) => {
 	res.json({
 		success: true,
 		timestamp: new Date().toISOString(),
-		IP: req.ip,
-		URL: req.originalUrl,
+		ip: req.ipv4,
+		url: req.originalUrl,
 	});
 });
 

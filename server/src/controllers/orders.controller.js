@@ -103,7 +103,7 @@ export const createByUser = async (req, res, next) => {
     if (req.body.paymentMethod === constants.ORDER.PAYMENT_METHOD.VNPAY) {
       const apiUrl = `${req.protocol}://${req.get('host')}`
       paymentUrl = await vnpayService.createPaymentUrl(
-        req.ip,
+        req.ipv4,
         apiUrl,
         req.headers.origin,
         order._id.toString(),
@@ -144,7 +144,7 @@ export const rePayOrder = async (req, res, next) => {
     } else if (order.paymentMethod === constants.ORDER.PAYMENT_METHOD.VNPAY) {
       const apiUrl = `${req.protocol}://${req.get('host')}`
       const paymentUrl = await vnpayService.createPaymentUrl(
-        req.ip,
+        req.ipv4,
         apiUrl,
         req.headers.origin,
         order._id.toString(),

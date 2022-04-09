@@ -27,7 +27,7 @@ export const register = async (req, res, next) => {
 export const googleOAuth = async (req, res, next) => {
   try {
     const { googleCredential } = req.body;
-    const ipAddress = req.ip;
+    const ipAddress = req.ipv4;
 
     const payload = await googleServices.verify(googleCredential);
     if (!payload) {
@@ -53,7 +53,7 @@ export const googleOAuth = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const { username, password } = req.body;
-    const ipAddress = req.ip;
+    const ipAddress = req.ipv4;
 
     const result = await authService.authenticate(username, password, ipAddress);
     const userData = formatImageUrl(result.user, 'avatar', req);
@@ -73,7 +73,7 @@ export const login = async (req, res, next) => {
 
 export const refreshToken = async (req, res, next) => {
   try {
-    const ipAddress = req.ip;
+    const ipAddress = req.ipv4;
     const refreshToken = req.body.refreshToken;
 
     const result = await authService.refreshToken(refreshToken, ipAddress);
@@ -94,7 +94,7 @@ export const refreshToken = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
-    const ipAddress = req.ip;
+    const ipAddress = req.ipv4;
     const refreshToken = req.body.refreshToken;
     await authService.revokeToken(refreshToken, ipAddress);
     resUtils.status204(res);
