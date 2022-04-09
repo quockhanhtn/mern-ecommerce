@@ -73,7 +73,7 @@ const categoryData = [
     _id: mongoose.Types.ObjectId('c00000000000000000000005'),
     order: 5,
     name: 'Âm thanh',
-    image: '/public/uploads/categories/airpods.svg',
+    image: '/public/uploads/categories/sound.svg',
   },
   // Âm thanh -> Tai nghe
   {
@@ -135,7 +135,7 @@ const categoryData = [
     _id: mongoose.Types.ObjectId('c00000000000000000000006'),
     order: 6,
     name: 'Phụ kiện',
-    image: '/public/uploads/categories/camera.svg',
+    image: '/public/uploads/categories/accessories.svg',
   },
   // Phụ kiện -> Sạc, cáp
   {
@@ -340,7 +340,6 @@ const categoryData = [
     _id: mongoose.Types.ObjectId('c00000000000000000000052'),
     order: 6.08,
     name: 'Phụ kiện khác',
-    image: '/public/uploads/categories/others.svg',
     parent: mongoose.Types.ObjectId('c00000000000000000000006'),
   }
   //#endregion
