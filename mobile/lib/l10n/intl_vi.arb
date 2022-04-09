@@ -1,0 +1,16 @@
+{
+  "@@locale": "vi",
+  "language": "Việt Nam",
+  "@language": {
+    "description": "Ngôn ngữ mặc định"
+  },
+  "title": "Điện thoại HK",
+  "next": "Tiếp theo",
+  "start": "Bắt đầu",
+  "introTitle00": "100% Chính hãng",
+  "introText00": "Tất cả các sản phẩm tại HK Mobile đều là hàng chính hãng tại Việt Nam",
+  "introTitle01": "15 ngày đổi trả",
+  "introText01": "Cam kết đổi trả trong vòng 15 ngày nếu xảy ra lỗi",
+  "introTitle02": "Bảo hành chính hãng",
+  "introText02": "Sản phẩm được bảo hành chính hãng 12 tháng"
+}
