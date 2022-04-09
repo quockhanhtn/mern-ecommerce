@@ -20,6 +20,8 @@ jobs:
           NODE_OPTIONS: "--max-old-space-size=8192"
           REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL }}
           REACT_APP_FIREBASE_CONFIG: ${{ secrets.REACT_APP_FIREBASE_CONFIG }}
+          REACT_APP_FPT_API_KEY: ${{ secrets.REACT_APP_FPT_API_KEY }}
+          REACT_APP_FPT_API_ID: ${{ secrets.REACT_APP_FPT_API_ID }}
         run: |
           set -x
           npm -v

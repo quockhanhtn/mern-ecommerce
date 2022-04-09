@@ -163,6 +163,4 @@ server/yarn.lock
 client/certificate/ssl.key
 client/certificate/ssl.crt
 
-
-# flutter
-mobile/windows/*
+server/tool/*imported.json

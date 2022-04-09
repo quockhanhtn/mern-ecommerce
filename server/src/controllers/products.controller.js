@@ -121,6 +121,25 @@ export const getProductById = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
+export const getListProductsByIds = async (req, res, next) => {
+  try {
+    const {
+      list,
+      fields
+    } = req.body;
+    const filter = { '_id': { $in: list } };
+
+    let result = await productService.getAllProducts(fields, list.length, 1, filter);
+    let products = result.list.map(p => formatProduct(p, req));
+    if (products) {
+      resUtils.status200(res, null, products);
+    } else {
+      resUtils.status404(res, `Product not found!`);
+    }
+  } catch (err) { next(err); }
+}
+
+
 export const getSuggestProducts = async (req, res, next) => {
   try {
     const { keyword } = req.query;

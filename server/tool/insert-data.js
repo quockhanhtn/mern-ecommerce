@@ -49,262 +49,304 @@ const categoryData = [
     order: 1,
     name: 'Điện thoại',
     image: '/public/uploads/categories/phone.svg',
-  }, {
+  },
+  {
     _id: mongoose.Types.ObjectId('c00000000000000000000002'),
     order: 2,
     name: 'Máy tính bảng',
     image: '/public/uploads/categories/tablet.svg',
-  }, {
+  },
+  {
     _id: mongoose.Types.ObjectId('c00000000000000000000003'),
     order: 3,
     name: 'Đồng hồ',
     image: '/public/uploads/categories/watch.svg',
-  }, {
+  },
+  {
     _id: mongoose.Types.ObjectId('c00000000000000000000004'),
     order: 4,
     name: 'Laptop',
     image: '/public/uploads/categories/laptop.svg',
-  }, {
+  },
+  //#region Âm thanh
+  {
     _id: mongoose.Types.ObjectId('c00000000000000000000005'),
     order: 5,
-    name: 'Máy ảnh',
-    image: '/public/uploads/categories/camera.svg',
+    name: 'Âm thanh',
+    image: '/public/uploads/categories/airpods.svg',
   },
-  // Phụ kiện
+  // Âm thanh -> Tai nghe
+  {
+    _id: mongoose.Types.ObjectId('c00000000000000000000030'),
+    order: 5.01,
+    name: 'Tai nghe',
+    parent: mongoose.Types.ObjectId('c00000000000000000000005'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000031'),
+    order: 5.0101,
+    name: 'Không dây - True Wireles',
+    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000032'),
+    order: 5.0102,
+    name: 'Bluetooth',
+    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000033'),
+    order: 5.0103,
+    name: 'Chụp tai',
+    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000034'),
+    order: 5.0104,
+    name: 'Có dây',
+    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000035'),
+    order: 5.0105,
+    name: 'Gaming',
+    parent: mongoose.Types.ObjectId('c00000000000000000000030'),
+  },
+  // Âm thanh -> Loa
+  {
+    _id: mongoose.Types.ObjectId('c00000000000000000000036'),
+    order: 5.02,
+    name: 'Loa',
+    parent: mongoose.Types.ObjectId('c00000000000000000000005'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000037'),
+    order: 5.0201,
+    name: 'Loa bluetooth',
+    parent: mongoose.Types.ObjectId('c00000000000000000000036'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000038'),
+    order: 5.0202,
+    name: 'Loa vi tính',
+    parent: mongoose.Types.ObjectId('c00000000000000000000036'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000039'),
+    order: 5.0203,
+    name: 'Loa kéo',
+    parent: mongoose.Types.ObjectId('c00000000000000000000036'),
+  },
+  //#endregion
+  //#region Phụ kiện
   {
     _id: mongoose.Types.ObjectId('c00000000000000000000006'),
     order: 6,
     name: 'Phụ kiện',
-    image: '/public/uploads/categories/airpods.svg',
+    image: '/public/uploads/categories/camera.svg',
   },
-  // Phụ kiện -> Thiết bị âm thanh
+  // Phụ kiện -> Sạc, cáp
   {
     _id: mongoose.Types.ObjectId('c00000000000000000000007'),
     order: 6.01,
-    name: 'Thiết bị âm thanh',
-    image: '/public/uploads/categories/sound.svg',
+    name: 'Sạc, cáp',
     parent: mongoose.Types.ObjectId('c00000000000000000000006'),
   },
-  // Phụ kiện -> Thiết bị âm thanh -> Tai nghe
+  // Phụ kiện -> Sạc, cáp -> Adapter sạc, chuyển đổi
   {
     _id: mongoose.Types.ObjectId('c00000000000000000000008'),
     order: 6.0101,
-    name: 'Tai nghe',
-    image: '/public/uploads/categories/headphone.svg',
+    name: 'Adapter sạc, chuyển đổi',
     parent: mongoose.Types.ObjectId('c00000000000000000000007'),
-  },
-  // Phụ kiện -> Thiết bị âm thanh -> Tai nghe -> Tai nghe Bluetooth
-  {
+  }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000009'),
     order: 6.010101,
-    name: 'Tai nghe Bluetooth',
-    image: '/public/uploads/categories/bluetooth.svg',
+    name: 'Adapter sạc USB',
     parent: mongoose.Types.ObjectId('c00000000000000000000008'),
-  },
-  // Phụ kiện -> Thiết bị âm thanh -> Tai nghe -> Tai nghe có dây
-  {
+  }, {
     _id: mongoose.Types.ObjectId('c00000000000000000000010'),
     order: 6.010102,
-    name: 'Tai nghe có dây',
-    image: '/public/uploads/categories/earphone.svg',
+    name: 'Adapter sạc Type C',
+    parent: mongoose.Types.ObjectId('c00000000000000000000008'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000011'),
+    order: 6.010103,
+    name: 'Adapter sạc',
+    parent: mongoose.Types.ObjectId('c00000000000000000000008'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000012'),
+    order: 6.010104,
+    name: 'Adapter chuyển đổi',
+    parent: mongoose.Types.ObjectId('c00000000000000000000008'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000013'),
+    order: 6.010105,
+    name: 'Sạc không dây',
+    parent: mongoose.Types.ObjectId('c00000000000000000000008'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000014'),
+    order: 6.010106,
+    name: 'Sạc xe hơi',
     parent: mongoose.Types.ObjectId('c00000000000000000000008'),
   },
-  // Phụ kiện -> Thiết bị âm thanh -> Loa
+  //Phụ kiện -> Sạc, cáp -> Cáp sạc, chuyển đổi
   {
-    _id: mongoose.Types.ObjectId('c00000000000000000000011'),
+    _id: mongoose.Types.ObjectId('c00000000000000000000015'),
     order: 6.0102,
-    name: 'Loa',
-    image: '/public/uploads/categories/speaker.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000007')
+    name: 'Cáp sạc, chuyển đổi',
+    parent: mongoose.Types.ObjectId('c00000000000000000000007'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000016'),
+    order: 6.010201,
+    name: 'Cáp Lightning',
+    parent: mongoose.Types.ObjectId('c00000000000000000000015'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000017'),
+    order: 6.010202,
+    name: 'Cáp Type C',
+    parent: mongoose.Types.ObjectId('c00000000000000000000015'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000018'),
+    order: 6.010203,
+    name: 'Cáp Micro USB',
+    parent: mongoose.Types.ObjectId('c00000000000000000000015'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000019'),
+    order: 6.010204,
+    name: 'Cáp chuyển đổi',
+    parent: mongoose.Types.ObjectId('c00000000000000000000015'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000020'),
+    order: 6.010205,
+    name: 'Cáp 3 đầu',
+    parent: mongoose.Types.ObjectId('c00000000000000000000015'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000021'),
+    order: 6.010206,
+    name: 'Cáp âm thanh',
+    parent: mongoose.Types.ObjectId('c00000000000000000000015'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000022'),
+    order: 6.010207,
+    name: 'Cáp sạc Apple Watch',
+    parent: mongoose.Types.ObjectId('c00000000000000000000015'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000023'),
+    order: 6.010208,
+    name: 'Cáp khác',
+    parent: mongoose.Types.ObjectId('c00000000000000000000015'),
+  },
+  // Phụ kiện -> Sạc dự phòng
+  {
+    _id: mongoose.Types.ObjectId('c00000000000000000000024'),
+    order: 6.02,
+    name: 'Sạc dự phòng',
+    parent: mongoose.Types.ObjectId('c00000000000000000000006'),
+  },
+  // Phụ kiện -> Dán màn hình
+  {
+    _id: mongoose.Types.ObjectId('c00000000000000000000025'),
+    order: 6.03,
+    name: 'Dán màn hình',
+    parent: mongoose.Types.ObjectId('c00000000000000000000006'),
+  },
+  // Phụ kiện -> Ốp lưng, bao da
+  {
+    _id: mongoose.Types.ObjectId('c00000000000000000000026'),
+    order: 6.04,
+    name: 'Ốp lưng, bao da',
+    parent: mongoose.Types.ObjectId('c00000000000000000000006'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000027'),
+    order: 6.0401,
+    name: 'Ốp lưng điện thoại',
+    parent: mongoose.Types.ObjectId('c00000000000000000000026'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000028'),
+    order: 6.0402,
+    name: 'Ốp lưng tablet',
+    parent: mongoose.Types.ObjectId('c00000000000000000000026'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000029'),
+    order: 6.0403,
+    name: 'Bao da',
+    parent: mongoose.Types.ObjectId('c00000000000000000000026'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000053'),
+    order: 6.0404,
+    name: 'Phụ kiện tablet',
+    parent: mongoose.Types.ObjectId('c00000000000000000000026'),
+  },
+  // Phụ kiện -> Phụ kiện laptop
+  {
+    _id: mongoose.Types.ObjectId('c00000000000000000000040'),
+    order: 6.05,
+    name: 'Phụ kiện laptop',
+    parent: mongoose.Types.ObjectId('c00000000000000000000006'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000041'),
+    order: 6.0501,
+    name: 'Chuột máy tính',
+    parent: mongoose.Types.ObjectId('c00000000000000000000040'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000042'),
+    order: 6.0502,
+    name: 'Bàn phím',
+    parent: mongoose.Types.ObjectId('c00000000000000000000040'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000043'),
+    order: 6.0503,
+    name: 'Miếng lót chuột',
+    parent: mongoose.Types.ObjectId('c00000000000000000000040'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000044'),
+    order: 6.0504,
+    name: 'Phần mềm',
+    parent: mongoose.Types.ObjectId('c00000000000000000000040'),
+  },
+  // Phụ kiện -> Thiết bị mạng
+  {
+    _id: mongoose.Types.ObjectId('c00000000000000000000045'),
+    order: 6.06,
+    name: 'Thiết bị mạng',
+    parent: mongoose.Types.ObjectId('c00000000000000000000006'),
   },
   // Phụ kiện -> Thiết bị lưu trữ
   {
-    _id: mongoose.Types.ObjectId('c00000000000000000000012'),
-    order: 6.02,
+    _id: mongoose.Types.ObjectId('c00000000000000000000046'),
+    order: 6.07,
     name: 'Thiết bị lưu trữ',
-    image: '/public/uploads/categories/data-storage.svg',
     parent: mongoose.Types.ObjectId('c00000000000000000000006'),
-  },
-  // Phụ kiện -> Thiết bị lưu trữ -> Thẻ nhớ
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000013'),
-    order: 6.0201,
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000047'),
+    order: 6.0701,
     name: 'Thẻ nhớ',
-    image: '/public/uploads/categories/sd-storage.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000012'),
-  },
-  // Phụ kiện -> Thiết bị lưu trữ -> USB
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000014'),
-    order: 6.0202,
-    name: 'USB',
-    image: '/public/uploads/categories/usb.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000012'),
-  },
-  // Phụ kiện -> Thiết bị lưu trữ -> Ổ cứng di động
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000015'),
-    order: 6.0203,
-    name: 'Ổ cứng di động',
-    image: '/public/uploads/categories/hdd.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000012'),
-  },
-  // Phụ kiện -> Phụ kiện điện thoại
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000016'),
-    order: 6.03,
-    name: 'Phụ kiện điện thoại',
-    image: '/public/uploads/categories/phone-accessories.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000006'),
-  },
-  // Phụ kiện -> Phụ kiện điện thoại -> Pin sạc dự phòng
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000017'),
-    order: 6.0301,
-    name: 'Pin sạc dự phòng',
-    image: '/public/uploads/categories/power-bank.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000016'),
-  },
-  // Phụ kiện -> Phụ kiện điện thoại -> Sim, thẻ
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000018'),
-    order: 6.0302,
-    name: 'Sim, thẻ',
-    image: '/public/uploads/categories/sim.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000016'),
-  },
-  // Phụ kiện -> Phụ kiện điện thoại -> Miếng dán màn hình
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000019'),
-    order: 6.0303,
-    name: 'Miếng dán màn hình',
-    parent: mongoose.Types.ObjectId('c00000000000000000000016'),
-  },
-  // Phụ kiện -> Phụ kiện điện thoại -> Ốp lưng, bao da
-  {
-    _id: mongoose.Types.ObjectId('c0000000000000000000001a'),
-    order: 6.0304,
-    name: 'Ốp lưng, bao da',
-    parent: mongoose.Types.ObjectId('c00000000000000000000016'),
-  },
-  // Phụ kiện -> Phụ kiện điện thoại -> Gậy tự sướng
-  {
-    _id: mongoose.Types.ObjectId('c0000000000000000000001b'),
-    order: 6.0305,
-    name: 'Gậy tự sướng',
-    parent: mongoose.Types.ObjectId('c00000000000000000000016'),
-  },
-  // Phụ kiện -> Phụ kiện điện thoại -> Cáp sạc
-  {
-    _id: mongoose.Types.ObjectId('c0000000000000000000001c'),
-    order: 6.0306,
-    name: 'Cáp sạc',
-    image: '/public/uploads/categories/cable.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000016'),
-  },
-  // Phụ kiện -> Phụ kiện điện thoại -> Cáp sạc -> Cáp micro USB
-  {
-    _id: mongoose.Types.ObjectId('c0000000000000000000001d'),
-    order: 6.0307,
-    name: 'Cáp micro USB',
-    parent: mongoose.Types.ObjectId('c0000000000000000000001c'),
-  },
-  // Phụ kiện -> Phụ kiện điện thoại -> Cáp sạc -> Cáp type C
-  {
-    _id: mongoose.Types.ObjectId('c0000000000000000000001e'),
-    order: 6.0308,
-    name: 'Cáp type C',
-    parent: mongoose.Types.ObjectId('c0000000000000000000001c'),
-  },
-  // Phụ kiện -> Phụ kiện điện thoại -> Cáp sạc -> Cáp lightning
-  {
-    _id: mongoose.Types.ObjectId('c0000000000000000000001f'),
-    order: 6.0309,
-    name: 'Cáp lightning',
-    parent: mongoose.Types.ObjectId('c0000000000000000000001c'),
-  },
-  // Phụ kiện -> Phụ kiện máy tính
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000020'),
-    order: 6.04,
-    name: 'Phụ kiện máy tính',
-    image: '/public/uploads/categories/computer-maintenance.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000006'),
-  },
-  // Phụ kiện -> Phụ kiện máy tính -> Bàn phím
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000021'),
-    order: 6.0401,
-    name: 'Bàn phím',
-    image: '/public/uploads/categories/keyboard.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000020'),
-  },
-  // Phụ kiện -> Phụ kiện máy tính -> Chuột
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000022'),
-    order: 6.0402,
-    name: 'Chuột',
-    image: '/public/uploads/categories/mouse.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000020'),
-  },
-  // Phụ kiện -> Phụ kiện máy tính -> Màn hình
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000023'),
-    order: 6.0403,
-    name: 'Màn hình',
-    image: '/public/uploads/categories/monitor.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000020'),
-  },
-  // Phụ kiện -> Phụ kiện máy tính -> Máy in
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000024'),
-    order: 6.0404,
-    name: 'Máy in',
-    image: '/public/uploads/categories/printer.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000020'),
-  },
-  // Phụ kiện -> Phụ kiện máy tính -> Balo, túi chống sốc
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000025'),
-    order: 6.0405,
-    name: 'Balo, túi chống sốc',
-    image: '/public/uploads/categories/laptop-sleeve.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000020'),
-  },
-  // Phụ kiện -> Phụ kiện máy tính -> Phần mềm
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000026'),
-    order: 6.0406,
-    name: 'Phần mềm',
-    image: '/public/uploads/categories/software-dvd.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000020'),
-  },
-  // Phụ kiện -> Phụ kiện máy ảnh
-  {
-    _id: mongoose.Types.ObjectId('c00000000000000000000027'),
-    order: 6.05,
-    name: 'Phụ kiện máy ảnh',
-    image: '/public/uploads/categories/camera-change.svg',
-    parent: mongoose.Types.ObjectId('c00000000000000000000006'),
+    parent: mongoose.Types.ObjectId('c00000000000000000000046'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000048'),
+    order: 6.0702,
+    name: 'USB Type C',
+    parent: mongoose.Types.ObjectId('c00000000000000000000046'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000049'),
+    order: 6.0703,
+    name: 'USB 3.1',
+    parent: mongoose.Types.ObjectId('c00000000000000000000046'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000050'),
+    order: 6.0704,
+    name: 'USB 3.0',
+    parent: mongoose.Types.ObjectId('c00000000000000000000046'),
+  }, {
+    _id: mongoose.Types.ObjectId('c00000000000000000000051'),
+    order: 6.0705,
+    name: 'USB 2.0',
+    parent: mongoose.Types.ObjectId('c00000000000000000000046'),
   },
   // Phụ kiện -> Phụ kiện khác
   {
-    _id: mongoose.Types.ObjectId('c00000000000000000000028'),
-    order: 6.06,
+    _id: mongoose.Types.ObjectId('c00000000000000000000052'),
+    order: 6.08,
     name: 'Phụ kiện khác',
     image: '/public/uploads/categories/others.svg',
     parent: mongoose.Types.ObjectId('c00000000000000000000006'),
   }
+  //#endregion
 ];
 
 const brandData = [
-  // {
-  //   _id: mongoose.Types.ObjectId('b' + zeroFill(1, 23)01'),
-  //   name: 'Vsmart',
-  //   desc: 'Vsmart là thương hiệu mang tính công nghệ và trí tuệ Việt, mang tinh thần của một Việt Nam mới mẻ, hiện đại, là nền tảng hội tụ kết nối trí tuệ, đồng thời là đại diện của Vingroup trong lộ trình toàn cầu hóa, vươn ra thế giới.',
-  //   country: 'Việt Nam',
-  //   image: '/public/uploads/brands/vsmart.png'
-  // },
   {
     name: 'iPhone',
     desc: 'Apple iPhone',
@@ -495,12 +537,12 @@ const brandData = [
     image: "https://cdn.tgdd.vn/Brand/1/logo-asus-149x40.png"
   },
   {
-    "name": "HP",
+    name: "HP",
     "desc": "",
     "country": "US",
     "headQuarters": "Palo Alto, California, United States",
     "founded": 1998,
-    "image": "https://cdn.tgdd.vn/Brand/1/logo-hp-149x40-1.png"
+    image: "https://cdn.tgdd.vn/Brand/1/logo-hp-149x40-1.png"
   },
   {
     name: "Acer",
@@ -565,55 +607,258 @@ const brandData = [
     headQuarters: "",
     founded: 2004,
     image: "https://cdn.tgdd.vn/Brand/1/logo-chuwi-149x40.png"
+  },
+  {
+    name: "Anker",
+    image: "https://cdn.tgdd.vn/Brand/1/Anker57-b_11.png"
+  },
+  {
+    name: "Xmobile",
+    image: "https://cdn.tgdd.vn/Brand/1/Xmobile57-b_42.jpg"
+  },
+  {
+    name: "AVA",
+    image: "https://cdn.tgdd.vn/Brand/1/AVA57-b_50.jpg"
+  },
+  {
+    name: "AVA+",
+    image: "https://cdn.tgdd.vn/Brand/1/220-48-220x48-10.jpg"
+  },
+  {
+    name: "Hydrus",
+    image: "https://cdn.tgdd.vn/Brand/1/220-48-220x48-3.jpg"
+  },
+  {
+    name: "Hyper",
+    image: "https://cdn.tgdd.vn/Brand/1/HyperDrive9499-b11-220x48-1.jpg"
+  },
+  {
+    name: "Belkin",
+    image: "https://cdn.tgdd.vn/Brand/1/220-48-220x48-23.jpg"
+  },
+  {
+    name: "eValu",
+    image: "https://cdn.tgdd.vn/Brand/1/eValu57-b51-220x48-1.jpg"
+  },
+  {
+    name: "eSaver",
+    image: "https://cdn.tgdd.vn/Brand/1/eSaver57-b_47.jpg"
+  },
+  {
+    name: "Mophie",
+    image: "https://cdn.tgdd.vn/Brand/1/220-48-220x48.jpg"
+  },
+  {
+    name: "Mbest",
+    image: "https://cdn.tgdd.vn/Brand/1/Mbest57-b_9.jpg"
+  },
+  {
+    name: "iWalk",
+    image: "https://cdn.tgdd.vn/Brand/1/iWalk57-b_1.png"
+  },
+  {
+    name: "AUKEY",
+    image: "https://cdn.tgdd.vn/Brand/1/AUKEY57-b_21.png"
+  },
+  {
+    name: "Sony",
+    image: "https://cdn.tgdd.vn/Brand/1/Sony57-b_43.jpg"
+  },
+  {
+    name: "Apple",
+    image: "https://cdn.tgdd.vn/Brand/1/Apple9499-b_28.jpg"
+  },
+  {
+    name: "Philips",
+    image: "https://cdn.tgdd.vn/Brand/1/Philips9499-b_26.png"
+  },
+  {
+    name: "Roman",
+    image: "https://cdn.tgdd.vn/Brand/1/Roman9499-b_8.jpg"
+  },
+  {
+    name: "VCOM",
+    image: "https://cdn.tgdd.vn/Brand/1/logovcom-220x48-1.png"
+  },
+  {
+    name: "Playa",
+    image: "https://cdn.tgdd.vn/Brand/1/220-48-220x48-25.jpg"
+  },
+  {
+    name: "Omars",
+    image: "https://cdn.tgdd.vn/Brand/1/Omars-58-b_35.jpg"
+  },
+  {
+    name: "ECO",
+    image: "https://cdn.tgdd.vn/Brand/1/ECO58-b_56.jpg"
+  },
+  {
+    name: "Pisen",
+    image: "https://cdn.tgdd.vn/Brand/1/Pisen58-b_24.jpg"
+  },
+  {
+    name: "Leagtech",
+    image: "https://cdn.tgdd.vn/Brand/1/Leagtech58-b_26.jpg"
+  },
+  {
+    name: "Beats",
+    image: "https://cdn.tgdd.vn/Brand/1/Beats54-b_21.jpg"
+  },
+  {
+    name: "JBL",
+    image: "https://cdn.tgdd.vn/Brand/1/JBL54-b_27.jpg"
+  },
+  {
+    name: "Harman Kardon",
+    image: "https://cdn.tgdd.vn/Brand/1/Harman-Kardon54-b_21.jpg"
+  },
+  {
+    name: "Mozard",
+    image: "https://cdn.tgdd.vn/Brand/1/Mozard54-b_35.jpg"
+  },
+  {
+    name: "Jabra",
+    image: "https://cdn.tgdd.vn/Brand/1/Jabra54-b_17.jpg"
+  },
+  {
+    name: "Awei",
+    image: "https://cdn.tgdd.vn/Brand/1/Awei54-b_50.jpg"
+  },
+  {
+    name: "MozardX",
+    image: "https://cdn.tgdd.vn/Brand/1/MozardX54-b_7.jpg"
+  },
+  {
+    name: "Logitech",
+    image: "https://cdn.tgdd.vn/Brand/1/Logitech54-b_40.jpg"
+  },
+  {
+    name: "Kanen",
+    image: "https://cdn.tgdd.vn/Brand/1/Kanen54-b_9.jpg"
+  },
+  {
+    name: "Soundpeats",
+    image: "https://cdn.tgdd.vn/Brand/1/Soundpeats54-b_10.jpg"
+  },
+  {
+    name: "Plantronics",
+    image: "https://cdn.tgdd.vn/Brand/1/Plantronics54-b_13.png"
+  },
+  {
+    name: "Rapoo",
+    image: "https://cdn.tgdd.vn/Brand/1/Rapoo54-b_55.png"
+  },
+  {
+    name: "Corsair",
+    image: "https://cdn.tgdd.vn/Brand/1/Corsair54-b_4.jpg"
+  },
+  {
+    name: "JLab",
+    image: "https://cdn.tgdd.vn/Brand/1/Logo-Jlab-lon-220x48-1.jpg"
+  },
+  {
+    name: "Padmate",
+    image: "https://cdn.tgdd.vn/Brand/1/LogoPadmatelớn-220x48.jpg"
+  },
+  {
+    name: "Rezo",
+    image: "https://cdn.tgdd.vn/Brand/1/LOGO-REZO-220x48-1.png"
+  },
+  {
+    name: "Fenda",
+    image: "https://cdn.tgdd.vn/Brand/1/Fenda2162-b_18.jpg"
+  },
+  {
+    name: "Enkor",
+    image: "https://cdn.tgdd.vn/Brand/1/Enkor2162-b_14.jpg"
+  },
+  {
+    name: "Microlab",
+    image: "https://cdn.tgdd.vn/Brand/1/logo-microlab-220x48-1.png"
+  },
+  {
+    name: "Wetop",
+    image: "https://cdn.tgdd.vn/Brand/1/Wetop2162-b_25.jpg"
+  },
+  {
+    name: "iCutes",
+    image: "https://cdn.tgdd.vn/Brand/1/iCutes2162-b_23.jpg"
+  },
+  {
+    name: "Sandisk",
+    image: "https://cdn.tgdd.vn/Brand/1/Sandisk-b.png"
+  },
+  {
+    name: "Transcend",
+    image: "https://cdn.tgdd.vn/Brand/1/Transcend-b.png"
+  },
+  {
+    name: "Apacer",
+    image: "https://cdn.tgdd.vn/Brand/1/Apacer-b.png"
+  },
+  {
+    name: "Microsoft",
+    image: "https://cdn.tgdd.vn/Brand/1/Microsoft86-b_0.jpg"
+  },
+  {
+    name: "Genius",
+    image: "https://cdn.tgdd.vn/Brand/1/Genius86-b_53.jpg"
+  },
+  {
+    name: "Zadez",
+    image: "https://cdn.tgdd.vn/Brand/1/Zadez86-b_8.jpg"
+  },
+  {
+    name: "Anitech",
+    image: "https://cdn.tgdd.vn/Brand/1/logo-anitech-220x48-1.jpg"
+  },
+  {
+    name: "DareU",
+    image: "https://cdn.tgdd.vn/Brand/1/logodareu-220x48-1.png"
+  },
+  {
+    name: "HyperX",
+    image: "https://cdn.tgdd.vn/Brand/1/logo-hyperx-1-220x48-1.jpg"
+  },
+  {
+    name: "A4Tech",
+    image: "https://cdn.tgdd.vn/Brand/1/logoa4tech-220x48-3.png"
+  },
+  {
+    name: "Razer",
+    image: "https://cdn.tgdd.vn/Brand/1/220-48-220x48-13.jpg"
+  },
+  {
+    name: "Totolink",
+    image: "https://cdn.tgdd.vn/Brand/1/Totolink4727-b_20.jpg"
+  },
+  {
+    name: "Tenda",
+    image: "https://cdn.tgdd.vn/Brand/1/Tenda4727-b_40.png"
+  },
+  {
+    name: "TP-Link",
+    image: "https://cdn.tgdd.vn/Brand/1/TP-Link4727-b_48.jpg"
+  },
+  {
+    name: "Mercusys",
+    image: "https://cdn.tgdd.vn/Brand/1/Mercusys4727-b_26.jpg"
+  },
+  {
+    name: "Linksys",
+    image: "https://cdn.tgdd.vn/Brand/1/220-48-220x48-4.jpg"
+  },
+  {
+    name: "D-Link",
+    image: "https://cdn.tgdd.vn/Brand/1/160-40-160x40-12.jpg"
+  },
+  {
+    name: "Audio Technica",
+    country: "JP",
+    founded: 1962,
+    image: "https://cdn.tgdd.vn/Brand/1/Audio-Technica54-b_21.jpg",
+    desc: "Chuyên sản xuất các thiết bị âm thanh như Tai nghe và Micro"
   }
-  // {
-  //   name: 'LG Electronics',
-  //   desc: 'LG Electronics Inc. là một công ty điện tử đa quốc gia của Hàn Quốc có trụ sở chính tại Yeouido-dong, Seoul, Hàn Quốc. LG Electronics là một phần của tập đoàn chaebol lớn thứ tư ở Hàn Quốc và doanh thu toàn cầu của nó đạt 55,91 tỷ USD vào năm 2014.',
-  //   country: 'Hàn Quốc',
-  //   image: '/public/uploads/brands/lg-electronics.png'
-  // },
-  // {
-  //   name: 'Philips',
-  //   desc: 'Koninklijke Philips N.V. là một tập đoàn đa quốc gia của Hà Lan được thành lập tại Eindhoven. Kể từ năm 1997, nó chủ yếu có trụ sở chính ở Amsterdam, mặc dù trụ sở chính của Benelux vẫn ở Eindhoven',
-  //   country: 'Hà Lan',
-  //   image: '/public/uploads/brands/philips.png'
-  // },
-  // {
-  //   name: 'Sony',
-  //   desc: 'Sony là một trong những thương hiệu toàn cầu nổi tiếng nhất về điện tử tiêu dùng nhờ vào những sáng tạo đột phá mang tính cách mạng và chất lượng sản phẩm. Thành công của Sony tại thị trường Việt Nam là bởi thương hiệu Sony luôn thể hiện được bản sắc riêng một cách mạnh mẽ và ấn tượng, kết hợp giữa chất lượng sản phẩm-công nghệ hàng đầu-kiểu dáng thiết kế độc đáo và cách xây dựng thương hiệu sáng tạo-tôn trọng văn hóa bản địa tiếp tục nâng cao tinh thần sáng tạo của mình để luôn tạo ra sản phẩm chất lượng cho người dùng.',
-  //   country: 'Nhật Bản',
-  //   image: '/public/uploads/brands/sony.png'
-  // },
-  // {
-  //   name: 'ASUS',
-  //   desc: 'ASUS đam mê công nghệ và được thúc đẩy bởi sự đổi mới. Chúng tôi mơ ước, chúng tôi dám và chúng tôi cố gắng để tạo ra một cuộc sống kỹ thuật số dễ dàng và thú vị cho tất cả mọi người. Chúng tôi luôn tìm kiếm những ý tưởng và trải nghiệm đáng kinh ngạc, và chúng tôi mong muốn cung cấp những điều đó trong mọi việc chúng tôi làm.',
-  //   country: 'Đài Loan',
-  //   image: '/public/uploads/brands/asus.png'
-  // },
-  // {
-  //   name: 'Dell',
-  //   desc: 'Dell là một công ty công nghệ máy tính đa quốc gia của Mỹ chuyên phát triển, bán, sửa chữa và hỗ trợ máy tính cũng như các sản phẩm và dịch vụ liên quan và thuộc sở hữu của công ty mẹ Dell Technologies.',
-  //   country: 'Mỹ',
-  //   image: '/public/uploads/brands/dell.png'
-  // },
-  // {
-  //   name: 'MSI',
-  //   desc: 'Micro-Star International Co., Ltd là một tập đoàn công nghệ thông tin đa quốc gia của Đài Loan có trụ sở chính tại thành phố Tân Đài Bắc, Đài Loan.',
-  //   country: 'Đài Loan',
-  //   image: '/public/uploads/brands/msi.png'
-  // },
-  // {
-  //   name: 'Nikon',
-  //   desc: 'Nikon Corporation, còn được gọi là Nikon, là một tập đoàn đa quốc gia của Nhật Bản có trụ sở chính tại Tokyo, Nhật Bản, chuyên về quang học và các sản phẩm hình ảnh',
-  //   country: 'Nhật Bản',
-  //   image: '/public/uploads/brands/nikon.png'
-  // },
-  // {
-  //   name: 'Canon',
-  //   desc: 'Canon Inc. là một tập đoàn đa quốc gia của Nhật Bản có trụ sở chính tại Ōta, Tokyo, Nhật Bản, chuyên về các sản phẩm quang học, hình ảnh và công nghiệp, chẳng hạn như ống kính, máy ảnh, thiết bị y tế, máy quét, máy in và thiết bị sản xuất chất bán dẫn.',
-  //   country: 'Nhật Bản',
-  //   image: '/public/uploads/brands/canon.png'
-  // }
 ];
 
 const categoryMap = {
@@ -621,6 +866,8 @@ const categoryMap = {
   'may-tinh-bang': mongoose.Types.ObjectId('c00000000000000000000002'),
   'dong-ho-thong-minh': mongoose.Types.ObjectId('c00000000000000000000003'),
   'laptop': mongoose.Types.ObjectId('c00000000000000000000004'),
+  'am-thanh': mongoose.Types.ObjectId('c00000000000000000000005'),
+  'phu-kien': mongoose.Types.ObjectId('c00000000000000000000006'),
 };
 function escapeRegExp(str) {
   return str.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
@@ -652,10 +899,12 @@ function splitProductName(name) {
 
 async function insertProduct() {
   const filePath = process.cwd() + '/tool/product.00.json';
-  const filePath2 = process.cwd() + '/tool/product.01.json';
+  const filePath1 = process.cwd() + '/tool/product.01.json';
+  const filePath2 = process.cwd() + '/tool/product.02.json';
 
   let listProduct = [
     ...JSON.parse(fs.readFileSync(filePath)),
+    ...JSON.parse(fs.readFileSync(filePath1)),
     ...JSON.parse(fs.readFileSync(filePath2)),
   ];
   const listBrand = await Brand.find({}).lean().exec();
@@ -697,6 +946,7 @@ async function insertProduct() {
     if (element.productPolicies) { product.policies = element.productPolicies.map(item => standardPolicy(item)); }
     if (element.hightLightImgs) { product.hightLightPics = element.hightLightImgs; }
     if (element.specThumb) { product.specPicture = element.specThumb; }
+    if (element.key) { product.crawlKey = element.key; }
 
     product.variants = element.variants.map(v => ({
       variantName: v.variantName,

@@ -8,6 +8,7 @@
     "dev": "nodemon ./src/index.js --trace-warnings --unhandled-rejections=strict",
     "start": "node ./src/index.js",
     "insert-data": "nodemon ./tool/insert-data.js",
+    "import-data": "nodemon ./tool/import-data-to-fpt.js",
     "tes": "node ./tool/a.js"
   },
   "contributors": [
@@ -49,9 +50,12 @@
     "nodemailer-express-handlebars": "^4.0.0",
     "query-string": "^7.0.1",
     "sanitize-html": "^2.6.0",
-    "sharp": "^0.29.2"
+    "sharp": "^0.29.2",
+    "socket.io": "^4.4.1"
   },
   "devDependencies": {
+    "axios": "^0.26.1",
+    "html-to-text": "^8.1.0",
     "nodemon": "^2.0.14"
   }
 }

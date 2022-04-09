@@ -158,7 +158,12 @@ export default function PageOrderList() {
       return <LoadingScreen />;
     }
     if (error) {
-      return <p>{JSON.parse(error)}</p>;
+      let errorDisplay = '';
+      try {
+        errorDisplay = JSON.parse(error);
+        // eslint-disable-next-line no-empty
+      } catch {}
+      return <p>{errorDisplay}</p>;
     }
     if (!orderList || orderList.length === 0) {
       return <EmptyCard title={t('dashboard.categories.title-not-found')} />;

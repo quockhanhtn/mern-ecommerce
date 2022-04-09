@@ -1,3 +1,4 @@
+import SimpleBarReact from 'simplebar-react';
 // routes
 import Router from './routes';
 // theme
@@ -18,16 +19,18 @@ export default function App() {
   const { isInitialized } = useAuth();
 
   return (
-    <ThemeConfig>
-      <ThemePrimaryColor>
-        <RtlLayout>
-          <NotistackProvider>
-            <Settings />
-            <ScrollToTop />
-            {isInitialized ? <Router /> : <LoadingScreen />}
-          </NotistackProvider>
-        </RtlLayout>
-      </ThemePrimaryColor>
-    </ThemeConfig>
+    <SimpleBarReact style={{ maxHeight: '100vh' }}>
+      <ThemeConfig>
+        <ThemePrimaryColor>
+          <RtlLayout>
+            <NotistackProvider>
+              <Settings />
+              <ScrollToTop />
+              {isInitialized ? <Router /> : <LoadingScreen />}
+            </NotistackProvider>
+          </RtlLayout>
+        </ThemePrimaryColor>
+      </ThemeConfig>
+    </SimpleBarReact>
   );
 }

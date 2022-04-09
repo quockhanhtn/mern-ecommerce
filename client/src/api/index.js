@@ -59,6 +59,8 @@ export const getAllProduct = (fields, search, brand, category, page, limit) =>
   API.get(`/products?fields=${fields}&search=${search}&b=${brand}&c=${category}&page=${page}&limit=${limit}`);
 export const getSearchSuggest = (keyword) => API.get(`/products/search/suggest?keyword==${keyword}`);
 export const getFullAllProduct = () => API.get('/products/all');
+export const getRelatedProduct = (listId) =>
+  API.post('/products/get-by-ids', { list: listId, fields: '_id name slug category brand views rate variants' });
 export const getOneProduct = (identity) => API.get(`/products/${identity}`);
 export const createProduct = (newProduct) => API.post('/products', newProduct);
 export const updateProduct = (identity, updatedProduct) => API.patch(`/products/${identity}`, updatedProduct);
@@ -115,3 +117,4 @@ export const addProductToCartDB = (newProduct) => API.post(`/write-order`, newPr
 export const deleteProductToCartDB = (productInfo) => API.post(`/write-order/delete`, productInfo);
 export const increaseProductToCartDB = (productInfo) => API.patch(`/write-order/increase`, productInfo);
 export const decreaseProductToCartDB = (productInfo) => API.patch(`/write-order/decrease`, productInfo);
+export const cleanProductToCartDB = () => API.delete(`/write-order/delete-all`);

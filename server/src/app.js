@@ -16,6 +16,7 @@ const __dirname = process.cwd();
 // share uploads resource
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/public/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
+app.use('/public/logs', express.static(path.join(__dirname, 'public', 'logs')));
 
 
 // User middleware
@@ -26,6 +27,8 @@ app.use((req, _, next) => {
   if (!req.headers.origin.startsWith('http')) {
     req.headers.origin = req.protocol + '://' + req.headers.origin;
   }
+
+  req.ipv4 = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
   next();
 });
 app.use(logger);
