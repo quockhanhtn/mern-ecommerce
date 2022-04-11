@@ -14,7 +14,9 @@ mongoose.connect(process.env.MONGO_URI)
 
 const DATSET_NAME = 'CellphonesDataset';
 const REQ_CONFIG = { headers: { Authorization: "a3fa7034b71ae0741665767fd902193e" } };
-const REQ_URL = `https://recom.fpt.vn/api/v0.1/recommendation/dataset/${DATSET_NAME}/append`;
+const REQ_URL = `https://recom.fpt.vn/api/v0.1/recommendation/dataset/${DATSET_NAME}/`;
+const METHOD_OVERWRITE = `overwrite`;
+const METHOD_APPEND = `append`;
 
 async function loadData() {
   const result = await productService.getAllProducts(
@@ -49,6 +51,7 @@ async function main() {
   let list = await loadData();
   console.log(`Loading data done, ${list.length} items`);
 
+
   // get current datetime in format yyyyMMdd
   const date = new Date();
   const dateStr = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
@@ -61,14 +64,28 @@ async function main() {
     return;
   }
 
-  for (let i = list.length - 1; i >= 0; i--) {
+  console.log('Clearing data ...');
+  let isOverwrited = false;
+  while (!isOverwrited) {
+    try {
+      await axios.post(REQ_URL + METHOD_OVERWRITE, [list[0]], REQ_CONFIG);
+      isOverwrited = true;
+      listImpoted.push(list[0].id);
+    } catch (err) {
+      console.log(`Error: ${err}`);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+  }
+  console.log('Clearing data done');
+
+  for (let i = list.length - 1; i > 0; i--) {
     const data = list[i];
     if (listImpoted.indexOf(data.id) >= 0) {
       console.log(`--> Skip ${data.id}`);
       continue;
     }
     try {
-      await axios.post(REQ_URL, [data], REQ_CONFIG);
+      await axios.post(REQ_URL + METHOD_APPEND, [data], REQ_CONFIG);
       console.log(`${data.id} done`);
       listImpoted.push(data.id);
     } catch (error) {
