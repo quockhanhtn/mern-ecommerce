@@ -46,11 +46,10 @@ async function loadData() {
   }));
 }
 
-async function main() {
-  console.log('Loading data ...');
+export async function importDataToFpt() {
+  console.log('Loading data from db ...');
   let list = await loadData();
-  console.log(`Loading data done, ${list.length} items`);
-
+  console.log(`Loaded ${list.length} items from db !`);
 
   // get current datetime in format yyyyMMdd
   const date = new Date();
@@ -59,12 +58,12 @@ async function main() {
   const filePath = process.cwd() + `/tool/${dateStr}imported.json`;
   let listImpoted = fs.existsSync(filePath) ? JSON.parse(fs.readFileSync(filePath)) : [];
 
-  if (listImpoted.length == list.length) {
+  if (listImpoted.length === list.length) {
     console.log('All items imported');
     return;
   }
 
-  console.log('Clearing data ...');
+  console.log('Clearing old data ...');
   let isOverwrited = false;
   while (!isOverwrited) {
     try {
@@ -76,7 +75,7 @@ async function main() {
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
   }
-  console.log('Clearing data done');
+  console.log('Clearing old data done');
 
   for (let i = list.length - 1; i > 0; i--) {
     const data = list[i];
