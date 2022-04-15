@@ -1,4 +1,4 @@
-name: mobile
+name: hk_mobile
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -44,6 +44,7 @@ dependencies:
   after_layout: ^1.1.0
   http: ^0.13.4
   json_annotation: ^4.4.0
+  logger: ^1.1.0
 
 dev_dependencies:
   flutter_test:

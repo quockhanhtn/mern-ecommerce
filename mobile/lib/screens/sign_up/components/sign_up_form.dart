@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/components/custom_suffix_icon.dart';
-import 'package:mobile/components/default_button.dart';
-import 'package:mobile/components/form_error.dart';
-import 'package:mobile/screens/complete_profile/complete_profile_screen.dart';
+import 'package:hk_mobile/components/custom_suffix_icon.dart';
+import 'package:hk_mobile/components/default_button.dart';
+import 'package:hk_mobile/components/form_error.dart';
+import 'package:hk_mobile/screens/complete_profile/complete_profile_screen.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';

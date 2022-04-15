@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mobile/components/default_button.dart';
+import 'package:hk_mobile/components/default_button.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/dto/Cart.dart';
+import 'package:hk_mobile/dto/Cart.dart';
 
 import 'components/body.dart';
 import 'components/check_out_card.dart';

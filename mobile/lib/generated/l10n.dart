@@ -149,6 +149,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Search product`
+  String get productSearchHint {
+    return Intl.message(
+      'Search product',
+      name: 'productSearchHint',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

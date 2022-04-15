@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/components/rounded_icon_btn.dart';
-import 'package:mobile/dto/Product.dart';
+import 'package:hk_mobile/components/rounded_icon_btn.dart';
+import 'package:hk_mobile/dto/Product.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';

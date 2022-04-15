@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:mobile/dto/Product.dart';
+import 'package:hk_mobile/dto/Product.dart';
 import 'components/body.dart';
 import 'components/custom_app_bar.dart';
 

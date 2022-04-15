@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/components/custom_suffix_icon.dart';
-import 'package:mobile/components/default_button.dart';
-import 'package:mobile/components/form_error.dart';
-import 'package:mobile/components/no_account_text.dart';
-import 'package:mobile/size_config.dart';
+import 'package:hk_mobile/components/custom_suffix_icon.dart';
+import 'package:hk_mobile/components/default_button.dart';
+import 'package:hk_mobile/components/form_error.dart';
+import 'package:hk_mobile/components/no_account_text.dart';
+import 'package:hk_mobile/size_config.dart';
 
 import '../../../constants.dart';
 

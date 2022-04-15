@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants.dart';
-import 'package:mobile/size_config.dart';
+import 'package:hk_mobile/constants.dart';
+import 'package:hk_mobile/size_config.dart';
 
 import 'complete_profile_form.dart';
 

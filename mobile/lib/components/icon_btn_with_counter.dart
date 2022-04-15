@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../constants.dart';
-import '../../../size_config.dart';
-
 class IconBtnWithCounter extends StatelessWidget {
   const IconBtnWithCounter({
     Key? key,
     required this.svgSrc,
     this.numOfItem = 0,
     required this.press,
+    required this.icPadding,
+    required this.icHeight,
+    required this.icWidth,
+    required this.numberWidth,
+    required this.numberHeight,
+    required this.numberFontSize,
+    required this.boxColor
   }) : super(key: key);
 
   final String svgSrc;
   final int numOfItem;
   final GestureTapCallback press;
+
+  final double icPadding;
+  final double icHeight;
+  final double icWidth;
+
+  final double numberWidth;
+  final double numberHeight;
+  final double numberFontSize;
+
+  final Color boxColor;
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +39,11 @@ class IconBtnWithCounter extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           Container(
-            padding: EdgeInsets.all(getProportionateScreenWidth(12)),
-            height: getProportionateScreenWidth(46),
-            width: getProportionateScreenWidth(46),
+            padding: EdgeInsets.all(icPadding),
+            height: icHeight,
+            width: icWidth,
             decoration: BoxDecoration(
-              color: kSecondaryColor.withOpacity(0.1),
+              color: boxColor,
               shape: BoxShape.circle,
             ),
             child: SvgPicture.asset(svgSrc),
@@ -39,8 +53,8 @@ class IconBtnWithCounter extends StatelessWidget {
               top: -3,
               right: 0,
               child: Container(
-                height: getProportionateScreenWidth(16),
-                width: getProportionateScreenWidth(16),
+                height: numberHeight,
+                width: numberWidth,
                 decoration: BoxDecoration(
                   color: const Color(0xFFFF4848),
                   shape: BoxShape.circle,
@@ -50,7 +64,7 @@ class IconBtnWithCounter extends StatelessWidget {
                   child: Text(
                     "$numOfItem",
                     style: TextStyle(
-                      fontSize: getProportionateScreenWidth(10),
+                      fontSize: numberFontSize,
                       height: 1,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,

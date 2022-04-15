@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/dto/Product.dart';
-import 'package:mobile/screens/details/details_screen.dart';
+import 'package:hk_mobile/dto/Product.dart';
+import 'package:hk_mobile/screens/details/details_screen.dart';
 
 import '../constants.dart';
 import '../size_config.dart';
