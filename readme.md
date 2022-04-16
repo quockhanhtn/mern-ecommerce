@@ -1,4 +1,4 @@
-# Tiểu luận chuyên ngành Công nghệ phần mềm
+# Khoá luận tốt nghiệp - chuyên ngành Công nghệ phần mềm
 - Đề tài: **Website bán điện thoại và phụ kiện dùng MERN stack**
 - Giáo viên hướng dẫn: TS. Huỳnh Xuân Phụng
 - Sinh viên:
@@ -25,7 +25,7 @@
 	|JWT_SECRET            |✔       |Khóa bí mật (secret key), dùng trong Json Web token                                       |                |
 	|JWT_EXPIRES_IN        |✔       |Thời gian có hiệu lực của jsonWebToken. VD: 15m, 1d, 30d ...                              |                |
 	|JWT_REFRESH_EXPIRES_IN|✔       |Thời gian có hiệu lực của refreshToken. VD: 15d, 30d ...                                  |                |
-	|VNPAY_SECRET          |✔       |VNpay Secert                                                                              |                |
+	|VNPAY_SECRET          |✔       |VNpay Secret                                                                              |                |
 	|VNPAY_TMN_CODE        |✔       |VNPay TMN Code                                                                            |                |
 	|VNPAY_URL             |✔       |VNPay Url                                                                                 |                |
 	|FIREBASE_PROJECT_ID   |✔       |Firebase project Id                                                                       |                |
