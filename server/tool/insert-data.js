@@ -73,7 +73,7 @@ const categoryData = [
     _id: mongoose.Types.ObjectId('c00000000000000000000005'),
     order: 5,
     name: 'Âm thanh',
-    image: '/public/uploads/categories/airpods.svg',
+    image: '/public/uploads/categories/sound.svg',
   },
   // Âm thanh -> Tai nghe
   {
@@ -135,7 +135,7 @@ const categoryData = [
     _id: mongoose.Types.ObjectId('c00000000000000000000006'),
     order: 6,
     name: 'Phụ kiện',
-    image: '/public/uploads/categories/camera.svg',
+    image: '/public/uploads/categories/accessories.svg',
   },
   // Phụ kiện -> Sạc, cáp
   {
@@ -340,7 +340,6 @@ const categoryData = [
     _id: mongoose.Types.ObjectId('c00000000000000000000052'),
     order: 6.08,
     name: 'Phụ kiện khác',
-    image: '/public/uploads/categories/others.svg',
     parent: mongoose.Types.ObjectId('c00000000000000000000006'),
   }
   //#endregion
@@ -898,14 +897,16 @@ function splitProductName(name) {
 }
 
 async function insertProduct() {
-  const filePath = process.cwd() + '/tool/product.00.json';
+  const filePath = process.cwd() + '/tool/product.all.json';
+  const filePath0 = process.cwd() + '/tool/product.00.json';
   const filePath1 = process.cwd() + '/tool/product.01.json';
   const filePath2 = process.cwd() + '/tool/product.02.json';
 
   let listProduct = [
     ...JSON.parse(fs.readFileSync(filePath)),
-    ...JSON.parse(fs.readFileSync(filePath1)),
-    ...JSON.parse(fs.readFileSync(filePath2)),
+    // ...JSON.parse(fs.readFileSync(filePath0)),
+    // ...JSON.parse(fs.readFileSync(filePath1)),
+    // ...JSON.parse(fs.readFileSync(filePath2)),
   ];
   const listBrand = await Brand.find({}).lean().exec();
 
