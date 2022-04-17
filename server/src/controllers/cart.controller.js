@@ -3,8 +3,13 @@ import cartService from '../services/cart.service.js';
 
 export const getCartItems = async (req, res, next) => {
   try {
-    const userId = req.user._id;
-    const items = await cartService.getCartItemsByUser(userId);
+    let items;
+    const clientItems = req?.body?.items || [];
+    if (req?.user?._id) {
+      items = await cartService.getCartItemsByUser(req.user._id);
+    } else {
+      items = await cartService.getCartItemsFromData(clientItems);
+    }
     if (items) {
       ResponseUtils.status200(res, 'Get cart items successfully !', items);
     } else {

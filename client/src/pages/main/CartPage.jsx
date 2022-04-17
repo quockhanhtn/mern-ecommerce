@@ -4,10 +4,9 @@ import { Icon } from '@iconify/react';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 // material
 import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector } from '@material-ui/core';
-import { useTheme, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 // hooks
-import useLocales from '../../hooks/useLocales';
-import useOrderFlow from '../../hooks/useOrderFlow';
+import { useLocales, useOrderFlow } from '../../hooks';
 // components
 import Page from '../../components/Page';
 import { CheckoutCart, CheckoutPayment, CheckoutBillingAddress } from '../../components/checkout';
@@ -50,8 +49,6 @@ function QontoStepIcon({ active, completed }) {
 }
 
 export default function CartPage() {
-  const theme = useTheme();
-
   const { t } = useLocales();
 
   const { activeStep } = useOrderFlow();
@@ -79,7 +76,7 @@ export default function CartPage() {
 
   return (
     <Page title={t('cart.page-title')}>
-      <Container sx={{ marginY: theme.spacing(5) }}>
+      <Container sx={{ marginY: (theme) => theme.spacing(5) }}>
         <Grid container justifyContent="flex-start">
           <Grid item xs={12} md={8} sx={{ mb: 5 }}>
             <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>

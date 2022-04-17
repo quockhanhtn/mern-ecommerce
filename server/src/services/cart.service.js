@@ -4,7 +4,10 @@ import ApiError from '../utils/APIError.js';
 import StringUtils from '../utils/StringUtils.js';
 import productService from './products.service.js';
 
+const SELECTED_FIELDS = 'name variants.name variants.sku variants.variantName variants.price variants.marketPrice variants.thumbnail variants.sold variants.quantity';
+
 export default {
+  getCartItemsFromData,
   getCartItemsByUser,
   addItem,
   updateItemQty,
@@ -24,12 +27,21 @@ async function getProductInfo(productId, sku) {
   return { product, variant };
 }
 
+async function getCartItemsFromData(items) {
+  const filter = {
+    '_id': { $in: items.map(i => i.productId) },
+    'variants.sku': { $in: items.map(i => i.sku) }
+  };
+  const result = await productService.getAllProducts(SELECTED_FIELDS, items.length, 1, filter);
+  return result;
+}
+
 async function getCartItemsByUser(userId) {
   const filter = { userId };
   const populateOpts = [
     {
       path: 'items.productId',
-      select: 'name variants.name variants.sku variants.variantName variants.price variants.marketPrice variants.thumbnail variants.sold variants.quantity',
+      select: SELECTED_FIELDS,
       model: 'Product'
     }
   ];

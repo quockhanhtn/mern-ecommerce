@@ -8,9 +8,7 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 // hooks
 import { useDispatch, useSelector } from 'react-redux';
-import useLocales from '../../hooks/useLocales';
-import useAuth from '../../hooks/useAuth';
-import useOrderFlow from '../../hooks/useOrderFlow';
+import { useLocales, useAuth, useOrderFlow } from '../../hooks';
 // components
 import Scrollbar from '../Scrollbar';
 import EmptyContent from '../EmptyContent';

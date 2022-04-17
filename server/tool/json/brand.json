@@ -1,0 +1,514 @@
+[
+  {
+    "name": "iPhone",
+    "desc": "Apple iPhone",
+    "country": "US",
+    "headQuarters": "Cupertino, California, United States",
+    "founded": 1976,
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-iphone-220x48.png"
+  },
+  {
+    "name": "MacBook",
+    "desc": "Apple MacBook",
+    "country": "US",
+    "headQuarters": "Cupertino, California, United States",
+    "founded": 1976,
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-macbook-149x40.png"
+  },
+  {
+    "name": "Apple Watch",
+    "desc": "Apple Watch",
+    "country": "US",
+    "headQuarters": "Cupertino, California, United States",
+    "founded": 1976,
+    "image": "https://cdn.tgdd.vn/Brand/1/Apple7077-b26-220x48.png"
+  },
+  {
+    "name": "iPad",
+    "desc": "Apple iPad",
+    "country": "US",
+    "headQuarters": "Cupertino, California, United States",
+    "founded": 1976,
+    "image": "https://cdn.tgdd.vn/Brand/1/iPad-(Apple)522-b_4.jpg"
+  },
+  {
+    "name": "Samsung",
+    "desc": "Thương hiệu chiếm lĩnh thị trường smartphone Việt. Samsung là tập đoàn đa quốc gia có trụ sở được đặt tại thủ đô Seoul, Hàn Quốc",
+    "country": "KR",
+    "headQuarters": "Seoul, Hàn Quốc",
+    "founded": 1938,
+    "image": "https://cdn.tgdd.vn/Brand/1/samsungnew-220x48-1.png"
+  },
+  {
+    "name": "Oppo",
+    "desc": "",
+    "country": "CN",
+    "headQuarters": "Dongguan, China",
+    "founded": 2004,
+    "image": "https://cdn.tgdd.vn/Brand/1/OPPO42-b_5.jpg"
+  },
+  {
+    "name": "Vivo",
+    "desc": "",
+    "country": "CN",
+    "headQuarters": "Dongguan, China",
+    "founded": 2009,
+    "image": "https://cdn.tgdd.vn/Brand/1/Vivo42-b_50.jpg"
+  },
+  {
+    "name": "Xiaomi",
+    "desc": "",
+    "country": "CN",
+    "headQuarters": "Beijing, China",
+    "founded": 2010,
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-xiaomi-220x48-5.png"
+  },
+  {
+    "name": "Realme",
+    "desc": "",
+    "country": "CN",
+    "headQuarters": "Shenzhen, China",
+    "founded": 2018,
+    "image": "https://cdn.tgdd.vn/Brand/1/Realme42-b_37.png"
+  },
+  {
+    "name": "Nokia",
+    "desc": "",
+    "country": "FI",
+    "headQuarters": "Espoo, Finland",
+    "founded": 1865,
+    "image": "https://cdn.tgdd.vn/Brand/1/Nokia42-b_21.jpg"
+  },
+  {
+    "name": "Mobell",
+    "desc": "Mobell là nhãn hiệu di động đến từ \"Đảo quốc sư tử\" Singapore, có nhà máy sản xuất ở Singapore và Trung Quốc",
+    "country": "SG",
+    "headQuarters": "",
+    "founded": 2012,
+    "image": "https://cdn.tgdd.vn/Brand/1/Mobell42-b_19.jpg"
+  },
+  {
+    "name": "Itel",
+    "desc": "",
+    "country": "CN",
+    "headQuarters": "Shenzhen, China",
+    "founded": 2014,
+    "image": "https://cdn.tgdd.vn/Brand/1/Itel42-b_54.jpg"
+  },
+  {
+    "name": "Masstel",
+    "desc": "Masstel là thương hiệu công nghệ Việt thuộc Công ty Cổ phần Masscom Việt Nam",
+    "country": "VN",
+    "headQuarters": "",
+    "founded": 2010,
+    "image": "https://cdn.tgdd.vn/Brand/1/Masstel42-b_0.png"
+  },
+  {
+    "name": "Energizer",
+    "desc": "",
+    "country": "US",
+    "headQuarters": "St. Louis, Missouri, United States",
+    "founded": 1896,
+    "image": "https://cdn.tgdd.vn/Brand/1/Energizer42-b_32.jpg"
+  },
+  {
+    "name": "Garmin",
+    "desc": "",
+    "country": "US",
+    "headQuarters": "Olathe, Kansas, United States",
+    "founded": 1989,
+    "image": "https://cdn.tgdd.vn/Brand/1/Garmin7077-b_13.png"
+  },
+  {
+    "name": "BeU",
+    "desc": "Đồng hồ thông minh BeU là sản phẩm mang thương hiệu Việt, được sản xuất và phân phối bởi công ty Công ty Cổ phần Đầu tư Thế Giới Di Động (MWG)",
+    "country": "VN",
+    "headQuarters": "",
+    "image": "https://cdn.tgdd.vn/Brand/1/BeU7077-b_18.jpg"
+  },
+  {
+    "name": "Kidcare",
+    "desc": "Kidcare là hãng sản xuất đồng hồ thông minh dành riêng cho trẻ em, bên cạnh việc giúp cho trẻ theo dõi giờ giấc thì còn hỗ trợ phụ huynh dõi theo con em mình mà không cần phải 24/24 giờ theo sát",
+    "country": "CN",
+    "headQuarters": "",
+    "image": "https://cdn.tgdd.vn/Brand/1/Kidcare7077-b_5.jpg"
+  },
+  {
+    "name": "Suunto",
+    "desc": "Suunto là thương hiệu đồng hồ được thành lập vào năm 1936 ở Phần Lan bởi ông Tuomas Vohlonen, một nhà khảo sát cổ tài năng",
+    "country": "FI",
+    "headQuarters": "Vantaa, Phần Lan",
+    "founded": 1936,
+    "image": "https://cdn.tgdd.vn/Brand/1/Suunto7077-b_14.png"
+  },
+  {
+    "name": "Huami Amazfit",
+    "desc": "Huami là hãng chuyên cung cấp các dịch vụ chăm sóc sức khỏe thông qua các thiết bị đeo thông minh hàng đầu thế giới",
+    "country": "CN",
+    "headQuarters": "Hefei, China",
+    "founded": 2013,
+    "image": "https://cdn.tgdd.vn/Brand/1/Huami-Amazfit7077-b_30.jpg"
+  },
+  {
+    "name": "Oaxis MyFirst Fone",
+    "desc": "Oaxis - một thương hiệu công nghệ hướng đến sức khỏe có tiếng tại Singapore",
+    "country": "SG",
+    "headQuarters": "",
+    "founded": 2010,
+    "image": "https://cdn.tgdd.vn/Brand/1/Oaxis-MyFirst-Fone7077-b_25.jpg"
+  },
+  {
+    "name": "Abardeen",
+    "desc": "Abardeen là thương hiệu đồng hồ thông minh trẻ em thuộc công ty Shenzhen Continental Wireless Co",
+    "country": "CN",
+    "headQuarters": "",
+    "image": "https://cdn.tgdd.vn/Brand/1/Abardeen7077-b_25.jpg"
+  },
+  {
+    "name": "Huawei",
+    "desc": "",
+    "country": "CN",
+    "headQuarters": "Shenzhen, China",
+    "founded": 1987,
+    "image": "https://cdn.tgdd.vn/Brand/1/Huawei522-b_4.jpg"
+  },
+  {
+    "name": "Lenovo",
+    "desc": "",
+    "country": "HK",
+    "headQuarters": "Quarry Bay, Hong Kong",
+    "founded": 1984,
+    "image": "https://cdn.tgdd.vn/Brand/1/Lenovo522-b_6.jpg"
+  },
+  {
+    "name": "Asus",
+    "desc": "",
+    "country": "TW",
+    "headQuarters": "Beitou District, Taipei, Taiwan",
+    "founded": 1989,
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-asus-149x40.png"
+  },
+  {
+    "name": "HP",
+    "desc": "",
+    "country": "US",
+    "headQuarters": "Palo Alto, California, United States",
+    "founded": 1998,
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-hp-149x40-1.png"
+  },
+  {
+    "name": "Acer",
+    "desc": "",
+    "country": "TW",
+    "headQuarters": "New Taipei City, Taiwan",
+    "founded": 1976,
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-acer-149x40.png"
+  },
+  {
+    "name": "Dell",
+    "desc": "",
+    "country": "US",
+    "headQuarters": "Round Rock, Texas, United States",
+    "founded": 1984,
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-dell-149x40.png"
+  },
+  {
+    "name": "MSI",
+    "desc": "Micro-Star International",
+    "country": "TW",
+    "headQuarters": "Zhonghe District, Taipei, Taiwan",
+    "founded": 1986,
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-msi-149x40.png"
+  },
+  {
+    "name": "LG",
+    "desc": "",
+    "country": "KR",
+    "headQuarters": "Seoul, South Korea",
+    "founded": 1947,
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-lg-149x40.png"
+  },
+  {
+    "name": "Gigabyte",
+    "desc": "",
+    "country": "TW",
+    "headQuarters": "New Taipei City, Taiwan",
+    "founded": 1986,
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-gigabyte-149x40.png"
+  },
+  {
+    "name": "Intel",
+    "desc": "",
+    "country": "US",
+    "headQuarters": "Santa Clara, California, United States",
+    "founded": 1968,
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-intel-149x40.png"
+  },
+  {
+    "name": "Surface",
+    "desc": "Microsoft Surface",
+    "country": "US",
+    "headQuarters": "Redmond, Washington, United States",
+    "founded": 1975,
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-surface-149x40-1.png"
+  },
+  {
+    "name": "Chuwi",
+    "desc": "",
+    "country": "CN",
+    "headQuarters": "",
+    "founded": 2004,
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-chuwi-149x40.png"
+  },
+  {
+    "name": "Anker",
+    "image": "https://cdn.tgdd.vn/Brand/1/Anker57-b_11.png"
+  },
+  {
+    "name": "Xmobile",
+    "image": "https://cdn.tgdd.vn/Brand/1/Xmobile57-b_42.jpg"
+  },
+  {
+    "name": "AVA",
+    "image": "https://cdn.tgdd.vn/Brand/1/AVA57-b_50.jpg"
+  },
+  {
+    "name": "AVA+",
+    "image": "https://cdn.tgdd.vn/Brand/1/220-48-220x48-10.jpg"
+  },
+  {
+    "name": "Hydrus",
+    "image": "https://cdn.tgdd.vn/Brand/1/220-48-220x48-3.jpg"
+  },
+  {
+    "name": "Hyper",
+    "image": "https://cdn.tgdd.vn/Brand/1/HyperDrive9499-b11-220x48-1.jpg"
+  },
+  {
+    "name": "Belkin",
+    "image": "https://cdn.tgdd.vn/Brand/1/220-48-220x48-23.jpg"
+  },
+  {
+    "name": "eValu",
+    "image": "https://cdn.tgdd.vn/Brand/1/eValu57-b51-220x48-1.jpg"
+  },
+  {
+    "name": "eSaver",
+    "image": "https://cdn.tgdd.vn/Brand/1/eSaver57-b_47.jpg"
+  },
+  {
+    "name": "Mophie",
+    "image": "https://cdn.tgdd.vn/Brand/1/220-48-220x48.jpg"
+  },
+  {
+    "name": "Mbest",
+    "image": "https://cdn.tgdd.vn/Brand/1/Mbest57-b_9.jpg"
+  },
+  {
+    "name": "iWalk",
+    "image": "https://cdn.tgdd.vn/Brand/1/iWalk57-b_1.png"
+  },
+  {
+    "name": "AUKEY",
+    "image": "https://cdn.tgdd.vn/Brand/1/AUKEY57-b_21.png"
+  },
+  {
+    "name": "Sony",
+    "image": "https://cdn.tgdd.vn/Brand/1/Sony57-b_43.jpg"
+  },
+  {
+    "name": "Apple",
+    "image": "https://cdn.tgdd.vn/Brand/1/Apple9499-b_28.jpg"
+  },
+  {
+    "name": "Philips",
+    "image": "https://cdn.tgdd.vn/Brand/1/Philips9499-b_26.png"
+  },
+  {
+    "name": "Roman",
+    "image": "https://cdn.tgdd.vn/Brand/1/Roman9499-b_8.jpg"
+  },
+  {
+    "name": "VCOM",
+    "image": "https://cdn.tgdd.vn/Brand/1/logovcom-220x48-1.png"
+  },
+  {
+    "name": "Playa",
+    "image": "https://cdn.tgdd.vn/Brand/1/220-48-220x48-25.jpg"
+  },
+  {
+    "name": "Omars",
+    "image": "https://cdn.tgdd.vn/Brand/1/Omars-58-b_35.jpg"
+  },
+  {
+    "name": "ECO",
+    "image": "https://cdn.tgdd.vn/Brand/1/ECO58-b_56.jpg"
+  },
+  {
+    "name": "Pisen",
+    "image": "https://cdn.tgdd.vn/Brand/1/Pisen58-b_24.jpg"
+  },
+  {
+    "name": "Leagtech",
+    "image": "https://cdn.tgdd.vn/Brand/1/Leagtech58-b_26.jpg"
+  },
+  {
+    "name": "Beats",
+    "image": "https://cdn.tgdd.vn/Brand/1/Beats54-b_21.jpg"
+  },
+  {
+    "name": "JBL",
+    "image": "https://cdn.tgdd.vn/Brand/1/JBL54-b_27.jpg"
+  },
+  {
+    "name": "Harman Kardon",
+    "image": "https://cdn.tgdd.vn/Brand/1/Harman-Kardon54-b_21.jpg"
+  },
+  {
+    "name": "Mozard",
+    "image": "https://cdn.tgdd.vn/Brand/1/Mozard54-b_35.jpg"
+  },
+  {
+    "name": "Jabra",
+    "image": "https://cdn.tgdd.vn/Brand/1/Jabra54-b_17.jpg"
+  },
+  {
+    "name": "Awei",
+    "image": "https://cdn.tgdd.vn/Brand/1/Awei54-b_50.jpg"
+  },
+  {
+    "name": "MozardX",
+    "image": "https://cdn.tgdd.vn/Brand/1/MozardX54-b_7.jpg"
+  },
+  {
+    "name": "Logitech",
+    "image": "https://cdn.tgdd.vn/Brand/1/Logitech54-b_40.jpg"
+  },
+  {
+    "name": "Kanen",
+    "image": "https://cdn.tgdd.vn/Brand/1/Kanen54-b_9.jpg"
+  },
+  {
+    "name": "Soundpeats",
+    "image": "https://cdn.tgdd.vn/Brand/1/Soundpeats54-b_10.jpg"
+  },
+  {
+    "name": "Plantronics",
+    "image": "https://cdn.tgdd.vn/Brand/1/Plantronics54-b_13.png"
+  },
+  {
+    "name": "Rapoo",
+    "image": "https://cdn.tgdd.vn/Brand/1/Rapoo54-b_55.png"
+  },
+  {
+    "name": "Corsair",
+    "image": "https://cdn.tgdd.vn/Brand/1/Corsair54-b_4.jpg"
+  },
+  {
+    "name": "JLab",
+    "image": "https://cdn.tgdd.vn/Brand/1/Logo-Jlab-lon-220x48-1.jpg"
+  },
+  {
+    "name": "Padmate",
+    "image": "https://cdn.tgdd.vn/Brand/1/LogoPadmatelớn-220x48.jpg"
+  },
+  {
+    "name": "Rezo",
+    "image": "https://cdn.tgdd.vn/Brand/1/LOGO-REZO-220x48-1.png"
+  },
+  {
+    "name": "Fenda",
+    "image": "https://cdn.tgdd.vn/Brand/1/Fenda2162-b_18.jpg"
+  },
+  {
+    "name": "Enkor",
+    "image": "https://cdn.tgdd.vn/Brand/1/Enkor2162-b_14.jpg"
+  },
+  {
+    "name": "Microlab",
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-microlab-220x48-1.png"
+  },
+  {
+    "name": "Wetop",
+    "image": "https://cdn.tgdd.vn/Brand/1/Wetop2162-b_25.jpg"
+  },
+  {
+    "name": "iCutes",
+    "image": "https://cdn.tgdd.vn/Brand/1/iCutes2162-b_23.jpg"
+  },
+  {
+    "name": "Sandisk",
+    "image": "https://cdn.tgdd.vn/Brand/1/Sandisk-b.png"
+  },
+  {
+    "name": "Transcend",
+    "image": "https://cdn.tgdd.vn/Brand/1/Transcend-b.png"
+  },
+  {
+    "name": "Apacer",
+    "image": "https://cdn.tgdd.vn/Brand/1/Apacer-b.png"
+  },
+  {
+    "name": "Microsoft",
+    "image": "https://cdn.tgdd.vn/Brand/1/Microsoft86-b_0.jpg"
+  },
+  {
+    "name": "Genius",
+    "image": "https://cdn.tgdd.vn/Brand/1/Genius86-b_53.jpg"
+  },
+  {
+    "name": "Zadez",
+    "image": "https://cdn.tgdd.vn/Brand/1/Zadez86-b_8.jpg"
+  },
+  {
+    "name": "Anitech",
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-anitech-220x48-1.jpg"
+  },
+  {
+    "name": "DareU",
+    "image": "https://cdn.tgdd.vn/Brand/1/logodareu-220x48-1.png"
+  },
+  {
+    "name": "HyperX",
+    "image": "https://cdn.tgdd.vn/Brand/1/logo-hyperx-1-220x48-1.jpg"
+  },
+  {
+    "name": "A4Tech",
+    "image": "https://cdn.tgdd.vn/Brand/1/logoa4tech-220x48-3.png"
+  },
+  {
+    "name": "Razer",
+    "image": "https://cdn.tgdd.vn/Brand/1/220-48-220x48-13.jpg"
+  },
+  {
+    "name": "Totolink",
+    "image": "https://cdn.tgdd.vn/Brand/1/Totolink4727-b_20.jpg"
+  },
+  {
+    "name": "Tenda",
+    "image": "https://cdn.tgdd.vn/Brand/1/Tenda4727-b_40.png"
+  },
+  {
+    "name": "TP-Link",
+    "image": "https://cdn.tgdd.vn/Brand/1/TP-Link4727-b_48.jpg"
+  },
+  {
+    "name": "Mercusys",
+    "image": "https://cdn.tgdd.vn/Brand/1/Mercusys4727-b_26.jpg"
+  },
+  {
+    "name": "Linksys",
+    "image": "https://cdn.tgdd.vn/Brand/1/220-48-220x48-4.jpg"
+  },
+  {
+    "name": "D-Link",
+    "image": "https://cdn.tgdd.vn/Brand/1/160-40-160x40-12.jpg"
+  },
+  {
+    "name": "Audio Technica",
+    "country": "JP",
+    "founded": 1962,
+    "image": "https://cdn.tgdd.vn/Brand/1/Audio-Technica54-b_21.jpg",
+    "desc": "Chuyên sản xuất các thiết bị âm thanh như Tai nghe và Micro"
+  }
+]

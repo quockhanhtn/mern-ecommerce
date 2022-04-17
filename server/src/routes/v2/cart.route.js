@@ -6,7 +6,7 @@ import {
   deleteItem,
   cleanCart,
 } from '../../controllers/cart.controller.js';
-import { isAuthorized } from '../../middlewares/jwt-auth.js';
+import { isAuthorized, isGuestOrAuthorized } from '../../middlewares/jwt-auth.js';
 
 const router = Router();
 
@@ -15,11 +15,12 @@ const router = Router();
  * all routes : any user
  */
 
-router.route('/').get(isAuthorized, getCartItems)
-  .post(isAuthorized, addItem)
+router.route('/').post(isGuestOrAuthorized, getCartItems)
+  //.post(isAuthorized, addItem)
   .patch(isAuthorized, updateItemQty)
   .delete(isAuthorized, deleteItem);
 
+router.route('/add').post(isAuthorized, addItem);
 router.route('/clean').delete(isAuthorized, cleanCart);
 
 export default router;
