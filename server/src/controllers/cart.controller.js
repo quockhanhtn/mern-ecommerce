@@ -48,7 +48,7 @@ export const updateItemQty = async (req, res, next) => {
 export const deleteItem = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const { productId, sku } = req.body;
+    const { productId, sku } =  req.params;
 
     const result = await cartService.removeItem(userId, productId, sku);
     if (result) {

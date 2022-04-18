@@ -126,7 +126,7 @@ async function removeItem(userId, productId, sku) {
   if (!userCart || !item) {
     throw ApiError.simple(`This item not exits in your cart`, 404);
   }
-  return Cart.findByIdAndUpdate(userCart._id, { $pull: { items: { productId, sku } } });
+  return Cart.findByIdAndUpdate(userCart._id, { $pull: { items: { productId, sku } } }, { new: true });
 }
 
 async function cleanCart(userId) {

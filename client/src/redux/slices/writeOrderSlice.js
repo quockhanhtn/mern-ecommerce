@@ -85,8 +85,9 @@ export const decreaseProductToCartDB = (productInfo) => async (dispatch) => {
 export const deleteProductToCartDB = (productInfo) => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    await api.removeItem(productInfo);
-    dispatch(actions.delete({ _id: productInfo.productId }));
+    const { productId, sku } = productInfo;
+    await api.removeItem(productId, sku);
+    dispatch(actions.delete({ productId, sku }));
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
   }

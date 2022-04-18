@@ -116,5 +116,5 @@ export const getCartItems = () => API.post(`/cart`);
 export const addItemToCart = (item) => API.post(`/cart/add`, item);
 export const increaseQty = (item) => API.patch(`/cart`, { ...item, delta: 1 });
 export const decreaseQty = (item) => API.patch(`/cart`, { ...item, delta: -1 });
-export const removeItem = (productInfo) => API.delete(`/cart/delete`, productInfo);
+export const removeItem = (productId, sku) => API.delete(`/cart/${productId}/${sku}`);
 export const cleanCart = () => API.delete(`/cart/clean`);

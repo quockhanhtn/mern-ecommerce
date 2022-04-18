@@ -18,9 +18,10 @@ const router = Router();
 router.route('/').post(isGuestOrAuthorized, getCartItems)
   //.post(isAuthorized, addItem)
   .patch(isAuthorized, updateItemQty)
-  .delete(isAuthorized, deleteItem);
 
 router.route('/add').post(isAuthorized, addItem);
+
+router.route('/:productId/:sku').delete(isAuthorized, deleteItem);
 router.route('/clean').delete(isAuthorized, cleanCart);
 
 export default router;

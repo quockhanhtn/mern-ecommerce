@@ -62,16 +62,12 @@ export default function CheckoutCart() {
     isEmptyCart = !(listProducts && listProducts.length > 0);
   }, [listProducts]);
 
-  const handleDeleteCart = (_id, skuVariant) => {
-    removeToCart(_id, skuVariant).then(() => {
+  const handleDeleteCart = (productId, sku) => {
+    removeToCart(productId, sku).then(() => {
       enqueueSnackbar(t('cart.notification.remove'), { variant: 'success' });
     });
-    const productInfo = {
-      productId: _id,
-      skuVariant
-    };
     if (isAuthenticated) {
-      dispatch(deleteProductToCartDB(productInfo)).then(() => {
+      dispatch(deleteProductToCartDB({ productId, sku })).then(() => {
         dispatch(getProductToCartDB());
       });
     }
