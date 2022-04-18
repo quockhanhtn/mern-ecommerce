@@ -1,7 +1,5 @@
 // icons
 import { Icon } from '@iconify/react';
-import add12Filled from '@iconify/icons-fluent/add-12-filled';
-import subtract12Filled from '@iconify/icons-fluent/subtract-12-filled';
 import roundAddShoppingCart from '@iconify/icons-ic/round-add-shopping-cart';
 //
 
@@ -9,16 +7,18 @@ import { useSnackbar } from 'notistack';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFormik, Form, FormikProvider, useField } from 'formik';
+import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Stack, Button, Divider, Typography, FormHelperText } from '@material-ui/core';
 // components
-import { MButton, MIconButton } from '../../@material-extend';
+import { MButton } from '../../@material-extend';
 import { fCurrency } from '../../../utils/formatNumber';
 import { addItemToCart } from '../../../redux/slices/writeOrderSlice';
 import { useAuth, useLocales, useOrderFlow } from '../../../hooks';
-// --------------------
+import Incrementer from '../../Incrementer';
+
+// ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
   padding: theme.spacing(3),
@@ -28,53 +28,6 @@ const RootStyle = styled('div')(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-
-const Incrementer = (props) => {
-  const [field, , helpers] = useField(props);
-  const { available } = props;
-  const { value } = field;
-  const { setValue } = helpers;
-
-  const incrementQuantity = () => {
-    setValue(value + 1);
-  };
-  const decrementQuantity = () => {
-    setValue(value - 1);
-  };
-
-  return (
-    <Box
-      sx={{
-        py: 0.5,
-        px: 0.75,
-        border: 1,
-        lineHeight: 0,
-        borderRadius: 1,
-        display: 'flex',
-        alignItems: 'center',
-        borderColor: 'grey.50032'
-      }}
-    >
-      <MIconButton size="small" color="inherit" disabled={value <= 1} onClick={decrementQuantity}>
-        <Icon icon={subtract12Filled} width={16} height={16} />
-      </MIconButton>
-      <Typography
-        variant="body2"
-        component="span"
-        sx={{
-          width: 40,
-          textAlign: 'center',
-          display: 'inline-block'
-        }}
-      >
-        {value}
-      </Typography>
-      <MIconButton size="small" color="inherit" disabled={value >= available} onClick={incrementQuantity}>
-        <Icon icon={add12Filled} width={16} height={16} />
-      </MIconButton>
-    </Box>
-  );
-};
 
 export default function ProductDetailsSummary({ isLoading, product, indexVariant, handleChangeIndexVariant }) {
   const { addToCart } = useOrderFlow();
@@ -172,7 +125,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
                   variants.length > 0 &&
                   variants.map((variant, index) => (
                     <Button
-                      clicked
+                      // clicked
                       key={variant.sku}
                       onClick={() => {
                         handleChangeIndexVariant(index);

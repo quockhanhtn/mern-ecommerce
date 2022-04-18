@@ -85,33 +85,25 @@ export default function CheckoutCart() {
     // dispatch(applyDiscount(value));
   };
 
-  const handleIncreaseQuantity = (_id, skuVariant) => {
-    increaseProductInCart(_id, skuVariant).then(() => {
+  const handleIncreaseQuantity = (productId, sku) => {
+    increaseProductInCart(productId, sku).then(() => {
       enqueueSnackbar(t('cart.notification.increase'), { variant: 'success' });
     });
     if (isAuthenticated) {
-      const productInfo = {
-        productId: _id,
-        skuVariant
-      };
       setIsIncreaseToCart(true);
-      dispatch(increaseProductToCartDB(productInfo)).then(() => {
+      dispatch(increaseProductToCartDB({ productId, sku })).then(() => {
         setIsIncreaseToCart(false);
       });
     }
   };
 
-  const handleDecreaseQuantity = (_id, skuVariant) => {
-    decreaseProductInCart(_id, skuVariant).then(() => {
+  const handleDecreaseQuantity = (productId, sku) => {
+    decreaseProductInCart(productId, sku).then(() => {
       enqueueSnackbar(t('cart.notification.decrease'), { variant: 'success' });
     });
     if (isAuthenticated) {
-      const productInfo = {
-        productId: _id,
-        skuVariant
-      };
       setIsDecreaseToCart(true);
-      dispatch(decreaseProductToCartDB(productInfo)).then(() => {
+      dispatch(decreaseProductToCartDB({ productId, sku })).then(() => {
         setIsDecreaseToCart(false);
       });
     }

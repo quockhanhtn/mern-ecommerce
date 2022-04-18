@@ -4,25 +4,29 @@ import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import minusFill from '@iconify/icons-eva/minus-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
+import radioButtonOffFill from '@iconify/icons-eva/radio-button-off-fill';
+import radioButtonOnFill from '@iconify/icons-eva/radio-button-on-fill';
+import radioButtonOnOutline from '@iconify/icons-eva/radio-button-on-outline';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import {
   Box,
-  Table,
-  Stack,
+  Checkbox,
   Divider,
-  TableRow,
+  Stack,
+  Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
-  Typography,
-  TableContainer
+  TableRow,
+  Typography
 } from '@material-ui/core';
-import useLocales from '../../hooks/useLocales';
-// utils
-import { fCurrency } from '../../utils/formatNumber';
+import { useState } from 'react';
 //
-import { MIconButton } from '../@material-extend';
+import { useLocales } from '../../hooks';
+import { fCurrency } from '../../utils/formatNumber';
+import { MCheckbox, MIconButton } from '../@material-extend';
 
 // ----------------------------------------------------------------------
 
@@ -103,20 +107,53 @@ export default function ProductList({
 }) {
   const { t, currentLang } = useLocales();
   const { products } = formik.values;
+  const [selectedItems, setSelectedItems] = useState([]);
 
-  const handleIncreaseQuantity = (_id, skuVariant) => {
-    onIncreaseQuantity(_id, skuVariant);
+  const handleIncreaseQuantity = (productId, sku) => {
+    onIncreaseQuantity(productId, sku);
   };
 
-  const handleDecreaseQuantity = (_id, skuVariant) => {
-    onDecreaseQuantity(_id, skuVariant);
+  const handleDecreaseQuantity = (productId, sku) => {
+    onDecreaseQuantity(productId, sku);
   };
+
+  const handleSelectAll = () => {
+    if (selectedItems.length < products.length) {
+      setSelectedItems(products.map((x) => ({ productId: x.productId, sku: x.sku })));
+    } else {
+      setSelectedItems([]);
+    }
+  };
+
+  const handleSelectChange = (e, productId, sku) => {
+    if (e.target.checked) {
+      setSelectedItems((prev) => [...prev, { productId, sku }]);
+    } else {
+      setSelectedItems((prev) => [...prev.filter((x) => x.productId !== productId && x.sku !== sku)]);
+    }
+  };
+
+  const isSelected = (productId, sku) =>
+    selectedItems.findIndex((x) => x.productId === productId && x.sku === sku) > -1;
 
   return (
     <TableContainer sx={{ minWidth: 720 }}>
       <Table>
         <TableHead>
           <TableRow>
+            <TableCell padding="checkbox">
+              <MCheckbox
+                indeterminate={selectedItems.length > 0 && selectedItems.length < products?.length}
+                checked={products?.length > 0 && selectedItems.length === products?.length}
+                onChange={handleSelectAll}
+                inputProps={{ 'aria-label': 'select all desserts' }}
+                color="primary"
+                sx={{
+                  color: 'rgba(0,0,0,0)',
+                  '&:hover': { color: (theme) => theme.palette.primary.main }
+                }}
+              />
+            </TableCell>
             <TableCell>{t('products.title')}</TableCell>
             <TableCell align="left">{t('cart.unit-price')}</TableCell>
             <TableCell align="center">{t('products.quantity')}</TableCell>
@@ -127,9 +164,31 @@ export default function ProductList({
 
         <TableBody>
           {products.map((product) => {
-            const { _id, skuVariant, name, variantName, thumbnail, price, quantity, quantityAvailable } = product;
+            const { productId, sku, qty, name, variantName, thumbnail, price, marketPrice, quantity, sold } = product;
+            const isItemSelected = isSelected(productId, sku);
+            const labelId = `enhanced-table-checkbox-${productId}_${sku}`;
             return (
-              <TableRow key={_id}>
+              <TableRow
+                hover
+                key={`${productId}_${sku}`}
+                role="checkbox"
+                aria-checked={isItemSelected}
+                tabIndex={-1}
+                selected={isItemSelected}
+              >
+                <TableCell padding="checkbox">
+                  <MCheckbox
+                    // inputProps={{ 'aria-labelledby': labelId }}
+                    onChange={(e) => handleSelectChange(e, productId, sku)}
+                    checked={isItemSelected}
+                    sx={{
+                      color: 'rgba(0,0,0,0)',
+                      '&:hover': {
+                        color: (theme) => theme.palette.primary.main
+                      }
+                    }}
+                  />
+                </TableCell>
                 <TableCell>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <ThumbImgStyle alt="product image" src={thumbnail} />
@@ -144,12 +203,7 @@ export default function ProductList({
                         alignItems="center"
                         divider={<Divider orientation="vertical" sx={{ height: 14, alignSelf: 'center' }} />}
                       >
-                        <Typography variant="body2">
-                          {/* <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
-                            Variant Name:&nbsp;
-                          </Typography> */}
-                          {variantName}
-                        </Typography>
+                        <Typography variant="body2">{variantName + sku}</Typography>
                       </Stack>
                     </Box>
                   </Box>
@@ -159,20 +213,20 @@ export default function ProductList({
 
                 <TableCell align="center">
                   <Incrementer
-                    quantity={quantity}
-                    available={quantityAvailable}
-                    availableText={t('cart.available', { available: quantityAvailable })}
-                    onDecrease={() => handleDecreaseQuantity(_id, skuVariant)}
-                    onIncrease={() => handleIncreaseQuantity(_id, skuVariant)}
+                    quantity={qty}
+                    available={quantity - sold}
+                    availableText={t('cart.available', { available: quantity - sold })}
+                    onDecrease={() => handleDecreaseQuantity(productId, sku)}
+                    onIncrease={() => handleIncreaseQuantity(productId, sku)}
                     isDecreaseToCart={isDecreaseToCart}
                     isIncreaseToCart={isIncreaseToCart}
                   />
                 </TableCell>
 
-                <TableCell align="right">{fCurrency(price * quantity, currentLang.value)}</TableCell>
+                <TableCell align="right">{fCurrency(price * qty, currentLang.value)}</TableCell>
 
                 <TableCell align="right">
-                  <MIconButton onClick={() => onDelete(_id, skuVariant)}>
+                  <MIconButton onClick={() => onDelete(productId, sku)}>
                     <Icon icon={trash2Fill} width={20} height={20} />
                   </MIconButton>
                 </TableCell>

@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import Cart from '../models/cart.model.js';
 import ApiError from '../utils/APIError.js';
-import StringUtils from '../utils/StringUtils.js';
 import productService from './products.service.js';
 
 const SELECTED_FIELDS = 'name variants.name variants.sku variants.variantName variants.price variants.marketPrice variants.thumbnail variants.sold variants.quantity';
@@ -28,11 +27,28 @@ async function getProductInfo(productId, sku) {
 }
 
 async function getCartItemsFromData(items) {
-  const filter = {
-    '_id': { $in: items.map(i => i.productId) },
-    'variants.sku': { $in: items.map(i => i.sku) }
-  };
-  const result = await productService.getAllProducts(SELECTED_FIELDS, items.length, 1, filter);
+  const filter = { '_id': { $in: items.map(i => i.productId) } };
+  const { list: products } = await productService.getAllProducts(SELECTED_FIELDS, items.length, 1, filter);
+
+  let result = [];
+  for (let i = 0; i < items.length; i++) {
+    const element = items[i];
+    const currentProduct = products.find(p => p._id.toString() === element.productId.toString());
+    if (currentProduct?.variants?.length > 0) {
+      const { variants, _id: uuId,...product } = currentProduct;
+      const variant = variants.find(v => v.sku === element.sku);
+      if (variant) {
+        result.push({
+          ...product,
+          ...variant,
+          productId: uuId,
+          sku: element.sku,
+          qty: element.qty
+        });
+      }
+    }
+  }
+
   return result;
 }
 
@@ -46,14 +62,16 @@ async function getCartItemsByUser(userId) {
     }
   ];
   const cart = await Cart.findOne(filter).populate(populateOpts).lean().exec();
-  return cart?.items?.map(item => ({
-    product: {
-      ...item.productId,
-      variants: item.productId.variants.filter(v => v.sku === item.sku)
-    },
-    sku: item.sku,
-    qty: item.qty
-  }));
+  return cart?.items?.map(item => {
+    const { variants, _id: uuId,...product } = item.productId;
+    return {
+      ...product,
+      ...(variants?.filter(v => v.sku === item.sku)?.[0] || {}),
+      productId: uuId,
+      sku: item.sku,
+      qty: item.qty
+    };
+  });
 }
 
 async function addItem(userId, productId, sku, qty = 1) {

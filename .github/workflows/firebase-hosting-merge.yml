@@ -11,12 +11,12 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
 
-      - name: NodeJs set up 📀
+      - name: NodeJs set up 💿
         uses: actions/setup-node@v2
         with:
           node-version: '14'
       
-      - name: Run Unit test on server app 📐
+      - name: Run Unit test on server app 💫
         working-directory: server
         env:
           CI: false

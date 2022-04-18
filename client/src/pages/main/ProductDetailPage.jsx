@@ -172,14 +172,7 @@ export default function ProductDetailPage() {
         <Grid container sx={{ my: 4 }}>
           {productMoreInfos.map((item) => (
             <Grid item xs={12} md={4} key={item.title}>
-              <Box
-                sx={{
-                  my: 2,
-                  mx: 'auto',
-                  maxWidth: 280,
-                  textAlign: 'center'
-                }}
-              >
+              <Box sx={{ my: 2, mx: 'auto', maxWidth: 280, textAlign: 'center' }}>
                 <IconWrapperStyle>
                   <Icon icon={item.icon} width={36} height={36} />
                 </IconWrapperStyle>

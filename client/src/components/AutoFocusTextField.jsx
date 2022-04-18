@@ -19,7 +19,7 @@ function AutoFocusTextField({ InputComponent, ...other }) {
 }
 
 AutoFocusTextField.propTypes = {
-  InputComponent: PropTypes.node
+  InputComponent: PropTypes.any
 };
 
 AutoFocusTextField.defaultProps = {
