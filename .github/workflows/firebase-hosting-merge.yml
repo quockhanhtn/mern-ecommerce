@@ -3,6 +3,7 @@ name: Deploy to Firebase Hosting on merge
   push:
     branches:
       - master
+
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
@@ -10,12 +11,22 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
 
-      - name: Nodejs set up
+      - name: NodeJs set up 📀
         uses: actions/setup-node@v2
         with:
           node-version: '14'
+      
+      - name: Run Unit test on server app 📐
+        working-directory: server
+        env:
+          CI: false
+          NODE_OPTIONS: '--max-old-space-size=8192'
+        run: |
+          set -x
+          npm ci
+          npm test
 
-      - name: Build Client
+      - name: Build Client app ⭐
         working-directory: client
         env:
           CI: false
@@ -26,34 +37,22 @@ jobs:
           REACT_APP_FPT_API_ID: ${{ secrets.REACT_APP_FPT_API_ID }}
         run: |
           set -x
-          npm -v
           npm ci
-          npm run pullrequest
+          npm run build
 
-      - name: Archive Production Artifact
+      - name: Archive build artifact ↗️
         uses: actions/upload-artifact@v2
         with:
           name: build
           path: ./client/build
 
-      - name: Build Unit Test for Server
-        working-directory: server
-        env:
-          CI: false
-          NODE_OPTIONS: '--max-old-space-size=8192'
-        run: |
-          set -x
-          npm -v
-          npm ci
-          npm test
-
-      - name: Download Artifact
+      - name: Download artifact ↙️ 
         uses: actions/download-artifact@v2
         with:
           name: build
           path: build
 
-      - name: Deploy 🚀
+      - name: Deploy release app to Firebase 🚀
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
