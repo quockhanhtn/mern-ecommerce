@@ -14,12 +14,7 @@ import Scrollbar from '../Scrollbar';
 import EmptyContent from '../EmptyContent';
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutProductList from './CheckoutProductList';
-import {
-  decreaseProductToCartDB,
-  deleteProductToCartDB,
-  getProductToCartDB,
-  increaseProductToCartDB
-} from '../../redux/slices/writeOrderSlice';
+import { decreaseItemQty, deleteProductToCartDB, getCartItems, increaseItemQty } from '../../redux/slices/cartSlice';
 import { getSubTotal } from '../../helper/localStorageHelper';
 
 // ----------------------------------------------------------------------
@@ -29,38 +24,38 @@ export default function CheckoutCart() {
   const { enqueueSnackbar } = useSnackbar();
   const { user, isAuthenticated } = useAuth();
   const dispatch = useDispatch();
-  const {
-    cart,
-    quantityInCart,
-    activeStep,
-    subTotal,
-    removeToCart,
-    increaseProductInCart,
-    decreaseProductInCart,
-    nextStepOrder
-  } = useOrderFlow();
-  const [isIncreaseToCart, setIsIncreaseToCart] = useState(false);
-  const [isDecreaseToCart, setIsDecreaseToCart] = useState(false);
+  const { cart, quantityInCart, activeStep, subTotal, removeToCart, nextStepOrder } = useOrderFlow();
+
   const discount = cart.length > 0 ? 50000 : 0;
-  const { list: listProducts } = useSelector((state) => state.writeOrder);
-  let isEmptyCart = !(listProducts && listProducts.length > 0);
+  const { allItems: listProducts, isLoading: isLoadingCart } = useSelector((state) => state.cart);
+
   const [subTotalDB, setSubTotalDB] = useState(0);
 
-  // Set cart
-  if (!user) {
-    isEmptyCart = cart ? cart.length === 0 : true;
-  }
-
-  useEffect(() => {
-    if (user) {
-      dispatch(getProductToCartDB());
-    }
-  }, [dispatch, cart, isIncreaseToCart, isDecreaseToCart]);
+  // useEffect(() => {
+  //   if (user) {
+  //     dispatch(getCartItems());
+  //   }
+  // }, [dispatch, cart]);
 
   useEffect(() => {
     setSubTotalDB(getSubTotal(listProducts));
-    isEmptyCart = !(listProducts && listProducts.length > 0);
   }, [listProducts]);
+
+  const handleApplyDiscount = () => {
+    // dispatch(applyDiscount(value));
+  };
+
+  const handleIncreaseQuantity = (productId, sku, qty) => {
+    dispatch(increaseItemQty({ productId, sku, qty })).then(() => {
+      enqueueSnackbar(t('cart.notification.increase'), { variant: 'success' });
+    });
+  };
+
+  const handleDecreaseQuantity = (productId, sku, qty) => {
+    dispatch(decreaseItemQty({ productId, sku, qty })).then(() => {
+      enqueueSnackbar(t('cart.notification.decrease'), { variant: 'success' });
+    });
+  };
 
   const handleDeleteCart = (productId, sku) => {
     removeToCart(productId, sku).then(() => {
@@ -68,7 +63,7 @@ export default function CheckoutCart() {
     });
     if (isAuthenticated) {
       dispatch(deleteProductToCartDB({ productId, sku })).then(() => {
-        dispatch(getProductToCartDB());
+        dispatch(getCartItems());
       });
     }
   };
@@ -77,107 +72,61 @@ export default function CheckoutCart() {
     nextStepOrder(activeStep);
   };
 
-  const handleApplyDiscount = () => {
-    // dispatch(applyDiscount(value));
-  };
-
-  const handleIncreaseQuantity = (productId, sku) => {
-    increaseProductInCart(productId, sku).then(() => {
-      enqueueSnackbar(t('cart.notification.increase'), { variant: 'success' });
-    });
-    if (isAuthenticated) {
-      setIsIncreaseToCart(true);
-      dispatch(increaseProductToCartDB({ productId, sku })).then(() => {
-        setIsIncreaseToCart(false);
-      });
-    }
-  };
-
-  const handleDecreaseQuantity = (productId, sku) => {
-    decreaseProductInCart(productId, sku).then(() => {
-      enqueueSnackbar(t('cart.notification.decrease'), { variant: 'success' });
-    });
-    if (isAuthenticated) {
-      setIsDecreaseToCart(true);
-      dispatch(decreaseProductToCartDB({ productId, sku })).then(() => {
-        setIsDecreaseToCart(false);
-      });
-    }
-  };
-
-  const formik = useFormik({
-    enableReinitialize: true,
-    initialValues: { products: user ? listProducts : cart },
-    onSubmit: async (values, { setErrors, setSubmitting }) => {
-      try {
-        setSubmitting(true);
-        handleNextStep();
-      } catch (error) {
-        console.error(error);
-        setErrors(error.message);
-      }
-    }
-  });
-
-  const { values, handleSubmit } = formik;
+  if (isLoadingCart) {
+    return <>Loading...</>;
+  }
 
   return (
-    <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
-            <Card sx={{ mb: 3 }}>
-              <CardHeader
-                title={
-                  <Typography variant="h6">
-                    {t('cart.title-detail')}
-                    <Typography component="span" sx={{ ml: 2, color: 'text.secondary' }}>
-                      ({user ? listProducts?.length : quantityInCart} {t('cart.item')})
-                    </Typography>
-                  </Typography>
-                }
-                sx={{ mb: 3 }}
+    <Grid container spacing={3}>
+      <Grid item xs={12} md={8}>
+        <Card sx={{ mb: 3 }}>
+          <CardHeader
+            title={
+              <Typography variant="h6">
+                {t('cart.title-detail')}
+                <Typography component="span" sx={{ ml: 2, color: 'text.secondary' }}>
+                  ({user ? listProducts?.length : quantityInCart} {t('cart.item')})
+                </Typography>
+              </Typography>
+            }
+            sx={{ mb: 3 }}
+          />
+
+          {listProducts?.length > 0 ? (
+            <Scrollbar>
+              <CheckoutProductList
+                products={listProducts}
+                onDelete={handleDeleteCart}
+                onIncreaseQuantity={handleIncreaseQuantity}
+                onDecreaseQuantity={handleDecreaseQuantity}
               />
-
-              {!isEmptyCart ? (
-                <Scrollbar>
-                  <CheckoutProductList
-                    formik={formik}
-                    onDelete={handleDeleteCart}
-                    onIncreaseQuantity={handleIncreaseQuantity}
-                    onDecreaseQuantity={handleDecreaseQuantity}
-                    isDecreaseToCart={isDecreaseToCart}
-                    isIncreaseToCart={isIncreaseToCart}
-                  />
-                </Scrollbar>
-              ) : (
-                <EmptyContent
-                  title={t('cart.empty')}
-                  description={t('cart.empty-desc')}
-                  img="/static/illustrations/illustration_empty_cart.svg"
-                />
-              )}
-            </Card>
-
-            <Button color="inherit" href="/" startIcon={<Icon icon={arrowIosBackFill} />}>
-              {t('cart.empty-action')}
-            </Button>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <CheckoutSummary
-              total={user ? subTotalDB : subTotal}
-              // enableDiscount
-              discount={discount}
-              subtotal={user ? subTotalDB : subTotal}
-              onApplyDiscount={handleApplyDiscount}
+            </Scrollbar>
+          ) : (
+            <EmptyContent
+              title={t('cart.empty')}
+              description={t('cart.empty-desc')}
+              img="/static/illustrations/illustration_empty_cart.svg"
             />
-            <Button fullWidth size="large" type="submit" variant="contained" disabled={values.products?.length === 0}>
-              {t('cart.checkout')}
-            </Button>
-          </Grid>
-        </Grid>
-      </Form>
-    </FormikProvider>
+          )}
+        </Card>
+
+        <Button color="inherit" href="/" startIcon={<Icon icon={arrowIosBackFill} />}>
+          {t('cart.empty-action')}
+        </Button>
+      </Grid>
+
+      <Grid item xs={12} md={4}>
+        <CheckoutSummary
+          total={user ? subTotalDB : subTotal}
+          // enableDiscount
+          discount={discount}
+          subtotal={user ? subTotalDB : subTotal}
+          onApplyDiscount={handleApplyDiscount}
+        />
+        <Button fullWidth size="large" onClick={handleNextStep} variant="contained" disabled={!listProducts?.length}>
+          {t('cart.checkout')}
+        </Button>
+      </Grid>
+    </Grid>
   );
 }

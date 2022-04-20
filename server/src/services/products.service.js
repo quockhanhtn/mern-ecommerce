@@ -146,29 +146,6 @@ async function initialProduct(data, isAddNew = false) {
   return product;
 }
 
-/**
- * Get product
- * @param {*} identity
- * @param {boolean} needIncView - if true, inc views 1
- * @returns
- */
-async function getOneProduct(identity, needIncView = false, notLean = false) {
-  const filter = StringUtils.isUUID(identity)
-    ? { _id: identity }
-    : { slug: identity };
-
-  if (needIncView) {
-    return Product.findOneAndUpdate(filter, { $inc: { views: 1 } }, { new: true })
-      .select(SELECT_FIELD)
-      .populate(POPULATE_OPTS)
-      .lean().exec();
-  } else if (notLean) {
-    return Product.findOne(filter).populate(POPULATE_OPTS).exec();
-  } else {
-    return Product.findOne(filter).populate(POPULATE_OPTS).lean().exec();
-  }
-}
-
 async function addProductVariants(productIdentity, variantData) {
   const product = await getOneProduct(productIdentity, false, true);
   if (!product) {
@@ -249,6 +226,37 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy 
   //   .lean().exec();
 
   return { countAll, total, list };
+}
+
+/**
+ * Get product
+ * @param {*} identity
+ * @param {boolean} needIncView - if true, inc views 1
+ * @returns
+ */
+async function getOneProduct(identity, needIncView = false, notLean = false, fields = SELECT_FIELD) {
+  const filter = StringUtils.isUUID(identity)
+    ? { _id: identity }
+    : { slug: identity };
+
+  const populateOpts = [];
+  if (fields.includes('category')) {
+    populateOpts.push({ path: 'category', select: 'name slug image _id -children', model: 'Category' },);
+  }
+  if (fields.includes('brand')) {
+    populateOpts.push({ path: 'brand', select: 'name slug image _id', model: 'Brand' },);
+  }
+
+  if (needIncView) {
+    return Product.findOneAndUpdate(filter, { $inc: { views: 1 } }, { new: true })
+      .select(fields)
+      .populate(populateOpts)
+      .lean().exec();
+  } else if (notLean) {
+    return Product.findOne(filter).select(fields).populate(populateOpts).exec();
+  } else {
+    return Product.findOne(filter).select(fields).populate(populateOpts).lean().exec();
+  }
 }
 
 async function getSuggestProducts(keyword) {

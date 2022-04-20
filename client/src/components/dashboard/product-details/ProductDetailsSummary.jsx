@@ -4,7 +4,7 @@ import roundAddShoppingCart from '@iconify/icons-ic/round-add-shopping-cart';
 //
 
 import { useSnackbar } from 'notistack';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -14,7 +14,7 @@ import { Box, Stack, Button, Divider, Typography, FormHelperText } from '@materi
 // components
 import { MButton } from '../../@material-extend';
 import { fCurrency } from '../../../utils/formatNumber';
-import { addItemToCart } from '../../../redux/slices/writeOrderSlice';
+import { addItemToCart } from '../../../redux/slices/cartSlice';
 import { useAuth, useLocales, useOrderFlow } from '../../../hooks';
 import Incrementer from '../../Incrementer';
 
@@ -34,7 +34,9 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const [isAddToCart, setIsAddToCart] = useState(false);
+
+  const { isLoading: isLoadingCart } = useSelector((state) => state.cart);
+
   const { isAuthenticated } = useAuth();
   const { t, currentLang } = useLocales();
 
@@ -69,30 +71,20 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
   const { values, touched, errors, getFieldProps, handleSubmit } = formik;
 
   const handleAddCart = () => {
-    const productInCart = {
-      _id: product._id,
-      name: product.name,
-      variantName: product.variants[indexVariant].variantName,
-      skuVariant: product.variants[indexVariant].sku,
-      quantity: values.quantity,
-      price: product.variants[indexVariant].price,
-      quantityAvailable: product.variants[indexVariant].quantity,
-      thumbnail: product.variants[indexVariant].thumbnail
+    const newItem = {
+      productId: product._id,
+      sku: product.variants[indexVariant].sku,
+      qty: values.quantity
     };
-    addToCart(productInCart).then(() => {
-      enqueueSnackbar('Thêm sản phẩm vào giỏ hàng thành công', {
-        variant: 'success'
-      });
-    });
-    // Add to DB
-    if (isAuthenticated) {
-      setIsAddToCart(true);
-      dispatch(
-        addItemToCart({ productId: product._id, sku: product.variants[indexVariant].sku, qty: values.quantity })
-      ).then(() => {
-        setIsAddToCart(false);
-      });
-    }
+    dispatch(addItemToCart(newItem));
+    // addToCart(newItem).then(() => {
+    //   enqueueSnackbar('Thêm sản phẩm vào giỏ hàng thành công', {
+    //     variant: 'success'
+    //   });
+    // });
+    // // Add to DB
+    // if (isAuthenticated) {
+    // }
   };
 
   if (isLoading) {
@@ -174,7 +166,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
               startIcon={<Icon icon={roundAddShoppingCart} />}
               onClick={handleAddCart}
               sx={{ whiteSpace: 'nowrap' }}
-              disabled={isAddToCart}
+              disabled={isLoadingCart}
             >
               Thêm vào giỏ hàng
             </MButton>

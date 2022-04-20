@@ -75,7 +75,7 @@ async function createWithTransaction(orderData, createdBy) {
       const cartItem = orderData.items[i];
 
       const product = await Product.findOne(
-        { _id: cartItem.product, 'variants.sku': cartItem.sku }
+        { _id: cartItem.productIdId, 'variants.sku': cartItem.sku }
       ).lean().exec();
       if (!product || product?.variants?.length === 0) {
         throw new ApiError({
@@ -85,7 +85,7 @@ async function createWithTransaction(orderData, createdBy) {
         });
       }
 
-      if (product?.variants?.[0].sold + cartItem.quantity > product?.variants?.[0].quantity) {
+      if (product?.variants?.[0].sold + cartItem.qty > product?.variants?.[0].quantity) {
         throw new ApiError({
           message: 'Product out of stock',
           errors: { productId: product._id, sku: product.variants[0].sku },
@@ -95,15 +95,15 @@ async function createWithTransaction(orderData, createdBy) {
 
       // update sold
       await Product.findOneAndUpdate(
-        { _id: cartItem.product, 'variants.sku': cartItem.sku },
-        { $inc: { 'variants.$.sold': cartItem.quantity } },
+        { _id: cartItem.productId, 'variants.sku': cartItem.sku },
+        { $inc: { 'variants.$.sold': cartItem.qty } },
         { session }
       );
 
       orderToSave.items.push({
         product: product._id,
         sku: product.variants[0].sku,
-        quantity: cartItem.quantity,
+        quantity: cartItem.qty,
         pricePerUnit: product?.variants?.[0].price
       });
     }

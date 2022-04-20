@@ -112,9 +112,9 @@ export const getAllComment = (product) => API.get(`/comments/${product}`);
 export const createComment = (newComment) => API.post(`/comments`, newComment);
 
 // ----------------------------Cart------------------------------------
-export const getCartItems = () => API.post(`/cart`);
+export const getCartItems = (pendingData) => API.post(`/cart`, { items: pendingData });
 export const addItemToCart = (item) => API.post(`/cart/add`, item);
 export const increaseQty = (item) => API.patch(`/cart`, { ...item, delta: 1 });
 export const decreaseQty = (item) => API.patch(`/cart`, { ...item, delta: -1 });
-export const removeItem = (productId, sku) => API.delete(`/cart/${productId}/${sku}`);
+export const removeItemFromCart = (productId, sku) => API.delete(`/cart/${productId}/${sku}`);
 export const cleanCart = () => API.delete(`/cart/clean`);

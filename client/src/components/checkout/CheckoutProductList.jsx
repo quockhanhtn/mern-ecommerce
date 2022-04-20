@@ -58,28 +58,15 @@ Incrementer.propTypes = {
   onDecrease: PropTypes.func
 };
 
-function Incrementer({
-  available,
-  availableText,
-  quantity,
-  onIncrease,
-  onDecrease,
-  isIncreaseToCart,
-  isDecreaseToCart
-}) {
+function Incrementer({ available, availableText, quantity, onIncrease, onDecrease }) {
   return (
     <Box sx={{ width: 96, textAlign: 'center', margin: '0 auto' }}>
       <IncrementerStyle>
-        <MIconButton size="small" color="inherit" onClick={onDecrease} disabled={quantity <= 1 || isDecreaseToCart}>
+        <MIconButton size="small" color="inherit" onClick={onDecrease} disabled={quantity <= 1}>
           <Icon icon={minusFill} width={16} height={16} />
         </MIconButton>
         {quantity}
-        <MIconButton
-          size="small"
-          color="inherit"
-          onClick={onIncrease}
-          disabled={quantity >= available || isIncreaseToCart}
-        >
+        <MIconButton size="small" color="inherit" onClick={onIncrease} disabled={quantity >= available}>
           <Icon icon={plusFill} width={16} height={16} />
         </MIconButton>
       </IncrementerStyle>
@@ -90,36 +77,28 @@ function Incrementer({
   );
 }
 
-ProductList.propTypes = {
-  formik: PropTypes.object.isRequired,
+CheckoutProductList.propTypes = {
+  products: PropTypes.object,
   onDelete: PropTypes.func,
   onDecreaseQuantity: PropTypes.func,
   onIncreaseQuantity: PropTypes.func
 };
 
-export default function ProductList({
-  formik,
-  onDelete,
-  onIncreaseQuantity,
-  onDecreaseQuantity,
-  isIncreaseToCart,
-  isDecreaseToCart
-}) {
+export default function CheckoutProductList({ products, onDelete, onIncreaseQuantity, onDecreaseQuantity }) {
   const { t, currentLang } = useLocales();
-  const { products } = formik.values;
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const handleIncreaseQuantity = (productId, sku) => {
-    onIncreaseQuantity(productId, sku);
+  const handleIncreaseQuantity = (productId, sku, qty) => {
+    onIncreaseQuantity(productId, sku, qty);
   };
 
-  const handleDecreaseQuantity = (productId, sku) => {
-    onDecreaseQuantity(productId, sku);
+  const handleDecreaseQuantity = (productId, sku, qty) => {
+    onDecreaseQuantity(productId, sku, qty);
   };
 
   const handleSelectAll = () => {
-    if (selectedItems.length < products.length) {
-      setSelectedItems(products.map((x) => ({ productId: x.productId, sku: x.sku })));
+    if (selectedItems.length < products?.length) {
+      setSelectedItems(products?.map((x) => ({ productId: x.productId, sku: x.sku })));
     } else {
       setSelectedItems([]);
     }
@@ -163,7 +142,7 @@ export default function ProductList({
         </TableHead>
 
         <TableBody>
-          {products.map((product) => {
+          {products?.map((product) => {
             const { productId, sku, qty, name, variantName, thumbnail, price, marketPrice, quantity, sold } = product;
             const isItemSelected = isSelected(productId, sku);
             const labelId = `enhanced-table-checkbox-${productId}_${sku}`;
@@ -197,14 +176,7 @@ export default function ProductList({
                         {name}
                       </Typography>
 
-                      <Stack
-                        direction="row"
-                        spacing={1}
-                        alignItems="center"
-                        divider={<Divider orientation="vertical" sx={{ height: 14, alignSelf: 'center' }} />}
-                      >
-                        <Typography variant="body2">{variantName + sku}</Typography>
-                      </Stack>
+                      {variantName && <Typography variant="body2">{variantName}</Typography>}
                     </Box>
                   </Box>
                 </TableCell>
@@ -216,10 +188,8 @@ export default function ProductList({
                     quantity={qty}
                     available={quantity - sold}
                     availableText={t('cart.available', { available: quantity - sold })}
-                    onDecrease={() => handleDecreaseQuantity(productId, sku)}
-                    onIncrease={() => handleIncreaseQuantity(productId, sku)}
-                    isDecreaseToCart={isDecreaseToCart}
-                    isIncreaseToCart={isIncreaseToCart}
+                    onDecrease={() => handleDecreaseQuantity(productId, sku, qty)}
+                    onIncrease={() => handleIncreaseQuantity(productId, sku, qty)}
                   />
                 </TableCell>
 

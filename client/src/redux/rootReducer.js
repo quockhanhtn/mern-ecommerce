@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import categoryReducer from './slices/categorySlice';
-import writeOrderReducer from './slices/writeOrderSlice';
+import cartSlice from './slices/cartSlice';
 import brandsReducer from './reducers/brands';
 import discountsReducer from './reducers/discounts';
 import productsReducer from './slices/productSlice';
@@ -11,7 +11,7 @@ import commentsReduces from './reducers/comments';
 
 const rootReducer = combineReducers({
   category: categoryReducer,
-  writeOrder: writeOrderReducer,
+  cart: cartSlice,
 
   brand: brandsReducer,
   discount: discountsReducer,

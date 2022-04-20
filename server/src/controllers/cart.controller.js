@@ -24,7 +24,7 @@ export const addItem = async (req, res, next) => {
     const { productId, sku, qty } = req.body;
     const addResult = await cartService.addItem(userId, productId, sku, qty);
     if (addResult) {
-      ResponseUtils.status200(res, 'Add item to cart successfully');
+      ResponseUtils.status200(res, 'Add item to cart successfully', addResult);
     } else {
       ResponseUtils.status500(res, 'Error when at item to cart');
     }

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 // icon
@@ -13,9 +14,7 @@ import baselineSettings from '@iconify/icons-ic/baseline-settings';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, IconButton, AppBar, Toolbar, Container, Stack } from '@material-ui/core';
 // hooks
-import { useDispatch, useSelector } from 'react-redux';
-import useOffSetTop from '../../hooks/useOffSetTop';
-import useLocales from '../../hooks/useLocales';
+import { useOffSetTop, useLocales } from '../../hooks';
 // components
 import Logo from '../../components/Logo';
 import LogoFull from '../../components/LogoFull';
@@ -26,12 +25,9 @@ import MenuMobile from './MenuMobile';
 import SearchBar from './SearchBar';
 import AccountPopover from '../common/AccountPopover';
 import LanguagePopover from '../common/LanguagePopover';
-import useOrderFlow from '../../hooks/useOrderFlow';
-import useAuth from '../../hooks/useAuth';
-import { getProductToCartDB } from '../../redux/slices/writeOrderSlice';
 
 // ----------------------------------------------------------------------
-const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 110;
 
@@ -76,7 +72,16 @@ const ContainerStyle = styled(Container)(() => ({
   justifyContent: 'space-between'
 }));
 
-const NavbarItem = ({ badgeContent, text, icon, color, ...other }) => {
+// ----------------------------------------------------------------------
+
+NavbarItem.propTypes = {
+  badgeContent: PropTypes.node,
+  text: PropTypes.string,
+  icon: PropTypes.object,
+  color: PropTypes.string
+};
+
+function NavbarItem({ badgeContent, text, icon, color, ...other }) {
   if (badgeContent) {
     return (
       <MBadge badgeContent={badgeContent} color={color}>
@@ -99,30 +104,25 @@ const NavbarItem = ({ badgeContent, text, icon, color, ...other }) => {
       </MHidden>
     </>
   );
-};
+}
 
 // ----------------------------------------------------------------------
 
-export default function MainNavbar({ categoryList }) {
+MainNavbar.propTypes = {
+  categoryList: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string,
+      path: PropTypes.string,
+      image: PropTypes.string,
+      _id: PropTypes.string
+    })
+  ),
+  cartItemsCount: PropTypes.number
+};
+
+function MainNavbar({ categoryList, cartItemsCount }) {
   const { t } = useLocales();
   const isOffset = useOffSetTop(100);
-  const { quantityInCart, getCart } = useOrderFlow();
-  const { isAuthenticated } = useAuth();
-  const dispatch = useDispatch();
-  const { list: listProducts } = useSelector((state) => state.writeOrder);
-  useEffect(() => {
-    getCart().then(() => {
-      if (isDev) {
-        console.log('Get cart successfully');
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(getProductToCartDB());
-    }
-  }, [dispatch]);
 
   const accountMenus = [
     {
@@ -181,7 +181,7 @@ export default function MainNavbar({ categoryList }) {
 
             <NavbarItem text={t('home.order-history')} icon={history24Filled} color="inherit" href="/order-history" />
             <NavbarItem
-              badgeContent={isAuthenticated && listProducts ? listProducts?.length : quantityInCart}
+              badgeContent={cartItemsCount}
               text={t('home.cart')}
               icon={cart24Regular}
               color="primary"
@@ -204,3 +204,5 @@ export default function MainNavbar({ categoryList }) {
     </AppBar>
   );
 }
+
+export default MainNavbar;

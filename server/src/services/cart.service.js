@@ -14,8 +14,24 @@ export default {
   cleanCart
 };
 
-async function getProductInfo(productId, sku) {
-  const product = await productService.getOneProduct(productId, false, true);
+const formatResult = (product, sku, qty) => {
+  const { variants, _id: uuId, ...otherProductInfo } = product;
+  const variantInfo = variants.find(v => v.sku === sku);
+
+  if (variantInfo) {
+    return {
+      productId: uuId,
+      sku,
+      qty,
+      ...otherProductInfo,
+      ...variantInfo
+    };
+  }
+  return null;
+};
+
+async function getProductInfo(productId, sku, notClean = true) {
+  const product = await productService.getOneProduct(productId, false, notClean, SELECTED_FIELDS);
   if (!product) {
     throw ApiError.simple(`Product ${productId} not found`, 404);
   }
@@ -34,22 +50,10 @@ async function getCartItemsFromData(items) {
   for (let i = 0; i < items.length; i++) {
     const element = items[i];
     const currentProduct = products.find(p => p._id.toString() === element.productId.toString());
-    if (currentProduct?.variants?.length > 0) {
-      const { variants, _id: uuId,...product } = currentProduct;
-      const variant = variants.find(v => v.sku === element.sku);
-      if (variant) {
-        result.push({
-          ...product,
-          ...variant,
-          productId: uuId,
-          sku: element.sku,
-          qty: element.qty
-        });
-      }
-    }
+    result.push(formatResult(currentProduct, element.sku, element.qty));
   }
 
-  return result;
+  return result.filter(i => i);
 }
 
 async function getCartItemsByUser(userId) {
@@ -62,20 +66,12 @@ async function getCartItemsByUser(userId) {
     }
   ];
   const cart = await Cart.findOne(filter).populate(populateOpts).lean().exec();
-  return cart?.items?.map(item => {
-    const { variants, _id: uuId,...product } = item.productId;
-    return {
-      ...product,
-      ...(variants?.filter(v => v.sku === item.sku)?.[0] || {}),
-      productId: uuId,
-      sku: item.sku,
-      qty: item.qty
-    };
-  });
+  return cart?.items?.map(item => formatResult(item.productId, item.sku, item.qty))
+    .filter(i => i);
 }
 
 async function addItem(userId, productId, sku, qty = 1) {
-  const { product, variant } = await getProductInfo(productId, sku);
+  const { product, variant } = await getProductInfo(productId, sku, false);
 
   const userCart = await Cart.findOne({ userId });
   if (!userCart) {
@@ -85,18 +81,19 @@ async function addItem(userId, productId, sku, qty = 1) {
       items: [{ productId, sku, qty }]
     });
     await newCart.save();
-    return true;
   } else {
     const itemInCart = userCart.items.find(i => i.productId.toString() === productId && i.sku === sku);
     if (itemInCart) {
       itemInCart.qty += qty;
+      qty = itemInCart.qty;
     }
     else {
       userCart.items.push({ productId, sku, qty });
     }
     await userCart.save();
-    return true;
   }
+
+  return formatResult(product, variant.sku, qty);
 }
 
 async function updateItemQty(userId, productId, sku, delta) {

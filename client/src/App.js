@@ -1,10 +1,13 @@
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
 import SimpleBarReact from 'simplebar-react';
 // routes
 import Router from './routes';
 // theme
 import ThemeConfig from './theme';
 // hooks
-import useAuth from './hooks/useAuth';
+import { useAuth } from './hooks';
 // components
 import Settings from './components/settings';
 import RtlLayout from './components/RtlLayout';
@@ -13,10 +16,19 @@ import LoadingScreen from './components/LoadingScreen';
 import ThemePrimaryColor from './components/ThemePrimaryColor';
 import NotistackProvider from './components/NotistackProvider';
 
+import { syncCart } from './redux/slices/cartSlice';
+
 // ----------------------------------------------------------------------
 
 export default function App() {
-  const { isInitialized } = useAuth();
+  const dispatch = useDispatch();
+  const { isInitialized, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (isInitialized && isAuthenticated) {
+      dispatch(syncCart(isAuthenticated));
+    }
+  }, [isInitialized, isAuthenticated]);
 
   return (
     <SimpleBarReact style={{ maxHeight: '100vh' }}>

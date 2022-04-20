@@ -20,7 +20,7 @@ import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 
 import * as Helper from '../../helper/localStorageHelper';
-import { cleanProductToCartDB } from '../../redux/slices/writeOrderSlice';
+import { cleanProductToCartDB } from '../../redux/slices/cartSlice';
 
 // ----------------------------------------------------------------------
 

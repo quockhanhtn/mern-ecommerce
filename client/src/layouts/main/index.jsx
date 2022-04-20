@@ -43,6 +43,7 @@ export default function MainLayout() {
   const { user, googleOAuth } = useAuth();
 
   const { listSimple: categoryList } = useSelector((state) => state.category);
+  const { itemsCount } = useSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(getAllCategories(true));
@@ -73,7 +74,7 @@ export default function MainLayout() {
 
   return (
     <RootStyle>
-      <MainNavbar categoryList={navBarItems} />
+      <MainNavbar categoryList={navBarItems} cartItemsCount={itemsCount} />
       <MainStyle>
         <Outlet />
         <MainFooter />
