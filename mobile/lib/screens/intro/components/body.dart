@@ -4,8 +4,8 @@ import 'package:hk_mobile/constants.dart';
 import 'package:hk_mobile/screens/home/home_screen.dart';
 import 'package:hk_mobile/size_config.dart';
 
-import 'package:hk_mobile/components/default_button.dart';
-import 'package:hk_mobile/utils/preference_utils.dart';
+import 'package:hk_mobile/core/components/default_button.dart';
+import 'package:hk_mobile/core/utils/preference_util.dart';
 import 'intro_content.dart';
 
 class Body extends StatefulWidget {
@@ -78,7 +78,7 @@ class _BodyState extends State<Body> {
                     DefaultButton(
                       text: AppLocalizations.of(context)!.next,
                       press: () {
-                        PreferenceUtils.setBool('seen', true);
+                        PreferenceUtil.setBool('seen', true);
                         Navigator.pushNamed(context, HomeScreen.routeName);
                       },
                     ),

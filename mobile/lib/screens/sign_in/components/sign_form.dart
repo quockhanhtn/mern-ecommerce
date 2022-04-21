@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/components/custom_suffix_icon.dart';
-import 'package:hk_mobile/components/form_error.dart';
+import 'package:hk_mobile/core/components/components.dart';
 import 'package:hk_mobile/helper/keyboard.dart';
 import 'package:hk_mobile/screens/forgot_password/forgot_password_screen.dart';
 import 'package:hk_mobile/screens/login_success/login_success_screen.dart';
 
-import '../../../components/default_button.dart';
 import '../../../constants.dart';
 import '../../../size_config.dart';
 

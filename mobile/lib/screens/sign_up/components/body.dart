@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/components/social_card.dart';
+import 'package:hk_mobile/core/components/social_card.dart';
 import 'package:hk_mobile/constants.dart';
 import 'package:hk_mobile/size_config.dart';
 

@@ -3,16 +3,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hk_mobile/screens/home/home_screen.dart';
 import 'package:hk_mobile/screens/profile/profile_screen.dart';
 
-import '../constants.dart';
-import '../enums.dart';
+enum MenuState { home, favourite, message, profile }
 
 class CustomBottomNavBar extends StatelessWidget {
   const CustomBottomNavBar({
     Key? key,
     required this.selectedMenu,
+    required this.activeIconColor
   }) : super(key: key);
 
   final MenuState selectedMenu;
+  final Color activeIconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -40,27 +41,27 @@ class CustomBottomNavBar extends StatelessWidget {
             children: [
               IconButton(
                 icon: SvgPicture.asset(
-                  "assets/icons/Shop Icon.svg",
+                  "assets/icons/ic_shop.svg",
                   color: MenuState.home == selectedMenu
-                      ? kPrimaryColor
+                      ? inActiveIconColor
                       : inActiveIconColor,
                 ),
                 onPressed: () =>
                     Navigator.pushNamed(context, HomeScreen.routeName),
               ),
               IconButton(
-                icon: SvgPicture.asset("assets/icons/Heart Icon.svg"),
+                icon: SvgPicture.asset("assets/icons/ic_heart_outline.svg"),
                 onPressed: () {},
               ),
               IconButton(
-                icon: SvgPicture.asset("assets/icons/Chat bubble Icon.svg"),
+                icon: SvgPicture.asset("assets/icons/ic_chat_bubble.svg"),
                 onPressed: () {},
               ),
               IconButton(
                 icon: SvgPicture.asset(
                   "assets/icons/ic_user.svg",
                   color: MenuState.profile == selectedMenu
-                      ? kPrimaryColor
+                      ? inActiveIconColor
                       : inActiveIconColor,
                 ),
                 onPressed: () =>

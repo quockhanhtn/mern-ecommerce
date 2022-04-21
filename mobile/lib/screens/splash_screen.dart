@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hk_mobile/screens/home/home_screen.dart';
 import 'package:hk_mobile/screens/intro/intro_screen.dart';
 import 'package:hk_mobile/size_config.dart';
-import 'package:hk_mobile/utils/preference_utils.dart';
+import 'package:hk_mobile/core/utils/preference_util.dart';
 
 class SplashScreen extends StatefulWidget {
   static String routeName = "/splash";
@@ -17,7 +17,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with AfterLayoutMixin<SplashScreen> {
   Future checkFirstSeen() async {
-    bool _seen = PreferenceUtils.getBool('seen', false);
+    bool _seen = PreferenceUtil.getBool('seen', false);
 
     if (_seen) {
       Navigator.pushNamed(context, HomeScreen.routeName);

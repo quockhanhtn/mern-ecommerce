@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/components/rounded_icon_btn.dart';
+import 'package:hk_mobile/core/components/rounded_icon_btn.dart';
 import 'package:hk_mobile/dto/Product.dart';
 
 import '../../../constants.dart';
@@ -33,12 +33,14 @@ class ColorDots extends StatelessWidget {
           RoundedIconBtn(
             icon: Icons.remove,
             press: () {},
+            iconSize: getProportionateScreenWidth(40)
           ),
           SizedBox(width: getProportionateScreenWidth(20)),
           RoundedIconBtn(
             icon: Icons.add,
             showShadow: true,
             press: () {},
+            iconSize: getProportionateScreenWidth(40)
           ),
         ],
       ),

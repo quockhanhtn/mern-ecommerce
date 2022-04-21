@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/components/no_account_text.dart';
-import 'package:hk_mobile/components/social_card.dart';
+import 'package:hk_mobile/core/components/no_account_text.dart';
+import 'package:hk_mobile/core/components/social_card.dart';
 import '../../../size_config.dart';
 import 'sign_form.dart';
 

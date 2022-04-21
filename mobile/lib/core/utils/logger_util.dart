@@ -1,6 +1,6 @@
 import 'package:logger/logger.dart';
 
-class LoggerUtils {
+class LoggerUtil {
   static late Logger ins;
 
   static void init() {

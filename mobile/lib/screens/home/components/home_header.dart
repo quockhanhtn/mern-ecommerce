@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:hk_mobile/components/components.dart';
+import 'package:hk_mobile/core/components/components.dart';
 import 'package:hk_mobile/constants.dart';
 import 'package:hk_mobile/size_config.dart';
 import 'package:hk_mobile/screens/cart/cart_screen.dart';

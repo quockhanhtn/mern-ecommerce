@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/components/custom_bottom_nav_bar.dart';
-import 'package:hk_mobile/enums.dart';
+import 'package:hk_mobile/constants.dart';
+import 'package:hk_mobile/core/components/custom_bottom_nav_bar.dart';
 
 import 'components/body.dart';
 
@@ -15,7 +15,7 @@ class ProfileScreen extends StatelessWidget {
         title: const Text("Tài khoản"),
       ),
       body: const Body(),
-      bottomNavigationBar: const CustomBottomNavBar(selectedMenu: MenuState.profile),
+      bottomNavigationBar: const CustomBottomNavBar(selectedMenu: MenuState.profile, activeIconColor: kPrimaryColor,),
     );
   }
 }

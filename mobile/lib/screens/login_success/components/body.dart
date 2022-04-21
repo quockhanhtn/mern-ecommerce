@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/components/default_button.dart';
+import 'package:hk_mobile/core/components/default_button.dart';
 import 'package:hk_mobile/screens/home/home_screen.dart';
 import 'package:hk_mobile/size_config.dart';
 

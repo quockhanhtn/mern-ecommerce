@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/components/custom_bottom_nav_bar.dart';
-import 'package:hk_mobile/enums.dart';
+import 'package:hk_mobile/constants.dart';
+import 'package:hk_mobile/core/components/custom_bottom_nav_bar.dart';
 import 'package:hk_mobile/size_config.dart';
 
 import 'components/body.dart';
@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
     SizeConfig().init(context);
     return const Scaffold(
       body: Body(),
-      bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.home),
+      bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.home, activeIconColor: kPrimaryColor,),
     );
   }
 }

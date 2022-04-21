@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hk_mobile/dto/Product.dart';
 import 'package:hk_mobile/screens/details/details_screen.dart';
 
-import '../constants.dart';
-import '../size_config.dart';
+import '../../constants.dart';
+import '../../size_config.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -76,7 +76,7 @@ class ProductCard extends StatelessWidget {
                   //       shape: BoxShape.circle,
                   //     ),
                   //     child: SvgPicture.asset(
-                  //       "assets/icons/Heart Icon_2.svg",
+                  //       "assets/icons/ic_heart_fill.svg",
                   //       color: product.isFavourite
                   //           ? const Color(0xFFFF4848)
                   //           : const Color(0xFFDBDEE4),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/components/product_card.dart';
+import 'package:hk_mobile/core/components/product_card.dart';
 import 'package:hk_mobile/dto/Product.dart';
 
 import '../../../size_config.dart';

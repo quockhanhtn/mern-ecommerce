@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:hk_mobile/controllers/category_controller.dart';
 import 'package:hk_mobile/dto/category_dto.dart';
-import 'package:hk_mobile/repositories/category_repository.dart';
 
 import '../../../size_config.dart';
 
 class Categories extends StatelessWidget {
-  const Categories({Key? key}) : super(key: key);
+  final CategoryController categoryController = Get.put(CategoryController());
 
   List<Widget> renderChild(List<CategoryDto> source) {
     List<Widget> child = [];
@@ -15,9 +16,7 @@ class Categories extends StatelessWidget {
     }
     for (var i = 0; i < source.length; i++) {
       child.add(CategoryCard(
-          icon: source[i].image,
-          text: source[i].name,
-          press: () => {}));
+          icon: source[i].image, text: source[i].name, press: () => {}));
     }
     return child;
   }
@@ -26,32 +25,20 @@ class Categories extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
         padding: EdgeInsets.all(getProportionateScreenWidth(20)),
-        child: FutureBuilder<List<CategoryDto>>(
-            future: CategoryRepository().getAll(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data != null) {
-                return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: renderChild(snapshot.data as List<CategoryDto>));
-              } else if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
-              }
-              return const CircularProgressIndicator();
-            })
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   crossAxisAlignment: CrossAxisAlignment.start,
-        //   children: List.generate(
-        //     categories.length,
-        //     (index) => CategoryCard(
-        //       icon: categories[index]["icon"],
-        //       text: categories[index]["text"],
-        //       press: () {},
-        //     ),
-        //   ),
-        // ),
-        );
+        child: Obx(() {
+          if (categoryController.isLoading.isTrue) {
+            return const CircularProgressIndicator();
+          } else if (categoryController.errorMgs.isNotEmpty) {
+            return Text('Error: ' + categoryController.errorMgs.toString(),
+                style: const TextStyle(color: Colors.red),
+                textAlign: TextAlign.center);
+          } else {
+            return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: renderChild(categoryController.list.value));
+          }
+        }));
   }
 }
 
