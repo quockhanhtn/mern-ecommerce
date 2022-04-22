@@ -32,6 +32,7 @@ const categorySchema = mongoose.Schema(
 
     // image: { type: mongoose.Schema.Types.ObjectId, ref: 'Image', default: null },
     image: { type: String, trim: true, required: false },
+    coverImage: { type: String, trim: true, required: false },
 
     parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null },
     children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],

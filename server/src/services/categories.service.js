@@ -16,7 +16,7 @@ export default {
 };
 
 const SELECTED_FIELDS =
-  '_id slug order name desc isHide image parent children createdAt updatedAt';
+  '_id slug order name desc isHide image coverImage parent children createdAt updatedAt';
 // const POPULATE_OPTS = [
 //   {
 //     path: 'image',
@@ -96,7 +96,7 @@ async function create(data, createdBy = null) {
       throw new Error(`Parent category '${data.parent}' not found!`);
     }
   }
-  return await category.save();
+  return category.save();
 }
 
 async function update(identity, updatedData, updatedBy = null) {
