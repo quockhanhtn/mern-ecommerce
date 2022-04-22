@@ -1,0 +1,34 @@
+@startuml fpt recom
+!theme cerulean
+
+actor       User       as u
+participant FptModule as f
+participant Client as c
+participant Server as s
+participant Database as d
+
+u -> c: view product
+c -> f: GetRecommended(productId)
+
+alt Fpt No Response
+  f -> c: < No content >
+  c -> u: Hide section related product on UI
+
+else Fpt Response Data
+  f -> c: listProductId (related to the sent productId)
+
+  c -> s: GetProductById(listProductId)
+  s -> d: QueryToFind()
+  d -> s: Result()
+
+  alt  Server not found or all products are sold out
+    s -> c: ErrorResponse()
+    c -> u: Hide section related product on UI
+  else Server found products by list id
+    s -> c: SuccessResponse()
+    c -> u: Show list product related   
+  end
+end
+
+
+@endumc

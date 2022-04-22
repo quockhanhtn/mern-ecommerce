@@ -14,7 +14,9 @@ mongoose.connect(process.env.MONGO_URI)
 
 const DATSET_NAME = 'CellphonesDataset';
 const REQ_CONFIG = { headers: { Authorization: "a3fa7034b71ae0741665767fd902193e" } };
-const REQ_URL = `https://recom.fpt.vn/api/v0.1/recommendation/dataset/${DATSET_NAME}/append`;
+const REQ_URL = `https://recom.fpt.vn/api/v0.1/recommendation/dataset/${DATSET_NAME}/`;
+const METHOD_OVERWRITE = `overwrite`;
+const METHOD_APPEND = `append`;
 
 async function loadData() {
   const result = await productService.getAllProducts(
@@ -44,10 +46,10 @@ async function loadData() {
   }));
 }
 
-async function main() {
-  console.log('Loading data ...');
+export async function importDataToFpt() {
+  console.log('Loading data from db ...');
   let list = await loadData();
-  console.log(`Loading data done, ${list.length} items`);
+  console.log(`Loaded ${list.length} items from db !`);
 
   // get current datetime in format yyyyMMdd
   const date = new Date();
@@ -56,19 +58,33 @@ async function main() {
   const filePath = process.cwd() + `/tool/${dateStr}imported.json`;
   let listImpoted = fs.existsSync(filePath) ? JSON.parse(fs.readFileSync(filePath)) : [];
 
-  if (listImpoted.length == list.length) {
+  if (listImpoted.length === list.length) {
     console.log('All items imported');
     return;
   }
 
-  for (let i = list.length - 1; i >= 0; i--) {
+  console.log('Clearing old data ...');
+  let isOverwrited = false;
+  while (!isOverwrited) {
+    try {
+      await axios.post(REQ_URL + METHOD_OVERWRITE, [list[0]], REQ_CONFIG);
+      isOverwrited = true;
+      listImpoted.push(list[0].id);
+    } catch (err) {
+      console.log(`Error: ${err}`);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+  }
+  console.log('Clearing old data done');
+
+  for (let i = list.length - 1; i > 0; i--) {
     const data = list[i];
     if (listImpoted.indexOf(data.id) >= 0) {
       console.log(`--> Skip ${data.id}`);
       continue;
     }
     try {
-      await axios.post(REQ_URL, [data], REQ_CONFIG);
+      await axios.post(REQ_URL + METHOD_APPEND, [data], REQ_CONFIG);
       console.log(`${data.id} done`);
       listImpoted.push(data.id);
     } catch (error) {
