@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  //SecureStorageUtil.init();
   LoggerUtil.init();
   DioUtil.init(kApiBaseUrl);
   await PreferenceUtil.init();

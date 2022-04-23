@@ -13,8 +13,8 @@ class PreferenceUtil {
     LoggerUtil.ins.i('Init SharedPreferences ins done');
   }
 
-  static String? getString(String key, [String? defValue]) {
-    return _instance.getString(key) ?? defValue ?? "";
+  static String getString(String key, {String defValue = ''}) {
+    return _instance.getString(key) ?? defValue;
   }
 
   static Future<bool> setString(String key, String value) async {

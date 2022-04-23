@@ -7,10 +7,19 @@ class DioUtil {
     _instance = Dio(BaseOptions(baseUrl: baseUrl));
   }
 
-  // static Future<Response<dynamic>> get(String path,
-  //     {Map<String, dynamic>? queryParameters}) async {
-  //   return _instance.get(path, queryParameters: queryParameters);
-  // }
+  static void setHeader(String key, String value) {
+    _instance.options.headers[key] = value;
+  }
+
+  static Future<Response<dynamic>> getAsync(String path,
+      {Map<String, dynamic>? queryParameters}) async {
+    return _instance.get(path, queryParameters: queryParameters);
+  }
+
+  static Future<Response<dynamic>> postAsync(String path,
+      {Map<String, String>? data, Map<String, dynamic>? queryParameters}) async {
+    return _instance.post(path, data: data, queryParameters: queryParameters);
+  }
 
   static void get(
     String path, {
