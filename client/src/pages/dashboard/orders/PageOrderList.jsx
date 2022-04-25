@@ -26,7 +26,7 @@ import { stableSort, getComparator } from '../../../helper/listHelper';
 export default function PageOrderList() {
   const { t } = useLocales();
   const dispatch = useDispatch();
-  const { list: orderList, isLoading, error } = useSelector((state) => state.order);
+  const { list: orderList, isLoading, error } = useSelector((state) => state.orderManager);
 
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('order');

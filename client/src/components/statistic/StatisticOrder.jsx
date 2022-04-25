@@ -38,7 +38,7 @@ export default function StatisticOrder() {
   const { t } = useLocales();
   const dispatch = useDispatch();
   const theme = useTheme();
-  const { list: orderList } = useSelector((state) => state.order);
+  const { list: orderList } = useSelector((state) => state.orderManager);
   const [orderPaid, setOrderPaid] = useState(0);
 
   useEffect(() => {

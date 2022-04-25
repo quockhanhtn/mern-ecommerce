@@ -12,7 +12,7 @@ import roundAccountBox from '@iconify/icons-ic/round-account-box';
 import baselineSettings from '@iconify/icons-ic/baseline-settings';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, IconButton, AppBar, Toolbar, Container, Stack } from '@material-ui/core';
+import { Box, IconButton, AppBar, Toolbar, Container, Stack, Divider } from '@material-ui/core';
 // hooks
 import { useOffSetTop, useLocales } from '../../hooks';
 // components
@@ -40,11 +40,11 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
     easing: theme.transitions.easing.easeInOut,
     duration: theme.transitions.duration.shorter
   }),
-  paddingBottom: 2,
-  [theme.breakpoints.up('md')]: {
-    height: APP_BAR_DESKTOP,
-    paddingBottom: 0
-  }
+  paddingBottom: 2
+  // [theme.breakpoints.up('md')]: {
+  //   height: APP_BAR_DESKTOP,
+  //   paddingBottom: 0
+  // }
 }));
 
 const ToolbarShadowStyle = styled('div')(({ theme }) => ({
@@ -117,10 +117,11 @@ MainNavbar.propTypes = {
       _id: PropTypes.string
     })
   ),
+  showCategoryMenu: PropTypes.bool,
   cartItemsCount: PropTypes.number
 };
 
-function MainNavbar({ categoryList, cartItemsCount }) {
+function MainNavbar({ categoryList, showCategoryMenu, cartItemsCount }) {
   const { t } = useLocales();
   const isOffset = useOffSetTop(100);
 
@@ -157,7 +158,13 @@ function MainNavbar({ categoryList, cartItemsCount }) {
     <AppBar color="default" sx={{ boxShadow: 0 }}>
       <ToolbarStyle
         disableGutters
-        sx={{ ...(isOffset && { bgcolor: 'background.default', height: { md: APP_BAR_DESKTOP - 16 } }) }}
+        sx={(theme) => ({
+          [theme.breakpoints.up('md')]: {
+            height: APP_BAR_DESKTOP - (showCategoryMenu ? 0 : 44),
+            paddingBottom: 0
+          },
+          ...(isOffset && { bgcolor: 'background.default', height: { md: APP_BAR_DESKTOP - 16 } })
+        })}
       >
         <ContainerStyle maxWidth="lg">
           <RouterLink to="/">
@@ -191,13 +198,17 @@ function MainNavbar({ categoryList, cartItemsCount }) {
             <AccountPopover menuOptions={accountMenus} isShowTitle />
           </Stack>
         </ContainerStyle>
-        <MHidden width="mdDown">
-          <ColorBar>
-            <ContainerStyle maxWidth="lg">
-              <MenuDesktop isOffset={isOffset} isHome={false} navConfig={categoryList} />
-            </ContainerStyle>
-          </ColorBar>
-        </MHidden>
+        {showCategoryMenu ? (
+          <MHidden width="mdDown">
+            <ColorBar>
+              <ContainerStyle maxWidth="lg">
+                <MenuDesktop isOffset={isOffset} isHome={false} navConfig={categoryList} />
+              </ContainerStyle>
+            </ColorBar>
+          </MHidden>
+        ) : (
+          <ColorBar style={{ height: '2px' }} />
+        )}
       </ToolbarStyle>
 
       {isOffset && <ToolbarShadowStyle />}

@@ -15,22 +15,28 @@ export default {
 
 const SELECTED_FIELDS = '_id numericId customer user address isReceiveAtStore status paymentMethod paymentStatus items subTotal shippingFee discount total createdAt updatedAt';
 
-const POPULATE_OPT = {
-  path: 'items.product',
-  select: '_id name variants.variantName variants.price variants.marketPrice variants.thumbnail variants.sku',
-};
+const POPULATE_OPT = [
+  {
+    path: 'items.product',
+    select: '_id name variants.variantName variants.price variants.marketPrice variants.thumbnail variants.sku',
+  },
+  {
+    path: 'user',
+    select: '_id name',
+  }
+];
 
 function formatResult(record) {
-  if (!record) { return null; }
+  if (!Boolean(record)) { return null; }
 
   if (Array.isArray(record)) {
     return record.map(item => formatResult(item));
   }
 
-  if (!record.customer) {
+  if (!Boolean(record.customer)) {
     record.customer = {
-      name: record.address.name,
-      phone: record.address.phone,
+      name: record?.address?.name,
+      phone: record?.address?.phone,
     };
   }
 
@@ -75,8 +81,9 @@ async function createWithTransaction(orderData, createdBy) {
       const cartItem = orderData.items[i];
 
       const product = await Product.findOne(
-        { _id: cartItem.productIdId, 'variants.sku': cartItem.sku }
+        { _id: cartItem.productId, 'variants.sku': cartItem.sku }
       ).lean().exec();
+
       if (!product || product?.variants?.length === 0) {
         throw new ApiError({
           message: 'Product does not exist',
@@ -129,7 +136,7 @@ async function createWithTransaction(orderData, createdBy) {
       orderToSave.address = null;
     }
 
-    const order = await orderToSave.save({ session });
+    const order = orderToSave.save({ session });
 
     await session.commitTransaction();
     session.endSession();
@@ -199,11 +206,11 @@ async function getOne(orderId, selectedFields = null) {
 }
 
 async function getAlls(search, status, paymentStatus, selectedFields = null) {
-  return await getList(null, search, status, paymentStatus, selectedFields);
+  return getList(null, search, status, paymentStatus, selectedFields);
 }
 
 async function getListByUser(userId, search, status, paymentStatus, selectedFields = null) {
-  return await getList(userId, search, status, paymentStatus, selectedFields);
+  return getList(userId, search, status, paymentStatus, selectedFields);
 }
 
 /**
@@ -222,6 +229,13 @@ async function create(customerInfo, orderData, createdBy) {
     orderData.user = user._id;
   }
   else {
+    orderData.customer = {
+      name: orderData.address.name,
+      phone: orderData.address.phone,
+    };
+  }
+
+  if (orderData.isReceiveAtStore) {
     orderData.customer = {
       name: orderData.address.name,
       phone: orderData.address.phone,

@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import categoryReducer from './slices/categorySlice';
 import cartSlice from './slices/cartSlice';
+import orderSlice from './slices/orderSlice';
 import brandsReducer from './reducers/brands';
 import discountsReducer from './reducers/discounts';
 import productsReducer from './slices/productSlice';
@@ -12,13 +13,14 @@ import commentsReduces from './reducers/comments';
 const rootReducer = combineReducers({
   category: categoryReducer,
   cart: cartSlice,
+  order: orderSlice,
 
   brand: brandsReducer,
   discount: discountsReducer,
   product: productsReducer,
   user: usersReducer,
   account: accountReducer,
-  order: ordersReducer,
+  orderManager: ordersReducer,
   comment: commentsReduces
 });
 

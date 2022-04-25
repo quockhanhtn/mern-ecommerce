@@ -4,9 +4,10 @@ import { Icon } from '@iconify/react';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 // material
 import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, experimentalStyled as styled } from '@material-ui/core/styles';
 // hooks
-import { useLocales, useOrderFlow } from '../../hooks';
+import { useSelector } from 'react-redux';
+import { useLocales } from '../../hooks';
 // components
 import Page from '../../components/Page';
 import { CheckoutCart, CheckoutPayment, CheckoutBillingAddress } from '../../components/checkout';
@@ -48,10 +49,29 @@ function QontoStepIcon({ active, completed }) {
   );
 }
 
+// ----------------------------------------------------------------------
+
+const StepperStyle = styled(Stepper)(({ theme }) => ({
+  position: 'fixed',
+  left: theme.spacing(2),
+  top: '50%',
+  transform: 'translateY(-50%)',
+  zIndex: 1000,
+  alignItems: 'center',
+  justifyContent: 'center'
+}));
+
+const StepLabelStyle = styled(StepLabel)(({ theme }) => ({
+  '& .MuiStepLabel-label': {
+    typography: 'subtitle2',
+    color: 'text.disabled',
+    paddingBottom: theme.spacing(3)
+  }
+}));
+
 export default function CartPage() {
   const { t } = useLocales();
-
-  const { activeStep } = useOrderFlow();
+  const { activeStep } = useSelector((state) => state.order);
 
   const steps = [
     {
@@ -68,29 +88,24 @@ export default function CartPage() {
     }
   ];
 
-  // useEffect(() => {
-  //   if (isMountedRef.current) {
-  //     // dispatch(getCart(cart));
-  //   }
-  // }, [dispatch, isMountedRef, cart]);
-
   return (
-    <Page title={t('cart.page-title')}>
-      <Container sx={{ marginY: (theme) => theme.spacing(5) }}>
+    <Page title={t('cart.page-title')} sx={{ mt: -7 }}>
+      <Container sx={{ mt: 0, mb: (theme) => theme.spacing(5) }}>
         <Grid container justifyContent="flex-start">
           <Grid item xs={12} md={8} sx={{ mb: 5 }}>
-            <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
+            <StepperStyle
+              alternativeLabel
+              activeStep={activeStep}
+              // connector={<QontoConnector />}
+              connector={null}
+              orientation="vertical"
+            >
               {steps.map((s) => (
                 <Step key={s.label}>
-                  <StepLabel
-                    StepIconComponent={QontoStepIcon}
-                    sx={{ '& .MuiStepLabel-label': { typography: 'subtitle2', color: 'text.disabled' } }}
-                  >
-                    {s.label}
-                  </StepLabel>
+                  <StepLabelStyle StepIconComponent={QontoStepIcon}>{s.label}</StepLabelStyle>
                 </Step>
               ))}
-            </Stepper>
+            </StepperStyle>
           </Grid>
         </Grid>
 

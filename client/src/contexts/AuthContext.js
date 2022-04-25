@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { createContext, useEffect, useReducer } from 'react';
 import * as api from '../api';
+import { setAuthenticated } from '../redux/slices/cartSlice';
 
 import { isValidToken, setSession } from '../utils/jwt';
 
@@ -161,6 +162,7 @@ function AuthProvider({ children }) {
   const logoutAction = async () => {
     setSession(null);
     dispatch({ type: 'LOGOUT' });
+    dispatch(setAuthenticated(false));
   };
 
   return (

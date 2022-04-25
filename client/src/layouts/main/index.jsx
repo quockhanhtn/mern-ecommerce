@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { useLocation, Outlet } from 'react-router-dom';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 // material
 // hooks
@@ -42,6 +42,9 @@ export default function MainLayout() {
   const dispatch = useDispatch();
   const { user, googleOAuth } = useAuth();
 
+  const { pathname } = useLocation();
+  const isCartPage = pathname.startsWith('/cart');
+
   const { listSimple: categoryList } = useSelector((state) => state.category);
   const { itemsCount } = useSelector((state) => state.cart);
 
@@ -74,7 +77,7 @@ export default function MainLayout() {
 
   return (
     <RootStyle>
-      <MainNavbar categoryList={navBarItems} cartItemsCount={itemsCount} />
+      <MainNavbar categoryList={navBarItems} showCategoryMenu={!isCartPage} cartItemsCount={itemsCount} />
       <MainStyle>
         <Outlet />
         <MainFooter />

@@ -5,7 +5,6 @@ import roundAddShoppingCart from '@iconify/icons-ic/round-add-shopping-cart';
 
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
@@ -15,8 +14,8 @@ import { Box, Stack, Button, Divider, Typography, FormHelperText } from '@materi
 import { MButton } from '../../@material-extend';
 import { fCurrency } from '../../../utils/formatNumber';
 import { addItemToCart } from '../../../redux/slices/cartSlice';
-import { useAuth, useLocales, useOrderFlow } from '../../../hooks';
-import Incrementer from '../../Incrementer';
+import { useLocales } from '../../../hooks';
+import { IncrementerField } from '../../Incrementer';
 
 // ----------------------------------------------------------------------
 
@@ -30,20 +29,18 @@ const RootStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function ProductDetailsSummary({ isLoading, product, indexVariant, handleChangeIndexVariant }) {
-  const { addToCart } = useOrderFlow();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { isLoading: isLoadingCart } = useSelector((state) => state.cart);
-
-  const { isAuthenticated } = useAuth();
+  const { isLoading: isLoadingCart, isAuthenticated } = useSelector((state) => state.cart);
   const { t, currentLang } = useLocales();
 
   if (!product) {
     return null;
   }
 
+  // eslint-disable-next-line react/prop-types
   const { _id, name, price, cover, views, variants, rates } = product;
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -71,20 +68,17 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
   const { values, touched, errors, getFieldProps, handleSubmit } = formik;
 
   const handleAddCart = () => {
+    const selectVariant = product?.variants?.[indexVariant];
     const newItem = {
       productId: product._id,
-      sku: product.variants[indexVariant].sku,
+      sku: selectVariant.sku,
       qty: values.quantity
     };
-    dispatch(addItemToCart(newItem));
-    // addToCart(newItem).then(() => {
-    //   enqueueSnackbar('Thêm sản phẩm vào giỏ hàng thành công', {
-    //     variant: 'success'
-    //   });
-    // });
-    // // Add to DB
-    // if (isAuthenticated) {
-    // }
+    let moreInfo = {};
+    if (!isAuthenticated) {
+      moreInfo = { name: product.name, ...selectVariant };
+    }
+    dispatch(addItemToCart(newItem, moreInfo));
   };
 
   if (isLoading) {
@@ -136,7 +130,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
                 Số lượng
               </Typography>
               <div>
-                <Incrementer name="quantity" available={variants?.[indexVariant].quantity} />
+                <IncrementerField name="quantity" available={variants?.[indexVariant].quantity} />
                 <Typography
                   variant="caption"
                   sx={{
