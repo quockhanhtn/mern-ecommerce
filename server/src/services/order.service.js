@@ -3,7 +3,7 @@ import Order from '../models/order.model.js';
 import Product from '../models/product.model.js';
 import User from '../models/user.model.js';
 import constants from '../constants.js';
-import ApiError from '../utils/APIError.js';
+import ApiError from '../utils/ApiError.js';
 
 export default {
   getOne,

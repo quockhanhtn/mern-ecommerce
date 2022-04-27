@@ -3,7 +3,7 @@ import userService from './user.service.js';
 import { randomBytes } from 'crypto';
 import JwtUtils from '../utils/JwtUtils.js';
 import CipherUtils from '../utils/CipherUtils.js';
-import ApiError from '../utils/APIError.js';
+import ApiError from '../utils/ApiError.js';
 import responseDef from '../responseCode.js';
 
 

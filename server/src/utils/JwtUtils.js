@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import ApiError from './APIError.js';
+import ApiError from './ApiError.js';
 
 const secretKey = process.env.JWT_SECRET;
 const opts = { expiresIn: process.env.JWT_EXPIRES_IN };

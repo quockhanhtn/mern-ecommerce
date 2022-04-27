@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import Cart from '../models/cart.model.js';
-import ApiError from '../utils/APIError.js';
+import ApiError from '../utils/ApiError.js';
 import productService from './products.service.js';
 
 const SELECTED_FIELDS = 'name variants.name variants.sku variants.variantName variants.price variants.marketPrice variants.thumbnail variants.sold variants.quantity';

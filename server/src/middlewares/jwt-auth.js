@@ -1,6 +1,6 @@
 import constants from '../constants.js';
 import userService from '../services/user.service.js';
-import ApiError from '../utils/APIError.js';
+import ApiError from '../utils/ApiError.js';
 import JwtUtils from '../utils/JwtUtils.js';
 
 const roleAdmin = constants.USER.ROLE.ADMIN;

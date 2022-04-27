@@ -13,6 +13,7 @@ import discountRoutes from './discounts.route.js';
 import orderRoutes from './order.route.js';
 import paymentRoutes from './payment.route.js';
 import cartRoutes from './cart.route.js';
+import userBehaviorRoutes from './user-behavior.route.js';
 
 
 const router = Router();
@@ -40,5 +41,6 @@ router.use('/discounts', discountRoutes);
 router.use('/orders', orderRoutes);
 router.use('/payment', paymentRoutes);
 router.use('/cart', cartRoutes);
+router.use('/user-behavior', userBehaviorRoutes);
 
 export default router;

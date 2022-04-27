@@ -370,10 +370,20 @@ function standardPolicy(str) {
   return str;
 }
 function splitProductName(name) {
+  if (name.startsWith('Laptop')) { return name.replace('Laptop', '').trim(); }
+
+  name = StringUtils.removeMultiSpace(StringUtils.replaceAll(name, '16GB', ' '));
+  name = StringUtils.removeMultiSpace(StringUtils.replaceAll(name, '32GB', ' '));
+  name = StringUtils.removeMultiSpace(StringUtils.replaceAll(name, '64GB', ' '));
+  name = StringUtils.removeMultiSpace(StringUtils.replaceAll(name, '128GB', ' '));
+  name = StringUtils.removeMultiSpace(StringUtils.replaceAll(name, '256GB', ' '));
+  name = StringUtils.removeMultiSpace(StringUtils.replaceAll(name, '512GB', ' '));
+  name = StringUtils.removeMultiSpace(StringUtils.replaceAll(name, '1TB', ' '));
+
   if (name.startsWith('Máy tính bảng')) { return name.replace('Máy tính bảng', '').trim(); }
   if (name.startsWith('Đồng hồ thông minh')) { return name.replace('Đồng hồ thông minh', '').trim(); }
   if (name.startsWith('Điện thoại')) { return name.replace('Điện thoại', '').trim(); }
-  if (name.startsWith('Laptop')) { return name.replace('Laptop', '').trim(); }
+  
   return name;
 }
 

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import User from '../models/user.model.js';
-import ApiError from '../utils/APIError.js';
+import ApiError from '../utils/ApiError.js';
 
 export default {
   getList,

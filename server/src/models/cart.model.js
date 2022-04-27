@@ -8,7 +8,7 @@ const cartSchema = mongoose.Schema(
     userId: { type: mongoose.Types.ObjectId, require: true },
     items: {
       type: [{
-        productId: { type: mongoose.Types.ObjectId, required: true },
+        productId: { type: mongoose.Types.ObjectId, ref: 'Product', required: true },
         sku: { type: String, trim: true, required: true },
         qty: { type: Number, required: true, min: 1 },
         updatedAt: { type: Date, default: Date.now }

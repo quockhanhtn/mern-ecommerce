@@ -2,7 +2,7 @@ import Product from '../models/product.model.js';
 import categoryService from './categories.service.js'
 import brandService from './brands.service.js'
 import StringUtils from '../utils/StringUtils.js';
-import ApiError from '../utils/APIError.js';
+import ApiError from '../utils/ApiError.js';
 
 export default {
   getAllProducts,
