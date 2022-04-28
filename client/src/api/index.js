@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api/v1';
+const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api/v2';
 const API = axios.create({ baseURL });
 
 // Add Header Authorization
@@ -107,14 +107,17 @@ export const orderManager = {
   create: (newOrder) => API.post('/orders/manager', newOrder),
   update: (id, updatedOrder) => API.patch(`/orders/manager/${id}`, updatedOrder)
 };
-// ----------------------------Comment ---------------------------
+// ----------------------------Comment --------------------------------
 export const getAllComment = (product) => API.get(`/comments/${product}`);
 export const createComment = (newComment) => API.post(`/comments`, newComment);
 
-// ----------------------------Write DB for Cart ---------------------------
-export const getProductToCartDB = () => API.get(`/write-order`);
-export const addProductToCartDB = (newProduct) => API.post(`/write-order`, newProduct);
-export const deleteProductToCartDB = (productInfo) => API.post(`/write-order/delete`, productInfo);
-export const increaseProductToCartDB = (productInfo) => API.patch(`/write-order/increase`, productInfo);
-export const decreaseProductToCartDB = (productInfo) => API.patch(`/write-order/decrease`, productInfo);
-export const cleanProductToCartDB = () => API.delete(`/write-order/delete-all`);
+// ----------------------------Cart------------------------------------
+export const getCartItems = (pendingData) => API.post(`/cart`, { items: pendingData });
+export const addItemToCart = (item) => API.post(`/cart/add`, item);
+export const increaseQty = (item) => API.patch(`/cart`, { ...item, delta: 1 });
+export const decreaseQty = (item) => API.patch(`/cart`, { ...item, delta: -1 });
+export const removeItemFromCart = (productId, sku) => API.delete(`/cart/${productId}/${sku}`);
+export const cleanCart = () => API.delete(`/cart/clean`);
+
+// ----------------------------User behavior----------------------------
+export const sendTrackingData = (data) => API.post('/user-behavior', data);

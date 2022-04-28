@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import {
   getOne,
   getList,
@@ -12,7 +12,7 @@ import {
 } from '../../controllers/orders.controller.js';
 import { isGuestOrAuthorized, isAdminOrStaff } from '../../middlewares/jwt-auth.js';
 
-const router = express.Router();
+const router = Router();
 
 /**
  * Authorization

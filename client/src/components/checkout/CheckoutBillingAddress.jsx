@@ -5,7 +5,7 @@ import plusFill from '@iconify/icons-eva/plus-fill';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
 // material
-import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+import { experimentalStyled as styled } from '@material-ui/core/styles';
 import {
   Alert,
   Box,
@@ -29,20 +29,18 @@ import * as Yup from 'yup';
 // hooks
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import useLocales from '../../hooks/useLocales';
-import useOrderFlow from '../../hooks/useOrderFlow';
-import useAuth from '../../hooks/useAuth';
+import { useLocales, useAuth } from '../../hooks';
 // components
 import { MHidden } from '../@material-extend';
-import Label from '../Label';
 import AddressPicker from '../location/AddressPicker';
 import AddressForm from '../account/AddressForm';
 import CheckoutSummary from './CheckoutSummary';
-import CheckoutDelivery from './CheckoutDelivery';
+// import CheckoutDelivery from './CheckoutDelivery';
 // other
 import * as cartHelper from '../../helper/localStorageHelper';
 // actions
 import { getAllAddresses, createAddress } from '../../redux/actions/account';
+import { setOrderInfo, backStepOrder, nextStepOrder } from '../../redux/slices/orderSlice';
 
 // ----------------------------------------------------------------------
 
@@ -58,17 +56,13 @@ const OptionStyle = styled('div')(({ theme }) => ({
 
 export default function CheckoutBillingAddress() {
   const { t } = useLocales();
-  const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
 
   const { user, isAuthenticated } = useAuth();
   const dispatch = useDispatch();
-  const { list: addressList, isLoading, error } = useSelector((state) => state.account.addresses);
+  const { list: addressList, isLoading } = useSelector((state) => state.account.addresses);
 
   const [openForm, setOpenForm] = useState(false);
-
-  const { cart, subTotal, activeStep, updateOrderInfo, backStepOrder, nextStepOrder } = useOrderFlow();
-  const discount = cart.length > 0 ? 50000 : 0;
 
   const initInfo = cartHelper.getOrderInfo();
 
@@ -100,6 +94,7 @@ export default function CheckoutBillingAddress() {
     }
   ];
 
+  // eslint-disable-next-line no-unused-vars
   const deliveryOpts = [
     {
       value: 0,
@@ -243,21 +238,18 @@ export default function CheckoutBillingAddress() {
     }
   };
 
-  const handleApplyShipping = () => {
-    //
-  };
+  // const handleApplyShipping = () => {
+  //   //
+  // };
 
   const handleNextStep = () => {
-    console.log('Submit', {
-      values,
-      errors
-    });
-    updateOrderInfo(formik.values);
-    nextStepOrder(activeStep);
+    dispatch(setOrderInfo(formik.values));
+    dispatch(nextStepOrder());
   };
 
   const handleBackStep = () => {
-    backStepOrder(activeStep);
+    dispatch(setOrderInfo(formik.values));
+    dispatch(backStepOrder());
   };
 
   const renderAddressInput = () => {
@@ -272,7 +264,7 @@ export default function CheckoutBillingAddress() {
           <RadioGroup name="userAddressId">
             <Grid container spacing={2}>
               {addressList.map((add) => {
-                const { _id, name, phone, street, ward, district, province, type } = add;
+                const { _id, name, phone, street, ward, district, province } = add;
                 return (
                   <Grid key={_id} item xs={12} md={12}>
                     <OptionStyle
@@ -312,7 +304,7 @@ export default function CheckoutBillingAddress() {
             size="small"
             startIcon={<Icon icon={plusFill} width={20} height={20} />}
             onClick={handleAddAddress}
-            sx={{ my: 3 }}
+            sx={{ mt: 3 }}
           >
             {t('address.add-title')}
           </Button>
@@ -458,23 +450,23 @@ export default function CheckoutBillingAddress() {
                   sx={{ mt: 3 }}
                 />
               )} */}
-
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-                <Button
-                  size="small"
-                  color="inherit"
-                  onClick={handleBackStep}
-                  startIcon={<Icon icon={arrowIosBackFill} />}
-                >
-                  {t('common.back')}
-                </Button>
-              </Box>
             </Grid>
 
             <Grid item xs={12} md={4}>
-              <CheckoutSummary subtotal={subTotal} total={subTotal} discount={discount} />
+              <CheckoutSummary />
               <Button type="submit" fullWidth size="large" variant="contained">
                 {t('common.continue')}
+              </Button>
+
+              <Button
+                size="small"
+                fullWidth
+                color="inherit"
+                onClick={handleBackStep}
+                startIcon={<Icon icon={arrowIosBackFill} />}
+                sx={{ mt: 3 }}
+              >
+                {t('common.back')}
               </Button>
             </Grid>
           </Grid>

@@ -1,21 +1,23 @@
+// icons
 import { Icon } from '@iconify/react';
-import { useNavigate } from 'react-router-dom';
-import add12Filled from '@iconify/icons-fluent/add-12-filled';
-import subtract12Filled from '@iconify/icons-fluent/subtract-12-filled';
 import roundAddShoppingCart from '@iconify/icons-ic/round-add-shopping-cart';
-import { useFormik, Form, FormikProvider, useField } from 'formik';
+//
+
+import { useSnackbar } from 'notistack';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Stack, Button, Rating, Divider, Typography, FormHelperText } from '@material-ui/core';
-import { useSnackbar } from 'notistack';
-import { useDispatch } from 'react-redux';
-import { useState } from 'react';
-import { MButton, MIconButton } from '../../@material-extend';
-import { fNumber, fCurrency } from '../../../utils/formatNumber';
-import useOrderFlow from '../../../hooks/useOrderFlow';
-import { addProductToCartDB } from '../../../redux/slices/writeOrderSlice';
-import { useAuth, useLocales } from '../../../hooks';
-// --------------------
+import { Box, Stack, Button, Divider, Typography, FormHelperText } from '@material-ui/core';
+// components
+import { MButton } from '../../@material-extend';
+import { fCurrency } from '../../../utils/formatNumber';
+import { addItemToCart } from '../../../redux/slices/cartSlice';
+import { useLocales } from '../../../hooks';
+import { IncrementerField } from '../../Incrementer';
+
+// ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
   padding: theme.spacing(3),
@@ -26,66 +28,19 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const Incrementer = (props) => {
-  const [field, , helpers] = useField(props);
-  const { available } = props;
-  const { value } = field;
-  const { setValue } = helpers;
-
-  const incrementQuantity = () => {
-    setValue(value + 1);
-  };
-  const decrementQuantity = () => {
-    setValue(value - 1);
-  };
-
-  return (
-    <Box
-      sx={{
-        py: 0.5,
-        px: 0.75,
-        border: 1,
-        lineHeight: 0,
-        borderRadius: 1,
-        display: 'flex',
-        alignItems: 'center',
-        borderColor: 'grey.50032'
-      }}
-    >
-      <MIconButton size="small" color="inherit" disabled={value <= 1} onClick={decrementQuantity}>
-        <Icon icon={subtract12Filled} width={16} height={16} />
-      </MIconButton>
-      <Typography
-        variant="body2"
-        component="span"
-        sx={{
-          width: 40,
-          textAlign: 'center',
-          display: 'inline-block'
-        }}
-      >
-        {value}
-      </Typography>
-      <MIconButton size="small" color="inherit" disabled={value >= available} onClick={incrementQuantity}>
-        <Icon icon={add12Filled} width={16} height={16} />
-      </MIconButton>
-    </Box>
-  );
-};
-
 export default function ProductDetailsSummary({ isLoading, product, indexVariant, handleChangeIndexVariant }) {
-  const { addToCart } = useOrderFlow();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const [isAddToCart, setIsAddToCart] = useState(false);
-  const { isAuthenticated } = useAuth();
+
+  const { isLoading: isLoadingCart, isAuthenticated } = useSelector((state) => state.cart);
   const { t, currentLang } = useLocales();
 
   if (!product) {
     return null;
   }
 
+  // eslint-disable-next-line react/prop-types
   const { _id, name, price, cover, views, variants, rates } = product;
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -113,28 +68,17 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
   const { values, touched, errors, getFieldProps, handleSubmit } = formik;
 
   const handleAddCart = () => {
-    const productInCart = {
-      _id: product._id,
-      name: product.name,
-      variantName: product.variants[indexVariant].variantName,
-      skuVariant: product.variants[indexVariant].sku,
-      quantity: values.quantity,
-      price: product.variants[indexVariant].price,
-      quantityAvailable: product.variants[indexVariant].quantity,
-      thumbnail: product.variants[indexVariant].thumbnail
+    const selectVariant = product?.variants?.[indexVariant];
+    const newItem = {
+      productId: product._id,
+      sku: selectVariant.sku,
+      qty: values.quantity
     };
-    addToCart(productInCart).then(() => {
-      enqueueSnackbar('Thêm sản phẩm vào giỏ hàng thành công', {
-        variant: 'success'
-      });
-    });
-    // Add to DB
-    if (isAuthenticated) {
-      setIsAddToCart(true);
-      dispatch(addProductToCartDB(productInCart)).then(() => {
-        setIsAddToCart(false);
-      });
+    let moreInfo = {};
+    if (!isAuthenticated) {
+      moreInfo = { name: product.name, ...selectVariant };
     }
+    dispatch(addItemToCart(newItem, moreInfo));
   };
 
   if (isLoading) {
@@ -167,7 +111,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
                   variants.length > 0 &&
                   variants.map((variant, index) => (
                     <Button
-                      clicked
+                      // clicked
                       key={variant.sku}
                       onClick={() => {
                         handleChangeIndexVariant(index);
@@ -186,7 +130,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
                 Số lượng
               </Typography>
               <div>
-                <Incrementer name="quantity" available={variants?.[indexVariant].quantity} />
+                <IncrementerField name="quantity" available={variants?.[indexVariant].quantity} />
                 <Typography
                   variant="caption"
                   sx={{
@@ -216,7 +160,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
               startIcon={<Icon icon={roundAddShoppingCart} />}
               onClick={handleAddCart}
               sx={{ whiteSpace: 'nowrap' }}
-              disabled={isAddToCart}
+              disabled={isLoadingCart}
             >
               Thêm vào giỏ hàng
             </MButton>

@@ -2,7 +2,7 @@ import http from 'http';
 import cron from 'node-cron';
 import { Server as SocketServer } from 'socket.io';
 import app from './app.js';
-import logging from './utils/logging.js';
+import LogUtils from './utils/LogUtils.js';
 import socketHandler from './socket.io.js';
 import { importDataToFpt } from '../tool/import-data-to-fpt.js';
 
@@ -16,7 +16,7 @@ const io = new SocketServer(apiServer, {
 io.on('connection', (socket) => socketHandler(io, socket));
 
 apiServer.listen(port, () => {
-  logging.info('SERVER', `Server listening on port ${port}`);
+  LogUtils.info('SERVER', `Server listening on port ${port}`);
 });
 
 // schedule task run every day at 03:00 AM

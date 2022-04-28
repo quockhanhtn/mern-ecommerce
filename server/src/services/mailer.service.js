@@ -2,7 +2,7 @@
 import { createTransport } from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
 import { resolve } from 'path';
-import logging from '../utils/logging.js';
+import LogUtils from '../utils/LogUtils.js';
 
 // initialize nodemailer
 const transporter = createTransport({
@@ -75,9 +75,9 @@ export const sendMail = (receiver, subject) => {
 
   transporter.sendMail(mailOptions, (err, info) => {
     if (err) {
-      logging.error('MAILER', 'Error sending mail', err);
+      LogUtils.error('MAILER', 'Error sending mail', err);
     } else {
-      logging.info('MAILER', 'Mail sent', info);
+      LogUtils.info('MAILER', 'Mail sent', info);
     }
   });
 };

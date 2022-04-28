@@ -10,47 +10,42 @@ import { LoadingButton } from '@material-ui/lab';
 // hooks
 import { useLayoutEffect } from 'react';
 import { useSnackbar } from 'notistack';
-import { useDispatch } from 'react-redux';
-import useLocales from '../../hooks/useLocales';
-import useAuth from '../../hooks/useAuth';
-import useOrderFlow from '../../hooks/useOrderFlow';
+import { useSelector, useDispatch } from 'react-redux';
+import { useAuth, useLocales } from '../../hooks';
 // components
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 
-import * as Helper from '../../helper/localStorageHelper';
-import { cleanProductToCartDB } from '../../redux/slices/writeOrderSlice';
+import { createOrder, backStepOrder } from '../../redux/slices/orderSlice';
 
 // ----------------------------------------------------------------------
 
 export default function CheckoutPayment() {
   const { t } = useLocales();
-  const { isAuthenticated } = useAuth();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const { orderInfo, isCreatingOrder, orderCreated, orderError, subTotal, activeStep, createOrder, backStepOrder } =
-    useOrderFlow();
+  const { orderInfo, isLoading: isCreatingOrder, orderCreated, error } = useSelector((state) => state.order);
 
-  const discount = 0;
   useLayoutEffect(() => {
-    if (orderError) {
-      console.log('orderError', orderError);
-      enqueueSnackbar(orderError?.message || 'Có lỗi', { variant: 'error' });
+    if (error) {
+      console.log('orderError', error);
+      enqueueSnackbar(error?.message || 'Có lỗi', { variant: 'error' });
     }
 
     if (orderCreated) {
-      Helper.clearAfterOrder();
-      if (isAuthenticated) {
-        dispatch(cleanProductToCartDB());
-      }
+      // Helper.clearAfterOrder();
+      // if (isAuthenticated) {
+      //   dispatch(cleanCart());
+      // }
       let redirect = `/order/${orderCreated._id}`;
       if (orderCreated.paymentUrl) {
         redirect = orderCreated.paymentUrl;
       }
       window.open(redirect, '_self');
     }
-  }, [orderCreated, orderError]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderCreated, error]);
 
   const paymentOpts = [
     {
@@ -106,11 +101,11 @@ export default function CheckoutPayment() {
   }
 
   const handleBackStep = () => {
-    backStepOrder(activeStep);
+    dispatch(backStepOrder());
   };
 
   const handlePayment = async (values) => {
-    await createOrder(values);
+    dispatch(createOrder(values));
   };
 
   const PaymentSchema = Yup.object().shape({
@@ -151,9 +146,18 @@ export default function CheckoutPayment() {
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
             <CheckoutPaymentMethods formik={formik} paymentOptions={paymentOpts} />
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <CheckoutBillingInfo orderInfo={orderInfo} onBackStep={handleBackStep} />
+            <CheckoutSummary />
+            <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isCreatingOrder}>
+              {t('cart.order.action')}
+            </LoadingButton>
             <Button
               type="button"
               size="small"
+              fullWidth
               color="inherit"
               onClick={handleBackStep}
               startIcon={<Icon icon={arrowIosBackFill} />}
@@ -161,14 +165,6 @@ export default function CheckoutPayment() {
             >
               {t('common.back')}
             </Button>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <CheckoutBillingInfo orderInfo={orderInfo} onBackStep={handleBackStep} />
-            <CheckoutSummary subtotal={subTotal} total={subTotal} discount={discount} />
-            <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isCreatingOrder}>
-              {t('cart.order.action')}
-            </LoadingButton>
           </Grid>
         </Grid>
       </Form>

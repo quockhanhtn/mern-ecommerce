@@ -35,7 +35,9 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 MTableToolbar.propTypes = {
   searchPlaceHolder: PropTypes.string.isRequired,
-  numSelected: PropTypes.number.isRequired
+  numSelected: PropTypes.number.isRequired,
+  filterName: PropTypes.string,
+  onFilterName: PropTypes.func
 };
 
 export default function MTableToolbar({ searchPlaceHolder, numSelected, filterName, onFilterName }) {

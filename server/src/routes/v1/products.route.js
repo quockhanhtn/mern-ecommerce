@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import { allowImageMineTypes } from '../../constants.js';
 import {
   getAllProducts,
@@ -14,10 +14,10 @@ import {
   getFullAllProducts
 } from '../../controllers/products.controller.js';
 import { isAdmin, isAdminOrStaff } from '../../middlewares/jwt-auth.js';
-import { handleFilePath, multerUpload } from '../../utils/upload-utils.js';
+import  UploadUtils from '../../utils/UploadUtils.js';
 
-const router = express.Router();
-const upload = multerUpload(
+const router = Router();
+const upload = UploadUtils.multerUpload(
   '/products/',
   allowImageMineTypes,
   21    // 21 = 1 thumbnail + 20 pictures
@@ -39,7 +39,7 @@ router.get('/:identity', getProductById);
 router.post('/',
   isAdminOrStaff,
   upload.fields(uploadFields),
-  handleFilePath(uploadFields),
+  UploadUtils.handleFilePath(uploadFields),
   createProduct
 );
 router.patch('/:identity', isAdminOrStaff, updateProduct);
@@ -49,13 +49,13 @@ router.patch('/:identity/rate', rateProduct);
 router.post('/:identity/variants',
   isAdminOrStaff,
   upload.fields(uploadFields),
-  handleFilePath(uploadFields),
+  UploadUtils.handleFilePath(uploadFields),
   addProductVariants
 );
 router.patch('/:identity/variants/:sku',
   isAdminOrStaff,
   upload.fields(uploadFields),
-  handleFilePath(uploadFields),
+  UploadUtils.handleFilePath(uploadFields),
   updateProductVariants
 );
 router.delete('/:identity/variants/:sku', isAdmin, deleteProductVariants);

@@ -1,11 +1,11 @@
-import express from 'express';
+import { Router } from 'express';
 import { allowImageMineTypes, USER } from '../../constants.js';
 import { createUser, getUsers } from '../../controllers/users.controller.js';
 import { isAdmin, isAdminOrStaff } from '../../middlewares/jwt-auth.js';
-import { handleFilePath, multerUpload } from '../../utils/upload-utils.js';
+import UploadUtils from '../../utils/UploadUtils.js';
 
-const router = express.Router();
-const upload = multerUpload('/users/', allowImageMineTypes);
+const router = Router();
+const upload = UploadUtils.multerUpload('/users/', allowImageMineTypes);
 const roleStaff = USER.ROLE.STAFF;
 const roleCustomer = USER.ROLE.CUSTOMER;
 
@@ -22,7 +22,7 @@ router.route('/staff')
   .post(
     isAdmin,
     upload.single('avatar'),
-    handleFilePath('avatar'),
+    UploadUtils.handleFilePath('avatar'),
     createUser(roleStaff)
   );
 
@@ -34,7 +34,7 @@ router.route('/customer')
   .post(
     isAdminOrStaff,
     upload.single('avatar'),
-    handleFilePath('avatar'),
+    UploadUtils.handleFilePath('avatar'),
     createUser(roleCustomer)
   );
 router.route('/customer/:identity')
@@ -42,7 +42,7 @@ router.route('/customer/:identity')
   .patch(
     isAdminOrStaff,
     upload.single('avatar'),
-    handleFilePath('avatar'),
+    UploadUtils.handleFilePath('avatar'),
     createUser(roleCustomer)
   )
   .delete(

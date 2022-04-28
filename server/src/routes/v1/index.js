@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 
 // import all the routes here
 import authRoutes from './auth.route.js';
@@ -12,10 +12,9 @@ import commentRoutes from './comments.route.js';
 import discountRoutes from './discounts.route.js';
 import orderRoutes from './order.route.js';
 import paymentRoutes from './payment.route.js';
-import writeOrderRoutes from "../v2/write-order.route.js";
 
 
-const router = express.Router();
+const router = Router();
 
 /**
  * GET v1/status
@@ -39,6 +38,5 @@ router.use('/comments', commentRoutes);
 router.use('/discounts', discountRoutes);
 router.use('/orders', orderRoutes);
 router.use('/payment', paymentRoutes);
-router.use('/write-order', writeOrderRoutes);
 
 export default router;

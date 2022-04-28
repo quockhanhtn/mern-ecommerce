@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import path from 'path';
 import sharp from 'sharp';
 import Image from '../models/image.model.js';
-import strUtils from '../utils/str-utils.js';
+import StringUtils from '../utils/StringUtils.js';
 
 
 export default {
@@ -32,22 +32,22 @@ function initFilePaths(saveDir, imageId, fExt) {
   if (!fs.existsSync(absDirPath)) { fs.mkdirSync(absDirPath); }
 
   return {
-    dirPath: strUtils.replaceAll(dirPath, '\\', '/'),
+    dirPath: StringUtils.replaceAll(dirPath, '\\', '/'),
     original: {
       absFilePath: path.join(absDirPath, 'original.' + fExt),
-      filePath: strUtils.replaceAll(path.join(dirPath, 'original.' + fExt), '\\', '/')
+      filePath: StringUtils.replaceAll(path.join(dirPath, 'original.' + fExt), '\\', '/')
     },
     small: {
       absFilePath: path.join(absDirPath, 'small.' + fExt),
-      filePath: strUtils.replaceAll(path.join(dirPath, 'small.' + fExt), '\\', '/')
+      filePath: StringUtils.replaceAll(path.join(dirPath, 'small.' + fExt), '\\', '/')
     },
     medium: {
       absFilePath: path.join(absDirPath, 'medium.' + fExt),
-      filePath: strUtils.replaceAll(path.join(dirPath, 'medium.' + fExt), '\\', '/')
+      filePath: StringUtils.replaceAll(path.join(dirPath, 'medium.' + fExt), '\\', '/')
     },
     large: {
       absFilePath: path.join(absDirPath, 'large.' + fExt),
-      filePath: strUtils.replaceAll(path.join(dirPath, 'large.' + fExt), '\\', '/')
+      filePath: StringUtils.replaceAll(path.join(dirPath, 'large.' + fExt), '\\', '/')
     }
   };
 }
@@ -85,7 +85,7 @@ async function resizeWithSharp(sharpInput, saveDir, imageId, isExistOriginal) {
   // if file type is svg, we don't need to resize
   if (fileExt === 'svg' && isExistOriginal) {
     return {
-      original: strUtils.replaceAll(sharpInput, '\\', '/'),
+      original: StringUtils.replaceAll(sharpInput, '\\', '/'),
       dirPath: filePaths.dirPath,
       ext: 'svg'
     };
@@ -117,7 +117,7 @@ async function resizeWithSharp(sharpInput, saveDir, imageId, isExistOriginal) {
   } else { delete filePaths.small; }
 
   if (isExistOriginal) {
-    filePaths.original.filePath = '/' + strUtils.replaceAll(sharpInput, '\\', '/');
+    filePaths.original.filePath = '/' + StringUtils.replaceAll(sharpInput, '\\', '/');
     // move image to new location
     // const newPath = filePaths.original.absFilePath.replace(/\.[^/.]+$/, "") + path.extname(sharpInput);
     // fs.renameSync(

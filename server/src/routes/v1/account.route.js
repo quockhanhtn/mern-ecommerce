@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import { allowImageMineTypes } from '../../constants.js';
 
 import {
@@ -17,17 +17,17 @@ import {
 } from '../../controllers/orders.controller.js';
 
 import { isAuthorized } from '../../middlewares/jwt-auth.js';
-import { handleFilePath, multerUpload } from '../../utils/upload-utils.js';
+import UploadUtils from '../../utils/UploadUtils.js';
 
-const router = express.Router();
-const upload = multerUpload('/users/', allowImageMineTypes);
+const router = Router();
+const upload = UploadUtils.multerUpload('/users/', allowImageMineTypes);
 
 router.route('/')
   .get(isAuthorized, getInfo)
   .patch(
     isAuthorized,
     upload.single('avatar'),
-    handleFilePath('avatar'),
+    UploadUtils.handleFilePath('avatar'),
     updateInfo
   );
 

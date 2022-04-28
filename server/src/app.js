@@ -6,7 +6,7 @@ import error from './middlewares/error.js';
 import logger from './middlewares/logger.js';
 import routesV1 from './routes/v1/index.js';
 import routesV2 from './routes/v2/index.js';
-import logging from './utils/logging.js';
+import LogUtils from './utils/LogUtils.js';
 
 
 const app = express();
@@ -17,6 +17,10 @@ const __dirname = process.cwd();
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/public/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 app.use('/public/logs', express.static(path.join(__dirname, 'public', 'logs')));
+
+app.get('/favicon.ico', (_, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'favicon.ico'));
+});
 
 
 // User middleware
@@ -51,8 +55,8 @@ app.use(error.handler);     // error handler, send stacktrace only during develo
 
 //Config connection to MongoDb and listen app
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => logging.info('DATABASE', `Connected successfully to MongoDB`))
-  .catch(err => logging.info('DATABASE', 'Connect to MongoDB failed', err));
+  .then(() => LogUtils.info('DATABASE', `Connected successfully to MongoDB`))
+  .catch(err => LogUtils.info('DATABASE', 'Connect to MongoDB failed', err));
 
 
 export default app;

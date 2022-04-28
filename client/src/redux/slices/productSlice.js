@@ -94,7 +94,8 @@ const productSlice = createSlice({
         products: action.payload.products
       };
     },
-    relatedExists(state, action) {
+    // eslint-disable-next-line no-unused-vars
+    relatedExists(state, _action) {
       state.related.isLoading = false;
       state.related.error = null;
     }

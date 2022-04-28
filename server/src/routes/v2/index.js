@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 
 // import all the routes here
 import authRoutes from './auth.route.js';
@@ -12,10 +12,11 @@ import commentRoutes from './comments.route.js';
 import discountRoutes from './discounts.route.js';
 import orderRoutes from './order.route.js';
 import paymentRoutes from './payment.route.js';
-import writeOrderRoutes from './write-order.route.js';
+import cartRoutes from './cart.route.js';
+import userBehaviorRoutes from './user-behavior.route.js';
 
 
-const router = express.Router();
+const router = Router();
 
 /**
  * GET v2/status
@@ -39,6 +40,7 @@ router.use('/comments', commentRoutes);
 router.use('/discounts', discountRoutes);
 router.use('/orders', orderRoutes);
 router.use('/payment', paymentRoutes);
-router.use('/write-order', writeOrderRoutes);
+router.use('/cart', cartRoutes);
+router.use('/user-behavior', userBehaviorRoutes);
 
 export default router;

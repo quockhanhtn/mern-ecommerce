@@ -28,6 +28,7 @@ export default function useFirebaseStorage(file, uploadDir = 'images') {
         console.log('useFirebaseStorage hook: ', url);
       }
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
 
   return { progress, url, error };

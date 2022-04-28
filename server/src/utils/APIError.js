@@ -1,7 +1,3 @@
-/**
- * @extends Error
- * @author Anand Undavia <abundavia@gmail.com>
- */
 class ExtendableError extends Error {
   constructor({ message, errors, status, isPublic, stack }) {
     super(message);
@@ -16,11 +12,6 @@ class ExtendableError extends Error {
   }
 }
 
-/**
- * Class representing an API error.
- * @extends ExtendableError
- * @author Anand Undavia <abundavia@gmail.com>
- */
 class ApiError extends ExtendableError {
   /**
    * Creates an API error.
@@ -41,7 +32,7 @@ class ApiError extends ExtendableError {
   }
 
   /**
-   * Simple helper method to create an error of type APIError.  
+   * Simple helper method to create an error ins of type APIError.  
    * @param {string} message  - Error message.
    * @param {number} status   - HTTP status code of error.
    * @returns 
