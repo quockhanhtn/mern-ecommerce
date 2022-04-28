@@ -1,24 +1,12 @@
-import faker from 'faker';
-import * as Yup from 'yup';
-import { useSnackbar } from 'notistack';
-import { useCallback } from 'react';
-import { Form, FormikProvider, useFormik } from 'formik';
+// import faker from 'faker';
+// import * as Yup from 'yup';
+// import { useSnackbar } from 'notistack';
+// import { useCallback } from 'react';
+// import { Form, FormikProvider, useFormik } from 'formik';
 // material
-import {
-  Box,
-  Grid,
-  Card,
-  Stack,
-  Switch,
-  TextField,
-  FormControlLabel,
-  Typography,
-  FormHelperText
-} from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import { Box, Grid, Card, Stack, Switch, FormControlLabel, Typography } from '@material-ui/core';
 // hooks
-import useAuth from '../../hooks/useAuth';
-import useIsMountedRef from '../../hooks/useIsMountedRef';
+// import { useIsMountedRef } from '../../hooks';
 import { UploadAvatar } from '../upload';
 // utils
 import { fData } from '../../utils/formatNumber';
@@ -26,28 +14,24 @@ import { fData } from '../../utils/formatNumber';
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
-  const isMountedRef = useIsMountedRef();
-  const { enqueueSnackbar } = useSnackbar();
-  const user = {
-    id: '8864c717-587d-472a-929a-8e5f298024da-0',
-    displayName: 'Jaydon Frankie',
-    email: 'demo@minimals.cc',
-    password: 'demo1234',
-    photoURL: '/static/mock-images/avatars/avatar_default.jpg',
-    phoneNumber: '+40 777666555',
-    country: 'United States',
-    address: '90210 Broadway Blvd',
-    state: 'California',
-    city: 'San Francisco',
-    zipCode: '94116',
-    about: faker.lorem.paragraphs(),
-    role: 'admin',
-    isPublic: true
-  };
-
-  const updateProfile = () => {
-    // kk
-  };
+  // const isMountedRef = useIsMountedRef();
+  // const { enqueueSnackbar } = useSnackbar();
+  // const user = {
+  //   id: '8864c717-587d-472a-929a-8e5f298024da-0',
+  //   displayName: 'Jaydon Frankie',
+  //   email: 'demo@minimals.cc',
+  //   password: 'demo1234',
+  //   photoURL: '/static/mock-images/avatars/avatar_default.jpg',
+  //   phoneNumber: '+40 777666555',
+  //   country: 'United States',
+  //   address: '90210 Broadway Blvd',
+  //   state: 'California',
+  //   city: 'San Francisco',
+  //   zipCode: '94116',
+  //   about: faker.lorem.paragraphs(),
+  //   role: 'admin',
+  //   isPublic: true
+  // };
 
   // const handleDrop = useCallback(
   //   (acceptedFiles) => {

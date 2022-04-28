@@ -1,5 +1,5 @@
-export { default as AccountBilling } from './AccountBilling';
 export { default as AccountAddressBook } from './AccountAddressBook';
+export { default as AccountBilling } from './AccountBilling';
 export { default as AccountBillingInvoiceHistory } from './AccountBillingInvoiceHistory';
 export { default as AccountBillingPaymentMethod } from './AccountBillingPaymentMethod';
 export { default as AccountChangePassword } from './AccountChangePassword';

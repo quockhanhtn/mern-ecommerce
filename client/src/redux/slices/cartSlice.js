@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import * as api from '../../api';
+import { trackingInCart } from './userBehaviorSlice';
 
 const calculateFee = (allItems, selectedItems) => {
   let saveMoney = 0;
@@ -12,8 +13,8 @@ const calculateFee = (allItems, selectedItems) => {
         selectedItems.findIndex((slcItem) => item.productId === slcItem.productId && item.sku === slcItem.sku) > -1
     )
     .forEach((item) => {
-      subTotal += item.price * item.quantity;
-      saveMoney += (item.marketPrice - item.price) * item.quantity;
+      subTotal += item.price * item.qty;
+      saveMoney += (item.marketPrice - item.price) * item.qty;
     });
 
   shipping = 20000;
@@ -35,6 +36,35 @@ const calculateFee = (allItems, selectedItems) => {
   saveMoney += discount;
 
   return { subTotal, saveMoney, discount, shipping, total: subTotal - discount + shipping };
+};
+
+const handleUpdateTrackingCart = (productId) => (dispatch, getState) => {
+  const { allItems } = getState().cart;
+  const countMap = {};
+
+  allItems.forEach((item) => {
+    if (countMap[item.productId]) {
+      countMap[item.productId] += item.qty;
+    } else {
+      countMap[item.productId] = item.qty;
+    }
+  });
+
+  Object.keys(countMap).forEach((productId) => {
+    dispatch(
+      trackingInCart({
+        productId,
+        qty: countMap[productId]
+      })
+    );
+  });
+
+  // use when remove item from cart
+  if (productId) {
+    if (allItems.findIndex((item) => item.productId === productId) < 0) {
+      dispatch(trackingInCart({ productId, qty: 0 }));
+    }
+  }
 };
 
 const initialState = {
@@ -161,6 +191,7 @@ export const addItemToCart = (item, extraInfo) => async (dispatch, getState) => 
     } else {
       dispatch(actions.addItem({ ...item, ...extraInfo }));
     }
+    dispatch(handleUpdateTrackingCart());
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
   }
@@ -173,6 +204,7 @@ export const increaseItemQty = (item) => async (dispatch, getState) => {
       await api.increaseQty(item);
     }
     dispatch(actions.updateItem({ ...item, qty: item.qty + 1 }));
+    dispatch(handleUpdateTrackingCart());
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
   }
@@ -185,6 +217,7 @@ export const decreaseItemQty = (item) => async (dispatch, getState) => {
       await api.decreaseQty(item);
     }
     dispatch(actions.updateItem({ ...item, qty: item.qty - 1 }));
+    dispatch(handleUpdateTrackingCart());
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
   }
@@ -196,6 +229,7 @@ export const removeItem = (item) => async (dispatch) => {
     const { productId, sku } = item;
     await api.removeItemFromCart(productId, sku);
     dispatch(actions.removeItem(item));
+    dispatch(handleUpdateTrackingCart(productId));
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
   }
@@ -206,6 +240,7 @@ export const cleanCart = () => async (dispatch) => {
     dispatch(actions.startLoading());
     await api.cleanCart();
     dispatch(actions.removeItem([]));
+    dispatch(handleUpdateTrackingCart());
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
   }

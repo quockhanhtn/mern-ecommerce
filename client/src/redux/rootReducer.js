@@ -9,6 +9,7 @@ import usersReducer from './reducers/users';
 import accountReducer from './reducers/account';
 import ordersReducer from './reducers/orders';
 import commentsReduces from './reducers/comments';
+import userBehaviorSlice from './slices/userBehaviorSlice';
 
 const rootReducer = combineReducers({
   category: categoryReducer,
@@ -21,7 +22,9 @@ const rootReducer = combineReducers({
   user: usersReducer,
   account: accountReducer,
   orderManager: ordersReducer,
-  comment: commentsReduces
+  comment: commentsReduces,
+
+  userBehavior: userBehaviorSlice
 });
 
 export default rootReducer;

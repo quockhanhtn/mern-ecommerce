@@ -15,10 +15,11 @@ import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductById } from '../../redux/slices/productSlice';
+import { trackingViewCount, trackingViewTime } from '../../redux/slices/userBehaviorSlice';
 import * as api from '../../api';
 import { getRecommendation } from '../../api/fpt';
 // hooks
-import useLocales from '../../hooks/useLocales';
+import { useLocales, useInterval } from '../../hooks';
 // components
 import Page from '../../components/Page';
 import LoadingScreen from '../../components/LoadingScreen';
@@ -93,9 +94,22 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     fetchRelatedItems(product?._id);
+    dispatch(trackingViewCount({ productId: product?._id }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product?._id]);
 
-  const handleChangeTab = (e, newValue) => {
+  useInterval(
+    () => {
+      if (product?._id) {
+        dispatch(trackingViewTime({ productId: product?._id, viewTime: 1 }));
+      }
+    },
+    1,
+    [product?._id]
+  );
+
+  // eslint-disable-next-line no-unused-vars
+  const handleChangeTab = (_e, newValue) => {
     setTab(newValue);
   };
 

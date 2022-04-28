@@ -118,3 +118,6 @@ export const increaseQty = (item) => API.patch(`/cart`, { ...item, delta: 1 });
 export const decreaseQty = (item) => API.patch(`/cart`, { ...item, delta: -1 });
 export const removeItemFromCart = (productId, sku) => API.delete(`/cart/${productId}/${sku}`);
 export const cleanCart = () => API.delete(`/cart/clean`);
+
+// ----------------------------User behavior----------------------------
+export const sendTrackingData = (data) => API.post('/user-behavior', data);

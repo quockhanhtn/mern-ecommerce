@@ -5,10 +5,9 @@ const userBehaviorSchema = mongoose.Schema(
   {
     productId: { type: String, trim: true, required: true },     // productId
     userIdentity: { type: String, trim: true, required: true },  // ip or userId
-    behavior: { type: Object, required: true },
-    score: { type: Number, required: true, min: 0, max: 5 },
+    behavior: { type: Object, required: true }
   },
-  { _id: false, id: false, timestamps: false, versionKey: false, }
+  { id: false, timestamps: false, versionKey: false, }
 );
 userBehaviorSchema.index({ productId: 1, userIdentity: 1 }, { unique: true });
 userBehaviorSchema.plugin(removeMultiSpace);

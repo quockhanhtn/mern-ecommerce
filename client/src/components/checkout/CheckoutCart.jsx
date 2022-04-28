@@ -9,9 +9,7 @@ import {
   Card,
   CardHeader,
   Container,
-  Grid,
   InputAdornment,
-  Paper,
   Stack,
   Table,
   TableBody,
@@ -26,7 +24,6 @@ import { experimentalStyled as styled } from '@material-ui/core/styles';
 // routes
 import { useSnackbar } from 'notistack';
 // hooks
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocales } from '../../hooks';
 import { fCurrency, fNumber } from '../../utils/formatNumber';
@@ -83,14 +80,10 @@ export default function CheckoutCart() {
   const {
     allItems: allCartItems,
     selectedItems,
-    isLoading: isLoadingCart,
+    // isLoading: isLoadingCart,
     itemsCount,
     fee: { discount, subTotal, shipping, total }
   } = useSelector((state) => state.cart);
-
-  const { activeStep } = useSelector((state) => state.order);
-
-  // const [selectedItems, setSelectedItems] = useState([]);
 
   const handleApplyDiscount = () => {
     // dispatch(applyDiscount(value));
@@ -137,7 +130,7 @@ export default function CheckoutCart() {
   return (
     <>
       <Container disableGutters>
-        <Card sx={{ mb: 3 }}>
+        <Card sx={{ mb: 3, minHeight: 600 }}>
           <CardHeader
             title={
               <Box

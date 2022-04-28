@@ -32,11 +32,10 @@ import { useSnackbar } from 'notistack';
 import { useLocales, useAuth } from '../../hooks';
 // components
 import { MHidden } from '../@material-extend';
-import Label from '../Label';
 import AddressPicker from '../location/AddressPicker';
 import AddressForm from '../account/AddressForm';
 import CheckoutSummary from './CheckoutSummary';
-import CheckoutDelivery from './CheckoutDelivery';
+// import CheckoutDelivery from './CheckoutDelivery';
 // other
 import * as cartHelper from '../../helper/localStorageHelper';
 // actions
@@ -61,11 +60,9 @@ export default function CheckoutBillingAddress() {
 
   const { user, isAuthenticated } = useAuth();
   const dispatch = useDispatch();
-  const { list: addressList, isLoading, error } = useSelector((state) => state.account.addresses);
+  const { list: addressList, isLoading } = useSelector((state) => state.account.addresses);
 
   const [openForm, setOpenForm] = useState(false);
-
-  const { activeStep } = useSelector((state) => state.order);
 
   const initInfo = cartHelper.getOrderInfo();
 
@@ -97,6 +94,7 @@ export default function CheckoutBillingAddress() {
     }
   ];
 
+  // eslint-disable-next-line no-unused-vars
   const deliveryOpts = [
     {
       value: 0,
@@ -240,9 +238,9 @@ export default function CheckoutBillingAddress() {
     }
   };
 
-  const handleApplyShipping = () => {
-    //
-  };
+  // const handleApplyShipping = () => {
+  //   //
+  // };
 
   const handleNextStep = () => {
     dispatch(setOrderInfo(formik.values));
@@ -266,7 +264,7 @@ export default function CheckoutBillingAddress() {
           <RadioGroup name="userAddressId">
             <Grid container spacing={2}>
               {addressList.map((add) => {
-                const { _id, name, phone, street, ward, district, province, type } = add;
+                const { _id, name, phone, street, ward, district, province } = add;
                 return (
                   <Grid key={_id} item xs={12} md={12}>
                     <OptionStyle

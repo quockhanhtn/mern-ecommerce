@@ -28,7 +28,8 @@ AddressForm.propTypes = {
   addressData: PropTypes.object,
   open: PropTypes.bool,
   onClose: PropTypes.func,
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  isLoading: PropTypes.bool
 };
 
 export default function AddressForm({ addressData, open, onClose, onSubmit, isLoading }) {
@@ -77,7 +78,7 @@ export default function AddressForm({ addressData, open, onClose, onSubmit, isLo
     }
   });
 
-  const { errors, values, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, handleSubmit, getFieldProps } = formik;
   const [addressType, setAddressType] = useState('');
 
   useEffect(() => {
