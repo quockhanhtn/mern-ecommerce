@@ -20,22 +20,25 @@ class PopularProducts extends StatelessWidget {
           child: SectionTitle(title: "Sản phẩm mới nhất", press: () {}),
         ),
         SizedBox(height: getProportionateScreenWidth(20)),
-        SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Wrap(
-            children: [
-              ...List.generate(
-                productController.list.length,
-                (index) {
-                return ProductCard(product: productController.list[index]);
-                },
-              ),
-
-              SizedBox(width: getProportionateScreenWidth(20)),
-            ],
-
-          ),
-        )
+        Obx(() {
+          if (productController.isLoading.isTrue) {
+            return const CircularProgressIndicator();
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Wrap(
+              children: [
+                ...List.generate(
+                  productController.list.length,
+                  (index) {
+                    return ProductCard(product: productController.list[index]);
+                  },
+                ),
+                SizedBox(width: getProportionateScreenWidth(20)),
+              ],
+            ),
+          );
+        })
       ],
     );
   }
