@@ -3,6 +3,7 @@ import 'package:hk_mobile/core/components/rounded_icon_btn.dart';
 import 'package:hk_mobile/dto/Product.dart';
 
 import '../../../constants.dart';
+import '../../../dto/product/product_dto.dart';
 import '../../../size_config.dart';
 
 class ColorDots extends StatelessWidget {
@@ -11,7 +12,7 @@ class ColorDots extends StatelessWidget {
     required this.product,
   }) : super(key: key);
 
-  final Product product;
+  final ProductDto product;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +24,9 @@ class ColorDots extends StatelessWidget {
       child: Row(
         children: [
           ...List.generate(
-            product.colors.length,
+            product.variants.length,
             (index) => ColorDot(
-              color: product.colors[index],
+              color: const Color(0xFFF6625E),
               isSelected: index == selectedColor,
             ),
           ),

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hk_mobile/core/components/product_card.dart';
 import 'package:hk_mobile/dto/Product.dart';
 
+import '../../../controllers/product_controller.dart';
 import '../../../size_config.dart';
 import 'section_title.dart';
 
 class PopularProducts extends StatelessWidget {
-  const PopularProducts({Key? key}) : super(key: key);
+  final ProductController productController = Get.put(ProductController());
 
   @override
   Widget build(BuildContext context) {
@@ -19,22 +21,19 @@ class PopularProducts extends StatelessWidget {
         ),
         SizedBox(height: getProportionateScreenWidth(20)),
         SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
+          scrollDirection: Axis.vertical,
+          child: Wrap(
             children: [
               ...List.generate(
-                demoProducts.length,
+                productController.list.length,
                 (index) {
-                  if (demoProducts[index].isPopular) {
-                    return ProductCard(product: demoProducts[index]);
-                  }
-
-                  return const SizedBox
-                      .shrink(); // here by default width and height is 0
+                return ProductCard(product: productController.list[index]);
                 },
               ),
+
               SizedBox(width: getProportionateScreenWidth(20)),
             ],
+
           ),
         )
       ],

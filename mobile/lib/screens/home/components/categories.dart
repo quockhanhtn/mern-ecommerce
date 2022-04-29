@@ -3,13 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/controllers/category_controller.dart';
 import 'package:hk_mobile/dto/category_dto.dart';
-import 'package:hk_mobile/controllers/product_controller.dart';
 
 import '../../../size_config.dart';
 
 class Categories extends StatelessWidget {
   final CategoryController categoryController = Get.put(CategoryController());
-  final ProductController productController = Get.put(ProductController());
 
   List<Widget> renderChild(List<CategoryDto> source) {
     List<Widget> child = [];
