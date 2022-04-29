@@ -2,7 +2,7 @@ import Product from '../models/product.model.js';
 import categoryService from './categories.service.js'
 import brandService from './brands.service.js'
 import StringUtils from '../utils/StringUtils.js';
-import ApiError from '../utils/ApiError.js';
+import ApiErrorUtils from '../utils/ApiErrorUtils.js';
 
 export default {
   getAllProducts,
@@ -93,7 +93,7 @@ async function initialProduct(data, isAddNew = false) {
   //#region Handle category and brand
   const categoryId = await categoryService.getId(data.categoryId);
   if (!categoryId && isAddNew) {
-    throw new ApiError({
+    throw new ApiErrorUtils({
       message: `Category '${data.categoryId}' not found!`,
       status: 404
     });
@@ -103,7 +103,7 @@ async function initialProduct(data, isAddNew = false) {
 
   const brandId = await brandService.getId(data.brandId);
   if (!brandId && isAddNew) {
-    throw new ApiError({
+    throw new ApiErrorUtils({
       message: `Brand '${data.brandId}' not found!`,
       status: 404
     });
@@ -149,7 +149,7 @@ async function initialProduct(data, isAddNew = false) {
 async function addProductVariants(productIdentity, variantData) {
   const product = await getOneProduct(productIdentity, false, true);
   if (!product) {
-    throw new ApiError({
+    throw new ApiErrorUtils({
       message: `Product ${productIdentity} not found !`,
       status: 404
     })
@@ -164,7 +164,7 @@ async function addProductVariants(productIdentity, variantData) {
 async function updateProductVariants(productIdentity, sku, variantData) {
   const product = await getOneProduct(productIdentity, false, true);
   if (!product) {
-    throw ApiError.simple(`Product ${productIdentity} not found !`, 404);
+    throw ApiErrorUtils.simple(`Product ${productIdentity} not found !`, 404);
   }
 
   let variantUpdate = initialProductVariant(variantData);
@@ -275,11 +275,11 @@ async function getSuggestProducts(keyword) {
 async function createProduct(data) {
   const categoryId = await categoryService.getId(data.categoryId);
   if (!categoryId) {
-    throw ApiError.simple(`Category '${data.categoryId}' not found!`, 404);
+    throw ApiErrorUtils.simple(`Category '${data.categoryId}' not found!`, 404);
   }
   const brandId = await brandService.getId(data.brandId);
   if (!brandId) {
-    throw ApiError.simple(`Brand '${data.brandId}' not found!`, 404);
+    throw ApiErrorUtils.simple(`Brand '${data.brandId}' not found!`, 404);
   }
 
   const product = new Product({

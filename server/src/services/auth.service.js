@@ -3,7 +3,7 @@ import userService from './user.service.js';
 import { randomBytes } from 'crypto';
 import JwtUtils from '../utils/JwtUtils.js';
 import CipherUtils from '../utils/CipherUtils.js';
-import ApiError from '../utils/ApiError.js';
+import ApiErrorUtils from '../utils/ApiErrorUtils.js';
 import responseDef from '../responseCode.js';
 
 
@@ -26,7 +26,7 @@ async function googleAuthenticate(payload, ipAddress) {
 
   const user = await userService.getOrCreateByGoogleId(googleId, email, firstName, lastName, avatar);
   if (!user) {
-    throw ApiError.simple2(responseDef.AUTH.USER_NOT_FOUND);
+    throw ApiErrorUtils.simple2(responseDef.AUTH.USER_NOT_FOUND);
   }
 
   // authentication successful so generate jwt and refresh tokens
@@ -46,12 +46,12 @@ async function googleAuthenticate(payload, ipAddress) {
 async function authenticate(username, password, ipAddress) {
   const user = await userService.getOne(username, '-addresses');
   if (!user) {
-    throw ApiError.simple2(responseDef.AUTH.USER_NOT_FOUND);
+    throw ApiErrorUtils.simple2(responseDef.AUTH.USER_NOT_FOUND);
   }
 
   const isMatch = CipherUtils.comparePassword(password, user.password);
   if (!isMatch) {
-    throw ApiError.simple2(responseDef.AUTH.INVALID_PASSWORD);
+    throw ApiErrorUtils.simple2(responseDef.AUTH.INVALID_PASSWORD);
   }
 
   // authentication successful so generate jwt and refresh tokens
@@ -71,7 +71,7 @@ async function authenticate(username, password, ipAddress) {
 async function refreshToken(refreshToken, ipAddress) {
   const currentRfToken = await getRefreshToken(refreshToken);
   if (currentRfToken.createdByIp !== ipAddress) {
-    throw ApiError.simple('Can\'t refresh token from other ip address', 401);
+    throw ApiErrorUtils.simple('Can\'t refresh token from other ip address', 401);
   }
 
   const { user } = currentRfToken;
@@ -109,7 +109,7 @@ async function getRefreshToken(token) {
     .findOne({ token })
     .populate({ path: 'user', select: '-addresses -password' });
   if (!refreshToken || !refreshToken.isActive) {
-    throw ApiError.simple2(responseDef.AUTH.INVALID_TOKEN);
+    throw ApiErrorUtils.simple2(responseDef.AUTH.INVALID_TOKEN);
   }
   return refreshToken;
 }
@@ -117,7 +117,7 @@ async function getRefreshToken(token) {
 async function changePassword(userId, oldPassword, newPassword) {
   const user = await userService.getOneById(userId, '_id password emptyPassword googleId email');
   if (!user) {
-    throw ApiError.simple2(responseDef.AUTH.USER_NOT_FOUND);
+    throw ApiErrorUtils.simple2(responseDef.AUTH.USER_NOT_FOUND);
   }
 
   const updateData = {};
@@ -127,23 +127,23 @@ async function changePassword(userId, oldPassword, newPassword) {
   } else {
     const isMatch = CipherUtils.comparePassword(oldPassword, user.password);
     if (!isMatch) {
-      throw ApiError.simple2(responseDef.AUTH.INVALID_PASSWORD);
+      throw ApiErrorUtils.simple2(responseDef.AUTH.INVALID_PASSWORD);
     }
   }
 
   if (oldPassword === newPassword) {
-    throw ApiError.simple2(responseDef.AUTH.PASSWORD_NOT_CHANGED);
+    throw ApiErrorUtils.simple2(responseDef.AUTH.PASSWORD_NOT_CHANGED);
   }
 
   if (newPassword === '' || newPassword === null) {
-    throw ApiError.simple2(responseDef.AUTH.PASSWORD_EMPTY);
+    throw ApiErrorUtils.simple2(responseDef.AUTH.PASSWORD_EMPTY);
   }
 
   if (newPassword.length < 6) {
-    throw ApiError.simple2(responseDef.AUTH.PASSWORD_TOO_SHORT);
+    throw ApiErrorUtils.simple2(responseDef.AUTH.PASSWORD_TOO_SHORT);
   }
   if (newPassword.length > 32) {
-    throw ApiError.simple2(responseDef.AUTH.PASSWORD_TOO_LONG);
+    throw ApiErrorUtils.simple2(responseDef.AUTH.PASSWORD_TOO_LONG);
   }
 
   updateData.password = CipherUtils.hashPassword(newPassword);

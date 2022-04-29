@@ -3,7 +3,7 @@ import Order from '../models/order.model.js';
 import Product from '../models/product.model.js';
 import User from '../models/user.model.js';
 import constants from '../constants.js';
-import ApiError from '../utils/ApiError.js';
+import ApiErrorUtils from '../utils/ApiErrorUtils.js';
 
 export default {
   getOne,
@@ -85,7 +85,7 @@ async function createWithTransaction(orderData, createdBy) {
       ).lean().exec();
 
       if (!product || product?.variants?.length === 0) {
-        throw new ApiError({
+        throw new ApiErrorUtils({
           message: 'Product does not exist',
           errors: { productId: product._id, sku: product.variants[0].sku },
           status: 404
@@ -93,7 +93,7 @@ async function createWithTransaction(orderData, createdBy) {
       }
 
       if (product?.variants?.[0].sold + cartItem.qty > product?.variants?.[0].quantity) {
-        throw new ApiError({
+        throw new ApiErrorUtils({
           message: 'Product out of stock',
           errors: { productId: product._id, sku: product.variants[0].sku },
           status: 404
@@ -146,10 +146,10 @@ async function createWithTransaction(orderData, createdBy) {
     await session.abortTransaction();
     session.endSession();
 
-    if (err instanceof ApiError) {
+    if (err instanceof ApiErrorUtils) {
       throw err;
     } else {
-      throw new ApiError({
+      throw new ApiErrorUtils({
         message: 'Create order failed: ' + err.message,
         errors: err,
         status: 500
@@ -224,7 +224,7 @@ async function create(customerInfo, orderData, createdBy) {
   if (mongoose.Types.ObjectId.isValid(customerInfo)) {
     const user = await User.findOne({ _id: customerInfo }, { _id: 1 }).lean().exec();
     if (!user) {
-      throw new ApiError('User does not exist', 400);
+      throw new ApiErrorUtils('User does not exist', 400);
     }
     orderData.user = user._id;
   }
@@ -243,11 +243,11 @@ async function create(customerInfo, orderData, createdBy) {
   }
 
   if (!orderData.items || orderData.items.length === 0) {
-    throw ApiError.simple('Invalid order items', 400);
+    throw ApiErrorUtils.simple('Invalid order items', 400);
   };
 
   if (!Object.values(constants.ORDER.PAYMENT_METHOD).includes(orderData.paymentMethod)) {
-    throw ApiError.simple('Invalid payment method', 400);
+    throw ApiErrorUtils.simple('Invalid payment method', 400);
   }
 
   // if (orderData.isReceiveAtStore) {
@@ -255,7 +255,7 @@ async function create(customerInfo, orderData, createdBy) {
   // } else if (orderData.address) {
   //   orderData.address = data.address;
   // } else {
-  //   throw ApiError.simple('Invalid address', 400);
+  //   throw ApiErrorUtils.simple('Invalid address', 400);
   // }
 
   const order = await createWithTransaction(orderData, createdBy);
@@ -264,10 +264,10 @@ async function create(customerInfo, orderData, createdBy) {
 
 async function update(userId, orderId, data) {
   if (!mongoose.Types.ObjectId.isValid(userId)) {
-    throw new ApiError('Invalid user id', 400);
+    throw new ApiErrorUtils('Invalid user id', 400);
   }
   if (!mongoose.Types.ObjectId.isValid(orderId)) {
-    throw new ApiError('Invalid order id', 400);
+    throw new ApiErrorUtils('Invalid order id', 400);
   }
 
   data.updatedBy = userId;

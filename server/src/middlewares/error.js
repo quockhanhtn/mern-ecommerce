@@ -1,6 +1,6 @@
 import { ValidationError } from 'express-validation';
 import httpStatus from 'http-status';
-import APIError from '../utils/APIError.js';
+import ApiErrorUtils from '../utils/ApiErrorUtils.js';
 import UploadUtils from '../utils/UploadUtils.js';
 
 export default {
@@ -11,7 +11,7 @@ export default {
 
 
 /**
- * Converts errors to APIError
+ * Converts errors to ApiErrorUtils
  * @param {*} err - Error object
  * @param {*} req - Express request object
  * @param {*} res - Express response object
@@ -21,14 +21,14 @@ function converter(err, req, res, _) {
   let convertedError = err;
 
   if (err instanceof ValidationError) {
-    convertedError = new APIError({
+    convertedError = new ApiErrorUtils({
       message: 'Validation Error',
       errors: err.errors,
       status: err.status || httpStatus.INTERNAL_SERVER_ERROR,
       stack: err.stack,
     });
-  } else if (!(err instanceof APIError)) {
-    convertedError = new APIError({
+  } else if (!(err instanceof ApiErrorUtils)) {
+    convertedError = new ApiErrorUtils({
       message: err.message,
       status: err.status || httpStatus.INTERNAL_SERVER_ERROR,
       stack: err.stack,
@@ -45,7 +45,7 @@ function converter(err, req, res, _) {
  * @param {*} res - Express response object
  */
 function notFound(req, res) {
-  const err = new APIError({
+  const err = new ApiErrorUtils({
     message: 'Not found',
     status: httpStatus.NOT_FOUND,
   });

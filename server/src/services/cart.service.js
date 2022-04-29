@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import Cart from '../models/cart.model.js';
-import ApiError from '../utils/ApiError.js';
+import ApiErrorUtils from '../utils/ApiErrorUtils.js';
 import productService from './products.service.js';
 
 const SELECTED_FIELDS = 'name variants.name variants.sku variants.variantName variants.price variants.marketPrice variants.thumbnail variants.sold variants.quantity';
@@ -33,11 +33,11 @@ const formatResult = (product, sku, qty) => {
 async function getProductInfo(productId, sku, notClean = true) {
   const product = await productService.getOneProduct(productId, false, notClean, SELECTED_FIELDS);
   if (!product) {
-    throw ApiError.simple(`Product ${productId} not found`, 404);
+    throw ApiErrorUtils.simple(`Product ${productId} not found`, 404);
   }
   const variant = product?.variants.find((v) => v.sku === sku);
   if (!variant) {
-    throw ApiError.simple(`Variant sku=${sku} of product ${productId} not found`, 404);
+    throw ApiErrorUtils.simple(`Variant sku=${sku} of product ${productId} not found`, 404);
   }
   return { product, variant };
 }
@@ -101,7 +101,7 @@ async function updateItemQty(userId, productId, sku, delta) {
   const userCart = await Cart.findOne({ userId });
   const item = userCart?.items?.find(i => i.productId.toString() === productId && i.sku === sku);
   if (!userCart || !item) {
-    throw ApiError.simple(`This item not exits in your cart`, 404);
+    throw ApiErrorUtils.simple(`This item not exits in your cart`, 404);
   }
   item.qty += delta;
   if (item.qty <= 0) {
@@ -121,7 +121,7 @@ async function removeItem(userId, productId, sku) {
   const userCart = await Cart.findOne({ userId });
   const item = userCart?.items?.find(i => i.productId.toString() === productId && i.sku === sku);
   if (!userCart || !item) {
-    throw ApiError.simple(`This item not exits in your cart`, 404);
+    throw ApiErrorUtils.simple(`This item not exits in your cart`, 404);
   }
   return Cart.findByIdAndUpdate(userCart._id, { $pull: { items: { productId, sku } } }, { new: true });
 }
