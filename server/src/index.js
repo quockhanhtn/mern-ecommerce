@@ -1,10 +1,10 @@
 import http from 'http';
 import cron from 'node-cron';
 import { Server as SocketServer } from 'socket.io';
-import app from './app.js';
-import LogUtils from './utils/LogUtils.js';
-import socketHandler from './socket.io.js';
 import { importDataToFpt } from '../tool/import-data-to-fpt.js';
+import app from './app.js';
+import socketHandler from './socket.io.js';
+import LogUtils from './utils/LogUtils.js';
 
 const port = process.env.PORT || 3001;
 

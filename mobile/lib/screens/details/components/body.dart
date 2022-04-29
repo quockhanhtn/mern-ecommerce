@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/components/default_button.dart';
-import 'package:mobile/dto/Product.dart';
-import 'package:mobile/size_config.dart';
+import 'package:hk_mobile/core/components/default_button.dart';
+import 'package:hk_mobile/dto/Product.dart';
+import 'package:hk_mobile/dto/product/product_dto.dart';
+import 'package:hk_mobile/size_config.dart';
 
 import 'color_dots.dart';
 import 'product_description.dart';
@@ -9,7 +10,7 @@ import 'top_rounded_container.dart';
 import 'product_images.dart';
 
 class Body extends StatelessWidget {
-  final Product product;
+  final ProductDto product;
 
   const Body({Key? key, required this.product}) : super(key: key);
 

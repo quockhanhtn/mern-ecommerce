@@ -1,6 +1,6 @@
 {
-    "name": "mobile",
-    "short_name": "mobile",
+    "name": "hk_mobile",
+    "short_name": "hk_mobile",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

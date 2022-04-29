@@ -1,6 +1,6 @@
 import constants from '../constants.js';
 import userService from '../services/user.service.js';
-import ApiError from '../utils/ApiError.js';
+import ApiErrorUtils from '../utils/ApiErrorUtils.js';
 import JwtUtils from '../utils/JwtUtils.js';
 
 const roleAdmin = constants.USER.ROLE.ADMIN;
@@ -22,11 +22,11 @@ function authorized(roles = []) {
     async (req, _, next) => {
       const user = await userService.getOneById(req.user._id, '_id role', false);
       if (!user) {
-        return next(ApiError.simple('Unauthorized: User doesn\'t exist!', 401))
+        return next(ApiErrorUtils.simple('Unauthorized: User doesn\'t exist!', 401))
       }
 
       if (roles.length && !roles.includes(user.role)) {
-        return next(ApiError.simple('Unauthorized: User role is not allowed!', 401))
+        return next(ApiErrorUtils.simple('Unauthorized: User role is not allowed!', 401))
       }
 
       req.user.role = user.role;

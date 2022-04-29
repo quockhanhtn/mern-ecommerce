@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/size_config.dart';
+import 'package:hk_mobile/size_config.dart';
 
 const kApiBaseUrl = 'https://api-mobile7076.herokuapp.com/api/v2/';
 

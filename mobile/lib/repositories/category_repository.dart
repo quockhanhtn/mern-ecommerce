@@ -1,5 +1,5 @@
-import 'package:mobile/dto/category_dto.dart';
-import 'package:mobile/services/category_service.dart';
+import 'package:hk_mobile/dto/category_dto.dart';
+import 'package:hk_mobile/services/category_service.dart';
 
 class CategoryRepository {
   CategoryService service = CategoryService();

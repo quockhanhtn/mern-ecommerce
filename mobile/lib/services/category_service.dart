@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:mobile/dto/api_response_dto.dart';
 
-import 'package:mobile/dto/category_dto.dart';
-import 'package:mobile/constants.dart';
+import 'package:hk_mobile/constants.dart';
+import 'package:hk_mobile/dto/api_response_dto.dart';
+import 'package:hk_mobile/dto/category_dto.dart';
+import 'package:http/http.dart' as http;
 
 class CategoryService {
   String resource = "categories";
@@ -31,7 +31,7 @@ class CategoryService {
       }
       return List.empty();
     } else {
-      throw Exception('failed to load players');
+      throw Exception('Failed to load categories');
     }
   }
 }

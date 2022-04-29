@@ -12,7 +12,7 @@ class ExtendableError extends Error {
   }
 }
 
-class ApiError extends ExtendableError {
+class ApiErrorUtils extends ExtendableError {
   /**
    * Creates an API error.
    * @param {string} message - Error message.
@@ -38,10 +38,10 @@ class ApiError extends ExtendableError {
    * @returns 
    */
   static simple(message, status = 500) {
-    return new ApiError({ message, status });
+    return new ApiErrorUtils({ message, status });
   }
   static simple2(obj) {
-    return new ApiError({
+    return new ApiErrorUtils({
       message: obj.message,
       status: obj.status,
       errors: obj.code,
@@ -49,4 +49,4 @@ class ApiError extends ExtendableError {
   }
 }
 
-export default ApiError;
+export default ApiErrorUtils;

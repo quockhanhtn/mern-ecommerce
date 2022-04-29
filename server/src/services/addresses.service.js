@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import User from '../models/user.model.js';
-import ApiError from '../utils/ApiError.js';
+import ApiErrorUtils from '../utils/ApiErrorUtils.js';
 
 export default {
   getList,
@@ -15,7 +15,7 @@ async function getUser(userId, includeAddress = false) {
 
   const user = await User.findById(userId, projection).lean().exec();
   if (!user) {
-    throw new ApiError.simple(`User '${userId}' not found!`, 404);
+    throw new ApiErrorUtils.simple(`User '${userId}' not found!`, 404);
   }
 
   return user;
@@ -26,13 +26,13 @@ function initAddress(data, user) {
   if (!data.phone && user.phone) {
     data.phone = user.phone;
   } else if (!data.phone) {
-    throw ApiError.simple('Phone is required!', 400);
+    throw ApiErrorUtils.simple('Phone is required!', 400);
   }
 
   if (!data.name && (user.firstName || user.lastName)) {
     data.name = `${user.firstName} ${user.lastName}`.trim();
   } else if (!data.name) {
-    throw ApiError.simple('Name is required!', 400);
+    throw ApiErrorUtils.simple('Name is required!', 400);
   }
 
   const missingFields = [];
@@ -42,7 +42,7 @@ function initAddress(data, user) {
     }
   });
   if (missingFields.length) {
-    throw ApiError.simple(`${missingFields.join(', ')} is required!`, 400);
+    throw ApiErrorUtils.simple(`${missingFields.join(', ')} is required!`, 400);
   }
 
   return { ...data, ...address };
@@ -57,7 +57,7 @@ async function getList(userId) {
     .lean({ virtuals: true }).exec();
 
   if (!result) {
-    throw ApiError.simple('User not found or id not valid!', 404);
+    throw ApiErrorUtils.simple('User not found or id not valid!', 404);
   }
 
   return result.addresses;
@@ -85,7 +85,7 @@ async function add(userId, data) {
   );
 
   if (result?.errors?.addresses) {
-    throw ApiError.simple(result.errors.addresses.message, 400);
+    throw ApiErrorUtils.simple(result.errors.addresses.message, 400);
   }
 
   return result?.addresses?.find(address => address._id.equals(newId));
@@ -104,7 +104,7 @@ async function update(userId, addressId, updatedData) {
   const addressList = user.addresses;
   const updateIndex = addressList.findIndex(address => address._id.equals(addressId));
   if (updateIndex === -1) {
-    throw ApiError.simple('Address not found!', 404);
+    throw ApiErrorUtils.simple('Address not found!', 404);
   }
 
   const currentAddress = addressList[updateIndex];
@@ -117,7 +117,7 @@ async function update(userId, addressId, updatedData) {
   );
 
   if (result?.errors?.addresses) {
-    throw ApiError.simple(result.errors.addresses.message, 400);
+    throw ApiErrorUtils.simple(result.errors.addresses.message, 400);
   }
 
   return result?.addresses?.find(address => address._id.equals(addressId));
@@ -135,7 +135,7 @@ async function remove(userId, addressId) {
   const addressList = user.addresses;
   const updateIndex = addressList.findIndex(address => address._id.equals(addressId));
   if (updateIndex === -1) {
-    throw ApiError.simple('Address not found!', 404);
+    throw ApiErrorUtils.simple('Address not found!', 404);
   }
 
   addressList.splice(updateIndex, 1);
@@ -146,7 +146,7 @@ async function remove(userId, addressId) {
   );
 
   if (result?.errors?.addresses) {
-    throw ApiError.simple(result.errors.addresses.message, 400);
+    throw ApiErrorUtils.simple(result.errors.addresses.message, 400);
   }
 
   if (result?.addresses?.findIndex(a => a._id.equals(addressId)) === -1) {

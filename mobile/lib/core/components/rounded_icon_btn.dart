@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants.dart';
-
-import '../size_config.dart';
+import 'package:hk_mobile/constants.dart';
 
 class RoundedIconBtn extends StatelessWidget {
   const RoundedIconBtn({
     Key? key,
     required this.icon,
     required this.press,
+    required this.iconSize,
     this.showShadow = false,
   }) : super(key: key);
 
   final IconData icon;
   final GestureTapCancelCallback press;
+  final double iconSize;
   final bool showShadow;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: getProportionateScreenWidth(40),
-      width: getProportionateScreenWidth(40),
+      height: iconSize,
+      width: iconSize,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         boxShadow: [

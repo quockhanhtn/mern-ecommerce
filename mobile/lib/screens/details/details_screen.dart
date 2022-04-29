@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:mobile/dto/Product.dart';
+import 'package:hk_mobile/dto/Product.dart';
+import 'package:hk_mobile/dto/product/product_dto.dart';
 import 'components/body.dart';
 import 'components/custom_app_bar.dart';
 
@@ -17,7 +18,7 @@ class DetailsScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFF5F6F9),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-        child: CustomAppBar(rating: agrs.product.rating),
+        child: CustomAppBar(rating: agrs.product.variants[0].price),
       ),
       body: Body(product: agrs.product),
     );
@@ -25,7 +26,7 @@ class DetailsScreen extends StatelessWidget {
 }
 
 class ProductDetailsArguments {
-  final Product product;
+  final ProductDto product;
 
   ProductDetailsArguments({required this.product});
 }

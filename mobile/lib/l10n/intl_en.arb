@@ -9,5 +9,7 @@
   "introTitle01": "Title 02",
   "introText01": "Content 02",
   "introTitle02": "Title 03",
-  "introText02": "Content 03"
+  "introText02": "Content 03",
+
+  "productSearchHint": "Search product"
 }

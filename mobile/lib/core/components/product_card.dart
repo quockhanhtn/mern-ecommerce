@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/dto/Product.dart';
-import 'package:mobile/screens/details/details_screen.dart';
+import 'package:hk_mobile/dto/Product.dart';
+import 'package:hk_mobile/dto/product/product_dto.dart';
+import 'package:hk_mobile/screens/details/details_screen.dart';
 
-import '../constants.dart';
-import '../size_config.dart';
+import '../../constants.dart';
+import '../../size_config.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({
+  ProductCard({
     Key? key,
     this.width = 140,
     this.aspectRetio = 1.02,
     required this.product,
-  }) : super(key: key);
+  });
 
   final double width, aspectRetio;
-  final Product product;
+  final ProductDto product;
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +42,13 @@ class ProductCard extends StatelessWidget {
                   ),
                   child: Hero(
                     tag: product.id.toString(),
-                    child: Image.asset(product.images[0], fit: BoxFit.contain,),
+                    child: Image.network(product.variants[0].thumbnail.toString(), fit: BoxFit.contain,),
                   ),
                 ),
               ),
               const SizedBox(height: 10),
               Text(
-                product.title,
+                product.name,
                 style: const TextStyle(color: Colors.black),
                 maxLines: 2,
               ),
@@ -55,13 +56,14 @@ class ProductCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "${product.price} đ",
+                    "${product.variants[0].price} đ",
                     style: TextStyle(
                       fontSize: getProportionateScreenWidth(18),
                       fontWeight: FontWeight.w600,
                       color: kPrimaryColor,
                     ),
                   ),
+                  const SizedBox(height: 40),
                   // InkWell(
                   //   borderRadius: BorderRadius.circular(50),
                   //   onTap: () {},
@@ -76,7 +78,7 @@ class ProductCard extends StatelessWidget {
                   //       shape: BoxShape.circle,
                   //     ),
                   //     child: SvgPicture.asset(
-                  //       "assets/icons/Heart Icon_2.svg",
+                  //       "assets/icons/ic_heart_fill.svg",
                   //       color: product.isFavourite
                   //           ? const Color(0xFFFF4848)
                   //           : const Color(0xFFDBDEE4),
@@ -84,7 +86,8 @@ class ProductCard extends StatelessWidget {
                   //   ),
                   // ),
                 ],
-              )
+              ),
+              SizedBox(height: getProportionateScreenWidth(40)),
             ],
           ),
         ),
