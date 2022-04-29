@@ -37,6 +37,18 @@ class SpecialOffers extends StatelessWidget {
                 numOfBrands: 24,
                 press: () {},
               ),
+              SpecialOfferCard(
+                image: "assets/images/Image Banner 3.png",
+                category: "Phụ kiện",
+                numOfBrands: 24,
+                press: () {},
+              ),
+              SpecialOfferCard(
+                image: "assets/images/Image Banner 3.png",
+                category: "Phụ kiện",
+                numOfBrands: 24,
+                press: () {},
+              ),
               SizedBox(width: getProportionateScreenWidth(20)),
             ],
           ),

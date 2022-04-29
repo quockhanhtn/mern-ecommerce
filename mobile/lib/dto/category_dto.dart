@@ -1,4 +1,6 @@
-class CategoryDto {
+import 'package:hk_mobile/dto/generic_dto.dart';
+
+class CategoryDto extends GenericDto {
   CategoryDto(this.id, this.slug, this.name, this.image, this.children);
 
   final String id;
@@ -6,7 +8,7 @@ class CategoryDto {
   final String name;
   final String? image;
   final List<CategoryDto> children;
-
+  
   factory CategoryDto.fromJson(Map<String, dynamic> json) {
     List<dynamic> children = [];
     if (json['children'] != null) {

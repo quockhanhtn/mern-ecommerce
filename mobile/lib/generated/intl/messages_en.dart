@@ -30,6 +30,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "introTitle02": MessageLookupByLibrary.simpleMessage("Title 03"),
         "language": MessageLookupByLibrary.simpleMessage("English"),
         "next": MessageLookupByLibrary.simpleMessage("Next"),
+        "productSearchHint":
+            MessageLookupByLibrary.simpleMessage("Search product"),
         "start": MessageLookupByLibrary.simpleMessage("Start"),
         "title": MessageLookupByLibrary.simpleMessage("HK Mobile")
       };

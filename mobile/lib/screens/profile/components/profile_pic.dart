@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfilePic extends StatelessWidget {
-  const ProfilePic({
-    Key? key,
-  }) : super(key: key);
+  const ProfilePic({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +15,11 @@ class ProfilePic extends StatelessWidget {
         children: [
           const CircleAvatar(
             backgroundImage: AssetImage("assets/images/Profile Image.png"),
+            // child: ClipOval(
+            //   child: Center(
+            //     child: Image.network(imageUrl!),
+            //   ),
+            // ),
           ),
           Positioned(
             right: -16,
@@ -34,7 +37,7 @@ class ProfilePic extends StatelessWidget {
                   backgroundColor: const Color(0xFFF5F6F9),
                 ),
                 onPressed: () {},
-                child: SvgPicture.asset("assets/icons/Camera Icon.svg"),
+                child: SvgPicture.asset("assets/icons/ic_camera.svg"),
               ),
             ),
           )

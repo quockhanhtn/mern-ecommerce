@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mobile/constants.dart';
+import 'package:hk_mobile/constants.dart';
 
 import '../../../size_config.dart';
 
@@ -34,7 +34,7 @@ class CustomAppBar extends StatelessWidget {
                 ),
                 onPressed: () => Navigator.pop(context),
                 child: SvgPicture.asset(
-                  "assets/icons/Back ICon.svg",
+                  "assets/icons/ic_back.svg",
                   height: 15,
                 ),
               ),

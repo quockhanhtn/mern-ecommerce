@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/components/custom_suffix_icon.dart';
-import 'package:mobile/components/form_error.dart';
-import 'package:mobile/helper/keyboard.dart';
-import 'package:mobile/screens/forgot_password/forgot_password_screen.dart';
-import 'package:mobile/screens/login_success/login_success_screen.dart';
+import 'package:get/get.dart';
+import 'package:hk_mobile/controllers/authentication_controller.dart';
+import 'package:hk_mobile/core/components/components.dart';
+import 'package:hk_mobile/helper/keyboard.dart';
+import 'package:hk_mobile/screens/forgot_password/forgot_password_screen.dart';
+import 'package:hk_mobile/screens/login_success/login_success_screen.dart';
+import 'package:hk_mobile/screens/profile/profile_screen.dart';
 
-import '../../../components/default_button.dart';
 import '../../../constants.dart';
 import '../../../size_config.dart';
 
@@ -23,6 +24,9 @@ class _SignFormState extends State<SignForm> {
   bool? remember = false;
   final List<String?> errors = [];
 
+  final AuthenticationController authController =
+      Get.put(AuthenticationController());
+
   void addError({String? error}) {
     if (!errors.contains(error)) {
       setState(() {
@@ -36,6 +40,13 @@ class _SignFormState extends State<SignForm> {
       setState(() {
         errors.remove(error);
       });
+    }
+  }
+
+  void handleLogin() async {
+    await authController.login(email!, password!);
+    if (authController.isAuthenticated.isTrue) {
+      Navigator.pushNamed(context, ProfileScreen.routeName);
     }
   }
 
@@ -72,19 +83,35 @@ class _SignFormState extends State<SignForm> {
               )
             ],
           ),
-          FormError(errors: errors),
+          Obx(() {
+            if (authController.errorMgs.isNotEmpty) {
+              errors.clear();
+              errors.add(authController.errorMgs.toString());
+            }
+            return FormError(errors: errors);
+          }),
           SizedBox(height: getProportionateScreenHeight(20)),
-          DefaultButton(
-            text: "Tiếp tục",
-            press: () {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
-                // if all are valid then go to success screen
-                KeyboardUtil.hideKeyboard(context);
-                Navigator.pushNamed(context, LoginSuccessScreen.routeName);
-              }
-            },
-          ),
+          Obx(() {
+            if (authController.isLoading.isTrue) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (authController.isAuthenticated.isTrue) {
+              Navigator.pushNamed(context, ProfileScreen.routeName);
+            }
+            return DefaultButton(
+              text: "Tiếp tục",
+              press: () {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+
+                  // if all are valid then go to success screen
+                  KeyboardUtil.hideKeyboard(context);
+                  authController.login(email!, password!);
+                  //Navigator.pushNamed(context, LoginSuccessScreen.routeName);
+                }
+              },
+            );
+          })
         ],
       ),
     );

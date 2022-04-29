@@ -34,6 +34,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Bảo hành chính hãng"),
         "language": MessageLookupByLibrary.simpleMessage("Việt Nam"),
         "next": MessageLookupByLibrary.simpleMessage("Tiếp theo"),
+        "productSearchHint":
+            MessageLookupByLibrary.simpleMessage("Tìm kiếm sản phẩm"),
         "start": MessageLookupByLibrary.simpleMessage("Bắt đầu"),
         "title": MessageLookupByLibrary.simpleMessage("Điện thoại HK")
       };
