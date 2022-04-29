@@ -389,7 +389,7 @@ function splitProductName(name) {
   if (name.startsWith('Máy tính bảng')) { return name.replace('Máy tính bảng', '').trim(); }
   if (name.startsWith('Đồng hồ thông minh')) { return name.replace('Đồng hồ thông minh', '').trim(); }
   if (name.startsWith('Điện thoại')) { return name.replace('Điện thoại', '').trim(); }
-  
+
   return name;
 }
 
@@ -406,6 +406,8 @@ async function insertProduct() {
     // ...JSON.parse(fs.readFileSync(filePath2)),
   ];
   const listBrand = await Brand.find({}).lean().exec();
+
+  const productQueue = [];
 
   for (let i = 0; i < listProduct.length; i++) {
     const element = listProduct[i];
@@ -465,8 +467,15 @@ async function insertProduct() {
       marketPrice: parseInt(v.price, 10) * ((100 + getRandomInt(5, 30)) / 100),
       quantity: getRandomInt(1, 20) * 5
     }));
+
+    productQueue.push(product);
+  }
+
+  let j = 0;
+  for (let i = productQueue.length - 1; i >= 0; i--) {
+    const product = productQueue[i];
     await product.save();
-    console.log(`[${i + 1}/${listProduct.length}] Insert product '${product.name}' success`);
+    console.log(`[${++j}/${listProduct.length}] Insert product '${product.name}' success`);
   }
 }
 
@@ -478,21 +487,25 @@ function zeroFill(number, width) {
   return number + ""; // always return a string
 }
 
+async function insertUsers() {
+  // await User.deleteMany({});
+  // console.log('--> Insert user data');
+  // for (let i = 0; i < userData.length; i++) {
+  //   const element = userData[i];
+  //   const newUser = new User(element);
+  //   await newUser.save();
+  //   console.log(`[${i + 1}/${userData.length}] Inserted user: ` + element.username);
+  // }
+};
+
 async function insertData() {
   console.log('REMOVE ALL DOCUMENTS IN DATABASE\n');
-  await User.deleteMany({});
   await Category.deleteMany({});
   await Brand.deleteMany({});
   await Product.deleteMany({});
 
   console.log('START INSERT SAMPLE DATA\n');
-  console.log('--> Insert user data');
-  for (let i = 0; i < userData.length; i++) {
-    const element = userData[i];
-    const newUser = new User(element);
-    await newUser.save();
-    console.log(`[${i + 1}/${userData.length}] Inserted user: ` + element.username);
-  }
+  await insertUsers();
 
   console.log('--> Insert category data');
   for (let i = 0; i < categoryData.length; i++) {
