@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hk_mobile/dto/Product.dart';
+import 'package:hk_mobile/dto/product/product_dto.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
@@ -10,7 +11,7 @@ class ProductImages extends StatefulWidget {
     required this.product,
   }) : super(key: key);
 
-  final Product product;
+  final ProductDto product;
 
   @override
   _ProductImagesState createState() => _ProductImagesState();
@@ -28,7 +29,7 @@ class _ProductImagesState extends State<ProductImages> {
             aspectRatio: 1,
             child: Hero(
               tag: widget.product.id.toString(),
-              child: Image.asset(widget.product.images[selectedImage], fit: BoxFit.contain),
+              child: Image.network(widget.product.variants[0].pictures.toString()[selectedImage], fit: BoxFit.contain),
             ),
           ),
         ),
@@ -36,7 +37,7 @@ class _ProductImagesState extends State<ProductImages> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ...List.generate(widget.product.images.length,
+            ...List.generate(widget.product.variants[0].pictures.toString().length,
                 (index) => buildSmallProductPreview(index)),
           ],
         )
@@ -63,7 +64,7 @@ class _ProductImagesState extends State<ProductImages> {
           border: Border.all(
               color: kPrimaryColor.withOpacity(selectedImage == index ? 1 : 0)),
         ),
-        child: Image.asset(widget.product.images[index], fit: BoxFit.cover,),
+        child: Image.network(widget.product.variants[0].pictures.toString()[index], fit: BoxFit.cover,),
       ),
     );
   }
