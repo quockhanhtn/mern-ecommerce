@@ -36,3 +36,31 @@ class DefaultButton extends StatelessWidget {
     );
   }
 }
+
+class DefaultButton2 extends StatelessWidget {
+  const DefaultButton2({
+    Key? key,
+    required this.textChild,
+    this.press,
+  }) : super(key: key);
+  final Widget textChild;
+  final Function? press;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: getProportionateScreenHeight(56),
+      child: TextButton(
+        style: TextButton.styleFrom(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          primary: Colors.white,
+          backgroundColor: kPrimaryColor,
+        ),
+        onPressed: press as void Function()?,
+        child: textChild,
+      ),
+    );
+  }
+}

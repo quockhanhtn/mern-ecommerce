@@ -51,6 +51,7 @@ dependencies:
   # flutter_secure_storage: ^5.0.2
   jwt_decoder: ^2.0.1
   cached_network_image: ^3.2.0
+  flutter_html: ^3.0.0-alpha.3
 
 dev_dependencies:
   flutter_test:

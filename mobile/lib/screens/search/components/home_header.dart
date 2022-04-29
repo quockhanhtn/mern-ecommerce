@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:get/get.dart';
-import 'package:hk_mobile/controllers/product_controller.dart';
 
 import 'package:hk_mobile/core/components/components.dart';
 import 'package:hk_mobile/constants.dart';
-import 'package:hk_mobile/screens/search/search_screen.dart';
 import 'package:hk_mobile/size_config.dart';
 import 'package:hk_mobile/screens/cart/cart_screen.dart';
 
 class HomeHeader extends StatelessWidget {
-  HomeHeader({
+  const HomeHeader({
     Key? key,
   }) : super(key: key);
-
-  final ProductController productController = Get.put(ProductController());
 
   @override
   Widget build(BuildContext context) {
@@ -24,24 +19,13 @@ class HomeHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Obx(() {
-            return SearchField(
-                text: productController.keyword.value,
-                hintText: AppLocalizations.of(context)!.productSearchHint,
-                width: SizeConfig.screenWidth * 0.6,
-                boxColor: kSecondaryColor.withOpacity(0.1),
-                horizontalPadding: getProportionateScreenWidth(20),
-                verticalPadding: getProportionateScreenWidth(9),
-                onSubmitted: (value) {
-                  productController.searchProducts(value);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SearchScreen(keyword: value),
-                    ),
-                  );
-                });
-          }),
+          SearchField(
+            hintText: AppLocalizations.of(context)!.productSearchHint,
+            width: SizeConfig.screenWidth * 0.6,
+            boxColor: kSecondaryColor.withOpacity(0.1),
+            horizontalPadding: getProportionateScreenWidth(20),
+            verticalPadding: getProportionateScreenWidth(9)
+          ),
           IconBtnWithCounter(
             svgSrc: "assets/icons/ic_cart.svg",
             press: () => Navigator.pushNamed(context, CartScreen.routeName),

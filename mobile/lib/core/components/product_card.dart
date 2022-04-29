@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hk_mobile/core/components/network_image.dart';
 import 'package:hk_mobile/dto/product_dto.dart';
 import 'package:hk_mobile/screens/details/details_screen.dart';
+import 'package:intl/intl.dart';
 
 import '../../constants.dart';
 import '../../size_config.dart';
@@ -12,15 +13,17 @@ class ProductCard extends StatelessWidget {
     this.width = 140,
     this.aspectRatio = 1.02,
     required this.product,
-  });
+  }) : super(key: key);
 
   final double width, aspectRatio;
   final ProductDto product;
 
+  final fNumber = NumberFormat("#,##0", "vi_VN");
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: getProportionateScreenWidth(20)),
+      padding: EdgeInsets.only(left: getProportionateScreenWidth(10)),
       child: SizedBox(
         width: getProportionateScreenWidth(width),
         child: GestureDetector(
@@ -53,14 +56,16 @@ class ProductCard extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 product.name,
-                style: const TextStyle(color: Colors.black),
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.w700),
                 maxLines: 2,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "${product.variants[0].price} đ",
+                    "${fNumber.format(product.variants[0].price)} đ",
                     style: TextStyle(
                       fontSize: getProportionateScreenWidth(18),
                       fontWeight: FontWeight.w600,
@@ -91,7 +96,7 @@ class ProductCard extends StatelessWidget {
                   // ),
                 ],
               ),
-              SizedBox(height: getProportionateScreenWidth(40)),
+              SizedBox(height: getProportionateScreenWidth(20)),
             ],
           ),
         ),
