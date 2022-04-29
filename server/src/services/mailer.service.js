@@ -28,7 +28,7 @@ const handlebarOptions = {
 transporter.use('compile', hbs(handlebarOptions));
 
 // need to custom template
-export const sendMail = (receiver, subject) => {
+export const sendMail = (receiver, subject, title, content) => {
   if (typeof receiver === 'string') {
     receiver = [receiver];
   }
@@ -41,8 +41,8 @@ export const sendMail = (receiver, subject) => {
     context: {
       logoHref: 'https://mern-ecommerce-b848d.web.app/',
       description: 'Welcome to HK Mobile',
-      title: 'OTP Verification',
-      content: 'Please enter the OTP to verify your account'
+      title,
+      content
     },
     attachments: [
       {

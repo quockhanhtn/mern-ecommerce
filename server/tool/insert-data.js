@@ -50,24 +50,28 @@ const categoryData = [
     order: 1,
     name: 'Điện thoại',
     image: '/public/uploads/categories/phone.svg',
+    coverImage: '/public/uploads/categories/cover/phone.jpg',
   },
   {
     _id: mongoose.Types.ObjectId('c00000000000000000000002'),
     order: 2,
     name: 'Máy tính bảng',
     image: '/public/uploads/categories/tablet.svg',
+    coverImage: '/public/uploads/categories/cover/tablet.jpg',
   },
   {
     _id: mongoose.Types.ObjectId('c00000000000000000000003'),
     order: 3,
     name: 'Đồng hồ',
     image: '/public/uploads/categories/watch.svg',
+    coverImage: '/public/uploads/categories/cover/watch.jpg',
   },
   {
     _id: mongoose.Types.ObjectId('c00000000000000000000004'),
     order: 4,
     name: 'Laptop',
     image: '/public/uploads/categories/laptop.svg',
+    coverImage: '/public/uploads/categories/cover/laptop.jpg',
   },
   //#region Âm thanh
   {
@@ -75,6 +79,7 @@ const categoryData = [
     order: 5,
     name: 'Âm thanh',
     image: '/public/uploads/categories/sound.svg',
+    coverImage: '/public/uploads/categories/cover/sound.jpg',
   },
   // Âm thanh -> Tai nghe
   {
@@ -137,6 +142,7 @@ const categoryData = [
     order: 6,
     name: 'Phụ kiện',
     image: '/public/uploads/categories/accessories.svg',
+    coverImage: '/public/uploads/categories/cover/accessories.jpg',
   },
   // Phụ kiện -> Sạc, cáp
   {

@@ -10,6 +10,7 @@ const formatCategory = (category, req) => {
   //   category.image = `${req.protocol}://${req.get('host')}` + category.image;
   // }
   category = FormatUtils.imageUrl(category, 'image', req);
+  category = FormatUtils.imageUrl(category, 'coverImage', req);
 
   if (category.children && category.children.length > 0) {
     category.children = category.children.map((child) =>

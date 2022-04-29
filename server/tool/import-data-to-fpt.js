@@ -2,15 +2,16 @@
 import axios from 'axios';
 import fs from 'fs';
 import { convert } from 'html-to-text';
-import mongoose from 'mongoose';
+//import mongoose from 'mongoose';
 import productService from '../src/services/products.service.js';
+import { sendMail } from '../src/services/mailer.service.js';
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('Connected to database ' + process.env.MONGO_URI);
-    main();
-  })
-  .catch(err => console.log('Connect to MongoDB failed', err));
+// mongoose.connect(process.env.MONGO_URI)
+//   .then(() => {
+//     console.log('Connected to database ' + process.env.MONGO_URI);
+//     importDataToFpt();
+//   })
+//   .catch(err => console.log('Connect to MongoDB failed', err));
 
 const DATSET_NAME = 'CellphonesDataset';
 const REQ_CONFIG = { headers: { Authorization: "a3fa7034b71ae0741665767fd902193e" } };
@@ -93,4 +94,11 @@ export async function importDataToFpt() {
   }
 
   fs.writeFileSync(filePath, JSON.stringify(listImpoted));
+
+  sendMail(
+    ['quockhanhdev@gmail.com', 'hoangho1147@gmail.com'],
+    'Import new data to fpt recom',
+    'Import new data to fpt recom',
+    `Imported ${list.length} product(s) to fpt recom from ${date.toLocaleString()} to ${new Date().toLocaleString()}`
+  );
 }
