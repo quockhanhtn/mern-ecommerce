@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hk_mobile/dto/Product.dart';
-import 'package:hk_mobile/dto/product/product_dto.dart';
+import 'package:hk_mobile/dto/product_dto.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';

@@ -3,8 +3,12 @@ import 'package:hk_mobile/size_config.dart';
 
 const kApiBaseUrl = 'https://api-mobile7076.herokuapp.com/api/v2/';
 
+const kPrimaryColorLighter = Color(0xFFC8FACD);
+const kPrimaryColorLight = Color(0xFF5BE584);
 const kPrimaryColor = Color(0xFF00AB55);
-const kPrimaryLightColor = Color(0xFFFFECDF);
+const kPrimaryColorDark = Color(0xFF007B55);
+const kPrimaryColorDarker = Color(0xFF005249);
+
 const kPrimaryGradientColor = LinearGradient(
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,

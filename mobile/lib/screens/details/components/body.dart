@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hk_mobile/core/components/default_button.dart';
-import 'package:hk_mobile/dto/Product.dart';
-import 'package:hk_mobile/dto/product/product_dto.dart';
+import 'package:hk_mobile/dto/product_dto.dart';
 import 'package:hk_mobile/size_config.dart';
 
 import 'color_dots.dart';

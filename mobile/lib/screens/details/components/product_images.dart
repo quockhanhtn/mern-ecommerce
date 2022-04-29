@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/dto/Product.dart';
-import 'package:hk_mobile/dto/product/product_dto.dart';
+import 'package:hk_mobile/core/components/network_image.dart';
+import 'package:hk_mobile/dto/product_dto.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
@@ -21,6 +21,18 @@ class _ProductImagesState extends State<ProductImages> {
   int selectedImage = 0;
   @override
   Widget build(BuildContext context) {
+    var listImages = <String>[];
+    listImages.add(widget.product.variants[0].thumbnail!);
+    var count = 1;
+    for (var item
+        in widget.product.variants[0].pictures?.whereType<String>().toList() ??
+            []) {
+      if (count == 5) {
+        break;
+      }
+      listImages.add(item);
+      count++;
+    }
     return Column(
       children: [
         SizedBox(
@@ -28,24 +40,25 @@ class _ProductImagesState extends State<ProductImages> {
           child: AspectRatio(
             aspectRatio: 1,
             child: Hero(
-              tag: widget.product.id.toString(),
-              child: Image.network(widget.product.variants[0].pictures.toString()[selectedImage], fit: BoxFit.contain),
-            ),
+                tag: widget.product.id.toString(),
+                child: NetWorkImage(
+                    imageUrl: listImages[selectedImage],
+                    imageFit: BoxFit.contain)),
           ),
         ),
         // SizedBox(height: getProportionateScreenWidth(20)),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ...List.generate(widget.product.variants[0].pictures.toString().length,
-                (index) => buildSmallProductPreview(index)),
+            ...List.generate(listImages.length,
+                (index) => buildSmallProductPreview(index, listImages)),
           ],
         )
       ],
     );
   }
 
-  GestureDetector buildSmallProductPreview(int index) {
+  GestureDetector buildSmallProductPreview(int index, List<String> listImages) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -64,7 +77,10 @@ class _ProductImagesState extends State<ProductImages> {
           border: Border.all(
               color: kPrimaryColor.withOpacity(selectedImage == index ? 1 : 0)),
         ),
-        child: Image.network(widget.product.variants[0].pictures.toString()[index], fit: BoxFit.cover,),
+        child: Image.network(
+          listImages[index],
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

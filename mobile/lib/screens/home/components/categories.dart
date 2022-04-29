@@ -1,44 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:hk_mobile/constants.dart';
 import 'package:hk_mobile/controllers/category_controller.dart';
 import 'package:hk_mobile/dto/category_dto.dart';
 
 import '../../../size_config.dart';
 
 class Categories extends StatelessWidget {
-  final CategoryController categoryController = Get.put(CategoryController());
-
-  List<Widget> renderChild(List<CategoryDto> source) {
-    List<Widget> child = [];
-    if (source.isEmpty) {
-      return child;
-    }
-    for (var i = 0; i < source.length; i++) {
-      child.add(CategoryCard(
-          icon: source[i].image, text: source[i].name, press: () => {}));
-    }
-    return child;
-  }
+  List<Map<String, dynamic>> categories = [
+    {"icon": "assets/icons/Flash Icon.svg", "text": "Flash Deal"},
+    {"icon": "assets/icons/ic_bill.svg", "text": "Hóa\n đơn"},
+    {"icon": "assets/icons/Parcel.svg", "text": "Đơn hàng"},
+    {"icon": "assets/icons/Gift Icon.svg", "text": "Khuyến mãi"},
+    {"icon": "assets/icons/Discover.svg", "text": "Xem thêm"},
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: EdgeInsets.all(getProportionateScreenWidth(20)),
-        child: Obx(() {
-          if (categoryController.isLoading.isTrue) {
-            return const CircularProgressIndicator();
-          } else if (categoryController.errorMgs.isNotEmpty) {
-            return Text('Error: ' + categoryController.errorMgs.toString(),
-                style: const TextStyle(color: Colors.red),
-                textAlign: TextAlign.center);
-          } else {
-            return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: renderChild(categoryController.list.value));
-          }
-        }));
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List.generate(
+              categories.length,
+              (index) => CategoryCard(
+                icon: categories[index]["icon"],
+                text: categories[index]["text"],
+                press: () {},
+              ),
+            )));
   }
 }
 
@@ -66,10 +58,10 @@ class CategoryCard extends StatelessWidget {
               height: getProportionateScreenWidth(55),
               width: getProportionateScreenWidth(55),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFECDF),
+                color: kPrimaryColorLighter,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: SvgPicture.network(icon!),
+              child: SvgPicture.asset(icon!),
             ),
             const SizedBox(height: 5),
             Text(text!, textAlign: TextAlign.center)

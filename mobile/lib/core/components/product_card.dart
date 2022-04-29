@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/dto/Product.dart';
-import 'package:hk_mobile/dto/product/product_dto.dart';
+import 'package:hk_mobile/core/components/network_image.dart';
+import 'package:hk_mobile/dto/product_dto.dart';
 import 'package:hk_mobile/screens/details/details_screen.dart';
 
 import '../../constants.dart';
@@ -10,11 +10,11 @@ class ProductCard extends StatelessWidget {
   ProductCard({
     Key? key,
     this.width = 140,
-    this.aspectRetio = 1.02,
+    this.aspectRatio = 1.02,
     required this.product,
   });
 
-  final double width, aspectRetio;
+  final double width, aspectRatio;
   final ProductDto product;
 
   @override
@@ -24,11 +24,14 @@ class ProductCard extends StatelessWidget {
       child: SizedBox(
         width: getProportionateScreenWidth(width),
         child: GestureDetector(
-          onTap: () => Navigator.pushNamed(
-            context,
-            DetailsScreen.routeName,
-            arguments: ProductDetailsArguments(product: product),
-          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailsScreen(productDto: product),
+              ),
+            );
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -41,9 +44,10 @@ class ProductCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Hero(
-                    tag: product.id.toString(),
-                    child: Image.network(product.variants[0].thumbnail.toString(), fit: BoxFit.contain,),
-                  ),
+                      tag: product.id.toString(),
+                      child: NetWorkImage(
+                          imageUrl: product.variants[0].thumbnail.toString(),
+                          imageFit: BoxFit.contain)),
                 ),
               ),
               const SizedBox(height: 10),

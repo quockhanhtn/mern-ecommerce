@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:hk_mobile/constants.dart';
 import 'package:hk_mobile/dto/api_response_dto.dart';
-import 'package:hk_mobile/dto/product/product_dto.dart';
+import 'package:hk_mobile/dto/product_dto.dart';
 import 'package:http/http.dart' as http;
 
 class ProductService {
