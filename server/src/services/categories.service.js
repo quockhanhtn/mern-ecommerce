@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import Category from '../models/category.model.js';
-import strUtils from '../utils/str-utils.js';
+import StringUtils from '../utils/StringUtils.js';
 // import imagesService from './images.service.js';
 
 export default {
@@ -48,7 +48,7 @@ async function getAll(fields = SELECTED_FIELDS) {
  * @returns
  */
 async function getOne(identity) {
-  const filter = strUtils.isUUID(identity)
+  const filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
 
@@ -61,7 +61,7 @@ async function getOne(identity) {
  * @returns _id of document if found, otherwise null
  */
 async function getId(identity) {
-  const filter = strUtils.isUUID(identity) ? { _id: identity } : { slug: identity };
+  const filter = StringUtils.isUUID(identity) ? { _id: identity } : { slug: identity };
   const result = await Category.findOne(filter).select('_id').lean().exec();
   return result ? result._id : null;
 }
@@ -112,7 +112,7 @@ async function update(identity, updatedData, updatedBy = null) {
 
   // update parent category
   if (updatedData.parent && currentCategory.parent !== updatedData.parent) {
-    const parentFilter = strUtils.isUUID(updatedData.parent)
+    const parentFilter = StringUtils.isUUID(updatedData.parent)
       ? { _id: updatedData.parent }
       : { slug: updatedData.parent };
     const parent = await Category.findOne(parentFilter);
@@ -149,14 +149,14 @@ async function update(identity, updatedData, updatedBy = null) {
 }
 
 async function incCountProduct(identity) {
-  const filter = strUtils.isUUID(identity)
+  const filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
   await Category.findOneAndUpdate(filter, { $inc: { countProduct: 1 } }, { new: false, timestamps: null });
 }
 
 async function decCountProduct(identity) {
-  const filter = strUtils.isUUID(identity)
+  const filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
   await Category.findOneAndUpdate(filter, { $inc: { countProduct: -1 } }, { new: false, timestamps: null });
@@ -185,7 +185,7 @@ async function hidden(identity) {
  * @returns true if delete successfully else false
  */
 async function remove(identity) {
-  let filter = strUtils.isUUID(identity)
+  let filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
   return Category.findOneAndDelete(filter);

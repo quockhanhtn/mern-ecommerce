@@ -7,7 +7,7 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import { Button, Box, Link, OutlinedInput, FormHelperText, Stack } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
 // hooks
-import useLocales from '../../../hooks/useLocales';
+// import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -41,9 +41,9 @@ VerifyCodeForm.defaultProps = {
 // ----------------------------------------------------------------------
 
 export default function VerifyCodeForm({ confirmResult, onResentOtp, onGoBack, onSuccess }) {
-  const { t } = useLocales();
+  // const { t } = useLocales();
   const [isLoading, setIsLoading] = useState(false);
-  const [otp, setOtp] = useState('');
+  // const [otp, setOtp] = useState('');
 
   const VerifyCodeSchema = Yup.object().shape({
     code1: Yup.number().required('Code is required'),

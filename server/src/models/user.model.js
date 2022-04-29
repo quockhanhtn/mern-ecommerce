@@ -3,7 +3,7 @@ import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 import removeMultiSpace from './plugins/remove-multi-space.js';
 import addressSchema from './schemas/address.schema.js';
 import constants from '../constants.js';
-import { hashPassword } from '../utils/cipher-utils.js';
+import CipherUtils from '../utils/CipherUtils.js';
 
 const userSchema = mongoose.Schema(
   {
@@ -97,7 +97,7 @@ userSchema.pre('save', function (next) {
   }
 
   // hash password
-  this.password = hashPassword(this.password);
+  this.password = CipherUtils.hashPassword(this.password);
   next();
 });
 

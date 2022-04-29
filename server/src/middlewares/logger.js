@@ -1,4 +1,4 @@
-import logging from "../utils/logging.js";
+import LogUtils from "../utils/LogUtils.js";
 
 export default logger;
 
@@ -15,11 +15,11 @@ function logger(req, res, next) {
   const reqIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
   //Log the request info
-  logging.info(LOG_TAG, `${reqIP} ${req.method} ${req.url}`);
+  LogUtils.info(LOG_TAG, `${reqIP} ${req.method} ${req.url}`);
 
   res.on('finish', () => {
     //Log the response info
-    logging.info(LOG_TAG, `${reqIP} ${req.method} ${req.url} (${res.statusCode})`);
+    LogUtils.info(LOG_TAG, `${reqIP} ${req.method} ${req.url} (${res.statusCode})`);
   })
 
   next();

@@ -2,7 +2,7 @@
 import { createTransport } from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
 import { resolve } from 'path';
-import logging from '../utils/logging.js';
+import LogUtils from '../utils/LogUtils.js';
 
 // initialize nodemailer
 const transporter = createTransport({
@@ -28,7 +28,7 @@ const handlebarOptions = {
 transporter.use('compile', hbs(handlebarOptions));
 
 // need to custom template
-export const sendMail = (receiver, subject) => {
+export const sendMail = (receiver, subject, title, content) => {
   if (typeof receiver === 'string') {
     receiver = [receiver];
   }
@@ -41,8 +41,8 @@ export const sendMail = (receiver, subject) => {
     context: {
       logoHref: 'https://mern-ecommerce-b848d.web.app/',
       description: 'Welcome to HK Mobile',
-      title: 'OTP Verification',
-      content: 'Please enter the OTP to verify your account'
+      title,
+      content
     },
     attachments: [
       {
@@ -75,9 +75,9 @@ export const sendMail = (receiver, subject) => {
 
   transporter.sendMail(mailOptions, (err, info) => {
     if (err) {
-      logging.error('MAILER', 'Error sending mail', err);
+      LogUtils.error('MAILER', 'Error sending mail', err);
     } else {
-      logging.info('MAILER', 'Mail sent', info);
+      LogUtils.info('MAILER', 'Mail sent', info);
     }
   });
 };

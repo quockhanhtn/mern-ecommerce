@@ -38,7 +38,7 @@ export default function StatisticTurnover() {
   const { t, currentLang } = useLocales();
   const dispatch = useDispatch();
   const theme = useTheme();
-  const { list: orderList } = useSelector((state) => state.order);
+  const { list: orderList } = useSelector((state) => state.orderManager);
   const [turnover, setTurnover] = useState(0);
 
   useEffect(() => {

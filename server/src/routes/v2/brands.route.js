@@ -1,13 +1,13 @@
-import express from 'express';
+import { Router } from 'express';
 import { allowImageMineTypes } from '../../constants.js';
 import {
   createBrand, deleteBrand, getBrand, getBrands, hiddenBrand, updateBrand
 } from '../../controllers/brands.controller.js';
 import { isAdmin, isAdminOrStaff } from '../../middlewares/jwt-auth.js';
-import { multerUpload, handleFilePath } from '../../utils/upload-utils.js';
+import  UploadUtils from '../../utils/UploadUtils.js';
 
-const router = express.Router();
-const upload = multerUpload('/brands/', allowImageMineTypes);
+const router = Router();
+const upload = UploadUtils.multerUpload('/brands/', allowImageMineTypes);
 
 /**
  * Authorization
@@ -21,7 +21,7 @@ router.route('/')
   .post(
     isAdminOrStaff,
     upload.single('image'),
-    handleFilePath('image'),
+    UploadUtils.handleFilePath('image'),
     createBrand
   );
 
@@ -31,7 +31,7 @@ router.route('/:identity')
   .patch(
     isAdminOrStaff,
     upload.single('image'),
-    handleFilePath('image'),
+    UploadUtils.handleFilePath('image'),
     updateBrand
   )
   .delete(isAdmin, deleteBrand);

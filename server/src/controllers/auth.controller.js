@@ -1,22 +1,22 @@
 import userService from '../services/user.service.js';
 import authService from '../services/auth.service.js';
-import googleServices from '../services/google.services.js';
-import resUtils from '../utils/res-utils.js';
-import { formatImageUrl } from '../utils/format-utils.js';
-import { generateToken } from '../utils/jwt-utils.js';
+import googleServices from '../services/google.service.js';
+import ResponseUtils from '../utils/ResponseUtils.js';
+import FormatUtils from '../utils/FormatUtils.js';
+import JwtUtils from '../utils/JwtUtils.js';
 
 export const register = async (req, res, next) => {
   try {
     const newUser = await userService.create(req.body);
     if (newUser && newUser._doc) {
-      const userData = formatImageUrl(newUser._doc, 'avatar', req);
+      const userData = FormatUtils.imageUrl(newUser._doc, 'avatar', req);
       delete userData.password;
       delete userData.addresses;
 
-      resUtils.status201(
+      ResponseUtils.status201(
         res,
         'Register successfully !',
-        { token: generateToken(userData), user: userData }
+        { token: JwtUtils.generateToken(userData), user: userData }
       );
     }
     throw new Error('Register failed !');
@@ -35,10 +35,10 @@ export const googleOAuth = async (req, res, next) => {
     }
 
     const result = await authService.googleAuthenticate(payload, ipAddress);
-    const userData = formatImageUrl(result.user, 'avatar', req);
+    const userData = FormatUtils.imageUrl(result.user, 'avatar', req);
     delete userData.password;
 
-    resUtils.status200(
+    ResponseUtils.status200(
       res,
       'Google OAuth successful !',
       {
@@ -56,10 +56,10 @@ export const login = async (req, res, next) => {
     const ipAddress = req.ipv4;
 
     const result = await authService.authenticate(username, password, ipAddress);
-    const userData = formatImageUrl(result.user, 'avatar', req);
+    const userData = FormatUtils.imageUrl(result.user, 'avatar', req);
     delete userData.password;
 
-    resUtils.status200(
+    ResponseUtils.status200(
       res,
       'Login successful !',
       {
@@ -77,10 +77,10 @@ export const refreshToken = async (req, res, next) => {
     const refreshToken = req.body.refreshToken;
 
     const result = await authService.refreshToken(refreshToken, ipAddress);
-    const userData = formatImageUrl(result.user, 'image', req);
+    const userData = FormatUtils.imageUrl(result.user, 'image', req);
     delete userData.password;
 
-    resUtils.status200(
+    ResponseUtils.status200(
       res,
       'Refresh Token successful !',
       {
@@ -97,6 +97,6 @@ export const logout = async (req, res, next) => {
     const ipAddress = req.ipv4;
     const refreshToken = req.body.refreshToken;
     await authService.revokeToken(refreshToken, ipAddress);
-    resUtils.status204(res);
+    ResponseUtils.status204(res);
   } catch (err) { next(err) }
 };

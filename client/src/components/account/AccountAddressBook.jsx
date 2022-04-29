@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 // icons
 import { Icon } from '@iconify/react';
@@ -20,7 +21,6 @@ import { MButton } from '../@material-extend';
 
 const LEFT_WIDTH = 200;
 
-// eslint-disable-next-line react/prop-types
 const InfoItem = ({ label, value, valueVariant }) => {
   let display = (
     <Typography variant={valueVariant} sx={{ flex: 1, marginLeft: 3 }}>

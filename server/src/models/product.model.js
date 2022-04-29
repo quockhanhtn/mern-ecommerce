@@ -55,8 +55,11 @@ const productSchema = mongoose.Schema({
   warrantyPeriod: { type: Number, min: 0, default: 12 },                      // in months
   origin: { type: String, trim: true, required: false },                      // country of manufacture
 
-  category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null },
   brand: { type: mongoose.Schema.Types.ObjectId, ref: 'Brand', default: null },
+  category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null },
+  categorySub1: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null },
+  categorySub2: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null },
+  categorySub3: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null },
 
   views: { type: Number, default: 0, min: 0 },                                // views of product
   rates: [                                                                    // rate of product

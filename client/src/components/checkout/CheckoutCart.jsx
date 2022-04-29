@@ -1,197 +1,336 @@
 import { Icon } from '@iconify/react';
-import { useFormik, Form, FormikProvider } from 'formik';
+import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
-import { Grid, Card, Button, CardHeader, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Divider,
+  Card,
+  CardHeader,
+  Container,
+  InputAdornment,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography
+} from '@material-ui/core';
+import { experimentalStyled as styled } from '@material-ui/core/styles';
 // routes
 import { useSnackbar } from 'notistack';
-import { useEffect, useState } from 'react';
 // hooks
 import { useDispatch, useSelector } from 'react-redux';
-import useLocales from '../../hooks/useLocales';
-import useAuth from '../../hooks/useAuth';
-import useOrderFlow from '../../hooks/useOrderFlow';
+import { useLocales } from '../../hooks';
+import { fCurrency, fNumber } from '../../utils/formatNumber';
+import { MCheckbox, MIconButton } from '../@material-extend';
 // components
-import Scrollbar from '../Scrollbar';
 import EmptyContent from '../EmptyContent';
-import CheckoutSummary from './CheckoutSummary';
-import CheckoutProductList from './CheckoutProductList';
+import Scrollbar from '../Scrollbar';
+import { Incrementer } from '../Incrementer';
 import {
-  decreaseProductToCartDB,
-  deleteProductToCartDB,
-  getProductToCartDB,
-  increaseProductToCartDB
-} from '../../redux/slices/writeOrderSlice';
-import { getSubTotal } from '../../helper/localStorageHelper';
+  changeSelect,
+  selectAllItems,
+  increaseItemQty,
+  decreaseItemQty,
+  removeItem
+} from '../../redux/slices/cartSlice';
+import { nextStepOrder } from '../../redux/slices/orderSlice';
+
+// ----------------------------------------------------------------------
+
+const ThumbImgStyle = styled('img')(({ theme }) => ({
+  width: 64,
+  height: 64,
+  objectFit: 'cover',
+  marginRight: theme.spacing(2),
+  borderRadius: theme.shape.borderRadiusSm
+}));
+
+const BottomContainerStyle = styled(Container)(({ theme }) => ({
+  position: 'fixed',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  zIndex: theme.zIndex.snackbar - 5,
+  boxShadow: theme.customShadows.z24[1],
+  bgcolor: theme.palette.background
+}));
 
 // ----------------------------------------------------------------------
 
 export default function CheckoutCart() {
-  const { t } = useLocales();
-  const { enqueueSnackbar } = useSnackbar();
-  const { user, isAuthenticated } = useAuth();
   const dispatch = useDispatch();
+
+  const { t, currentLang } = useLocales();
+  const { enqueueSnackbar } = useSnackbar();
+  const snackbarOpts = {
+    variant: 'success',
+    anchorOrigin: {
+      vertical: 'top',
+      horizontal: 'right'
+    }
+  };
+
+  const enableDiscount = false;
   const {
-    cart,
-    quantityInCart,
-    activeStep,
-    subTotal,
-    removeToCart,
-    increaseProductInCart,
-    decreaseProductInCart,
-    nextStepOrder
-  } = useOrderFlow();
-  const [isIncreaseToCart, setIsIncreaseToCart] = useState(false);
-  const [isDecreaseToCart, setIsDecreaseToCart] = useState(false);
-  const discount = cart.length > 0 ? 50000 : 0;
-  const { list: listProducts } = useSelector((state) => state.writeOrder);
-  let isEmptyCart = !(listProducts && listProducts.length > 0);
-  const [subTotalDB, setSubTotalDB] = useState(0);
-
-  // Set cart
-  if (!user) {
-    isEmptyCart = cart ? cart.length === 0 : true;
-  }
-
-  useEffect(() => {
-    if (user) {
-      dispatch(getProductToCartDB());
-    }
-  }, [dispatch, cart, isIncreaseToCart, isDecreaseToCart]);
-
-  useEffect(() => {
-    setSubTotalDB(getSubTotal(listProducts));
-    isEmptyCart = !(listProducts && listProducts.length > 0);
-  }, [listProducts]);
-
-  const handleDeleteCart = (_id, skuVariant) => {
-    removeToCart(_id, skuVariant).then(() => {
-      enqueueSnackbar(t('cart.notification.remove'), { variant: 'success' });
-    });
-    const productInfo = {
-      productId: _id,
-      skuVariant
-    };
-    if (isAuthenticated) {
-      dispatch(deleteProductToCartDB(productInfo)).then(() => {
-        dispatch(getProductToCartDB());
-      });
-    }
-  };
-
-  const handleNextStep = () => {
-    nextStepOrder(activeStep);
-  };
+    allItems: allCartItems,
+    selectedItems,
+    // isLoading: isLoadingCart,
+    itemsCount,
+    fee: { discount, subTotal, shipping, total }
+  } = useSelector((state) => state.cart);
 
   const handleApplyDiscount = () => {
     // dispatch(applyDiscount(value));
   };
 
-  const handleIncreaseQuantity = (_id, skuVariant) => {
-    increaseProductInCart(_id, skuVariant).then(() => {
-      enqueueSnackbar(t('cart.notification.increase'), { variant: 'success' });
+  const handleIncreaseQuantity = (productId, sku, qty) => {
+    dispatch(increaseItemQty({ productId, sku, qty })).then(() => {
+      enqueueSnackbar(t('cart.notification.increase'), snackbarOpts);
     });
-    if (isAuthenticated) {
-      const productInfo = {
-        productId: _id,
-        skuVariant
-      };
-      setIsIncreaseToCart(true);
-      dispatch(increaseProductToCartDB(productInfo)).then(() => {
-        setIsIncreaseToCart(false);
-      });
-    }
   };
 
-  const handleDecreaseQuantity = (_id, skuVariant) => {
-    decreaseProductInCart(_id, skuVariant).then(() => {
-      enqueueSnackbar(t('cart.notification.decrease'), { variant: 'success' });
+  const handleDecreaseQuantity = (productId, sku, qty) => {
+    dispatch(decreaseItemQty({ productId, sku, qty })).then(() => {
+      enqueueSnackbar(t('cart.notification.decrease'), snackbarOpts);
     });
-    if (isAuthenticated) {
-      const productInfo = {
-        productId: _id,
-        skuVariant
-      };
-      setIsDecreaseToCart(true);
-      dispatch(decreaseProductToCartDB(productInfo)).then(() => {
-        setIsDecreaseToCart(false);
-      });
-    }
   };
 
-  const formik = useFormik({
-    enableReinitialize: true,
-    initialValues: { products: user ? listProducts : cart },
-    onSubmit: async (values, { setErrors, setSubmitting }) => {
-      try {
-        setSubmitting(true);
-        handleNextStep();
-      } catch (error) {
-        console.error(error);
-        setErrors(error.message);
-      }
-    }
-  });
+  const handleDeleteCart = (productId, sku) => {
+    dispatch(removeItem({ productId, sku })).then(() => {
+      enqueueSnackbar(t('cart.notification.remove'), snackbarOpts);
+    });
+  };
 
-  const { values, handleSubmit } = formik;
+  const handleNextStep = () => {
+    dispatch(nextStepOrder());
+  };
+
+  const handleSelectAll = () => {
+    dispatch(selectAllItems());
+  };
+
+  const handleSelectChange = (e, productId, sku) => {
+    dispatch(changeSelect({ productId, sku, isSelect: e.target.checked }));
+    // if (e.target.checked) {
+    //   setSelectedItems((prev) => [...prev, { productId, sku }]);
+    // } else {
+    //   setSelectedItems((prev) => [...prev.filter((x) => x.productId !== productId && x.sku !== sku)]);
+    // }
+  };
+
+  const isSelected = (productId, sku) =>
+    selectedItems.findIndex((x) => x.productId === productId && x.sku === sku) > -1;
 
   return (
-    <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
-            <Card sx={{ mb: 3 }}>
-              <CardHeader
-                title={
-                  <Typography variant="h6">
-                    {t('cart.title-detail')}
-                    <Typography component="span" sx={{ ml: 2, color: 'text.secondary' }}>
-                      ({user ? listProducts?.length : quantityInCart} {t('cart.item')})
-                    </Typography>
-                  </Typography>
-                }
-                sx={{ mb: 3 }}
-              />
+    <>
+      <Container disableGutters>
+        <Card sx={{ mb: 3, minHeight: 600 }}>
+          <CardHeader
+            title={
+              <Box
+                sx={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}
+              >
+                <Typography variant="h6">{t('cart.title-detail')}</Typography>
+                <Typography component="span" sx={{ ml: 2, color: 'text.secondary' }}>
+                  {`${itemsCount} ${t('cart.item')}`}
+                </Typography>
+              </Box>
+            }
+            sx={{ mb: 3 }}
+          />
 
-              {!isEmptyCart ? (
-                <Scrollbar>
-                  <CheckoutProductList
-                    formik={formik}
-                    onDelete={handleDeleteCart}
-                    onIncreaseQuantity={handleIncreaseQuantity}
-                    onDecreaseQuantity={handleDecreaseQuantity}
-                    isDecreaseToCart={isDecreaseToCart}
-                    isIncreaseToCart={isIncreaseToCart}
-                  />
-                </Scrollbar>
-              ) : (
-                <EmptyContent
-                  title={t('cart.empty')}
-                  description={t('cart.empty-desc')}
-                  img="/static/illustrations/illustration_empty_cart.svg"
-                />
-              )}
-            </Card>
+          {allCartItems?.length > 0 ? (
+            <Scrollbar>
+              <TableContainer sx={{ minWidth: 720 }}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell padding="checkbox">
+                        <MCheckbox
+                          indeterminate={selectedItems.length > 0 && selectedItems.length < allCartItems?.length}
+                          checked={allCartItems?.length > 0 && selectedItems.length === allCartItems?.length}
+                          onChange={handleSelectAll}
+                          inputProps={{ 'aria-label': 'select all desserts' }}
+                          color="primary"
+                          sx={{
+                            color: 'rgba(0,0,0,0)',
+                            '&:hover': { color: (theme) => theme.palette.primary.main }
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell>{t('products.title')}</TableCell>
+                      <TableCell align="left">{t('cart.unit-price')}</TableCell>
+                      <TableCell align="center">{t('products.quantity')}</TableCell>
+                      <TableCell align="right">{t('cart.amount-price')}</TableCell>
+                      <TableCell align="right" />
+                    </TableRow>
+                  </TableHead>
 
-            <Button color="inherit" href="/" startIcon={<Icon icon={arrowIosBackFill} />}>
-              {t('cart.empty-action')}
-            </Button>
-          </Grid>
+                  <TableBody>
+                    {allCartItems?.map((product) => {
+                      const { productId, sku, qty, name, variantName, thumbnail, price, marketPrice, quantity, sold } =
+                        product;
+                      const isItemSelected = isSelected(productId, sku);
+                      const labelId = `enhanced-table-checkbox-${productId}_${sku}`;
+                      return (
+                        <TableRow
+                          hover
+                          key={`${productId}_${sku}`}
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          selected={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <MCheckbox
+                              // inputProps={{ 'aria-labelledby': labelId }}
+                              onChange={(e) => handleSelectChange(e, productId, sku)}
+                              checked={isItemSelected}
+                              sx={{
+                                color: 'rgba(0,0,0,0)',
+                                '&:hover': {
+                                  color: (theme) => theme.palette.primary.main
+                                }
+                              }}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <ThumbImgStyle alt="product image" src={thumbnail} />
+                              <Box>
+                                <Typography noWrap variant="subtitle2" sx={{ maxWidth: 240, mb: 0.5 }}>
+                                  {name}
+                                </Typography>
 
-          <Grid item xs={12} md={4}>
-            <CheckoutSummary
-              total={user ? subTotalDB : subTotal}
-              // enableDiscount
-              discount={discount}
-              subtotal={user ? subTotalDB : subTotal}
-              onApplyDiscount={handleApplyDiscount}
+                                {variantName && <Typography variant="body2">{variantName}</Typography>}
+                              </Box>
+                            </Box>
+                          </TableCell>
+
+                          <TableCell align="left">{fCurrency(price, currentLang.value)}</TableCell>
+
+                          <TableCell align="center">
+                            <Incrementer
+                              quantity={qty}
+                              available={quantity - sold}
+                              availableText={t('cart.available', { available: quantity - sold })}
+                              onDecrease={() => handleDecreaseQuantity(productId, sku, qty)}
+                              onIncrease={() => handleIncreaseQuantity(productId, sku, qty)}
+                            />
+                          </TableCell>
+
+                          <TableCell align="right">{fCurrency(price * qty, currentLang.value)}</TableCell>
+
+                          <TableCell align="right">
+                            <MIconButton onClick={() => handleDeleteCart(productId, sku)}>
+                              <Icon icon={trash2Fill} width={20} height={20} />
+                            </MIconButton>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Scrollbar>
+          ) : (
+            <EmptyContent
+              title={t('cart.empty')}
+              description={t('cart.empty-desc')}
+              img="/static/illustrations/illustration_empty_cart.svg"
             />
-            <Button fullWidth size="large" type="submit" variant="contained" disabled={values.products?.length === 0}>
-              {t('cart.checkout')}
-            </Button>
-          </Grid>
-        </Grid>
-      </Form>
-    </FormikProvider>
+          )}
+        </Card>
+      </Container>
+
+      <BottomContainerStyle disableGutters>
+        <Card sx={{ p: 2, mx: (theme) => theme.spacing(2.5), borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
+          <Stack spacing={1}>
+            {enableDiscount && (
+              <TextField
+                fullWidth
+                placeholder="Discount codes / Gifts"
+                value="DISCOUNT5"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Button onClick={handleApplyDiscount} sx={{ mr: -0.5 }} type="button">
+                        Apply
+                      </Button>
+                    </InputAdornment>
+                  )
+                }}
+              />
+            )}
+
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {t('cart.order.sub-total')}
+              </Typography>
+              <Typography variant="subtitle2">{`${fNumber(subTotal)} ₫`}</Typography>
+            </Stack>
+
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {t('cart.order.discount')}
+              </Typography>
+              <Typography variant="subtitle2">{fCurrency(discount, currentLang.value)}</Typography>
+            </Stack>
+
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {t('cart.order.shipping-fee')}
+              </Typography>
+              <Typography variant="subtitle2">{fCurrency(shipping, currentLang.value)}</Typography>
+            </Stack>
+
+            <Divider />
+
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+              <Button href="/" color="inherit" startIcon={<Icon icon={arrowIosBackFill} />}>
+                {t('cart.empty-action')}
+              </Button>
+              <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
+                <Typography variant="subtitle1">{`${t('cart.order.total')}: `}</Typography>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    color: 'error.main',
+                    minWidth: 200,
+                    textAlign: 'right',
+                    position: 'relative',
+                    paddingRight: (theme) => theme.spacing(2)
+                  }}
+                >
+                  {fCurrency(total, currentLang.value)}
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      color: 'text.secondary',
+                      fontStyle: 'italic',
+                      position: 'absolute',
+                      bottom: 0,
+                      right: (theme) => theme.spacing(2),
+                      transform: 'translateY(110%)'
+                    }}
+                  >
+                    {`(${t('cart.order.include-vat')})`}
+                  </Typography>
+                </Typography>
+              </Box>
+              <Button size="large" onClick={handleNextStep} variant="contained" disabled={!selectedItems?.length}>
+                {t('cart.checkout')}
+              </Button>
+            </Box>
+          </Stack>
+        </Card>
+      </BottomContainerStyle>
+    </>
   );
 }

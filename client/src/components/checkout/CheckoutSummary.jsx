@@ -1,6 +1,4 @@
 import PropTypes from 'prop-types';
-import { Icon } from '@iconify/react';
-import editFill from '@iconify/icons-eva/edit-fill';
 // material
 import {
   Box,
@@ -14,32 +12,25 @@ import {
   CardContent,
   InputAdornment
 } from '@material-ui/core';
-import useLocales from '../../hooks/useLocales';
+import { useSelector } from 'react-redux';
+
+import { useLocales } from '../../hooks';
 // utils
 import { fCurrency, fNumber } from '../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
 CheckoutSummary.propTypes = {
-  total: PropTypes.number,
-  discount: PropTypes.number,
-  subtotal: PropTypes.number,
-  shipping: PropTypes.number,
   onApplyDiscount: PropTypes.func,
   enableDiscount: PropTypes.bool,
   sx: PropTypes.object
 };
 
-export default function CheckoutSummary({
-  total,
-  discount,
-  subtotal,
-  shipping = 0,
-  onApplyDiscount,
-  enableDiscount = false,
-  sx
-}) {
+export default function CheckoutSummary({ onApplyDiscount, enableDiscount = false, sx }) {
   const { t, currentLang } = useLocales();
+  const {
+    fee: { discount, subTotal, shipping, total }
+  } = useSelector((state) => state.cart);
 
   return (
     <Card sx={{ mb: 3, ...sx }}>
@@ -51,7 +42,7 @@ export default function CheckoutSummary({
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               {t('cart.order.sub-total')}
             </Typography>
-            <Typography variant="subtitle2">{`${fNumber(subtotal)} ₫`}</Typography>
+            <Typography variant="subtitle2">{`${fNumber(subTotal)} ₫`}</Typography>
           </Stack>
 
           <Stack direction="row" justifyContent="space-between">

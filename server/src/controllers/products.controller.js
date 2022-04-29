@@ -1,15 +1,15 @@
-import resUtils from '../utils/res-utils.js';
+import ResponseUtils from '../utils/ResponseUtils.js';
 import productService from '../services/products.service.js'
-import { formatImageUrl } from '../utils/format-utils.js';
+import FormatUtils from '../utils/FormatUtils.js';
 
 const formatProduct = (product, req) => {
-  product.category = formatImageUrl(product.category, 'image', req);
-  product.brand = formatImageUrl(product.brand, 'image', req);
+  product.category = FormatUtils.imageUrl(product.category, 'image', req);
+  product.brand = FormatUtils.imageUrl(product.brand, 'image', req);
 
   if (product.variants && product.variants.length > 0) {
     product.variants = product.variants.map(x => {
-      x = formatImageUrl(x, 'thumbnail', req);
-      x = formatImageUrl(x, 'pictures', req);
+      x = FormatUtils.imageUrl(x, 'thumbnail', req);
+      x = FormatUtils.imageUrl(x, 'pictures', req);
       return x;
     });
   }
@@ -23,13 +23,13 @@ export const addProductVariants = async (req, res, next) => {
 
     const updatedProduct = await productService.addProductVariants(identity, req.body);
     if (updatedProduct) {
-      resUtils.status201(
+      ResponseUtils.status201(
         res,
         `Add product variant to '${updatedProduct.name}' successfully!`,
         formatProduct(updatedProduct, req)
       );
     } else {
-      resUtils.status500(res, `Has error when add variant to product '${identity}`);
+      ResponseUtils.status500(res, `Has error when add variant to product '${identity}`);
     }
   } catch (err) { next(err); }
 };
@@ -40,13 +40,13 @@ export const updateProductVariants = async (req, res, next) => {
     const updatedProduct = await productService.updateProductVariants(identity, sku, req.body);
 
     if (updatedProduct) {
-      resUtils.status200(
+      ResponseUtils.status200(
         res,
         `Update product variant of '${updatedProduct.name}' successfully!`,
         formatProduct(updatedProduct, req)
       );
     } else {
-      resUtils.status500(res, `Update product variant of '${updatedProduct.name}' failed!`);
+      ResponseUtils.status500(res, `Update product variant of '${updatedProduct.name}' failed!`);
     }
 
   } catch (err) { next(err); }
@@ -56,7 +56,7 @@ export const deleteProductVariants = async (req, res, next) => {
   try {
     const { identity, sku } = req.params;
     await productService.deleteProductVariants(identity, sku);
-    resUtils.status204(res, `Delete product variant successfully!`,);
+    ResponseUtils.status204(res, `Delete product variant successfully!`,);
   } catch (err) { next(err); }
 };
 //#endregion
@@ -104,7 +104,7 @@ export const getAllProducts = async (req, res, next) => {
       pagination.nextPage = page + 1;
     }
 
-    resUtils.status200(res, 'Get all products successfully!', products, { pagination });
+    ResponseUtils.status200(res, 'Get all products successfully!', products, { pagination });
   } catch (err) { next(err); }
 };
 
@@ -114,9 +114,9 @@ export const getProductById = async (req, res, next) => {
     // inc views and get new data for return
     const product = await productService.getOneProduct(identity, true);
     if (product) {
-      resUtils.status200(res, null, formatProduct(product, req));
+      ResponseUtils.status200(res, null, formatProduct(product, req));
     } else {
-      resUtils.status404(res, `Product '${identity}' not found!`);
+      ResponseUtils.status404(res, `Product '${identity}' not found!`);
     }
   } catch (err) { next(err); }
 }
@@ -132,9 +132,9 @@ export const getListProductsByIds = async (req, res, next) => {
     let result = await productService.getAllProducts(fields, list.length, 1, filter);
     let products = result.list.map(p => formatProduct(p, req));
     if (products) {
-      resUtils.status200(res, null, products);
+      ResponseUtils.status200(res, null, products);
     } else {
-      resUtils.status404(res, `Product not found!`);
+      ResponseUtils.status404(res, `Product not found!`);
     }
   } catch (err) { next(err); }
 }
@@ -144,14 +144,14 @@ export const getSuggestProducts = async (req, res, next) => {
   try {
     const { keyword } = req.query;
     const products = await productService.getSuggestProducts(keyword);
-    resUtils.status200(res, 'Get suggest products successfully!', products.map(p => formatProduct(p, req)));
+    ResponseUtils.status200(res, 'Get suggest products successfully!', products.map(p => formatProduct(p, req)));
   } catch (err) { next(err); }
 };
 
 export const createProduct = async (req, res, next) => {
   try {
     const newProduct = await productService.createProduct(req.body);
-    resUtils.status201(
+    ResponseUtils.status201(
       res,
       `Create NEW product '${newProduct.name}' successfully!`,
       formatProduct(newProduct, req)
@@ -164,13 +164,13 @@ export const updateProduct = async (req, res, next) => {
     const { identity } = req.params;
     const updatedProduct = await productService.updateProduct(identity, req.body);
     if (updatedProduct) {
-      resUtils.status200(
+      ResponseUtils.status200(
         res,
         `Update product '${updatedProduct.name}' successfully!`,
         formatProduct(updatedProduct, req)
       );
     } else {
-      resUtils.status404(res, `Product not found!`);
+      ResponseUtils.status404(res, `Product not found!`);
     }
   } catch (err) { next(err); }
 };
@@ -180,9 +180,9 @@ export const deleteProduct = async (req, res, next) => {
     const { identity } = req.params;
     const result = await productService.removeProduct(identity);
     if (result) {
-      resUtils.status204(res, `Deleted product successfully!`);
+      ResponseUtils.status204(res, `Deleted product successfully!`);
     } else {
-      resUtils.status404(res, `Product not found!`);
+      ResponseUtils.status404(res, `Product not found!`);
     }
   } catch (err) { next(err); }
 };
@@ -200,13 +200,13 @@ export const rateProduct = async (req, res, next) => {
 
     const result = await productService.rateProduct(identity, ip, rateStar);
     if (result) {
-      resUtils.status200(
+      ResponseUtils.status200(
         res,
         `Rate product '${result.name}' successfully!`,
         formatProduct(result, req)
       );
     } else {
-      resUtils.status404(res, `Product not found!`);
+      ResponseUtils.status404(res, `Product not found!`);
     }
   } catch (err) { next(err); }
 };
@@ -216,7 +216,7 @@ export const rateProduct = async (req, res, next) => {
 export const getProductSpecifications = async (req, res, next) => {
   try {
     const data = await productService.getSpecifications();
-    resUtils.status200(res, 'Get product overSpecs successfully!', data);
+    ResponseUtils.status200(res, 'Get product overSpecs successfully!', data);
   } catch (err) { next(err); }
 };
 //#endregion
@@ -227,9 +227,9 @@ export const getFullAllProducts = async (req, res, next) => {
     let products = await productService.getFullAll(fields);
     products = products.map(product => formatProduct(product, req));
     if (products && products.length > 0) {
-      resUtils.status200(res, 'Gets all products successfully', products);
+      ResponseUtils.status200(res, 'Gets all products successfully', products);
     } else {
-      resUtils.status200(res, 'No products found', []);
+      ResponseUtils.status200(res, 'No products found', []);
     }
   } catch (err) { next(err); }
 }

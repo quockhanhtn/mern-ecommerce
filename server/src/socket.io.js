@@ -1,11 +1,11 @@
-import logging from './utils/logging.js';
+import LogUtils from './utils/LogUtils.js';
 
 function socketHandler(io, socket) {
   const address = socket.handshake.address || socket.request.connection.remoteAddress;
-  logging.info('socket.io', `User from ${address} connected`);
+  LogUtils.info('socket.io', `User from ${address} connected`);
 
   socket.on('disconnect', () => {
-    logging.info('socket.io', `User from ${address} disconnected`);
+    LogUtils.info('socket.io', `User from ${address} disconnected`);
   });
 
   socket.on('chat', (data) => {

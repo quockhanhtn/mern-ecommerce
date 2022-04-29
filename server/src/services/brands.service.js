@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import Brand from '../models/brand.model.js';
-import strUtils from '../utils/str-utils.js';
+import StringUtils from '../utils/StringUtils.js';
 
 export default {
   getAll,
@@ -37,7 +37,7 @@ async function getAll(fields = SELECTED_FIELDS) {
  * @returns
  */
 async function getOne(identity, needLean = true) {
-  const filter = strUtils.isUUID(identity)
+  const filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
 
@@ -54,7 +54,7 @@ async function getOne(identity, needLean = true) {
  * @returns _id of document if found, otherwise null
  */
 async function getId(identity) {
-  const filter = strUtils.isUUID(identity) ? { _id: identity } : { slug: identity };
+  const filter = StringUtils.isUUID(identity) ? { _id: identity } : { slug: identity };
   const result = await Brand.findOne(filter).select('_id').lean().exec();
   return result ? result._id : null;
 }
@@ -101,14 +101,14 @@ async function update(identity, updatedData, updatedBy = null) {
 }
 
 async function incCountProduct(identity) {
-  const filter = strUtils.isUUID(identity)
+  const filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
   await Brand.findOneAndUpdate(filter, { $inc: { countProduct: 1 } }, { new: false, timestamps: null });
 }
 
 async function decCountProduct(identity) {
-  const filter = strUtils.isUUID(identity)
+  const filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
   await Brand.findOneAndUpdate(filter, { $inc: { countProduct: -1 } }, { new: false, timestamps: null });
@@ -137,7 +137,7 @@ async function hidden(identity) {
  * @returns true if delete successfully else false
  */
 async function remove(identity) {
-  let filter = strUtils.isUUID(identity)
+  let filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
   const deletedBrand = await Brand.findOneAndDelete(filter);

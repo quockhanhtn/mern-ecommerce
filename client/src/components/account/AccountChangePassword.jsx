@@ -2,7 +2,7 @@
 import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import { Alert, Stack, Card, TextField, Typography } from '@material-ui/core';
+import { Alert, Stack, Card, TextField } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
 // hooks
 import { useEffect, useState } from 'react';

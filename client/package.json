@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "start": "react-scripts start",
+    "prebuild": "set \"GENERATE_SOURCEMAP=false\"",
     "build": "react-scripts build",
     "pullrequest": "react-scripts build",
     "test": "react-scripts test",

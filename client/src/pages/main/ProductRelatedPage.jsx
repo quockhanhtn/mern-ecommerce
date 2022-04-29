@@ -36,7 +36,7 @@ export default function ProductRelatedPage() {
   const { t, currentLang } = useLocales();
   const dispatch = useDispatch();
   const { slug: productSlug } = useParams();
-  const { item: product, isLoading } = useSelector((state) => state.product);
+  const { item: product } = useSelector((state) => state.product);
 
   const [isLoadingRelated, setIsLoadingRelated] = useState(false);
   const [listIds, setListIds] = useState([]);
@@ -48,7 +48,7 @@ export default function ProductRelatedPage() {
     try {
       const fptRes = await getRecommendation(productId);
       const ids = fptRes.data.data.map((x) => x.replace('{', '').replace('}', ''));
-      setListIds((_prev) => [...ids]);
+      setListIds([...ids]);
       setPage(0); // trigger to call useEffect([page])
     } catch (e) {
       console.log('error when fetch related products', e);
