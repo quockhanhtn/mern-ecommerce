@@ -22,7 +22,7 @@ apiServer.listen(port, () => {
 if (process.env.NODE_ENV !== 'dev') {
   // schedule task run every day at 03:00 AM
   cron.schedule('0 3 * * *', () => {
-    logging.info('SERVER', 'Running a task every day at 03:00 AM to import data to FPT');
+    LogUtils.info('SERVER', 'Running a task every day at 03:00 AM to import data to FPT');
     importDataToFpt();
   });
 }
