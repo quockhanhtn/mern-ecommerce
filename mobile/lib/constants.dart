@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hk_mobile/size_config.dart';
 
-const kApiBaseUrl = 'https://api-mobile7076.herokuapp.com/api/v2/';
+//const kApiBaseUrl = 'https://api-mobile7076.herokuapp.com/api/v2/';
+const kApiBaseUrl = 'http://192.168.1.84:3001/api/v2/';
 
 const kPrimaryColorLighter = Color(0xFFC8FACD);
 const kPrimaryColorLight = Color(0xFF5BE584);
@@ -29,8 +30,7 @@ final headingStyle = TextStyle(
 const defaultDuration = Duration(milliseconds: 250);
 
 // Form Error
-final RegExp emailValidatorRegExp =
-    RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+final RegExp emailValidatorRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 const String kEmailNullError = "Vui lòng nhập địa chỉ email";
 const String kInvalidEmailError = "Email không hợp lệ";
 const String kPassNullError = "Vui lòng nhập mật khẩu";
@@ -41,8 +41,7 @@ const String kPhoneNumberNullError = "Vui lòng nhập số điện thoại";
 const String kAddressNullError = "Vui lòng nhập địa chỉ";
 
 final otpInputDecoration = InputDecoration(
-  contentPadding:
-      EdgeInsets.symmetric(vertical: getProportionateScreenWidth(15)),
+  contentPadding: EdgeInsets.symmetric(vertical: getProportionateScreenWidth(15)),
   border: outlineInputBorder(),
   focusedBorder: outlineInputBorder(),
   enabledBorder: outlineInputBorder(),

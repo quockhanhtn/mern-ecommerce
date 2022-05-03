@@ -1,4 +1,4 @@
-import 'package:hk_mobile/screens/main/components/product_list_view.dart';
+import 'package:hk_mobile/screens/main/components/products_list_view.dart';
 import 'package:hk_mobile/template/ui_view/running_view.dart';
 import 'package:hk_mobile/template/ui_view/title_view.dart';
 import 'package:hk_mobile/template/ui_view/workout_view.dart';
@@ -90,7 +90,7 @@ class _TrainingScreenState extends State<TrainingScreen> with TickerProviderStat
     );
 
     listViews.add(
-      ProductListView(
+      ProductsListView(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!, curve: Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
         mainScreenAnimationController: widget.animationController!,

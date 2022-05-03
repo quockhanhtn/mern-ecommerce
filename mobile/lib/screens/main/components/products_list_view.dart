@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 import 'package:hk_mobile/app_theme.dart';
 
-class ProductListView extends StatefulWidget {
-  const ProductListView({Key? key, this.mainScreenAnimationController, this.mainScreenAnimation}) : super(key: key);
+class ProductsListView extends StatefulWidget {
+  const ProductsListView({Key? key, this.mainScreenAnimationController, this.mainScreenAnimation}) : super(key: key);
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
   @override
-  _ProductListViewState createState() => _ProductListViewState();
+  _ProductsListViewState createState() => _ProductsListViewState();
 }
 
-class _ProductListViewState extends State<ProductListView> with TickerProviderStateMixin {
+class _ProductsListViewState extends State<ProductsListView> with TickerProviderStateMixin {
   AnimationController? animationController;
   List<String> areaListData = <String>[
     'assets/fitness_app/area1.png',
@@ -52,7 +52,7 @@ class _ProductListViewState extends State<ProductListView> with TickerProviderSt
               0.0,
             ),
             child: AspectRatio(
-              aspectRatio: 0.5,
+              aspectRatio: 2 / 5,
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8),
                 child: renderGridView(),

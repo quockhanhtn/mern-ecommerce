@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hk_mobile/app_theme.dart';
-import 'package:hk_mobile/screens/main/components/product_list_view.dart';
+import 'package:hk_mobile/screens/main/components/categories_list_view.dart';
+import 'package:hk_mobile/screens/main/components/products_list_view.dart';
 import 'package:hk_mobile/template/ui_view/glass_view.dart';
 import 'package:hk_mobile/template/ui_view/title_view.dart';
 import 'package:hk_mobile/ui_view/circle_icon_btn.dart';
@@ -55,7 +56,27 @@ class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMix
   }
 
   void addAllListData() {
-    const int count = 3;
+    const int count = 5;
+
+    listViews.add(
+      TitleView(
+        titleTxt: 'Danh mục sản phẩm',
+        subTxt: 'Xem thêm',
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController!,
+            curve: const Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController!,
+      ),
+    );
+
+    listViews.add(
+      CategoriesListView(
+        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController!,
+            curve: const Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
+        mainScreenAnimationController: widget.animationController,
+      ),
+    );
 
     listViews.add(
       TitleView(
@@ -67,7 +88,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMix
       ),
     );
     listViews.add(
-      ProductListView(
+      ProductsListView(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
           parent: widget.animationController!,
           curve: const Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn),
