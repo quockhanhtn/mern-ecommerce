@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:hk_mobile/app_theme.dart';
+import 'package:hk_mobile/controllers/product_controller.dart';
+import 'package:hk_mobile/core/components/network_img.dart';
+import 'package:hk_mobile/core/utils/format_util.dart';
+import 'package:hk_mobile/dto/product_dto.dart';
+import 'package:hk_mobile/screens/details/details_screen.dart';
 
 class ProductsListView extends StatefulWidget {
   const ProductsListView({Key? key, this.mainScreenAnimationController, this.mainScreenAnimation}) : super(key: key);
@@ -12,19 +18,21 @@ class ProductsListView extends StatefulWidget {
 }
 
 class _ProductsListViewState extends State<ProductsListView> with TickerProviderStateMixin {
+  final ProductController productController = Get.put(ProductController());
   AnimationController? animationController;
-  List<String> areaListData = <String>[
-    'assets/fitness_app/area1.png',
-    'assets/fitness_app/area2.png',
-    'assets/fitness_app/area3.png',
-    'assets/fitness_app/area1.png',
-    'assets/fitness_app/area2.png',
-    'assets/fitness_app/area3.png',
-    'assets/fitness_app/area1.png',
-    'assets/fitness_app/area2.png',
-    'assets/fitness_app/area3.png',
-    'assets/fitness_app/area3.png',
-  ];
+
+  // List<String> areaListData = <String>[
+  //   'assets/fitness_app/area1.png',
+  //   'assets/fitness_app/area2.png',
+  //   'assets/fitness_app/area3.png',
+  //   'assets/fitness_app/area1.png',
+  //   'assets/fitness_app/area2.png',
+  //   'assets/fitness_app/area3.png',
+  //   'assets/fitness_app/area1.png',
+  //   'assets/fitness_app/area2.png',
+  //   'assets/fitness_app/area3.png',
+  //   'assets/fitness_app/area3.png',
+  // ];
 
   @override
   void initState() {
@@ -46,36 +54,52 @@ class _ProductsListViewState extends State<ProductsListView> with TickerProvider
         return FadeTransition(
           opacity: widget.mainScreenAnimation!,
           child: Transform(
-            transform: Matrix4.translationValues(
-              0.0,
-              30 * (1.0 - widget.mainScreenAnimation!.value),
-              0.0,
-            ),
-            child: AspectRatio(
-              aspectRatio: 2 / 5,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8),
-                child: renderGridView(),
+              transform: Matrix4.translationValues(
+                0.0,
+                30 * (1.0 - widget.mainScreenAnimation!.value),
+                0.0,
               ),
-            ),
-          ),
+              child: Obx(() {
+                double ratio = 2 / 5;
+
+                if (productController.isLoading.isTrue) {
+                  ratio = 1;
+                } else if (productController.list.isNotEmpty) {
+                  ratio = 2 / ((productController.list.length) / 2);
+                }
+
+                return AspectRatio(
+                  aspectRatio: ratio,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    child: renderGridView(),
+                  ),
+                );
+              })),
         );
       },
     );
   }
 
   Widget renderGridView() {
+    if (productController.isLoading.isTrue) {
+      return const CircularProgressIndicator();
+    } else if (productController.errorMgs.isNotEmpty) {
+      return Text('Error: ' + productController.errorMgs.toString(),
+          style: const TextStyle(color: Colors.red), textAlign: TextAlign.center);
+    }
+
     return GridView(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 50),
       physics: const BouncingScrollPhysics(),
       scrollDirection: Axis.vertical,
       children: List<Widget>.generate(
-        areaListData.length,
+        productController.list.length,
         (int index) {
-          final int count = areaListData.length;
+          final int count = productController.list.length;
           animationController?.forward();
-          return AreaView(
-            imagepath: areaListData[index],
+          return ProductView(
+            product: productController.list[index],
             animation: Tween<double>(begin: 0.0, end: 1.0).animate(
               CurvedAnimation(
                 parent: animationController!,
@@ -96,17 +120,21 @@ class _ProductsListViewState extends State<ProductsListView> with TickerProvider
   }
 }
 
-class AreaView extends StatelessWidget {
-  const AreaView({
+class ProductView extends StatelessWidget {
+  const ProductView({
     Key? key,
-    this.imagepath,
+    required this.product,
     this.animationController,
     this.animation,
   }) : super(key: key);
 
-  final String? imagepath;
+  final ProductDto product;
   final AnimationController? animationController;
   final Animation<double>? animation;
+
+  void onTap() {
+    Get.to(DetailsScreen(productDto: product));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,14 +165,50 @@ class AreaView extends StatelessWidget {
                   hoverColor: Colors.transparent,
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   splashColor: AppTheme.nearlyDarkBlue.withOpacity(0.2),
-                  onTap: () {},
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-                        child: Image.asset(imagepath!),
-                      ),
-                    ],
+                  onTap: onTap,
+                  child: AspectRatio(
+                    aspectRatio: 2,
+                    child: Stack(
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 40),
+                            child: NetworkImg(
+                              imageUrl: product.variants[0].thumbnail!,
+                              imageFit: BoxFit.scaleDown,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                            bottom: 1,
+                            left: 0,
+                            right: 0,
+                            child: Column(
+                              children: [
+                                Text(
+                                  product.name,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 13,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                ),
+                                Text(
+                                  FormatUtils.currency(product.variants[0].price),
+                                  style: const TextStyle(
+                                    fontSize: (15),
+                                    fontWeight: FontWeight.w600,
+                                    color: AppTheme.primaryColor,
+                                  ),
+                                ),
+                              ],
+                            )),
+                      ],
+                    ),
                   ),
                 ),
               ),

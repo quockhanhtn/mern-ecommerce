@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/controllers/category_controller.dart';
-import 'package:hk_mobile/core/components/network_image.dart';
+import 'package:hk_mobile/core/components/network_img.dart';
 
 class CategoriesListView extends StatefulWidget {
   const CategoriesListView({Key? key, this.mainScreenAnimationController, this.mainScreenAnimation}) : super(key: key);
@@ -142,7 +142,7 @@ class CategoryView extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: Stack(
               children: [
-                NetWorkImage(imageUrl: image, imageFit: BoxFit.cover),
+                NetworkImg(imageUrl: image, imageFit: BoxFit.cover),
                 Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(

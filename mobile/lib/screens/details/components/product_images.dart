@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/core/components/network_image.dart';
+import 'package:hk_mobile/core/components/network_img.dart';
 import 'package:hk_mobile/dto/product_dto.dart';
 
 import '../../../constants.dart';
@@ -24,9 +24,7 @@ class _ProductImagesState extends State<ProductImages> {
     var listImages = <String>[];
     listImages.add(widget.product.variants[0].thumbnail!);
     var count = 1;
-    for (var item
-        in widget.product.variants[0].pictures?.whereType<String>().toList() ??
-            []) {
+    for (var item in widget.product.variants[0].pictures?.whereType<String>().toList() ?? []) {
       if (count == 5) {
         break;
       }
@@ -41,17 +39,14 @@ class _ProductImagesState extends State<ProductImages> {
             aspectRatio: 1,
             child: Hero(
                 tag: widget.product.id.toString(),
-                child: NetWorkImage(
-                    imageUrl: listImages[selectedImage],
-                    imageFit: BoxFit.contain)),
+                child: NetworkImg(imageUrl: listImages[selectedImage], imageFit: BoxFit.contain)),
           ),
         ),
         // SizedBox(height: getProportionateScreenWidth(20)),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ...List.generate(listImages.length,
-                (index) => buildSmallProductPreview(index, listImages)),
+            ...List.generate(listImages.length, (index) => buildSmallProductPreview(index, listImages)),
           ],
         )
       ],
@@ -74,8 +69,7 @@ class _ProductImagesState extends State<ProductImages> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-              color: kPrimaryColor.withOpacity(selectedImage == index ? 1 : 0)),
+          border: Border.all(color: kPrimaryColor.withOpacity(selectedImage == index ? 1 : 0)),
         ),
         child: Image.network(
           listImages[index],

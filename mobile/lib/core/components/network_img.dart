@@ -1,19 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class NetWorkImage extends StatelessWidget {
-  const NetWorkImage(
-      {Key? key,
-      required this.imageUrl,
-      this.imageFit,
-      this.filterColor,
-      this.filterBlendMode})
-      : super(key: key);
+class NetworkImg extends StatelessWidget {
+  const NetworkImg({
+    Key? key,
+    required this.imageUrl,
+    this.imageFit,
+  }) : super(key: key);
 
   final String imageUrl;
   final BoxFit? imageFit;
-  final Color? filterColor;
-  final BlendMode? filterBlendMode;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +20,6 @@ class NetWorkImage extends StatelessWidget {
           image: DecorationImage(
             image: imageProvider,
             fit: imageFit ?? BoxFit.cover,
-            // colorFilter: ColorFilter.mode(filterColor ?? Colors.red,
-            //     filterBlendMode ?? BlendMode.colorBurn)
           ),
         ),
       ),

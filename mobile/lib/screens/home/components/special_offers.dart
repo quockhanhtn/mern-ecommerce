@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/controllers/category_controller.dart';
-import 'package:hk_mobile/core/components/network_image.dart';
+import 'package:hk_mobile/core/components/network_img.dart';
 
 import '../../../size_config.dart';
 import 'section_title.dart';
@@ -15,8 +15,7 @@ class SpecialOffers extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
           child: SectionTitle(
             title: "Danh mục",
             press: () {},
@@ -30,8 +29,7 @@ class SpecialOffers extends StatelessWidget {
                 return const CircularProgressIndicator();
               } else if (categoryController.errorMgs.isNotEmpty) {
                 return Text('Error: ' + categoryController.errorMgs.toString(),
-                    style: const TextStyle(color: Colors.red),
-                    textAlign: TextAlign.center);
+                    style: const TextStyle(color: Colors.red), textAlign: TextAlign.center);
               } else {
                 return Row(children: [
                   SizedBox(width: getProportionateScreenWidth(10)),
@@ -82,7 +80,7 @@ class SpecialOfferCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: Stack(
               children: [
-                NetWorkImage(imageUrl: image, imageFit: BoxFit.cover),
+                NetworkImg(imageUrl: image, imageFit: BoxFit.cover),
                 Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(

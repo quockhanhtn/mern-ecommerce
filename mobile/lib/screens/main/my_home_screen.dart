@@ -115,8 +115,8 @@ class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMix
         backgroundColor: Colors.transparent,
         body: Stack(
           children: <Widget>[
-            getMainListViewUI(),
-            getAppBarUI(),
+            renderMainListViewUI(),
+            renderAppBarUI(),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             )
@@ -126,7 +126,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMix
     );
   }
 
-  Widget getMainListViewUI() {
+  Widget renderMainListViewUI() {
     return ListView.builder(
       controller: scrollController,
       padding: EdgeInsets.only(
@@ -142,7 +142,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMix
     );
   }
 
-  Widget getAppBarUI() {
+  Widget renderAppBarUI() {
     return Column(
       children: <Widget>[
         AnimatedBuilder(

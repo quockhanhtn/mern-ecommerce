@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/core/components/network_image.dart';
+import 'package:hk_mobile/core/components/network_img.dart';
+import 'package:hk_mobile/core/utils/format_util.dart';
 import 'package:hk_mobile/dto/product_dto.dart';
 import 'package:hk_mobile/screens/details/details_screen.dart';
-import 'package:intl/intl.dart';
 
 import '../../constants.dart';
 import '../../size_config.dart';
 
 class ProductCard extends StatelessWidget {
-  ProductCard({
+  const ProductCard({
     Key? key,
     this.width = 140,
     this.aspectRatio = 1.02,
@@ -17,8 +17,6 @@ class ProductCard extends StatelessWidget {
 
   final double width, aspectRatio;
   final ProductDto product;
-
-  final fNumber = NumberFormat("#,##0", "vi_VN");
 
   @override
   Widget build(BuildContext context) {
@@ -48,24 +46,21 @@ class ProductCard extends StatelessWidget {
                   ),
                   child: Hero(
                       tag: product.id.toString(),
-                      child: NetWorkImage(
-                          imageUrl: product.variants[0].thumbnail.toString(),
-                          imageFit: BoxFit.contain)),
+                      child: NetworkImg(imageUrl: product.variants[0].thumbnail.toString(), imageFit: BoxFit.contain)),
                 ),
               ),
               const SizedBox(height: 10),
               Text(
                 product.name,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.w700),
+                style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
                 maxLines: 2,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "${fNumber.format(product.variants[0].price)} đ",
+                    FormatUtils.currency(product.variants[0].price),
                     style: TextStyle(
                       fontSize: getProportionateScreenWidth(18),
                       fontWeight: FontWeight.w600,
