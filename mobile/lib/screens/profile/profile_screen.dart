@@ -6,6 +6,7 @@ import 'package:hk_mobile/core/components/custom_bottom_nav_bar.dart';
 
 import 'components/body.dart';
 
+// ignore: must_be_immutable
 class ProfileScreen extends StatelessWidget {
   static String routeName = "/profile";
 

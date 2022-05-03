@@ -52,6 +52,7 @@ dependencies:
   jwt_decoder: ^2.0.1
   cached_network_image: ^3.2.0
   flutter_html: ^3.0.0-alpha.3
+  badges: ^2.0.2
 
 dev_dependencies:
   flutter_test:
@@ -95,6 +96,8 @@ flutter:
   # assets:
   assets:
     - assets/icons/
+    - assets/fitness_app/
+    - assets/icons/bot-nav/
     - assets/images/
     - assets/images/ip13/
     - assets/images/s22/

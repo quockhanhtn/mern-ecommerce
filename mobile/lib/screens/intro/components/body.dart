@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
 import 'package:hk_mobile/constants.dart';
 import 'package:hk_mobile/screens/home/home_screen.dart';
 import 'package:hk_mobile/size_config.dart';
@@ -62,8 +63,7 @@ class _BodyState extends State<Body> {
             Expanded(
               flex: 2,
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: getProportionateScreenWidth(20)),
+                padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
                 child: Column(
                   children: <Widget>[
                     const Spacer(),
@@ -79,7 +79,8 @@ class _BodyState extends State<Body> {
                       text: AppLocalizations.of(context)!.next,
                       press: () {
                         PreferenceUtil.setBool('seen', true);
-                        Navigator.pushNamed(context, HomeScreen.routeName);
+                        Get.to(const HomeScreen());
+                        // Navigator.pushNamed(context, HomeScreen.routeName);
                       },
                     ),
                     const Spacer(),

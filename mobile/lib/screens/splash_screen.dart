@@ -1,9 +1,10 @@
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/screens/home/home_screen.dart';
-import 'package:hk_mobile/screens/intro/intro_screen.dart';
-import 'package:hk_mobile/size_config.dart';
+import 'package:get/get.dart';
 import 'package:hk_mobile/core/utils/preference_util.dart';
+import 'package:hk_mobile/screens/intro/intro_screen.dart';
+import 'package:hk_mobile/screens/main/main_screen.dart';
+import 'package:hk_mobile/size_config.dart';
 
 class SplashScreen extends StatefulWidget {
   static String routeName = "/splash";
@@ -14,15 +15,16 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with AfterLayoutMixin<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> with AfterLayoutMixin<SplashScreen> {
   Future checkFirstSeen() async {
     bool _seen = PreferenceUtil.getBool('seen', false);
 
     if (_seen) {
-      Navigator.pushNamed(context, HomeScreen.routeName);
+      Get.to(const MainScreen());
+      //Navigator.pushNamed(context, HomeScreen.routeName);
     } else {
-      Navigator.pushNamed(context, IntroScreen.routeName);
+      Get.to(const IntroScreen());
+      //Navigator.pushNamed(context, IntroScreen.routeName);
     }
   }
 
@@ -32,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-  
+
     return const Scaffold(
       body: Center(
         child: Text('Loading...'),
