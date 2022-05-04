@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hk_mobile/app_theme.dart';
+import 'package:hk_mobile/controllers/product_controller.dart';
+import 'package:hk_mobile/core/components/custom_btn.dart';
 import 'package:hk_mobile/screens/main/components/categories_list_view.dart';
 import 'package:hk_mobile/screens/main/components/products_list_view.dart';
 import 'package:hk_mobile/template/ui_view/glass_view.dart';
@@ -16,10 +19,11 @@ class MyHomeScreen extends StatefulWidget {
 }
 
 class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMixin {
-  Animation<double>? topBarAnimation;
-
-  List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
+  final ProductController productController = Get.put(ProductController());
+
+  Animation<double>? topBarAnimation;
+  List<Widget> listViews = <Widget>[];
   double topBarOpacity = 0.0;
 
   @override
@@ -87,6 +91,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMix
         animationController: widget.animationController!,
       ),
     );
+
     listViews.add(
       ProductsListView(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -96,15 +101,26 @@ class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMix
         mainScreenAnimationController: widget.animationController!,
       ),
     );
-    listViews.add(
-      GlassView(
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-                parent: widget.animationController!,
-                curve: const Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn)),
-          ),
-          animationController: widget.animationController!),
-    );
+
+    listViews.add(CustomBtn(
+      text: 'Xem thêm',
+      btnColor: AppTheme.nearlyBlue,
+      textColor: AppTheme.nearlyWhite,
+      btnPadding: const EdgeInsets.only(left: 24, right: 24, bottom: 30),
+      onTap: () {
+        productController.fetchMoreProduct();
+      },
+    ));
+
+    // listViews.add(
+    //   GlassView(
+    //       animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+    //         CurvedAnimation(
+    //             parent: widget.animationController!,
+    //             curve: const Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn)),
+    //       ),
+    //       animationController: widget.animationController!),
+    // );
   }
 
   @override

@@ -8,6 +8,8 @@ import 'package:hk_mobile/core/utils/format_util.dart';
 import 'package:hk_mobile/dto/product_dto.dart';
 import 'package:hk_mobile/screens/details/details_screen.dart';
 
+const kItemRatio = 0.8;
+
 class ProductsListView extends StatefulWidget {
   const ProductsListView({Key? key, this.mainScreenAnimationController, this.mainScreenAnimation}) : super(key: key);
 
@@ -21,22 +23,12 @@ class _ProductsListViewState extends State<ProductsListView> with TickerProvider
   final ProductController productController = Get.put(ProductController());
   AnimationController? animationController;
 
-  // List<String> areaListData = <String>[
-  //   'assets/fitness_app/area1.png',
-  //   'assets/fitness_app/area2.png',
-  //   'assets/fitness_app/area3.png',
-  //   'assets/fitness_app/area1.png',
-  //   'assets/fitness_app/area2.png',
-  //   'assets/fitness_app/area3.png',
-  //   'assets/fitness_app/area1.png',
-  //   'assets/fitness_app/area2.png',
-  //   'assets/fitness_app/area3.png',
-  //   'assets/fitness_app/area3.png',
-  // ];
-
   @override
   void initState() {
-    animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
+    animationController = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    );
     super.initState();
   }
 
@@ -65,13 +57,14 @@ class _ProductsListViewState extends State<ProductsListView> with TickerProvider
                 if (productController.isLoading.isTrue) {
                   ratio = 1;
                 } else if (productController.list.isNotEmpty) {
-                  ratio = 2 / ((productController.list.length) / 2);
+                  ratio = (kItemRatio) / (kItemRatio * (productController.list.length / 4));
+                  // ratio = kItemRatio;
                 }
 
                 return AspectRatio(
                   aspectRatio: ratio,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    padding: const EdgeInsets.only(left: 8, right: 8),
                     child: renderGridView(),
                   ),
                 );
@@ -83,14 +76,20 @@ class _ProductsListViewState extends State<ProductsListView> with TickerProvider
 
   Widget renderGridView() {
     if (productController.isLoading.isTrue) {
-      return const CircularProgressIndicator();
+      return const Center(
+        child: SizedBox(
+          width: 100,
+          height: 100,
+          child: CircularProgressIndicator(),
+        ),
+      );
     } else if (productController.errorMgs.isNotEmpty) {
       return Text('Error: ' + productController.errorMgs.toString(),
           style: const TextStyle(color: Colors.red), textAlign: TextAlign.center);
     }
 
     return GridView(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 50),
+      padding: const EdgeInsets.all(16),
       physics: const BouncingScrollPhysics(),
       scrollDirection: Axis.vertical,
       children: List<Widget>.generate(
@@ -114,7 +113,7 @@ class _ProductsListViewState extends State<ProductsListView> with TickerProvider
         crossAxisCount: 2,
         mainAxisSpacing: 12,
         crossAxisSpacing: 12,
-        childAspectRatio: 1,
+        childAspectRatio: kItemRatio,
       ),
     );
   }
@@ -172,12 +171,10 @@ class ProductView extends StatelessWidget {
                       children: [
                         AspectRatio(
                           aspectRatio: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 40),
-                            child: NetworkImg(
-                              imageUrl: product.variants[0].thumbnail!,
-                              imageFit: BoxFit.scaleDown,
-                            ),
+                          child: NetworkImg(
+                            imageUrl: product.variants[0].thumbnail!,
+                            imageFit: BoxFit.scaleDown,
+                            progressSize: 50,
                           ),
                         ),
                         Positioned(

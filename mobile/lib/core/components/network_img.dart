@@ -6,14 +6,18 @@ class NetworkImg extends StatelessWidget {
     Key? key,
     required this.imageUrl,
     this.imageFit,
+    this.progressSize = 0,
+    this.imgPadding,
   }) : super(key: key);
 
   final String imageUrl;
   final BoxFit? imageFit;
+  final double? progressSize;
+  final EdgeInsetsGeometry? imgPadding;
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
+    var widget = CachedNetworkImage(
       imageUrl: imageUrl,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
@@ -23,9 +27,30 @@ class NetworkImg extends StatelessWidget {
           ),
         ),
       ),
-      progressIndicatorBuilder: (context, url, downloadProgress) =>
-          CircularProgressIndicator(value: downloadProgress.progress),
+      progressIndicatorBuilder: (context, url, downloadProgress) => renderProgressIndicator(downloadProgress.progress),
       errorWidget: (context, url, error) => const Icon(Icons.error),
     );
+
+    if (imgPadding != null) {
+      return Padding(
+        padding: imgPadding!,
+        child: widget,
+      );
+    }
+
+    return widget;
+  }
+
+  Widget renderProgressIndicator(value) {
+    if (progressSize! != 0) {
+      return Center(
+        child: SizedBox(
+          width: progressSize,
+          height: progressSize,
+          child: CircularProgressIndicator(value: value),
+        ),
+      );
+    }
+    return CircularProgressIndicator(value: value);
   }
 }
