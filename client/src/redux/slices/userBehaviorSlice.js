@@ -6,8 +6,8 @@ const BEHAVIOR = {
   VIEW_COUNT: 'viewCount',
   CLICK_COUNT: 'clickCount',
   HOVER_COUNT: 'hoverCount',
-  IN_CART: 'inCart',
-  BOUGHT: 'bought'
+  IN_CART_COUNT: 'inCartCount',
+  BOUGHT_COUNT: 'bought'
 };
 
 const initialState = {
@@ -98,7 +98,7 @@ export const trackingInCart = (data) => (dispatch) => {
     actions.updateTrackingData({
       productId,
       behaviorData: qty,
-      behaviorProp: BEHAVIOR.IN_CART,
+      behaviorProp: BEHAVIOR.IN_CART_COUNT,
       mode: 'overwrite'
     })
   );

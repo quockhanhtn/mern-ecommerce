@@ -10,6 +10,7 @@
     "start": "node ./src/index.js",
     "insert-data": "nodemon ./tool/insert-data.js",
     "import-data": "nodemon ./tool/import-data-to-fpt.js",
+    "import-user-behavior": "nodemon ./tool/import-user-behavior.js",
     "tes": "node ./tool/a.js"
   },
   "contributors": [

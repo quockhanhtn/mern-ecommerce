@@ -21,14 +21,13 @@ import {
   Typography
 } from '@material-ui/core';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-// routes
-import { useSnackbar } from 'notistack';
 // hooks
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocales } from '../../hooks';
-import { fCurrency, fNumber } from '../../utils/formatNumber';
-import { MCheckbox, MIconButton } from '../@material-extend';
+import { useSnackbar } from 'notistack';
+import { useLocales, useOnScreen } from '../../hooks';
 // components
+import { MCheckbox, MIconButton } from '../@material-extend';
 import EmptyContent from '../EmptyContent';
 import Scrollbar from '../Scrollbar';
 import { Incrementer } from '../Incrementer';
@@ -40,6 +39,7 @@ import {
   removeItem
 } from '../../redux/slices/cartSlice';
 import { nextStepOrder } from '../../redux/slices/orderSlice';
+import { fCurrency, fNumber } from '../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
@@ -85,6 +85,9 @@ export default function CheckoutCart() {
     fee: { discount, subTotal, shipping, total }
   } = useSelector((state) => state.cart);
 
+  const ref = useRef();
+  const isVisibleCheckout = useOnScreen(ref);
+
   const handleApplyDiscount = () => {
     // dispatch(applyDiscount(value));
   };
@@ -127,10 +130,106 @@ export default function CheckoutCart() {
   const isSelected = (productId, sku) =>
     selectedItems.findIndex((x) => x.productId === productId && x.sku === sku) > -1;
 
+  const renderCheckOutArea = (isSticky = true) => {
+    const content = (
+      <Stack spacing={1}>
+        {enableDiscount && (
+          <TextField
+            fullWidth
+            placeholder="Discount codes / Gifts"
+            value="DISCOUNT5"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Button onClick={handleApplyDiscount} sx={{ mr: -0.5 }} type="button">
+                    Apply
+                  </Button>
+                </InputAdornment>
+              )
+            }}
+          />
+        )}
+
+        <Stack direction="row" justifyContent="space-between">
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {t('cart.order.sub-total')}
+          </Typography>
+          <Typography variant="subtitle2">{`${fNumber(subTotal)} ₫`}</Typography>
+        </Stack>
+
+        <Stack direction="row" justifyContent="space-between">
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {t('cart.order.discount')}
+          </Typography>
+          <Typography variant="subtitle2">{fCurrency(discount, currentLang.value)}</Typography>
+        </Stack>
+
+        <Stack direction="row" justifyContent="space-between">
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {t('cart.order.shipping-fee')}
+          </Typography>
+          <Typography variant="subtitle2">{fCurrency(shipping, currentLang.value)}</Typography>
+        </Stack>
+
+        <Divider />
+
+        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          <Button href="/" color="inherit" startIcon={<Icon icon={arrowIosBackFill} />}>
+            {t('cart.empty-action')}
+          </Button>
+          <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
+            <Typography variant="subtitle1">{`${t('cart.order.total')}: `}</Typography>
+            <Typography
+              variant="subtitle1"
+              sx={{
+                color: 'error.main',
+                minWidth: 200,
+                textAlign: 'right',
+                position: 'relative',
+                paddingRight: (theme) => theme.spacing(2)
+              }}
+            >
+              {fCurrency(total, currentLang.value)}
+              <Typography
+                variant="caption"
+                sx={{
+                  color: 'text.secondary',
+                  fontStyle: 'italic',
+                  position: 'absolute',
+                  bottom: 0,
+                  right: (theme) => theme.spacing(2),
+                  transform: 'translateY(110%)'
+                }}
+              >
+                {`(${t('cart.order.include-vat')})`}
+              </Typography>
+            </Typography>
+          </Box>
+          <Button size="large" onClick={handleNextStep} variant="contained" disabled={!selectedItems?.length}>
+            {t('cart.checkout')}
+          </Button>
+        </Box>
+      </Stack>
+    );
+
+    if (isSticky) {
+      return (
+        <Card sx={{ p: 2, mx: (theme) => theme.spacing(2.5), borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
+          {content}
+        </Card>
+      );
+    }
+    return (
+      <Card ref={ref} sx={{ p: 2 }}>
+        {content}
+      </Card>
+    );
+  };
+
   return (
     <>
       <Container disableGutters>
-        <Card sx={{ mb: 3, minHeight: 600 }}>
+        <Card sx={{ mb: 3 }}>
           <CardHeader
             title={
               <Box
@@ -147,7 +246,7 @@ export default function CheckoutCart() {
 
           {allCartItems?.length > 0 ? (
             <Scrollbar>
-              <TableContainer sx={{ minWidth: 720 }}>
+              <TableContainer>
                 <Table>
                   <TableHead>
                     <TableRow>
@@ -247,90 +346,10 @@ export default function CheckoutCart() {
             />
           )}
         </Card>
+
+        {renderCheckOutArea(false)}
       </Container>
-
-      <BottomContainerStyle disableGutters>
-        <Card sx={{ p: 2, mx: (theme) => theme.spacing(2.5), borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
-          <Stack spacing={1}>
-            {enableDiscount && (
-              <TextField
-                fullWidth
-                placeholder="Discount codes / Gifts"
-                value="DISCOUNT5"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Button onClick={handleApplyDiscount} sx={{ mr: -0.5 }} type="button">
-                        Apply
-                      </Button>
-                    </InputAdornment>
-                  )
-                }}
-              />
-            )}
-
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {t('cart.order.sub-total')}
-              </Typography>
-              <Typography variant="subtitle2">{`${fNumber(subTotal)} ₫`}</Typography>
-            </Stack>
-
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {t('cart.order.discount')}
-              </Typography>
-              <Typography variant="subtitle2">{fCurrency(discount, currentLang.value)}</Typography>
-            </Stack>
-
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {t('cart.order.shipping-fee')}
-              </Typography>
-              <Typography variant="subtitle2">{fCurrency(shipping, currentLang.value)}</Typography>
-            </Stack>
-
-            <Divider />
-
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-              <Button href="/" color="inherit" startIcon={<Icon icon={arrowIosBackFill} />}>
-                {t('cart.empty-action')}
-              </Button>
-              <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
-                <Typography variant="subtitle1">{`${t('cart.order.total')}: `}</Typography>
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    color: 'error.main',
-                    minWidth: 200,
-                    textAlign: 'right',
-                    position: 'relative',
-                    paddingRight: (theme) => theme.spacing(2)
-                  }}
-                >
-                  {fCurrency(total, currentLang.value)}
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      color: 'text.secondary',
-                      fontStyle: 'italic',
-                      position: 'absolute',
-                      bottom: 0,
-                      right: (theme) => theme.spacing(2),
-                      transform: 'translateY(110%)'
-                    }}
-                  >
-                    {`(${t('cart.order.include-vat')})`}
-                  </Typography>
-                </Typography>
-              </Box>
-              <Button size="large" onClick={handleNextStep} variant="contained" disabled={!selectedItems?.length}>
-                {t('cart.checkout')}
-              </Button>
-            </Box>
-          </Stack>
-        </Card>
-      </BottomContainerStyle>
+      {!isVisibleCheckout && <BottomContainerStyle disableGutters>{renderCheckOutArea()}</BottomContainerStyle>}
     </>
   );
 }

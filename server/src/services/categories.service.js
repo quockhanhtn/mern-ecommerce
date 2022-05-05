@@ -16,7 +16,7 @@ export default {
 };
 
 const SELECTED_FIELDS =
-  '_id slug order name desc isHide image coverImage parent children createdAt updatedAt';
+  '_id slug order name desc isHide image coverImage parent children countProduct createdAt updatedAt';
 // const POPULATE_OPTS = [
 //   {
 //     path: 'image',

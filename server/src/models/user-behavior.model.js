@@ -4,12 +4,13 @@ import removeMultiSpace from './plugins/remove-multi-space.js';
 const userBehaviorSchema = mongoose.Schema(
   {
     productId: { type: String, trim: true, required: true },     // productId
-    userIdentity: { type: String, trim: true, required: true },  // ip or userId
+    userIdentity: { type: String, trim: true },                  // userId
+    ipAddress: { type: String, trim: true, required: true },
     behavior: { type: Object, required: true }
   },
   { id: false, timestamps: false, versionKey: false, }
 );
-userBehaviorSchema.index({ productId: 1, userIdentity: 1 }, { unique: true });
+userBehaviorSchema.index({ productId: 1, userIdentity: 1, ipAddress: 1 }, { unique: true });
 userBehaviorSchema.plugin(removeMultiSpace);
 
 const userBehaviorModel = mongoose.model('UserBehavior', userBehaviorSchema);

@@ -6,6 +6,8 @@ import Category from '../src/models/category.model.js';
 import Brand from '../src/models/brand.model.js';
 import Product from '../src/models/product.model.js';
 import StringUtils from '../src/utils/StringUtils.js';
+import categoryService from '../src/services/categories.service.js';
+import brandService from '../src/services/brands.service.js';
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
@@ -404,7 +406,26 @@ async function insertProduct() {
     // ...JSON.parse(fs.readFileSync(filePath0)),
     // ...JSON.parse(fs.readFileSync(filePath1)),
     // ...JSON.parse(fs.readFileSync(filePath2)),
-  ];
+  ].sort((a, b) => {
+    const catCompare = categoryMap[a.link].toString().localeCompare(categoryMap[b.link].toString());
+    if (catCompare != 0) {
+      return catCompare;
+    }
+
+    if (a.brandName.toLowerCase() === b.brandName.toLowerCase()) {
+      return a.productName.localeCompare(b.productName.toLowerCase());
+    }
+
+    if (a.brandName.toLowerCase() === 'apple' && b.brandName.toLowerCase() !== 'apple') {
+      return -1;
+    }
+
+    if (a.brandName.toLowerCase() === 'samsung' && b.brandName.toLowerCase() !== 'apple') {
+      return 1;
+    }
+
+    return categoryMap[a.link].toString().localeCompare(categoryMap[b.link].toString());
+  });
   const listBrand = await Brand.find({}).lean().exec();
 
   const productQueue = [];
@@ -472,11 +493,78 @@ async function insertProduct() {
   }
 
   let j = 0;
+
+  var categoryCountMap = {};
+  var brandCountMap = {};
+
   for (let i = productQueue.length - 1; i >= 0; i--) {
     const product = productQueue[i];
     await product.save();
+
+    if (product.category) {
+      if (!categoryCountMap[product.category]) {
+        categoryCountMap[product.category] = 1;
+      } else {
+        categoryCountMap[product.category]++;
+      }
+
+      if (product.categorySub1) {
+        if (!categoryCountMap[product.categorySub1]) {
+          categoryCountMap[product.categorySub1] = 1;
+        } else {
+          categoryCountMap[product.categorySub1]++;
+        }
+        if (product.categorySub2) {
+          if (!categoryCountMap[product.categorySub2]) {
+            categoryCountMap[product.categorySub2] = 1;
+          } else {
+            categoryCountMap[product.categorySub2]++;
+          }
+          if (product.categorySub3) {
+            if (!categoryCountMap[product.categorySub3]) {
+              categoryCountMap[product.categorySub3] = 1;
+            } else {
+              categoryCountMap[product.categorySub3]++;
+            }
+          }
+        }
+      }
+    }
+
+    if (product.brand) {
+      if (!brandCountMap[product.brand]) {
+        brandCountMap[product.brand] = 1;
+      } else {
+        brandCountMap[product.brand]++;
+      }
+    }
+    // await brandService.incCountProduct(product.brand);
+    // await categoryService.incCountProduct(product.category);
+    // await categoryService.incCountProduct(product.categorySub1);
+    // await categoryService.incCountProduct(product.categorySub2);
+    // await categoryService.incCountProduct(product.categorySub3);
     console.log(`[${++j}/${listProduct.length}] Insert product '${product.name}' success`);
   }
+
+  for (let i = 0; i < Object.entries(categoryCountMap).length; i++) {
+    const [categoryId, count] = Object.entries(categoryCountMap)[i];
+    await Category.findByIdAndUpdate(categoryId, {
+      $set: {
+        countProduct: count
+      }
+    }).exec();
+  }
+
+  for (let i = 0; i < Object.entries(brandCountMap).length; i++) {
+    const [brandId, count] = Object.entries(brandCountMap)[i];
+    await Brand.findByIdAndUpdate(brandId, {
+      $set: {
+        countProduct: count
+      }
+    }).exec();
+  }
+
+  console.log('Insert product success');
 }
 
 function zeroFill(number, width) {
