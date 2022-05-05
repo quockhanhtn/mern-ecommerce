@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 import '../../../size_config.dart';
@@ -7,10 +9,12 @@ class SectionTitle extends StatelessWidget {
     Key? key,
     required this.title,
     required this.press,
+    this.viewMoreText,
   }) : super(key: key);
 
   final String title;
   final GestureTapCallback press;
+  final String? viewMoreText;
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +30,9 @@ class SectionTitle extends StatelessWidget {
         ),
         GestureDetector(
           onTap: press,
-          child: const Text(
-            "Xem thêm",
-            style: TextStyle(color: Color(0xFFBBBBBB)),
+          child: Text(
+            viewMoreText ?? "Xem thêm",
+            style: const TextStyle(color: Color(0xFFBBBBBB)),
           ),
         ),
       ],

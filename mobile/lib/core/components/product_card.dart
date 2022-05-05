@@ -1,34 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/dto/Product.dart';
-import 'package:hk_mobile/dto/product/product_dto.dart';
+import 'package:hk_mobile/core/components/network_img.dart';
+import 'package:hk_mobile/core/utils/format_util.dart';
+import 'package:hk_mobile/dto/product_dto.dart';
 import 'package:hk_mobile/screens/details/details_screen.dart';
 
 import '../../constants.dart';
 import '../../size_config.dart';
 
 class ProductCard extends StatelessWidget {
-  ProductCard({
+  const ProductCard({
     Key? key,
     this.width = 140,
-    this.aspectRetio = 1.02,
+    this.aspectRatio = 1.02,
     required this.product,
-  });
+  }) : super(key: key);
 
-  final double width, aspectRetio;
+  final double width, aspectRatio;
   final ProductDto product;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: getProportionateScreenWidth(20)),
+      padding: EdgeInsets.only(left: getProportionateScreenWidth(10)),
       child: SizedBox(
         width: getProportionateScreenWidth(width),
         child: GestureDetector(
-          onTap: () => Navigator.pushNamed(
-            context,
-            DetailsScreen.routeName,
-            arguments: ProductDetailsArguments(product: product),
-          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailsScreen(productDto: product),
+              ),
+            );
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -41,22 +45,22 @@ class ProductCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Hero(
-                    tag: product.id.toString(),
-                    child: Image.network(product.variants[0].thumbnail.toString(), fit: BoxFit.contain,),
-                  ),
+                      tag: product.id.toString(),
+                      child: NetworkImg(imageUrl: product.variants[0].thumbnail.toString(), imageFit: BoxFit.contain)),
                 ),
               ),
               const SizedBox(height: 10),
               Text(
                 product.name,
-                style: const TextStyle(color: Colors.black),
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
                 maxLines: 2,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "${product.variants[0].price} đ",
+                    FormatUtils.currency(product.variants[0].price),
                     style: TextStyle(
                       fontSize: getProportionateScreenWidth(18),
                       fontWeight: FontWeight.w600,
@@ -87,7 +91,7 @@ class ProductCard extends StatelessWidget {
                   // ),
                 ],
               ),
-              SizedBox(height: getProportionateScreenWidth(40)),
+              SizedBox(height: getProportionateScreenWidth(20)),
             ],
           ),
         ),

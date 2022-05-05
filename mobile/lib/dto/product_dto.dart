@@ -1,7 +1,54 @@
 import 'package:hk_mobile/dto/brand_dto.dart';
 import 'package:hk_mobile/dto/category_dto.dart';
 import 'package:hk_mobile/dto/generic_dto.dart';
-import 'package:hk_mobile/dto/product/product_variant_dto.dart';
+
+class ProductVariantDto extends GenericDto {
+  ProductVariantDto(
+      this.sku,
+      this.slug,
+      this.variantName,
+      this.price,
+      this.marketPrice,
+      this.quantity,
+      this.sold,
+      this.thumbnail,
+      this.pictures);
+
+  final String sku;
+  final String slug;
+  final String variantName;
+  final double price;
+  final double marketPrice;
+  final int quantity;
+  final int? sold;
+  final String? thumbnail;
+  final List<String>? pictures;
+
+  factory ProductVariantDto.fromJson(Map<String, dynamic> json) {
+    return ProductVariantDto(
+        json['sku'] as String,
+        json['slug'] as String,
+        json['variantName'] as String,
+        json['price'].toDouble(),
+        json['marketPrice'].toDouble(),
+        json['quantity'] as int,
+        json['sold'] as int?,
+        json['thumbnail'] as String?,
+        List<String>.from(json['pictures'] ?? List<String>.empty()));
+  }
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'sku': sku,
+        'slug': slug,
+        'variantName': variantName,
+        'price': price,
+        'marketPrice': marketPrice,
+        'quantity': quantity,
+        'sold': sold,
+        'thumbnail': thumbnail,
+        'pictures': pictures,
+      };
+}
 
 class ProductDto extends GenericDto {
   ProductDto(
@@ -21,8 +68,7 @@ class ProductDto extends GenericDto {
       this.hightLightPics,
       this.variants,
       this.isHide,
-      this.isOutOfStock,
-      this.crawlKey);
+      this.isOutOfStock);
 
   final String id;
   final String name;
@@ -41,7 +87,6 @@ class ProductDto extends GenericDto {
   final List<ProductVariantDto> variants;
   final bool isHide;
   final bool isOutOfStock;
-  final String? crawlKey;
 
   factory ProductDto.fromJson(Map<String, dynamic> json) {
     return ProductDto(
@@ -65,7 +110,6 @@ class ProductDto extends GenericDto {
           .cast<ProductVariantDto>(),
       json['isHide'] ?? false,
       json['isOutOfStock'] ?? false,
-      json['crawlKey'] as String?,
     );
   }
 
@@ -86,7 +130,6 @@ class ProductDto extends GenericDto {
         'hightLightPics': hightLightPics,
         'variants': variants,
         'isHide': isHide,
-        'isOutOfStock': isOutOfStock,
-        'crawlKey': crawlKey,
+        'isOutOfStock': isOutOfStock
       };
 }

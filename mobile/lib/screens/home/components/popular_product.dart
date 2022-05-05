@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hk_mobile/core/components/default_button.dart';
 import 'package:hk_mobile/core/components/product_card.dart';
-import 'package:hk_mobile/dto/Product.dart';
+import 'package:hk_mobile/screens/details/components/top_rounded_container.dart';
 
 import '../../../controllers/product_controller.dart';
 import '../../../size_config.dart';
@@ -10,6 +11,8 @@ import 'section_title.dart';
 class PopularProducts extends StatelessWidget {
   final ProductController productController = Get.put(ProductController());
 
+  PopularProducts({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -17,7 +20,8 @@ class PopularProducts extends StatelessWidget {
         Padding(
           padding:
               EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-          child: SectionTitle(title: "Sản phẩm mới nhất", press: () {}),
+          child: SectionTitle(
+              title: "Sản phẩm mới nhất", viewMoreText: "", press: () {}),
         ),
         SizedBox(height: getProportionateScreenWidth(20)),
         Obx(() {
@@ -34,11 +38,49 @@ class PopularProducts extends StatelessWidget {
                     return ProductCard(product: productController.list[index]);
                   },
                 ),
-                SizedBox(width: getProportionateScreenWidth(20)),
               ],
             ),
           );
-        })
+        }),
+        Obx(() {
+          if (productController.isLoading.isTrue ||
+              productController.remainingItems <= 0) {
+            return const SizedBox.shrink();
+          }
+          if (productController.isLoadingMore.isTrue) {
+            return const CircularProgressIndicator();
+          }
+          return TopRoundedContainer(
+            color: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: getProportionateScreenWidth(30),
+                  vertical: getProportionateScreenWidth(5)),
+              child: DefaultButton2(
+                textChild: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: TextStyle(
+                        fontSize: getProportionateScreenWidth(16),
+                        color: Colors.white),
+                    children: <TextSpan>[
+                      const TextSpan(text: 'Xem thêm\n'),
+                      TextSpan(
+                          text:
+                              '(${productController.remainingItems.value} sản phẩm)',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: getProportionateScreenWidth(10))),
+                    ],
+                  ),
+                ),
+                press: () {
+                  productController.fetchMoreProduct();
+                },
+              ),
+            ),
+          );
+        }),
       ],
     );
   }

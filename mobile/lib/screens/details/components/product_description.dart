@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hk_mobile/dto/Product.dart';
-import 'package:hk_mobile/dto/product/product_dto.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
@@ -9,11 +8,13 @@ import '../../../size_config.dart';
 class ProductDescription extends StatelessWidget {
   const ProductDescription({
     Key? key,
-    required this.product,
+    required this.desc,
+    required this.isFavorite,
     this.pressOnSeeMore,
   }) : super(key: key);
 
-  final ProductDto product;
+  final String desc;
+  final bool isFavorite;
   final GestureTapCallback? pressOnSeeMore;
 
   @override
@@ -24,10 +25,7 @@ class ProductDescription extends StatelessWidget {
         Padding(
           padding:
               EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-          child: Text(
-            product.name,
-            style: Theme.of(context).textTheme.headline6,
-          ),
+          child: Html(data: desc),
         ),
         Align(
           alignment: Alignment.centerRight,
@@ -35,7 +33,7 @@ class ProductDescription extends StatelessWidget {
             padding: EdgeInsets.all(getProportionateScreenWidth(15)),
             width: getProportionateScreenWidth(64),
             decoration: BoxDecoration(
-              color: product.isHide
+              color: isFavorite
                   ? const Color(0xFFFFE6E6)
                   : const Color(0xFFF5F6F9),
               borderRadius: const BorderRadius.only(
@@ -45,47 +43,47 @@ class ProductDescription extends StatelessWidget {
             ),
             child: SvgPicture.asset(
               "assets/icons/ic_heart_fill.svg",
-              color: product.isHide
+              color: isFavorite
                   ? const Color(0xFFFF4848)
                   : const Color(0xFFDBDEE4),
               height: getProportionateScreenWidth(16),
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(
-            left: getProportionateScreenWidth(20),
-            right: getProportionateScreenWidth(64),
-          ),
-          child: Text(
-            product.name,
-            maxLines: 3,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: getProportionateScreenWidth(20),
-            vertical: 10,
-          ),
-          child: GestureDetector(
-            onTap: () {},
-            child: Row(
-              children: const [
-                Text(
-                  "Xem thêm",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600, color: kPrimaryColor),
-                ),
-                SizedBox(width: 5),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  size: 12,
-                  color: kPrimaryColor,
-                ),
-              ],
-            ),
-          ),
-        )
+        // Padding(
+        //   padding: EdgeInsets.only(
+        //     left: getProportionateScreenWidth(20),
+        //     right: getProportionateScreenWidth(64),
+        //   ),
+        //   child: Text(
+        //     desc,
+        //     maxLines: 3,
+        //   ),
+        // ),
+        // Padding(
+        //   padding: EdgeInsets.symmetric(
+        //     horizontal: getProportionateScreenWidth(20),
+        //     vertical: 10,
+        //   ),
+        //   child: GestureDetector(
+        //     onTap: () {},
+        //     child: Row(
+        //       children: const [
+        //         Text(
+        //           "Xem thêm",
+        //           style: TextStyle(
+        //               fontWeight: FontWeight.w600, color: kPrimaryColor),
+        //         ),
+        //         SizedBox(width: 5),
+        //         Icon(
+        //           Icons.arrow_forward_ios,
+        //           size: 12,
+        //           color: kPrimaryColor,
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // )
       ],
     );
   }
