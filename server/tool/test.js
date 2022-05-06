@@ -21,14 +21,14 @@ async function main() {
   const dirPath = path.join(process.cwd(), 'tool', 'logs');
   if (!fs.existsSync(dirPath)) { fs.mkdirSync(dirPath); }
 
-  fs.appendFileSync(path.join(dirPath, `product.csv`), `productId, sku, productName, variantName`);
+  fs.appendFileSync(path.join(dirPath, `product.csv`), `productId, sku, price, marketPrice`);
   for (let i = 0; i < list.length; i++) {
     const item = list[i];
 
     for (let j = 0; j < item.variants.length; j++) {
       console.log(`${i + 1}/${list.length} - ${item.variants[j].sku}`);
       const element = item.variants[j];
-      fs.appendFileSync(path.join(dirPath, `product.csv`), `\n${item._id}, ${element.sku}, ${item.name}, ${element.variantName}`);
+      fs.appendFileSync(path.join(dirPath, `product.csv`), `\n${item._id}, ${element.sku}, ${element.price}, ${element.marketPrice}`);
     }
   }
 

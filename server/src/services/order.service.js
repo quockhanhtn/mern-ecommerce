@@ -244,7 +244,7 @@ async function create(customerInfo, orderData, createdBy) {
 
   if (!orderData.items || orderData.items.length === 0) {
     throw ApiErrorUtils.simple('Invalid order items', 400);
-  };
+  }
 
   if (!Object.values(constants.ORDER.PAYMENT_METHOD).includes(orderData.paymentMethod)) {
     throw ApiErrorUtils.simple('Invalid payment method', 400);

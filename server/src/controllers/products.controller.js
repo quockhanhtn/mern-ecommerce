@@ -66,7 +66,7 @@ export const getAllProducts = async (req, res, next) => {
   try {
     const category = req.query.c || '';
     const brand = req.query.b || '';
-    const search = req.query.search || '';
+    const search = decodeURI(req.query.search || '');
 
     const fields = req.query.fields || '';
     const limit = parseInt(req.query.limit) || 10;

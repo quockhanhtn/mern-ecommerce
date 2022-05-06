@@ -392,6 +392,16 @@ function splitProductName(name) {
 
   return name;
 }
+function roundPrice(price) {
+  let input = price;
+  let result = 1;
+  while (input > 100) {
+    result *= 10;
+    input = Number.parseInt(input / 10);
+  }
+
+  return Math.round(price / result) * result;
+}
 
 async function insertProduct() {
   const filePath = process.cwd() + '/tool/product.all.json';
@@ -404,7 +414,26 @@ async function insertProduct() {
     // ...JSON.parse(fs.readFileSync(filePath0)),
     // ...JSON.parse(fs.readFileSync(filePath1)),
     // ...JSON.parse(fs.readFileSync(filePath2)),
-  ];
+  ].sort((a, b) => {
+    const catCompare = categoryMap[a.link].toString().localeCompare(categoryMap[b.link].toString());
+    if (catCompare != 0) {
+      return catCompare;
+    }
+
+    if (a.brandName.toLowerCase() === b.brandName.toLowerCase()) {
+      return a.productName.localeCompare(b.productName.toLowerCase());
+    }
+
+    if (a.brandName.toLowerCase() === 'apple' && b.brandName.toLowerCase() !== 'apple') {
+      return -1;
+    }
+
+    if (a.brandName.toLowerCase() === 'samsung' && b.brandName.toLowerCase() !== 'apple') {
+      return 1;
+    }
+
+    return categoryMap[a.link].toString().localeCompare(categoryMap[b.link].toString());
+  });
   const listBrand = await Brand.find({}).lean().exec();
 
   const productQueue = [];
@@ -459,12 +488,14 @@ async function insertProduct() {
     }
 
     product.variants = element.variants.map(v => ({
-      variantName: v.variantName,
+      variantName: v.variantName.trim() !== 'Hình sản phẩm' ? v.variantName.trim() : '',
       sku: v.sku,
       thumbnail: v.images[1].map(item => item.startsWith('//') ? `https:${item}` : item)[0],
       pictures: v.images[1].slice(1).map(item => item.startsWith('//') ? `https:${item}` : item),
       price: parseInt(v.price, 10),
-      marketPrice: parseInt(v.price, 10) * ((100 + getRandomInt(5, 30)) / 100),
+      marketPrice: roundPrice(
+        parseInt(v.price, 10) * ((100 + getRandomInt(5, 30)) / 100)
+      ),
       quantity: getRandomInt(1, 20) * 5
     }));
 
@@ -472,11 +503,78 @@ async function insertProduct() {
   }
 
   let j = 0;
+
+  var categoryCountMap = {};
+  var brandCountMap = {};
+
   for (let i = productQueue.length - 1; i >= 0; i--) {
     const product = productQueue[i];
     await product.save();
+
+    if (product.category) {
+      if (!categoryCountMap[product.category]) {
+        categoryCountMap[product.category] = 1;
+      } else {
+        categoryCountMap[product.category]++;
+      }
+
+      if (product.categorySub1) {
+        if (!categoryCountMap[product.categorySub1]) {
+          categoryCountMap[product.categorySub1] = 1;
+        } else {
+          categoryCountMap[product.categorySub1]++;
+        }
+        if (product.categorySub2) {
+          if (!categoryCountMap[product.categorySub2]) {
+            categoryCountMap[product.categorySub2] = 1;
+          } else {
+            categoryCountMap[product.categorySub2]++;
+          }
+          if (product.categorySub3) {
+            if (!categoryCountMap[product.categorySub3]) {
+              categoryCountMap[product.categorySub3] = 1;
+            } else {
+              categoryCountMap[product.categorySub3]++;
+            }
+          }
+        }
+      }
+    }
+
+    if (product.brand) {
+      if (!brandCountMap[product.brand]) {
+        brandCountMap[product.brand] = 1;
+      } else {
+        brandCountMap[product.brand]++;
+      }
+    }
+    // await brandService.incCountProduct(product.brand);
+    // await categoryService.incCountProduct(product.category);
+    // await categoryService.incCountProduct(product.categorySub1);
+    // await categoryService.incCountProduct(product.categorySub2);
+    // await categoryService.incCountProduct(product.categorySub3);
     console.log(`[${++j}/${listProduct.length}] Insert product '${product.name}' success`);
   }
+
+  for (let i = 0; i < Object.entries(categoryCountMap).length; i++) {
+    const [categoryId, count] = Object.entries(categoryCountMap)[i];
+    await Category.findByIdAndUpdate(categoryId, {
+      $set: {
+        countProduct: count
+      }
+    }).exec();
+  }
+
+  for (let i = 0; i < Object.entries(brandCountMap).length; i++) {
+    const [brandId, count] = Object.entries(brandCountMap)[i];
+    await Brand.findByIdAndUpdate(brandId, {
+      $set: {
+        countProduct: count
+      }
+    }).exec();
+  }
+
+  console.log('Insert product success');
 }
 
 function zeroFill(number, width) {

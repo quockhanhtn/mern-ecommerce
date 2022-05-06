@@ -14,7 +14,7 @@ export default {
   remove
 };
 
-const SELECTED_FIELDS = '_id order slug name desc headQuarters country image isHide createdAt updatedAt';
+const SELECTED_FIELDS = '_id order slug name desc headQuarters country image countProduct isHide createdAt updatedAt';
 
 /**
  *

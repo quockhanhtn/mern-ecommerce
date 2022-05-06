@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hk_mobile/core/components/rounded_icon_btn.dart';
-import 'package:hk_mobile/dto/Product.dart';
 
 import '../../../constants.dart';
-import '../../../dto/product/product_dto.dart';
+import '../../../dto/product_dto.dart';
 import '../../../size_config.dart';
 
 class ColorDots extends StatelessWidget {
@@ -32,17 +31,15 @@ class ColorDots extends StatelessWidget {
           ),
           const Spacer(),
           RoundedIconBtn(
-            icon: Icons.remove,
-            press: () {},
-            iconSize: getProportionateScreenWidth(40)
-          ),
+              icon: Icons.remove,
+              press: () {},
+              iconSize: getProportionateScreenWidth(40)),
           SizedBox(width: getProportionateScreenWidth(20)),
           RoundedIconBtn(
-            icon: Icons.add,
-            showShadow: true,
-            press: () {},
-            iconSize: getProportionateScreenWidth(40)
-          ),
+              icon: Icons.add,
+              showShadow: true,
+              press: () {},
+              iconSize: getProportionateScreenWidth(40)),
         ],
       ),
     );
