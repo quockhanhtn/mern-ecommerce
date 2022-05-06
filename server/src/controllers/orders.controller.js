@@ -2,6 +2,7 @@ import ResponseUtils from '../utils/ResponseUtils.js';
 import orderService from '../services/order.service.js';
 import vnpayService from '../services/vnpay.service.js';
 import firebaseService from '../services/firebase.service.js';
+import userBehaviorService from '../services/user-behavior.service.js';
 import constants from '../constants.js';
 
 // Order manager by user
@@ -98,6 +99,8 @@ export const createByUser = async (req, res, next) => {
       userId,
       req.body
     );
+
+    userBehaviorService.handleUpdateBoughtCount(userId ?? '', req.ipv4, order.items);
 
     let paymentUrl = '';
     if (req.body.paymentMethod === constants.ORDER.PAYMENT_METHOD.VNPAY) {

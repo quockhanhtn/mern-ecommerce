@@ -6,8 +6,6 @@ import Category from '../src/models/category.model.js';
 import Brand from '../src/models/brand.model.js';
 import Product from '../src/models/product.model.js';
 import StringUtils from '../src/utils/StringUtils.js';
-import categoryService from '../src/services/categories.service.js';
-import brandService from '../src/services/brands.service.js';
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
@@ -394,6 +392,16 @@ function splitProductName(name) {
 
   return name;
 }
+function roundPrice(price) {
+  let input = price;
+  let result = 1;
+  while (input > 100) {
+    result *= 10;
+    input = Number.parseInt(input / 10);
+  }
+
+  return Math.round(price / result) * result;
+}
 
 async function insertProduct() {
   const filePath = process.cwd() + '/tool/product.all.json';
@@ -480,12 +488,14 @@ async function insertProduct() {
     }
 
     product.variants = element.variants.map(v => ({
-      variantName: v.variantName,
+      variantName: v.variantName.trim() !== 'Hình sản phẩm' ? v.variantName.trim() : '',
       sku: v.sku,
       thumbnail: v.images[1].map(item => item.startsWith('//') ? `https:${item}` : item)[0],
       pictures: v.images[1].slice(1).map(item => item.startsWith('//') ? `https:${item}` : item),
       price: parseInt(v.price, 10),
-      marketPrice: parseInt(v.price, 10) * ((100 + getRandomInt(5, 30)) / 100),
+      marketPrice: roundPrice(
+        parseInt(v.price, 10) * ((100 + getRandomInt(5, 30)) / 100)
+      ),
       quantity: getRandomInt(1, 20) * 5
     }));
 
