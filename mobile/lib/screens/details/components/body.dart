@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hk_mobile/constants.dart';
 import 'package:hk_mobile/core/components/default_button.dart';
+import 'package:hk_mobile/core/utils/format_util.dart';
 import 'package:hk_mobile/dto/product_dto.dart';
 import 'package:hk_mobile/size_config.dart';
 
@@ -29,9 +31,18 @@ class Body extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w800,
-                      fontSize: getProportionateScreenWidth(20)),
+                      color: Colors.black, fontWeight: FontWeight.w800, fontSize: getProportionateScreenWidth(20)),
+                  maxLines: 3,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(getProportionateScreenWidth(5)),
+                child: Text(
+                  FormatUtils.currency(product.variants[0].price),
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: kPrimaryColor, fontWeight: FontWeight.w800, fontSize: getProportionateScreenWidth(17)),
                   maxLines: 3,
                 ),
               ),
