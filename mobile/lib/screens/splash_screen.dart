@@ -2,6 +2,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/core/utils/preference_util.dart';
+import 'package:hk_mobile/screens/home/home_screen.dart';
 import 'package:hk_mobile/screens/intro/intro_screen.dart';
 import 'package:hk_mobile/screens/main/main_screen.dart';
 import 'package:hk_mobile/size_config.dart';
@@ -20,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayoutMixin<Splas
     bool _seen = PreferenceUtil.getBool('seen', false);
 
     if (_seen) {
-      Get.to(const MainScreen());
+      Get.to(const HomeScreen());
       //Navigator.pushNamed(context, HomeScreen.routeName);
     } else {
       Get.to(const IntroScreen());
