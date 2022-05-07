@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/core/components/default_button.dart';
 
 import 'package:hk_mobile/dto/product_dto.dart';
@@ -9,8 +11,9 @@ import 'components/custom_app_bar.dart';
 
 class DetailsScreen extends StatelessWidget {
   static String routeName = "/details";
+  final CartController cartController = Get.put(CartController());
 
-  const DetailsScreen({Key? key, required this.productDto}) : super(key: key);
+  DetailsScreen({Key? key, required this.productDto}) : super(key: key);
   final ProductDto productDto;
 
   @override
@@ -33,7 +36,9 @@ class DetailsScreen extends StatelessWidget {
             ),
             child: DefaultButton(
               text: "Thêm vào giỏ hàng",
-              press: () {},
+              press: () {
+                cartController.add(productDto);
+              },
             ),
           ),
         ));

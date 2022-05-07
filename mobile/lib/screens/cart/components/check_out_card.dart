@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/core/components/default_button.dart';
+import 'package:hk_mobile/core/utils/format_util.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
 
 class CheckoutCard extends StatelessWidget {
-  const CheckoutCard({
-    Key? key,
-  }) : super(key: key);
+  final CartController cartController = Get.put(CartController());
+
+  CheckoutCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,17 +66,19 @@ class CheckoutCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text.rich(
-                  TextSpan(
-                    text: "Tồng cộng:\n",
-                    children: [
-                      TextSpan(
-                        text: "499.500.000 đ",
-                        style: TextStyle(fontSize: 16, color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
+                Obx(() {
+                  return Text.rich(
+                    TextSpan(
+                      text: "Tồng cộng:\n",
+                      children: [
+                        TextSpan(
+                          text: FormatUtils.currency(cartController.subTotal.value),
+                          style: const TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
                 SizedBox(
                   width: getProportionateScreenWidth(190),
                   child: DefaultButton(
