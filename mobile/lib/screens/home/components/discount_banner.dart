@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 
 import '../../../size_config.dart';
 
@@ -10,31 +11,54 @@ class DiscountBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: 90,
-      width: double.infinity,
-      margin: EdgeInsets.all(getProportionateScreenWidth(20)),
+      margin: EdgeInsets.all(getProportionateScreenWidth(5)),
       padding: EdgeInsets.symmetric(
-        horizontal: getProportionateScreenWidth(20),
-        vertical: getProportionateScreenWidth(15),
+        horizontal: getProportionateScreenWidth(10),
+        vertical: getProportionateScreenWidth(5),
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFF4A3298),
-        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
       ),
-      child: Text.rich(
-        TextSpan(
-          style: const TextStyle(color: Colors.white),
-          children: [
-            const TextSpan(text: "Khuyến mãi hấp dẫn\n"),
-            TextSpan(
-              text: "Giảm giá 20%",
-              style: TextStyle(
-                fontSize: getProportionateScreenWidth(24),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+      child:  ImageSlideshow(
+
+        /// Width of the [ImageSlideshow].
+        width: double.infinity,
+
+        /// Height of the [ImageSlideshow].
+        height: 200,
+
+        /// The page to show when first creating the [ImageSlideshow].
+        initialPage: 0,
+
+        /// The color to paint the indicator.
+        indicatorColor: Colors.blue,
+
+        /// The color to paint behind th indicator.
+        indicatorBackgroundColor: Colors.grey,
+
+        /// The widgets to display in the [ImageSlideshow].
+        /// Add the sample image file into the images folder
+        children: [
+          Image.asset(
+            'assets/images/Profile Image.png',
+            fit: BoxFit.contain,
+          ),
+          Image.asset(
+            'assets/images/Profile Image.png',
+            fit: BoxFit.contain,
+          ),
+          Image.asset(
+            'assets/images/Profile Image.png',
+            fit: BoxFit.contain,
+          ),
+        ],
+        /// Auto scroll interval.
+        /// Do not auto scroll with null or 0.
+        autoPlayInterval: 3000,
+
+        /// Loops back to first slide.
+        isLoop: true,
       ),
     );
   }
