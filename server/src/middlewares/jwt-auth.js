@@ -47,5 +47,22 @@ export const isGuestOrAuthorized = (req, res, next) => {
   if (token) {
     return JwtUtils.jwtMiddleware(req, res, next);
   }
+
+  let cookieId = req.signedCookies.cookieId;
+  if (!cookieId) {
+    cookieId = Date.now();
+    res.cookie(
+      'userIdentifier',
+      cookieId,
+      {
+        sameSite: 'none',
+        maxAge: Number.MAX_SAFE_INTEGER,
+        signed: true,
+        httpOnly: true,
+      }
+    );
+  }
+
+  req.cookieId = cookieId;
   next();
 }
