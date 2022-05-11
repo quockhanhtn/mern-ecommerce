@@ -32,7 +32,7 @@ export default function App() {
     () => {
       dispatch(sendTrackingData());
     },
-    isDevMode ? 20 : 5
+    isDevMode ? 10 : 5
   );
 
   useEffect(() => {

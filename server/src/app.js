@@ -29,13 +29,14 @@ app.get('/favicon.ico', (_, res) => {
 
 
 // User middleware
-app.use(cookieParser(process.env.JWT_SECRET || ''));
+app.use(cookieParser());
 app.use(cors({
-  origin: true,
+  origin: process.env.ALLOW_ORIGIN?.split(',') || '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   preflightContinue: false,
-  optionsSuccessStatus: 204,
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   credentials: true,
+  exposedHeaders: ["set-cookie"],
 }));
 
 app.use((req, _, next) => {

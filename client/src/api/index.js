@@ -1,16 +1,35 @@
 import axios from 'axios';
 
-const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api/v2';
-const API = axios.create({ baseURL, withCredentials: true });
+const API = axios.create({
+  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api/v2',
+  withCredentials: true,
+  credentials: 'include'
+});
 
-// Add Header Authorization
+// Add a request interceptor
 API.interceptors.request.use((req) => {
+  // Add Header Authorization
   const accessToken = localStorage.getItem('accessToken');
   if (accessToken) {
     req.headers.authorization = `Bearer ${accessToken}`;
   }
   return req;
 });
+
+// Add a response interceptor
+axios.interceptors.response.use(
+  // eslint-disable-next-line arrow-body-style
+  (res) => {
+    // do something with response data
+    return res;
+  },
+  (err) => {
+    if (err.response.status === 401 || err.response.status === 403) {
+      localStorage.removeItem('accessToken');
+      window.location.href = '/login';
+    }
+  }
+);
 
 export const apiInstance = API;
 

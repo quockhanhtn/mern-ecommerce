@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 // material
-import { Box, Card, Link, Typography, Stack, Zoom, Tooltip } from '@material-ui/core';
+import { Box, Card, Typography, Stack } from '@material-ui/core';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 //
 import { useDispatch } from 'react-redux';
 import { useLocales } from '../../hooks';
 
 import { ImageBrokenIcon } from '../../assets';
+
+import ProductNameTypo from './ProductNameTypo';
 
 import { fCurrency } from '../../utils/formatNumber';
 import { trackingClick } from '../../redux/slices/userBehaviorSlice';
@@ -22,14 +24,15 @@ const ProductImgStyle = styled('img')({
   position: 'absolute'
 });
 
-const TypographyStyle = styled(Typography)({
-  cursor: 'pointer',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  display: '-webkit-box',
-  WebkitLineClamp: 2,
-  WebkitBoxOrient: 'vertical'
-});
+const PriceBoxStyle = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  flexDirection: 'column',
+  [theme.breakpoints.up('lg')]: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  }
+}));
 
 // ----------------------------------------------------------------------
 
@@ -62,25 +65,22 @@ export default function ProductItem({ product }) {
         )}
       </Box>
 
-      <Stack spacing={2} sx={{ p: 2 }}>
-        <Tooltip TransitionComponent={Zoom} title={name} placement="top">
-          <TypographyStyle component={Link} color="inherit" onClick={handleOnClick} variant="subtitle2">
-            {name}
-          </TypographyStyle>
-        </Tooltip>
+      <Stack spacing={1} sx={{ p: 2 }}>
+        <ProductNameTypo name={name} onClick={handleOnClick} />
 
-        <Stack>
+        <PriceBoxStyle>
+          <Typography variant="subtitle1" noWrap color="primary" sx={{ mr: 2 }}>
+            {variants[0].price ? fCurrency(variants[0].price, currentLang.value) : t('product.free')}
+          </Typography>
+
           <Typography
             component="span"
             variant="subtitle2"
-            sx={{ color: 'text.disabled', textDecoration: 'line-through' }}
+            sx={{ color: 'text.disabled', textDecoration: 'line-through', fontSize: '90%' }}
           >
             {variants[0].marketPrice && fCurrency(variants[0].marketPrice, currentLang.value)}
           </Typography>
-          <Typography variant="subtitle1" noWrap>
-            {variants[0].price ? fCurrency(variants[0].price, currentLang.value) : t('product.free')}
-          </Typography>
-        </Stack>
+        </PriceBoxStyle>
       </Stack>
     </Card>
   );

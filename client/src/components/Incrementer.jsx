@@ -66,12 +66,12 @@ function IncrementerField(props) {
 
   const incrementQuantity = () => {
     if (typeof setValue === 'function') {
-      setValue((prev) => prev + 1);
+      setValue(value + 1);
     }
   };
   const decrementQuantity = () => {
     if (typeof setValue === 'function') {
-      setValue((prev) => prev - 1);
+      setValue(value - 1);
     }
   };
 

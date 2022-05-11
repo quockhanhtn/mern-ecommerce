@@ -26,7 +26,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const LIMIT = 15;
+const LIMIT = 20;
 
 export default function HomePage() {
   const { t } = useLocales();
