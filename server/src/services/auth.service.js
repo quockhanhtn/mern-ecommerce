@@ -55,7 +55,7 @@ async function authenticate(username, password, ipAddress) {
   }
 
   // authentication successful so generate jwt and refresh tokens
-  const jwtToken = generateToken({ _id: user._id });
+  const jwtToken = JwtUtils.generateToken({ _id: user._id });
   const refreshToken = generateRefreshToken(user._id, ipAddress);
 
   // save refresh token
@@ -85,7 +85,7 @@ async function refreshToken(refreshToken, ipAddress) {
   await newRfToken.save();
 
   // generate new jwt
-  const jwtToken = generateToken({ _id: user._id });
+  const jwtToken = JwtUtils.generateToken({ _id: user._id });
 
   // return basic details and tokens
   return {

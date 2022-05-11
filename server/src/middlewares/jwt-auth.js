@@ -48,21 +48,21 @@ export const isGuestOrAuthorized = (req, res, next) => {
     return JwtUtils.jwtMiddleware(req, res, next);
   }
 
-  let cookieId = req.signedCookies.cookieId;
-  if (!cookieId) {
-    cookieId = Date.now();
+  let uid = req.cookies.uid;
+  if (!uid) {
+    uid = Date.now();
     res.cookie(
-      'userIdentifier',
-      cookieId,
+      'uid',
+      uid,
       {
-        sameSite: 'none',
+        expires: new Date(8640000000000000),
         maxAge: Number.MAX_SAFE_INTEGER,
-        signed: true,
         httpOnly: true,
+        secure: true
       }
     );
   }
 
-  req.cookieId = cookieId;
+  req.userIdentifier = uid;
   next();
 }

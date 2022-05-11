@@ -27,6 +27,7 @@ serverApi.listen(serverPort, () => {
 if (process.env.NODE_ENV !== 'dev') {
   SlackUtils.sendMessage('------------------------------------------------------');
   SlackUtils.sendMessage(`Server running at *${serverIp}:${serverPort}*`);
+  SlackUtils.sendMessage(`Set allow origin = *${process.env.ALLOW_ORIGIN?.split(',').join(' ') || '*'}*`);
 
   // schedule task run every day at 03:00 AM
   cron.schedule('0 3 * * *', () => {
@@ -34,7 +35,7 @@ if (process.env.NODE_ENV !== 'dev') {
     LogUtils.info('SERVER', 'Running a task every day at 03:00 AM to import data to FPT');
 
     importDataToFpt();
-  });
+  }, { scheduled: true, timezone: 'Asia/Ho_Chi_Minh' });
 
   // schedule task run every 30 minutes
   cron.schedule('*/30 * * * *', () => {

@@ -16,10 +16,6 @@ export default {
   getDataWithCalculateScore
 };
 
-const getExistData = async (userIdentifier, productId) => {
-  return UserBehavior.findOne({ userIdentifier, productId });
-}
-
 const weights = (key) => {
   switch (key) {
     case BEHAVIOR.HOVER_COUNT:
@@ -61,13 +57,13 @@ const mergeData = (prevData, newData) => {
   return mergedData;
 };
 
-async function handleUserBehavior(userId, ip, trackingData) {
+async function handleUserBehavior(userIdentifier, trackingData) {
   if (!trackingData) { return; }
   const data = Object.entries(trackingData);
 
   for (let i = 0; i < data.length; i++) {
     const [productId, behavior] = data[i];
-    const userBehavior = await getExistData(userId, ip, productId);
+    const userBehavior = await UserBehavior.findOne({ userIdentifier, productId });
 
     if (userBehavior) {
       userBehavior.behavior = mergeData(userBehavior.behavior, behavior);
@@ -75,8 +71,7 @@ async function handleUserBehavior(userId, ip, trackingData) {
     } else {
       const newUserBehavior = new UserBehavior({
         _id: new mongoose.Types.ObjectId(),
-        userIdentity: userId,
-        ipAddress: ip,
+        userIdentifier,
         productId,
         behavior
       });
@@ -85,7 +80,7 @@ async function handleUserBehavior(userId, ip, trackingData) {
   }
 }
 
-async function handleUpdateBoughtCount(userId, ip, orderItems) {
+async function handleUpdateBoughtCount(userIdentifier, orderItems) {
   const boughtData = Object.entries(
     orderItems.reduce((acc, { product, quantity }) => {
       if (!acc[product]) {
@@ -98,7 +93,7 @@ async function handleUpdateBoughtCount(userId, ip, orderItems) {
 
   for (let i = 0; i < boughtData.length; i++) {
     const [productId, qty] = boughtData[i];
-    const userBehavior = await getExistData(userId, ip, productId);
+    const userBehavior = await UserBehavior.findOne({ userIdentifier, productId });
 
     if (userBehavior) {
       if (userBehavior?.behavior?.[BEHAVIOR.BOUGHT_COUNT]) {

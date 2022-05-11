@@ -1,6 +1,29 @@
 import { Box, Skeleton } from '@material-ui/core';
+import { experimentalStyled as styled } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+
 import ProductItem from './ProductItem';
+
+// ----------------------------------------------------------------------
+
+const BoxListStyle = styled(Box)(({ theme }) => ({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(5, 1fr)',
+  gridGap: theme.spacing(1.5),
+  [theme.breakpoints.down('md+')]: {
+    gridTemplateColumns: 'repeat(4, 1fr)'
+  },
+  [theme.breakpoints.down('md')]: {
+    gridTemplateColumns: 'repeat(3, 1fr)'
+  },
+  [theme.breakpoints.down('sm')]: {
+    gridTemplateColumns: 'repeat(2, 1fr)'
+  }
+}));
+
+const BoxItemStyle = styled(Box)(({ _theme }) => ({
+  gridColumn: 'span'
+}));
 
 // ----------------------------------------------------------------------
 
@@ -14,33 +37,18 @@ export default function ProductList(props) {
   const { products = [], isLoading = true, limit = 10, ...other } = props;
 
   return (
-    <Box display="grid" gridTemplateColumns="repeat(15, 1fr)" gap={1.5} {...other}>
+    <BoxListStyle {...other}>
       {products?.map((product) => (
-        <Box key={product._id} gridColumn="span 3" sx={{ display: 'flex' }}>
+        <BoxItemStyle key={product._id}>
           <ProductItem product={product} />
-        </Box>
+        </BoxItemStyle>
       ))}
       {isLoading &&
-        [...Array(limit)].map((item, index) => (
-          <Box key={index} gridColumn="span 3">
+        [...Array(limit)].map((_item, index) => (
+          <BoxItemStyle key={index}>
             <Skeleton variant="rectangular" width="100%" sx={{ paddingTop: '115%', borderRadius: 2 }} />
-          </Box>
+          </BoxItemStyle>
         ))}
-    </Box>
-    // <Box {...other}>
-    //   <Grid container spacing={1.5}>
-    //     {products.map((product) => (
-    //       <Grid key={product._id} item xs={12} sm={6} md={3}>
-    //         <ProductItem product={product} />
-    //       </Grid>
-    //     ))}
-    //     {isLoading &&
-    //       [...Array(8)].map((item, index) => (
-    //         <Grid item xs={12} sm={6} md={3} key={index}>
-    //           <Skeleton variant="rectangular" width="100%" sx={{ paddingTop: '115%', borderRadius: 2 }} />
-    //         </Grid>
-    //       ))}
-    //   </Grid>
-    // </Box>
+    </BoxListStyle>
   );
 }

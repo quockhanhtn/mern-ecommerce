@@ -5,11 +5,12 @@ import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 import {
   Box,
   Button,
-  Divider,
   Card,
   CardHeader,
   Container,
+  Divider,
   InputAdornment,
+  Link,
   Stack,
   Table,
   TableBody,
@@ -18,11 +19,14 @@ import {
   TableHead,
   TableRow,
   TextField,
-  Typography
+  Tooltip,
+  Typography,
+  Zoom
 } from '@material-ui/core';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 // hooks
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { useLocales, useOnScreen } from '../../hooks';
@@ -39,6 +43,7 @@ import {
   removeItem
 } from '../../redux/slices/cartSlice';
 import { nextStepOrder } from '../../redux/slices/orderSlice';
+import { trackingClick } from '../../redux/slices/userBehaviorSlice';
 import { fCurrency, fNumber } from '../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
@@ -46,10 +51,21 @@ import { fCurrency, fNumber } from '../../utils/formatNumber';
 const ThumbImgStyle = styled('img')(({ theme }) => ({
   width: 64,
   height: 64,
-  objectFit: 'cover',
+  objectFit: 'contain',
   marginRight: theme.spacing(2),
-  borderRadius: theme.shape.borderRadiusSm
+  borderRadius: theme.shape.borderRadiusSm,
+  border: `solid 2px ${theme.palette.divider}`,
+  backgroundColor: 'white'
 }));
+
+const TypographyStyle = styled(Typography)({
+  cursor: 'pointer',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  display: '-webkit-box',
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: 'vertical'
+});
 
 const BottomContainerStyle = styled(Container)(({ theme }) => ({
   position: 'fixed',
@@ -65,6 +81,7 @@ const BottomContainerStyle = styled(Container)(({ theme }) => ({
 
 export default function CheckoutCart() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { t, currentLang } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
@@ -85,8 +102,8 @@ export default function CheckoutCart() {
     fee: { discount, subTotal, shipping, total }
   } = useSelector((state) => state.cart);
 
-  const ref = useRef();
-  const isVisibleCheckout = useOnScreen(ref);
+  const checkoutAreaRef = useRef();
+  const isVisibleCheckout = useOnScreen(checkoutAreaRef);
 
   const handleApplyDiscount = () => {
     // dispatch(applyDiscount(value));
@@ -118,13 +135,13 @@ export default function CheckoutCart() {
     dispatch(selectAllItems());
   };
 
+  const handleOnClickProduct = (e, productId, sku) => {
+    dispatch(trackingClick({ productId }));
+    navigate(`/c'/${productId}?code=${sku}`);
+  };
+
   const handleSelectChange = (e, productId, sku) => {
     dispatch(changeSelect({ productId, sku, isSelect: e.target.checked }));
-    // if (e.target.checked) {
-    //   setSelectedItems((prev) => [...prev, { productId, sku }]);
-    // } else {
-    //   setSelectedItems((prev) => [...prev.filter((x) => x.productId !== productId && x.sku !== sku)]);
-    // }
   };
 
   const isSelected = (productId, sku) =>
@@ -220,7 +237,7 @@ export default function CheckoutCart() {
       );
     }
     return (
-      <Card ref={ref} sx={{ p: 2 }}>
+      <Card ref={checkoutAreaRef} sx={{ p: 2 }}>
         {content}
       </Card>
     );
@@ -264,7 +281,7 @@ export default function CheckoutCart() {
                         />
                       </TableCell>
                       <TableCell>{t('products.title')}</TableCell>
-                      <TableCell align="left">{t('cart.unit-price')}</TableCell>
+                      <TableCell align="right">{t('cart.unit-price')}</TableCell>
                       <TableCell align="center">{t('products.quantity')}</TableCell>
                       <TableCell align="right">{t('cart.amount-price')}</TableCell>
                       <TableCell align="right" />
@@ -276,7 +293,6 @@ export default function CheckoutCart() {
                       const { productId, sku, qty, name, variantName, thumbnail, price, marketPrice, quantity, sold } =
                         product;
                       const isItemSelected = isSelected(productId, sku);
-                      const labelId = `enhanced-table-checkbox-${productId}_${sku}`;
                       return (
                         <TableRow
                           hover
@@ -288,7 +304,6 @@ export default function CheckoutCart() {
                         >
                           <TableCell padding="checkbox">
                             <MCheckbox
-                              // inputProps={{ 'aria-labelledby': labelId }}
                               onChange={(e) => handleSelectChange(e, productId, sku)}
                               checked={isItemSelected}
                               sx={{
@@ -303,16 +318,25 @@ export default function CheckoutCart() {
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                               <ThumbImgStyle alt="product image" src={thumbnail} />
                               <Box>
-                                <Typography noWrap variant="subtitle2" sx={{ maxWidth: 240, mb: 0.5 }}>
-                                  {name}
-                                </Typography>
+                                <Tooltip TransitionComponent={Zoom} title={name} placement="top-start">
+                                  <TypographyStyle
+                                    component={Link}
+                                    color="inherit"
+                                    onClick={(e) => handleOnClickProduct(e, productId, sku)}
+                                    variant="subtitle2"
+                                  >
+                                    {name}
+                                  </TypographyStyle>
+                                </Tooltip>
 
                                 {variantName && <Typography variant="body2">{variantName}</Typography>}
                               </Box>
                             </Box>
                           </TableCell>
 
-                          <TableCell align="left">{fCurrency(price, currentLang.value)}</TableCell>
+                          <TableCell align="right" sx={{ minWidth: 150 }}>
+                            {fCurrency(price, currentLang.value)}
+                          </TableCell>
 
                           <TableCell align="center">
                             <Incrementer
@@ -324,7 +348,9 @@ export default function CheckoutCart() {
                             />
                           </TableCell>
 
-                          <TableCell align="right">{fCurrency(price * qty, currentLang.value)}</TableCell>
+                          <TableCell align="right" sx={{ minWidth: 150 }}>
+                            {fCurrency(price * qty, currentLang.value)}
+                          </TableCell>
 
                           <TableCell align="right">
                             <MIconButton onClick={() => handleDeleteCart(productId, sku)}>
