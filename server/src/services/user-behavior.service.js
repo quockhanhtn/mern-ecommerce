@@ -16,14 +16,8 @@ export default {
   getDataWithCalculateScore
 };
 
-const getExistData = async (userId, ip, productId) => {
-  let filter = {};
-  if (userId && mongoose.Types.ObjectId.isValid(userId)) {
-    filter = { userIdentity: userId, productId };
-  } else {
-    filter = { ipAddress: ip, productId };
-  }
-  return UserBehavior.findOne(filter);
+const getExistData = async (userIdentifier, productId) => {
+  return UserBehavior.findOne({ userIdentifier, productId });
 }
 
 const weights = (key) => {
@@ -120,8 +114,7 @@ async function handleUpdateBoughtCount(userId, ip, orderItems) {
     } else {
       const newUserBehavior = new UserBehavior({
         _id: new mongoose.Types.ObjectId(),
-        userIdentity: userId,
-        ipAddress: ip,
+        userIdentifier,
         productId,
         behavior: {
           [BEHAVIOR.BOUGHT_COUNT]: qty
@@ -133,33 +126,10 @@ async function handleUpdateBoughtCount(userId, ip, orderItems) {
 }
 
 async function getDataWithCalculateScore() {
-  let result = [];
-  const ipScoreMap = {};
-
-  const unKnownUsers = await UserBehavior.find({ userIdentity: { $in: [null, ''] } });
-  for (let i = 0; i < unKnownUsers.length; i++) {
-    const { productId, ipAddress, behavior } = unKnownUsers[i];
-    if (!ipScoreMap[ipAddress]) {
-      ipScoreMap[ipAddress] = {};
-    }
-    if (!ipScoreMap[ipAddress][productId]) {
-      ipScoreMap[ipAddress][productId] = { score: 0 };
-    }
-    const score = calculateScore(behavior);
-
-    ipScoreMap[ipAddress][productId].score += score;
-    result.push({ productId, userData: ipAddress, score });
-  }
-
-  const knownUsers = await UserBehavior.find({ userIdentity: { $nin: [null, ''] } });
-  for (let i = 0; i < knownUsers.length; i++) {
-    const { userIdentity, productId, behavior, ipAddress } = knownUsers[i];
-    let score = calculateScore(behavior);
-    if (ipScoreMap?.[ipAddress]?.[productId]?.score) {
-      score += ipScoreMap[ipAddress][productId].score;
-    }
-    result.push({ productId, userData: userIdentity, score });
-  }
-
-  return result;
+  const userBehaviorData = await UserBehavior.find({}).lean().exec();
+  return userBehaviorData.map((item) => ({
+    productId: item.productId,
+    userData: item.userIdentifier,
+    score: calculateScore(item.behavior)
+  }));
 }

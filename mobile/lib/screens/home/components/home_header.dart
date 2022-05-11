@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/controllers/product_controller.dart';
 
 import 'package:hk_mobile/core/components/components.dart';
@@ -15,12 +16,12 @@ class HomeHeader extends StatelessWidget {
   }) : super(key: key);
 
   final ProductController productController = Get.put(ProductController());
+  final CartController cartController = Get.put(CartController());
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+      padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -42,17 +43,20 @@ class HomeHeader extends StatelessWidget {
                   );
                 });
           }),
-          IconBtnWithCounter(
-            svgSrc: "assets/icons/ic_cart.svg",
-            press: () => Navigator.pushNamed(context, CartScreen.routeName),
-            icPadding: getProportionateScreenWidth(12),
-            icHeight: getProportionateScreenWidth(46),
-            icWidth: getProportionateScreenWidth(46),
-            numberHeight: getProportionateScreenWidth(16),
-            numberWidth: getProportionateScreenWidth(16),
-            numberFontSize: getProportionateScreenWidth(10),
-            boxColor: kSecondaryColor.withOpacity(0.1),
-          ),
+          Obx(() {
+            return IconBtnWithCounter(
+              svgSrc: "assets/icons/ic_cart.svg",
+              numOfItem: cartController.list.length,
+              press: () => Get.to(CartScreen()),
+              icPadding: getProportionateScreenWidth(12),
+              icHeight: getProportionateScreenWidth(46),
+              icWidth: getProportionateScreenWidth(46),
+              numberHeight: getProportionateScreenWidth(16),
+              numberWidth: getProportionateScreenWidth(16),
+              numberFontSize: getProportionateScreenWidth(10),
+              boxColor: kSecondaryColor.withOpacity(0.1),
+            );
+          }),
           IconBtnWithCounter(
             svgSrc: "assets/icons/ic_bell.svg",
             numOfItem: 3,

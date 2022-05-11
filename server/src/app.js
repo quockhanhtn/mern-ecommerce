@@ -1,13 +1,18 @@
+import cookieParser from 'cookie-parser';
 import express from 'express';
 import mongoose from 'mongoose';
 import path from 'path';
-import cors from './middlewares/cors.js';
+import cors from 'cors';
+
 import error from './middlewares/error.js';
 import logger from './middlewares/logger.js';
+
 import routesV1 from './routes/v1/index.js';
 import routesV2 from './routes/v2/index.js';
+
 import LogUtils from './utils/LogUtils.js';
 
+//------------------------------------------------------------------------------
 
 const app = express();
 const __dirname = process.cwd();
@@ -24,6 +29,15 @@ app.get('/favicon.ico', (_, res) => {
 
 
 // User middleware
+app.use(cookieParser(process.env.JWT_SECRET || ''));
+app.use(cors({
+  origin: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  credentials: true,
+}));
+
 app.use((req, _, next) => {
   // This middleware take care of the origin when the origin is undefined.
   // origin is undefined when request is local
@@ -38,7 +52,6 @@ app.use((req, _, next) => {
 app.use(logger);
 app.use(express.urlencoded({ limit: '30mb', extended: false }));
 app.use(express.json({ limit: '30mb' }));
-app.use(cors);
 
 
 // Routes which should handle requests
