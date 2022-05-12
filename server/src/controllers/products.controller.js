@@ -72,10 +72,21 @@ export const getAllProducts = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
 
+    const minPrice = parseInt(req.query.minPrice) || 0;
+    const maxPrice = parseInt(req.query.maxPrice) || 0;
+
+    if (minPrice > maxPrice) {
+      ResponseUtils.status400(res, `Min price must be less than max price!`);
+      return;
+    }
+
     let filters = {};
     if (category) { filters.category = [...category.split(',')]; }
     if (brand) { filters.brand = [...brand.split(',')]; }
     if (search) { filters.name = { $regex: search, $options: 'i' }; }
+
+    if (minPrice > 0) { filters.minPrice = { $gte: minPrice }; }
+    if (maxPrice > 0) { filters.maxPrice = { $lte: maxPrice }; }
 
     let { list: products, total, countAll } = await productService.getAllProducts(fields, limit, page, filters);
     products = products.map(p => formatProduct(p, req));

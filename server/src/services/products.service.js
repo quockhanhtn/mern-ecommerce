@@ -17,6 +17,7 @@ export default {
   addProductVariants,
   updateProductVariants,
   deleteProductVariants,
+  updatePriceRange
 };
 
 const SELECT_FIELD = '_id name slug desc video overSpecs origin category brand tags views rate variants quantity warrantyPeriod createdAt updatedAt';
@@ -407,4 +408,23 @@ async function getFullAll(fields = SELECT_FIELD) {
     .select(fields)
     .sort({ createdAt: -1 })
     .lean().exec();
+}
+
+async function updatePriceRange() {
+  const list = await Product.find({}).select('_id variants').exec();
+  for (let i = 0; i < list.length; i++) {
+    const product = list[i];
+    let minPrice = Number.MAX_SAFE_INTEGER;
+    let maxPrice = Number.MIN_SAFE_INTEGER;
+    for (let j = 0; j < product.variants.length; j++) {
+      const variant = product.variants[j];
+      if (variant.price < minPrice) {
+        minPrice = variant.price;
+      }
+      if (variant.price > maxPrice) {
+        maxPrice = variant.price;
+      }
+    }
+    await Product.findByIdAndUpdate(product._id, { minPrice, maxPrice });
+  }
 }
