@@ -11,8 +11,9 @@ import '../../../constants.dart';
 import '../../../size_config.dart';
 
 class SignForm extends StatefulWidget {
-  const SignForm({Key? key}) : super(key: key);
+  SignForm({Key? key, this.onLoginSuccess}) : super(key: key);
 
+  Function? onLoginSuccess;
   @override
   _SignFormState createState() => _SignFormState();
 }
@@ -24,8 +25,7 @@ class _SignFormState extends State<SignForm> {
   bool? remember = false;
   final List<String?> errors = [];
 
-  final AuthenticationController authController =
-      Get.put(AuthenticationController());
+  final AuthenticationController authController = Get.put(AuthenticationController());
 
   void addError({String? error}) {
     if (!errors.contains(error)) {
@@ -46,7 +46,9 @@ class _SignFormState extends State<SignForm> {
   void handleLogin() async {
     await authController.login(email!, password!);
     if (authController.isAuthenticated.isTrue) {
-      Navigator.pushNamed(context, ProfileScreen.routeName);
+      widget.onLoginSuccess!();
+      // Navigator.pop(context);
+      //Get.back();
     }
   }
 
@@ -74,8 +76,7 @@ class _SignFormState extends State<SignForm> {
               const Text("Lưu đăng nhập"),
               const Spacer(),
               GestureDetector(
-                onTap: () => Navigator.pushNamed(
-                    context, ForgotPasswordScreen.routeName),
+                onTap: () => Navigator.pushNamed(context, ForgotPasswordScreen.routeName),
                 child: const Text(
                   "Quên mật khẩu",
                   style: TextStyle(decoration: TextDecoration.underline),

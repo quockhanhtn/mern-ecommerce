@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:get/get.dart';
 import 'package:hk_mobile/dto/cart_dto.dart';
 import 'package:hk_mobile/dto/product_dto.dart';
