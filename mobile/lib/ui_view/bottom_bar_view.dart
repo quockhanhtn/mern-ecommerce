@@ -41,7 +41,10 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
                 elevation: 16.0,
                 clipper: TabClipper(
                     radius: Tween<double>(begin: 0.0, end: 1.0)
-                            .animate(CurvedAnimation(parent: animationController!, curve: Curves.fastOutSlowIn))
+                            .animate(CurvedAnimation(
+                              parent: animationController!,
+                              curve: Curves.fastOutSlowIn,
+                            ))
                             .value *
                         38.0),
                 child: Column(
@@ -70,8 +73,10 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
                             ),
                             SizedBox(
                               width: Tween<double>(begin: 0.0, end: 1.0)
-                                      .animate(
-                                          CurvedAnimation(parent: animationController!, curve: Curves.fastOutSlowIn))
+                                      .animate(CurvedAnimation(
+                                        parent: animationController!,
+                                        curve: Curves.fastOutSlowIn,
+                                      ))
                                       .value *
                                   64.0,
                             ),
@@ -119,8 +124,10 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
                   padding: const EdgeInsets.all(8.0),
                   child: ScaleTransition(
                     alignment: Alignment.center,
-                    scale: Tween<double>(begin: 0.0, end: 1.0)
-                        .animate(CurvedAnimation(parent: animationController!, curve: Curves.fastOutSlowIn)),
+                    scale: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                      parent: animationController!,
+                      curve: Curves.fastOutSlowIn,
+                    )),
                     child: Container(
                       // alignment: Alignment.center,s
                       decoration: BoxDecoration(
