@@ -19,7 +19,7 @@ function cors(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
 
   // Request headers you wish to allow
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, uid');
 
   if (req.method === 'OPTIONS') {
     // Request methods you wish to allow

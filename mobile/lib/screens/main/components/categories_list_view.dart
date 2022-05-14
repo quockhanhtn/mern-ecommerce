@@ -78,7 +78,9 @@ class _CategoriesListViewState extends State<CategoriesListView> with TickerProv
         itemBuilder: (BuildContext context, int index) {
           final int count = min(categoryController.list.length, 10);
           final Animation<double> animation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: animationController!, curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn)));
+            parent: animationController!,
+            curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),
+          ));
           animationController?.forward();
 
           var category = categoryController.list[index];
@@ -88,7 +90,7 @@ class _CategoriesListViewState extends State<CategoriesListView> with TickerProv
               animationController: animationController!,
               image: category.coverImage!,
               category: category.name,
-              countProduct: index * 2 + 10,
+              countProduct: category.countProduct!,
               press: () {});
         },
       );

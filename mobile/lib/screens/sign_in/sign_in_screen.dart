@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'components/body.dart';
 
@@ -12,7 +13,11 @@ class SignInScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Đăng nhập"),
       ),
-      body: const Body(),
+      body: Body(
+        onLoginSuccess: () {
+          Get.back();
+        },
+      ),
     );
   }
 }

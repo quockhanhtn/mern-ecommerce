@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:hk_mobile/app_theme.dart';
 import 'package:hk_mobile/controllers/cart_controller.dart';
+import 'package:hk_mobile/core/components/custom_btn.dart';
 import 'package:hk_mobile/core/components/default_button.dart';
 import 'package:hk_mobile/core/utils/format_util.dart';
 
@@ -80,12 +82,19 @@ class CheckoutCard extends StatelessWidget {
                   );
                 }),
                 SizedBox(
-                  width: getProportionateScreenWidth(190),
-                  child: DefaultButton(
-                    text: "Thanh toán",
-                    press: () {},
-                  ),
-                ),
+                    width: getProportionateScreenWidth(190),
+                    child: CustomBtn(
+                      text: 'Thanh toán',
+                      btnColor: AppTheme.nearlyBlue,
+                      textColor: AppTheme.nearlyWhite,
+                      btnPadding: const EdgeInsets.all(0),
+                      onTap: () {},
+                    )
+                    // DefaultButton(
+                    //   text: "Thanh toán",
+                    //   press: () {},
+                    // ),
+                    ),
               ],
             ),
           ],

@@ -10,12 +10,16 @@ class CircleIconBtn extends StatelessWidget {
     this.badgeColor,
     this.iconData,
     this.iconColor = AppTheme.grey,
+    this.customIcon,
+    this.onPress,
   }) : super(key: key);
 
   final String? badgeContent;
   final Color? badgeColor;
   final IconData? iconData;
   final Color? iconColor;
+  final Widget? customIcon;
+  final Function? onPress;
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +37,17 @@ class CircleIconBtn extends StatelessWidget {
         child: InkWell(
           highlightColor: Colors.transparent,
           borderRadius: const BorderRadius.all(Radius.circular(32.0)),
-          onTap: () {},
+          onTap: () {
+            onPress!();
+          },
           child: Center(
-            child: Icon(iconData, color: iconColor),
+            child: customIcon ?? Icon(iconData, color: iconColor),
           ),
         ),
       ),
     );
 
-    if (badgeContent == null || badgeContent!.isEmpty) {
+    if (badgeContent == null || badgeContent!.isEmpty || badgeContent == '0') {
       return iconWidget;
     }
     return Badge(

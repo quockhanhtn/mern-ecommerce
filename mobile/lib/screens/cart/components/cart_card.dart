@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hk_mobile/core/components/network_img.dart';
+import 'package:hk_mobile/core/components/numeric_up_down.dart';
 import 'package:hk_mobile/dto/cart_dto.dart';
 import 'package:hk_mobile/core/utils/format_util.dart';
 
@@ -53,6 +54,15 @@ class CartCard extends StatelessWidget {
                   TextSpan(text: " x ${cart.numOfItem}", style: Theme.of(context).textTheme.bodyText1),
                 ],
               ),
+            ),
+            NumericUpDown(
+              currentValue: cart.numOfItem,
+              onDecrease: () {
+                cart.numOfItem = cart.numOfItem--;
+              },
+              onIncrease: () {
+                cart.numOfItem = cart.numOfItem++;
+              },
             )
           ],
         )

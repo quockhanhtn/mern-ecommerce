@@ -74,7 +74,9 @@ const productSchema = mongoose.Schema({
   hightLightPics: [{ type: String, trim: true }],
 
   variants: [productVariantSchema],
-  // defaultVariant: { type: String }, // default variant of product
+  minPrice: { type: Number, min: 1000 },        // min price
+  maxPrice: { type: Number, min: 1000 },        // max price
+  // defaultVariant: { type: String },          // default variant of product
 
   isHide: { type: Boolean, default: false },
   isOutOfStock: { type: Boolean, default: false },

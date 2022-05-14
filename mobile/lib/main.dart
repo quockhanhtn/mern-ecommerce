@@ -7,7 +7,6 @@ import 'package:hk_mobile/core/utils/dio_util.dart';
 import 'package:hk_mobile/core/utils/logger_util.dart';
 import 'package:hk_mobile/core/utils/preference_util.dart';
 import 'package:hk_mobile/l10n/l10n.dart';
-import 'package:hk_mobile/routes.dart';
 import 'package:hk_mobile/screens/splash_screen.dart';
 import 'package:hk_mobile/theme.dart';
 import 'package:intl/intl.dart';

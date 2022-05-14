@@ -11,8 +11,7 @@ class DioUtil {
     _instance.options.headers[key] = value;
   }
 
-  static Future<Response<dynamic>> getAsync(String path,
-      {Map<String, dynamic>? queryParameters}) async {
+  static Future<Response<dynamic>> getAsync(String path, {Map<String, dynamic>? queryParameters}) async {
     return _instance.get(path, queryParameters: queryParameters);
   }
 
@@ -24,11 +23,12 @@ class DioUtil {
   static void get(
     String path, {
     Map<String, dynamic>? queryParameters,
+    CancelToken? cancelToken,
     required Function(dynamic data) onSuccess,
     required Function(dynamic error) onError,
     Function()? onFinally,
   }) {
-    _instance.get(path, queryParameters: queryParameters).then((res) {
+    _instance.get(path, queryParameters: queryParameters, cancelToken: cancelToken).then((res) {
       if (res.statusCode! >= 200 && res.statusCode! < 300) {
         onSuccess(res.data);
       }

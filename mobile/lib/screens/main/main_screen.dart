@@ -1,7 +1,12 @@
-import 'package:hk_mobile/template/training/training_screen.dart';
 import 'package:flutter/material.dart';
-import '../../ui_view/bottom_bar_view.dart';
-import '../../app_theme.dart';
+import 'package:get/get.dart';
+import 'package:hk_mobile/app_theme.dart';
+import 'package:hk_mobile/screens/cart/cart_screen.dart';
+import 'package:hk_mobile/screens/main/my_profile_screen.dart';
+import 'package:hk_mobile/screens/search/search_screen.dart';
+import 'package:hk_mobile/template/training/training_screen.dart';
+import 'package:hk_mobile/ui_view/bottom_bar_view.dart';
+
 import 'my_home_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -15,6 +20,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   AnimationController? animationController;
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+  List<Widget> bodyItems = [];
 
   Widget tabBody = Container(
     color: AppTheme.background,
@@ -27,8 +33,17 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     }
     tabIconsList[0].isSelected = true;
 
-    animationController = AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = MyHomeScreen(animationController: animationController);
+    animationController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+
+    bodyItems.insert(0, MyHomeScreen(animationController: animationController));
+    bodyItems.insert(1, TrainingScreen(animationController: animationController));
+    bodyItems.insert(2, CartScreen());
+    bodyItems.insert(3, MyProfileScreen());
+
+    tabBody = bodyItems[0];
     super.initState();
   }
 
@@ -62,27 +77,18 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         ),
         BottomBarView(
           tabIconsList: tabIconsList,
-          addClick: () {},
+          addClick: () {
+            Get.to(SearchScreen());
+          },
           changeIndex: (int index) {
-            if (index == 0 || index == 2) {
-              animationController?.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  tabBody = MyHomeScreen(animationController: animationController);
-                });
+            animationController?.reverse().then<dynamic>((data) {
+              if (!mounted) {
+                return;
+              }
+              setState(() {
+                tabBody = bodyItems[index];
               });
-            } else if (index == 1 || index == 3) {
-              animationController?.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  tabBody = TrainingScreen(animationController: animationController);
-                });
-              });
-            }
+            });
           },
         ),
       ],

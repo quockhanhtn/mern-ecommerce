@@ -26,12 +26,15 @@ class DiscountBanner extends StatelessWidget {
       ),
       child: Obx(() {
         if (discountController.isLoading.isTrue) {
-          return const CircularProgressIndicator();
+          return const SizedBox(
+            child: CircularProgressIndicator(),
+            height: 100.0,
+            width: 100.0,
+          );
         }
         return SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: ImageSlideshow(
-
             /// Width of the [ImageSlideshow].
             width: double.infinity,
 
@@ -52,15 +55,20 @@ class DiscountBanner extends StatelessWidget {
             children: [
               ...List.generate(
                 discountController.list.length,
-                  (index) {
-                    var imageUrl = discountController.list[index].image.toString();
-                    if (discountController.list[index].image == ''){
-                      imageUrl = 'https://cdn1.hoanghamobile.com/tin-tuc/wp-content/uploads/2020/06/Q.png';
-                    }
-                    return NetworkImg(imageUrl: imageUrl, imageFit: BoxFit.contain);
+                (index) {
+                  var imageUrl = discountController.list[index].image.toString();
+                  if (discountController.list[index].image == '') {
+                    imageUrl = 'https://cdn1.hoanghamobile.com/tin-tuc/wp-content/uploads/2020/06/Q.png';
                   }
+                  return NetworkImg(
+                    imageUrl: imageUrl,
+                    imageFit: BoxFit.contain,
+                    progressSize: 100,
+                  );
+                },
               ),
             ],
+
             /// Auto scroll interval.
             /// Do not auto scroll with null or 0.
             autoPlayInterval: 10000,

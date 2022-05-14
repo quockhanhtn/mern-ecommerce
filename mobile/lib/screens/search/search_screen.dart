@@ -4,8 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/constants.dart';
 import 'package:hk_mobile/controllers/product_controller.dart';
-import 'package:hk_mobile/core/components/icon_btn_with_counter.dart';
-import 'package:hk_mobile/core/components/search_field.dart';
+import 'package:hk_mobile/screens/search/components/search_bar.dart';
 import 'package:hk_mobile/size_config.dart';
 
 import 'components/body.dart';
@@ -13,9 +12,7 @@ import 'components/body.dart';
 class CustomAppBar2 extends StatelessWidget {
   final ProductController productController = Get.put(ProductController());
 
-  final String keyword;
-
-  CustomAppBar2({Key? key, required this.keyword}) : super(key: key);
+  CustomAppBar2({Key? key}) : super(key: key);
 
   // AppBar().preferredSize.height provide us the height that apply on our app bar
   Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
@@ -24,8 +21,7 @@ class CustomAppBar2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding:
-            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+        padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
         child: Row(
           children: [
             SizedBox(
@@ -48,15 +44,17 @@ class CustomAppBar2 extends StatelessWidget {
               ),
             ),
             Obx(() {
-              return SearchField(
+              return SearchBar(
                 text: productController.keyword.value,
                 hintText: AppLocalizations.of(context)!.productSearchHint,
-                width:
-                    SizeConfig.screenWidth - getProportionateScreenWidth(100),
+                width: SizeConfig.screenWidth - getProportionateScreenWidth(100),
                 boxColor: kSecondaryColor.withOpacity(0.1),
                 horizontalPadding: getProportionateScreenWidth(20),
                 verticalPadding: getProportionateScreenWidth(9),
                 onSubmitted: (value) {
+                  productController.searchProducts(value);
+                },
+                onChanged: (value) {
                   productController.searchProducts(value);
                 },
               );
@@ -69,9 +67,8 @@ class CustomAppBar2 extends StatelessWidget {
 }
 
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({Key? key, required this.keyword}) : super(key: key);
+  const SearchScreen({Key? key}) : super(key: key);
 
-  final String keyword;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -80,13 +77,12 @@ class SearchScreen extends StatelessWidget {
         //   title: const Text("Tìm kiếm sản phẩm"),
         // ),
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(
-              AppBar().preferredSize.height + getProportionateScreenHeight(20)),
+          preferredSize: Size.fromHeight(AppBar().preferredSize.height + getProportionateScreenHeight(20)),
           child: Column(children: [
             SizedBox(height: getProportionateScreenHeight(20)),
-            CustomAppBar2(keyword: keyword)
+            CustomAppBar2(),
           ]),
         ),
-        body: Body(keyword: keyword));
+        body: Body());
   }
 }
