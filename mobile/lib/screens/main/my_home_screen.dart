@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/app_theme.dart';
+import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/controllers/product_controller.dart';
+import 'package:hk_mobile/screens/cart/cart_screen.dart';
 import 'package:hk_mobile/screens/home/components/discount_banner.dart';
 import 'package:hk_mobile/screens/main/components/categories_list_view.dart';
 import 'package:hk_mobile/screens/main/components/load_more_btn.dart';
 import 'package:hk_mobile/screens/main/components/product_list_view_old.dart';
+import 'package:hk_mobile/screens/search/search_screen.dart';
 import 'package:hk_mobile/template/ui_view/title_view.dart';
 import 'package:hk_mobile/ui_view/circle_icon_btn.dart';
 import 'package:hk_mobile/ui_view/hk_logo.dart';
@@ -21,6 +24,7 @@ class MyHomeScreen extends StatefulWidget {
 class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMixin {
   final ScrollController scrollController = ScrollController();
   final ProductController productController = Get.put(ProductController());
+  final CartController cartController = Get.put(CartController());
 
   Animation<double>? topBarAnimation;
   List<Widget> listViews = <Widget>[];
@@ -181,8 +185,8 @@ class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMix
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Expanded(
+                          children: [
+                            const Expanded(
                               child: Padding(
                                 //padding: EdgeInsets.all(8.0),
                                 padding: EdgeInsets.symmetric(vertical: 9, horizontal: 8),
@@ -195,19 +199,27 @@ class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMix
                               child: CircleIconBtn(
                                 iconData: Icons.search,
                                 iconColor: AppTheme.grey,
+                                onPress: () {
+                                  Get.to(SearchScreen());
+                                },
                               ),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
+                            const SizedBox(width: 10),
                             SizedBox(
                               height: 38,
                               width: 38,
-                              child: CircleIconBtn(
-                                badgeContent: '20',
-                                iconData: Icons.notifications_on_rounded,
-                                iconColor: AppTheme.grey,
-                              ),
+                              child: Obx(() {
+                                return CircleIconBtn(
+                                  badgeContent: cartController.list.length.toString(),
+                                  customIcon: Padding(
+                                    child: Image.asset('assets/icons/ic_cart.png'),
+                                    padding: const EdgeInsets.all(6),
+                                  ),
+                                  onPress: () {
+                                    Get.to(CartScreen());
+                                  },
+                                );
+                              }),
                             )
                           ],
                         ),

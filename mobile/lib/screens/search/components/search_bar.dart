@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SearchField extends StatelessWidget {
-  SearchField({
+class SearchBar extends StatelessWidget {
+  const SearchBar({
     Key? key,
     this.text,
     this.hintText,
@@ -22,16 +22,8 @@ class SearchField extends StatelessWidget {
   final Function? onSubmitted;
   final Function? onChanged;
 
-  final TextEditingController _controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    // if (text != null) {
-    //   _controller.value = _controller.value.copyWith(
-    //     text: text,
-    //     selection: const TextSelection.collapsed(offset: 0),
-    //   );
-    // }
     return Container(
       width: width,
       decoration: BoxDecoration(
@@ -39,7 +31,6 @@ class SearchField extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextField(
-        // controller: _controller,
         textAlignVertical: TextAlignVertical.center,
         onChanged: (value) {
           if (onChanged != null) {
@@ -53,12 +44,13 @@ class SearchField extends StatelessWidget {
           }
         },
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            hintText: hintText,
-            prefixIcon: const Icon(Icons.search)),
+          contentPadding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+          border: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          hintText: hintText,
+          suffixIcon: const Icon(Icons.search),
+        ),
       ),
     );
   }

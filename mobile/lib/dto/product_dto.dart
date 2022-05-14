@@ -3,16 +3,8 @@ import 'package:hk_mobile/dto/category_dto.dart';
 import 'package:hk_mobile/dto/generic_dto.dart';
 
 class ProductVariantDto extends GenericDto {
-  ProductVariantDto(
-      this.sku,
-      this.slug,
-      this.variantName,
-      this.price,
-      this.marketPrice,
-      this.quantity,
-      this.sold,
-      this.thumbnail,
-      this.pictures);
+  ProductVariantDto(this.sku, this.slug, this.variantName, this.price, this.marketPrice, this.quantity, this.sold,
+      this.thumbnail, this.pictures);
 
   final String sku;
   final String slug;
@@ -27,11 +19,11 @@ class ProductVariantDto extends GenericDto {
   factory ProductVariantDto.fromJson(Map<String, dynamic> json) {
     return ProductVariantDto(
         json['sku'] as String,
-        json['slug'] as String,
-        json['variantName'] as String,
+        (json['slug'] as String?) ?? '',
+        (json['variantName'] as String?) ?? '',
         json['price'].toDouble(),
         json['marketPrice'].toDouble(),
-        json['quantity'] as int,
+        (json['quantity'] as int?) ?? 0,
         json['sold'] as int?,
         json['thumbnail'] as String?,
         List<String>.from(json['pictures'] ?? List<String>.empty()));
@@ -52,23 +44,24 @@ class ProductVariantDto extends GenericDto {
 
 class ProductDto extends GenericDto {
   ProductDto(
-      this.id,
-      this.name,
-      this.slug,
-      this.desc,
-      this.video,
-      this.tags,
-      this.warrantyPeriod,
-      this.origin,
-      this.category,
-      this.brand,
-      this.views,
-      // this.rates,
-      this.policies,
-      this.hightLightPics,
-      this.variants,
-      this.isHide,
-      this.isOutOfStock);
+    this.id,
+    this.name,
+    this.slug,
+    this.desc,
+    this.video,
+    this.tags,
+    this.warrantyPeriod,
+    this.origin,
+    this.category,
+    this.brand,
+    this.views,
+    // this.rates,
+    this.policies,
+    this.hightLightPics,
+    this.variants,
+    this.isHide,
+    this.isOutOfStock,
+  );
 
   final String id;
   final String name;
@@ -92,7 +85,7 @@ class ProductDto extends GenericDto {
     return ProductDto(
       json['_id'] as String,
       json['name'] as String,
-      json['slug'] as String,
+      (json['slug'] as String?) ?? '',
       json['desc'] as String?,
       json['video'] as String?,
       List<String>.from(json['tags'] ?? List<String>.empty()),

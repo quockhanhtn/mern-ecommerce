@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/core/utils/dio_util.dart';
 import 'package:hk_mobile/dto/product_dto.dart';
@@ -22,6 +23,8 @@ class ProductController extends GetxController {
   final remainingItemsCat = 0.obs;
   final isLoadingMoreCat = false.obs;
 
+  CancelToken searchCancelToken = CancelToken();
+
   @override
   void onInit() {
     fetchProducts();
@@ -30,11 +33,8 @@ class ProductController extends GetxController {
 
   void fetchProducts() {
     isLoading(true);
-    DioUtil.get('products', queryParameters: {'page': page.value, 'limit': 10},
-        onSuccess: (data) {
-      var result = data["data"]
-          .map((e) => ProductDto.fromJson(e as Map<String, dynamic>))
-          .toList();
+    DioUtil.get('products', queryParameters: {'page': page.value, 'limit': 10}, onSuccess: (data) {
+      var result = data["data"].map((e) => ProductDto.fromJson(e as Map<String, dynamic>)).toList();
 
       int countAll = data['pagination']['countAll'] as int;
       remainingItems(countAll - page.value * 10);
@@ -51,11 +51,8 @@ class ProductController extends GetxController {
 
   void fetchMoreProduct() {
     isLoadingMore(true);
-    DioUtil.get('products', queryParameters: {'page': page.value, 'limit': 10},
-        onSuccess: (data) {
-      var result = data["data"]
-          .map((e) => ProductDto.fromJson(e as Map<String, dynamic>))
-          .toList();
+    DioUtil.get('products', queryParameters: {'page': page.value, 'limit': 10}, onSuccess: (data) {
+      var result = data["data"].map((e) => ProductDto.fromJson(e as Map<String, dynamic>)).toList();
 
       int countAll = data['pagination']['countAll'] as int;
       remainingItems(countAll - page.value * 10);
@@ -78,21 +75,25 @@ class ProductController extends GetxController {
     isSearching(true);
     prevKeyword(keyword.value);
     keyword(newKeyword);
-    DioUtil.get('products', queryParameters: {
-      'search': keyword.value,
-      'page': page,
-      'limit': limit
-    }, onSuccess: (data) {
-      var result = data["data"]
-          .map((e) => ProductDto.fromJson(e as Map<String, dynamic>))
-          .toList();
-      searchResult.value = result.cast<ProductDto>();
-      errorMgs('');
-    }, onError: (e) {
-      errorMgs(e.toString());
-    }, onFinally: () {
-      isSearching(false);
-    });
+
+    searchCancelToken.cancel();
+    searchCancelToken = CancelToken();
+
+    DioUtil.get(
+      'products/search/suggest?keyword==' + Uri.encodeComponent(newKeyword),
+      cancelToken: searchCancelToken,
+      onSuccess: (data) {
+        var result = data["data"].map((e) => ProductDto.fromJson(e as Map<String, dynamic>)).toList();
+        searchResult.value = result.cast<ProductDto>();
+        errorMgs('');
+      },
+      onError: (e) {
+        errorMgs(e.toString());
+      },
+      onFinally: () {
+        isSearching(false);
+      },
+    );
   }
 
   void setCat(String categoryId) {
@@ -102,14 +103,9 @@ class ProductController extends GetxController {
 
   void fetchProductsByCat() {
     isLoadingByCat(true);
-    DioUtil.get('products', queryParameters: {
-      'c': catId.value,
-      'page': pageByCat.value,
-      'limit': 10
-    }, onSuccess: (data) {
-      var result = data["data"]
-          .map((e) => ProductDto.fromJson(e as Map<String, dynamic>))
-          .toList();
+    DioUtil.get('products', queryParameters: {'c': catId.value, 'page': pageByCat.value, 'limit': 10},
+        onSuccess: (data) {
+      var result = data["data"].map((e) => ProductDto.fromJson(e as Map<String, dynamic>)).toList();
 
       int countAll = data['pagination']['countAll'] as int;
       remainingItems(countAll - pageByCat.value * 10);
@@ -126,14 +122,9 @@ class ProductController extends GetxController {
 
   void fetchMoreProductByCat() {
     isLoadingMoreCat(true);
-    DioUtil.get('products', queryParameters: {
-      'c': catId.value,
-      'page': pageByCat.value,
-      'limit': 10
-    }, onSuccess: (data) {
-      var result = data["data"]
-          .map((e) => ProductDto.fromJson(e as Map<String, dynamic>))
-          .toList();
+    DioUtil.get('products', queryParameters: {'c': catId.value, 'page': pageByCat.value, 'limit': 10},
+        onSuccess: (data) {
+      var result = data["data"].map((e) => ProductDto.fromJson(e as Map<String, dynamic>)).toList();
 
       int countAll = data['pagination']['countAll'] as int;
       remainingItemsCat(countAll - pageByCat.value * 10);

@@ -233,8 +233,9 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                 ScaleTransition(
                   alignment: Alignment.center,
                   scale: Tween<double>(begin: 0.88, end: 1.0).animate(CurvedAnimation(
-                      parent: widget.tabIconData!.animationController!,
-                      curve: const Interval(0.1, 1.0, curve: Curves.fastOutSlowIn))),
+                    parent: widget.tabIconData!.animationController!,
+                    curve: const Interval(0.1, 1.0, curve: Curves.fastOutSlowIn),
+                  )),
                   child: Image.asset(widget.tabIconData!.isSelected
                       ? widget.tabIconData!.selectedImagePath
                       : widget.tabIconData!.imagePath),
@@ -246,8 +247,9 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                   child: ScaleTransition(
                     alignment: Alignment.center,
                     scale: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                        parent: widget.tabIconData!.animationController!,
-                        curve: const Interval(0.2, 1.0, curve: Curves.fastOutSlowIn))),
+                      parent: widget.tabIconData!.animationController!,
+                      curve: const Interval(0.2, 1.0, curve: Curves.fastOutSlowIn),
+                    )),
                     child: Container(
                       width: 8,
                       height: 8,
@@ -265,8 +267,9 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                   child: ScaleTransition(
                     alignment: Alignment.center,
                     scale: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                        parent: widget.tabIconData!.animationController!,
-                        curve: const Interval(0.5, 0.8, curve: Curves.fastOutSlowIn))),
+                      parent: widget.tabIconData!.animationController!,
+                      curve: const Interval(0.5, 0.8, curve: Curves.fastOutSlowIn),
+                    )),
                     child: Container(
                       width: 4,
                       height: 4,
@@ -317,15 +320,37 @@ class TabClipper extends CustomClipper<Path> {
     final double v = radius * 2;
     path.lineTo(0, 0);
     path.arcTo(Rect.fromLTWH(0, 0, radius, radius), degreeToRadians(180), degreeToRadians(90), false);
-    path.arcTo(Rect.fromLTWH(((size.width / 2) - v / 2) - radius + v * 0.04, 0, radius, radius), degreeToRadians(270),
-        degreeToRadians(70), false);
+    path.arcTo(
+      Rect.fromLTWH(((size.width / 2) - v / 2) - radius + v * 0.04, 0, radius, radius),
+      degreeToRadians(270),
+      degreeToRadians(70),
+      false,
+    );
 
     path.arcTo(
-        Rect.fromLTWH((size.width / 2) - v / 2, -v / 2, v, v), degreeToRadians(160), degreeToRadians(-140), false);
+      Rect.fromLTWH((size.width / 2) - v / 2, -v / 2, v, v),
+      degreeToRadians(160),
+      degreeToRadians(-140),
+      false,
+    );
 
-    path.arcTo(Rect.fromLTWH((size.width - ((size.width / 2) - v / 2)) - v * 0.04, 0, radius, radius),
-        degreeToRadians(200), degreeToRadians(70), false);
-    path.arcTo(Rect.fromLTWH(size.width - radius, 0, radius, radius), degreeToRadians(270), degreeToRadians(90), false);
+    path.arcTo(
+      Rect.fromLTWH(
+        (size.width - ((size.width / 2) - v / 2)) - v * 0.04,
+        0,
+        radius,
+        radius,
+      ),
+      degreeToRadians(200),
+      degreeToRadians(70),
+      false,
+    );
+    path.arcTo(
+      Rect.fromLTWH(size.width - radius, 0, radius, radius),
+      degreeToRadians(270),
+      degreeToRadians(90),
+      false,
+    );
     path.lineTo(size.width, 0);
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);

@@ -38,7 +38,7 @@ class HomeHeader extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SearchScreen(keyword: value),
+                      builder: (context) => SearchScreen(),
                     ),
                   );
                 });

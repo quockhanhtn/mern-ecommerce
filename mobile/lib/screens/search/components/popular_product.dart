@@ -16,17 +16,20 @@ class PopularProducts extends StatelessWidget {
       children: [
         Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: getProportionateScreenWidth(20)),
+              horizontal: getProportionateScreenWidth(20),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Obx(() {
                   if (productController.keyword.isEmpty) {
-                    return Text('Sản phẩm mới nhất',
-                        style: TextStyle(
-                          fontSize: getProportionateScreenWidth(14),
-                          color: Colors.black,
-                        ));
+                    return Text(
+                      'Nhập từ khóa để tìm kiếm sản phẩm',
+                      style: TextStyle(
+                        fontSize: getProportionateScreenWidth(14),
+                        color: Colors.black,
+                      ),
+                    );
                   }
                   return RichText(
                     text: TextSpan(
@@ -37,9 +40,7 @@ class PopularProducts extends StatelessWidget {
                       children: <TextSpan>[
                         const TextSpan(text: 'Kết quả tìm kiếm cho '),
                         TextSpan(
-                            text: productController.keyword.value,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
+                            text: productController.keyword.value, style: const TextStyle(fontWeight: FontWeight.bold)),
                       ],
                     ),
                   );
@@ -61,8 +62,7 @@ class PopularProducts extends StatelessWidget {
                 ...List.generate(
                   productController.searchResult.length,
                   (index) {
-                    return ProductCard(
-                        product: productController.searchResult[index]);
+                    return ProductCard(product: productController.searchResult[index]);
                   },
                 ),
                 SizedBox(width: getProportionateScreenWidth(20)),

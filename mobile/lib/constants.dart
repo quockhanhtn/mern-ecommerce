@@ -6,7 +6,8 @@ const kApiBaseUrl = 'https://api-mobile7076.herokuapp.com/api/v2/';
 
 const kPrimaryColorLighter = Color(0xFFC8FACD);
 const kPrimaryColorLight = Color(0xFF5BE584);
-const kPrimaryColor = Color(0xFF00AB55);
+// const kPrimaryColor = Color(0xFF00AB55);
+const kPrimaryColor = Color(0xff00B6F0);
 const kPrimaryColorDark = Color(0xFF007B55);
 const kPrimaryColorDarker = Color(0xFF005249);
 

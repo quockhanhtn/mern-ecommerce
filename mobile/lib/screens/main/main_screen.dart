@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hk_mobile/app_theme.dart';
+import 'package:hk_mobile/screens/cart/cart_screen.dart';
 import 'package:hk_mobile/screens/main/my_profile_screen.dart';
+import 'package:hk_mobile/screens/search/search_screen.dart';
 import 'package:hk_mobile/template/training/training_screen.dart';
 import 'package:hk_mobile/ui_view/bottom_bar_view.dart';
 
@@ -37,7 +40,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
     bodyItems.insert(0, MyHomeScreen(animationController: animationController));
     bodyItems.insert(1, TrainingScreen(animationController: animationController));
-    bodyItems.insert(2, MyHomeScreen(animationController: animationController));
+    bodyItems.insert(2, CartScreen());
     bodyItems.insert(3, MyProfileScreen());
 
     tabBody = bodyItems[0];
@@ -74,7 +77,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         ),
         BottomBarView(
           tabIconsList: tabIconsList,
-          addClick: () {},
+          addClick: () {
+            Get.to(SearchScreen());
+          },
           changeIndex: (int index) {
             animationController?.reverse().then<dynamic>((data) {
               if (!mounted) {
