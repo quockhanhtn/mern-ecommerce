@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api/v2',
-  withCredentials: true,
-  credentials: 'include'
+  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api/v2'
+  // withCredentials: true,
+  // credentials: 'include'
 });
 
 // Add a request interceptor
@@ -13,6 +13,14 @@ API.interceptors.request.use((req) => {
   if (accessToken) {
     req.headers.authorization = `Bearer ${accessToken}`;
   }
+
+  let uid = localStorage.getItem('uid');
+  if (!uid) {
+    uid = Date.now();
+    localStorage.setItem('uid', uid);
+  }
+  req.headers.uid = uid;
+
   return req;
 });
 

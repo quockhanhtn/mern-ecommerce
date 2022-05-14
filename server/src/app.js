@@ -1,8 +1,10 @@
-import cookieParser from 'cookie-parser';
+//import cookieParser from 'cookie-parser';
 import express from 'express';
 import mongoose from 'mongoose';
 import path from 'path';
-import cors from 'cors';
+// import cors from 'cors';
+
+import cors from './middlewares/cors.js';
 
 import error from './middlewares/error.js';
 import logger from './middlewares/logger.js';
@@ -29,15 +31,16 @@ app.get('/favicon.ico', (_, res) => {
 
 
 // User middleware
-app.use(cookieParser());
-app.use(cors({
-  origin: process.env.ALLOW_ORIGIN?.split(',') || '*',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  preflightContinue: false,
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-  credentials: true,
-  exposedHeaders: ["set-cookie"],
-}));
+app.use(cors)
+// app.use(cookieParser());
+// app.use(cors({
+//   // origin: process.env.ALLOW_ORIGIN?.split(',') || '*',
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//   preflightContinue: false,
+//   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+//   credentials: true,
+//   exposedHeaders: ["set-cookie"],
+// }));
 
 app.use((req, _, next) => {
   // This middleware take care of the origin when the origin is undefined.

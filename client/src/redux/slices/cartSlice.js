@@ -235,11 +235,15 @@ export const removeItem = (item) => async (dispatch) => {
   }
 };
 
-export const cleanCart = () => async (dispatch) => {
+export const cleanCart = () => async (dispatch, getState) => {
   try {
     dispatch(actions.startLoading());
-    await api.cleanCart();
-    dispatch(actions.removeItem([]));
+
+    if (getState().cart.isAuthenticated) {
+      await api.cleanCart();
+    }
+
+    dispatch(actions.getItems([]));
     dispatch(handleUpdateTrackingCart());
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
