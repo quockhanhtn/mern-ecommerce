@@ -40,13 +40,22 @@ class ProductCard extends StatelessWidget {
                 aspectRatio: 1.02,
                 child: Container(
                   padding: EdgeInsets.all(getProportionateScreenWidth(2)),
+                  // color: Colors.white,
                   decoration: BoxDecoration(
-                    color: kSecondaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
+                      // color: kSecondaryColor.withOpacity(0.1),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        color: kSecondaryColor.withOpacity(0.4),
+                        width: 1,
+                      )),
                   child: Hero(
-                      tag: product.id.toString(),
-                      child: NetworkImg(imageUrl: product.variants[0].thumbnail.toString(), imageFit: BoxFit.contain)),
+                    tag: product.id.toString(),
+                    child: NetworkImg(
+                      imageUrl: product.variants[0].thumbnail.toString(),
+                      imageFit: BoxFit.contain,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 10),

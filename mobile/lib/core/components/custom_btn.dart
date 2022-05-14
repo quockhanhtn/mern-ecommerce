@@ -10,7 +10,7 @@ class CustomBtn extends StatelessWidget {
     required this.btnPadding,
     this.onTap,
     this.textFontSize = 18.0,
-    this.subtextFontSize = 10.0,
+    this.subtextFontSize = 12.0,
   }) : super(key: key);
 
   final String text;
@@ -68,6 +68,7 @@ class CustomBtn extends StatelessWidget {
         style: TextStyle(
           fontSize: textFontSize,
           color: Colors.white,
+          fontWeight: FontWeight.w600,
         ),
         children: <TextSpan>[
           TextSpan(text: '$text\n'),

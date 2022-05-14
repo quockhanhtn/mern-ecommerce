@@ -14,3 +14,8 @@ flutter clean && flutter pub get && flutter pub run flutter_native_splash:create
 flutter packages pub run build_runner build
 flutter packages pub run build_runner watch
 ```
+
+- Build android
+```bash
+flutter build apk --release
+```

@@ -1,83 +1,104 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
-import 'package:hk_mobile/controllers/discount_controller.dart';
 import 'package:get/get.dart';
+import 'package:hk_mobile/controllers/discount_controller.dart';
 import 'package:hk_mobile/core/components/network_img.dart';
 
 import '../../../size_config.dart';
 
 class DiscountBanner extends StatelessWidget {
   final DiscountController discountController = Get.put(DiscountController());
-  DiscountBanner({
-    Key? key,
-  }) : super(key: key);
+
+  DiscountBanner({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(getProportionateScreenWidth(5)),
+      // margin: EdgeInsets.all(getProportionateScreenWidth(5)),
       padding: EdgeInsets.symmetric(
         horizontal: getProportionateScreenWidth(0),
         vertical: getProportionateScreenWidth(5),
       ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
+      // decoration: BoxDecoration(
+      //   color: Colors.white,
+      //   borderRadius: BorderRadius.circular(10),
+      // ),
       child: Obx(() {
         if (discountController.isLoading.isTrue) {
-          return const SizedBox(
+          return const Center(
+              child: SizedBox(
             child: CircularProgressIndicator(),
             height: 100.0,
             width: 100.0,
-          );
+          ));
         }
-        return SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: ImageSlideshow(
-            /// Width of the [ImageSlideshow].
-            width: double.infinity,
 
-            /// Height of the [ImageSlideshow].
-            height: 200,
-
-            /// The page to show when first creating the [ImageSlideshow].
-            initialPage: 0,
-
-            /// The color to paint the indicator.
-            indicatorColor: Colors.blue,
-
-            /// The color to paint behind th indicator.
-            indicatorBackgroundColor: Colors.grey,
-
-            /// The widgets to display in the [ImageSlideshow].
-            /// Add the sample image file into the images folder
-            children: [
-              ...List.generate(
-                discountController.list.length,
-                (index) {
-                  var imageUrl = discountController.list[index].image.toString();
-                  if (discountController.list[index].image == '') {
-                    imageUrl = 'https://cdn1.hoanghamobile.com/tin-tuc/wp-content/uploads/2020/06/Q.png';
-                  }
-                  return NetworkImg(
-                    imageUrl: imageUrl,
-                    imageFit: BoxFit.contain,
-                    progressSize: 100,
-                  );
-                },
-              ),
-            ],
-
-            /// Auto scroll interval.
-            /// Do not auto scroll with null or 0.
-            autoPlayInterval: 10000,
-
-            /// Loops back to first slide.
-            isLoop: true,
+        return CarouselSlider(
+          options: CarouselOptions(
+            autoPlay: true,
+            aspectRatio: 2.0,
+            enlargeCenterPage: true,
           ),
+          items: renderListImage(),
         );
       }),
     );
+  }
+
+  List<Widget> renderListImage() {
+    return discountController.list
+        .map((item) => Container(
+              margin: const EdgeInsets.all(5.0),
+              child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                  child: Stack(
+                    children: <Widget>[
+                      NetworkImg(
+                        imageUrl: item.image ?? '',
+                        imageFit: BoxFit.cover,
+                        progressSize: 1000.0,
+                      ),
+                      Positioned(
+                        bottom: 0.0,
+                        left: 0.0,
+                        right: 0.0,
+                        child: Container(
+                          // decoration: BoxDecoration(
+                          //   gradient: LinearGradient(
+                          //     colors: [Color.fromARGB(200, 0, 0, 0), Color.fromARGB(0, 0, 0, 0)],
+                          //     begin: Alignment.bottomCenter,
+                          //     end: Alignment.topCenter,
+                          //   ),
+                          // ),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 5,
+                          ),
+                          child: Text(
+                            item.name,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                              shadows: <Shadow>[
+                                Shadow(
+                                  offset: Offset(3, 3),
+                                  blurRadius: 3.0,
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                ),
+                                Shadow(
+                                  offset: Offset(-5, -5),
+                                  blurRadius: 8.0,
+                                  color: Color.fromARGB(125, 0, 0, 255),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+            ))
+        .toList();
   }
 }
