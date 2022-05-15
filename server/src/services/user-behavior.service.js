@@ -121,10 +121,37 @@ async function handleUpdateBoughtCount(userIdentifier, orderItems) {
 }
 
 async function getDataWithCalculateScore() {
-  const userBehaviorData = await UserBehavior.find({}).lean().exec();
-  return userBehaviorData.map((item) => ({
-    productId: item.productId,
-    userData: item.userIdentifier,
-    score: calculateScore(item.behavior)
-  }));
+  const userBehaviorData = await UserBehavior.find({}).sort({ userData: 1 }).lean().exec();
+  const groupByLst = userBehaviorData
+    .map((item) => ({
+      productId: item.productId,
+      userData: item.userIdentifier,
+      score: calculateScore(item.behavior)
+    }))
+    .reduce((acc, item) => {
+      if (!acc[item.userData]) {
+        acc[item.userData] = [];
+      }
+      acc[item.userData].push(item);
+
+      return acc;
+    }, {});
+
+  let result = [];
+  Object.keys(groupByLst).forEach((key) => {
+    const lst = Array.from(groupByLst[key]);
+    const maxScore = Math.max(...lst.map(({ score }) => score));
+    result = result.concat(
+      lst.reduce((acc, { productId, userData, score }) => {
+        acc.push({
+          productId,
+          userData,
+          rating: Number.parseFloat(score) / maxScore
+        });
+        return acc;
+      }, [])
+    );
+  });
+
+  return result;
 }

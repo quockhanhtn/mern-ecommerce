@@ -14,6 +14,7 @@ import orderRoutes from './order.route.js';
 import paymentRoutes from './payment.route.js';
 import cartRoutes from './cart.route.js';
 import userBehaviorRoutes from './user-behavior.route.js';
+import testingRoutes from './testing.route.js';
 
 
 const router = Router();
@@ -42,5 +43,9 @@ router.use('/orders', orderRoutes);
 router.use('/payment', paymentRoutes);
 router.use('/cart', cartRoutes);
 router.use('/user-behavior', userBehaviorRoutes);
+
+if (process.env.NODE_ENV?.toString().startsWith('dev')) {
+	router.use('/testing', testingRoutes);
+}
 
 export default router;

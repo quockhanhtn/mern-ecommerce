@@ -3,10 +3,9 @@ import cron from 'node-cron';
 import os from 'os';
 import { Server as SocketServer } from 'socket.io';
 
-import { importDataToFpt } from '../tool/import-data-to-fpt.js';
-import { importUserBehaviorToFpt } from '../tool/import-user-behavior.js';
 import app from './app.js';
 import socketHandler from './socket.io.js';
+import fptService from './services/fpt.service.js';
 import LogUtils from './utils/LogUtils.js';
 import SlackUtils from './utils/SlackUtils.js';
 
@@ -27,21 +26,28 @@ serverApi.listen(serverPort, () => {
 if (process.env.NODE_ENV !== 'dev') {
   SlackUtils.sendMessage('------------------------------------------------------');
   SlackUtils.sendMessage(`Server running at *${serverIp}:${serverPort}*`);
-  SlackUtils.sendMessage(`Set allow origin = *${process.env.ALLOW_ORIGIN?.split(',').join(' ') || '*'}*`);
 
-  // schedule task run every day at 03:00 AM
-  cron.schedule('0 3 * * *', () => {
-    SlackUtils.sendMessage('*[RECOMMEND]* Running a task every day at 03:00 AM to import data to FPT');
-    LogUtils.info('SERVER', 'Running a task every day at 03:00 AM to import data to FPT');
+  const scheduleOpts = { scheduled: true, timezone: 'Asia/Ho_Chi_Minh' };
 
-    importDataToFpt();
-  }, { scheduled: true, timezone: 'Asia/Ho_Chi_Minh' });
+  // schedule task run every hour at minute 45
+  cron.schedule('45 * * * *', async () => {
+    SlackUtils.sendMessage('*[USER_BEHAVIOR]* Running a task every hour at minute 45 to import user behavior to FPT');
+    LogUtils.info('SERVER', 'Running a task every hour at minute 45 to import user behavior to FPT');
 
-  // schedule task run every 30 minutes
-  cron.schedule('*/30 * * * *', () => {
-    SlackUtils.sendMessage('*[USER-BEHAVIOR]* Running a task every 30 minutes to import user behavior to FPT');
-    LogUtils.info('SERVER', 'Running a task every 30 minutes to import user behavior to FPT');
+    fptService.importUserBehaviorToFpt();
+  }, scheduleOpts);
 
-    importUserBehaviorToFpt();
-  });
+  // schedule task run every day at 02:00 AM import product data to FPT
+  cron.schedule('0 2 * * *', () => {
+    LogUtils.info('SERVER', 'Running a task every day at 02:00 AM to import product data to FPT');
+    SlackUtils.sendMessage('*[RECOMMEND_IMPORT]* Running a task every day at 03:00 AM to product import data to FPT');
+    fptService.importProductDataToFpt()
+  }, scheduleOpts);
+
+  // schedule task run every day at 04:00 AM to update recommend data
+  cron.schedule('0 4 * * *', () => {
+    LogUtils.info('SERVER', 'Running a task every day at 04:00 AM to to update recommend data');
+    SlackUtils.sendMessage('*[RECOMMEND_UPDATE]* Running a task every day at 04:00 AM to update recommend data');
+    fptService.updateRecommendData()
+  }, scheduleOpts);
 }
