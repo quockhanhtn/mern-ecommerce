@@ -5,6 +5,7 @@ import {
   getProductById,
   getListProductsByIds,
   getSuggestProducts,
+  getProductRecommend,
   createProduct,
   updateProduct,
   deleteProduct,
@@ -37,6 +38,7 @@ router.get('/', getAllProducts);
 router.get('/all', getFullAllProducts);
 router.get('/specs', getProductSpecifications);
 router.get('/search/suggest', getSuggestProducts);
+router.get('/recommend/:productId', getProductRecommend);
 router.get('/:identity', getProductById);
 router.post('/get-by-ids', getListProductsByIds);
 

@@ -108,6 +108,7 @@ async function importProductDataToFpt() {
 }
 
 async function updateRecommendData() {
+  const startTime = new Date();
   const url = 'https://recom.fpt.vn/api/v0.1/recommendation/api/result/getBatchResult';
   const fptApiId = process.env.FPT_API_ID;
   const fptApiKey = process.env.FPT_API_KEY;
@@ -120,13 +121,11 @@ async function updateRecommendData() {
 
   let page = 1, countError = 0, countSuccess = 0;
   let errorDetails = [];
+  let isSuccess = true;
 
   while (true) {
     try {
-      const { data } = await axiosInstance.get(
-        fptApiId,
-        { params: { page, key: fptApiKey } }
-      );
+      const { data } = await axiosInstance.get(fptApiId, { params: { page, key: fptApiKey } });
 
       if (data.message === 'No data found' || !data.data) {
         break;
@@ -136,15 +135,13 @@ async function updateRecommendData() {
         const { input_id, recommend_id } = data.data[i];
         const productId = input_id.toString().replace(/}/g, '').replace(/{/g, '');
 
-        await ProductRecom.insertMany(recommend_id.map((item) =>
-          new ProductRecom({
-            _id: new mongoose.Types.ObjectId(),
-            productId,
-            recommendId: item.toString().replace(/}/g, '').replace(/{/g, ''),
-            version: nextVersion
-          })
-        ));
-
+        const newItem = new ProductRecom({
+          _id: new mongoose.Types.ObjectId(),
+          productId,
+          recommend: recommend_id.map(x => x.toString().replace(/}/g, '').replace(/{/g, '')),
+          version: nextVersion
+        });
+        await newItem.save();
         countSuccess++;
       }
 
@@ -156,15 +153,27 @@ async function updateRecommendData() {
         stack: e.stack
       });
       ++countError;
+
+      if (countError > 10) {
+        isSuccess = false;
+        break;
+      }
     }
   }
 
-  const mgs = `Update recommend data success: ${countSuccess} | Error: ${countError} `;
-  SlackUtils.sendMessage(mgs);
-
+  let mgs = `[From *${getFormatDateTime(startTime)}* to *${getFormatDateTime()}*]\n`;
+  mgs += `Update recommend data *${isSuccess ? 'succeed' : 'failed'}*. Total page: ${page - 1} | Success: ${countSuccess} | Error: ${countError}.`;
   if (countError === 0) {
-    await ProductRecom.deleteMany({ version: { $lte: prevVersion } });
+    const deleteResult = await ProductRecom.deleteMany({ version: { $lte: prevVersion } });
+    mgs += `\nDelete old data: ${deleteResult.deletedCount}`;
+  } else {
+    mgs += `\n\nError details: \n`;
+    errorDetails.forEach(item => {
+      mgs += `\t- *${item.page}* Message: ${item.errorMgs}, stack: ${item.stack}\n`;
+    });
   }
+
+  await SlackUtils.sendMessageSync(mgs, 'C02BFR5KSUW');
 }
 
 async function importUserBehaviorToFpt() {

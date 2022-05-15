@@ -1,13 +1,18 @@
 import Product from '../models/product.model.js';
+import ProductRecom from '../models/product-recom.model.js';
+
 import categoryService from './categories.service.js'
 import brandService from './brands.service.js'
+
 import StringUtils from '../utils/StringUtils.js';
 import ApiErrorUtils from '../utils/ApiErrorUtils.js';
+import ValidUtils from '../utils/ValidUtils.js';
 
 export default {
   getAllProducts,
   getOneProduct,
   getSuggestProducts,
+  getProductRecommend,
   createProduct,
   updateProduct,
   removeProduct,
@@ -271,6 +276,27 @@ async function getSuggestProducts(keyword) {
     .limit(10)
     .lean().exec();
   return result;
+}
+
+async function getProductRecommend(productId, page = 1, limit = 10) {
+  if (!ValidUtils.isUuid(productId)) {
+    throw ApiErrorUtils.simple(`Product ${productId} not found !`, 404);
+  }
+
+  const recommendData = await ProductRecom.findOne({ productId: productId }).lean().exec();
+  if (!recommendData) {
+    return [];
+  }
+
+  const filter = { _id: { $in: recommendData.recommend } };
+  const total = await Product.countDocuments(filter, null).exec();
+  const list = await Product.find(filter)
+    .select('_id')
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .lean().exec();
+
+  return { total, list };
 }
 
 async function createProduct(data) {
