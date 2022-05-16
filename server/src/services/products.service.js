@@ -200,7 +200,7 @@ async function deleteProductVariants(identity, sku) {
  * @param {object} filter - filter
  * @returns {object} - list of products, total count
  */
-async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy = 'createdAt', sortType = -1) {
+async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy = 'createdAt', sortType = -1, isShowHidden = false) {
   if (fields === null || fields == '' || fields === undefined) { fields = SELECT_FIELD; }
 
   if (fields.indexOf(',') > -1) {
@@ -217,6 +217,10 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy 
 
   const sortOtp = {};
   sortOtp[sortBy] = sortType;
+
+  if (!isShowHidden) {
+    filter.isHide = false;
+  }
 
   const countAll = await Product.estimatedDocumentCount();
   const total = await Product.countDocuments(JSON.parse(JSON.stringify(filter)), null).exec();
@@ -385,6 +389,12 @@ async function removeProduct(identity) {
   const filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
+  const product = await Product.findOne(filter).exec();
+  if (!product) {
+    throw ApiErrorUtils.simple(`Product ${identity} not found !`, 404);
+  }
+
+  product.remove();
   return Product.findOneAndDelete(filter);
 }
 

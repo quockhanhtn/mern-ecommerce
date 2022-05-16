@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getAllOrders, updateOrder } from '../../../redux/actions/orders';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
-import useLocales from '../../../hooks/useLocales';
+import { useLocales } from '../../../hooks';
 // components
 import Page from '../../../components/Page';
 import Scrollbar from '../../../components/Scrollbar';
@@ -141,8 +141,8 @@ export default function PageOrderList() {
   };
 
   const handleCreateNew = () => {
-    setCurrentId(null);
-    setOpenForm(true);
+    // setCurrentId(null);
+    // setOpenForm(true);
   };
 
   const handleUpdateOrder = (orderId, updatedData) => {

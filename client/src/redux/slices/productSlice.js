@@ -4,6 +4,13 @@ import { getRecommendation } from '../../api/fpt';
 
 const initialState = {
   isLoading: true,
+  dashboard: {
+    list: [],
+    pagination: {},
+    error: null,
+    isLoading: false
+  },
+
   error: null,
   item: null,
   list: [],
@@ -21,6 +28,21 @@ const productSlice = createSlice({
   name: 'product',
   initialState,
   reducers: {
+    // #region dashboard
+    dashboardStartLoading(state) {
+      state.dashboard.isLoading = true;
+    },
+    dashboardHasError(state, action) {
+      state.dashboard.isLoading = false;
+      state.dashboard.error = action.payload;
+    },
+    dashboardGetSuccess(state, action) {
+      state.dashboard.isLoading = false;
+      state.dashboard.error = null;
+      state.dashboard.list = action.payload.list;
+      state.dashboard.pagination = action.payload.pagination;
+    },
+    // #endregion dashboard
     startLoading(state) {
       state.isLoading = true;
     },
@@ -106,6 +128,19 @@ const { actions, reducer } = productSlice;
 
 export const { getAlls } = actions;
 export default reducer;
+
+export const getProductDashboard = (search, page, limit) => async (dispatch) => {
+  try {
+    dispatch(actions.dashboardStartLoading());
+
+    const { data } = await api.getAllProduct('', search, '', '', page, limit);
+    dispatch(actions.dashboardGetSuccess({ list: data.data, pagination: data.pagination }));
+
+    dispatch(actions.getAllSuccess(data));
+  } catch (e) {
+    dispatch(actions.dashboardHasError(e));
+  }
+};
 
 export const getAllProducts =
   (search = '', brand = '', category = '', page = 1, limit = 12) =>

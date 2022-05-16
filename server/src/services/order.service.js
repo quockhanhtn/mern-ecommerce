@@ -17,10 +17,6 @@ const SELECTED_FIELDS = '_id numericId customer user address isReceiveAtStore st
 
 const POPULATE_OPT = [
   {
-    path: 'items.product',
-    select: '_id name variants.variantName variants.price variants.marketPrice variants.thumbnail variants.sku',
-  },
-  {
     path: 'user',
     select: '_id name',
   }
@@ -40,21 +36,22 @@ function formatResult(record) {
     };
   }
 
-  let itemsToShow = record.items.map(item => {
-    return {
-      product: item.product._id,
-      productName: item.product.name,
-      sku: item.sku,
-      quantity: item.quantity,
-      pricePerUnit: item.pricePerUnit,
-      variant: item.product.variants.find(variant => variant.sku === item.sku)
-    };
-  });
+  return record;
+  // let itemsToShow = record.items.map(item => {
+  //   return {
+  //     product: item.product._id,
+  //     productName: item.product.name,
+  //     sku: item.sku,
+  //     quantity: item.quantity,
+  //     pricePerUnit: item.pricePerUnit,
+  //     variant: item.product.variants.find(variant => variant.sku === item.sku)
+  //   };
+  // });
 
-  return {
-    ...record,
-    items: itemsToShow,
-  };
+  // return {
+  //   ...record,
+  //   items: itemsToShow,
+  // };
 }
 
 /**
@@ -108,10 +105,14 @@ async function createWithTransaction(orderData, createdBy) {
       );
 
       orderToSave.items.push({
-        product: product._id,
+        productId: product._id.toString(),
         sku: product.variants[0].sku,
+        productName: product.name,
+        variantName: product?.variants?.[0].variantName,
+        thumbnail: product?.variants?.[0].thumbnail,
+        marketPrice: product?.variants?.[0].marketPrice,
+        pricePerUnit: product?.variants?.[0].price,
         quantity: cartItem.qty,
-        pricePerUnit: product?.variants?.[0].price
       });
     }
 

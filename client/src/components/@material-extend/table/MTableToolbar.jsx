@@ -4,10 +4,12 @@ import searchFill from '@iconify/icons-eva/search-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
 import { Icon } from '@iconify/react';
-import { Box, IconButton, InputAdornment, OutlinedInput, Toolbar, Tooltip, Typography } from '@material-ui/core';
 // material
+import { Box, IconButton, InputAdornment, OutlinedInput, Toolbar, Tooltip, Typography } from '@material-ui/core';
 import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -36,13 +38,25 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 MTableToolbar.propTypes = {
   searchPlaceHolder: PropTypes.string.isRequired,
   numSelected: PropTypes.number.isRequired,
-  filterName: PropTypes.string,
-  onFilterName: PropTypes.func
+  initialValue: PropTypes.string,
+  onSearch: PropTypes.func
 };
 
-export default function MTableToolbar({ searchPlaceHolder, numSelected, filterName, onFilterName }) {
+export default function MTableToolbar({ searchPlaceHolder, numSelected, initialValue, onSearch }) {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
+
+  const [searchValue, setSearchValue] = useState(initialValue);
+
+  const handleOnChange = (event) => {
+    setSearchValue(event.target.value);
+  };
+
+  const handleOnKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      onSearch(event, searchValue);
+    }
+  };
 
   return (
     <RootStyle
@@ -59,8 +73,9 @@ export default function MTableToolbar({ searchPlaceHolder, numSelected, filterNa
         </Typography>
       ) : (
         <SearchStyle
-          value={filterName}
-          onChange={onFilterName}
+          value={searchValue}
+          onChange={handleOnChange}
+          onKeyPress={handleOnKeyPress}
           placeholder={searchPlaceHolder}
           size="small"
           startAdornment={

@@ -8,10 +8,20 @@ const ThumbImgStyle = (props) => {
     height,
     objectFit,
     margin: theme.spacing(0, 2, 0, 0),
-    borderRadius: theme.shape.borderRadiusSm
+    borderRadius: theme.shape.borderRadiusSm,
+    border: `solid 2px ${theme.palette.divider}`,
+    backgroundColor: 'white'
   }));
 
-  return <ImgStyle {...other} />;
+  return (
+    <ImgStyle
+      {...other}
+      onError={({ currentTarget }) => {
+        currentTarget.onerror = null; // prevents looping
+        currentTarget.src = '/static/img-error.png';
+      }}
+    />
+  );
 };
 
 ThumbImgStyle.propTypes = {
