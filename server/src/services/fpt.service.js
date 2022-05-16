@@ -119,7 +119,7 @@ async function updateRecommendData() {
   const prevVersion = parseInt(item?.version, 10) || 0;
   const nextVersion = Date.now();
 
-  let page = 1, countError = 0, countSuccess = 0;
+  let page = 0, countError = 0, countSuccess = 0;
   let errorDetails = [];
   let isSuccess = true;
 
@@ -162,7 +162,7 @@ async function updateRecommendData() {
   }
 
   let mgs = `[From *${getFormatDateTime(startTime)}* to *${getFormatDateTime()}*]\n`;
-  mgs += `Update recommend data *${isSuccess ? 'succeed' : 'failed'}*. Total page: ${page - 1} | Success: ${countSuccess} | Error: ${countError}.`;
+  mgs += `Update recommend data *${isSuccess ? 'succeed' : 'failed'}*. Total page: ${page} | Success: ${countSuccess} | Error: ${countError}.`;
   if (countError === 0) {
     const deleteResult = await ProductRecom.deleteMany({ version: { $lte: prevVersion } });
     mgs += `\nDelete old data: ${deleteResult.deletedCount}`;
