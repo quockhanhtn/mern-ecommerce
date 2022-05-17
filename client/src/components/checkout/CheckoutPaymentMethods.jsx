@@ -1,9 +1,8 @@
-import PropTypes from 'prop-types';
+// icons
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
 import {
   Alert,
   Box,
@@ -20,21 +19,11 @@ import {
   FormControlLabel
 } from '@material-ui/core';
 //
+import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
-import useLocales from '../../hooks/useLocales';
+import { useLocales } from '../../hooks';
 import { MHidden } from '../@material-extend';
-
-// ----------------------------------------------------------------------
-
-const OptionStyle = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 2.5),
-  justifyContent: 'space-between',
-  borderRadius: theme.shape.borderRadius,
-  transition: theme.transitions.create('all'),
-  border: `solid 1px ${theme.palette.grey[500_32]}`
-}));
+import { OptionStyle } from '../@styled';
 
 // ----------------------------------------------------------------------
 

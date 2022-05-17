@@ -1,7 +1,7 @@
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { PropTypes } from 'prop-types';
 
-const ThumbImgStyle = (props) => {
+function ThumbImgStyle(props) {
   const { width = 64, height = 64, objectFit = 'cover', isSelected = false, ...other } = props;
   const ImgStyle = styled('img')(({ theme }) => ({
     width,
@@ -22,7 +22,7 @@ const ThumbImgStyle = (props) => {
       }}
     />
   );
-};
+}
 
 ThumbImgStyle.propTypes = {
   width: PropTypes.number,

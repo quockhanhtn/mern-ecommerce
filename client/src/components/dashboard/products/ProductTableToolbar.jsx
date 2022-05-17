@@ -148,10 +148,6 @@ export default function ProductTableToolbar({
     }
   };
 
-  const handleOnInputChangeCategory = (event, value, reason) => {
-    console.log('handleClearFilter-handleOnInputChangeCategory', { event, value, reason });
-  };
-
   return (
     <RootStyle
       sx={{
@@ -200,7 +196,6 @@ export default function ProductTableToolbar({
                 size="small"
                 renderInput={(params) => <TextField {...params} label="Danh mục" />}
                 onChange={handleChangeCategoryFilter}
-                onInputChange={handleOnInputChangeCategory}
               />
             </Grid>
             <Grid item xs={6} sm={3}>

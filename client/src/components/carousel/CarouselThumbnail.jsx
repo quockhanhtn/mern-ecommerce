@@ -27,8 +27,8 @@ const LargeImgStyle = styled('img')({
 const ThumbImgStyle = styled('img')(({ theme }) => ({
   opacity: 0.48,
   width: THUMB_SIZE,
-  cursor: 'pointer',
   height: THUMB_SIZE,
+  cursor: 'pointer',
   margin: theme.spacing(0, 1),
   objectFit: 'contain',
   borderRadius: theme.shape.borderRadiusSm,

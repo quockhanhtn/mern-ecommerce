@@ -24,9 +24,9 @@ import { useLocales, useInterval } from '../../hooks';
 import Page from '../../components/Page';
 import LoadingScreen from '../../components/LoadingScreen';
 import Markdown from '../../components/Markdown';
-import { ProductDetailsReview, ProductDetailsSummary } from '../../components/dashboard/product-details';
+import { ProductDetailsReview } from '../../components/dashboard/product-details';
 import { CarouselThumbnail } from '../../components/carousel';
-import ProductList from '../../components/e-commerce/ProductList';
+import { ProductList, ProductVariantInfo } from '../../components/e-commerce';
 //
 import { fShortenNumber } from '../../utils/formatNumber';
 
@@ -173,7 +173,7 @@ export default function ProductDetailPage() {
               <CarouselThumbnail carousels={images.map((x) => ({ image: x }))} />
             </Grid>
             <Grid item xs={12} md={6} lg={5}>
-              <ProductDetailsSummary
+              <ProductVariantInfo
                 isLoading={isLoading}
                 product={product}
                 indexVariant={selectedVariant}
