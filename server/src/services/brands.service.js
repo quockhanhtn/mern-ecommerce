@@ -20,12 +20,12 @@ const SELECTED_FIELDS = '_id order slug name desc headQuarters country image cou
  *
  * @returns all brands
  */
-async function getAll(fields = SELECTED_FIELDS) {
+async function getAll(fields = SELECTED_FIELDS, filter = {}) {
   if (fields.indexOf(',') > -1) {
     fields = fields.split(',').join(' ');
   }
 
-  return Brand.find()
+  return Brand.find(filter)
     .select(fields)
     .sort({ createdAt: -1 })
     .lean().exec();

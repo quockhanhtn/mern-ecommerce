@@ -7,6 +7,8 @@ const initialState = {
   dashboard: {
     list: [],
     pagination: {},
+    categoryFilter: [],
+    brandFilter: [],
     error: null,
     isLoading: false
   },
@@ -39,8 +41,10 @@ const productSlice = createSlice({
     dashboardGetSuccess(state, action) {
       state.dashboard.isLoading = false;
       state.dashboard.error = null;
-      state.dashboard.list = action.payload.list;
+      state.dashboard.list = action.payload.data;
       state.dashboard.pagination = action.payload.pagination;
+      state.dashboard.categoryFilter = action.payload.categoryFilter;
+      state.dashboard.brandFilter = action.payload.brandFilter;
     },
     // #endregion dashboard
     startLoading(state) {
@@ -129,12 +133,14 @@ const { actions, reducer } = productSlice;
 export const { getAlls } = actions;
 export default reducer;
 
-export const getProductDashboard = (search, page, limit, sort, sortBy) => async (dispatch) => {
+export const getProductDashboard = (search, page, limit, sort, sortBy, category, brand) => async (dispatch) => {
   try {
     dispatch(actions.dashboardStartLoading());
 
     const { data } = await api.getAllProduct2({
       search: search || '',
+      c: category || '',
+      b: brand || '',
       page,
       limit,
       sort,
@@ -142,9 +148,7 @@ export const getProductDashboard = (search, page, limit, sort, sortBy) => async 
       getBrandFilter: '1',
       getCategoryFilter: '1'
     });
-    dispatch(actions.dashboardGetSuccess({ list: data.data, pagination: data.pagination }));
-
-    dispatch(actions.getAllSuccess(data));
+    dispatch(actions.dashboardGetSuccess(data));
   } catch (e) {
     dispatch(actions.dashboardHasError(e));
   }

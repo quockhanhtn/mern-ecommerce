@@ -39,10 +39,11 @@ MTableToolbar.propTypes = {
   searchPlaceHolder: PropTypes.string.isRequired,
   numSelected: PropTypes.number.isRequired,
   initialValue: PropTypes.string,
-  onSearch: PropTypes.func
+  onSearch: PropTypes.func,
+  onFilter: PropTypes.func
 };
 
-export default function MTableToolbar({ searchPlaceHolder, numSelected, initialValue, onSearch }) {
+export default function MTableToolbar({ searchPlaceHolder, numSelected, initialValue, onSearch, onFilter }) {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
 
@@ -53,8 +54,16 @@ export default function MTableToolbar({ searchPlaceHolder, numSelected, initialV
   };
 
   const handleOnKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && typeof onSearch === 'function') {
       onSearch(event, searchValue);
+    }
+  };
+
+  const handleOnFilter = (event) => {
+    if (typeof onFilter === 'function') {
+      onFilter();
+    } else {
+      event.stopPropagation();
     }
   };
 
@@ -110,7 +119,7 @@ export default function MTableToolbar({ searchPlaceHolder, numSelected, initialV
         </Box>
       ) : (
         <Tooltip title="Filter list">
-          <IconButton>
+          <IconButton onClick={handleOnFilter}>
             <Icon icon={roundFilterList} />
           </IconButton>
         </Tooltip>

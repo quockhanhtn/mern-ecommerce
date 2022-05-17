@@ -29,12 +29,12 @@ const SELECTED_FIELDS =
  *
  * @returns all categories
  */
-async function getAll(fields = SELECTED_FIELDS) {
+async function getAll(fields = SELECTED_FIELDS, filter = { parent: null }) {
   if (fields.indexOf(',') > -1) {
     fields = fields.split(',').join(' ');
   }
 
-  return Category.find({ parent: null })
+  return Category.find(filter)
     .select(fields)
     // .populate(POPULATE_OPTS)
     .sort({ order: 1 })

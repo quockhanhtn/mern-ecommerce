@@ -235,19 +235,19 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy 
   let result = { countAll, total, list };
 
   if (getCategoryFilter) {
-    const categoryFilter = await Product.distinct('category', filter)
-      .populate([{ path: 'category', select: 'name slug image _id -children', model: 'Category' }])
-      .lean()
-      .exec();
-    result.categoryFilter = categoryFilter;
+    const lstCatId = await Product.distinct('category', filter).lean().exec();
+    result.categoryFilter = await categoryService.getAll('name slug image _id -children', { _id: { $in: lstCatId } });
+    if (lstCatId.some(x => !x)) {
+      result.categoryFilter = [{ _id: 'null', name: '', slug: '', image: '' }, ...result.categoryFilter];
+    }
   }
 
   if (getBrandFilter) {
-    const getBrandFilter = await Product.distinct('brand', filter)
-      .populate([{ path: 'brand', select: 'name slug image _id', model: 'Brand' }])
-      .lean()
-      .exec();
-    result.brandFilter = getBrandFilter;
+    const lstBrandId = await Product.distinct('brand', filter).lean().exec();
+    result.brandFilter = await brandService.getAll('name slug image _id', { _id: { $in: lstBrandId } });
+    if (lstBrandId.some(x => !x)) {
+      result.brandFilter = [{ _id: 'null', name: '', slug: '', image: '' }, ...result.brandFilter];
+    }
   }
   // const list = await Product.find(JSON.parse(JSON.stringify(filter)), fields, { skip: (page - 1) * limit, limit: limit })
   //   .lean().exec();

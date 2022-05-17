@@ -81,8 +81,20 @@ export const getAllProducts = async (req, res, next) => {
     }
 
     let filters = {};
-    if (category) { filters.category = [...category.split(',')]; }
-    if (brand) { filters.brand = [...brand.split(',')]; }
+    if (category) {
+      if (category === 'null') {
+        filters.category = null;
+      } else {
+        filters.category = [...category.split(',')];
+      }
+    }
+    if (brand) {
+      if (brand === 'null') {
+        filters.brand = null;
+      } else {
+        filters.brand = [...brand.split(',')];
+      }
+    }
     if (search) { filters.name = { $regex: search, $options: 'i' }; }
 
     if (minPrice > 0) { filters.minPrice = { $gte: minPrice }; }

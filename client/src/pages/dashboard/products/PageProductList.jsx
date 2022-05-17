@@ -1,6 +1,6 @@
 // icons
-import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
+import { Icon } from '@iconify/react';
 // material-ui
 import {
   Box,
@@ -20,31 +20,26 @@ import {
 } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 //
-import { useEffect, useState } from 'react';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { useSnackbar } from 'notistack';
 import { Link as RouterLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useSnackbar } from 'notistack';
+import { useDispatch, useSelector } from 'react-redux';
 //
-
-import { PATH_DASHBOARD } from '../../../routes/paths';
 import { useLocales } from '../../../hooks';
+import { PATH_DASHBOARD } from '../../../routes/paths';
 
-import Page from '../../../components/Page';
-import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
-import LoadingScreen from '../../../components/LoadingScreen';
-import { deleteProduct, getProductDashboard } from '../../../redux/slices/productSlice';
-import Label from '../../../components/Label';
-import Scrollbar from '../../../components/Scrollbar';
-import { stableSort, getComparator } from '../../../helper/listHelper';
-import SearchNotFound from '../../../components/SearchNotFound';
-import { ProductMoreMenu } from '../../../components/dashboard/products';
-import { ImageBrokenIcon } from '../../../assets';
-import EmptyCard from '../../../components/EmptyCard';
 import { ThumbImgStyle } from '../../../components/@styled';
+import { ProductMoreMenu, ProductTableToolbar } from '../../../components/dashboard/products';
+import EmptyCard from '../../../components/EmptyCard';
+import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
+import Label from '../../../components/Label';
+import Page from '../../../components/Page';
+import Scrollbar from '../../../components/Scrollbar';
+import SearchNotFound from '../../../components/SearchNotFound';
+import { deleteProduct, getProductDashboard } from '../../../redux/slices/productSlice';
 
-import { MTableHead, MTableToolbar } from '../../../components/@material-extend/table';
 import { MCircularProgress } from '../../../components/@material-extend';
+import { MTableHead } from '../../../components/@material-extend/table';
 
 import { fDateTime } from '../../../utils/formatTime';
 
@@ -68,9 +63,12 @@ export default function PageProductList() {
   const [sort, setSort] = useState('desc');
   const [sortBy, setSortBy] = useState('createdAt');
 
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [brandFilter, setBrandFilter] = useState('');
+
   useEffect(() => {
-    dispatch(getProductDashboard(search, page, rowsPerPage, sort, sortBy));
-  }, [dispatch, page, rowsPerPage, search, sort, sortBy]);
+    dispatch(getProductDashboard(search, page, rowsPerPage, sort, sortBy, categoryFilter, brandFilter));
+  }, [dispatch, page, rowsPerPage, search, sort, sortBy, categoryFilter, brandFilter]);
 
   const tableHeads = [
     {
@@ -180,7 +178,8 @@ export default function PageProductList() {
   const isSelected = (slug) => selected.indexOf(slug) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty productsList.
-  const emptyRows = page > 0 ? Math.max(0, (2 + page) * rowsPerPage - pagination?.total) : 0;
+  const emptyRows =
+    page > 0 ? Math.min(rowsPerPage - productsList.length, (1 + page) * rowsPerPage - pagination?.total) : 0;
 
   if (hasError) {
     return <SearchNotFound />;
@@ -309,12 +308,15 @@ export default function PageProductList() {
           }
         />
         <Card>
-          <MTableToolbar
+          <ProductTableToolbar
             searchPlaceHolder="Tìm kiếm sản phẩm"
             numSelected={selected.length}
             initialValue={search}
             onSearch={(e, search) => setSearch(search)}
+            onCategoryChange={(newValue) => setCategoryFilter(newValue)}
+            onBrandChange={(newValue) => setBrandFilter(newValue)}
           />
+
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table size={isCompact ? 'small' : 'medium'}>
