@@ -15,6 +15,7 @@ export default {
   getProductRecommend,
   createProduct,
   updateProduct,
+  toggleHideProduct,
   removeProduct,
   rateProduct,
   getSpecifications,
@@ -25,7 +26,7 @@ export default {
   updatePriceRange
 };
 
-const SELECT_FIELD = '_id name slug desc video overSpecs origin category brand tags views rate variants quantity warrantyPeriod createdAt updatedAt';
+const SELECT_FIELD = '_id name slug desc video overSpecs origin category brand tags views rate variants quantity warrantyPeriod isHide createdAt updatedAt';
 const POPULATE_OPTS = [
   {
     path: 'category',
@@ -400,6 +401,14 @@ async function updateProduct(identity, data) {
 
   let updated = await initialProduct(data);
   return Product.findOneAndUpdate(filter, updated, { new: true });
+}
+
+async function toggleHideProduct(identity) {
+  const filter = StringUtils.isUUID(identity)
+    ? { _id: identity }
+    : { slug: identity };
+  const product = await Product.findOne(filter).select('isHide').lean().exec();
+  return Product.findOneAndUpdate(filter, { $set: { isHide: !product.isHide } }, { new: true, lean: true, fields: '_id isHide' });
 }
 
 async function removeProduct(identity) {

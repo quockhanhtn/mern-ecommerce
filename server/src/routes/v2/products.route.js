@@ -9,6 +9,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  toggleHideProduct,
   rateProduct,
   getProductSpecifications,
   addProductVariants,
@@ -50,6 +51,7 @@ router.post('/',
 );
 router.patch('/:identity', isAdminOrStaff, updateProduct);
 router.delete('/:identity', isAdmin, deleteProduct);
+router.patch('/:identity/toggleHide', isAdmin, toggleHideProduct);
 router.patch('/:identity/rate', rateProduct);
 
 router.post('/:identity/variants',

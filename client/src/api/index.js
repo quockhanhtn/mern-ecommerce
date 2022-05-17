@@ -93,6 +93,7 @@ export const getRelatedProduct = (listId) =>
 export const getOneProduct = (identity) => API.get(`/products/${identity}`);
 export const createProduct = (newProduct) => API.post('/products', newProduct);
 export const updateProduct = (identity, updatedProduct) => API.patch(`/products/${identity}`, updatedProduct);
+export const toggleHideProduct = (identity) => API.patch(`/products/${identity}/toggleHide`);
 export const deleteProduct = (identity) => API.delete(`/products/${identity}`);
 
 // ----------------------------Variant--------------------------------

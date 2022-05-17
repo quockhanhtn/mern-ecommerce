@@ -108,7 +108,8 @@ export const getAllProducts = async (req, res, next) => {
       req.query.sortBy || 'createdAt',
       ((req.query.sort || 'desc') === 'asc') ? 1 : -1,
       req.query?.getCategoryFilter === '1',
-      req.query?.getBrandFilter === '1'
+      req.query?.getBrandFilter === '1',
+      req.query?.isShowHidden === '1',
     );
     products = products.map(p => formatProduct(p, req));
 
@@ -252,6 +253,19 @@ export const deleteProduct = async (req, res, next) => {
     }
   } catch (err) { next(err); }
 };
+
+export const toggleHideProduct = async (req, res, next) => {
+  try {
+    const { identity } = req.params;
+    const result = await productService.toggleHideProduct(identity);
+    if (result) {
+      ResponseUtils.status200(res, `Toggle Hide product successfully!`, result);
+    } else {
+      ResponseUtils.status404(res, `Product not found!`);
+    }
+  } catch (err) { next(err); }
+};
+
 
 export const rateProduct = async (req, res, next) => {
   try {

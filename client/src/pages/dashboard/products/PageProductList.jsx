@@ -36,7 +36,7 @@ import Label from '../../../components/Label';
 import Page from '../../../components/Page';
 import Scrollbar from '../../../components/Scrollbar';
 import SearchNotFound from '../../../components/SearchNotFound';
-import { deleteProduct, getProductDashboard } from '../../../redux/slices/productSlice';
+import { deleteProduct, getProductDashboard, toggleHideProduct } from '../../../redux/slices/productSlice';
 
 import { MCircularProgress } from '../../../components/@material-extend';
 import { MTableHead } from '../../../components/@material-extend/table';
@@ -65,10 +65,11 @@ export default function PageProductList() {
 
   const [categoryFilter, setCategoryFilter] = useState('');
   const [brandFilter, setBrandFilter] = useState('');
+  const [showHidden, setShowHidden] = useState(false);
 
   useEffect(() => {
-    dispatch(getProductDashboard(search, page, rowsPerPage, sort, sortBy, categoryFilter, brandFilter));
-  }, [dispatch, page, rowsPerPage, search, sort, sortBy, categoryFilter, brandFilter]);
+    dispatch(getProductDashboard(search, page, rowsPerPage, sort, sortBy, categoryFilter, brandFilter, showHidden));
+  }, [dispatch, page, rowsPerPage, search, sort, sortBy, categoryFilter, brandFilter, showHidden]);
 
   const tableHeads = [
     {
@@ -116,6 +117,10 @@ export default function PageProductList() {
       disablePadding: false
     }
   ];
+
+  const handleChangeProductHide = (id) => {
+    dispatch(toggleHideProduct(id));
+  };
 
   const handleDeleteProduct = (id, slug) => {
     try {
@@ -259,7 +264,13 @@ export default function PageProductList() {
                   {fDateTime(createdAt, currentLang.value)}
                 </TableCell>
                 <TableCell align="right" onClick={(event) => event.stopPropagation()}>
-                  <ProductMoreMenu onDelete={() => handleDeleteProduct(_id, slug)} productId={_id} nameInfo={name} />
+                  <ProductMoreMenu
+                    onDelete={() => handleDeleteProduct(_id, slug)}
+                    onChangeHide={handleChangeProductHide}
+                    productId={_id}
+                    nameInfo={name}
+                    isHide={isHide}
+                  />
                 </TableCell>
               </TableRow>
             );
@@ -315,6 +326,7 @@ export default function PageProductList() {
             onSearch={(e, search) => setSearch(search)}
             onCategoryChange={(newValue) => setCategoryFilter(newValue)}
             onBrandChange={(newValue) => setBrandFilter(newValue)}
+            onChangeShowHidden={(newValue) => setShowHidden(newValue)}
           />
 
           <Scrollbar>

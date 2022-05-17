@@ -83,6 +83,11 @@ const productSlice = createSlice({
         error: null
       };
     },
+    toggleHideSuccess(state, action) {
+      state.dashboard.list = state.dashboard.list.map((p) =>
+        p._id === action.payload._id ? { ...p, isHide: action.payload.isHide } : p
+      );
+    },
     deleteSuccess(state, action) {
       return {
         ...state,
@@ -133,26 +138,28 @@ const { actions, reducer } = productSlice;
 export const { getAlls } = actions;
 export default reducer;
 
-export const getProductDashboard = (search, page, limit, sort, sortBy, category, brand) => async (dispatch) => {
-  try {
-    dispatch(actions.dashboardStartLoading());
+export const getProductDashboard =
+  (search, page, limit, sort, sortBy, category, brand, showHide) => async (dispatch) => {
+    try {
+      dispatch(actions.dashboardStartLoading());
 
-    const { data } = await api.getAllProduct2({
-      search: search || '',
-      c: category || '',
-      b: brand || '',
-      page,
-      limit,
-      sort,
-      sortBy,
-      getBrandFilter: '1',
-      getCategoryFilter: '1'
-    });
-    dispatch(actions.dashboardGetSuccess(data));
-  } catch (e) {
-    dispatch(actions.dashboardHasError(e));
-  }
-};
+      const { data } = await api.getAllProduct2({
+        search: search || '',
+        c: category || '',
+        b: brand || '',
+        page,
+        limit,
+        sort,
+        sortBy,
+        getBrandFilter: '1',
+        getCategoryFilter: '1',
+        isShowHidden: showHide ? '1' : '0'
+      });
+      dispatch(actions.dashboardGetSuccess(data));
+    } catch (e) {
+      dispatch(actions.dashboardHasError(e));
+    }
+  };
 
 export const getAllProducts = (search, brand, category, page, limit) => async (dispatch) => {
   try {
@@ -216,6 +223,16 @@ export const deleteProduct = (id) => async (dispatch) => {
     dispatch(actions.startLoading());
     await api.deleteProduct(id);
     dispatch(actions.deleteSuccess(id));
+  } catch (e) {
+    dispatch(actions.hasError(e));
+  }
+};
+
+export const toggleHideProduct = (id) => async (dispatch) => {
+  try {
+    dispatch(actions.startLoading());
+    const { data } = await api.toggleHideProduct(id);
+    dispatch(actions.toggleHideSuccess(data.data));
   } catch (e) {
     dispatch(actions.hasError(e));
   }

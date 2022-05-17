@@ -1,3 +1,4 @@
+// icon
 import editFill from '@iconify/icons-eva/edit-fill';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 import searchFill from '@iconify/icons-eva/search-fill';
@@ -6,19 +7,21 @@ import closeCircleFill from '@iconify/icons-eva/close-circle-fill';
 import { Icon } from '@iconify/react';
 // material
 import {
+  Autocomplete,
   Box,
+  FormControlLabel,
+  Grid,
   IconButton,
   InputAdornment,
   OutlinedInput,
+  Switch,
+  TextField,
   Toolbar,
   Tooltip,
-  Typography,
-  Autocomplete,
-  Grid,
-  TextField
+  Typography
 } from '@material-ui/core';
 import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
-
+//
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -54,7 +57,8 @@ ProductTableToolbar.propTypes = {
   initialValue: PropTypes.string,
   onSearch: PropTypes.func,
   onCategoryChange: PropTypes.func,
-  onBrandChange: PropTypes.func
+  onBrandChange: PropTypes.func,
+  onChangeShowHidden: PropTypes.func
 };
 
 export default function ProductTableToolbar({
@@ -63,7 +67,8 @@ export default function ProductTableToolbar({
   initialValue,
   onSearch,
   onCategoryChange,
-  onBrandChange
+  onBrandChange,
+  onChangeShowHidden
 }) {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
@@ -74,6 +79,7 @@ export default function ProductTableToolbar({
   const [brandOpts, setBrandOpts] = useState([]);
 
   const [searchValue, setSearchValue] = useState(initialValue);
+  const [showHidden, setShowHidden] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState(null);
 
@@ -90,6 +96,12 @@ export default function ProductTableToolbar({
   }, [lstCategories, lstBrands]);
 
   useEffect(() => {
+    if (typeof onChangeShowHidden === 'function') {
+      onChangeShowHidden(showHidden);
+    }
+  }, [onChangeShowHidden, showHidden]);
+
+  useEffect(() => {
     if (typeof onCategoryChange === 'function' && selectedCategory && '_id' in selectedCategory) {
       onCategoryChange(selectedCategory._id);
     }
@@ -101,6 +113,20 @@ export default function ProductTableToolbar({
     }
   }, [onBrandChange, selectedBrand]);
 
+  const handleOnChange = (event) => {
+    setSearchValue(event.target.value);
+  };
+
+  const handleOnKeyPress = (event) => {
+    if (event.key === 'Enter' && typeof onSearch === 'function') {
+      onSearch(event, searchValue);
+    }
+  };
+
+  const handleChangeShowHidden = (event) => {
+    setShowHidden(event.target.checked);
+  };
+
   const handleChangeCategoryFilter = (event, value) => {
     if (value) {
       setSelectedCategory(value);
@@ -110,16 +136,6 @@ export default function ProductTableToolbar({
   const handleChangeBrandFilter = (event, value) => {
     if (value) {
       setSelectedBrand(value);
-    }
-  };
-
-  const handleOnChange = (event) => {
-    setSearchValue(event.target.value);
-  };
-
-  const handleOnKeyPress = (event) => {
-    if (event.key === 'Enter' && typeof onSearch === 'function') {
-      onSearch(event, searchValue);
     }
   };
 
@@ -152,7 +168,7 @@ export default function ProductTableToolbar({
       ) : (
         <Box sx={{ width: '100%' }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={6} sm={3}>
               <SearchStyle
                 value={searchValue}
                 onChange={handleOnChange}
@@ -165,6 +181,14 @@ export default function ProductTableToolbar({
                   </InputAdornment>
                 }
               />
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                <FormControlLabel
+                  control={<Switch checked={showHidden} onChange={handleChangeShowHidden} />}
+                  label="Hiển thị sản phầm đã ẩn"
+                />
+              </Box>
             </Grid>
             <Grid item xs={6} sm={3}>
               <Autocomplete
