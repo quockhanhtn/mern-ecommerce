@@ -71,6 +71,18 @@ class StringUtils {
   static isPhoneNumber(str) {
     return REGEX.PHONE.test(str);
   }
+
+  static isEmpty(str) {
+    return !str || str === '' || str === null || str === undefined || str.length === 0;
+  }
+
+  static isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+  }
+
+  static isBlankOrEmpty(str) {
+    return this.isEmpty(str) || this.isBlank(str);
+  }
 }
 
 export default StringUtils;

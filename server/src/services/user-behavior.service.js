@@ -121,7 +121,7 @@ async function handleUpdateBoughtCount(userIdentifier, orderItems) {
 }
 
 async function getDataWithCalculateScore() {
-  const userBehaviorData = await UserBehavior.find({}).sort({ userData: 1 }).lean().exec();
+  const userBehaviorData = await UserBehavior.find({ productId: { $ne: 'undefined' } }).sort({ userData: 1 }).lean().exec();
   const groupByLst = userBehaviorData
     .map((item) => ({
       productId: item.productId,
@@ -146,7 +146,7 @@ async function getDataWithCalculateScore() {
         acc.push({
           productId,
           userData,
-          rating: Number.parseFloat(score) / maxScore
+          rating: (Number.parseFloat(score) / maxScore).toFixed(5)
         });
         return acc;
       }, [])

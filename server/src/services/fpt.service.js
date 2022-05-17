@@ -4,8 +4,10 @@ import { convert } from 'html-to-text';
 
 import productService from '../services/products.service.js';
 import userBehaviorService from '../services/user-behavior.service.js';
-import SlackUtils from '../utils/SlackUtils.js';
+
 import ProductRecom from '../models/product-recom.model.js';
+import SlackUtils from '../utils/SlackUtils.js';
+import StringUtils from '../utils/StringUtils.js';
 
 export default {
   importProductDataToFpt,
@@ -38,14 +40,8 @@ const loadProductData = async () => {
     '_id',
     -1
   );
-  return list.map(item => ({
-    id: item._id.toString(),
-    slug: item.slug,
-    name: item.name,
-    category: item?.category?.name || '',
-    brand: item?.brand?.name || '',
-    variants: item.variants.map(x => x.variantName).join(';'),
-    desc: convert(item.desc)
+  return list.map(item => {
+    const desc = convert(item.desc)
       .replace(/\[[^\]\[]*\]/g, ' ')
       .replace(/:+/g, ' ')
       .replace(/\/+/g, ' ')
@@ -53,8 +49,17 @@ const loadProductData = async () => {
       .replace(/,+/g, ' ')
       .replace(/\s+/g, ' ')
       .replace('Nguồn: thegioididong.com', '')
-      .trim()
-  }));
+      .trim();
+    return {
+      id: item._id.toString(),
+      slug: item.slug,
+      name: item.name,
+      category: item?.category?.name || '',
+      brand: item?.brand?.name || '',
+      variants: item.variants.map(x => x.variantName).join(';'),
+      desc: StringUtils.isBlankOrEmpty(desc) ? 'Đang cập nhật' : desc
+    };
+  });
 }
 
 async function importProductDataToFpt() {
