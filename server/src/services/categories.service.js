@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
+
+import productsService from './products.service.js';
 import Category from '../models/category.model.js';
+
+import ApiErrorUtils from '../utils/ApiErrorUtils.js';
 import StringUtils from '../utils/StringUtils.js';
+import responseDef from '../responseCode.js';
 // import imagesService from './images.service.js';
 
 export default {
@@ -185,8 +190,15 @@ async function hidden(identity) {
  * @returns true if delete successfully else false
  */
 async function remove(identity) {
-  let filter = StringUtils.isUUID(identity)
-    ? { _id: identity }
-    : { slug: identity };
-  return Category.findOneAndDelete(filter);
+  const category = await getOne(identity);
+  if (!category) {
+    throw ApiErrorUtils.simple2(responseDef.CATEGORY.CATEGORY_NOT_FOUND);
+  }
+
+  const countProduct = await productsService.countProduct({ category: category._id });
+  if (countProduct > 0) {
+    throw ApiErrorUtils.simple2(responseDef.CATEGORY.CATEGORY_HAS_PRODUCT);
+  }
+  
+  return Category.findByIdAndDelete(category._id);
 }

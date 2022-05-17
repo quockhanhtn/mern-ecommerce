@@ -18,6 +18,7 @@ export default {
   toggleHideProduct,
   removeProduct,
   rateProduct,
+  countProduct,
   getSpecifications,
   getFullAll,
   addProductVariants,
@@ -224,7 +225,7 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy 
   }
 
   const countAll = await Product.estimatedDocumentCount();
-  const total = await Product.countDocuments(JSON.parse(JSON.stringify(filter)), null).exec();
+  const total = await countProduct(filter);
   const list = await Product.find(filter)
     .select(fields)
     .populate(populateOpts)
@@ -431,6 +432,10 @@ async function rateProduct(identity, ip, rateStar) {
 
   await Product.findOneAndUpdate(filter, { $pull: { rates: { ip: ip } } }); // remove old rate if exist
   return Product.findOneAndUpdate(filter, { $addToSet: { rates: { ip: ip, star: rateStar } } }, { new: true });
+}
+
+async function countProduct(filter) {
+  return Product.countDocuments(JSON.parse(JSON.stringify(filter)), null).exec()
 }
 
 async function getSpecifications() {

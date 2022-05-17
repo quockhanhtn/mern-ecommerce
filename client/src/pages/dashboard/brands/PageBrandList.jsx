@@ -1,3 +1,6 @@
+import { Icon } from '@iconify/react';
+import plusFill from '@iconify/icons-eva/plus-fill';
+//
 import {
   Box,
   Button,
@@ -12,30 +15,32 @@ import {
   TableContainer,
   TablePagination,
   TableRow,
+  Tooltip,
   Typography
 } from '@material-ui/core';
-import { Icon } from '@iconify/react';
-import plusFill from '@iconify/icons-eva/plus-fill';
-import { useEffect, useState } from 'react';
 import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+//
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
+//
 import Page from '../../../components/Page';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
 import useLocales from '../../../hooks/useLocales';
 import LoadingScreen from '../../../components/LoadingScreen';
-import { deleteBrand, getAllBrands } from '../../../redux/actions/brands';
+import { deleteBrand, getAllBrands } from '../../../redux/slices/brandSlice';
 import Label from '../../../components/Label';
 import { fDateTime } from '../../../utils/formatTime';
 import Scrollbar from '../../../components/Scrollbar';
-import * as Helper from '../../../helper/listHelper';
+import { getComparator, stableSort } from '../../../helper/listHelper';
 import BrandForm from './BrandForm';
 import { BrandListHead, BrandListToolbar, BrandMoreMenu } from '../../../components/dashboard/brand-list';
 import { ImageBrokenIcon } from '../../../assets';
-import SearchNotFound from '../../../components/SearchNotFound';
 import EmptyCard from '../../../components/EmptyCard';
+
 // ----------------------------------------------------------------------
+
 const ThumbImgStyle = styled('img')(({ theme }) => ({
   width: 150,
   height: 64,
@@ -49,7 +54,9 @@ export default function PageBrandList() {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const { list: brandsList, isLoading, hasError } = useSelector((state) => state.brand);
+
+  const { list: brandsList, isLoading, error, deletedIds } = useSelector((state) => state.brand);
+
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('createdAt');
   const [selected, setSelected] = useState([]);
@@ -58,15 +65,27 @@ export default function PageBrandList() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [currentId, setCurrentId] = useState(null);
   const [openForm, setOpenForm] = useState(false);
+  const [deletingId, setDeletingId] = useState('');
 
   useEffect(() => {
     dispatch(getAllBrands());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (error) {
+      const mgs = error?.message?.[currentLang.value] || 'Có lỗi xảy ra !';
+      enqueueSnackbar(mgs, { variant: 'error' });
+    }
+    if (deletedIds && deletedIds.some((x) => x === deletingId)) {
+      enqueueSnackbar('Xóa thương hiệu thành công', { variant: 'success' });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error, deletedIds]);
+
   const tableHeads = [
     {
       id: 'name',
-      align: 'center',
+      align: 'left',
       disablePadding: true,
       label: `${t('dashboard.brands.name')}\t\t\t`
     },
@@ -100,8 +119,8 @@ export default function PageBrandList() {
   ];
 
   const handleDeleteBrand = (id, slug) => {
+    setDeletingId(id);
     dispatch(deleteBrand(id));
-    enqueueSnackbar(t('dashboard.brands.delete'), { variant: 'success' });
     const selectedIndex = selected.indexOf(slug);
     if (selectedIndex > -1) {
       selected.splice(selectedIndex, 1);
@@ -174,10 +193,6 @@ export default function PageBrandList() {
     return <LoadingScreen />;
   }
 
-  if (hasError) {
-    return <SearchNotFound />;
-  }
-
   return (
     <Page title={t('dashboard.brands.page-title')}>
       <Container>
@@ -215,10 +230,10 @@ export default function PageBrandList() {
                     onSelectAllClick={handleSelectAllClick}
                   />
                   <TableBody>
-                    {Helper.stableSort(brandsList, Helper.getComparator(order, orderBy))
+                    {stableSort(brandsList, getComparator(order, orderBy))
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row, index) => {
-                        const { _id, slug, name, country, image, createdAt, updatedAt, isHide } = row;
+                        const { _id, slug, name, desc, country, image, createdAt, updatedAt, isHide } = row;
                         const isItemSelected = isSelected(slug);
                         const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -235,24 +250,26 @@ export default function PageBrandList() {
                             <TableCell padding="checkbox">
                               <Checkbox checked={isItemSelected} />
                             </TableCell>
-                            {isCompact ? (
-                              <TableCell component="th" id={labelId} scope="row" padding="none">
-                                {name}
-                              </TableCell>
-                            ) : (
-                              <TableCell component="th" scope="row" padding="none">
-                                <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
-                                  {image ? (
-                                    <ThumbImgStyle alt={name} src={image} />
-                                  ) : (
-                                    <ImageBrokenIcon width={64} height={64} marginRight={2} />
-                                  )}
-                                  <Typography variant="subtitle2" noWrap>
-                                    {name}
-                                  </Typography>
-                                </Box>
-                              </TableCell>
-                            )}
+                            <Tooltip title={desc ?? name} placement="right">
+                              {isCompact ? (
+                                <TableCell component="th" id={labelId} scope="row" padding="none">
+                                  {name}
+                                </TableCell>
+                              ) : (
+                                <TableCell component="th" scope="row" padding="none">
+                                  <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
+                                    {image ? (
+                                      <ThumbImgStyle alt={name} src={image} />
+                                    ) : (
+                                      <ImageBrokenIcon width={64} height={64} marginRight={2} />
+                                    )}
+                                    <Typography variant="subtitle2" noWrap>
+                                      {name}
+                                    </Typography>
+                                  </Box>
+                                </TableCell>
+                              )}
+                            </Tooltip>
                             <TableCell align="left" style={{ minWidth: 160 }}>
                               <Typography variant="subtitle4" noWrap>
                                 {country}

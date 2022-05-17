@@ -36,13 +36,13 @@ const RootStyle = styled(Toolbar)(({ theme }) => ({
 }));
 
 const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
-  minWidth: 320,
-  width: '75%',
+  minWidth: 240,
+  width: '50%',
   transition: theme.transitions.create(['box-shadow', 'width'], {
     easing: theme.transitions.easing.easeInOut,
     duration: theme.transitions.duration.shorter
   }),
-  '&.Mui-focused': { minWidth: 450, width: '100%', boxShadow: theme.customShadows.z8 },
+  '&.Mui-focused': { minWidth: 320, width: '100%', boxShadow: theme.customShadows.z8 },
   '& fieldset': {
     borderWidth: `1px !important`,
     borderColor: `${theme.palette.grey[500_32]} !important`
@@ -186,7 +186,7 @@ export default function ProductTableToolbar({
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                 <FormControlLabel
                   control={<Switch checked={showHidden} onChange={handleChangeShowHidden} />}
-                  label="Hiển thị sản phầm đã ẩn"
+                  label="Hiển thị sản phẩm đã ẩn"
                 />
               </Box>
             </Grid>

@@ -31,8 +31,16 @@ export default function CategoryMoreMenu({ editTitle, onEdit, deleteTitle, onDel
     setTextConfirmDelete(text);
   }, [nameInfo]);
 
-  const handleDelete = () => {
+  const handleEdit = (event) => {
+    if (onEdit && typeof onEdit === 'function') {
+      onEdit();
+    }
+    setIsOpen(false);
+  };
+
+  const handleDelete = (event) => {
     setOpenDialogConfirm(true);
+    setIsOpen(false);
   };
 
   return (
@@ -51,20 +59,18 @@ export default function CategoryMoreMenu({ editTitle, onEdit, deleteTitle, onDel
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <div onMouseLeave={() => setIsOpen(false)}>
-          <MenuItem onClick={onEdit} sx={{ color: 'text.secondary' }}>
-            <ListItemIcon>
-              <Icon icon={editFill} width={24} height={24} />
-            </ListItemIcon>
-            <ListItemText primary={editTitle} primaryTypographyProps={{ variant: 'body2' }} />
-          </MenuItem>
-          <MenuItem onClick={handleDelete} sx={{ color: 'text.secondary' }}>
-            <ListItemIcon>
-              <Icon icon={trash2Outline} width={24} height={24} />
-            </ListItemIcon>
-            <ListItemText primary={deleteTitle} primaryTypographyProps={{ variant: 'body2' }} />
-          </MenuItem>
-        </div>
+        <MenuItem onClick={handleEdit} sx={{ color: 'text.secondary' }}>
+          <ListItemIcon>
+            <Icon icon={editFill} width={24} height={24} />
+          </ListItemIcon>
+          <ListItemText primary={editTitle} primaryTypographyProps={{ variant: 'body2' }} />
+        </MenuItem>
+        <MenuItem onClick={handleDelete} sx={{ color: 'text.secondary' }}>
+          <ListItemIcon>
+            <Icon icon={trash2Outline} width={24} height={24} />
+          </ListItemIcon>
+          <ListItemText primary={deleteTitle} primaryTypographyProps={{ variant: 'body2' }} />
+        </MenuItem>
       </Menu>
       <DialogConfirm
         open={openDialogConfirm}

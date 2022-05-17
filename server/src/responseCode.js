@@ -72,6 +72,42 @@ export const responseDef = {
     },
     401001: 'Unauthorized',
     401002: 'Invalid token',
+  },
+  CATEGORY: {
+    CATEGORY_NOT_FOUND: {
+      status: 404,
+      code: 404001,
+      message: {
+        en: 'Category not found',
+        vi: 'Danh mục không tồn tại'
+      }
+    },
+    CATEGORY_HAS_PRODUCT: {
+      status: 400,
+      code: 400001,
+      message: {
+        vi: 'Không thể xóa danh mục này vì nó có sản phẩm',
+        en: 'Can not delete category because it has products'
+      }
+    }
+  },
+  BRAND: {
+    BRAND_NOT_FOUND: {
+      status: 404,
+      code: 404001,
+      message: {
+        en: 'Brand not found',
+        vi: 'Thương hiệu không tồn tại'
+      }
+    },
+    BRAND_HAS_PRODUCT: {
+      status: 400,
+      code: 400001,
+      message: {
+        vi: 'Không thể xóa thương hiệu này vì nó có sản phẩm',
+        en: 'Can not delete brand because it has products'
+      }
+    }
   }
 }
 

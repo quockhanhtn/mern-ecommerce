@@ -26,7 +26,7 @@ import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllBrands } from '../../../redux/actions/brands';
+import { getAllBrands } from '../../../redux/slices/brandSlice';
 import { getAllCategories } from '../../../redux/slices/categorySlice';
 import { createProduct } from '../../../redux/slices/productSlice';
 // components

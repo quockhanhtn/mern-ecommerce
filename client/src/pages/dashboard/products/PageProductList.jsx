@@ -88,18 +88,6 @@ export default function PageProductList() {
       disablePadding: true,
       label: t('products.category')
     },
-    // {
-    //   id: 'origin',
-    //   numeric: false,
-    //   disablePadding: false,
-    //   label: t('products.origin')
-    // },
-    // {
-    //   id: 'warrantyPeriod',
-    //   numeric: false,
-    //   disablePadding: false,
-    //   label: t('products.warrantyPeriod')
-    // },
     {
       id: 'isHide',
       disablePadding: true,
