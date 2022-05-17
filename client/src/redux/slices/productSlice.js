@@ -129,11 +129,19 @@ const { actions, reducer } = productSlice;
 export const { getAlls } = actions;
 export default reducer;
 
-export const getProductDashboard = (search, page, limit) => async (dispatch) => {
+export const getProductDashboard = (search, page, limit, sort, sortBy) => async (dispatch) => {
   try {
     dispatch(actions.dashboardStartLoading());
 
-    const { data } = await api.getAllProduct('', search, '', '', page, limit);
+    const { data } = await api.getAllProduct2({
+      search: search || '',
+      page,
+      limit,
+      sort,
+      sortBy,
+      getBrandFilter: '1',
+      getCategoryFilter: '1'
+    });
     dispatch(actions.dashboardGetSuccess({ list: data.data, pagination: data.pagination }));
 
     dispatch(actions.getAllSuccess(data));
@@ -142,18 +150,22 @@ export const getProductDashboard = (search, page, limit) => async (dispatch) => 
   }
 };
 
-export const getAllProducts =
-  (search = '', brand = '', category = '', page = 1, limit = 12) =>
-  async (dispatch) => {
-    try {
-      dispatch(actions.startLoading());
+export const getAllProducts = (search, brand, category, page, limit) => async (dispatch) => {
+  try {
+    dispatch(actions.startLoading());
 
-      const { data } = await api.getAllProduct('', search, brand, category, page, limit);
-      dispatch(actions.getAllSuccess(data));
-    } catch (e) {
-      dispatch(actions.hasError(e));
-    }
-  };
+    const { data } = await api.getAllProduct2({
+      search: search || '',
+      page,
+      limit,
+      b: brand || '',
+      c: category || ''
+    });
+    dispatch(actions.getAllSuccess(data));
+  } catch (e) {
+    dispatch(actions.hasError(e));
+  }
+};
 
 export const getFullAllProducts = () => async (dispatch) => {
   try {

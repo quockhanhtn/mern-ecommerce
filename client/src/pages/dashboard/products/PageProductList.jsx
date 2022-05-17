@@ -26,10 +26,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { Link as RouterLink } from 'react-router-dom';
 //
-import Page from '../../../components/Page';
+
 import { PATH_DASHBOARD } from '../../../routes/paths';
+import { useLocales } from '../../../hooks';
+
+import Page from '../../../components/Page';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
-import useLocales from '../../../hooks/useLocales';
 import LoadingScreen from '../../../components/LoadingScreen';
 import { deleteProduct, getProductDashboard } from '../../../redux/slices/productSlice';
 import Label from '../../../components/Label';
@@ -44,10 +46,12 @@ import { ThumbImgStyle } from '../../../components/@styled';
 import { MTableHead, MTableToolbar } from '../../../components/@material-extend/table';
 import { MCircularProgress } from '../../../components/@material-extend';
 
+import { fDateTime } from '../../../utils/formatTime';
+
 // ----------------------------------------------------------------------
 
 export default function PageProductList() {
-  const { t } = useLocales();
+  const { t, currentLang } = useLocales();
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
@@ -61,27 +65,27 @@ export default function PageProductList() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('createdAt');
+  const [sort, setSort] = useState('desc');
+  const [sortBy, setSortBy] = useState('createdAt');
 
   useEffect(() => {
-    dispatch(getProductDashboard(search, page, rowsPerPage));
-  }, [dispatch, page, rowsPerPage, search]);
+    dispatch(getProductDashboard(search, page, rowsPerPage, sort, sortBy));
+  }, [dispatch, page, rowsPerPage, search, sort, sortBy]);
 
   const tableHeads = [
     {
       id: 'name',
       numeric: false,
-      disablePadding: true,
+      disablePadding: false,
       label: t('products.name')
     },
     {
-      id: 'brand.name',
+      id: 'brand',
       disablePadding: true,
       label: t('products.brand')
     },
     {
-      id: 'category.name',
+      id: 'category',
       disablePadding: true,
       label: t('products.category')
     },
@@ -103,6 +107,12 @@ export default function PageProductList() {
       label: t('products.status')
     },
     {
+      id: 'createdAt',
+      align: 'right',
+      disablePadding: true,
+      label: t('dashboard.created-at')
+    },
+    {
       id: 'action',
       numeric: false,
       disablePadding: false
@@ -121,9 +131,9 @@ export default function PageProductList() {
   };
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+    const isAsc = sortBy === property && sort === 'asc';
+    setSort(isAsc ? 'desc' : 'asc');
+    setSortBy(property);
   };
 
   const handleSelectAllClick = (event) => {
@@ -195,7 +205,7 @@ export default function PageProductList() {
       return (
         <TableBody>
           {productsList.map((row, index) => {
-            const { _id, slug, name, brand, category, isHide } = row;
+            const { _id, slug, name, brand, category, isHide, createdAt } = row;
             const thumbnail = row?.variants[0]?.thumbnail;
             const isItemSelected = isSelected(slug);
             const labelId = `enhanced-table-checkbox-${index}`;
@@ -220,7 +230,7 @@ export default function PageProductList() {
                 ) : (
                   <TableCell component="th" scope="row" padding="none">
                     <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
-                      <ThumbImgStyle alt={name} src={thumbnail} objectFit="contain" />
+                      <ThumbImgStyle alt={name} src={thumbnail} objectFit="contain" isSelected={isItemSelected} />
 
                       <Typography variant="subtitle2" noWrap>
                         {name}
@@ -238,12 +248,6 @@ export default function PageProductList() {
                     {category?.name ?? '<chưa phân loại>'}
                   </Typography>
                 </TableCell>
-                {/* <TableCell align="left" style={{ minWidth: 100 }}>
-                              {origin}
-                            </TableCell>
-                            <TableCell align="left" style={{ minWidth: 100 }}>
-                              {warrantyPeriod}
-                            </TableCell> */}
                 <TableCell align="left" padding="none">
                   <Label
                     variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
@@ -251,6 +255,9 @@ export default function PageProductList() {
                   >
                     {t(`products.${isHide ? 'hidden' : 'visible'}`)}
                   </Label>
+                </TableCell>
+                <TableCell align="right" padding="none" style={{ width: 175 }}>
+                  {fDateTime(createdAt, currentLang.value)}
                 </TableCell>
                 <TableCell align="right" onClick={(event) => event.stopPropagation()}>
                   <ProductMoreMenu onDelete={() => handleDeleteProduct(_id, slug)} productId={_id} nameInfo={name} />
@@ -312,8 +319,8 @@ export default function PageProductList() {
             <TableContainer sx={{ minWidth: 800 }}>
               <Table size={isCompact ? 'small' : 'medium'}>
                 <MTableHead
-                  order={order}
-                  orderBy={orderBy}
+                  order={sort}
+                  orderBy={sortBy}
                   headLabel={tableHeads}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}

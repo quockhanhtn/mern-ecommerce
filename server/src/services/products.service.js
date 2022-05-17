@@ -200,7 +200,7 @@ async function deleteProductVariants(identity, sku) {
  * @param {object} filter - filter
  * @returns {object} - list of products, total count
  */
-async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy = 'createdAt', sortType = -1, isShowHidden = false) {
+async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy = 'createdAt', sortType = -1, getCategoryFilter, getBrandFilter = false, isShowHidden = false) {
   if (fields === null || fields == '' || fields === undefined) { fields = SELECT_FIELD; }
 
   if (fields.indexOf(',') > -1) {
@@ -209,10 +209,10 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy 
 
   const populateOpts = [];
   if (fields.includes('category')) {
-    populateOpts.push({ path: 'category', select: 'name slug image _id -children', model: 'Category' },);
+    populateOpts.push({ path: 'category', select: 'name slug image _id -children', model: 'Category' });
   }
   if (fields.includes('brand')) {
-    populateOpts.push({ path: 'brand', select: 'name slug image _id', model: 'Brand' },);
+    populateOpts.push({ path: 'brand', select: 'name slug image _id', model: 'Brand' });
   }
 
   const sortOtp = {};
@@ -232,10 +232,27 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy 
     .limit(limit)
     .lean().exec();
 
+  let result = { countAll, total, list };
+
+  if (getCategoryFilter) {
+    const categoryFilter = await Product.distinct('category', filter)
+      .populate([{ path: 'category', select: 'name slug image _id -children', model: 'Category' }])
+      .lean()
+      .exec();
+    result.categoryFilter = categoryFilter;
+  }
+
+  if (getBrandFilter) {
+    const getBrandFilter = await Product.distinct('brand', filter)
+      .populate([{ path: 'brand', select: 'name slug image _id', model: 'Brand' }])
+      .lean()
+      .exec();
+    result.brandFilter = getBrandFilter;
+  }
   // const list = await Product.find(JSON.parse(JSON.stringify(filter)), fields, { skip: (page - 1) * limit, limit: limit })
   //   .lean().exec();
 
-  return { countAll, total, list };
+  return result;
 }
 
 /**

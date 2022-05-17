@@ -56,10 +56,23 @@ export default function ProductItem({ product }) {
   };
 
   return (
-    <Card sx={{ flexGrow: 1, '&:hover': { transform: 'scale(1.02)', boxShadow: (theme) => theme.customShadows.z8 } }}>
+    <Card
+      sx={{
+        height: '100%',
+        flexGrow: 1,
+        '&:hover': { transform: 'scale(1.02)', boxShadow: (theme) => theme.customShadows.z8 }
+      }}
+    >
       <Box sx={{ pt: '90%', position: 'relative' }}>
         {image ? (
-          <ProductImgStyle alt={name} src={variants[0].thumbnail} />
+          <ProductImgStyle
+            alt={name}
+            src={variants[0].thumbnail}
+            onError={({ currentTarget }) => {
+              currentTarget.onerror = null; // prevents looping
+              currentTarget.src = '/static/no-picture-available.png';
+            }}
+          />
         ) : (
           <ImageBrokenIcon sx={{ top: 0, width: '100%', height: '100%', objectFit: 'cover', position: 'absolute' }} />
         )}

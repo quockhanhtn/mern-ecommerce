@@ -88,7 +88,16 @@ export const getAllProducts = async (req, res, next) => {
     if (minPrice > 0) { filters.minPrice = { $gte: minPrice }; }
     if (maxPrice > 0) { filters.maxPrice = { $lte: maxPrice }; }
 
-    let { list: products, total, countAll } = await productService.getAllProducts(fields, limit, page, filters);
+    let { list: products, total, countAll, ...other } = await productService.getAllProducts(
+      fields,
+      limit,
+      page,
+      filters,
+      req.query.sortBy || 'createdAt',
+      ((req.query.sort || 'desc') === 'asc') ? 1 : -1,
+      req.query?.getCategoryFilter === '1',
+      req.query?.getBrandFilter === '1'
+    );
     products = products.map(p => formatProduct(p, req));
 
     const pagination = {
@@ -115,7 +124,7 @@ export const getAllProducts = async (req, res, next) => {
       pagination.nextPage = page + 1;
     }
 
-    ResponseUtils.status200(res, 'Get all products successfully!', products, { pagination });
+    ResponseUtils.status200(res, 'Get all products successfully!', products, { pagination, ...other });
   } catch (err) { next(err); }
 };
 
