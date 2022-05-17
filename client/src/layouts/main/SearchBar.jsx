@@ -152,7 +152,6 @@ export default function SearchBar({ iconSx }) {
   return (
     <ClickAwayListener onClickAway={handleClose}>
       <Autocomplete
-        autoFocus
         fullWidth
         freeSolo
         autoComplete
