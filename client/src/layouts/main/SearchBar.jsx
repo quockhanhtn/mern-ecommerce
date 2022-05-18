@@ -171,7 +171,6 @@ export default function SearchBar({ iconSx }) {
         renderInput={(params) => (
           <TextField
             {...params}
-            autoFocus
             disableUnderline
             placeholder={t('common.search-placeholder')}
             variant="standard"
@@ -201,7 +200,7 @@ export default function SearchBar({ iconSx }) {
             setOpen(false);
           }
         }}
-        sx={{ mr: 1, fontWeight: 'fontWeightBold', maxWidth: 400, marginLeft: 3, zIndex: 999 }}
+        sx={{ mr: 1, fontWeight: 'fontWeightBold', maxWidth: 380, marginLeft: 3, zIndex: 999 }}
       />
     </ClickAwayListener>
   );
