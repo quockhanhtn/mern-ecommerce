@@ -63,7 +63,8 @@ export default function ProductDetailPage() {
 
   const [images, setImages] = useState([]);
   const [tab, setTab] = useState('1');
-  const [selectedVariant, setSelectedVariant] = useState(0);
+
+  const [selectedV, setSelectedV] = useState(null);
 
   const [isLoadingRelated, setIsLoadingRelated] = useState(false);
   const [relatedItems, setRelatedItems] = useState([]);
@@ -83,14 +84,17 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     dispatch(getProductById(productSlug));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productSlug]);
+  }, [dispatch, productSlug]);
 
   useEffect(() => {
-    setImages([]);
-    handleGatherPicture();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [product, selectedVariant]);
+    setSelectedV(product?.variants?.[0]);
+  }, [product]);
+
+  useEffect(() => {
+    if (product && selectedV) {
+      setImages([selectedV?.thumbnail, ...selectedV?.pictures]);
+    }
+  }, [product, selectedV]);
 
   useEffect(() => {
     fetchRelatedItems(product?._id);
@@ -113,18 +117,8 @@ export default function ProductDetailPage() {
     setTab(newValue);
   };
 
-  const handleGatherPicture = () => {
-    if (product?.variants?.[selectedVariant].pictures.length > 0) {
-      const temp = [product?.variants[selectedVariant].thumbnail, ...product?.variants[selectedVariant].pictures];
-      setImages(temp);
-    } else {
-      const temp = [product?.variants?.[selectedVariant].thumbnail];
-      setImages(temp);
-    }
-  };
-
-  const handleChangeIndexVariant = (index) => {
-    setSelectedVariant(index);
+  const handleChangeVariant = (newVariant) => {
+    setSelectedV(newVariant);
   };
 
   if (isLoading) {
@@ -173,12 +167,13 @@ export default function ProductDetailPage() {
               <CarouselThumbnail carousels={images.map((x) => ({ image: x }))} />
             </Grid>
             <Grid item xs={12} md={6} lg={5}>
-              <ProductVariantInfo
-                isLoading={isLoading}
-                product={product}
-                indexVariant={selectedVariant}
-                handleChangeIndexVariant={handleChangeIndexVariant}
-              />
+              {product?.variants && (
+                <ProductVariantInfo
+                  allVariants={product.variants}
+                  selectedVariant={selectedV}
+                  onChangeVariant={handleChangeVariant}
+                />
+              )}
             </Grid>
           </Grid>
         </Card>

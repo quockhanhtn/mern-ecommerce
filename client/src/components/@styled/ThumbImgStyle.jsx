@@ -1,8 +1,8 @@
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 
 function ThumbImgStyle(props) {
-  const { width = 64, height = 64, objectFit = 'cover', isSelected = false, ...other } = props;
+  const { width = 64, height = 64, objectFit = 'cover', noBorder = false, isSelected = false, ...other } = props;
   const ImgStyle = styled('img')(({ theme }) => ({
     width,
     height,
@@ -15,6 +15,7 @@ function ThumbImgStyle(props) {
 
   return (
     <ImgStyle
+      style={noBorder ? { borderColor: 'transparent' } : {}}
       {...other}
       onError={({ currentTarget }) => {
         currentTarget.onerror = null; // prevents looping
@@ -28,6 +29,7 @@ ThumbImgStyle.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
   objectFit: PropTypes.string,
+  noBorder: PropTypes.bool,
   isSelected: PropTypes.bool
 };
 

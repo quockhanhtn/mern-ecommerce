@@ -30,7 +30,8 @@ const PriceBoxStyle = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   [theme.breakpoints.up('lg')]: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'space-between'
   }
 }));
 

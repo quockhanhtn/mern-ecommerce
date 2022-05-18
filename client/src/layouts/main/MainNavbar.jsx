@@ -176,8 +176,9 @@ function MainNavbar({ categoryList, showCategoryMenu, cartItemsCount }) {
             </MHidden>
           </RouterLink>
 
-          <SearchBar iconSx={{ marginLeft: 2 }} />
-          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ mx: 3, flexGrow: 1 }}>
+            <SearchBar />
+          </Box>
 
           <Stack direction="row" spacing={{ xs: 0.5, sm: 5 }} sx={{ alignItems: 'center' }}>
             <MHidden width="mdUp">
