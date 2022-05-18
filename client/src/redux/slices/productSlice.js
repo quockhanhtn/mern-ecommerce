@@ -4,6 +4,15 @@ import { getRecommendation } from '../../api/fpt';
 
 const initialState = {
   isLoading: true,
+  dashboard: {
+    list: [],
+    pagination: {},
+    categoryFilter: [],
+    brandFilter: [],
+    error: null,
+    isLoading: false
+  },
+
   error: null,
   item: null,
   list: [],
@@ -21,6 +30,23 @@ const productSlice = createSlice({
   name: 'product',
   initialState,
   reducers: {
+    // #region dashboard
+    dashboardStartLoading(state) {
+      state.dashboard.isLoading = true;
+    },
+    dashboardHasError(state, action) {
+      state.dashboard.isLoading = false;
+      state.dashboard.error = action.payload;
+    },
+    dashboardGetSuccess(state, action) {
+      state.dashboard.isLoading = false;
+      state.dashboard.error = null;
+      state.dashboard.list = action.payload.data;
+      state.dashboard.pagination = action.payload.pagination;
+      state.dashboard.categoryFilter = action.payload.categoryFilter;
+      state.dashboard.brandFilter = action.payload.brandFilter;
+    },
+    // #endregion dashboard
     startLoading(state) {
       state.isLoading = true;
     },
@@ -56,6 +82,11 @@ const productSlice = createSlice({
         isLoading: false,
         error: null
       };
+    },
+    toggleHideSuccess(state, action) {
+      state.dashboard.list = state.dashboard.list.map((p) =>
+        p._id === action.payload._id ? { ...p, isHide: action.payload.isHide } : p
+      );
     },
     deleteSuccess(state, action) {
       return {
@@ -107,18 +138,45 @@ const { actions, reducer } = productSlice;
 export const { getAlls } = actions;
 export default reducer;
 
-export const getAllProducts =
-  (search = '', brand = '', category = '', page = 1, limit = 12) =>
-  async (dispatch) => {
+export const getProductDashboard =
+  (search, page, limit, sort, sortBy, category, brand, showHide) => async (dispatch) => {
     try {
-      dispatch(actions.startLoading());
+      dispatch(actions.dashboardStartLoading());
 
-      const { data } = await api.getAllProduct('', search, brand, category, page, limit);
-      dispatch(actions.getAllSuccess(data));
+      const { data } = await api.getAllProduct2({
+        search: search || '',
+        c: category || '',
+        b: brand || '',
+        page,
+        limit,
+        sort,
+        sortBy,
+        getBrandFilter: '1',
+        getCategoryFilter: '1',
+        isShowHidden: showHide ? '1' : '0'
+      });
+      dispatch(actions.dashboardGetSuccess(data));
     } catch (e) {
-      dispatch(actions.hasError(e));
+      dispatch(actions.dashboardHasError(e));
     }
   };
+
+export const getAllProducts = (search, brand, category, page, limit) => async (dispatch) => {
+  try {
+    dispatch(actions.startLoading());
+
+    const { data } = await api.getAllProduct2({
+      search: search || '',
+      page,
+      limit,
+      b: brand || '',
+      c: category || ''
+    });
+    dispatch(actions.getAllSuccess(data));
+  } catch (e) {
+    dispatch(actions.hasError(e));
+  }
+};
 
 export const getFullAllProducts = () => async (dispatch) => {
   try {
@@ -165,6 +223,16 @@ export const deleteProduct = (id) => async (dispatch) => {
     dispatch(actions.startLoading());
     await api.deleteProduct(id);
     dispatch(actions.deleteSuccess(id));
+  } catch (e) {
+    dispatch(actions.hasError(e));
+  }
+};
+
+export const toggleHideProduct = (id) => async (dispatch) => {
+  try {
+    dispatch(actions.startLoading());
+    const { data } = await api.toggleHideProduct(id);
+    dispatch(actions.toggleHideSuccess(data.data));
   } catch (e) {
     dispatch(actions.hasError(e));
   }

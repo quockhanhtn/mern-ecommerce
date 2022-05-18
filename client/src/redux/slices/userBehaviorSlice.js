@@ -106,8 +106,11 @@ export const trackingInCart = (data) => (dispatch) => {
 
 export const sendTrackingData = () => async (dispatch, getState) => {
   try {
-    await api.sendTrackingData(getState().userBehavior.trackingData);
-    dispatch(actions.clearData());
+    const { trackingData } = getState().userBehavior;
+    if (trackingData && Object.keys(trackingData).length > 0) {
+      await api.sendTrackingData(trackingData);
+      dispatch(actions.clearData());
+    }
   } catch (e) {
     console.log(e);
   }

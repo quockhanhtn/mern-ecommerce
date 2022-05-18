@@ -1,32 +1,26 @@
-// icons
-import { Icon } from '@iconify/react';
-import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
-import { useEffect, useState } from 'react';
-// material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
 import {
   Box,
-  Button,
-  Link,
-  Grid,
   Card,
-  Table,
   Divider,
-  TableRow,
-  Container,
+  Grid,
+  Link,
   Stack,
+  Table,
   TableBody,
-  TableHead,
   TableCell,
-  Typography,
-  TableContainer
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography
 } from '@material-ui/core';
+import { experimentalStyled as styled } from '@material-ui/core/styles';
 // hooks
-import useLocales from '../../../hooks/useLocales';
+import { useLocales } from '../../../hooks';
 // components
+import { ImageBrokenIcon } from '../../../assets';
+import { ThumbImgStyle } from '../../@styled';
 import Label from '../../Label';
 import Scrollbar from '../../Scrollbar';
-import { ImageBrokenIcon } from '../../../assets';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
 import { getOrderStatusColor, getPaymentStatusColor } from '../../../utils/labelColor';
@@ -38,13 +32,13 @@ const RowResultStyle = styled(TableRow)(({ theme }) => ({
   }
 }));
 
-const ThumbImgStyle = styled('img')(({ theme }) => ({
-  width: 64,
-  height: 64,
-  objectFit: 'cover',
-  marginRight: theme.spacing(2),
-  borderRadius: theme.shape.borderRadiusSm
-}));
+// const ThumbImgStyle = styled('img')(({ theme }) => ({
+//   width: 64,
+//   height: 64,
+//   objectFit: 'contain',
+//   marginRight: theme.spacing(2),
+//   borderRadius: theme.shape.borderRadiusSm
+// }));
 
 const ROW_RESULT_CELL_WIDTH = 180;
 const LEFT_WIDTH = 100;
@@ -178,19 +172,21 @@ export default function OrderCard({ order, isShowTitle, handleRePay }) {
               {order?.items.map((item, index) => (
                 <TableRow key={index} sx={{ borderBottom: (theme) => `solid 1px ${theme.palette.divider}` }}>
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell align="left" sx={{ display: 'flex' }}>
-                    {item?.variant?.thumbnail ? (
-                      <ThumbImgStyle alt="product image" src={item?.variant?.thumbnail} />
+                  <TableCell align="left" sx={{ display: 'flex', alignItems: 'center' }}>
+                    {item?.thumbnail ? (
+                      <ThumbImgStyle alt="product image" src={item?.thumbnail} objectFit="contain" />
                     ) : (
                       <ImageBrokenIcon width={64} height={64} marginRight={2} />
                     )}
                     <Box sx={{ maxWidth: 560 }}>
-                      <Link underline="hover" variant="subtitle2" target="_blank" href={`/product/${item.product}`}>
+                      <Link underline="hover" variant="subtitle2" target="_blank" href={`/product/${item.productId}`}>
                         {item.productName}
                       </Link>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                        {item.variant.variantName}
-                      </Typography>
+                      {item.variantName && (
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                          {item.variantName}
+                        </Typography>
+                      )}
                     </Box>
                   </TableCell>
                   <TableCell align="center">{item.quantity}</TableCell>

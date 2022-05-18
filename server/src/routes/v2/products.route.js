@@ -5,9 +5,11 @@ import {
   getProductById,
   getListProductsByIds,
   getSuggestProducts,
+  getProductRecommend,
   createProduct,
   updateProduct,
   deleteProduct,
+  toggleHideProduct,
   rateProduct,
   getProductSpecifications,
   addProductVariants,
@@ -37,6 +39,7 @@ router.get('/', getAllProducts);
 router.get('/all', getFullAllProducts);
 router.get('/specs', getProductSpecifications);
 router.get('/search/suggest', getSuggestProducts);
+router.get('/recommend/:productId', getProductRecommend);
 router.get('/:identity', getProductById);
 router.post('/get-by-ids', getListProductsByIds);
 
@@ -48,6 +51,7 @@ router.post('/',
 );
 router.patch('/:identity', isAdminOrStaff, updateProduct);
 router.delete('/:identity', isAdmin, deleteProduct);
+router.patch('/:identity/toggleHide', isAdmin, toggleHideProduct);
 router.patch('/:identity/rate', rateProduct);
 
 router.post('/:identity/variants',

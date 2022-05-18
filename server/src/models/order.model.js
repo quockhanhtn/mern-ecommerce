@@ -42,10 +42,14 @@ const orderSchema = mongoose.Schema(
       required: true
     },
     items: [{
-      product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+      productId: { type: String, required: true },
       sku: { type: String, required: true },
-      quantity: { type: Number, required: true },
-      pricePerUnit: { type: Number, required: true }
+      productName: { type: String, required: false },
+      variantName: { type: String, required: false },
+      thumbnail: { type: String, required: false },
+      marketPrice: { type: Number, required: false },
+      pricePerUnit: { type: Number, required: true }, // sale price
+      quantity: { type: Number, required: true }
     }],
 
     subTotal: { type: Number, required: true },     // Tổng tiền hàng

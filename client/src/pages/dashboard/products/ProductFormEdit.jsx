@@ -23,7 +23,7 @@ import { useParams } from 'react-router';
 import { QuillEditor } from '../../../components/editor';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import useLocales from '../../../hooks/useLocales';
-import { getAllBrands } from '../../../redux/actions/brands';
+import { getAllBrands } from '../../../redux/slices/brandSlice';
 import { getAllCategories } from '../../../redux/slices/categorySlice';
 import { getProductById, updateProduct } from '../../../redux/slices/productSlice';
 // ----------------------------------------------------------------------

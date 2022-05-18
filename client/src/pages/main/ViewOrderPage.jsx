@@ -215,19 +215,26 @@ export default function ViewOrderPage() {
                   {order?.items.map((item, index) => (
                     <TableRow key={index} sx={{ borderBottom: (theme) => `solid 1px ${theme.palette.divider}` }}>
                       <TableCell>{index + 1}</TableCell>
-                      <TableCell align="left" sx={{ display: 'flex' }}>
-                        {item?.variant?.thumbnail ? (
-                          <ThumbImgStyle alt="product image" src={item?.variant?.thumbnail} />
+                      <TableCell align="left" sx={{ display: 'flex', alignItems: 'center' }}>
+                        {item?.thumbnail ? (
+                          <ThumbImgStyle alt="product image" src={item?.thumbnail} />
                         ) : (
                           <ImageBrokenIcon width={64} height={64} marginRight={2} />
                         )}
                         <Box sx={{ maxWidth: 560 }}>
-                          <Link underline="hover" variant="subtitle2" target="_blank" href={`/product/${item.product}`}>
+                          <Link
+                            underline="hover"
+                            variant="subtitle2"
+                            target="_blank"
+                            href={`/product/${item.productId}`}
+                          >
                             {item.productName}
                           </Link>
-                          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                            {item.variant.variantName}
-                          </Typography>
+                          {item.variantName && (
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                              {item.variantName}
+                            </Typography>
+                          )}
                         </Box>
                       </TableCell>
                       <TableCell align="center">{item.quantity}</TableCell>

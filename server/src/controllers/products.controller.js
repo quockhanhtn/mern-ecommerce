@@ -81,14 +81,36 @@ export const getAllProducts = async (req, res, next) => {
     }
 
     let filters = {};
-    if (category) { filters.category = [...category.split(',')]; }
-    if (brand) { filters.brand = [...brand.split(',')]; }
+    if (category) {
+      if (category === 'null') {
+        filters.category = null;
+      } else {
+        filters.category = [...category.split(',')];
+      }
+    }
+    if (brand) {
+      if (brand === 'null') {
+        filters.brand = null;
+      } else {
+        filters.brand = [...brand.split(',')];
+      }
+    }
     if (search) { filters.name = { $regex: search, $options: 'i' }; }
 
     if (minPrice > 0) { filters.minPrice = { $gte: minPrice }; }
     if (maxPrice > 0) { filters.maxPrice = { $lte: maxPrice }; }
 
-    let { list: products, total, countAll } = await productService.getAllProducts(fields, limit, page, filters);
+    let { list: products, total, countAll, ...other } = await productService.getAllProducts(
+      fields,
+      limit,
+      page,
+      filters,
+      req.query.sortBy || 'createdAt',
+      ((req.query.sort || 'desc') === 'asc') ? 1 : -1,
+      req.query?.getCategoryFilter === '1',
+      req.query?.getBrandFilter === '1',
+      req.query?.isShowHidden === '1',
+    );
     products = products.map(p => formatProduct(p, req));
 
     const pagination = {
@@ -115,7 +137,7 @@ export const getAllProducts = async (req, res, next) => {
       pagination.nextPage = page + 1;
     }
 
-    ResponseUtils.status200(res, 'Get all products successfully!', products, { pagination });
+    ResponseUtils.status200(res, 'Get all products successfully!', products, { pagination, ...other });
   } catch (err) { next(err); }
 };
 
@@ -150,12 +172,46 @@ export const getListProductsByIds = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
-
 export const getSuggestProducts = async (req, res, next) => {
   try {
     const { keyword } = req.query;
     const products = await productService.getSuggestProducts(keyword);
     ResponseUtils.status200(res, 'Get suggest products successfully!', products.map(p => formatProduct(p, req)));
+  } catch (err) { next(err); }
+};
+
+export const getProductRecommend = async (req, res, next) => {
+  try {
+    const { productId } = req.params;
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+
+    let { list: products, total } = await productService.getProductRecommend(productId, page, limit);
+    products = products.map(p => formatProduct(p, req));
+    const pagination = {
+      total,
+      totalPages: Math.ceil(total / limit),
+      limit,
+      page,
+      hasNextPage: false,
+      nextPage: null,
+      hasPrevPage: false,
+      prevPage: null
+    };
+
+    // Set prev page
+    if (page > 1) {
+      pagination.hasPrevPage = true;
+      pagination.prevPage = page - 1;
+    }
+
+    // Set next page
+    if (page < pagination.totalPages) {
+      pagination.hasNextPage = true;
+      pagination.nextPage = page + 1;
+    }
+
+    ResponseUtils.status200(res, 'Get recommend products successfully!', products, { pagination });
   } catch (err) { next(err); }
 };
 
@@ -197,6 +253,19 @@ export const deleteProduct = async (req, res, next) => {
     }
   } catch (err) { next(err); }
 };
+
+export const toggleHideProduct = async (req, res, next) => {
+  try {
+    const { identity } = req.params;
+    const result = await productService.toggleHideProduct(identity);
+    if (result) {
+      ResponseUtils.status200(res, `Toggle Hide product successfully!`, result);
+    } else {
+      ResponseUtils.status404(res, `Product not found!`);
+    }
+  } catch (err) { next(err); }
+};
+
 
 export const rateProduct = async (req, res, next) => {
   try {

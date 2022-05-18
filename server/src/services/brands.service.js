@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
 import Brand from '../models/brand.model.js';
+import responseDef from '../responseCode.js';
+import ApiErrorUtils from '../utils/ApiErrorUtils.js';
 import StringUtils from '../utils/StringUtils.js';
+import productsService from './products.service.js';
 
 export default {
   getAll,
@@ -20,12 +23,12 @@ const SELECTED_FIELDS = '_id order slug name desc headQuarters country image cou
  *
  * @returns all brands
  */
-async function getAll(fields = SELECTED_FIELDS) {
+async function getAll(fields = SELECTED_FIELDS, filter = {}) {
   if (fields.indexOf(',') > -1) {
     fields = fields.split(',').join(' ');
   }
 
-  return Brand.find()
+  return Brand.find(filter)
     .select(fields)
     .sort({ createdAt: -1 })
     .lean().exec();
@@ -137,9 +140,15 @@ async function hidden(identity) {
  * @returns true if delete successfully else false
  */
 async function remove(identity) {
-  let filter = StringUtils.isUUID(identity)
-    ? { _id: identity }
-    : { slug: identity };
-  const deletedBrand = await Brand.findOneAndDelete(filter);
-  return !!deletedBrand;
+  const brand = await getOne(identity);
+  if (!brand) {
+    throw ApiErrorUtils.simple2(responseDef.BRAND.BRAND_NOT_FOUND);
+  }
+
+  const countProduct = await productsService.countProduct({ brand: brand._id });
+  if (countProduct > 0) {
+    throw ApiErrorUtils.simple2(responseDef.BRAND.BRAND_HAS_PRODUCT);
+  }
+
+  return Brand.findByIdAndDelete(brand._id);
 }

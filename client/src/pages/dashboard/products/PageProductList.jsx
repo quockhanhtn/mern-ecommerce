@@ -1,6 +1,6 @@
 // icons
-import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
+import { Icon } from '@iconify/react';
 // material-ui
 import {
   Box,
@@ -20,85 +20,84 @@ import {
 } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 //
-import { useEffect, useState } from 'react';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { useSnackbar } from 'notistack';
 import { Link as RouterLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useSnackbar } from 'notistack';
+import { useDispatch, useSelector } from 'react-redux';
 //
-import Page from '../../../components/Page';
+import { useLocales } from '../../../hooks';
 import { PATH_DASHBOARD } from '../../../routes/paths';
-import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
-import useLocales from '../../../hooks/useLocales';
-import LoadingScreen from '../../../components/LoadingScreen';
-import { deleteProduct, getAllProducts } from '../../../redux/slices/productSlice';
-import Label from '../../../components/Label';
-import Scrollbar from '../../../components/Scrollbar';
-import { stableSort, getComparator } from '../../../helper/listHelper';
-import SearchNotFound from '../../../components/SearchNotFound';
-import { ProductListHead, ProductListToolbar, ProductMoreMenu } from '../../../components/dashboard/products';
-import { ImageBrokenIcon } from '../../../assets';
-import EmptyCard from '../../../components/EmptyCard';
-import { ThumbImgStyle } from '../../../components/@styled';
 
-import { MTableHead, MTableToolbar } from '../../../components/@material-extend/table';
+import { ThumbImgStyle } from '../../../components/@styled';
+import { ProductMoreMenu, ProductTableToolbar } from '../../../components/dashboard/products';
+import EmptyCard from '../../../components/EmptyCard';
+import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
+import Label from '../../../components/Label';
+import Page from '../../../components/Page';
+import Scrollbar from '../../../components/Scrollbar';
+import SearchNotFound from '../../../components/SearchNotFound';
+import { deleteProduct, getProductDashboard, toggleHideProduct } from '../../../redux/slices/productSlice';
+
+import { MCircularProgress } from '../../../components/@material-extend';
+import { MTableHead } from '../../../components/@material-extend/table';
+
+import { fDateTime } from '../../../utils/formatTime';
 
 // ----------------------------------------------------------------------
 
 export default function PageProductList() {
-  const { t } = useLocales();
+  const { t, currentLang } = useLocales();
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const { list: productsList, isLoading, hasError } = useSelector((state) => state.product);
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('createdAt');
+
   const [selected, setSelected] = useState([]);
-  const [page, setPage] = useState(0);
   const [isCompact, setIsCompact] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentId, setCurrentId] = useState(null);
 
+  const { list: productsList, isLoading, hasError, pagination } = useSelector((state) => state.product.dashboard);
+
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [sort, setSort] = useState('desc');
+  const [sortBy, setSortBy] = useState('createdAt');
+
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [brandFilter, setBrandFilter] = useState('');
+  const [showHidden, setShowHidden] = useState(false);
+
   useEffect(() => {
-    dispatch(getAllProducts('', '', '', 1, 10000));
-  }, [dispatch]);
+    dispatch(getProductDashboard(search, page, rowsPerPage, sort, sortBy, categoryFilter, brandFilter, showHidden));
+  }, [dispatch, page, rowsPerPage, search, sort, sortBy, categoryFilter, brandFilter, showHidden]);
 
   const tableHeads = [
     {
       id: 'name',
       numeric: false,
-      disablePadding: true,
+      disablePadding: false,
       label: t('products.name')
     },
     {
-      id: 'brand.name',
-      align: 'left',
+      id: 'brand',
       disablePadding: true,
       label: t('products.brand')
     },
     {
-      id: 'category.name',
-      align: 'left',
+      id: 'category',
       disablePadding: true,
       label: t('products.category')
     },
-    // {
-    //   id: 'origin',
-    //   numeric: false,
-    //   disablePadding: false,
-    //   label: t('products.origin')
-    // },
-    // {
-    //   id: 'warrantyPeriod',
-    //   numeric: false,
-    //   disablePadding: false,
-    //   label: t('products.warrantyPeriod')
-    // },
     {
       id: 'isHide',
-      numeric: false,
-      disablePadding: false,
+      disablePadding: true,
       label: t('products.status')
+    },
+    {
+      id: 'createdAt',
+      align: 'right',
+      disablePadding: true,
+      label: t('dashboard.created-at')
     },
     {
       id: 'action',
@@ -106,6 +105,10 @@ export default function PageProductList() {
       disablePadding: false
     }
   ];
+
+  const handleChangeProductHide = (id) => {
+    dispatch(toggleHideProduct(id));
+  };
 
   const handleDeleteProduct = (id, slug) => {
     try {
@@ -119,9 +122,9 @@ export default function PageProductList() {
   };
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+    const isAsc = sortBy === property && sort === 'asc';
+    setSort(isAsc ? 'desc' : 'asc');
+    setSortBy(property);
   };
 
   const handleSelectAllClick = (event) => {
@@ -153,12 +156,12 @@ export default function PageProductList() {
   };
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    setPage(newPage + 1);
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setPage(1);
   };
 
   const handleChangeDense = (event) => {
@@ -168,15 +171,116 @@ export default function PageProductList() {
   const isSelected = (slug) => selected.indexOf(slug) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty productsList.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productsList?.length) : 0;
-
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
+  const emptyRows =
+    page > 0 ? Math.min(rowsPerPage - productsList.length, (1 + page) * rowsPerPage - pagination?.total) : 0;
 
   if (hasError) {
     return <SearchNotFound />;
   }
+
+  const renderTableBody = () => {
+    if (isLoading) {
+      return (
+        <TableBody>
+          <TableRow>
+            <TableCell colSpan={tableHeads.length + 1}>
+              <Box height={200} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <MCircularProgress size={100} />
+              </Box>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      );
+    }
+
+    if (productsList?.length > 0) {
+      return (
+        <TableBody>
+          {productsList.map((row, index) => {
+            const { _id, slug, name, brand, category, isHide, createdAt } = row;
+            const thumbnail = row?.variants[0]?.thumbnail;
+            const isItemSelected = isSelected(slug);
+            const labelId = `enhanced-table-checkbox-${index}`;
+
+            return (
+              <TableRow
+                hover
+                role="checkbox"
+                aria-checked={isItemSelected}
+                tabIndex={-1}
+                key={_id}
+                selected={isItemSelected}
+                onClick={(event) => handleClick(event, slug)}
+              >
+                <TableCell padding="checkbox">
+                  <Checkbox checked={isItemSelected} />
+                </TableCell>
+                {isCompact ? (
+                  <TableCell component="th" id={labelId} scope="row" padding="normal">
+                    {name}
+                  </TableCell>
+                ) : (
+                  <TableCell component="th" scope="row" padding="none">
+                    <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
+                      <ThumbImgStyle alt={name} src={thumbnail} objectFit="contain" isSelected={isItemSelected} />
+
+                      <Typography variant="subtitle2" noWrap>
+                        {name}
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                )}
+                <TableCell align="left" padding="none">
+                  <Typography variant="subtitle4" noWrap>
+                    {brand?.name ?? '<trống>'}
+                  </Typography>
+                </TableCell>
+                <TableCell align="left" padding="none">
+                  <Typography variant="subtitle4" noWrap>
+                    {category?.name ?? '<chưa phân loại>'}
+                  </Typography>
+                </TableCell>
+                <TableCell align="left" padding="none">
+                  <Label
+                    variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
+                    color={isHide ? 'default' : 'success'}
+                  >
+                    {t(`products.${isHide ? 'hidden' : 'visible'}`)}
+                  </Label>
+                </TableCell>
+                <TableCell align="right" padding="none" style={{ width: 175 }}>
+                  {fDateTime(createdAt, currentLang.value)}
+                </TableCell>
+                <TableCell align="right" onClick={(event) => event.stopPropagation()}>
+                  <ProductMoreMenu
+                    onDelete={() => handleDeleteProduct(_id, slug)}
+                    onChangeHide={handleChangeProductHide}
+                    productId={_id}
+                    nameInfo={name}
+                    isHide={isHide}
+                  />
+                </TableCell>
+              </TableRow>
+            );
+          })}
+          {emptyRows > 0 && (
+            <TableRow style={{ height: (isCompact ? 33 : 53) * emptyRows }}>
+              <TableCell colSpan={tableHeads.length + 1} />
+            </TableRow>
+          )}
+        </TableBody>
+      );
+    }
+    return (
+      <TableBody>
+        <TableRow>
+          <TableCell colSpan={tableHeads.length + 1}>
+            <EmptyCard title={search ? 'Không tìm thấy sản phẩm' : t('products.title-not-found')} />
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    );
+  };
 
   return (
     <Page title={t('products.page-title')}>
@@ -202,127 +306,53 @@ export default function PageProductList() {
             </Button>
           }
         />
-        {productsList?.length > 0 ? (
-          <Card>
-            <MTableToolbar searchPlaceHolder={t('dashboard.categories.search')} numSelected={selected.length} />
-            <Scrollbar>
-              <TableContainer sx={{ minWidth: 800 }}>
-                <Table size={isCompact ? 'small' : 'medium'}>
-                  <MTableHead
-                    order={order}
-                    orderBy={orderBy}
-                    headLabel={tableHeads}
-                    numSelected={selected.length}
-                    onRequestSort={handleRequestSort}
-                    rowCount={productsList.length}
-                    onSelectAllClick={handleSelectAllClick}
-                  />
-                  <TableBody>
-                    {stableSort(productsList, getComparator(order, orderBy))
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((row, index) => {
-                        const { _id, slug, name, brand, category, isHide } = row;
-                        const thumbnail = row?.variants[0]?.thumbnail;
-                        const isItemSelected = isSelected(slug);
-                        const labelId = `enhanced-table-checkbox-${index}`;
+        <Card>
+          <ProductTableToolbar
+            searchPlaceHolder="Tìm kiếm sản phẩm"
+            numSelected={selected.length}
+            initialValue={search}
+            onSearch={(e, search) => setSearch(search)}
+            onCategoryChange={(newValue) => setCategoryFilter(newValue)}
+            onBrandChange={(newValue) => setBrandFilter(newValue)}
+            onChangeShowHidden={(newValue) => setShowHidden(newValue)}
+          />
 
-                        return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            aria-checked={isItemSelected}
-                            tabIndex={-1}
-                            key={_id}
-                            selected={isItemSelected}
-                            onClick={(event) => handleClick(event, slug)}
-                          >
-                            <TableCell padding="checkbox">
-                              <Checkbox checked={isItemSelected} />
-                            </TableCell>
-                            {isCompact ? (
-                              <TableCell component="th" id={labelId} scope="row" padding="normal">
-                                {name}
-                              </TableCell>
-                            ) : (
-                              <TableCell component="th" scope="row" padding="none">
-                                <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
-                                  {thumbnail ? (
-                                    <ThumbImgStyle alt={name} src={thumbnail} />
-                                  ) : (
-                                    <ImageBrokenIcon width={64} height={64} marginRight={2} />
-                                  )}
-                                  <Typography variant="subtitle2" noWrap>
-                                    {name}
-                                  </Typography>
-                                </Box>
-                              </TableCell>
-                            )}
-                            <TableCell align="left" padding="none">
-                              <Typography variant="subtitle4" noWrap>
-                                {brand?.name}
-                              </Typography>
-                            </TableCell>
-                            <TableCell align="left" padding="none">
-                              <Typography variant="subtitle4" noWrap>
-                                {category?.name}
-                              </Typography>
-                            </TableCell>
-                            {/* <TableCell align="left" style={{ minWidth: 100 }}>
-                              {origin}
-                            </TableCell>
-                            <TableCell align="left" style={{ minWidth: 100 }}>
-                              {warrantyPeriod}
-                            </TableCell> */}
-                            <TableCell align="left" padding="none">
-                              <Label
-                                variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                                color={isHide ? 'default' : 'success'}
-                              >
-                                {t(`products.${isHide ? 'hidden' : 'visible'}`)}
-                              </Label>
-                            </TableCell>
-                            <TableCell align="right" onClick={(event) => event.stopPropagation()}>
-                              <ProductMoreMenu
-                                onDelete={() => handleDeleteProduct(_id, slug)}
-                                productId={_id}
-                                nameInfo={name}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    {emptyRows > 0 && (
-                      <TableRow style={{ height: (isCompact ? 33 : 53) * emptyRows }}>
-                        <TableCell colSpan={6} />
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Scrollbar>
-
-            <Box sx={{ position: 'relative' }}>
-              <TablePagination
-                labelRowsPerPage={t('common.rows-per-page')}
-                rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                component="div"
-                count={productsList.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
-              <Box sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}>
-                <FormControlLabel
-                  control={<Switch checked={isCompact} onChange={handleChangeDense} />}
-                  label={t('common.small-padding')}
+          <Scrollbar>
+            <TableContainer sx={{ minWidth: 800 }}>
+              <Table size={isCompact ? 'small' : 'medium'}>
+                <MTableHead
+                  order={sort}
+                  orderBy={sortBy}
+                  headLabel={tableHeads}
+                  numSelected={selected.length}
+                  onRequestSort={handleRequestSort}
+                  rowCount={productsList.length}
+                  onSelectAllClick={handleSelectAllClick}
                 />
-              </Box>
+                {renderTableBody()}
+              </Table>
+            </TableContainer>
+          </Scrollbar>
+
+          <Box sx={{ position: 'relative' }}>
+            <TablePagination
+              labelRowsPerPage={t('common.rows-per-page')}
+              rowsPerPageOptions={[5, 10, 25, 50, 100]}
+              component="div"
+              count={pagination.total}
+              rowsPerPage={rowsPerPage}
+              page={page - 1}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+            <Box sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}>
+              <FormControlLabel
+                control={<Switch checked={isCompact} onChange={handleChangeDense} />}
+                label={t('common.small-padding')}
+              />
             </Box>
-          </Card>
-        ) : (
-          <EmptyCard title={t('products.title-not-found')} />
-        )}
+          </Box>
+        </Card>
       </Container>
     </Page>
   );

@@ -48,7 +48,7 @@ export default function MTableHead({
         {headLabel.map(({ id, label, align, disablePadding }) => (
           <TableCell
             key={id}
-            align={align || 'left'}
+            align={align ?? 'left'}
             padding={disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === id ? order : false}
           >

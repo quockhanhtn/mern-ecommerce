@@ -1,17 +1,24 @@
 import Product from '../models/product.model.js';
+import ProductRecom from '../models/product-recom.model.js';
+
 import categoryService from './categories.service.js'
 import brandService from './brands.service.js'
+
 import StringUtils from '../utils/StringUtils.js';
 import ApiErrorUtils from '../utils/ApiErrorUtils.js';
+import ValidUtils from '../utils/ValidUtils.js';
 
 export default {
   getAllProducts,
   getOneProduct,
   getSuggestProducts,
+  getProductRecommend,
   createProduct,
   updateProduct,
+  toggleHideProduct,
   removeProduct,
   rateProduct,
+  countProduct,
   getSpecifications,
   getFullAll,
   addProductVariants,
@@ -20,7 +27,7 @@ export default {
   updatePriceRange
 };
 
-const SELECT_FIELD = '_id name slug desc video overSpecs origin category brand tags views rate variants quantity warrantyPeriod createdAt updatedAt';
+const SELECT_FIELD = '_id name slug desc video overSpecs origin category brand tags views rate variants quantity warrantyPeriod isHide createdAt updatedAt';
 const POPULATE_OPTS = [
   {
     path: 'category',
@@ -195,7 +202,7 @@ async function deleteProductVariants(identity, sku) {
  * @param {object} filter - filter
  * @returns {object} - list of products, total count
  */
-async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy = 'createdAt', sortType = -1) {
+async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy = 'createdAt', sortType = -1, getCategoryFilter, getBrandFilter = false, isShowHidden = false) {
   if (fields === null || fields == '' || fields === undefined) { fields = SELECT_FIELD; }
 
   if (fields.indexOf(',') > -1) {
@@ -204,17 +211,21 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy 
 
   const populateOpts = [];
   if (fields.includes('category')) {
-    populateOpts.push({ path: 'category', select: 'name slug image _id -children', model: 'Category' },);
+    populateOpts.push({ path: 'category', select: 'name slug image _id -children', model: 'Category' });
   }
   if (fields.includes('brand')) {
-    populateOpts.push({ path: 'brand', select: 'name slug image _id', model: 'Brand' },);
+    populateOpts.push({ path: 'brand', select: 'name slug image _id', model: 'Brand' });
   }
 
   const sortOtp = {};
   sortOtp[sortBy] = sortType;
 
+  if (!isShowHidden) {
+    filter.isHide = false;
+  }
+
   const countAll = await Product.estimatedDocumentCount();
-  const total = await Product.countDocuments(JSON.parse(JSON.stringify(filter)), null).exec();
+  const total = await countProduct(filter);
   const list = await Product.find(filter)
     .select(fields)
     .populate(populateOpts)
@@ -223,10 +234,27 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy 
     .limit(limit)
     .lean().exec();
 
+  let result = { countAll, total, list };
+
+  if (getCategoryFilter) {
+    const lstCatId = await Product.distinct('category', filter).lean().exec();
+    result.categoryFilter = await categoryService.getAll('name slug image _id -children', { _id: { $in: lstCatId } });
+    if (lstCatId.some(x => !x)) {
+      result.categoryFilter = [{ _id: 'null', name: '', slug: '', image: '' }, ...result.categoryFilter];
+    }
+  }
+
+  if (getBrandFilter) {
+    const lstBrandId = await Product.distinct('brand', filter).lean().exec();
+    result.brandFilter = await brandService.getAll('name slug image _id', { _id: { $in: lstBrandId } });
+    if (lstBrandId.some(x => !x)) {
+      result.brandFilter = [{ _id: 'null', name: '', slug: '', image: '' }, ...result.brandFilter];
+    }
+  }
   // const list = await Product.find(JSON.parse(JSON.stringify(filter)), fields, { skip: (page - 1) * limit, limit: limit })
   //   .lean().exec();
 
-  return { countAll, total, list };
+  return result;
 }
 
 /**
@@ -271,6 +299,27 @@ async function getSuggestProducts(keyword) {
     .limit(10)
     .lean().exec();
   return result;
+}
+
+async function getProductRecommend(productId, page = 1, limit = 10) {
+  if (!ValidUtils.isUuid(productId)) {
+    throw ApiErrorUtils.simple(`Product ${productId} not found !`, 404);
+  }
+
+  const recommendData = await ProductRecom.findOne({ productId: productId }).lean().exec();
+  if (!recommendData) {
+    return [];
+  }
+
+  const filter = { _id: { $in: recommendData.recommend } };
+  const total = await Product.countDocuments(filter, null).exec();
+  const list = await Product.find(filter)
+    .select('_id')
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .lean().exec();
+
+  return { total, list };
 }
 
 async function createProduct(data) {
@@ -355,10 +404,24 @@ async function updateProduct(identity, data) {
   return Product.findOneAndUpdate(filter, updated, { new: true });
 }
 
+async function toggleHideProduct(identity) {
+  const filter = StringUtils.isUUID(identity)
+    ? { _id: identity }
+    : { slug: identity };
+  const product = await Product.findOne(filter).select('isHide').lean().exec();
+  return Product.findOneAndUpdate(filter, { $set: { isHide: !product.isHide } }, { new: true, lean: true, fields: '_id isHide' });
+}
+
 async function removeProduct(identity) {
   const filter = StringUtils.isUUID(identity)
     ? { _id: identity }
     : { slug: identity };
+  const product = await Product.findOne(filter).exec();
+  if (!product) {
+    throw ApiErrorUtils.simple(`Product ${identity} not found !`, 404);
+  }
+
+  product.remove();
   return Product.findOneAndDelete(filter);
 }
 
@@ -369,6 +432,10 @@ async function rateProduct(identity, ip, rateStar) {
 
   await Product.findOneAndUpdate(filter, { $pull: { rates: { ip: ip } } }); // remove old rate if exist
   return Product.findOneAndUpdate(filter, { $addToSet: { rates: { ip: ip, star: rateStar } } }, { new: true });
+}
+
+async function countProduct(filter) {
+  return Product.countDocuments(JSON.parse(JSON.stringify(filter)), null).exec()
 }
 
 async function getSpecifications() {

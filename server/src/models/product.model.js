@@ -1,21 +1,24 @@
 import mongoose from 'mongoose';
+
 import sanitizeHtml from 'sanitize-html';
 import slugGenerator from 'mongoose-slug-updater';
 import removeMultiSpace from './plugins/remove-multi-space.js';
 
-const specificationSchema = new mongoose.Schema({
+const { Schema } = mongoose;
+
+const specificationSchema = new Schema({
   name: { type: String, trim: true, required: true },
   key: { type: String, slug: "name", required: false },
   values: [{ type: String, trim: true, required: true }]
 }, { timestamps: false, versionKey: false, id: false, _id: false });
 
-const specificationDetailSchema = new mongoose.Schema({
+const specificationDetailSchema = new Schema({
   groupName: { type: String, trim: true, required: true },
   groupKey: { type: String, slug: "groupName", required: false },
   groupItems: [specificationSchema]
 }, { timestamps: false, versionKey: false, id: false, _id: false });
 
-const productVariantSchema = new mongoose.Schema({
+const productVariantSchema = new Schema({
   sku: { type: String, trim: true, required: true },
 
   variantName: { type: String, trim: true },
@@ -34,7 +37,7 @@ const productVariantSchema = new mongoose.Schema({
   pictures: [{ type: String, trim: true }]
 }, { timestamps: true, versionKey: false });
 
-const productSchema = mongoose.Schema({
+const productSchema = new Schema({
   _id: mongoose.Types.ObjectId,
 
   name: { type: String, trim: true, required: true, minLength: 6, maxLength: 255 },

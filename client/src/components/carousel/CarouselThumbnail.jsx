@@ -49,7 +49,14 @@ function LargeItem({ item }) {
 
   return (
     <Box sx={{ position: 'relative', paddingTop: { xs: '100%', md: '50%' } }}>
-      <LargeImgStyle alt={title} src={image} />
+      <LargeImgStyle
+        alt={title}
+        src={image}
+        onError={({ currentTarget }) => {
+          currentTarget.onerror = null; // prevents looping
+          currentTarget.src = '/static/no-picture-available.png';
+        }}
+      />
     </Box>
   );
 }
@@ -61,7 +68,16 @@ ThumbnailItem.propTypes = {
 function ThumbnailItem({ item }) {
   const { image, title } = item;
 
-  return <ThumbImgStyle alt={title} src={image} />;
+  return (
+    <ThumbImgStyle
+      alt={title}
+      src={image}
+      onError={({ currentTarget }) => {
+        currentTarget.onerror = null; // prevents looping
+        currentTarget.src = '/static/no-picture-available.png';
+      }}
+    />
+  );
 }
 
 function CarouselThumbnail({ carousels }) {

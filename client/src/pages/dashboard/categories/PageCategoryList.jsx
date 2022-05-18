@@ -18,39 +18,31 @@ import {
   TableRow,
   Typography
 } from '@material-ui/core';
+import { useSnackbar } from 'notistack';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllCategories, deleteCategory } from '../../../redux/slices/categorySlice';
-// utils
-import { fDateTime } from '../../../utils/formatTime';
+import { useLocales } from '../../../hooks';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
+import { ThumbImgStyle } from '../../../components/@styled';
 import { MTablePagination } from '../../../components/@material-extend';
+import { MTableHead, MTableToolbar } from '../../../components/@material-extend/table';
+
 import Page from '../../../components/Page';
 import Label from '../../../components/Label';
 import Scrollbar from '../../../components/Scrollbar';
-import SearchNotFound from '../../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
 import LoadingScreen from '../../../components/LoadingScreen';
 import EmptyCard from '../../../components/EmptyCard';
 import { CategoryMoreMenu } from '../../../components/dashboard/category-list';
 import CategoryForm from './CategoryForm';
-import useLocales from '../../../hooks/useLocales';
 import { ImageBrokenIcon } from '../../../assets';
+
+// utils
+import { fDateTime } from '../../../utils/formatTime';
 import { stableSort, getComparator } from '../../../helper/listHelper';
-
-import { MTableHead, MTableToolbar } from '../../../components/@material-extend/table';
-
-// ----------------------------------------------------------------------
-
-const ThumbImgStyle = styled('img')(({ theme }) => ({
-  width: 64,
-  height: 64,
-  objectFit: 'cover',
-  margin: theme.spacing(0, 2, 0, 0),
-  borderRadius: theme.shape.borderRadiusSm
-}));
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +50,10 @@ export default function PageCategoryList() {
   const { t, currentLang } = useLocales();
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { list: categoriesList, isLoading, hasError } = useSelector((state) => state.category);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { list: categoriesList, isLoading, error, deletedIds } = useSelector((state) => state.category);
+
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('order');
   const [selected, setSelected] = useState([]);
@@ -67,12 +62,25 @@ export default function PageCategoryList() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentId, setCurrentId] = useState(null);
   const [openForm, setOpenForm] = useState(false);
+  const [deletingId, setDeletingId] = useState('');
 
   useEffect(() => {
     dispatch(getAllCategories());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (error) {
+      const mgs = error?.message?.[currentLang.value] || 'Có lỗi xảy ra !';
+      enqueueSnackbar(mgs, { variant: 'error' });
+    }
+    if (deletedIds && deletedIds.some((x) => x === deletingId)) {
+      enqueueSnackbar('Xóa danh mục thành công', { variant: 'success' });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error, deletedIds]);
+
   const handleDeleteCategory = (id, slug) => {
+    setDeletingId(id);
     dispatch(deleteCategory(id));
     const selectedIndex = selected.indexOf(slug);
     if (selectedIndex > -1) {
@@ -145,25 +153,31 @@ export default function PageCategoryList() {
     },
     {
       id: 'name',
-      align: 'right',
-      disablePadding: true,
+      align: 'left',
+      disablePadding: false,
       label: t('dashboard.categories.name')
     },
     {
       id: 'isHide',
-      align: 'right',
+      align: 'left',
       disablePadding: false,
       label: t('dashboard.categories.status')
     },
     {
+      id: 'countProduct',
+      align: 'left',
+      disablePadding: false,
+      label: 'Số SP'
+    },
+    {
       id: 'createdAt',
-      numeric: true,
+      align: 'right',
       disablePadding: false,
       label: t('dashboard.created-at')
     },
     {
       id: 'updatedAt',
-      numeric: true,
+      align: 'right',
       disablePadding: false,
       label: t('dashboard.updated-at')
     },
@@ -179,10 +193,6 @@ export default function PageCategoryList() {
 
   if (isLoading) {
     return <LoadingScreen />;
-  }
-
-  if (hasError) {
-    return <SearchNotFound />;
   }
 
   return (
@@ -227,7 +237,7 @@ export default function PageCategoryList() {
                     {stableSort(categoriesList, getComparator(order, orderBy))
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row, index) => {
-                        const { _id, slug, order, name, image, createdAt, updatedAt, isHide } = row;
+                        const { _id, slug, order, name, image, createdAt, updatedAt, isHide, countProduct } = row;
                         const isItemSelected = isSelected(slug);
                         const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -273,6 +283,7 @@ export default function PageCategoryList() {
                                 {t(`dashboard.categories.${isHide ? 'hidden' : 'visible'}`)}
                               </Label>
                             </TableCell>
+                            <TableCell align="left">{countProduct}</TableCell>
                             <TableCell align="right" style={{ minWidth: 160 }}>
                               {fDateTime(createdAt, currentLang.value)}
                             </TableCell>
@@ -293,7 +304,7 @@ export default function PageCategoryList() {
                       })}
                     {emptyRows > 0 && (
                       <TableRow style={{ height: (isCompact ? 33 : 53) * emptyRows }}>
-                        <TableCell colSpan={6} />
+                        <TableCell colSpan={tableHeads.length + 1} />
                       </TableRow>
                     )}
                   </TableBody>

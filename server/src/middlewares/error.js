@@ -2,6 +2,7 @@ import { ValidationError } from 'express-validation';
 import httpStatus from 'http-status';
 import ApiErrorUtils from '../utils/ApiErrorUtils.js';
 import UploadUtils from '../utils/UploadUtils.js';
+import SlackUtils from '../utils/SlackUtils.js';
 
 export default {
   converter,
@@ -70,6 +71,11 @@ function handler(err, req, res, _) {
     ip: req.ipv4,
     url: req.originalUrl,
   };
+
+  let mgs = `❌ A Request from ip: *${req.ipv4}*, path: *${req.originalUrl}* has error: \`${response.message}\``;
+  mgs += `\n\`\`\`${JSON.stringify(response, null, 2)}\`\`\``;
+
+  SlackUtils.sendMessage(mgs, 'C03FMRF45K7');
 
   if (process.env.NODE_ENV !== 'dev') {
     delete response.stack;

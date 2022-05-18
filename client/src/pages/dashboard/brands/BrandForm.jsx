@@ -24,7 +24,7 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import { useSnackbar } from 'notistack';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { createBrand, updateBrand } from '../../../redux/actions/brands';
+import { createBrand, updateBrand } from '../../../redux/slices/brandSlice';
 // hooks
 import useLocales from '../../../hooks/useLocales';
 // components
