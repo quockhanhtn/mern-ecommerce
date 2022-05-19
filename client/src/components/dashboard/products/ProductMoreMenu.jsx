@@ -51,6 +51,11 @@ export default function ProductMoreMenu({ productId, productName, isHide, onChan
     setIsOpen(false);
   };
 
+  const handleDeleteSuccess = () => {
+    onDelete();
+    setOpenDialogConfirm(false);
+  };
+
   return (
     <>
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
@@ -92,7 +97,7 @@ export default function ProductMoreMenu({ productId, productName, isHide, onChan
       <DialogConfirm
         open={openDialogConfirm}
         setOpen={setOpenDialogConfirm}
-        handleSubmit={onDelete}
+        handleSubmit={handleDeleteSuccess}
         textContent={textConfirmDelete}
       />
     </>
