@@ -256,7 +256,7 @@ export default function PageProductList() {
                     onDelete={() => handleDeleteProduct(_id, slug)}
                     onChangeHide={handleChangeProductHide}
                     productId={_id}
-                    nameInfo={name}
+                    productName={name}
                     isHide={isHide}
                   />
                 </TableCell>

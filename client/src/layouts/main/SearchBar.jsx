@@ -191,7 +191,6 @@ export default function SearchBar({ iconSx }) {
         renderInput={(params) => (
           <TextField
             {...params}
-            autoFocus
             disableUnderline
             placeholder={t('common.search-placeholder')}
             // variant="standard"
