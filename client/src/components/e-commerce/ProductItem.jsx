@@ -84,7 +84,7 @@ export default function ProductItem({ product }) {
 
         <PriceBoxStyle>
           <Typography variant="subtitle1" noWrap color="primary" sx={{ mr: 2 }}>
-            {variants[0].price ? fCurrency(variants[0].price, currentLang.value) : t('product.free')}
+            {variants[0].price ? fCurrency(variants[0].price, currentLang.value) : t('products.fee')}
           </Typography>
 
           <Typography

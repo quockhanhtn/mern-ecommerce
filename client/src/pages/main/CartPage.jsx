@@ -52,13 +52,14 @@ function QontoStepIcon({ active, completed }) {
 // ----------------------------------------------------------------------
 
 const StepperStyle = styled(Stepper)(({ theme }) => ({
-  position: 'fixed',
-  left: theme.spacing(2),
-  top: '50%',
-  transform: 'translateY(-50%)',
-  zIndex: 1000,
-  alignItems: 'center',
-  justifyContent: 'center'
+  [theme.breakpoints.up(1440)]: {
+    position: 'fixed',
+    left: theme.spacing(2),
+    top: 100, // top bar size
+    zIndex: 1000,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 }));
 
 const StepLabelStyle = styled(StepLabel)(({ theme }) => ({

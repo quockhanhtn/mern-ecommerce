@@ -32,12 +32,14 @@ import { MButton, MHidden } from '../@material-extend';
 import { fCurrency } from '../../utils/formatNumber';
 import { addItemToCart } from '../../redux/slices/cartSlice';
 import { useLocales } from '../../hooks';
-import { IncrementerField } from '../Incrementer';
+import { Incrementer } from '../Incrementer';
 
 // ----------------------------------------------------------------------
 
-const RootStyle = styled('div')(({ theme }) => ({
-  padding: theme.spacing(3),
+const RootStyle = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  padding: theme.spacing(1),
   [theme.breakpoints.up(1368)]: {
     padding: theme.spacing(5, 8)
   }
@@ -49,12 +51,16 @@ function VariantGrid(props) {
   const { variantName, thumbnail, sku } = variant;
 
   const handleOnClick = () => {
+    console.log('VariantGrid', variant);
     onClick(variant);
   };
 
   return (
     <Grid key={key} item xs={12}>
-      <OptionStyle border={isSelected ? `solid 3px ${theme.palette.primary.main}` : null}>
+      <OptionStyle
+        padding={theme.spacing(0, 0, 0, 3)}
+        border={isSelected ? `solid 3px ${theme.palette.primary.main}` : null}
+      >
         <FormControlLabel
           onClick={handleOnClick}
           value={sku}
@@ -62,10 +68,17 @@ function VariantGrid(props) {
           label={
             <Box>
               <Typography variant="subtitle2">{variantName}</Typography>
-              {displayPrice && (
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {formatPrice}
-                </Typography>
+              {displayPrice && formatPrice && (
+                <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                  <Typography variant="body2" color="error" sx={{ mr: 2, fontWeight: 600 }}>
+                    {formatPrice}
+                  </Typography>
+                  {formatMarketPrice && (
+                    <Typography variant="body2" sx={{ color: 'text.secondary', textDecoration: 'line-through' }}>
+                      {formatMarketPrice}
+                    </Typography>
+                  )}
+                </Box>
               )}
             </Box>
           }
@@ -83,7 +96,8 @@ VariantGrid.propTypes = {
   isSelected: PropTypes.bool,
   displayPrice: PropTypes.bool,
   formatPrice: PropTypes.string,
-  formatMarketPrice: PropTypes.string
+  formatMarketPrice: PropTypes.string,
+  onClick: PropTypes.func
 };
 
 // ----------------------------------------------------------------------
@@ -129,6 +143,13 @@ function ProductVariantInfo({ allVariants, productId, productName, onChangeVaria
       setSelectedVariant(allVariants.find((x) => x.sku === value)[0]);
     }
   };
+  const handleIncreaseQuantity = (_event) => {
+    setSelectedQty((prev) => prev + 1);
+  };
+
+  const handleDecreaseQuantity = (_event) => {
+    setSelectedQty((prev) => prev - 1);
+  };
 
   const renderAutocompleteOpt = (props, option, state) => {
     const { sku, price, marketPrice } = option;
@@ -162,7 +183,7 @@ function ProductVariantInfo({ allVariants, productId, productName, onChangeVaria
     // }
     return (
       <RadioGroup row onChange={handleChangeVariant} value={selectedVariant.sku}>
-        <Grid container spacing={2}>
+        <Grid container spacing={0.5}>
           {allVariants.map((item, index) => {
             const { sku, price, marketPrice } = item;
 
@@ -189,8 +210,8 @@ function ProductVariantInfo({ allVariants, productId, productName, onChangeVaria
 
   return (
     <RootStyle>
-      <Typography variant="h3" component="span">
-        {selectedVariant.price ? fCurrency(selectedVariant.price, currentLang.value) : t('product.free')}
+      <Typography variant="h3" component="span" color="error">
+        {selectedVariant.price ? fCurrency(selectedVariant.price, currentLang.value) : t('products.fee')}
         <Box component="span" sx={{ ml: 3, color: 'text.disabled', textDecoration: 'line-through', fontSize: '75%' }}>
           {selectedVariant.marketPrice && fCurrency(selectedVariant.marketPrice, currentLang.value)}
         </Box>
@@ -198,28 +219,26 @@ function ProductVariantInfo({ allVariants, productId, productName, onChangeVaria
 
       <Divider sx={{ borderStyle: 'dashed' }} />
 
-      <Stack spacing={3} sx={{ my: 3 }}>
-        {renderVariantsList()}
+      <Typography variant="subtitle1" sx={{ my: 0.5 }}>
+        {t('products.variant')}
+      </Typography>
+      {renderVariantsList()}
 
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
-            Số lượng
-          </Typography>
-          <div>
-            {/* <IncrementerField name="quantity" available={selectedVariant.quantity} /> */}
-            <Typography
-              variant="caption"
-              sx={{
-                mt: 1,
-                display: 'block',
-                textAlign: 'right',
-                color: 'text.secondary'
-              }}
-            >
-              Còn: {selectedVariant.quantity} SP
-            </Typography>
-          </div>
-        </Stack>
+      <Divider sx={{ borderStyle: 'dashed' }} />
+
+      <Stack direction="row" justifyContent="space-between">
+        <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+          {t('products.quantity')}
+        </Typography>
+        <Box justifyContent="flex-end">
+          <Incrementer
+            quantity={selectedQty}
+            available={selectedVariant.quantity - selectedVariant.sold}
+            availableText={t('cart.available', { available: selectedVariant.quantity - selectedVariant.sold })}
+            onDecrease={handleDecreaseQuantity}
+            onIncrease={handleIncreaseQuantity}
+          />
+        </Box>
       </Stack>
 
       <Divider sx={{ borderStyle: 'dashed' }} />

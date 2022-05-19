@@ -106,7 +106,7 @@ export default function ProductRelatedPage() {
                       <Typography variant="h4" component="span">
                         {product?.variants[0].price
                           ? fCurrency(product?.variants[0].price, currentLang.value)
-                          : t('product.free')}
+                          : t('products.fee')}
                         <Box
                           component="span"
                           sx={{ ml: 3, color: 'text.disabled', textDecoration: 'line-through', fontSize: '75%' }}

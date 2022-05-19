@@ -170,6 +170,8 @@ export default function ProductDetailPage() {
               {product?.variants && (
                 <ProductVariantInfo
                   allVariants={product.variants}
+                  productId={product._id}
+                  productName={product.name}
                   selectedVariant={selectedV}
                   onChangeVariant={handleChangeVariant}
                 />
