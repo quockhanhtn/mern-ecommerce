@@ -90,7 +90,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Typography variant="h3" component="span">
-            {variants[0].price ? fCurrency(variants[0].price, currentLang.value) : t('product.free')}
+            {variants[0].price ? fCurrency(variants[0].price, currentLang.value) : t('products.fee')}
             <Box
               component="span"
               sx={{ ml: 3, color: 'text.disabled', textDecoration: 'line-through', fontSize: '75%' }}

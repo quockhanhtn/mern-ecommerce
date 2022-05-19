@@ -14,6 +14,7 @@ import {
   Link,
   ClickAwayListener
 } from '@material-ui/core';
+import { experimentalStyled as styled } from '@material-ui/core/styles';
 // hook
 import { useNavigate } from 'react-router-dom';
 import useLocales from '../../hooks/useLocales';
@@ -29,6 +30,17 @@ import Label from '../../components/Label';
 
 // ----------------------------------------------------------------------
 
+const StyledAutocomplete = styled(Autocomplete)(({ theme }) => ({
+  fontWeight: 'fontWeightBold',
+  maxWidth: 400,
+  marginLeft: 3,
+  zIndex: 999,
+  backgroundColor: `${theme.palette.primary.lighter}40`,
+  '& .MuiAutocomplete-listbox': {
+    maxHeight: '80vh'
+  }
+}));
+
 export default function SearchBar({ iconSx }) {
   const { t, currentLang } = useLocales();
   const navigate = useNavigate();
@@ -43,7 +55,7 @@ export default function SearchBar({ iconSx }) {
     try {
       setIsLoading(true);
       const { data } = await getSearchSuggest(keyword);
-      setResults((prev) => [...data.data]);
+      setResults((_prev) => [...data.data]);
     } catch (e) {
       console.log(e);
     }
@@ -74,6 +86,14 @@ export default function SearchBar({ iconSx }) {
   const handleNavigate = () => {
     setOpen(false);
     navigate(`/q?search=${encodeURIComponent(keyWord)}`);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleNavigate();
+    } else if (event.key === 'Escape') {
+      setOpen(false);
+    }
   };
 
   const handleOnClickResultItem = (product) => {
@@ -110,7 +130,7 @@ export default function SearchBar({ iconSx }) {
             }
           }}
         >
-          <ThumbImgStyle alt="product image" src={product.variants[0].thumbnail} />
+          <ThumbImgStyle alt={product.name} src={product.variants[0].thumbnail} />
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography variant="subtitle1" style={{ wordWrap: 'break-word' }}>
               {product.name}
@@ -151,7 +171,7 @@ export default function SearchBar({ iconSx }) {
 
   return (
     <ClickAwayListener onClickAway={handleClose}>
-      <Autocomplete
+      <StyledAutocomplete
         fullWidth
         freeSolo
         autoComplete
@@ -173,7 +193,8 @@ export default function SearchBar({ iconSx }) {
             {...params}
             disableUnderline
             placeholder={t('common.search-placeholder')}
-            variant="standard"
+            // variant="standard"
+            size="small"
             InputProps={{
               ...params.InputProps,
               startAdornment: (
@@ -190,17 +211,7 @@ export default function SearchBar({ iconSx }) {
             onChange={handleTextChange}
           />
         )}
-        onKeyPress={(e) => {
-          if (e.key === 'Enter') {
-            handleNavigate();
-          }
-        }}
-        onKeyDown={(event) => {
-          if (event.key === 'Escape') {
-            setOpen(false);
-          }
-        }}
-        sx={{ mr: 1, fontWeight: 'fontWeightBold', maxWidth: 380, marginLeft: 3, zIndex: 999 }}
+        onKeyDown={handleKeyDown}
       />
     </ClickAwayListener>
   );
