@@ -384,6 +384,7 @@ export default {
     }
   },
   products: {
+    fee: 'Giá liên hệ',
     'page-title': 'Quản lý sản phẩm | HK Mobile',
     title: 'Sản phẩm',
     list: 'Danh sách sản phẩm',
@@ -410,6 +411,7 @@ export default {
     'market-price-validation': 'Vui lòng nhập giá thị trường',
     sku: 'Mã sku',
     'sku-validation': 'Sku is required',
+    variant: 'Phiên bản',
     quantity: 'Số lượng',
     'warranty-period': 'Warranty Period',
     'specifications-name': 'Thông số',

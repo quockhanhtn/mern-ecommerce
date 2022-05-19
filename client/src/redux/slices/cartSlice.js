@@ -223,11 +223,13 @@ export const decreaseItemQty = (item) => async (dispatch, getState) => {
   }
 };
 
-export const removeItem = (item) => async (dispatch) => {
+export const removeItem = (item) => async (dispatch, getState) => {
   try {
     dispatch(actions.startLoading());
     const { productId, sku } = item;
-    await api.removeItemFromCart(productId, sku);
+    if (getState().cart.isAuthenticated) {
+      await api.removeItemFromCart(productId, sku);
+    }
     dispatch(actions.removeItem(item));
     dispatch(handleUpdateTrackingCart(productId));
   } catch (e) {
