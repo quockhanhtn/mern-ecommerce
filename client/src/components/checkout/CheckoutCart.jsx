@@ -137,7 +137,7 @@ export default function CheckoutCart() {
 
   const handleOnClickProduct = (e, productId, sku) => {
     dispatch(trackingClick({ productId }));
-    navigate(`/c'/${productId}?code=${sku}`);
+    navigate(`/c/${productId}?sku=${sku}`);
   };
 
   const handleSelectChange = (e, productId, sku) => {

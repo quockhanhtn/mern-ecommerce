@@ -27,6 +27,7 @@
     "import": 0,
     "max-len": 0,
     "no-alert": 0,
+    "no-plusplus": 0,
     "no-shadow": 0,
     "no-console": 0,
     "comma-dangle": 0,

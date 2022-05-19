@@ -1,13 +1,10 @@
 // icons
 import { Icon } from '@iconify/react';
 import roundAddShoppingCart from '@iconify/icons-ic/round-add-shopping-cart';
-import plusFill from '@iconify/icons-eva/plus-fill';
-import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
 //
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
 import {
@@ -16,7 +13,6 @@ import {
   Button,
   Divider,
   FormControlLabel,
-  FormHelperText,
   Grid,
   Radio,
   RadioGroup,
@@ -28,7 +24,7 @@ import {
 import { useState, useEffect } from 'react';
 //
 import { OptionStyle, ThumbImgStyle } from '../@styled';
-import { MButton, MHidden } from '../@material-extend';
+import { MButton } from '../@material-extend';
 import { fCurrency } from '../../utils/formatNumber';
 import { addItemToCart } from '../../redux/slices/cartSlice';
 import { useLocales } from '../../hooks';
@@ -39,6 +35,8 @@ import { Incrementer } from '../Incrementer';
 const RootStyle = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
+  height: '100%',
+  justifyContent: 'space-between',
   padding: theme.spacing(1),
   [theme.breakpoints.up(1368)]: {
     padding: theme.spacing(5, 8)
@@ -111,18 +109,46 @@ function ProductVariantInfo({ allVariants, productId, productName, onChangeVaria
 
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [selectedQty, setSelectedQty] = useState(1);
+  const [isSoldOut, setIsSoldOut] = useState(false);
 
   useEffect(() => {
     if (!selectedVariant) {
-      setSelectedVariant(allVariants[0]);
+      let i = 0;
+      let defaultVariant = null;
+      while (i < allVariants.length - 1) {
+        defaultVariant = allVariants[i];
+        if (defaultVariant.quantity - defaultVariant.sold <= 0) {
+          i++;
+        } else {
+          break;
+        }
+      }
+      // eslint-disable-next-line prettier/prettier, prefer-destructuring
+      if (!defaultVariant) { defaultVariant = allVariants[0]; }
+      setSelectedVariant(defaultVariant);
     }
   }, [allVariants, selectedVariant]);
 
   useEffect(() => {
     if (selectedVariant) {
       onChangeVariant(selectedVariant);
+      setIsSoldOut(selectedVariant.quantity - selectedVariant.sold <= 0);
     }
-  }, [selectedVariant, onChangeVariant]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedVariant]);
+
+  const handleChangeVariant = (event, value) => {
+    if (value) {
+      setSelectedVariant(allVariants.find((x) => x.sku === value.sku));
+    }
+  };
+  const handleIncreaseQuantity = (_event) => {
+    setSelectedQty((prev) => prev + 1);
+  };
+
+  const handleDecreaseQuantity = (_event) => {
+    setSelectedQty((prev) => prev - 1);
+  };
 
   const handleAddCart = () => {
     const selectVariant = selectedVariant;
@@ -138,17 +164,9 @@ function ProductVariantInfo({ allVariants, productId, productName, onChangeVaria
     dispatch(addItemToCart(newItem, moreInfo));
   };
 
-  const handleChangeVariant = (event, value) => {
-    if (value) {
-      setSelectedVariant(allVariants.find((x) => x.sku === value)[0]);
-    }
-  };
-  const handleIncreaseQuantity = (_event) => {
-    setSelectedQty((prev) => prev + 1);
-  };
-
-  const handleDecreaseQuantity = (_event) => {
-    setSelectedQty((prev) => prev - 1);
+  const handleBuyNow = (event) => {
+    handleAddCart();
+    navigate('/cart');
   };
 
   const renderAutocompleteOpt = (props, option, state) => {
@@ -157,30 +175,32 @@ function ProductVariantInfo({ allVariants, productId, productName, onChangeVaria
       <li {...props}>
         <VariantGrid
           key={`autocomplete_${sku}`}
+          isSelected={selectedVariant.sku === sku}
           variant={option}
+          displayPrice={allVariants.length > 1}
           formatPrice={fCurrency(price, currentLang.value)}
           formatMarketPrice={fCurrency(marketPrice)}
-          isSelected={state.selected}
+          onClick={(v) => setSelectedVariant(v)}
         />
       </li>
     );
   };
 
   const renderVariantsList = () => {
-    const length = allVariants?.length;
-    // if (product?.variants?.length > 4) {
-    //   return (
-    //     <Autocomplete
-    //       options={product?.variants}
-    //       renderInput={(params) => <TextField {...params} label="Danh mục" />}
-    //       renderOption={renderAutocompleteOpt}
-    //       fullWidth
-    //       disableClearable
-    //       value={selectedVariant}
-    //       onChange={handleChangeVariant}
-    //     />
-    //   );
-    // }
+    if (allVariants?.length > 4) {
+      return (
+        <Autocomplete
+          options={allVariants}
+          renderInput={(params) => <TextField {...params} label="" />}
+          getOptionLabel={(item) => item?.variantName}
+          renderOption={renderAutocompleteOpt}
+          fullWidth
+          disableClearable
+          value={selectedVariant}
+          onChange={handleChangeVariant}
+        />
+      );
+    }
     return (
       <RadioGroup row onChange={handleChangeVariant} value={selectedVariant.sku}>
         <Grid container spacing={0.5}>
@@ -219,12 +239,13 @@ function ProductVariantInfo({ allVariants, productId, productName, onChangeVaria
 
       <Divider sx={{ borderStyle: 'dashed' }} />
 
-      <Typography variant="subtitle1" sx={{ my: 0.5 }}>
-        {t('products.variant')}
-      </Typography>
-      {renderVariantsList()}
+      <Box sx={{ my: 1 }}>
+        <Typography variant="subtitle1" sx={{ my: 0.5 }}>
+          {t('products.variant')}
+        </Typography>
 
-      <Divider sx={{ borderStyle: 'dashed' }} />
+        {renderVariantsList()}
+      </Box>
 
       <Stack direction="row" justifyContent="space-between">
         <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
@@ -243,6 +264,8 @@ function ProductVariantInfo({ allVariants, productId, productName, onChangeVaria
 
       <Divider sx={{ borderStyle: 'dashed' }} />
 
+      {isSoldOut && <>Sản phẩm đã hết</>}
+
       <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 5 }}>
         <MButton
           fullWidth
@@ -253,11 +276,11 @@ function ProductVariantInfo({ allVariants, productId, productName, onChangeVaria
           startIcon={<Icon icon={roundAddShoppingCart} />}
           onClick={handleAddCart}
           sx={{ whiteSpace: 'nowrap' }}
-          disabled={isLoadingCart}
+          disabled={isLoadingCart || isSoldOut}
         >
           Thêm vào giỏ hàng
         </MButton>
-        <Button fullWidth size="large" type="submit" variant="contained">
+        <Button fullWidth size="large" variant="contained" disabled={isSoldOut} onClick={handleBuyNow}>
           Mua ngay
         </Button>
       </Stack>

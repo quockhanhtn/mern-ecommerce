@@ -9,6 +9,7 @@ export default {
   getOne,
   getAlls,
   getListByUser,
+  tryCreate,
   create,
   update,
 }
@@ -84,12 +85,21 @@ async function createWithTransaction(orderData, createdBy) {
       if (!product || product?.variants?.length === 0) {
         throw new ApiErrorUtils({
           message: 'Product does not exist',
-          errors: { productId: product._id, sku: product.variants[0].sku },
+          errors: { productId: cartItem.productId, sku: cartItem.sku },
           status: 404
         });
       }
 
-      if (product?.variants?.[0].sold + cartItem.qty > product?.variants?.[0].quantity) {
+      const selectedVariant = product.variants.find(variant => variant.sku === cartItem.sku);
+      if (!selectedVariant) {
+        throw new ApiErrorUtils({
+          message: 'Product does not exist',
+          errors: { productId: cartItem.productId, sku: cartItem.sku },
+          status: 404
+        });
+      }
+
+      if (selectedVariant.sold + cartItem.qty > selectedVariant.quantity) {
         throw new ApiErrorUtils({
           message: 'Product out of stock',
           errors: { productId: product._id, sku: product.variants[0].sku },
@@ -108,10 +118,10 @@ async function createWithTransaction(orderData, createdBy) {
         productId: product._id.toString(),
         sku: product.variants[0].sku,
         productName: product.name,
-        variantName: product?.variants?.[0].variantName,
-        thumbnail: product?.variants?.[0].thumbnail,
-        marketPrice: product?.variants?.[0].marketPrice,
-        pricePerUnit: product?.variants?.[0].price,
+        variantName: selectedVariant.variantName,
+        thumbnail: selectedVariant.thumbnail,
+        marketPrice: selectedVariant.marketPrice,
+        pricePerUnit: selectedVariant.price,
         quantity: cartItem.qty,
       });
     }
@@ -212,6 +222,26 @@ async function getAlls(search, status, paymentStatus, selectedFields = null) {
 
 async function getListByUser(userId, search, status, paymentStatus, selectedFields = null) {
   return getList(userId, search, status, paymentStatus, selectedFields);
+}
+
+/**
+ * Another function to create order, try to create order again if failed cause transaction
+ */
+async function tryCreate(customerInfo, orderData, createdBy) {
+  let countError = 0;
+  while (countError < 5) {
+    try {
+      const order = await create(customerInfo, orderData, createdBy);
+      return order;
+    } catch (err) {
+      const errMsg = (err?.message || '').toLowerCase();
+      if (errMsg.startsWith('transaction') && errMsg.endsWith('has been committed.')) {
+        countError++;
+      } else {
+        throw err;
+      }
+    }
+  }
 }
 
 /**
