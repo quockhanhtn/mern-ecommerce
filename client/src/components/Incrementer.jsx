@@ -43,9 +43,11 @@ function Incrementer({ available, availableText, quantity, onIncrease, onDecreas
           <Icon icon={plusFill} width={16} height={16} />
         </MIconButton>
       </IncrementerStyle>
-      <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-        {availableText}
-      </Typography>
+      {availableText && (
+        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+          {availableText}
+        </Typography>
+      )}
     </Box>
   );
 }

@@ -15,6 +15,8 @@ export default {
 };
 
 const formatResult = (product, sku, qty) => {
+  if (!product) return null;
+
   const { variants, _id: uuId, ...otherProductInfo } = product;
   const variantInfo = variants.find(v => v.sku === sku);
 

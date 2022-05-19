@@ -128,8 +128,8 @@ const cartSlice = createSlice({
     removeItem(state, action) {
       const { productId, sku } = action.payload;
 
-      state.allItems = state.allItems.filter((item) => item.productId !== productId && item.sku !== sku);
-      state.selectedItems = state.selectedItems.filter((item) => item.productId !== productId && item.sku !== sku);
+      state.allItems = state.allItems.filter((item) => item.productId !== productId || item.sku !== sku);
+      state.selectedItems = state.selectedItems.filter((item) => item.productId !== productId || sku.sku !== sku);
       state.itemsCount = state.allItems.length;
       state.isLoading = false;
       state.error = null;
@@ -139,7 +139,7 @@ const cartSlice = createSlice({
     changeSelect(state, action) {
       const { productId, sku, isSelect } = action.payload;
 
-      state.selectedItems = state.selectedItems.filter((item) => item.productId !== productId && item.sku !== sku);
+      state.selectedItems = state.selectedItems.filter((item) => item.productId !== productId || item.sku !== sku);
       if (isSelect) {
         state.selectedItems.push({ productId, sku });
       }
