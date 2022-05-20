@@ -1,4 +1,4 @@
-name: Deploy to Firebase Hosting on merge
+name: Start CI/CD on merge code to branch master
 'on':
   push:
     branches:
@@ -16,15 +16,22 @@ jobs:
         with:
           node-version: '14'
       
-      # - name: Run Unit test on server app 💫
-      #   working-directory: server
-      #   env:
-      #     CI: false
-      #     NODE_OPTIONS: '--max-old-space-size=8192'
-      #   run: |
-      #     set -x
-      #     npm ci
-      #     npm test
+      - name: 💫 Run unit test on server app
+        working-directory: server
+        env:
+          CI: false
+          NODE_OPTIONS: '--max-old-space-size=8192'
+        run: |
+          set -x
+          npm ci
+          npm test
+
+      - name: 🚀 Deploy Server API to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "api-mobile7076"
+          heroku_email: "quockhanhdev@gmail.com"
 
       - name: ⭐ Build Client app
         working-directory: client
@@ -42,7 +49,7 @@ jobs:
           npm ci
           npm run build
 
-      - name: ↗️ Archive build artifact
+      - name: ↗️ Archive client build artifact
         uses: actions/upload-artifact@v2
         with:
           name: build
@@ -54,7 +61,7 @@ jobs:
           name: build
           path: build
 
-      - name: 🚀 Deploy release app to Firebase
+      - name: 🚀 Deploy Client app to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
