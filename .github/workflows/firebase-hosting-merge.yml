@@ -8,51 +8,53 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
+      - name: 🛎️ Checkout
         uses: actions/checkout@v2
 
-      - name: NodeJs set up 💿
+      - name: 💿 NodeJs set up
         uses: actions/setup-node@v2
         with:
           node-version: '14'
       
-      - name: Run Unit test on server app 💫
-        working-directory: server
-        env:
-          CI: false
-          NODE_OPTIONS: '--max-old-space-size=8192'
-        run: |
-          set -x
-          npm ci
-          npm test
+      # - name: Run Unit test on server app 💫
+      #   working-directory: server
+      #   env:
+      #     CI: false
+      #     NODE_OPTIONS: '--max-old-space-size=8192'
+      #   run: |
+      #     set -x
+      #     npm ci
+      #     npm test
 
-      - name: Build Client app ⭐
+      - name: ⭐ Build Client app
         working-directory: client
         env:
           CI: false
           NODE_OPTIONS: '--max-old-space-size=8192'
           REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL }}
           REACT_APP_FIREBASE_CONFIG: ${{ secrets.REACT_APP_FIREBASE_CONFIG }}
-          REACT_APP_FPT_API_KEY: ${{ secrets.REACT_APP_FPT_API_KEY }}
-          REACT_APP_FPT_API_ID: ${{ secrets.REACT_APP_FPT_API_ID }}
+          REACT_APP_FPT_RELATED_ITEM_ID: ${{ secrets.REACT_APP_FPT_RELATED_ITEM_ID }}
+          REACT_APP_FPT_RELATED_ITEM_KEY: ${{ secrets.REACT_APP_FPT_RELATED_ITEM_KEY }}
+          REACT_APP_FPT_USER_BEHAVIOR_ID: ${{ secrets.REACT_APP_FPT_USER_BEHAVIOR_ID }}
+          REACT_APP_FPT_USER_BEHAVIOR_KEY: ${{ secrets.REACT_APP_FPT_USER_BEHAVIOR_KEY }}
         run: |
           set -x
           npm ci
           npm run build
 
-      - name: Archive build artifact ↗️
+      - name: ↗️ Archive build artifact
         uses: actions/upload-artifact@v2
         with:
           name: build
           path: ./client/build
 
-      - name: Download artifact ↙️ 
+      - name: ↙️ Download artifact
         uses: actions/download-artifact@v2
         with:
           name: build
           path: build
 
-      - name: Deploy release app to Firebase 🚀
+      - name: 🚀 Deploy release app to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

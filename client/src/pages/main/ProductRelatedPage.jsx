@@ -8,7 +8,7 @@ import { Box, Container, Card, CardContent, Stack, Typography } from '@material-
 import { useSelector, useDispatch } from 'react-redux';
 import { getProductById } from '../../redux/slices/productSlice';
 import * as api from '../../api';
-import { getRecommendation } from '../../api/fpt';
+import { getRelatedItems } from '../../api/fpt';
 // hooks
 import { useLocales } from '../../hooks';
 // components
@@ -46,8 +46,8 @@ export default function ProductRelatedPage() {
 
   async function fetchRelatedIds(productId) {
     try {
-      const fptRes = await getRecommendation(productId);
-      const ids = fptRes.data.data.map((x) => x.replace('{', '').replace('}', ''));
+      const fptRes = await getRelatedItems(productId);
+      const ids = fptRes.data.data.map((x) => x.id);
       setListIds([...ids]);
       setPage(0); // trigger to call useEffect([page])
     } catch (e) {
@@ -73,8 +73,9 @@ export default function ProductRelatedPage() {
   }, [productSlug]);
 
   useEffect(() => {
-    fetchRelatedIds(product?._id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (product?._id) {
+      fetchRelatedIds(product?._id);
+    }
   }, [product?._id]);
 
   useEffect(() => {
