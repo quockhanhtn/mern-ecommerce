@@ -5,7 +5,35 @@ name: Start CI/CD on merge code to branch master
       - master
 
 jobs:
-  build_and_deploy:
+  build_server_app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v2
+
+      # - name: 💿 NodeJs set up
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: '14'
+      
+      # - name: 💫 Run unit test on server app
+      #   working-directory: server
+      #   env:
+      #     CI: false
+      #     NODE_OPTIONS: '--max-old-space-size=8192'
+      #   run: |
+      #     set -x
+      #     npm ci
+      #     npm test
+
+      - name: 🚀 Deploy Server API to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "api-mobile7076"
+          heroku_email: "quockhanhdev@gmail.com"
+
+  build_client_app:
     runs-on: ubuntu-latest
     steps:
       - name: 🛎️ Checkout
@@ -15,23 +43,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-      
-      - name: 💫 Run unit test on server app
-        working-directory: server
-        env:
-          CI: false
-          NODE_OPTIONS: '--max-old-space-size=8192'
-        run: |
-          set -x
-          npm ci
-          npm test
-
-      - name: 🚀 Deploy Server API to Heroku
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "api-mobile7076"
-          heroku_email: "quockhanhdev@gmail.com"
 
       - name: ⭐ Build Client app
         working-directory: client
