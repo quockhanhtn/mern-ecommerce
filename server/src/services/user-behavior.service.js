@@ -146,7 +146,9 @@ async function getDataWithCalculateScore() {
         acc.push({
           productId,
           userData,
-          rating: (Number.parseFloat(score) / maxScore).toFixed(5)
+          rating: Number.parseFloat(
+            (Number.parseFloat(score) / maxScore).toFixed(5)
+          )
         });
         return acc;
       }, [])
