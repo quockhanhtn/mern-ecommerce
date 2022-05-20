@@ -301,25 +301,13 @@ async function getSuggestProducts(keyword) {
   return result;
 }
 
-async function getProductRecommend(productId, page = 1, limit = 10) {
+async function getProductRecommend(productId) {
   if (!ValidUtils.isUuid(productId)) {
     throw ApiErrorUtils.simple(`Product ${productId} not found !`, 404);
   }
 
   const recommendData = await ProductRecom.findOne({ productId: productId }).lean().exec();
-  if (!recommendData) {
-    return [];
-  }
-
-  const filter = { _id: { $in: recommendData.recommend } };
-  const total = await Product.countDocuments(filter, null).exec();
-  const list = await Product.find(filter)
-    .select('_id')
-    .skip((page - 1) * limit)
-    .limit(limit)
-    .lean().exec();
-
-  return { total, list };
+  return recommendData?.recommend || [];
 }
 
 async function createProduct(data) {

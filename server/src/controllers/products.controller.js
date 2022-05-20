@@ -183,35 +183,8 @@ export const getSuggestProducts = async (req, res, next) => {
 export const getProductRecommend = async (req, res, next) => {
   try {
     const { productId } = req.params;
-    const limit = parseInt(req.query.limit) || 10;
-    const page = parseInt(req.query.page) || 1;
-
-    let { list: products, total } = await productService.getProductRecommend(productId, page, limit);
-    products = products.map(p => formatProduct(p, req));
-    const pagination = {
-      total,
-      totalPages: Math.ceil(total / limit),
-      limit,
-      page,
-      hasNextPage: false,
-      nextPage: null,
-      hasPrevPage: false,
-      prevPage: null
-    };
-
-    // Set prev page
-    if (page > 1) {
-      pagination.hasPrevPage = true;
-      pagination.prevPage = page - 1;
-    }
-
-    // Set next page
-    if (page < pagination.totalPages) {
-      pagination.hasNextPage = true;
-      pagination.nextPage = page + 1;
-    }
-
-    ResponseUtils.status200(res, 'Get recommend products successfully!', products, { pagination });
+    const recommend = await productService.getProductRecommend(productId);
+    ResponseUtils.status200(res, 'Get recommend products successfully!', recommend);
   } catch (err) { next(err); }
 };
 

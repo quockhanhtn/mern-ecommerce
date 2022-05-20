@@ -42,6 +42,18 @@ const calculateScore = (behavior) => {
   }, 0);
 };
 
+function isInt(n) {
+  return Number(n) === n && n % 1 === 0;
+}
+
+function isFloat(n) {
+  return Number(n) === n && n % 1 !== 0;
+}
+
+function isValidRating(n) {
+  return (isInt(n) || isFloat(n)) && (n >= 0 && n <= 1);
+}
+
 const mergeData = (prevData, newData) => {
   const mergedData = { ...prevData };
   Object.keys(newData).forEach(key => {
@@ -143,17 +155,16 @@ async function getDataWithCalculateScore() {
     const maxScore = Math.max(...lst.map(({ score }) => score));
     result = result.concat(
       lst.reduce((acc, { productId, userData, score }) => {
-        acc.push({
-          productId,
-          userData,
-          rating: Number.parseFloat(
-            (Number.parseFloat(score) / maxScore).toFixed(5)
-          )
-        });
+        const rating = Number.parseFloat(
+          (Number.parseFloat(score) / maxScore).toFixed(5)
+        );
+        if (!Number.isNaN(rating)) {
+          acc.push({ productId, userData, rating });
+        }
         return acc;
       }, [])
     );
   });
 
-  return result;
+  return result.filter((x) => isValidRating(x.rating));
 }

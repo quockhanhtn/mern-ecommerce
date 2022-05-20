@@ -82,14 +82,15 @@ async function importProductDataToFpt() {
   let isSuccess = true;
 
   while (countSuccess < total) {
+    const url = `/${datasetName}/${countSuccess === 0 ? 'overwrite' : 'append'}`;
+    const items = list.slice(countSuccess, countSuccess + 100);
     try {
-      const url = `/${datasetName}/${countSuccess === 0 ? 'overwrite' : 'append'}`;
-      const item = list[countSuccess];
-      await axiosInstance.post(url, [item]);
-      countSuccess++;
+      await axiosInstance.post(url, [items]);
+      countSuccess += items?.length || 0;
+      console.log(`Success: ${countSuccess}/${total}`);
     } catch (err) {
       errorDetails.push({
-        itemId: item.id,
+        items,
         mgs: err.message,
         detail: JSON.stringify(err)
       });
@@ -107,6 +108,7 @@ async function importProductDataToFpt() {
     mgs += `\n\nError details: \n`;
     errorDetails.forEach(item => {
       mgs += `\t- *${item.itemId}* Message: ${item.mgs}, detail: ${item.detail}\n`;
+      mgs += `\n: Items: \n\`\`\`\n${JSON.stringify(item.items)}\n\`\`\`\``;
     });
   }
   await SlackUtils.sendMessageSync(mgs, 'C02BFR5KSUW');
@@ -201,14 +203,16 @@ async function importUserBehaviorToFpt() {
   let isSuccess = true;
 
   while (countSuccess < total) {
+    const url = `/${datasetName}/${countSuccess === 0 ? 'overwrite' : 'append'}`;
+    // const item = list[countSuccess];
+    const items = list.slice(countSuccess, countSuccess + 100);
     try {
-      const url = `/${datasetName}/${countSuccess === 0 ? 'overwrite' : 'append'}`;
-      const item = list[countSuccess];
-      await axiosInstance.post(url, [item]);
-      countSuccess++;
+      await axiosInstance.post(url, items);
+      countSuccess += items?.length || 0;
+      console.log(`Success: ${countSuccess}/${total}`);
     } catch (err) {
       errorDetails.push({
-        itemId: item.userData + '_' + item.productId,
+        items,
         mgs: err.message,
         detail: JSON.stringify(err)
       });
@@ -225,7 +229,8 @@ async function importUserBehaviorToFpt() {
   if (errorDetails?.length > 0) {
     mgs += `\n\nError details: \n`;
     errorDetails.forEach(item => {
-      mgs += `\t- *${item.itemId}* Message: ${item.mgs}, detail: ${item.detail}\n`;
+      mgs += `\t- Message: ${item.mgs}, detail: ${item.detail}\n`;
+      mgs += `\n: Items: \n\`\`\`\n${JSON.stringify(item.items)}\n\`\`\`\``;
     });
   }
   await SlackUtils.sendMessageSync(mgs, 'C029YEKCH5M');
