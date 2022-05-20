@@ -109,7 +109,7 @@ async function importProductDataToFpt() {
     mgs += `\n\nError details: \n`;
     errorDetails.forEach(item => {
       mgs += `\t- *${item.itemId}* Message: ${item.mgs}, detail: ${item.detail}\n`;
-      mgs += `\n: Items: \n\`\`\`\n${JSON.stringify(item.items)}\n\`\`\`\``;
+      mgs += `\n: Items: \n\`\`\`\n${JSON.stringify(item.items, null, 2)}\n\`\`\`\``;
     });
   }
   await SlackUtils.sendMessageSync(mgs, 'C02BFR5KSUW');
@@ -231,7 +231,7 @@ async function importUserBehaviorToFpt() {
     mgs += `\n\nError details: \n`;
     errorDetails.forEach(item => {
       mgs += `\t- Message: ${item.mgs}, detail: ${item.detail}\n`;
-      mgs += `\n: Items: \n\`\`\`\n${JSON.stringify(item.items)}\n\`\`\`\``;
+      mgs += `\n: Items: \n\`\`\`\n${JSON.stringify(item.items, null, 2)}\n\`\`\`\``;
     });
   }
   await SlackUtils.sendMessageSync(mgs, 'C029YEKCH5M');

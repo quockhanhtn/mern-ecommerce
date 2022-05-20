@@ -8,6 +8,7 @@ import socketHandler from './socket.io.js';
 import fptService from './services/fpt.service.js';
 import LogUtils from './utils/LogUtils.js';
 import SlackUtils from './utils/SlackUtils.js';
+import FormatUtils from './utils/FormatUtils.js';
 
 const serverIp = Object.entries((Object.entries(os.networkInterfaces())[0]))?.[1]?.[1]?.filter(x => x.family === 'IPv4')?.[0]?.address || '';
 const serverPort = process.env.PORT || 3001;
@@ -23,8 +24,19 @@ serverApi.listen(serverPort, () => {
 
   if (process.env.NODE_ENV !== 'dev') {
     let startMgs = '------------------------------------------------------';
-    startMgs += `Server running at *${serverIp}:${serverPort}*`;
-    startMgs += '------------------------------------------------------';
+    startMgs += `\nServer running at *${serverIp}:${serverPort}*`;
+    const machineInfo = {
+      hostname: os.hostname(),
+      platform: os.platform(),
+      release: os.release(),
+      type: os.type(),
+      arch: os.arch(),
+      cpuModel: os.cpus()?.[0]?.model,
+      memory: `${FormatUtils.formatBytes(os.freemem())} / ${FormatUtils.formatBytes(os.totalmem())}`,
+    }
+    startMgs += `\nMachine info: \`\`\`${JSON.stringify(machineInfo, null, 2)}\`\`\``;
+   
+    startMgs += '\n------------------------------------------------------\n';
     SlackUtils.sendMessage(startMgs);
 
     const scheduleOpts = { scheduled: true, timezone: 'Asia/Ho_Chi_Minh' };
