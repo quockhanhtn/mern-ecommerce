@@ -20,7 +20,6 @@ import { useSnackbar } from 'notistack';
 import * as Yup from 'yup';
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
-import { useNavigate } from 'react-router-dom';
 import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
 import { UploadMultiFile, UploadSingleFile } from '../../../components/upload';
 import useLocales from '../../../hooks/useLocales';
@@ -188,14 +187,14 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
           const productVariantData = handleAddDataForProductVariant(uploadImage);
           if (currentVariant) {
             dispatch(updateProductVariant(currentProductId, currentVariant.sku, productVariantData));
-            enqueueSnackbar(t('dashboard.brands.edit-title'), {
+            enqueueSnackbar(t('dashboard.products.save'), {
               variant: 'success'
             });
             handleCreateDone();
             return true;
           }
           dispatch(createProductVariant(currentProductId, productVariantData));
-          enqueueSnackbar(t('dashboard.brands.edit-title'), {
+          enqueueSnackbar(t('dashboard.products.save'), {
             variant: 'success'
           });
           handleCreateDone();
@@ -220,14 +219,14 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
           const productVariantData = handleAddDataForProductVariant(url);
           if (currentVariant) {
             dispatch(updateProductVariant(currentProductId, currentVariant.sku, productVariantData));
-            enqueueSnackbar(t('dashboard.brands.edit-title'), {
+            enqueueSnackbar(t('dashboard.products.save'), {
               variant: 'success'
             });
             handleCreateDone();
             return true;
           }
           dispatch(createProductVariant(currentProductId, productVariantData));
-          enqueueSnackbar(t('dashboard.brands.edit-title'), {
+          enqueueSnackbar(t('dashboard.products.save'), {
             variant: 'success'
           });
           handleCreateDone();
@@ -304,11 +303,8 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
     onSubmit: async () => {
       try {
         handleSave();
-      } catch (e) {
-        enqueueSnackbar('Lỗi', {
-          variant: 'error'
-        });
-      }
+        // eslint-disable-next-line no-empty
+      } catch (e) {}
     }
   });
 
