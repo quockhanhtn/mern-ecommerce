@@ -5,12 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "predev": "cls",
     "dev": "nodemon ./src/index.js --trace-warnings --unhandled-rejections=strict",
     "start": "node ./src/index.js",
-    "insert-data": "nodemon ./tool/insert-data.js",
-    "import-data": "nodemon ./tool/import-data-to-fpt.js",
-    "import-user-behavior": "nodemon ./tool/import-user-behavior.js",
+    "insert-data": "nodemon ./tool/update-data.js",
     "tes": "nodemon ./tool/test.js"
   },
   "contributors": [
