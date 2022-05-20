@@ -80,12 +80,13 @@ async function importProductDataToFpt() {
   let countError = 0, countSuccess = 0, total = list.length;
   let errorDetails = [];
   let isSuccess = true;
+  const step = 50;
 
   while (countSuccess < total) {
     const url = `/${datasetName}/${countSuccess === 0 ? 'overwrite' : 'append'}`;
-    const items = list.slice(countSuccess, countSuccess + 100);
+    const items = list.slice(countSuccess, countSuccess + step);
     try {
-      await axiosInstance.post(url, [items]);
+      await axiosInstance.post(url, items);
       countSuccess += items?.length || 0;
       console.log(`Success: ${countSuccess}/${total}`);
     } catch (err) {

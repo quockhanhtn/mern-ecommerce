@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getProductById } from '../../redux/slices/productSlice';
 import { trackingViewCount, trackingViewTime } from '../../redux/slices/userBehaviorSlice';
 import * as api from '../../api';
-import { getRecommendation } from '../../api/fpt';
+import { getRelatedItems } from '../../api/fpt';
 // hooks
 import { useLocales, useInterval } from '../../hooks';
 // components
@@ -72,8 +72,8 @@ export default function ProductDetailPage() {
   async function fetchRelatedItems(productId) {
     setIsLoadingRelated(true);
     try {
-      const fptRes = await getRecommendation(productId);
-      const listIds = fptRes.data.data.map((x) => x.replace('{', '').replace('}', ''));
+      const fptRes = await getRelatedItems(productId);
+      const listIds = fptRes.data.data.map((x) => x.id);
       const { data } = await api.getRelatedProduct(listIds.slice(0, 10));
       setRelatedItems(data.data);
     } catch (e) {

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import * as api from '../../api';
-import { getRecommendation } from '../../api/fpt';
+import { getRelatedItems } from '../../api/fpt';
 
 const initialState = {
   isLoading: true,
@@ -274,8 +274,8 @@ export const getRelatedProducts = (id) => async (dispatch) => {
     if (reducer.related?.[id]) {
       dispatch(actions.relatedExists(id));
     } else {
-      const fptRes = await getRecommendation(id);
-      const listIds = fptRes.data.data.map((x) => x.replace('{', '').replace('}', ''));
+      const fptRes = await getRelatedItems(id);
+      const listIds = fptRes.data.data.map((x) => x.id);
       const { data } = await api.getRelatedProduct(listIds.slice(0, 5));
       dispatch(
         actions.getRelatedSuccess({
