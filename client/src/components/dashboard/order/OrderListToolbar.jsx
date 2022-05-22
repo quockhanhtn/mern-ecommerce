@@ -125,6 +125,7 @@ export default function OrderListToolbar({
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <SearchStyle
+                size="small"
                 value={search}
                 onChange={onSearchChange}
                 onKeyDown={onKeyDown}
@@ -139,6 +140,7 @@ export default function OrderListToolbar({
             </Grid>
             <Grid item xs={6} sm={3}>
               <Autocomplete
+                size="small"
                 fullWidth
                 disableClearable
                 options={orderStatusList}
@@ -151,6 +153,7 @@ export default function OrderListToolbar({
             </Grid>
             <Grid item xs={6} sm={3}>
               <Autocomplete
+                size="small"
                 fullWidth
                 disableClearable
                 options={paymentStatusList}

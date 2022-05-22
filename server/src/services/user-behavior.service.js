@@ -94,11 +94,11 @@ async function handleUserBehavior(userIdentifier, trackingData) {
 
 async function handleUpdateBoughtCount(userIdentifier, orderItems) {
   const boughtData = Object.entries(
-    orderItems.reduce((acc, { product, quantity }) => {
-      if (!acc[product]) {
-        acc[product] = 0;
+    orderItems.reduce((acc, { productId, quantity }) => {
+      if (!acc[productId]) {
+        acc[productId] = 0;
       }
-      acc[product] += quantity;
+      acc[productId] += quantity;
       return acc;
     }, {})
   );
@@ -117,7 +117,7 @@ async function handleUpdateBoughtCount(userIdentifier, orderItems) {
           userBehavior.behavior = { [BEHAVIOR.BOUGHT_COUNT]: qty };
         }
       }
-      await userBehavior.save();
+      await UserBehavior.findByIdAndUpdate(userBehavior._id, { $set: { behavior: userBehavior.behavior } });
     } else {
       const newUserBehavior = new UserBehavior({
         _id: new mongoose.Types.ObjectId(),

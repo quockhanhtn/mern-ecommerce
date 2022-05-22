@@ -217,7 +217,7 @@ export default function PageOrderList() {
 
   return (
     <Page title={t('order.dashboard-page-title')}>
-      <Container>
+      <Container maxWidth={false}>
         <CategoryForm open={openForm} setOpen={setOpenForm} currentId={currentId} setCurrentId={setCurrentId} />
 
         <OrderDetailForm
