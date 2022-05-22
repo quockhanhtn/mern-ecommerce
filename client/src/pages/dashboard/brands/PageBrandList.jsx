@@ -195,7 +195,7 @@ export default function PageBrandList() {
 
   return (
     <Page title={t('dashboard.brands.page-title')}>
-      <Container>
+      <Container maxWidth={false}>
         {openForm && <BrandForm open={openForm} setOpen={setOpenForm} currentId={currentId} />}
         <HeaderBreadcrumbs
           heading={t('dashboard.brands.heading')}

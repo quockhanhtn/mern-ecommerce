@@ -166,7 +166,7 @@ function MainNavbar({ categoryList, showCategoryMenu, cartItemsCount }) {
           ...(isOffset && { bgcolor: 'background.default', height: { md: APP_BAR_DESKTOP - 16 } })
         })}
       >
-        <ContainerStyle maxWidth="lg">
+        <ContainerStyle maxWidth="lg" style={{ height: 64 }}>
           <RouterLink to="/">
             <MHidden width="mdUp">
               <Logo />
@@ -199,6 +199,7 @@ function MainNavbar({ categoryList, showCategoryMenu, cartItemsCount }) {
             <AccountPopover menuOptions={accountMenus} isShowTitle />
           </Stack>
         </ContainerStyle>
+
         {showCategoryMenu ? (
           <MHidden width="mdDown">
             <ColorBar>

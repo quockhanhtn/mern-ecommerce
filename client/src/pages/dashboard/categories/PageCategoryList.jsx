@@ -197,7 +197,7 @@ export default function PageCategoryList() {
 
   return (
     <Page title={t('dashboard.categories.page-title')}>
-      <Container>
+      <Container maxWidth={false}>
         <CategoryForm open={openForm} setOpen={setOpenForm} currentId={currentId} setCurrentId={setCurrentId} />
 
         <HeaderBreadcrumbs

@@ -100,7 +100,10 @@ export const createByUser = async (req, res, next) => {
       req.body
     );
 
-    userBehaviorService.handleUpdateBoughtCount(userId ?? req.userIdentifier, order.items);
+    userBehaviorService.handleUpdateBoughtCount(
+      userId ?? req.userIdentifier,
+      JSON.parse(JSON.stringify(order)).items
+    );
 
     let paymentUrl = '';
     if (req.body.paymentMethod === constants.ORDER.PAYMENT_METHOD.VNPAY) {

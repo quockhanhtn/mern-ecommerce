@@ -8,6 +8,8 @@ import userBehaviorService from '../services/user-behavior.service.js';
 import ProductRecom from '../models/product-recom.model.js';
 import SlackUtils from '../utils/SlackUtils.js';
 import StringUtils from '../utils/StringUtils.js';
+import FormatUtils from '../utils/FormatUtils.js';
+
 
 export default {
   importProductDataToFpt,
@@ -49,6 +51,7 @@ const loadProductData = async () => {
       .replace(/,+/g, ' ')
       .replace(/\s+/g, ' ')
       .replace('Nguồn: thegioididong.com', '')
+      .replace('Nguồn thegioididong.com', '')
       .trim();
     return {
       id: item._id.toString(),
@@ -59,6 +62,14 @@ const loadProductData = async () => {
       variants: item.variants.map(x => x.variantName).join(';'),
       desc: StringUtils.isBlankOrEmpty(desc) ? 'Đang cập nhật' : desc
     };
+  });
+}
+
+function delay(delayInMs) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(2);
+    }, delayInMs);
   });
 }
 
@@ -80,15 +91,30 @@ async function importProductDataToFpt() {
   let countError = 0, countSuccess = 0, total = list.length;
   let errorDetails = [];
   let isSuccess = true;
-  const step = 50;
+  let step = 2;
 
-  while (countSuccess < total) {
+  let errorList = [];
+  let requestFailed = 0;
+
+  while (true) {
     const url = `/${datasetName}/${countSuccess === 0 ? 'overwrite' : 'append'}`;
     const items = list.slice(countSuccess, countSuccess + step);
+    if (items.length === 0) {
+      break;
+    }
     try {
-      await axiosInstance.post(url, items);
-      countSuccess += items?.length || 0;
-      console.log(`Success: ${countSuccess}/${total}`);
+      const { data } = await axiosInstance.post(url, items);
+      if (data.msg === 'Success') {
+        countSuccess += items.length;
+        console.log(`Success: ${countSuccess}/${total}`);
+        requestFailed = 0;
+      } else {
+        requestFailed++;
+        if (requestFailed > 5) {
+          countSuccess += items.length;
+          errorList = [...errorList, ...items];
+        }
+      }
     } catch (err) {
       errorDetails.push({
         items,
@@ -103,16 +129,54 @@ async function importProductDataToFpt() {
     }
   }
 
-  let mgs = `[From *${getFormatDateTime(startTime)}* to *${getFormatDateTime()}*]\n`;
-  mgs += `Import product data to FPT *${isSuccess ? 'succeed' : 'failed'}*. Success: *${countSuccess}*/${total} | Error: *${countError}*/${total}.`;
+  countSuccess -= errorList.length;
+
+  for (let i = 0; i < errorList.length; i++) {
+    const item = errorList[i];
+    while (true) {
+      try {
+        const { data } = await axiosInstance.post(`/${datasetName}/append`, [item]);
+        if (data.msg === 'Success') {
+          countSuccess += 1;
+          console.log(`Success: ${countSuccess}/${total}`);
+          requestFailed = 0;
+          errorList = errorList.filter(x => x !== item);
+          i--;
+          break;
+        } else {
+          requestFailed++;
+          if (requestFailed > 5) {
+            throw new Error(`Failed to import`);
+          }
+        }
+      } catch (err) {
+        errorDetails.push({
+          items: [{ id: item.id, slug: item.slug }],
+          mgs: err.message,
+          detail: JSON.stringify(err)
+        });
+        ++countError;
+        break;
+      }
+    }
+  }
+
+  const endTime = new Date();
+  countError = errorDetails.length;
+
+  let mgs = `[From *${getFormatDateTime(startTime)}* to *${getFormatDateTime(endTime)}*]`;
+  mgs += `\nImport product data to FPT *${isSuccess ? 'succeed' : 'failed'}*. Success: *${countSuccess}*/${total} | Error: *${countError}*/${total}.`;
+  mgs += `\nTotal time: *${FormatUtils.formateReadableTimeSpan(startTime, endTime)}*`;
   if (errorDetails?.length > 0) {
     mgs += `\n\nError details: \n`;
-    errorDetails.forEach(item => {
-      mgs += `\t- *${item.itemId}* Message: ${item.mgs}, detail: ${item.detail}\n`;
-      mgs += `\n: Items: \n\`\`\`\n${JSON.stringify(item.items, null, 2)}\n\`\`\`\``;
+    errorDetails.forEach((item, index) => {
+      mgs += `\t- ${index + 1}/${errorDetails.length} Message: ${item.mgs}, detail: ${item.detail}\n`;
+      mgs += `\n\t\tItems: \n\`\`\`\n${JSON.stringify(item.items, null, 2)}\n\`\`\`\``;
     });
   }
   await SlackUtils.sendMessageSync(mgs, 'C02BFR5KSUW');
+  console.log('Done!');
+  console.log('errorList: ' + errorList.length + ' - ', errorList);
 }
 
 async function updateRecommendData() {
@@ -203,17 +267,20 @@ async function importUserBehaviorToFpt() {
   let errorDetails = [];
   let isSuccess = true;
 
-  while (countSuccess < total) {
+  while (true) {
     const url = `/${datasetName}/${countSuccess === 0 ? 'overwrite' : 'append'}`;
     // const item = list[countSuccess];
     const items = list.slice(countSuccess, countSuccess + 100);
+    if (items.length === 0) {
+      break;
+    }
     try {
       await axiosInstance.post(url, items);
-      countSuccess += items?.length || 0;
+      countSuccess += items.length;
       console.log(`Success: ${countSuccess}/${total}`);
     } catch (err) {
       errorDetails.push({
-        items,
+        items: items.map(x => ({ id: x.id, slug: x.slug })),
         mgs: err.message,
         detail: JSON.stringify(err)
       });
@@ -227,6 +294,7 @@ async function importUserBehaviorToFpt() {
 
   let mgs = `[From *${getFormatDateTime(startTime)}* to *${getFormatDateTime()}*]\n`;
   mgs += `Import user behavior data to FPT *${isSuccess ? 'succeed' : 'failed'}*. Success: *${countSuccess}*/${total} | Error: *${countError}*/${total}.`;
+  mgs += `\nTotal time: ${FormatUtils.formateReadableTimeSpan(startTime, new Date())}`;
   if (errorDetails?.length > 0) {
     mgs += `\n\nError details: \n`;
     errorDetails.forEach(item => {

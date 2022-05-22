@@ -301,6 +301,27 @@ async function update(userId, orderId, data) {
     throw new ApiErrorUtils('Invalid order id', 400);
   }
 
+  const currentData = await getOne(orderId);
+  if (!currentData) {
+    throw new ApiErrorUtils('Order does not exist', 400);
+  }
+
+  if (currentData.status === constants.ORDER.CANCELED) {
+    throw new ApiErrorUtils('Order has been canceled', 400);
+  }
+
+  if (currentData.status === constants.ORDER.COMPLETED) {
+    throw new ApiErrorUtils('Order has been completed', 400);
+  }
+
+  if (data.status === constants.ORDER.STATUS.CANCELED) {
+    if (currentData.status !== constants.ORDER.STATUS.PENDING) {
+      throw ApiErrorUtils.simple('Order is not pending', 400);
+    }
+  }
+
+
+
   data.updatedBy = userId;
 
   const order = await Order.findOneAndUpdate({ _id: orderId }, data, { new: true }).lean().exec();

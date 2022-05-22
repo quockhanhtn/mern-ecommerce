@@ -29,5 +29,32 @@ class FormatUtils {
 
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
+
+  static formateReadableTimeSpan(dateFrom, dateTo) {
+    const diff = dateTo.getTime() - dateFrom.getTime();
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+    const minutes = Math.floor(diff / (1000 * 60)) % 60;
+    const seconds = Math.floor(diff / 1000) % 60;
+
+    let result = '';
+    if (days > 0) {
+      result += `${days} day${days > 1 ? 's' : ''}`;
+    }
+    if (hours > 0) {
+      result += `${result ? ' ' : ''}${hours} hour${hours > 1 ? 's' : ''}`;
+    }
+    if (minutes > 0) {
+      result += `${result ? ' ' : ''}${minutes} minute${minutes > 1 ? 's' : ''}`;
+    }
+    if (seconds > 0) {
+      result += `${result ? ' ' : ''}${seconds} second${seconds > 1 ? 's' : ''}`;
+    }
+    if (result === '') {
+      result = '0 second';
+    }
+    return result;
+  }
 }
 export default FormatUtils;

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import UserBehavior from '../../models/user-behavior.model.js';
 import fptService from '../../services/fpt.service.js';
 import userBehaviorService from '../../services/user-behavior.service.js';
 
@@ -20,6 +21,12 @@ router.get('/import-ub', (req, res) => {
 });
 
 router.get('/result', async (req, res, next) => {
+  const rs = await userBehaviorService.getDataWithCalculateScore();
+  res.status(200).json(rs);
+  res.end();
+});
+
+router.get('/test', async (req, res, next) => {
   const rs = await userBehaviorService.getDataWithCalculateScore();
   res.status(200).json(rs);
   res.end();
