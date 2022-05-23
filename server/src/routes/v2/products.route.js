@@ -3,6 +3,7 @@ import { allowImageMineTypes } from '../../constants.js';
 import {
   getAllProducts,
   getProductById,
+  getBestSellerProducts,
   getListProductsByIds,
   getSuggestProducts,
   getProductRecommend,
@@ -36,6 +37,7 @@ const uploadFields = [{ name: 'thumbnail', maxCount: 1 }, { name: 'pictures', ma
  */
 
 router.get('/', getAllProducts);
+router.get('/best-seller', getBestSellerProducts);
 router.get('/all', getFullAllProducts);
 router.get('/specs', getProductSpecifications);
 router.get('/search/suggest', getSuggestProducts);

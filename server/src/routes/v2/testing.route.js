@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import UserBehavior from '../../models/user-behavior.model.js';
+import Product from '../../models/product.model.js';
 import fptService from '../../services/fpt.service.js';
 import userBehaviorService from '../../services/user-behavior.service.js';
+import productService from '../../services/products.service.js';
 
 const router = Router();
 
@@ -28,6 +30,12 @@ router.get('/result', async (req, res, next) => {
 
 router.get('/test', async (req, res, next) => {
   const rs = await userBehaviorService.getDataWithCalculateScore();
+  res.status(200).json(rs);
+  res.end();
+});
+
+router.get('/p', async (req, res, next) => {
+  const rs = await productService.getBestSellerProducts(1);
   res.status(200).json(rs);
   res.end();
 });
