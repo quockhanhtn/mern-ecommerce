@@ -88,8 +88,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         // If  you are using latest version of flutter then label text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon:
-            CustomSuffixIcon(svgIcon: "assets/icons/Location point.svg"),
+        suffixIcon: CustomSuffixIcon(svgIcon: "assets/icons/ic_location.svg"),
       ),
     );
   }

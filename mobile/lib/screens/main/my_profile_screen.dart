@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/controllers/authentication_controller.dart';
+import 'package:hk_mobile/screens/address_book/address_book_screen.dart';
 import 'package:hk_mobile/screens/main/components/profile_menu.dart';
 import 'package:hk_mobile/screens/sign_in/sign_in_screen.dart';
 import 'package:hk_mobile/ui_view/profile_picture.dart';
@@ -26,6 +27,13 @@ class MyProfileScreen extends StatelessWidget {
                   text: "Tài khoản",
                   icon: "assets/icons/ic_user.svg",
                   press: () => {},
+                ),
+                ProfileMenu(
+                  text: "Địa chỉ",
+                  icon: "assets/icons/ic_location.svg",
+                  press: () {
+                    Get.to(AddressBookScreen());
+                  },
                 ),
                 ProfileMenu(
                   text: "Thông báo",

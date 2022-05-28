@@ -1,3 +1,1 @@
-abstract class GenericDto {
-  
-}
+abstract class GenericDto {}
