@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class AlertUtil {
-  static showSimple(
+  static void showSimple(
     BuildContext buildCtx, {
     String content = '',
     String btnText = 'OK',

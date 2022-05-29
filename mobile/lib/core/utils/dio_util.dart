@@ -42,4 +42,28 @@ class DioUtil {
       }
     });
   }
+
+  static void patch(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    CancelToken? cancelToken,
+    required Function(dynamic data) onSuccess,
+    required Function(dynamic error) onError,
+    Function()? onFinally,
+  }) {
+    _instance.patch(path, data: data, queryParameters: queryParameters, cancelToken: cancelToken).then((res) {
+      if (res.statusCode! >= 200 && res.statusCode! < 300) {
+        onSuccess(res.data);
+      }
+      if (onFinally != null) {
+        onFinally();
+      }
+    }).catchError((e) {
+      onError(e);
+      if (onFinally != null) {
+        onFinally();
+      }
+    });
+  }
 }

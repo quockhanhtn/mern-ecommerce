@@ -12,6 +12,7 @@ const addressSchema = new mongoose.Schema(
     },
     type: { type: String, trim: true }, // home, office, etc ...
     note: { type: String, trim: true },
+    isDefault: { type: Boolean, default: false },
 
     street: { type: String, trim: true, required: [true, 'Please fill a street'] },
     ward: { type: String, trim: true, required: [true, 'Please fill a ward'] },

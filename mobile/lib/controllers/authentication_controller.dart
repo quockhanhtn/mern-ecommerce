@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:hk_mobile/controllers/account_controller.dart';
 import 'package:hk_mobile/core/utils/dio_util.dart';
 import 'package:hk_mobile/core/utils/preference_util.dart';
 import 'package:hk_mobile/dto/user_dto.dart';
@@ -9,6 +10,8 @@ class AuthenticationController extends GetxController {
   final isLoading = true.obs;
   final errorMgs = ''.obs;
   final isAuthenticated = false.obs;
+
+  final AccountController accountController = Get.put(AccountController());
 
   @override
   void onInit() {
@@ -33,28 +36,29 @@ class AuthenticationController extends GetxController {
     } else {
       isAuthenticated(false);
     }
+
     isLoading(false);
+    accountController.authenticatedChange(isAuthenticated.value);
   }
 
   Future<void> login(String username, String password) async {
     isLoading(true);
 
     try {
-      var response = await DioUtil.postAsync('/auth/login',
-          data: {'username': username, 'password': password});
+      var response = await DioUtil.postAsync('/auth/login', data: {'username': username, 'password': password});
       if (response.data['success'] as bool) {
         var userDto = UserDto.fromJson(response.data['data']['user']);
         list.clear();
         list.value = [userDto];
         isAuthenticated(true);
-        await PreferenceUtil.setString(
-            'accessToken', response.data['data']['token']);
+        await PreferenceUtil.setString('accessToken', response.data['data']['token']);
       }
     } catch (e) {
       errorMgs(e.toString());
     }
 
     isLoading(false);
+    accountController.authenticatedChange(isAuthenticated.value);
   }
 
   Future<void> logout() async {
@@ -62,5 +66,6 @@ class AuthenticationController extends GetxController {
     isAuthenticated(false);
     await PreferenceUtil.setString('accessToken', '');
     isLoading(false);
+    accountController.authenticatedChange(false);
   }
 }

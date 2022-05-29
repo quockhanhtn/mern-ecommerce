@@ -9,4 +9,19 @@ class StrUtil {
     }
     return removeDiacritics(str!);
   }
+
+  static String join(Iterable<String?> lst, {String separate = ', '}) {
+    String result = '';
+
+    for (String? item in lst) {
+      if (!isNullOrEmpty(item)) {
+        if (!isNullOrEmpty(result)) {
+          result += separate;
+        }
+        result += item!;
+      }
+    }
+
+    return result;
+  }
 }

@@ -52,7 +52,6 @@ dependencies:
   get: ^4.6.1
   google_sign_in: ^5.3.0
   http: ^0.13.4
-  json_annotation: ^4.4.0
   jwt_decoder: ^2.0.1
   logger: ^1.1.0
   lottie: ^1.2.2 # add lottie animation

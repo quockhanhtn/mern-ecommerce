@@ -79,7 +79,7 @@ class _BodyState extends State<Body> {
                       text: AppLocalizations.of(context)!.next,
                       press: () {
                         PreferenceUtil.setBool('seen', true);
-                        Get.to(const HomeScreen());
+                        Get.to(() => const HomeScreen());
                         // Navigator.pushNamed(context, HomeScreen.routeName);
                       },
                     ),

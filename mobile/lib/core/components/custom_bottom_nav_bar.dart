@@ -41,7 +41,7 @@ class CustomBottomNavBar extends StatelessWidget {
                   "assets/icons/ic_shop.svg",
                   color: MenuState.home == selectedMenu ? inActiveIconColor : inActiveIconColor,
                 ),
-                onPressed: () => Get.to(const HomeScreen()),
+                onPressed: () => Get.to(() => const HomeScreen()),
               ),
               IconButton(
                 icon: SvgPicture.asset("assets/icons/ic_heart_outline.svg"),
@@ -56,7 +56,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     "assets/icons/ic_user.svg",
                     color: MenuState.profile == selectedMenu ? inActiveIconColor : inActiveIconColor,
                   ),
-                  onPressed: () => Get.to(ProfileScreen())
+                  onPressed: () => Get.to(() => ProfileScreen())
                   // Navigator.pushNamed(context, ProfileScreen.routeName),
                   ),
             ],

@@ -44,7 +44,7 @@ class Body extends StatelessWidget {
                 child: Row(
                   children: [
                     const Spacer(),
-                    SvgPicture.asset("assets/icons/Trash.svg"),
+                    SvgPicture.asset("assets/icons/ic_trash.svg"),
                   ],
                 ),
               ),

@@ -32,7 +32,7 @@ class MyProfileScreen extends StatelessWidget {
                   text: "Địa chỉ",
                   icon: "assets/icons/ic_location.svg",
                   press: () {
-                    Get.to(AddressBookScreen());
+                    Get.to(() => AddressBookScreen());
                   },
                 ),
                 ProfileMenu(
@@ -66,7 +66,7 @@ class MyProfileScreen extends StatelessWidget {
                   text: "Đăng nhập",
                   icon: "assets/icons/Log out.svg",
                   press: () {
-                    Get.to(const SignInScreen());
+                    Get.to(() => const SignInScreen());
                   },
                 ),
               ],

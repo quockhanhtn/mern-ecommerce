@@ -8,6 +8,7 @@ import {
   getAddresses,
   addAddress,
   updateAddress,
+  setDefaultAddress,
   deleteAddress
 } from '../../controllers/account.controller.js';
 import {
@@ -17,7 +18,7 @@ import {
 } from '../../controllers/orders.controller.js';
 
 import { isAuthorized } from '../../middlewares/jwt-auth.js';
-import  UploadUtils from '../../utils/UploadUtils.js';
+import UploadUtils from '../../utils/UploadUtils.js';
 
 const router = Router();
 const upload = UploadUtils.multerUpload('/users/', allowImageMineTypes);
@@ -42,6 +43,12 @@ router.route('/addresses')
 router.route('/addresses/:addressId')
   .patch(isAuthorized, updateAddress)
   .delete(isAuthorized, deleteAddress);
+
+router.patch(
+  '/addresses/setDefault/:addressId',
+  isAuthorized,
+  setDefaultAddress
+);
 // End defining routes for addresses
 
 // Start defining routes for orders

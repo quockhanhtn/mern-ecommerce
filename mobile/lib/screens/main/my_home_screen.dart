@@ -200,7 +200,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMix
                                 iconData: Icons.search,
                                 iconColor: AppTheme.grey,
                                 onPress: () {
-                                  Get.to(SearchScreen());
+                                  Get.to(() => SearchScreen());
                                 },
                               ),
                             ),
@@ -216,7 +216,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMix
                                     padding: const EdgeInsets.all(6),
                                   ),
                                   onPress: () {
-                                    Get.to(CartScreen());
+                                    Get.to(() => CartScreen());
                                   },
                                 );
                               }),

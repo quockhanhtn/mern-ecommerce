@@ -27,6 +27,13 @@ class AppTheme {
   static const Color spacer = Color(0xFFF2F2F2);
   static const String fontName = 'Roboto';
 
+  static const Color chipBackground = Color(0xFFEEF1F3);
+
+  static const Color colorError = Color(0xffFF4842);
+  static const Color colorWarn = Color(0xffFFC107);
+  static const Color colorInfo = Color(0xFF1890FF);
+  static const Color colorSuccess = Color(0xFF54D62C);
+
   static const TextTheme textTheme = TextTheme(
     headline4: display1,
     headline5: headline,

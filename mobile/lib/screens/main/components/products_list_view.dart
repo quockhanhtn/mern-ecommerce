@@ -132,7 +132,7 @@ class ProductView extends StatelessWidget {
   final Animation<double>? animation;
 
   void onTap() {
-    Get.to(DetailsScreen(productDto: product));
+    Get.to(() => DetailsScreen(productDto: product));
   }
 
   @override
@@ -148,10 +148,11 @@ class ProductView extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppTheme.white,
                 borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8.0),
-                    bottomLeft: Radius.circular(8.0),
-                    bottomRight: Radius.circular(8.0),
-                    topRight: Radius.circular(8.0)),
+                  topLeft: Radius.circular(8.0),
+                  bottomLeft: Radius.circular(8.0),
+                  bottomRight: Radius.circular(8.0),
+                  topRight: Radius.circular(8.0),
+                ),
                 boxShadow: <BoxShadow>[
                   BoxShadow(color: AppTheme.grey.withOpacity(0.4), offset: const Offset(1.1, 1.1), blurRadius: 10.0),
                 ],

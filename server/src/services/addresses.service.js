@@ -6,6 +6,7 @@ export default {
   getList,
   add,
   update,
+  setDefault,
   remove
 }
 
@@ -60,7 +61,16 @@ async function getList(userId) {
     throw ApiErrorUtils.simple('User not found or id not valid!', 404);
   }
 
-  return result.addresses;
+  // sort by isDefault
+  return result.addresses.sort((a, b) => {
+    if (a.isDefault && !b.isDefault) {
+      return -1;
+    } else if (!a.isDefault && b.isDefault) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
 }
 
 
@@ -121,6 +131,26 @@ async function update(userId, addressId, updatedData) {
   }
 
   return result?.addresses?.find(address => address._id.equals(addressId));
+}
+
+async function setDefault(userId, addressId) {
+  const user = await getUser(userId, true);
+
+  const addressList = user.addresses;
+  const updateIndex = addressList.findIndex(address => address._id.equals(addressId));
+  if (updateIndex === -1) {
+    throw ApiErrorUtils.simple('Address not found!', 404);
+  }
+
+  addressList.forEach(address => address.isDefault = false);
+  user.addresses[updateIndex].isDefault = true;
+
+  const result = await User.findByIdAndUpdate(
+    user._id,
+    { $set: { addresses: user.addresses } },
+    { new: true, fields: 'addresses' }
+  );
+  return result;
 }
 
 /**
