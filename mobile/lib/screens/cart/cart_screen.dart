@@ -24,14 +24,10 @@ class CartScreen extends StatelessWidget {
       title: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Text(
-            "Giỏ hàng",
-            style: TextStyle(color: Colors.black),
-          ),
           Obx(() {
             return Text(
-              "${cartController.list.length} sản phẩm",
-              style: Theme.of(context).textTheme.caption,
+              "Giỏ hàng (${cartController.list.length})",
+              style: const TextStyle(color: Colors.black),
             );
           }),
         ],

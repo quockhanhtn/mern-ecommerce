@@ -15,7 +15,7 @@ class DioUtil {
     return _instance.get(path, queryParameters: queryParameters);
   }
 
-  static Future<Response<dynamic>> postAsync(String path,
+  static Future<Response<T>> postAsync<T>(String path,
       {Map<String, String>? data, Map<String, dynamic>? queryParameters}) async {
     return _instance.post(path, data: data, queryParameters: queryParameters);
   }
@@ -29,6 +29,29 @@ class DioUtil {
     Function()? onFinally,
   }) {
     _instance.get(path, queryParameters: queryParameters, cancelToken: cancelToken).then((res) {
+      if (res.statusCode! >= 200 && res.statusCode! < 300) {
+        onSuccess(res.data);
+      }
+      if (onFinally != null) {
+        onFinally();
+      }
+    }).catchError((e) {
+      onError(e);
+      if (onFinally != null) {
+        onFinally();
+      }
+    });
+  }
+
+  static void post(
+    String path, {
+    Map<String, String>? data,
+    Map<String, dynamic>? queryParameters,
+    required Function(dynamic data) onSuccess,
+    required Function(dynamic error) onError,
+    Function()? onFinally,
+  }) {
+    _instance.post(path, data: data, queryParameters: queryParameters).then((res) {
       if (res.statusCode! >= 200 && res.statusCode! < 300) {
         onSuccess(res.data);
       }

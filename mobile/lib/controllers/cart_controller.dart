@@ -19,6 +19,30 @@ class CartController extends GetxController {
     super.onInit();
   }
 
+  void authenticatedChange(bool isAuth) {
+    if (isAuth) {
+      fetchCartItems();
+    } else {
+      // clear data
+      list.clear();
+      list.refresh();
+    }
+  }
+
+  void fetchCartItems() {
+    isLoading(true);
+    DioUtil.post('/cart', onSuccess: (data) {
+      var result = data["data"].map((e) => CartDto(e as Map<String, dynamic>)).toList();
+      list.value = result.cast<CartDto>();
+      errorMgs('');
+      calculateFee();
+    }, onError: (e) {
+      errorMgs(e.toString());
+    }, onFinally: () {
+      isLoading(false);
+    });
+  }
+
   void add(
     String productId,
     ProductVariantDto variant,
@@ -34,24 +58,59 @@ class CartController extends GetxController {
 
     var response = await DioUtil.postAsync('/cart/add', data: CartDto.jsonForAdd(productId, variant.sku, qty));
 
-    calculate();
+    calculateFee();
     list.refresh();
+  }
+
+  void changeSelected(String productId, String sku) {
+    int itemIndex = list.indexWhere((item) => item.productId == productId && item.sku == sku);
+    if (itemIndex < 0) {
+      return;
+    }
+
+    list[itemIndex].isSelected = !list[itemIndex].isSelected;
+    list.refresh();
+    calculateFee();
+  }
+
+  void decreaseQty(String productId, String sku) {
+    int itemIndex = list.indexWhere((item) => item.productId == productId && item.sku == sku);
+    if (itemIndex < 0) {
+      return;
+    }
+
+    list[itemIndex].qty -= 1;
+    list.refresh();
+    calculateFee();
+  }
+
+  void increaseQty(String productId, String sku) {
+    int itemIndex = list.indexWhere((item) => item.productId == productId && item.sku == sku);
+    if (itemIndex < 0) {
+      return;
+    }
+
+    list[itemIndex].qty += 1;
+    list.refresh();
+    calculateFee();
   }
 
   void removeItem(int index) {
     if (index >= 0) {
       list.removeAt(index);
-      calculate();
+      calculateFee();
       list.refresh();
     }
   }
 
-  void calculate() {
-    // double price = 0;
-    // for (var i = 0; i < list.length; i++) {
-    //   var item = list[i];
-    //   price += item.numOfItem * item.product.variants[0].price;
-    // }
-    // subTotal(price);
+  void calculateFee() {
+    double price = 0;
+    for (var i = 0; i < list.length; i++) {
+      var item = list[i];
+      if (item.isSelected) {
+        price += item.qty * item.price;
+      }
+    }
+    subTotal(price);
   }
 }

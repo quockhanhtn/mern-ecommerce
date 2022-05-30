@@ -78,7 +78,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         BottomBarView(
           tabIconsList: tabIconsList,
           addClick: () {
-            Get.to(() => SearchScreen());
+            Get.to(() => const SearchScreen());
           },
           changeIndex: (int index) {
             animationController?.reverse().then<dynamic>((data) {

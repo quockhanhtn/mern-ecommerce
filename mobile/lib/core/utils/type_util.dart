@@ -10,14 +10,14 @@ class TypeUtil {
     if (object == null) {
       return defaultValue;
     }
-    return int.tryParse(object, radix: radix) ?? defaultValue;
+    return int.tryParse(object.toString(), radix: radix) ?? defaultValue;
   }
 
   static double toDouble(dynamic object, {double defaultValue = 0}) {
     if (object == null) {
       return defaultValue;
     }
-    return double.tryParse(object) ?? defaultValue;
+    return double.tryParse(object.toString()) ?? defaultValue;
   }
 
   static bool toBool(dynamic object, {bool defaultValue = false}) {

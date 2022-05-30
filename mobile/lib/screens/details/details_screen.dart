@@ -37,7 +37,12 @@ class DetailsScreen extends StatelessWidget {
             child: DefaultButton(
               text: "Thêm vào giỏ hàng",
               press: () {
-                cartController.add(productDto);
+                cartController.add(
+                  productDto.id,
+                  productDto.variants[0],
+                  1,
+                  () {},
+                );
               },
             ),
           ),

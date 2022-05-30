@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:hk_mobile/controllers/account_controller.dart';
+import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/core/utils/dio_util.dart';
 import 'package:hk_mobile/core/utils/preference_util.dart';
 import 'package:hk_mobile/dto/user_dto.dart';
@@ -12,11 +13,17 @@ class AuthenticationController extends GetxController {
   final isAuthenticated = false.obs;
 
   final AccountController accountController = Get.put(AccountController());
+  final CartController cartController = Get.put(CartController());
 
   @override
   void onInit() {
     checkAuthentication();
     super.onInit();
+  }
+
+  void _notifyAuthStatusChange() {
+    accountController.authenticatedChange(isAuthenticated.value);
+    cartController.authenticatedChange(isAuthenticated.value);
   }
 
   void checkAuthentication() async {
@@ -38,7 +45,7 @@ class AuthenticationController extends GetxController {
     }
 
     isLoading(false);
-    accountController.authenticatedChange(isAuthenticated.value);
+    _notifyAuthStatusChange();
   }
 
   Future<void> login(String username, String password) async {
@@ -58,7 +65,7 @@ class AuthenticationController extends GetxController {
     }
 
     isLoading(false);
-    accountController.authenticatedChange(isAuthenticated.value);
+    _notifyAuthStatusChange();
   }
 
   Future<void> logout() async {
@@ -66,6 +73,6 @@ class AuthenticationController extends GetxController {
     isAuthenticated(false);
     await PreferenceUtil.setString('accessToken', '');
     isLoading(false);
-    accountController.authenticatedChange(false);
+    _notifyAuthStatusChange();
   }
 }

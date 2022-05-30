@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:hk_mobile/app_theme.dart';
+import 'package:hk_mobile/core/components/shadow_container.dart';
 import 'package:hk_mobile/dto/address_dto.dart';
 
 enum PopupMenuOptions { edit, setDefault, delete }
@@ -24,24 +25,10 @@ class AddressCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-          margin: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.4),
-                spreadRadius: 3,
-                blurRadius: 7,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10, left: 10, right: 20, bottom: 10),
-            child: _buildAddressInfo(context),
-          ),
+        ShadowContainer(
+          child: _buildAddressInfo(context),
+          padding: const EdgeInsets.only(top: 10, left: 10, right: 20, bottom: 10),
+          margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
         ),
         Positioned(
           right: 5,

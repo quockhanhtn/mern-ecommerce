@@ -12,8 +12,9 @@ class CartDto extends GenericDto {
   late int quantity;
   late int sold;
   late String thumbnail;
+  bool isSelected;
 
-  CartDto(Map<String, dynamic> json) : super(json) {
+  CartDto(Map<String, dynamic> json, {this.isSelected = true}) : super(json) {
     productId = MapUtil.getString(json, 'productId');
     name = MapUtil.getString(json, 'name');
     sku = MapUtil.getString(json, 'sku');
