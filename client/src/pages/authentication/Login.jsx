@@ -44,7 +44,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 export default function Login() {
   const { t } = useLocales();
   return (
-    <RootStyle title={t('auth.page-login-title')}>
+    <RootStyle title={t('auth.page-title.login')}>
       <AuthLayout>
         {t('auth.dont-have-account')} &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to={PATH_AUTH.register}>

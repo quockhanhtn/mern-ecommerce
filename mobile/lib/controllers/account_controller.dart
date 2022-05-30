@@ -21,7 +21,7 @@ class AccountController extends GetxController {
   void fetchAddress() {
     isLoadingAdd(true);
     DioUtil.get('account/addresses', onSuccess: (data) {
-      var result = data["data"].map((e) => AddressDto.fromJson(e as Map<String, dynamic>)).toList();
+      var result = data["data"].map((e) => AddressDto(e as Map<String, dynamic>)).toList();
       lstAdd.value = result.cast<AddressDto>();
       lstAdd.refresh();
       errorMgsAdd('');

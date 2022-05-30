@@ -1,0 +1,19 @@
+.search-box {
+  width: 270px;
+  border-radius: 5px;
+}
+
+.country-list {
+  scrollbar-width: auto;
+  scrollbar-color: #505050 #ffffff;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.country-list::-webkit-scrollbar {
+  display: none;
+}
+
+.react-tel-input .form-control {
+  border-radius: 9px;
+}

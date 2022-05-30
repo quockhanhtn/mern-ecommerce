@@ -1,6 +1,4 @@
-import 'package:hk_mobile/dto/generic_dto.dart';
-
-class DiscountDto extends GenericDto {
+class DiscountDto {
   DiscountDto(
     this.id,
     this.slug,

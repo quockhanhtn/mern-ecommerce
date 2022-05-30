@@ -20,6 +20,9 @@ import 'slick-carousel/slick/slick-theme.css';
 // simplebar-react
 import 'simplebar/dist/simplebar.min.css';
 
+// react-phone-input-2
+import 'react-phone-input-2/lib/material.css';
+
 import ReactDOM from 'react-dom';
 import { StrictMode } from 'react';
 import { BrowserRouter } from 'react-router-dom';

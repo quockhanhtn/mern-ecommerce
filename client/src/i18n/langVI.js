@@ -174,8 +174,10 @@ export default {
     'language-not-available': 'Ngôn ngữ này không khả dụng !'
   },
   auth: {
-    'page-login-title': 'Đăng nhập | HK Mobile',
-    'page-register-title': 'Đăng ký | HK Mobile',
+    'page-title': {
+      login: 'Đăng nhập | HK Mobile',
+      register: 'Đăng ký | HK Mobile'
+    },
     salutation: 'Chào mừng quay trở lại !',
     register: 'Đăng ký',
     'get-started': 'Đăng ký',
@@ -217,9 +219,11 @@ export default {
     'confirm-password-not-match': 'Xác nhận mật khẩu không khớp',
     'change-password-success': 'Đổi mật khẩu thành công !',
     'acc-no-pass': 'Tài khoản của bạn chưa được đặt mật khẩu. Đặt mật khẩu giúp bạn có thể đăng nhập vào hệ thống',
+
     'role-admin': 'Quản trị viên',
     'role-staff': 'Nhân viên',
     'role-customer': 'Khách hàng',
+
     'accept-terms': 'Khi đăng ký, bạn đã đồng ý với HK Mobile về',
     tos: 'Điều khoản sử dụng',
     'privacy-policy': 'Chính sách bảo mật',
@@ -239,7 +243,11 @@ export default {
     'last-name': 'Họ',
     'last-name-min': 'Họ phải có ít nhất 2 ký tự',
     'last-name-max': 'Họ không được vượt quá 32 ký tự',
-    'last-name-required': 'Họ không thể bỏ trống'
+    'last-name-required': 'Họ không thể bỏ trống',
+
+    phone: 'Số điện thoại',
+    'phone-required': 'Số điện thoại không thể bỏ trống',
+    'phone-invalid': 'Số điện thoại không hợp lệ'
   },
   dashboard: {
     title: 'Bảng điều khiển',

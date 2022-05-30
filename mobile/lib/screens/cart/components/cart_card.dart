@@ -30,7 +30,7 @@ class CartCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: NetworkImg(
-                imageUrl: cart.product.variants[0].thumbnail!,
+                imageUrl: cart.thumbnail,
                 imageFit: BoxFit.cover,
               ),
             ),
@@ -41,27 +41,27 @@ class CartCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              cart.product.name,
+              cart.name,
               style: const TextStyle(color: Colors.black, fontSize: 16),
               maxLines: 2,
             ),
             const SizedBox(height: 10),
             Text.rich(
               TextSpan(
-                text: FormatUtils.currency(cart.product.variants[0].price),
+                text: FormatUtils.currency(cart.price),
                 style: const TextStyle(fontWeight: FontWeight.w600, color: kPrimaryColor),
                 children: [
-                  TextSpan(text: " x ${cart.numOfItem}", style: Theme.of(context).textTheme.bodyText1),
+                  TextSpan(text: " x ${cart.qty}", style: Theme.of(context).textTheme.bodyText1),
                 ],
               ),
             ),
             NumericUpDown(
-              currentValue: cart.numOfItem,
+              currentValue: cart.qty,
               onDecrease: () {
-                cart.numOfItem = cart.numOfItem--;
+                cart.qty = cart.qty--;
               },
               onIncrease: () {
-                cart.numOfItem = cart.numOfItem++;
+                cart.qty = cart.qty++;
               },
             )
           ],

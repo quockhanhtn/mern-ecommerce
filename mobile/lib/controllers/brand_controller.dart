@@ -16,9 +16,7 @@ class BrandController extends GetxController {
   void fetchBrands() {
     isLoading(true);
     DioUtil.get('brands', onSuccess: (data) {
-      var result = data["data"]
-          .map((e) => BrandDto.fromJson(e as Map<String, dynamic>))
-          .toList();
+      var result = data["data"].map((e) => BrandDto(e as Map<String, dynamic>)).toList();
       list.value = result.cast<BrandDto>();
       errorMgs('');
     }, onError: (e) {

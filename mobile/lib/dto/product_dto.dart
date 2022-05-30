@@ -2,7 +2,7 @@ import 'package:hk_mobile/dto/brand_dto.dart';
 import 'package:hk_mobile/dto/category_dto.dart';
 import 'package:hk_mobile/dto/generic_dto.dart';
 
-class ProductVariantDto extends GenericDto {
+class ProductVariantDto {
   ProductVariantDto(
     this.sku,
     this.slug,
@@ -52,7 +52,7 @@ class ProductVariantDto extends GenericDto {
       };
 }
 
-class ProductDto extends GenericDto {
+class ProductDto {
   ProductDto(
     this.id,
     this.name,
@@ -101,8 +101,8 @@ class ProductDto extends GenericDto {
       List<String>.from(json['tags'] ?? List<String>.empty()),
       json['warrantyPeriod'] as int?,
       json['origin'] as String?,
-      json['category'] != null ? CategoryDto.fromJson(json['category']) : null,
-      json['brand'] != null ? BrandDto.fromJson(json['brand']) : null,
+      json['category'] != null ? CategoryDto(json['category']) : null,
+      json['brand'] != null ? BrandDto(json['brand']) : null,
       json['views'] as int?,
       //json['rates'] as List<Object>?,
       List<String>.from(json['policies'] ?? List<String>.empty()),

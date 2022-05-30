@@ -1,36 +1,33 @@
+import 'package:hk_mobile/core/utils/map_util.dart';
 import 'package:hk_mobile/dto/generic_dto.dart';
 
 class BrandDto extends GenericDto {
-  BrandDto(this.id, this.slug, this.name, this.image,
-      this.headQuarters, this.country, this.founded);
-
-  final String id;
-  final String slug;
-  final String name;
-  final String? image;
-  final String? headQuarters;
-  final String? country;
-  final int? founded;
-
-  factory BrandDto.fromJson(Map<String, dynamic> json) {
-    return BrandDto(
-      json['_id'] as String,
-      json['slug'] as String,
-      json['name'] as String,
-      json['image'] as String?,
-      json['headQuarters'] as String?,
-      json['country'] as String?,
-      json['founded'] as int?,
-    );
+  BrandDto(Map<String, dynamic> json) : super(json) {
+    id = MapUtil.getString(json, '_id');
+    slug = MapUtil.getString(json, 'slug');
+    name = MapUtil.getString(json, 'name');
+    image = MapUtil.getString(json, 'image');
+    headQuarters = MapUtil.getString(json, 'headQuarters');
+    country = MapUtil.getString(json, 'country');
+    founded = MapUtil.getInt(json, 'founded');
   }
 
+  late String id;
+  late String slug;
+  late String name;
+  late String image;
+  late String headQuarters;
+  late String country;
+  late int founded;
+
+  @override
   Map<String, dynamic> toJson() => <String, dynamic>{
-    '_id': id,
-    'slug': slug,
-    'name': name,
-    'image': image,
-    'headQuarters': headQuarters,
-    'country': country,
-    'founded': founded,
-  };
+        '_id': id,
+        'slug': slug,
+        'name': name,
+        'image': image,
+        'headQuarters': headQuarters,
+        'country': country,
+        'founded': founded,
+      };
 }

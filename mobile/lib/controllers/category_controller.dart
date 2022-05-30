@@ -18,9 +18,7 @@ class CategoryController extends GetxController {
     // list.value = await CategoryRepository().getAll();
     // isLoading(false);
     DioUtil.get('categories', onSuccess: (data) {
-      var result = data["data"]
-          .map((e) => CategoryDto.fromJson(e as Map<String, dynamic>))
-          .toList();
+      var result = data["data"].map((e) => CategoryDto(e as Map<String, dynamic>)).toList();
       list.value = result.cast<CategoryDto>();
       errorMgs('');
     }, onError: (e) {
