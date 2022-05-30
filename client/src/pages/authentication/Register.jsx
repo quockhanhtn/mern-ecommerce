@@ -76,34 +76,6 @@ export default function Register() {
       .matches(/^\(?(([0-9]{3})|(\+84[0-9]{2}))\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, t('address.phone-invalid'))
   });
 
-  const formik = useFormik({
-    initialValues: {
-      phone: process.env.NODE_ENV === 'development' ? '+84123456789' : ''
-    },
-    validationSchema: PhoneInputSchema,
-    onSubmit: async (values, { setSubmitting, setErrors }) => {
-      const appVerifier = window.recaptchaVerifier;
-
-      if (values.phone.startsWith('0')) {
-        values.phone = `+84${values.phone.substring(1)}`;
-      }
-
-      setIsLoading(true);
-      firebaseAuth
-        .signInWithPhoneNumber(values.phone, appVerifier)
-        .then((confirmResult) => {
-          console.log(`OTP is sent to ${values.phone}`);
-          onOtpSent(confirmResult);
-        })
-        .catch((error) => {
-          setErrors({ phone: t('address.phone-invalid') });
-          setSubmitting(false);
-          console.log('error', error);
-        });
-      setIsLoading(false);
-    }
-  });
-
   const handleRegister = () => {
     if (phoneNumber === country.code) {
       setErrorMgs(t('auth.phone-required'));
