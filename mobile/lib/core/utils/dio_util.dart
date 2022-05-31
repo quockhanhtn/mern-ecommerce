@@ -45,7 +45,7 @@ class DioUtil {
 
   static void post(
     String path, {
-    Map<String, String>? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
     required Function(dynamic data) onSuccess,
     required Function(dynamic error) onError,

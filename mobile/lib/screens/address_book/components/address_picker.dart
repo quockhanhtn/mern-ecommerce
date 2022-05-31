@@ -9,6 +9,47 @@ import 'package:hk_mobile/core/utils/alert_util.dart';
 import 'package:hk_mobile/dto/admin_unit_dto.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+class TextFiledCustom extends StatelessWidget {
+  const TextFiledCustom(
+    this.iconData,
+    this.hintText, {
+    required this.padding,
+    required this.controller,
+    Key? key,
+  }) : super(key: key);
+
+  final IconData iconData;
+  final String hintText;
+  final EdgeInsets padding;
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: padding,
+      child: Container(
+        decoration: BoxDecoration(
+          color: kSecondaryColor.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: TextField(
+          controller: controller,
+          textAlignVertical: TextAlignVertical.center,
+          textInputAction: TextInputAction.search,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            hintText: hintText,
+            prefixIcon: Icon(iconData),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class AdminUnitPicker extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final String label;
@@ -77,21 +118,23 @@ class AdminUnitPicker extends StatelessWidget {
 }
 
 class AddressPicker extends StatelessWidget {
-  final Key controllerKey;
+  final Key getCtlerKey;
 
-  AddressPicker(this.controllerKey, {Key? key}) : super(key: key);
+  AddressPicker(this.getCtlerKey, {Key? key}) : super(key: key);
 
   final AddressController addController = Get.put(AddressController());
-  final TextEditingController provinceTextEController = TextEditingController();
-  final TextEditingController districtTextEController = TextEditingController();
-  final TextEditingController wardTextEController = TextEditingController();
+  final TextEditingController nameTxtEditCtl = TextEditingController();
+  final TextEditingController phoneTxtEditCtl = TextEditingController();
+  final TextEditingController provinceTxtEditCtl = TextEditingController();
+  final TextEditingController districtTxtEditCtl = TextEditingController();
+  final TextEditingController wardTextTxtEditCtl = TextEditingController();
 
   Iterable<AdminUnitDto> getProvinces(pattern) {
     return AdminUnitDto.getProvinces(pattern);
   }
 
   Iterable<AdminUnitDto> _getDistricts(pattern) {
-    var province = addController.getProvince(controllerKey);
+    var province = addController.getProvince(getCtlerKey);
     if (province == null) {
       return const Iterable.empty();
     }
@@ -99,7 +142,7 @@ class AddressPicker extends StatelessWidget {
   }
 
   Iterable<AdminUnitDto> _getWards(pattern) {
-    var district = addController.getDistrict(controllerKey);
+    var district = addController.getDistrict(getCtlerKey);
     if (district == null) {
       return const Iterable.empty();
     }
@@ -107,100 +150,123 @@ class AddressPicker extends StatelessWidget {
   }
 
   void handleChangeProvince(AdminUnitDto suggestion) {
-    addController.setProvince(controllerKey, suggestion);
-    provinceTextEController.text = suggestion.name;
-    districtTextEController.clear();
-    wardTextEController.clear();
+    addController.setProvince(getCtlerKey, suggestion);
+    provinceTxtEditCtl.text = suggestion.name;
+    districtTxtEditCtl.clear();
+    wardTextTxtEditCtl.clear();
   }
 
   void _handleChangeDistrict(AdminUnitDto suggestion) {
-    addController.setDistrict(controllerKey, suggestion);
-    districtTextEController.text = suggestion.name;
-    wardTextEController.clear();
+    addController.setDistrict(getCtlerKey, suggestion);
+    districtTxtEditCtl.text = suggestion.name;
+    wardTextTxtEditCtl.clear();
   }
 
   void _handleChangeWard(AdminUnitDto suggestion) {
-    addController.setWard(controllerKey, suggestion);
-    wardTextEController.text = suggestion.name;
+    addController.setWard(getCtlerKey, suggestion);
+    wardTextTxtEditCtl.text = suggestion.name;
   }
 
   void handleClearProvince() {
-    addController.clearProvince(controllerKey);
-    provinceTextEController.clear();
-    districtTextEController.clear();
-    wardTextEController.clear();
+    addController.clearProvince(getCtlerKey);
+    provinceTxtEditCtl.clear();
+    districtTxtEditCtl.clear();
+    wardTextTxtEditCtl.clear();
   }
 
   void _handleClearDistrict() {
-    addController.clearDistrict(controllerKey);
-    districtTextEController.clear();
-    wardTextEController.clear();
+    addController.clearDistrict(getCtlerKey);
+    districtTxtEditCtl.clear();
+    wardTextTxtEditCtl.clear();
   }
 
   void _handleClearWard() {
-    addController.clearWard(controllerKey);
-    wardTextEController.clear();
+    addController.clearWard(getCtlerKey);
+    wardTextTxtEditCtl.clear();
   }
 
   void _handleTapDistrict(context) {
-    if (addController.getProvince(controllerKey) == null) {
+    if (addController.getProvince(getCtlerKey) == null) {
       AlertUtil.showSimple(context, content: "Vui lòng chọn Tỉnh / Thành phố", type: AlertType.error);
     }
   }
 
   void _handleTapWard(context) {
-    if (addController.getProvince(controllerKey) == null) {
+    if (addController.getProvince(getCtlerKey) == null) {
       AlertUtil.showSimple(context, content: "Vui lòng chọn Tỉnh / Thành phố", type: AlertType.error);
-    } else if (addController.getDistrict(controllerKey) == null) {
+    } else if (addController.getDistrict(getCtlerKey) == null) {
       AlertUtil.showSimple(context, content: "Vui lòng chọn Quận / Huyện", type: AlertType.error);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
+    const inputPadding = EdgeInsets.only(top: 20, bottom: 0);
+    return Obx(() {
+      List<Widget> children = [];
+
+      var pSelect = addController.getProvince(getCtlerKey);
+      var dSelect = addController.getDistrict(getCtlerKey);
+      var wSelect = addController.getWard(getCtlerKey);
+
+      // return Column(children: [
+      //   Text(pSelect == null ? 'no select' : pSelect.name),
+      //   Text(dSelect == null ? 'no select' : dSelect.name),
+      //   Text(wSelect == null ? 'no select' : wSelect.name),
+      // ]);
+
+      children.add(TextFiledCustom(
+        Icons.account_box_rounded,
+        'Họ tên',
+        padding: inputPadding,
+        controller: nameTxtEditCtl,
+      ));
+      children.add(TextFiledCustom(
+        Icons.phone,
+        'Số diện thoại',
+        padding: inputPadding,
+        controller: phoneTxtEditCtl,
+      ));
+
+      children.add(
         AdminUnitPicker(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+          padding: inputPadding,
           label: 'Tỉnh / Thành phố',
           notFoundLabel: 'Không tìm thấy kết quả',
-          textController: provinceTextEController,
+          textController: provinceTxtEditCtl,
           handleSuggestionsCallback: getProvinces,
           handleSuggestionSelected: handleChangeProvince,
           onClear: handleClearProvince,
         ),
+      );
+
+      children.add(
         AdminUnitPicker(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+          padding: inputPadding,
           label: 'Quận / Huyện',
           notFoundLabel: 'Không tìm thấy kết quả',
-          textController: districtTextEController,
+          textController: districtTxtEditCtl,
           handleSuggestionsCallback: _getDistricts,
           handleSuggestionSelected: _handleChangeDistrict,
           onClear: _handleClearDistrict,
           onTapText: () => _handleTapDistrict(context),
         ),
+      );
+
+      children.add(
         AdminUnitPicker(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+          padding: inputPadding,
           label: 'Xã / Phường',
           notFoundLabel: 'Không tìm thấy kết quả',
-          textController: wardTextEController,
+          textController: wardTextTxtEditCtl,
           handleSuggestionsCallback: _getWards,
           handleSuggestionSelected: _handleChangeWard,
           onClear: _handleClearWard,
           onTapText: () => _handleTapWard(context),
         ),
-        Obx(() {
-          var pSelect = addController.getProvince(controllerKey);
-          var dSelect = addController.getDistrict(controllerKey);
-          var wSelect = addController.getWard(controllerKey);
+      );
 
-          return Column(children: [
-            Text(pSelect == null ? 'no select' : pSelect.name),
-            Text(dSelect == null ? 'no select' : dSelect.name),
-            Text(wSelect == null ? 'no select' : wSelect.name),
-          ]);
-        }),
-      ],
-    );
+      return Column(children: children);
+    });
   }
 }

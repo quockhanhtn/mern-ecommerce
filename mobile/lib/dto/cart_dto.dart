@@ -43,6 +43,14 @@ class CartDto extends GenericDto {
     return _data;
   }
 
+  Map<String, dynamic> toJsonMin() {
+    final _data = <String, dynamic>{};
+    _data['productId'] = productId;
+    _data['sku'] = sku;
+    _data['qty'] = qty;
+    return _data;
+  }
+
   static Map<String, String> jsonForAdd(String pid, String sku, int qty) {
     final _data = <String, String>{};
     _data['productId'] = pid;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:hk_mobile/app_theme.dart';
 import 'package:hk_mobile/core/components/custom_btn.dart';
+import 'package:hk_mobile/screens/address_book/components/address_bottom_sheet.dart';
 import 'package:hk_mobile/screens/address_book/components/address_list_view.dart';
 import 'package:hk_mobile/screens/address_book/components/address_picker.dart';
 import 'package:hk_mobile/size_config.dart';
@@ -8,9 +10,12 @@ import 'package:hk_mobile/size_config.dart';
 class AddressBookScreen extends StatelessWidget {
   AddressBookScreen({Key? key}) : super(key: key);
 
+  final GFBottomSheetController _controller = GFBottomSheetController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomSheet: AddressBottomSheet(_controller),
       appBar: renderAppBar(),
       body: renderBody(),
       bottomNavigationBar: renderBottom(context),
@@ -71,11 +76,17 @@ class AddressBookScreen extends StatelessWidget {
       ),
       child: SafeArea(
         child: CustomBtn(
-          text: 'Thêm địa chỉ',
+          text: _controller.isBottomSheetOpened ? 'Thêm địa chỉ' : 'Huy',
           btnColor: AppTheme.nearlyBlue,
           textColor: AppTheme.nearlyWhite,
           btnPadding: const EdgeInsets.all(0),
-          onTap: () {},
+          onTap: () {
+            if (_controller.isBottomSheetOpened) {
+              _controller.hideBottomSheet();
+            } else {
+              _controller.showBottomSheet();
+            }
+          },
         ),
       ),
     );
