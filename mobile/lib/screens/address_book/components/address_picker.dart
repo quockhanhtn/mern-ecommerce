@@ -3,52 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
+import 'package:getwidget/colors/gf_color.dart';
 import 'package:hk_mobile/constants.dart';
 import 'package:hk_mobile/controllers/address_controller.dart';
+import 'package:hk_mobile/core/components/components.dart';
+import 'package:hk_mobile/core/components/custom_text_field.dart';
 import 'package:hk_mobile/core/utils/alert_util.dart';
 import 'package:hk_mobile/dto/admin_unit_dto.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-
-class TextFiledCustom extends StatelessWidget {
-  const TextFiledCustom(
-    this.iconData,
-    this.hintText, {
-    required this.padding,
-    required this.controller,
-    Key? key,
-  }) : super(key: key);
-
-  final IconData iconData;
-  final String hintText;
-  final EdgeInsets padding;
-  final TextEditingController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: padding,
-      child: Container(
-        decoration: BoxDecoration(
-          color: kSecondaryColor.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: TextField(
-          controller: controller,
-          textAlignVertical: TextAlignVertical.center,
-          textInputAction: TextInputAction.search,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            hintText: hintText,
-            prefixIcon: Icon(iconData),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class AdminUnitPicker extends StatelessWidget {
   final EdgeInsetsGeometry padding;
@@ -125,13 +87,29 @@ class AddressPicker extends StatelessWidget {
   final AddressController addController = Get.put(AddressController());
   final TextEditingController nameTxtEditCtl = TextEditingController();
   final TextEditingController phoneTxtEditCtl = TextEditingController();
+  final TextEditingController streetTxtEditCtl = TextEditingController();
+  final TextEditingController noteTxtEditCtl = TextEditingController();
   final TextEditingController provinceTxtEditCtl = TextEditingController();
   final TextEditingController districtTxtEditCtl = TextEditingController();
   final TextEditingController wardTextTxtEditCtl = TextEditingController();
 
-  Iterable<AdminUnitDto> getProvinces(pattern) {
-    return AdminUnitDto.getProvinces(pattern);
+  void _handleChangeName(String value) {
+    addController.setName(getCtlerKey, value);
   }
+
+  void _handleChangePhone(String value) {
+    addController.setPhone(getCtlerKey, value);
+  }
+
+  void _handleChangeStreet(String value) {
+    addController.setStreet(getCtlerKey, value);
+  }
+
+  void _handleChangeNote(String value) {
+    addController.setNote(getCtlerKey, value);
+  }
+
+  Iterable<AdminUnitDto> _getProvinces(pattern) => AdminUnitDto.getProvinces(pattern);
 
   Iterable<AdminUnitDto> _getDistricts(pattern) {
     var province = addController.getProvince(getCtlerKey);
@@ -149,7 +127,7 @@ class AddressPicker extends StatelessWidget {
     return AdminUnitDto.getWards(pattern, district.code);
   }
 
-  void handleChangeProvince(AdminUnitDto suggestion) {
+  void _handleChangeProvince(AdminUnitDto suggestion) {
     addController.setProvince(getCtlerKey, suggestion);
     provinceTxtEditCtl.text = suggestion.name;
     districtTxtEditCtl.clear();
@@ -205,27 +183,23 @@ class AddressPicker extends StatelessWidget {
     return Obx(() {
       List<Widget> children = [];
 
-      var pSelect = addController.getProvince(getCtlerKey);
-      var dSelect = addController.getDistrict(getCtlerKey);
-      var wSelect = addController.getWard(getCtlerKey);
-
-      // return Column(children: [
-      //   Text(pSelect == null ? 'no select' : pSelect.name),
-      //   Text(dSelect == null ? 'no select' : dSelect.name),
-      //   Text(wSelect == null ? 'no select' : wSelect.name),
-      // ]);
-
-      children.add(TextFiledCustom(
-        Icons.account_box_rounded,
-        'Họ tên',
+      children.add(CustomTextField(
+        prefixIcon: Icons.account_circle,
+        hintText: 'Họ tên',
         padding: inputPadding,
+        keyboardType: TextInputType.text,
         controller: nameTxtEditCtl,
+        inputColor: kSecondaryColor.withOpacity(0.1),
+        onChanged: _handleChangeName,
       ));
-      children.add(TextFiledCustom(
-        Icons.phone,
-        'Số diện thoại',
+      children.add(CustomTextField(
+        prefixIcon: Icons.phone,
+        hintText: 'Số điện thoại',
         padding: inputPadding,
+        keyboardType: TextInputType.number,
         controller: phoneTxtEditCtl,
+        inputColor: kSecondaryColor.withOpacity(0.1),
+        onChanged: _handleChangePhone,
       ));
 
       children.add(
@@ -234,8 +208,8 @@ class AddressPicker extends StatelessWidget {
           label: 'Tỉnh / Thành phố',
           notFoundLabel: 'Không tìm thấy kết quả',
           textController: provinceTxtEditCtl,
-          handleSuggestionsCallback: getProvinces,
-          handleSuggestionSelected: handleChangeProvince,
+          handleSuggestionsCallback: _getProvinces,
+          handleSuggestionSelected: _handleChangeProvince,
           onClear: handleClearProvince,
         ),
       );
@@ -265,6 +239,54 @@ class AddressPicker extends StatelessWidget {
           onTapText: () => _handleTapWard(context),
         ),
       );
+
+      children.add(CustomTextField(
+        prefixIcon: Icons.location_on,
+        hintText: 'Địa chỉ cụ thể',
+        padding: inputPadding,
+        keyboardType: TextInputType.text,
+        controller: streetTxtEditCtl,
+        inputColor: kSecondaryColor.withOpacity(0.1),
+        onChanged: _handleChangeStreet,
+      ));
+
+      children.add(CustomTextField(
+        prefixIcon: Icons.note,
+        hintText: 'Ghi chú',
+        padding: inputPadding,
+        keyboardType: TextInputType.text,
+        controller: noteTxtEditCtl,
+        inputColor: kSecondaryColor.withOpacity(0.1),
+        onChanged: _handleChangeNote,
+      ));
+
+      List<String> errors = addController.getErrors(getCtlerKey);
+      if (errors.isNotEmpty) {
+        children.add(const SizedBox(height: 30));
+        children.add(FormError(errors: errors));
+        // children.add(
+        //   Column(
+        //       children: errors
+        //           .map((e) => Expanded(
+        //                 child: FittedBox(
+        //                     fit: BoxFit.contain,
+        //                     child: Text(
+        //                       e,
+        //                     )),
+        //               ))
+        //           .toList()),
+        // );
+        // children.addAll(errors.map(
+        //   (e) => FittedBox(
+        //     fit: BoxFit.fitHeight,
+        //     child: Text(
+        //       e,
+        //       textAlign: TextAlign.left,
+        //       style: const TextStyle(color: GFColors.DANGER),
+        //     ),
+        //   ),
+        // ));
+      }
 
       return Column(children: children);
     });

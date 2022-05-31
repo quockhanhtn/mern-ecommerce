@@ -16,6 +16,20 @@ class AddressDto extends GenericDto {
     note = MapUtil.getString(json, 'note');
   }
 
+  AddressDto.fromValues({
+    required this.name,
+    required this.phone,
+    required this.isDefault,
+    required this.province,
+    required this.district,
+    required this.ward,
+    required this.street,
+    required this.type,
+    required this.note,
+  }) : super(<String, dynamic>{}) {
+    id = '';
+  }
+
   late String id;
   late String name;
   late String phone;

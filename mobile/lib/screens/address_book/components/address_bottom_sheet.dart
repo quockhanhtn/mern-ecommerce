@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:hk_mobile/app_theme.dart';
-import 'package:hk_mobile/core/components/custom_btn.dart';
 import 'package:hk_mobile/screens/address_book/components/address_picker.dart';
 
 class AddressBottomSheet extends StatelessWidget {
@@ -33,18 +31,18 @@ class AddressBottomSheet extends StatelessWidget {
           ],
         ),
       ),
-      stickyFooter: Padding(
-        padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
-        child: Container(
-          color: GFColors.TRANSPARENT,
-          child: CustomBtn(
-            text: 'Hủy',
-            btnColor: AppTheme.darkGrey.withOpacity(0.3),
-            textColor: AppTheme.nearlyWhite,
-            btnPadding: const EdgeInsets.all(0),
-          ),
-        ),
-      ),
+      // stickyFooter: Padding(
+      //   padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
+      //   child: Container(
+      //     color: GFColors.TRANSPARENT,
+      //     child: CustomBtn(
+      //       text: 'Hủy',
+      //       btnColor: AppTheme.darkGrey.withOpacity(0.3),
+      //       textColor: AppTheme.nearlyWhite,
+      //       btnPadding: const EdgeInsets.all(0),
+      //     ),
+      //   ),
+      // ),
       stickyFooterHeight: 60,
     );
   }

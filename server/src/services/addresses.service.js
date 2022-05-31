@@ -23,6 +23,8 @@ async function getUser(userId, includeAddress = false) {
 }
 
 function initAddress(data, user) {
+  delete data._id;
+  
   let address = {};
   if (!data.phone && user.phone) {
     data.phone = user.phone;

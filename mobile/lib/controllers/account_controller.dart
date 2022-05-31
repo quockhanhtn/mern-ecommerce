@@ -45,4 +45,15 @@ class AccountController extends GetxController {
       isUpdateAdd(false);
     });
   }
+
+  void addNew(AddressDto addressDto, Function() onSuccess, Function(String) onError) {
+    DioUtil.post('account/addresses', data: addressDto.toJson(), onSuccess: (data) {
+      if (data["success"]) {
+        fetchAddress();
+        onSuccess();
+      }
+    }, onError: (e) {
+      onError(e.toString());
+    });
+  }
 }

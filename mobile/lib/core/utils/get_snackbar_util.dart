@@ -18,4 +18,20 @@ class GetSnackbarUtil {
       backgroundColor: Colors.white,
     );
   }
+
+  static void showError(
+    String mgs, {
+    String title = 'Xảy ra lỗi',
+    int duration = 3,
+  }) {
+    Get.snackbar(
+      title,
+      mgs,
+      icon: const Icon(Icons.check, color: AppTheme.colorError),
+      //colorText: AppTheme.colorSuccess,
+      duration: Duration(seconds: duration),
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.white,
+    );
+  }
 }
