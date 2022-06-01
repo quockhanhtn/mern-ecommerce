@@ -21,26 +21,29 @@ class CartCard extends StatelessWidget {
   final CartDto cart;
 
   void _toggleSelected() {
-    cartController.changeSelected(cart.productId, cart.sku);
+    cartController.toggleSelected(cart.productId, cart.sku);
   }
 
   Widget _buildImage() {
-    return SizedBox(
-      width: 88,
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: Container(
-          padding: EdgeInsets.all(getProportionateScreenWidth(5)),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(
-              color: cart.isSelected ? AppTheme.nearlyBlue : AppTheme.grey.withOpacity(0.2),
+    return GestureDetector(
+      onTap: _toggleSelected,
+      child: SizedBox(
+        width: 88,
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Container(
+            padding: EdgeInsets.all(getProportionateScreenWidth(5)),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(
+                color: cart.isSelected ? AppTheme.nearlyBlue : AppTheme.grey.withOpacity(0.2),
+              ),
             ),
-          ),
-          child: NetworkImg(
-            imageUrl: cart.thumbnail,
-            imageFit: BoxFit.contain,
+            child: NetworkImg(
+              imageUrl: cart.thumbnail,
+              imageFit: BoxFit.contain,
+            ),
           ),
         ),
       ),
@@ -61,18 +64,33 @@ class CartCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              FormatUtils.currency(cart.price),
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: GFColors.DANGER,
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  FormatUtils.currency(cart.price),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: GFColors.DANGER,
+                  ),
+                ),
+                Text(
+                  FormatUtils.currency(cart.marketPrice),
+                  style: TextStyle(
+                    decoration: TextDecoration.lineThrough,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.darkText.withOpacity(0.6),
+                  ),
+                ),
+              ],
             ),
             NumericUpDown(
               min: 1,
               max: cart.quantity - cart.sold,
               currentValue: cart.qty,
+              availableTxt: 'Còn ${cart.quantity - cart.sold - cart.qty} SP',
               onDecrease: () {
                 cartController.decreaseQty(cart.productId, cart.sku);
               },
@@ -95,7 +113,6 @@ class CartCard extends StatelessWidget {
             color: AppTheme.darkGrey.withOpacity(0.2),
           )),
           borderRadius: const BorderRadius.all(Radius.zero),
-          onTap: _toggleSelected,
           child: Row(
             children: [
               _buildImage(),

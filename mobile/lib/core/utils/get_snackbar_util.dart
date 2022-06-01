@@ -27,7 +27,7 @@ class GetSnackbarUtil {
     Get.snackbar(
       title,
       mgs,
-      icon: const Icon(Icons.check, color: AppTheme.colorError),
+      icon: const Icon(Icons.error, color: AppTheme.colorError),
       //colorText: AppTheme.colorSuccess,
       duration: Duration(seconds: duration),
       snackPosition: SnackPosition.BOTTOM,

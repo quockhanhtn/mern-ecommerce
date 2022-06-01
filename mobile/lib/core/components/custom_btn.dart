@@ -12,6 +12,7 @@ class CustomBtn extends StatelessWidget {
     this.onTap,
     this.textFontSize = 18.0,
     this.subtextFontSize = 12.0,
+    this.expandedFlex = 1,
   }) : super(key: key);
 
   final String text;
@@ -23,10 +24,12 @@ class CustomBtn extends StatelessWidget {
   final Function? onTap;
   final double textFontSize;
   final double subtextFontSize;
+  final int expandedFlex;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
+      flex: expandedFlex,
       child: Padding(
         padding: btnPadding,
         child: GestureDetector(

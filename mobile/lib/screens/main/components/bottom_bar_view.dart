@@ -1,7 +1,12 @@
 import 'dart:math' as math;
+import 'package:badges/badges.dart';
+import 'package:get/get.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:hk_mobile/app_theme.dart';
+import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/core/hex_color.dart';
 import 'package:flutter/material.dart';
+import 'package:hk_mobile/screens/cart/cart_screen.dart';
 
 class BottomBarView extends StatefulWidget {
   const BottomBarView({Key? key, this.tabIconsList, this.changeIndex, this.addClick}) : super(key: key);
@@ -15,6 +20,7 @@ class BottomBarView extends StatefulWidget {
 
 class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateMixin {
   AnimationController? animationController;
+  final CartController cartController = Get.put(CartController());
 
   @override
   void initState() {
@@ -80,14 +86,7 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
                                       .value *
                                   64.0,
                             ),
-                            Expanded(
-                              child: TabIcons(
-                                  tabIconData: widget.tabIconsList?[2],
-                                  removeAllSelect: () {
-                                    setRemoveAllSelection(widget.tabIconsList?[2]);
-                                    widget.changeIndex!(2);
-                                  }),
-                            ),
+                            _buildCartButton(),
                             Expanded(
                               child: TabIcons(
                                   tabIconData: widget.tabIconsList?[3],
@@ -179,6 +178,36 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
         }
       });
     });
+  }
+
+  Widget _buildCartButton() {
+    return Expanded(
+      child: Obx(() {
+        return Badge(
+          badgeContent: Text(
+            cartController.list.length.toString(),
+            style: const TextStyle(color: Colors.white),
+          ),
+          position: BadgePosition.topEnd(top: 0, end: 0),
+          gradient: LinearGradient(
+            colors: [
+              AppTheme.nearlyDarkBlue.withOpacity(1),
+              HexColor("#6F56E8").withOpacity(0.8),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          animationType: BadgeAnimationType.slide,
+          child: TabIcons(
+            tabIconData: widget.tabIconsList?[2],
+            removeAllSelect: () {
+              // setRemoveAllSelection(widget.tabIconsList?[2]);
+              Get.to(() => CartScreen());
+            },
+          ),
+        );
+      }),
+    );
   }
 }
 

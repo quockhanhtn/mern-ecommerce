@@ -28,7 +28,13 @@ class DioUtil {
     required Function(dynamic error) onError,
     Function()? onFinally,
   }) {
-    _instance.get(path, queryParameters: queryParameters, cancelToken: cancelToken).then((res) {
+    _instance
+        .get(
+      path,
+      queryParameters: queryParameters,
+      cancelToken: cancelToken,
+    )
+        .then((res) {
       if (res.statusCode! >= 200 && res.statusCode! < 300) {
         onSuccess(res.data);
       }

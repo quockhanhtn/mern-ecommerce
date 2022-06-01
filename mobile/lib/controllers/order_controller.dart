@@ -10,6 +10,7 @@ class OrderController extends GetxController {
 
   RxList<CartDto> items = <CartDto>[].obs;
   RxMap address = <String, dynamic>{}.obs;
+  RxString selectedAddressId = ''.obs;
   RxString customerName = ''.obs;
   RxString customerPhone = ''.obs;
   RxString paymentMethod = ''.obs;
@@ -25,10 +26,21 @@ class OrderController extends GetxController {
   }
 
   void setSelectedAddress(String id) {
+    if (id.isEmpty) {
+      var address = accountController.lstAdd.firstWhereOrNull((element) => element.isDefault);
+      if (address != null) {
+        id = address.id;
+      } else {
+        return;
+      }
+    }
+
     int index = accountController.lstAdd.indexWhere((element) => element.id == id);
     if (index < 0) {
       errorMgs('Vui lòng chọn địa chỉ');
     } else {
+      selectedAddressId(id);
+      selectedAddressId.refresh();
       address.value = accountController.lstAdd[index].toJson();
       customerName(accountController.lstAdd[index].name);
       customerPhone(accountController.lstAdd[index].phone);

@@ -20,14 +20,18 @@ class AddressListView extends StatelessWidget {
         padding: const EdgeInsets.only(top: 0, bottom: 0, right: 16, left: 16),
         itemCount: accountController.lstAdd.length,
         scrollDirection: Axis.vertical,
-        itemBuilder: (BuildContext context, int index) => AddressCard(
-          accountController.lstAdd[index],
-          onEdit: _handleEditAddress,
-          onSetDefault: (addressId) => _handleSetDefaultAddress(context, addressId),
-          onDelete: _handleDeleteAddress,
-        ),
+        itemBuilder: _buildItem,
       );
     });
+  }
+
+  Widget _buildItem(BuildContext context, int index) {
+    return AddressCard(
+      accountController.lstAdd[index],
+      onEdit: _handleEditAddress,
+      onSetDefault: (addressId) => _handleSetDefaultAddress(context, addressId),
+      onDelete: _handleDeleteAddress,
+    );
   }
 
   void _handleEditAddress(String addressId) {}

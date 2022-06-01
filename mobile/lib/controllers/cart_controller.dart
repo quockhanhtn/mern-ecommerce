@@ -14,11 +14,6 @@ class CartController extends GetxController {
   RxDouble shipping = 0.0.obs;
   RxDouble total = 0.0.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   void authenticatedChange(bool isAuth) {
     if (isAuth) {
       fetchCartItems();
@@ -46,31 +41,22 @@ class CartController extends GetxController {
   void add(
     String productId,
     ProductVariantDto variant,
-    int qty,
-    Function onSuccess,
-  ) async {
-    // var findIndex = list.indexWhere((cart) => cart.product.id == dto.id);
-    // if (findIndex < 0) {
-    //   list.add(CartDto(product: dto, numOfItem: 1));
-    // } else {
-    //   list[findIndex].numOfItem++;
-    // }
-
-    var response = await DioUtil.postAsync('/cart/add', data: CartDto.jsonForAdd(productId, variant.sku, qty));
-
-    calculateFee();
-    list.refresh();
-  }
-
-  void changeSelected(String productId, String sku) {
-    int itemIndex = list.indexWhere((item) => item.productId == productId && item.sku == sku);
-    if (itemIndex < 0) {
-      return;
-    }
-
-    list[itemIndex].isSelected = !list[itemIndex].isSelected;
-    list.refresh();
-    calculateFee();
+    int qty, {
+    required Function doWhenSuccess,
+    required Function(String) doWhenError,
+  }) async {
+    DioUtil.post(
+      '/cart/add',
+      data: CartDto.jsonForAdd(productId, variant.sku, qty),
+      onSuccess: (data) {
+        if (data["success"]) {
+          doWhenSuccess();
+          fetchCartItems();
+        }
+      },
+      onError: (e) => doWhenError(e.toString()),
+      onFinally: () {},
+    );
   }
 
   void decreaseQty(String productId, String sku) {
@@ -101,6 +87,34 @@ class CartController extends GetxController {
       calculateFee();
       list.refresh();
     }
+  }
+
+  bool isSelectedAll() {
+    for (CartDto element in list) {
+      if (!element.isSelected) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void toggleSelected(String productId, String sku) {
+    int itemIndex = list.indexWhere((item) => item.productId == productId && item.sku == sku);
+    if (itemIndex < 0) {
+      return;
+    }
+
+    list[itemIndex].isSelected = !list[itemIndex].isSelected;
+    list.refresh();
+    calculateFee();
+  }
+
+  void toggleSelectedAll() {
+    bool _isSelectedAll = isSelectedAll();
+    for (var i = 0; i < list.length; i++) {
+      list[i].isSelected = !_isSelectedAll;
+    }
+    list.refresh();
   }
 
   void calculateFee() {

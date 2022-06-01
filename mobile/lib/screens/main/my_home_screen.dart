@@ -9,7 +9,7 @@ import 'package:hk_mobile/screens/main/components/categories_list_view.dart';
 import 'package:hk_mobile/screens/main/components/load_more_btn.dart';
 import 'package:hk_mobile/screens/main/components/product_list_view_old.dart';
 import 'package:hk_mobile/screens/search/search_screen.dart';
-import 'package:hk_mobile/template/ui_view/title_view.dart';
+import 'package:hk_mobile/ui_view/title_view.dart';
 import 'package:hk_mobile/ui_view/circle_icon_btn.dart';
 import 'package:hk_mobile/ui_view/hk_logo.dart';
 
@@ -121,8 +121,8 @@ class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMix
         backgroundColor: Colors.transparent,
         body: Stack(
           children: <Widget>[
-            renderMainListViewUI(),
-            renderAppBarUI(),
+            _buildMainListView(),
+            _buildAppBar(),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             )
@@ -132,7 +132,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMix
     );
   }
 
-  Widget renderMainListViewUI() {
+  Widget _buildMainListView() {
     return ListView.builder(
       controller: scrollController,
       padding: EdgeInsets.only(
@@ -148,7 +148,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> with TickerProviderStateMix
     );
   }
 
-  Widget renderAppBarUI() {
+  Widget _buildAppBar() {
     return Column(
       children: <Widget>[
         AnimatedBuilder(

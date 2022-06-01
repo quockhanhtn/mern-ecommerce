@@ -14,20 +14,25 @@ class AddressCard extends StatelessWidget {
     required this.onEdit,
     required this.onSetDefault,
     required this.onDelete,
+    this.onTap,
+    this.padding = const EdgeInsets.only(top: 10, left: 10, right: 20, bottom: 10),
   }) : super(key: key);
 
   AddressDto address;
   Function(String) onEdit;
   Function(String) onSetDefault;
   Function(String) onDelete;
+  Function()? onTap;
+  EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         ShadowContainer(
+          onTap: onTap,
           child: _buildAddressInfo(context),
-          padding: const EdgeInsets.only(top: 10, left: 10, right: 20, bottom: 10),
+          padding: padding,
           margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
         ),
         Positioned(
