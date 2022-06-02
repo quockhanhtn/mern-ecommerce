@@ -4,6 +4,7 @@ import 'package:hk_mobile/app_theme.dart';
 import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/core/components/custom_btn.dart';
 import 'package:hk_mobile/core/utils/format_util.dart';
+import 'package:hk_mobile/screens/check_out/components/select_payment_list_view.dart';
 import 'package:hk_mobile/size_config.dart';
 
 class CheckOutPaymentScreen extends StatelessWidget {
@@ -38,7 +39,7 @@ class CheckOutPaymentScreen extends StatelessWidget {
 
   Widget _buildBody() {
     return Stack(
-      children: <Widget>[Container()],
+      children: <Widget>[SelectPaymentListView()],
     );
   }
 

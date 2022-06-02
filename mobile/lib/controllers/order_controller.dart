@@ -3,6 +3,7 @@ import 'package:hk_mobile/controllers/account_controller.dart';
 import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/core/utils/dio_util.dart';
 import 'package:hk_mobile/dto/cart_dto.dart';
+import 'package:hk_mobile/dto/order_dto.dart';
 
 class OrderController extends GetxController {
   final CartController cartController = Get.put(CartController());
@@ -19,6 +20,11 @@ class OrderController extends GetxController {
 
   RxBool isLoading = false.obs;
   RxString errorMgs = ''.obs;
+
+  RxString viewOrderId = ''.obs;
+  RxBool isLoadingViewOrder = false.obs;
+  RxString errorMgsViewOrder = ''.obs;
+  RxList<OrderDto> viewOrder = <OrderDto>[].obs; // use first
 
   void updateSelectedItem() {
     items.value = cartController.list.where((e) => e.isSelected).toList();
@@ -47,6 +53,21 @@ class OrderController extends GetxController {
     }
   }
 
+  void setPaymentMethod(String med) {
+    paymentMethod(med);
+    paymentMethod.refresh();
+  }
+
+  void setReceiveMethod(String med) {
+    receiveMethod(med);
+    receiveMethod.refresh();
+  }
+
+  void setIsReceiveAtStore(bool v) {
+    isReceiveAtStore(v);
+    isReceiveAtStore.refresh();
+  }
+
   void createOrder() {
     isLoading(true);
 
@@ -69,5 +90,24 @@ class OrderController extends GetxController {
     }, onFinally: () {
       isLoading(false);
     });
+  }
+
+  void setViewOrderId(id) {
+    viewOrderId(id);
+    isLoadingViewOrder(true);
+    DioUtil.get(
+      'orders/$id',
+      onSuccess: (data) {
+        if (data["success"]) {
+          OrderDto rs = OrderDto(data["data"] as Map<String, dynamic>);
+          viewOrder.clear();
+          viewOrder.add(rs);
+          viewOrder.refresh();
+          errorMgsViewOrder('');
+        }
+      },
+      onError: (e) => errorMgsViewOrder(e.toString()),
+      onFinally: () => isLoadingViewOrder(false),
+    );
   }
 }

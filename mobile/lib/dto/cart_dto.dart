@@ -27,6 +27,19 @@ class CartDto extends GenericDto {
     thumbnail = json['thumbnail'] as String;
   }
 
+  CartDto.fromOrder(Map<String, dynamic> json, {this.isSelected = true}) : super(json) {
+    productId = MapUtil.getString(json, 'productId');
+    name = MapUtil.getString(json, 'productName');
+    sku = MapUtil.getString(json, 'sku');
+    qty = MapUtil.getInt(json, 'qty');
+    variantName = MapUtil.getString(json, 'variantName');
+    price = MapUtil.getDouble(json, 'pricePerUnit');
+    marketPrice = MapUtil.getDouble(json, 'marketPrice');
+    quantity = MapUtil.getInt(json, 'quantity');
+    sold = MapUtil.getInt(json, 'sold');
+    thumbnail = json['thumbnail'] as String;
+  }
+
   @override
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};

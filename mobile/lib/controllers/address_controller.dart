@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/core/utils/map_util.dart';
@@ -12,7 +10,7 @@ class AddressController extends GetxController {
   var phoneMap = (<Key, String>{}).obs;
   var typeMap = (<Key, String>{}).obs;
   var noteMap = (<Key, String>{}).obs;
-  var isDefaultMap = (<Key, Bool>{}).obs;
+  var isDefaultMap = (<Key, bool>{}).obs;
   var provinceMap = (<Key, AdminUnitDto?>{}).obs;
   var districtMap = (<Key, AdminUnitDto?>{}).obs;
   var wardMap = (<Key, AdminUnitDto?>{}).obs;
@@ -114,7 +112,7 @@ class AddressController extends GetxController {
     noteMap.refresh();
   }
 
-  void setIsDefault(Key key, Bool isDefault) {
+  void setIsDefault(Key key, bool isDefault) {
     isDefaultMap[key] = isDefault;
     isDefaultMap.refresh();
   }
