@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hk_mobile/size_config.dart';
 
-//const kApiBaseUrl = 'https://api-mobile7076.herokuapp.com/api/v2/';
-const kApiBaseUrl = 'http://192.168.1.84:3001/api/v2/';
+const kApiBaseUrl = 'https://api-mobile7076.herokuapp.com/api/v2/';
+//const kApiBaseUrl = 'http://192.168.1.84:3001/api/v2/';
 
 const kPrimaryColorLighter = Color(0xFFC8FACD);
 const kPrimaryColorLight = Color(0xFF5BE584);
