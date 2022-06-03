@@ -2,31 +2,41 @@ import 'package:hk_mobile/dto/brand_dto.dart';
 import 'package:hk_mobile/dto/category_dto.dart';
 import 'package:hk_mobile/dto/generic_dto.dart';
 
-class ProductVariantDto extends GenericDto {
-  ProductVariantDto(this.sku, this.slug, this.variantName, this.price, this.marketPrice, this.quantity, this.sold,
-      this.thumbnail, this.pictures);
+class ProductVariantDto {
+  ProductVariantDto(
+    this.sku,
+    this.slug,
+    this.variantName,
+    this.price,
+    this.marketPrice,
+    this.quantity,
+    this.sold,
+    this.thumbnail,
+    this.pictures,
+  );
 
-  final String sku;
-  final String slug;
-  final String variantName;
-  final double price;
-  final double marketPrice;
-  final int quantity;
-  final int? sold;
-  final String? thumbnail;
-  final List<String>? pictures;
+  String sku;
+  String slug;
+  String variantName;
+  double price;
+  double marketPrice;
+  int quantity;
+  int? sold;
+  String? thumbnail;
+  List<String>? pictures;
 
   factory ProductVariantDto.fromJson(Map<String, dynamic> json) {
     return ProductVariantDto(
-        json['sku'] as String,
-        (json['slug'] as String?) ?? '',
-        (json['variantName'] as String?) ?? '',
-        json['price'].toDouble(),
-        json['marketPrice'].toDouble(),
-        (json['quantity'] as int?) ?? 0,
-        json['sold'] as int?,
-        json['thumbnail'] as String?,
-        List<String>.from(json['pictures'] ?? List<String>.empty()));
+      json['sku'] as String,
+      (json['slug'] as String?) ?? '',
+      (json['variantName'] as String?) ?? '',
+      json['price'].toDouble(),
+      json['marketPrice'].toDouble(),
+      (json['quantity'] as int?) ?? 0,
+      json['sold'] as int?,
+      json['thumbnail'] as String?,
+      List<String>.from(json['pictures'] ?? List<String>.empty()),
+    );
   }
 
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -42,7 +52,7 @@ class ProductVariantDto extends GenericDto {
       };
 }
 
-class ProductDto extends GenericDto {
+class ProductDto {
   ProductDto(
     this.id,
     this.name,
@@ -63,23 +73,23 @@ class ProductDto extends GenericDto {
     this.isOutOfStock,
   );
 
-  final String id;
-  final String name;
-  final String? slug;
-  final String? desc;
-  final String? video;
-  final List<Object>? tags;
-  final int? warrantyPeriod;
-  final String? origin;
-  final CategoryDto? category;
-  final BrandDto? brand;
-  final int? views;
-  //final List<Object>? rates;
-  final List<Object>? policies;
-  final List<Object>? hightLightPics;
-  final List<ProductVariantDto> variants;
-  final bool isHide;
-  final bool isOutOfStock;
+  String id;
+  String name;
+  String? slug;
+  String? desc;
+  String? video;
+  List<Object>? tags;
+  int? warrantyPeriod;
+  String? origin;
+  CategoryDto? category;
+  BrandDto? brand;
+  int? views;
+  // List<Object>? rates;
+  List<Object>? policies;
+  List<Object>? hightLightPics;
+  List<ProductVariantDto> variants;
+  bool isHide;
+  bool isOutOfStock;
 
   factory ProductDto.fromJson(Map<String, dynamic> json) {
     return ProductDto(
@@ -91,8 +101,8 @@ class ProductDto extends GenericDto {
       List<String>.from(json['tags'] ?? List<String>.empty()),
       json['warrantyPeriod'] as int?,
       json['origin'] as String?,
-      json['category'] != null ? CategoryDto.fromJson(json['category']) : null,
-      json['brand'] != null ? BrandDto.fromJson(json['brand']) : null,
+      json['category'] != null ? CategoryDto(json['category']) : null,
+      json['brand'] != null ? BrandDto(json['brand']) : null,
       json['views'] as int?,
       //json['rates'] as List<Object>?,
       List<String>.from(json['policies'] ?? List<String>.empty()),

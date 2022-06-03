@@ -68,6 +68,14 @@ export const updateAddress = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+export const setDefaultAddress = async (req, res, next) => {
+  try {
+    const { addressId } = req.params;
+    const address = await addressService.setDefault(req.user._id, addressId);
+    ResponseUtils.status200(res, `Set address default successfully!`, address);
+  } catch (err) { next(err); }
+};
+
 export const deleteAddress = async (req, res, next) => {
   try {
     const { addressId } = req.params;

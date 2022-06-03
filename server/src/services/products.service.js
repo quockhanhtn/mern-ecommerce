@@ -10,6 +10,7 @@ import ValidUtils from '../utils/ValidUtils.js';
 
 export default {
   getAllProducts,
+  getBestSellerProducts,
   getOneProduct,
   getSuggestProducts,
   getProductRecommend,
@@ -195,14 +196,23 @@ async function deleteProductVariants(identity, sku) {
 
 //#region Product info
 /**
- * Get list product
- * @param {string} fields - fields to select
- * @param {number} limit - limit
- * @param {number} page - page number
- * @param {object} filter - filter
- * @returns {object} - list of products, total count
+ * Get list products
+ * @param {String} fields - Fields to get
+ * @param {Number} limit 
+ * @param {Number} page 
+ * @param {Object} filter
+ * @param {String} sortBy 
+ * @param {-1 | 1} sortType 
+ * @param {Boolean} getCategoryFilter 
+ * @param {Boolean} getBrandFilter 
+ * @param {Boolean} isShowHidden 
+ * @returns 
  */
-async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy = 'createdAt', sortType = -1, getCategoryFilter, getBrandFilter = false, isShowHidden = false) {
+async function getAllProducts(
+  fields, limit = 10, page = 1, filter = {},
+  sortBy = 'createdAt', sortType = -1,
+  getCategoryFilter, getBrandFilter = false, isShowHidden = false
+) {
   if (fields === null || fields == '' || fields === undefined) { fields = SELECT_FIELD; }
 
   if (fields.indexOf(',') > -1) {
@@ -251,9 +261,31 @@ async function getAllProducts(fields, limit = 10, page = 1, filter = {}, sortBy 
       result.brandFilter = [{ _id: 'null', name: '', slug: '', image: '' }, ...result.brandFilter];
     }
   }
-  // const list = await Product.find(JSON.parse(JSON.stringify(filter)), fields, { skip: (page - 1) * limit, limit: limit })
-  //   .lean().exec();
 
+  return result;
+}
+
+async function getBestSellerProducts(limit = 10) {
+  const result = await Product.aggregate([
+    { "$addFields": { "totalSold": { "$sum": "$variants.sold" } } },
+    { "$sort": { "totalSold": -1 } },
+    { "$limit": limit },
+    { "$lookup": { "from": "categories", "localField": "category", "foreignField": "_id", "as": "category" } },
+    { "$unwind": "$category" },
+    { "$lookup": { "from": "brands", "localField": "brand", "foreignField": "_id", "as": "brand" } },
+    { "$unwind": "$brand" },
+    {
+      "$project":
+      {
+        "name": 1,
+        "slug": 1,
+        "totalSold": 1,
+        "variants": { "thumbnail": 1, "price": 1, "sold": 1 },
+        "category": { "name": 1, "_id": 1, "image": 1 },
+        "brand": { "name": 1, "_id": 1, "image": 1 }
+      }
+    }
+  ]).exec();
   return result;
 }
 
@@ -288,7 +320,7 @@ async function getOneProduct(identity, needIncView = false, notLean = false, fie
   }
 }
 
-async function getSuggestProducts(keyword) {
+async function getSuggestProducts(keyword, limit = 10) {
   const result = await Product.find(
     { $text: { $search: new RegExp(keyword, 'gmi') } },
     { score: { $meta: "textScore" } },
@@ -296,7 +328,7 @@ async function getSuggestProducts(keyword) {
     null
   ).select('slug name variants.variantName variants.sku variants.price variants.marketPrice variants.thumbnail')
     .sort({ score: { $meta: 'textScore' } })
-    .limit(10)
+    .limit(limit)
     .lean().exec();
   return result;
 }

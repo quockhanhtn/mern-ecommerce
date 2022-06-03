@@ -25,9 +25,7 @@ class CategoryService {
     if (response.statusCode == 200) {
       var apiResult = ApiResponseDto.fromJson(responseString);
       if (apiResult.success) {
-        return apiResult.data
-            .map((e) => CategoryDto.fromJson(e as Map<String, dynamic>))
-            .toList();
+        return apiResult.data.map((e) => CategoryDto(e as Map<String, dynamic>)).toList();
       }
       return List.empty();
     } else {

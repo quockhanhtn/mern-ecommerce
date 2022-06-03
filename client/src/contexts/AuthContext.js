@@ -96,6 +96,7 @@ function AuthProvider({ children }) {
 
           dispatch({ type: 'INITIALIZE', payload: { isAuthenticated: true, user: userInfo } });
         } else {
+          setSession(null); // clear session
           dispatch({ type: 'INITIALIZE', payload: { isAuthenticated: false, user: null } });
         }
       } catch (err) {

@@ -47,7 +47,7 @@ class HomeHeader extends StatelessWidget {
             return IconBtnWithCounter(
               svgSrc: "assets/icons/ic_cart.svg",
               numOfItem: cartController.list.length,
-              press: () => Get.to(CartScreen()),
+              press: () => Get.to(() => CartScreen()),
               icPadding: getProportionateScreenWidth(12),
               icHeight: getProportionateScreenWidth(46),
               icWidth: getProportionateScreenWidth(46),

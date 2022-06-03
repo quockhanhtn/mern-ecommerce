@@ -54,8 +54,10 @@ export default {
     'language-not-available': 'This language is not available'
   },
   auth: {
-    'page-login-title': 'Log in | HK Mobile',
-    'page-register-title': 'Register | HK Mobile',
+    'page-title': {
+      login: 'Log in | HK Mobile',
+      register: 'Register | HK Mobile'
+    },
     salutation: 'Hi, Welcome back',
     register: 'Register',
     'get-started': 'Get started',
@@ -79,13 +81,23 @@ export default {
     'confirm-password': 'Confirm password',
     'enter-new-password': 'Enter new password',
     'confirm-new-password': 'Confirm new password',
+
     'role-admin': 'Admin',
     'role-staff': 'Staff',
+    'role-customer': 'Customer',
 
     'accept-terms': 'By registering, I agree to HK Mobile',
     tos: 'Terms of Service',
     'privacy-policy': 'Privacy Policy',
-    'register-success': 'Register success'
+
+    'register-salutation': 'Hi, Welcome to HK Mobile',
+    'register-title': 'Become a member',
+    'register-subtitle': 'Accumulate points and receive many attractive offers',
+    'register-success': 'Register success',
+
+    phone: 'Phone number',
+    'phone-required': 'Phone number is require',
+    'phone-invalid': 'Phone number is invalid'
   },
   dashboard: {
     title: 'Dashboard',

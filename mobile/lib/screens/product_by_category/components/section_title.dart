@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 import '../../../size_config.dart';
@@ -14,7 +12,7 @@ class SectionTitle extends StatelessWidget {
 
   final String title;
   final GestureTapCallback press;
-  final Bool? hiddenMoreText;
+  final bool? hiddenMoreText;
 
   @override
   Widget build(BuildContext context) {

@@ -54,3 +54,40 @@ OutlineInputBorder outlineInputBorder() {
     borderSide: const BorderSide(color: kTextColor),
   );
 }
+
+const List<String> kOrderStatus = [
+  'pending',
+  'confirmed',
+  'shipping',
+  'completed',
+  'cancelled',
+];
+const List<String> kOrderStatusName = [
+  'Chờ xác nhận',
+  'Đã xác nhận',
+  'Đang vận chuyển',
+  'Đã hoàn thành',
+  'Đã hủy',
+];
+
+const List<String> kOrderPaymentMethod = [
+  'cash',
+  'cod',
+  'vnpay',
+];
+const List<String> kOrderPaymentMethodName = [
+  'Tiền mặt',
+  'COD',
+  'VN Pay',
+];
+
+const List<String> kOrderPaymentStatus = [
+  'pending',
+  'paid',
+  'cancelled',
+];
+const List<String> kOrderPaymentStatusName = [
+  'Chờ thanh toán',
+  'Đã thanh toán',
+  'Thanh toán thất bại',
+];

@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:hk_mobile/controllers/account_controller.dart';
+import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/core/utils/dio_util.dart';
 import 'package:hk_mobile/core/utils/preference_util.dart';
 import 'package:hk_mobile/dto/user_dto.dart';
@@ -10,10 +12,18 @@ class AuthenticationController extends GetxController {
   final errorMgs = ''.obs;
   final isAuthenticated = false.obs;
 
+  final AccountController accountController = Get.put(AccountController());
+  final CartController cartController = Get.put(CartController());
+
   @override
   void onInit() {
     checkAuthentication();
     super.onInit();
+  }
+
+  void _notifyAuthStatusChange() {
+    accountController.authenticatedChange(isAuthenticated.value);
+    cartController.authenticatedChange(isAuthenticated.value);
   }
 
   void checkAuthentication() async {
@@ -33,28 +43,29 @@ class AuthenticationController extends GetxController {
     } else {
       isAuthenticated(false);
     }
+
     isLoading(false);
+    _notifyAuthStatusChange();
   }
 
   Future<void> login(String username, String password) async {
     isLoading(true);
 
     try {
-      var response = await DioUtil.postAsync('/auth/login',
-          data: {'username': username, 'password': password});
+      var response = await DioUtil.postAsync('/auth/login', data: {'username': username, 'password': password});
       if (response.data['success'] as bool) {
         var userDto = UserDto.fromJson(response.data['data']['user']);
         list.clear();
         list.value = [userDto];
         isAuthenticated(true);
-        await PreferenceUtil.setString(
-            'accessToken', response.data['data']['token']);
+        await PreferenceUtil.setString('accessToken', response.data['data']['token']);
       }
     } catch (e) {
       errorMgs(e.toString());
     }
 
     isLoading(false);
+    _notifyAuthStatusChange();
   }
 
   Future<void> logout() async {
@@ -62,5 +73,6 @@ class AuthenticationController extends GetxController {
     isAuthenticated(false);
     await PreferenceUtil.setString('accessToken', '');
     isLoading(false);
+    _notifyAuthStatusChange();
   }
 }

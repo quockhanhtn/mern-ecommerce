@@ -1,70 +1,150 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:getwidget/getwidget.dart';
+import 'package:hk_mobile/app_theme.dart';
+import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/core/components/network_img.dart';
 import 'package:hk_mobile/core/components/numeric_up_down.dart';
-import 'package:hk_mobile/dto/cart_dto.dart';
+import 'package:hk_mobile/core/components/shadow_container.dart';
 import 'package:hk_mobile/core/utils/format_util.dart';
+import 'package:hk_mobile/core/utils/get_x_util.dart';
+import 'package:hk_mobile/dto/cart_dto.dart';
 
-import '../../../constants.dart';
 import '../../../size_config.dart';
 
 class CartCard extends StatelessWidget {
-  const CartCard({
+  CartCard({
     Key? key,
     required this.cart,
   }) : super(key: key);
 
+  final CartController cartController = Get.put(CartController());
   final CartDto cart;
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 88,
-          child: AspectRatio(
-            aspectRatio: 0.88,
-            child: Container(
-              padding: EdgeInsets.all(getProportionateScreenWidth(5)),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF5F6F9),
-                borderRadius: BorderRadius.circular(15),
+  void _toggleSelected() {
+    cartController.toggleSelected(cart.productId, cart.sku);
+  }
+
+  Widget _buildImage() {
+    return GestureDetector(
+      onTap: _toggleSelected,
+      child: SizedBox(
+        width: 88,
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Container(
+            padding: EdgeInsets.all(getProportionateScreenWidth(5)),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(
+                color: cart.isSelected ? AppTheme.nearlyBlue : AppTheme.grey.withOpacity(0.2),
               ),
-              child: NetworkImg(
-                imageUrl: cart.product.variants[0].thumbnail!,
-                imageFit: BoxFit.cover,
-              ),
+            ),
+            child: NetworkImg(
+              imageUrl: cart.thumbnail,
+              imageFit: BoxFit.contain,
             ),
           ),
         ),
-        const SizedBox(width: 20),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      ),
+    );
+  }
+
+  Widget _buildItem(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          cart.name,
+          style: const TextStyle(color: Colors.black, fontSize: 16),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              cart.product.name,
-              style: const TextStyle(color: Colors.black, fontSize: 16),
-              maxLines: 2,
-            ),
-            const SizedBox(height: 10),
-            Text.rich(
-              TextSpan(
-                text: FormatUtils.currency(cart.product.variants[0].price),
-                style: const TextStyle(fontWeight: FontWeight.w600, color: kPrimaryColor),
-                children: [
-                  TextSpan(text: " x ${cart.numOfItem}", style: Theme.of(context).textTheme.bodyText1),
-                ],
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  FormatUtils.currency(cart.price),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: GFColors.DANGER,
+                  ),
+                ),
+                Text(
+                  FormatUtils.currency(cart.marketPrice),
+                  style: TextStyle(
+                    decoration: TextDecoration.lineThrough,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.darkText.withOpacity(0.6),
+                  ),
+                ),
+              ],
             ),
             NumericUpDown(
-              currentValue: cart.numOfItem,
+              min: 1,
+              max: cart.quantity - cart.sold,
+              currentValue: cart.qty,
+              availableTxt: 'Còn ${cart.quantity - cart.sold - cart.qty} SP',
               onDecrease: () {
-                cart.numOfItem = cart.numOfItem--;
+                GetXUtil.showOverlay(asyncFunction: () => cartController.decreaseQtyAsync(cart.productId, cart.sku));
               },
               onIncrease: () {
-                cart.numOfItem = cart.numOfItem++;
+                GetXUtil.showOverlay(asyncFunction: () => cartController.increaseQtyAsync(cart.productId, cart.sku));
               },
-            )
+            ),
           ],
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        ShadowContainer(
+          border: Border.fromBorderSide(BorderSide(
+            color: AppTheme.darkGrey.withOpacity(0.2),
+          )),
+          borderRadius: const BorderRadius.all(Radius.zero),
+          child: Row(
+            children: [
+              _buildImage(),
+              const SizedBox(width: 20),
+              Expanded(
+                flex: 1,
+                child: _buildItem(context),
+              )
+            ],
+          ),
+          padding: const EdgeInsets.all(10),
+        ),
+        Positioned(
+          top: 10,
+          left: 10,
+          child: GFCheckbox(
+            onChanged: (value) {
+              _toggleSelected();
+            },
+            value: cart.isSelected,
+            size: GFSize.MEDIUM * 2 / 3,
+            activeBgColor: Colors.green,
+            type: GFCheckboxType.circle,
+            activeIcon: const Icon(
+              Icons.check,
+              size: 15,
+              color: Colors.white,
+            ),
+            // inactiveIcon: inactiveIcon,
+            // checkColor: checkColor,
+          ),
         )
       ],
     );

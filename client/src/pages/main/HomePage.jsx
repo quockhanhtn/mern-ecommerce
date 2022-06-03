@@ -5,7 +5,7 @@ import { LoadingButton } from '@material-ui/lab';
 import { Box, Container, Card, CardContent, CardHeader, Stack, Typography } from '@material-ui/core';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllProducts } from '../../redux/slices/productSlice';
+import { getAllProducts, getProductForYou } from '../../redux/slices/productSlice';
 // hooks
 import useLocales from '../../hooks/useLocales';
 // components
@@ -37,7 +37,8 @@ export default function HomePage() {
   const {
     list: productsApi,
     isLoading: isLoadingProduct,
-    pagination: productPagination
+    pagination: productPagination,
+    productForYou
   } = useSelector((state) => state.product);
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
@@ -57,9 +58,12 @@ export default function HomePage() {
   }));
 
   useEffect(() => {
+    dispatch(getProductForYou());
+  }, [dispatch]);
+
+  useEffect(() => {
     dispatch(getAllProducts('', '', '', page, LIMIT));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [dispatch, page]);
 
   useEffect(() => {
     setProducts((prev) => [...prev, ...productsApi]);
@@ -113,6 +117,22 @@ export default function HomePage() {
                 />
               </CardContent>
             </Card>
+
+            <Box>
+              <Card sx={{ marginBottom: 1.5, padding: 3 }}>
+                <CardContent sx={{ padding: 0, '&:last-child': { paddingBottom: 0 } }}>
+                  <Box sx={{ display: 'flex', marginBottom: -1 }}>
+                    <Typography variant="h5" component="h2" sx={{ padding: 0 }}>
+                      SẢN PHẨM DÀNH CHO BẠN
+                    </Typography>
+                    <Label color="info" sx={{ ml: 1 }}>
+                      Phù hợp nhất
+                    </Label>
+                  </Box>
+                </CardContent>
+              </Card>
+              <ProductList products={productForYou.list} isLoading={productForYou.isLoading} />
+            </Box>
 
             <Box>
               <Card sx={{ marginBottom: 1.5, padding: 3 }}>

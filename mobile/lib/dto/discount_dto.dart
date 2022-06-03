@@ -1,6 +1,4 @@
-import 'package:hk_mobile/dto/generic_dto.dart';
-
-class DiscountDto extends GenericDto {
+class DiscountDto {
   DiscountDto(
     this.id,
     this.slug,
@@ -25,7 +23,6 @@ class DiscountDto extends GenericDto {
   final int? discount;
   final String? image;
 
-
   factory DiscountDto.fromJson(Map<String, dynamic> json) {
     return DiscountDto(
       json['_id'] as String,
@@ -42,15 +39,15 @@ class DiscountDto extends GenericDto {
   }
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-    '_id': id,
-    'slug': slug,
-    'name': name,
-    'desc': desc,
-    'code': code,
-    // 'fromDate': fromDate,
-    // 'endDate': endDate,
-    'quantity': quantity,
-    'discount': discount,
-    'image': image,
-  };
+        '_id': id,
+        'slug': slug,
+        'name': name,
+        'desc': desc,
+        'code': code,
+        // 'fromDate': fromDate,
+        // 'endDate': endDate,
+        'quantity': quantity,
+        'discount': discount,
+        'image': image,
+      };
 }

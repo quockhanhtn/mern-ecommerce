@@ -154,6 +154,18 @@ export const getProductById = async (req, res, next) => {
   } catch (err) { next(err); }
 }
 
+export const getBestSellerProducts = async (req, res, next) => {
+  try {
+    const { limit } = req.query || 10;
+    const products = await productService.getBestSellerProducts(limit);
+    ResponseUtils.status200(
+      res,
+      'Get best seller products successfully!',
+      products.map(p => formatProduct(p, req))
+    );
+  } catch (err) { next(err); }
+}
+
 export const getListProductsByIds = async (req, res, next) => {
   try {
     const {

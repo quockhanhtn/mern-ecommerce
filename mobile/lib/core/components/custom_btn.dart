@@ -7,10 +7,12 @@ class CustomBtn extends StatelessWidget {
     this.subText,
     required this.btnColor,
     required this.textColor,
-    required this.btnPadding,
+    this.btnPadding = const EdgeInsets.all(0),
+    this.btnMargin = const EdgeInsets.all(0),
     this.onTap,
     this.textFontSize = 18.0,
     this.subtextFontSize = 12.0,
+    this.expandedFlex = 1,
   }) : super(key: key);
 
   final String text;
@@ -18,19 +20,23 @@ class CustomBtn extends StatelessWidget {
   final Color btnColor;
   final Color textColor;
   final EdgeInsetsGeometry btnPadding;
+  final EdgeInsetsGeometry btnMargin;
   final Function? onTap;
   final double textFontSize;
   final double subtextFontSize;
+  final int expandedFlex;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
+      flex: expandedFlex,
       child: Padding(
         padding: btnPadding,
         child: GestureDetector(
           onTap: onTap as void Function()?,
           child: Container(
             height: 48,
+            margin: btnMargin,
             decoration: BoxDecoration(
               color: btnColor,
               borderRadius: const BorderRadius.all(

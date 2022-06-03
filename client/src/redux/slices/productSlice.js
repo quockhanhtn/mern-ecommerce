@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import * as api from '../../api';
-import { getRelatedItems } from '../../api/fpt';
+import { getRelatedItems, getUserBasedRecommendation } from '../../api/fpt';
 
 const initialState = {
   isLoading: true,
@@ -23,6 +23,12 @@ const initialState = {
     error: null,
     result: [],
     map: {}
+  },
+
+  productForYou: {
+    isLoading: false,
+    error: null,
+    list: []
   }
 };
 
@@ -129,7 +135,21 @@ const productSlice = createSlice({
     relatedExists(state, _action) {
       state.related.isLoading = false;
       state.related.error = null;
+    },
+    // #region Product For You
+    forYouStartLoading(state) {
+      state.productForYou.isLoading = true;
+    },
+    forYouHasError(state, action) {
+      state.productForYou.isLoading = false;
+      state.productForYou.error = action.payload;
+    },
+    forYouGetSuccess(state, action) {
+      state.productForYou.isLoading = false;
+      state.productForYou.error = null;
+      state.productForYou.list = action.payload.list;
     }
+    // #endregion Product For You
   }
 });
 
@@ -287,5 +307,15 @@ export const getRelatedProducts = (id) => async (dispatch) => {
     }
   } catch (e) {
     dispatch(actions.hasError(e));
+  }
+};
+
+export const getProductForYou = () => async (dispatch, getState) => {
+  try {
+    dispatch(actions.forYouStartLoading());
+    const { data } = await api.getBestSellerProduct();
+    dispatch(actions.forYouGetSuccess({ list: data.data }));
+  } catch (e) {
+    dispatch(actions.forYouHasError(e));
   }
 };
