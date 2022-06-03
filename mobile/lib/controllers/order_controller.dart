@@ -27,6 +27,10 @@ class OrderController extends GetxController {
   RxString errorMgsViewOrder = ''.obs;
   RxList<OrderDto> viewOrder = <OrderDto>[].obs; // use first
 
+  RxBool isLoadingList = false.obs;
+  RxString errorMgList = ''.obs;
+  RxList<OrderDto> list = <OrderDto>[].obs;
+
   void updateSelectedItem() {
     items.value = cartController.list.where((e) => e.isSelected).toList();
     items.refresh();
@@ -165,5 +169,24 @@ class OrderController extends GetxController {
         onSuccess(paymentUrl);
       }
     } catch (e) {}
+  }
+
+  Future<void> fetchListAsync() async {
+    isLoadingList(true);
+    try {
+      var response = await DioUtil.getAsync('orders');
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        var data = response.data;
+        var result = data["data"].map((e) => OrderDto(e as Map<String, dynamic>)).toList();
+        list.value = result.cast<OrderDto>();
+      } else {
+        list.clear();
+      }
+      list.refresh();
+      errorMgList('');
+    } catch (e) {
+      errorMgList(e.toString());
+    }
+    isLoadingList(false);
   }
 }

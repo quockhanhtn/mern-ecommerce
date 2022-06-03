@@ -20,38 +20,39 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xFFF5F6F9),
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-          child: const CustomAppBar(rating: 4.5),
-        ),
-        body: Body(product: productDto),
-        bottomNavigationBar: TopRoundedContainer(
-          color: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: SizeConfig.screenWidth * 0.18,
-              right: SizeConfig.screenWidth * 0.18,
-              bottom: getProportionateScreenWidth(5),
-              top: getProportionateScreenWidth(0),
-            ),
-            child: DefaultButton(
-              text: "Thêm vào giỏ hàng",
-              press: () {
-                cartController.add(
-                  productDto.id,
-                  productDto.variants[0],
-                  1,
-                  doWhenSuccess: () {
-                    GetXUtil.showSnackBarSuccess('Thêm sản phẩm vào giỏ hàng thành công !');
-                  },
-                  doWhenError: (mgs) {
-                    GetXUtil.showSnackbarError(mgs);
-                  },
-                );
-              },
-            ),
+      backgroundColor: const Color(0xFFF5F6F9),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(AppBar().preferredSize.height),
+        child: const CustomAppBar(rating: 4.5),
+      ),
+      body: Body(product: productDto),
+      bottomNavigationBar: TopRoundedContainer(
+        color: Colors.white,
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: SizeConfig.screenWidth * 0.18,
+            right: SizeConfig.screenWidth * 0.18,
+            bottom: getProportionateScreenWidth(5),
+            top: getProportionateScreenWidth(0),
           ),
-        ));
+          child: DefaultButton(
+            text: "Thêm vào giỏ hàng",
+            press: () {
+              cartController.add(
+                productDto.id,
+                productDto.variants[0],
+                1,
+                doWhenSuccess: () {
+                  GetXUtil.showSnackBarSuccess('Thêm sản phẩm vào giỏ hàng thành công !');
+                },
+                doWhenError: (mgs) {
+                  GetXUtil.showSnackbarError(mgs);
+                },
+              );
+            },
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -54,28 +54,28 @@ class OrderItem extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  FormatUtils.currency(item.price),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: kTextColor,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  'x' + item.quantity.toString(),
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    color: kTextColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
+            const SizedBox(),
+            Text(
+              FormatUtils.currency(item.price),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: kTextColor,
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'x' + item.quantity.toString(),
+              textAlign: TextAlign.left,
+              style: const TextStyle(
+                color: kTextColor,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
             Text(
               FormatUtils.currency(item.price * item.quantity),

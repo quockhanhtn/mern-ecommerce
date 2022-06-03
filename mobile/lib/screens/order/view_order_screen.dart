@@ -6,10 +6,12 @@ import 'package:hk_mobile/constants.dart';
 import 'package:hk_mobile/controllers/order_controller.dart';
 import 'package:hk_mobile/core/components/custom_btn.dart';
 import 'package:hk_mobile/core/components/shadow_container.dart';
+import 'package:hk_mobile/core/utils/format_util.dart';
 import 'package:hk_mobile/core/utils/get_x_util.dart';
 import 'package:hk_mobile/core/utils/url_launcher_util.dart';
 import 'package:hk_mobile/dto/order_dto.dart';
 import 'package:hk_mobile/screens/order/components/order_item.dart';
+import 'package:hk_mobile/screens/order/components/status_item.dart';
 import 'package:hk_mobile/size_config.dart';
 
 class ViewOrderScreen extends StatelessWidget {
@@ -151,9 +153,9 @@ class ViewOrderScreen extends StatelessWidget {
               type: GFTypographyType.typo4,
             ),
             const SizedBox(height: 10),
-            _buildOrderStatus(MediaQuery.of(context).size.width, dto.status),
-            _buildPaymentMethod(MediaQuery.of(context).size.width, dto.paymentMethod),
-            _buildPaymentStatus(MediaQuery.of(context).size.width, dto.paymentStatus),
+            OrderStatusItem(width: MediaQuery.of(context).size.width, data: dto.status),
+            PaymentMethodItem(width: MediaQuery.of(context).size.width, data: dto.paymentMethod),
+            PaymentStatusItem(width: MediaQuery.of(context).size.width, data: dto.paymentStatus),
           ],
         ),
       ),
@@ -161,7 +163,8 @@ class ViewOrderScreen extends StatelessWidget {
     ]);
 
     if (dto.paymentMethod == 'vnpay' && dto.paymentStatus != 'paid') {
-      rs.add(
+      rs.addAll([
+        const SizedBox(height: 10),
         SizedBox(
           height: 50,
           child: CustomBtn(
@@ -171,7 +174,8 @@ class ViewOrderScreen extends StatelessWidget {
             onTap: _handleRePay,
           ),
         ),
-      );
+        const SizedBox(height: 10),
+      ]);
     }
 
     rs.addAll([
@@ -186,6 +190,37 @@ class ViewOrderScreen extends StatelessWidget {
     for (var i = 0; i < dto.items.length; i++) {
       rs.add(OrderItem(item: dto.items[i]));
     }
+
+    rs.addAll([
+      const SizedBox(height: 20),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Tổng tiền',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.darkText,
+                ),
+              ),
+              Text(
+                FormatUtils.currency(dto.total),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.colorError,
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+      const SizedBox(height: 20),
+    ]);
     return rs;
   }
 
@@ -213,27 +248,6 @@ class ViewOrderScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Expanded(
-            //   flex: 3,
-            //   child: Obx(() {
-            //     return Text.rich(
-            //       TextSpan(
-            //         text: "Tổng cộng:\n",
-            //         children: [
-            //           TextSpan(
-            //             text: FormatUtils.currency(5000),
-            //             style: const TextStyle(
-            //               fontSize: 18,
-            //               color: AppTheme.colorError,
-            //               fontWeight: FontWeight.bold,
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //       textAlign: TextAlign.right,
-            //     );
-            //   }),
-            // ),
             CustomBtn(
               btnMargin: const EdgeInsets.only(left: 10),
               expandedFlex: 2,
@@ -257,87 +271,6 @@ class ViewOrderScreen extends StatelessWidget {
         child: Text(
           text,
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildOrderStatus(double width, String status) {
-    Widget item = Text(status);
-
-    int index = kOrderStatus.indexOf(status);
-    if (index < 0) {
-      item = Text(status);
-    } else {
-      List<Color> colors = [GFColors.WARNING, GFColors.INFO, GFColors.INFO, GFColors.SUCCESS, GFColors.DANGER];
-
-      item = Container(
-        margin: const EdgeInsets.all(2),
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          border: Border.all(color: colors[index]),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        child: Text(kOrderStatusName[index]),
-      );
-    }
-
-    return _buildStatusItem(width, 'Trạng thái đơn hàng', item);
-  }
-
-  Widget _buildPaymentMethod(double width, String status) {
-    Widget item = Text(status);
-    int index = kOrderPaymentMethod.indexOf(status);
-    if (index >= 0) {
-      item = Container(
-        margin: const EdgeInsets.all(2),
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          border: Border.all(color: GFColors.SUCCESS),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        child: Text(kOrderPaymentMethodName[index]),
-      );
-    }
-    return _buildStatusItem(width, 'Phương thức thanh toán', item);
-  }
-
-  Widget _buildPaymentStatus(double width, String status) {
-    Widget item = Text(status);
-
-    int index = kOrderPaymentStatus.indexOf(status);
-    if (index < 0) {
-      item = Text(status);
-    } else {
-      List<Color> colors = [GFColors.WARNING, GFColors.SUCCESS, GFColors.DANGER];
-
-      item = Container(
-        margin: const EdgeInsets.all(2),
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          border: Border.all(color: colors[index]),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        child: Text(kOrderPaymentStatusName[index]),
-      );
-    }
-    return _buildStatusItem(width, 'Trạng thái thanh toán', item);
-  }
-
-  Widget _buildStatusItem(double width, String title, Widget item) {
-    return Container(
-      margin: const EdgeInsets.only(top: 2.5, bottom: 2.5),
-      child: SizedBox(
-        width: width,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
-            ),
-            item,
-          ],
         ),
       ),
     );
