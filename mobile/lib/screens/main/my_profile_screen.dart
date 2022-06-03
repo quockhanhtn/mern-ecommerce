@@ -62,7 +62,7 @@ class MyProfileScreen extends StatelessWidget {
 
   List<Widget> _buildItems() {
     return [
-      const ProfilePicture(),
+      ProfilePicture(url: authController.list.first.avatar),
       const SizedBox(height: 20),
       ProfileMenu(
         text: "Tài khoản",

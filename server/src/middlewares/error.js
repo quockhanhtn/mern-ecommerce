@@ -85,6 +85,7 @@ function handler(err, req, res, _) {
   // clear uploaded files
   UploadUtils.clearUploadFile(req);
 
+  res.set('Content-Type', 'application/json')
   res.status(response.code);
   res.json(response);
   res.end();

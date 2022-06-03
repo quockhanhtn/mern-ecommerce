@@ -43,15 +43,6 @@ class _SignFormState extends State<SignForm> {
     }
   }
 
-  void handleLogin() async {
-    await authController.login(email!, password!);
-    if (authController.isAuthenticated.isTrue) {
-      widget.onLoginSuccess!();
-      // Navigator.pop(context);
-      //Get.back();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -107,7 +98,12 @@ class _SignFormState extends State<SignForm> {
 
                   // if all are valid then go to success screen
                   KeyboardUtil.hideKeyboard(context);
-                  authController.login(email!, password!);
+                  authController.login(
+                    email!,
+                    password!,
+                    () {},
+                    (err) {},
+                  );
                   //Navigator.pushNamed(context, LoginSuccessScreen.routeName);
                 }
               },

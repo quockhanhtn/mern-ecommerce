@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hk_mobile/controllers/authentication_controller.dart';
 import 'package:hk_mobile/core/components/no_account_text.dart';
 import 'package:hk_mobile/core/components/social_card.dart';
+import 'package:hk_mobile/core/utils/get_x_util.dart';
+import 'package:hk_mobile/screens/main/main_screen.dart';
 import '../../../size_config.dart';
 import 'sign_form.dart';
 
@@ -11,6 +15,8 @@ class Body extends StatelessWidget {
   }) : super(key: key);
 
   Function? onLoginSuccess;
+
+  final AuthenticationController authController = Get.put(AuthenticationController());
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +49,19 @@ class Body extends StatelessWidget {
                   children: [
                     SocialCard(
                       icon: "assets/icons/google-icon.svg",
-                      press: () {},
+                      press: () {
+                        GetXUtil.showOverlay(
+                          asyncFunction: () => authController.signInWithGoogle(
+                            () {
+                              GetXUtil.showSnackBarSuccess('Đăng nhập thành công!');
+                              Get.off(() => const MainScreen());
+                            },
+                            (err) {
+                              GetXUtil.showSnackbarError(err);
+                            },
+                          ),
+                        );
+                      },
                     ),
                     SocialCard(
                       icon: "assets/icons/facebook-2.svg",

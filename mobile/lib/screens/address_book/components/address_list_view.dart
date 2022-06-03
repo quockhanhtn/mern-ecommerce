@@ -24,6 +24,18 @@ class AddressListView extends StatelessWidget {
         );
       }
 
+      if (accountController.lstAdd.isEmpty) {
+        return const Center(
+          child: Padding(
+            padding: EdgeInsets.only(left: 20),
+            child: GFTypography(
+              text: 'Danh sách địa chỉ trống',
+              showDivider: false,
+            ),
+          ),
+        );
+      }
+
       return ListView.builder(
         padding: const EdgeInsets.only(top: 0, bottom: 0, right: 16, left: 16),
         itemCount: accountController.lstAdd.length,

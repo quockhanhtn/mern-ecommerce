@@ -81,6 +81,9 @@ class ListOrderScreen extends StatelessWidget {
                 ),
               );
             }
+            if (orderController.list.isEmpty) {
+              return Text('Bạn chưa có đơn hàng nào !');
+            }
 
             return Column(
               children: _buildListWidget(context),
