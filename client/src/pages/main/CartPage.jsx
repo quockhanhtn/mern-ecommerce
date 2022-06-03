@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 // material
-import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector } from '@material-ui/core';
-import { withStyles, experimentalStyled as styled } from '@material-ui/core/styles';
+import { Box, Grid, Step, Stepper, Container, StepLabel } from '@material-ui/core';
+import { experimentalStyled as styled } from '@material-ui/core/styles';
 // hooks
 import { useSelector } from 'react-redux';
 import { useLocales } from '../../hooks';
@@ -13,13 +13,6 @@ import Page from '../../components/Page';
 import { CheckoutCart, CheckoutPayment, CheckoutBillingAddress } from '../../components/checkout';
 
 // ----------------------------------------------------------------------
-
-const QontoConnector = withStyles((theme) => ({
-  alternativeLabel: { top: 10, left: 'calc(-50% + 20px)', right: 'calc(50% + 20px)' },
-  active: { '& $line': { borderColor: theme.palette.primary.main } },
-  completed: { '& $line': { borderColor: theme.palette.primary.main } },
-  line: { borderTopWidth: 2, borderColor: theme.palette.divider }
-}))(StepConnector);
 
 QontoStepIcon.propTypes = {
   active: PropTypes.bool,
