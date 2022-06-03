@@ -70,9 +70,11 @@ class ListOrderScreen extends StatelessWidget {
       ),
       child: SingleChildScrollView(
         child: SafeArea(
-          child: Column(
-            children: _buildListWidget(context),
-          ),
+          child: Obx(() {
+            return Column(
+              children: _buildListWidget(context),
+            );
+          }),
         ),
       ),
     );
