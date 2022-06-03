@@ -28,6 +28,7 @@ class OrderController extends GetxController {
   RxList<OrderDto> viewOrder = <OrderDto>[].obs; // use first
 
   RxBool isLoadingList = false.obs;
+  RxBool hasFetch = false.obs;
   RxString errorMgList = ''.obs;
   RxList<OrderDto> list = <OrderDto>[].obs;
 
@@ -184,6 +185,7 @@ class OrderController extends GetxController {
       }
       list.refresh();
       errorMgList('');
+      hasFetch(true);
     } catch (e) {
       errorMgList(e.toString());
     }

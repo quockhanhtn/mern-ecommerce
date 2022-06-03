@@ -129,10 +129,14 @@ class AddressController extends GetxController {
 
     if (StrUtil.isNullOrEmpty(nameMap[key])) {
       errorMgs.add('Vui lòng nhập Họ tên');
+    } else if (nameMap[key]!.length < 3) {
+      errorMgs.add('Vui lòng nhập Họ tên có ít nhất 3 kí tự');
     }
 
     if (StrUtil.isNullOrEmpty(phoneMap[key])) {
       errorMgs.add('Vui lòng nhập Số điện thoại');
+    } else if (!StrUtil.isPhoneNumber(phoneMap[key])) {
+      errorMgs.add('Số điện thoại không hợp lệ');
     }
 
     if (getProvince(key) == null) {

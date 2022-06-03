@@ -75,12 +75,16 @@ class AddAddressScreen extends StatelessWidget {
               btnMargin: const EdgeInsets.only(right: 5),
               onTap: () {
                 if (addController.validate(pickerKey)) {
-                  accountController.addNew(addController.getUserInput(pickerKey), () {
-                    GetXUtil.showSnackBarSuccess('Thêm địa chỉ thành công !');
-                    Navigator.pop(context);
-                  }, (String errMgs) {
-                    GetXUtil.showSnackbarError(errMgs);
-                  });
+                  GetXUtil.showOverlay(
+                    asyncFunction: () => accountController.addAddressAsync(
+                      addController.getUserInput(pickerKey),
+                      () {
+                        GetXUtil.showSnackBarSuccess('Thêm địa chỉ thành công !');
+                        Navigator.pop(context);
+                      },
+                      (String errMgs) => GetXUtil.showSnackbarError(errMgs),
+                    ),
+                  );
                 }
               },
             ),

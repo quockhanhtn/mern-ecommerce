@@ -88,6 +88,7 @@ class AddressPicker extends StatelessWidget {
   final TextEditingController nameTxtEditCtl = TextEditingController();
   final TextEditingController phoneTxtEditCtl = TextEditingController();
   final TextEditingController streetTxtEditCtl = TextEditingController();
+  final TextEditingController typeTxtEditCtl = TextEditingController();
   final TextEditingController noteTxtEditCtl = TextEditingController();
   final TextEditingController provinceTxtEditCtl = TextEditingController();
   final TextEditingController districtTxtEditCtl = TextEditingController();
@@ -103,6 +104,10 @@ class AddressPicker extends StatelessWidget {
 
   void _handleChangeStreet(String value) {
     addController.setStreet(getCtlerKey, value);
+  }
+
+  void _handleChangeType(String value) {
+    addController.setType(getCtlerKey, value);
   }
 
   void _handleChangeNote(String value) {
@@ -248,6 +253,16 @@ class AddressPicker extends StatelessWidget {
         controller: streetTxtEditCtl,
         inputColor: kSecondaryColor.withOpacity(0.1),
         onChanged: _handleChangeStreet,
+      ));
+
+      children.add(CustomTextField(
+        prefixIcon: Icons.note,
+        hintText: 'Loại. VD: Nhà, Văn phòng ...',
+        padding: inputPadding,
+        keyboardType: TextInputType.text,
+        controller: typeTxtEditCtl,
+        inputColor: kSecondaryColor.withOpacity(0.1),
+        onChanged: _handleChangeType,
       ));
 
       children.add(CustomTextField(

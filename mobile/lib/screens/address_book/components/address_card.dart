@@ -21,7 +21,7 @@ class AddressCard extends StatelessWidget {
   AddressDto address;
   Function(String) onEdit;
   Function(String) onSetDefault;
-  Function(String) onDelete;
+  Function(String, String) onDelete;
   Function()? onTap;
   EdgeInsets padding;
 
@@ -134,7 +134,7 @@ class AddressCard extends StatelessWidget {
             onSetDefault(address.id);
             break;
           case PopupMenuOptions.delete:
-            onDelete(address.id);
+            onDelete(address.id, address.name + " | " + address.phone);
             break;
         }
       },

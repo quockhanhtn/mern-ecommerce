@@ -34,4 +34,46 @@ class AlertUtil {
       ],
     ).show();
   }
+
+  static void showYesNo(
+    BuildContext buildCtx, {
+    required Widget content,
+    AlertType type = AlertType.none,
+    required Function() onYes,
+    required Function() onNo,
+  }) {
+    var padding = type != AlertType.none ? const EdgeInsets.only(top: 10) : EdgeInsets.zero;
+
+    Alert(
+      type: type,
+      style: const AlertStyle(isCloseButton: false),
+      context: buildCtx,
+      content: Padding(
+        padding: padding,
+        child: content,
+      ),
+      buttons: [
+        DialogButton(
+          child: const Text(
+            'Có',
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+          onPressed: () {
+            onYes();
+            Navigator.pop(buildCtx);
+          },
+        ),
+        DialogButton(
+          child: const Text(
+            'Không',
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+          onPressed: () {
+            onNo();
+            Navigator.pop(buildCtx);
+          },
+        ),
+      ],
+    ).show();
+  }
 }
