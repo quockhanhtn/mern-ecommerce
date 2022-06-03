@@ -53,6 +53,26 @@ class OrderDto extends GenericDto {
     updatedAt = MapUtil.getString(json, 'updatedAt');
   }
 
+  String get getCustomerName {
+    if (customer != null) {
+      return customer!.name;
+    }
+    if (user != null) {
+      return user!.id;
+    }
+    return '<Chưa cung cấp>';
+  }
+
+  String get getCustomerPhone {
+    if (customer != null) {
+      return customer!.phone;
+    }
+    if (user != null) {
+      return user!.id;
+    }
+    return '<Chưa cung cấp>';
+  }
+
   @override
   Map<String, dynamic> toJson() {
     return <String, dynamic>{};

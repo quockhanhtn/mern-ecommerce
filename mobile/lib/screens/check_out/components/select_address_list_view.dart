@@ -5,7 +5,7 @@ import 'package:hk_mobile/app_theme.dart';
 import 'package:hk_mobile/controllers/account_controller.dart';
 import 'package:hk_mobile/controllers/order_controller.dart';
 import 'package:hk_mobile/core/components/custom_btn.dart';
-import 'package:hk_mobile/core/utils/get_snackbar_util.dart';
+import 'package:hk_mobile/core/utils/get_x_util.dart';
 import 'package:hk_mobile/dto/address_dto.dart';
 import 'package:hk_mobile/screens/address_book/add_address_screen.dart';
 import 'package:hk_mobile/screens/address_book/components/address_card.dart';
@@ -98,7 +98,7 @@ class SelectAddressListView extends StatelessWidget {
   void _handleSetDefaultAddress(BuildContext context, String addressId) {
     accountController.setDefaultAddress(
       addressId,
-      (mgs) => GetSnackbarUtil.showSuccess(mgs),
+      (mgs) => GetXUtil.showSnackBarSuccess(mgs),
     );
   }
 }

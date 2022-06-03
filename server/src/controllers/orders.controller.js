@@ -15,7 +15,7 @@ export const getOne = async (req, res, next) => {
       ResponseUtils.status200(
         res,
         'Get order info success',
-        order
+        JSON.parse(JSON.stringify(order))
       );
     } else {
       ResponseUtils.status404(

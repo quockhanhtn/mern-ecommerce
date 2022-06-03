@@ -8,7 +8,7 @@ import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/controllers/order_controller.dart';
 import 'package:hk_mobile/core/components/custom_btn.dart';
 import 'package:hk_mobile/core/utils/format_util.dart';
-import 'package:hk_mobile/core/utils/get_snackbar_util.dart';
+import 'package:hk_mobile/core/utils/get_x_util.dart';
 import 'package:hk_mobile/screens/check_out/check_out_address_screen.dart';
 import 'package:hk_mobile/size_config.dart';
 
@@ -23,13 +23,13 @@ class CartScreen extends StatelessWidget {
 
   void _handleBuyNow() {
     if (cartController.list.isEmpty) {
-      GetSnackbarUtil.showError('Bạn vẫn chưa chọn sản phẩm nào để mua', title: 'Giỏ hàng trống');
+      GetXUtil.showSnackbarError('Bạn vẫn chưa chọn sản phẩm nào để mua', title: 'Giỏ hàng trống');
       return;
     }
 
     orderController.updateSelectedItem();
     if (orderController.items.isEmpty) {
-      GetSnackbarUtil.showError('Bạn vẫn chưa chọn sản phẩm nào để mua', title: 'Chưa chọn sản phẩm');
+      GetXUtil.showSnackbarError('Bạn vẫn chưa chọn sản phẩm nào để mua', title: 'Chưa chọn sản phẩm');
     } else {
       Get.to(() => CheckOutAddressScreen());
     }
@@ -57,6 +57,14 @@ class CartScreen extends StatelessWidget {
           }),
         ],
       ),
+      actions: [
+        IconButton(
+          onPressed: () {
+            GetXUtil.showOverlay<void>(asyncFunction: () => cartController.fetchCartItemsAsync());
+          },
+          icon: const Icon(Icons.refresh),
+        ),
+      ],
     );
   }
 

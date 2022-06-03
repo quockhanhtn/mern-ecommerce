@@ -5,7 +5,7 @@ import 'package:hk_mobile/controllers/account_controller.dart';
 import 'package:hk_mobile/controllers/address_controller.dart';
 import 'package:hk_mobile/core/components/custom_btn.dart';
 import 'package:hk_mobile/core/utils/alert_util.dart';
-import 'package:hk_mobile/core/utils/get_snackbar_util.dart';
+import 'package:hk_mobile/core/utils/get_x_util.dart';
 import 'package:hk_mobile/screens/address_book/components/address_picker.dart';
 import 'package:hk_mobile/size_config.dart';
 
@@ -76,10 +76,10 @@ class AddAddressScreen extends StatelessWidget {
               onTap: () {
                 if (addController.validate(pickerKey)) {
                   accountController.addNew(addController.getUserInput(pickerKey), () {
-                    GetSnackbarUtil.showSuccess('Thêm địa chỉ thành công !');
+                    GetXUtil.showSnackBarSuccess('Thêm địa chỉ thành công !');
                     Navigator.pop(context);
                   }, (String errMgs) {
-                    GetSnackbarUtil.showError(errMgs);
+                    GetXUtil.showSnackbarError(errMgs);
                   });
                 }
               },

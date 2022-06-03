@@ -7,6 +7,7 @@ import 'package:hk_mobile/core/components/network_img.dart';
 import 'package:hk_mobile/core/components/numeric_up_down.dart';
 import 'package:hk_mobile/core/components/shadow_container.dart';
 import 'package:hk_mobile/core/utils/format_util.dart';
+import 'package:hk_mobile/core/utils/get_x_util.dart';
 import 'package:hk_mobile/dto/cart_dto.dart';
 
 import '../../../size_config.dart';
@@ -92,10 +93,10 @@ class CartCard extends StatelessWidget {
               currentValue: cart.qty,
               availableTxt: 'Còn ${cart.quantity - cart.sold - cart.qty} SP',
               onDecrease: () {
-                cartController.decreaseQty(cart.productId, cart.sku);
+                GetXUtil.showOverlay(asyncFunction: () => cartController.decreaseQtyAsync(cart.productId, cart.sku));
               },
               onIncrease: () {
-                cartController.increaseQty(cart.productId, cart.sku);
+                GetXUtil.showOverlay(asyncFunction: () => cartController.increaseQtyAsync(cart.productId, cart.sku));
               },
             ),
           ],

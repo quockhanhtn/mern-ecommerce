@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/core/components/default_button.dart';
-import 'package:hk_mobile/core/utils/get_snackbar_util.dart';
+import 'package:hk_mobile/core/utils/get_x_util.dart';
 
 import 'package:hk_mobile/dto/product_dto.dart';
 import 'package:hk_mobile/screens/details/components/top_rounded_container.dart';
@@ -43,10 +43,10 @@ class DetailsScreen extends StatelessWidget {
                   productDto.variants[0],
                   1,
                   doWhenSuccess: () {
-                    GetSnackbarUtil.showSuccess('Thêm sản phẩm vào giỏ hàng thành công !');
+                    GetXUtil.showSnackBarSuccess('Thêm sản phẩm vào giỏ hàng thành công !');
                   },
                   doWhenError: (mgs) {
-                    GetSnackbarUtil.showError(mgs);
+                    GetXUtil.showSnackbarError(mgs);
                   },
                 );
               },

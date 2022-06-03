@@ -59,7 +59,29 @@ class CartController extends GetxController {
     );
   }
 
-  void decreaseQty(String productId, String sku) {
+  Future<void> increaseQtyAsync(String productId, String sku) async {
+    var postData = <String, dynamic>{};
+    postData['productId'] = productId;
+    postData['sku'] = sku;
+    postData['delta'] = 1;
+    var response = await DioUtil.patchAsync('cart', data: postData);
+    if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      _increaseQty(productId, sku);
+    }
+  }
+
+  Future<void> decreaseQtyAsync(String productId, String sku) async {
+    var postData = <String, dynamic>{};
+    postData['productId'] = productId;
+    postData['sku'] = sku;
+    postData['delta'] = -1;
+    var response = await DioUtil.patchAsync('cart', data: postData);
+    if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      _decreaseQty(productId, sku);
+    }
+  }
+
+  void _decreaseQty(String productId, String sku) {
     int itemIndex = list.indexWhere((item) => item.productId == productId && item.sku == sku);
     if (itemIndex < 0) {
       return;
@@ -70,7 +92,7 @@ class CartController extends GetxController {
     calculateFee();
   }
 
-  void increaseQty(String productId, String sku) {
+  void _increaseQty(String productId, String sku) {
     int itemIndex = list.indexWhere((item) => item.productId == productId && item.sku == sku);
     if (itemIndex < 0) {
       return;
@@ -126,5 +148,29 @@ class CartController extends GetxController {
       }
     }
     subTotal(price);
+  }
+
+  Future<void> fetchCartItemsAsync() async {
+    var response = await DioUtil.postAsync('cart');
+    if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      var result = response.data["data"].map((e) => CartDto(e as Map<String, dynamic>)).toList();
+      list.value = result.cast<CartDto>();
+      errorMgs('');
+      calculateFee();
+    }
+  }
+
+  Future<void> removeItemAsync(String productId, String sku) async {
+    var response = await DioUtil.deleteAsync('/cart/$productId/$sku');
+    if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      await fetchCartItemsAsync();
+    }
+  }
+
+  Future<void> removeLstItemsAsync(List<CartDto> list) async {
+    for (var item in list) {
+      await DioUtil.deleteAsync('/cart/${item.productId}/${item.sku}');
+    }
+    await fetchCartItemsAsync();
   }
 }

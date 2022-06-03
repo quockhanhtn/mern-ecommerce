@@ -90,18 +90,19 @@ class AddressCard extends StatelessWidget {
         ),
       );
     }
-
-    labels.add(
-      Container(
-        margin: const EdgeInsets.all(2),
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          border: Border.all(color: AppTheme.colorInfo),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+    if (address.type.isNotEmpty) {
+      labels.add(
+        Container(
+          margin: const EdgeInsets.all(2),
+          padding: const EdgeInsets.all(3),
+          decoration: BoxDecoration(
+            border: Border.all(color: AppTheme.colorInfo),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+          ),
+          child: Text(address.type),
         ),
-        child: Text(address.type),
-      ),
-    );
+      );
+    }
 
     return labels;
   }

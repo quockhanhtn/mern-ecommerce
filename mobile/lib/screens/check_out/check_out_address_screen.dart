@@ -5,7 +5,7 @@ import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/controllers/order_controller.dart';
 import 'package:hk_mobile/core/components/custom_btn.dart';
 import 'package:hk_mobile/core/utils/format_util.dart';
-import 'package:hk_mobile/core/utils/get_snackbar_util.dart';
+import 'package:hk_mobile/core/utils/get_x_util.dart';
 import 'package:hk_mobile/screens/check_out/check_out_payment_screen.dart';
 import 'package:hk_mobile/screens/check_out/components/select_address_list_view.dart';
 import 'package:hk_mobile/size_config.dart';
@@ -18,7 +18,7 @@ class CheckOutAddressScreen extends StatelessWidget {
 
   void _handleGoPay() {
     if (orderController.selectedAddressId.isEmpty) {
-      GetSnackbarUtil.showError('Bạn chưa chọn địa chỉ để nhận hàng', title: 'Thiếu địa chỉ');
+      GetXUtil.showSnackbarError('Bạn chưa chọn địa chỉ để nhận hàng', title: 'Thiếu địa chỉ');
     } else {
       Get.to(() => CheckOutPaymentScreen());
     }

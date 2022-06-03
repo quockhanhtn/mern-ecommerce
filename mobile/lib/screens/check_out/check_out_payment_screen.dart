@@ -2,17 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/app_theme.dart';
 import 'package:hk_mobile/controllers/cart_controller.dart';
+import 'package:hk_mobile/controllers/order_controller.dart';
 import 'package:hk_mobile/core/components/custom_btn.dart';
 import 'package:hk_mobile/core/utils/format_util.dart';
+import 'package:hk_mobile/core/utils/get_x_util.dart';
+import 'package:hk_mobile/core/utils/url_launcher_util.dart';
 import 'package:hk_mobile/screens/check_out/components/select_payment_list_view.dart';
+import 'package:hk_mobile/screens/order/view_order_screen.dart';
 import 'package:hk_mobile/size_config.dart';
 
 class CheckOutPaymentScreen extends StatelessWidget {
   CheckOutPaymentScreen({Key? key}) : super(key: key);
 
   final CartController cartController = Get.put(CartController());
+  final OrderController orderController = Get.put(OrderController());
 
-  void _handlePayNow() {}
+  void _handlePayNow() {
+    if (orderController.paymentMethod.isEmpty) {
+      GetXUtil.showSnackbarError('Bạn chưa chọn phương thức thanh toán', title: 'Phương thức thanh toán');
+      return;
+    }
+
+    GetXUtil.showOverlay<void>(
+      asyncFunction: () => orderController.createAsync((paymentUrl) {
+        if (paymentUrl.isNotEmpty) {
+          UrlLauncherUtil.openUrl(paymentUrl);
+        }
+        GetXUtil.showSnackBarSuccess("Đặt hàng thành công !");
+        Get.to(() => ViewOrderScreen());
+      }),
+    );
+
+    // orderController.createOrder((String paymentUrl) {
+    //   if (paymentUrl.isNotEmpty) {
+    //     UrlLauncherUtil.openUrl(paymentUrl);
+    //   }
+    //   GetSnackbarUtil.showSuccess("Đặt hàng thành công !");
+    //   Get.to(() => ViewOrderScreen());
+    // });
+
+    //UrlLauncherUtil.openUrl('https://mern-ecommerce-b848d.web.app/');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +68,10 @@ class CheckOutPaymentScreen extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return Stack(
-      children: <Widget>[SelectPaymentListView()],
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: SelectPaymentListView(),
+      ),
     );
   }
 
@@ -91,7 +123,7 @@ class CheckOutPaymentScreen extends StatelessWidget {
             CustomBtn(
               btnMargin: const EdgeInsets.only(left: 10),
               expandedFlex: 2,
-              text: 'Thanh toán',
+              text: 'Đặt hàng',
               btnColor: AppTheme.nearlyBlue,
               textColor: AppTheme.nearlyWhite,
               btnPadding: const EdgeInsets.all(0),

@@ -15,6 +15,7 @@ class ShadowContainer extends StatelessWidget {
     this.boxShadowBlurRadius = 7,
     this.boxShadowOffset = const Offset(0, 3),
     this.onTap,
+    this.height,
   }) : super(key: key);
 
   final EdgeInsetsGeometry padding;
@@ -30,6 +31,7 @@ class ShadowContainer extends StatelessWidget {
   final double boxShadowBlurRadius;
   final Offset boxShadowOffset;
 
+  final double? height;
   final Function? onTap;
 
   @override
@@ -37,6 +39,7 @@ class ShadowContainer extends StatelessWidget {
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: Container(
+        height: height,
         margin: margin,
         decoration: BoxDecoration(
             color: color,

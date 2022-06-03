@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/controllers/account_controller.dart';
-import 'package:hk_mobile/core/utils/get_snackbar_util.dart';
+import 'package:hk_mobile/core/utils/get_x_util.dart';
 import 'package:hk_mobile/screens/address_book/components/address_card.dart';
 
 class AddressListView extends StatelessWidget {
@@ -41,7 +41,7 @@ class AddressListView extends StatelessWidget {
   void _handleSetDefaultAddress(BuildContext context, String addressId) {
     accountController.setDefaultAddress(
       addressId,
-      (mgs) => GetSnackbarUtil.showSuccess(mgs),
+      (mgs) => GetXUtil.showSnackBarSuccess(mgs),
     );
   }
 }

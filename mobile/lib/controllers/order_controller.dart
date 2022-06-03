@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:hk_mobile/controllers/account_controller.dart';
 import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/core/utils/dio_util.dart';
+import 'package:hk_mobile/core/utils/map_util.dart';
 import 'package:hk_mobile/dto/cart_dto.dart';
 import 'package:hk_mobile/dto/order_dto.dart';
 
@@ -68,28 +69,69 @@ class OrderController extends GetxController {
     isReceiveAtStore.refresh();
   }
 
-  void createOrder() {
+  Future<void> createAsync(Function(String) onSuccess) async {
+    isLoading(true);
     isLoading(true);
 
     final _data = <String, dynamic>{};
     _data['items'] = items.map((e) => e.toJsonMin()).toList();
-    _data['address'] = address;
+    _data['address'] = address.value;
     _data['customerInfo'] = <String, dynamic>{
-      'name': customerName,
-      'phone': customerPhone,
+      'name': customerName.value,
+      'phone': customerPhone.value,
     };
     _data['paymentMethod'] = paymentMethod.value;
     _data['receiveMethod'] = receiveMethod.value;
     _data['isReceiveAtStore'] = isReceiveAtStore.value;
 
-    DioUtil.post('', data: _data, onSuccess: (data) {
-      var result = data["data"];
-      errorMgs('');
-    }, onError: (e) {
+    try {
+      var response = await DioUtil.postAsync('orders', data: _data);
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        var data = response.data;
+        String paymentUrl = MapUtil.getString(data, 'paymentUrl');
+        String id = MapUtil.getString(data["data"], '_id');
+        setViewOrderId(id);
+        errorMgs('');
+        await cartController.removeLstItemsAsync(items.value);
+        onSuccess(paymentUrl);
+      }
+    } catch (e) {
       errorMgs(e.toString());
-    }, onFinally: () {
-      isLoading(false);
-    });
+    }
+    isLoading(false);
+  }
+
+  void createOrder(Function(String) onSuccess) {
+    isLoading(true);
+
+    final _data = <String, dynamic>{};
+    _data['items'] = items.map((e) => e.toJsonMin()).toList();
+    _data['address'] = address.value;
+    _data['customerInfo'] = <String, dynamic>{
+      'name': customerName.value,
+      'phone': customerPhone.value,
+    };
+    _data['paymentMethod'] = paymentMethod.value;
+    _data['receiveMethod'] = receiveMethod.value;
+    _data['isReceiveAtStore'] = isReceiveAtStore.value;
+
+    DioUtil.post(
+      'orders',
+      data: _data,
+      onSuccess: (data) {
+        String paymentUrl = MapUtil.getString(data, 'paymentUrl');
+        String id = MapUtil.getString(data["data"], '_id');
+        setViewOrderId(id);
+        errorMgs('');
+        onSuccess(paymentUrl);
+      },
+      onError: (e) {
+        errorMgs(e.toString());
+      },
+      onFinally: () {
+        isLoading(false);
+      },
+    );
   }
 
   void setViewOrderId(id) {
@@ -109,5 +151,19 @@ class OrderController extends GetxController {
       onError: (e) => errorMgsViewOrder(e.toString()),
       onFinally: () => isLoadingViewOrder(false),
     );
+  }
+
+  void reloadOrder() {
+    setViewOrderId(viewOrderId.value);
+  }
+
+  Future<void> repayAsync(Function(String paymentUrl) onSuccess) async {
+    try {
+      var response = await DioUtil.getAsync('orders/re-pay/${viewOrderId.value}');
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        String paymentUrl = MapUtil.getString(response.data, 'data');
+        onSuccess(paymentUrl);
+      }
+    } catch (e) {}
   }
 }

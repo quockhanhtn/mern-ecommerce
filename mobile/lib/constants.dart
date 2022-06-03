@@ -76,9 +76,9 @@ const List<String> kOrderPaymentMethod = [
   'vnpay',
 ];
 const List<String> kOrderPaymentMethodName = [
-  'Thanh toán bằng tiền mặt',
-  'Thanh toán khi nhận hàng (COD)',
-  'Thanh toán bằng ví VN Pay',
+  'Tiền mặt',
+  'COD',
+  'VN Pay',
 ];
 
 const List<String> kOrderPaymentStatus = [
