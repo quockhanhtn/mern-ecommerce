@@ -24,4 +24,12 @@ class StrUtil {
 
     return result;
   }
+
+  static final RegExp _phoneNumberReg = RegExp(r'^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$');
+  static bool isPhoneNumber(String? str) {
+    if (isNullOrEmpty(str)) {
+      return false;
+    }
+    return _phoneNumberReg.hasMatch(str!);
+  }
 }

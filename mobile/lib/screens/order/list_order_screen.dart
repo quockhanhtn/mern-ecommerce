@@ -6,7 +6,6 @@ import 'package:hk_mobile/controllers/order_controller.dart';
 import 'package:hk_mobile/core/components/shadow_container.dart';
 import 'package:hk_mobile/core/utils/format_util.dart';
 import 'package:hk_mobile/core/utils/get_x_util.dart';
-import 'package:hk_mobile/dto/cart_dto.dart';
 import 'package:hk_mobile/dto/order_dto.dart';
 import 'package:hk_mobile/screens/order/components/status_item.dart';
 import 'package:hk_mobile/screens/order/view_order_screen.dart';
@@ -19,7 +18,6 @@ class ListOrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    GetXUtil.showOverlay<void>(asyncFunction: () => orderController.fetchListAsync());
     return Scaffold(
       appBar: _buildAppBar(),
       body: _buildBody(context),
@@ -71,6 +69,22 @@ class ListOrderScreen extends StatelessWidget {
       child: SingleChildScrollView(
         child: SafeArea(
           child: Obx(() {
+            if (orderController.list.isEmpty && orderController.hasFetch.isFalse) {
+              orderController.fetchListAsync();
+            }
+            if (orderController.isLoadingList.isTrue) {
+              return const Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: GFLoader(
+                  type: GFLoaderType.circle,
+                  size: GFSize.LARGE * 2,
+                ),
+              );
+            }
+            if (orderController.list.isEmpty) {
+              return Text('Bạn chưa có đơn hàng nào !');
+            }
+
             return Column(
               children: _buildListWidget(context),
             );

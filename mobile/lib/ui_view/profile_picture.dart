@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:getwidget/components/avatar/gf_avatar.dart';
+import 'package:hk_mobile/core/components/network_img.dart';
+import 'package:hk_mobile/core/utils/str_util.dart';
 
 class ProfilePicture extends StatelessWidget {
-  const ProfilePicture({Key? key}) : super(key: key);
+  ProfilePicture({Key? key, required this.url}) : super(key: key);
+  final String url;
 
   @override
   Widget build(BuildContext context) {
+    Widget avatar = SizedBox();
+    if (StrUtil.isNullOrEmpty(url)) {
+      avatar = GFAvatar();
+    }
+    avatar = NetworkImg(imageUrl: url);
     return SizedBox(
       height: 115,
       width: 115,
@@ -13,14 +22,7 @@ class ProfilePicture extends StatelessWidget {
         fit: StackFit.expand,
         clipBehavior: Clip.none,
         children: [
-          const CircleAvatar(
-            backgroundImage: AssetImage("assets/images/Profile Image.png"),
-            // child: ClipOval(
-            //   child: Center(
-            //     child: Image.network(imageUrl!),
-            //   ),
-            // ),
-          ),
+          avatar,
           Positioned(
             right: -16,
             bottom: 0,

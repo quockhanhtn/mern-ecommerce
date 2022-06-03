@@ -2,6 +2,7 @@
 
 import { OAuth2Client } from 'google-auth-library';
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const clientMobile = new OAuth2Client(process.env.GOOGLE_CLIENT_ID_MOBILE);
 
 export default {
   verify
@@ -13,12 +14,20 @@ export default {
  * @returns user data - more info: https://developers.google.com/identity/sign-in/web/backend-auth#calling-the-tokeninfo-endpoint
  * @sample return data: {
  */
-async function verify(googleCredential) {
-  const ticket = await client.verifyIdToken({
-    idToken: googleCredential,
-    audience: process.env.GOOGLE_CLIENT_ID
-  });
-  return ticket.getPayload();
+async function verify(googleCredential, isMobile = false) {
+  if(isMobile){
+    const ticketM = await clientMobile.verifyIdToken({
+      idToken: googleCredential,
+      audience: process.env.GOOGLE_CLIENT_ID_MOBILE
+    });
+    return ticketM.getPayload();
+  } else {
+    const ticket = await client.verifyIdToken({
+      idToken: googleCredential,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+    return ticket.getPayload();
+  }
 }
 
 // {

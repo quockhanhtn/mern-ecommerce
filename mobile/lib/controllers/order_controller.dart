@@ -3,6 +3,7 @@ import 'package:hk_mobile/controllers/account_controller.dart';
 import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/core/utils/dio_util.dart';
 import 'package:hk_mobile/core/utils/map_util.dart';
+import 'package:hk_mobile/core/utils/str_util.dart';
 import 'package:hk_mobile/dto/cart_dto.dart';
 import 'package:hk_mobile/dto/order_dto.dart';
 
@@ -28,6 +29,7 @@ class OrderController extends GetxController {
   RxList<OrderDto> viewOrder = <OrderDto>[].obs; // use first
 
   RxBool isLoadingList = false.obs;
+  RxBool hasFetch = false.obs;
   RxString errorMgList = ''.obs;
   RxList<OrderDto> list = <OrderDto>[].obs;
 
@@ -172,15 +174,17 @@ class OrderController extends GetxController {
   }
 
   Future<void> fetchListAsync() async {
+    hasFetch(true);
     isLoadingList(true);
     try {
       var response = await DioUtil.getAsync('orders');
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
-        var data = response.data;
-        var result = data["data"].map((e) => OrderDto(e as Map<String, dynamic>)).toList();
-        list.value = result.cast<OrderDto>();
-      } else {
         list.clear();
+        var data = response.data;
+        if (data != null && !StrUtil.isNullOrEmpty(data)) {
+          var result = data["data"].map((e) => OrderDto(e as Map<String, dynamic>)).toList();
+          list.value = result.cast<OrderDto>();
+        }
       }
       list.refresh();
       errorMgList('');

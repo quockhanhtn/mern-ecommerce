@@ -12,8 +12,10 @@ class ResponseUtils {
       success: statusCode >= 200 && statusCode < 300, // 200-299 Successful responses
       message
     };
+    res.set('Content-Type', 'application/json');
+
     Object.assign(responseData, data && { data });
-    res.status(statusCode).json({ ...responseData, ...extras });
+    res.json({ ...responseData, ...extras });
     res.end();
   }
 

@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hk_mobile/controllers/account_controller.dart';
 import 'package:hk_mobile/controllers/cart_controller.dart';
 import 'package:hk_mobile/core/utils/dio_util.dart';
@@ -35,7 +38,7 @@ class AuthenticationController extends GetxController {
       var res = await DioUtil.getAsync('account');
       if (res.data['success'] as bool) {
         list.clear();
-        list.value = [UserDto.fromJson(res.data['data'])];
+        list.value = [UserDto(res.data['data'])];
         isAuthenticated(true);
       } else {
         isAuthenticated(false);
@@ -48,19 +51,26 @@ class AuthenticationController extends GetxController {
     _notifyAuthStatusChange();
   }
 
-  Future<void> login(String username, String password) async {
+  Future<void> login(
+    String username,
+    String password,
+    Function() onSuccess,
+    Function(String) onError,
+  ) async {
     isLoading(true);
 
     try {
       var response = await DioUtil.postAsync('/auth/login', data: {'username': username, 'password': password});
       if (response.data['success'] as bool) {
-        var userDto = UserDto.fromJson(response.data['data']['user']);
+        var userDto = UserDto(response.data['data']['user']);
         list.clear();
         list.value = [userDto];
         isAuthenticated(true);
         await PreferenceUtil.setString('accessToken', response.data['data']['token']);
+        onSuccess();
       }
     } catch (e) {
+      onError(e.toString());
       errorMgs(e.toString());
     }
 
@@ -74,5 +84,44 @@ class AuthenticationController extends GetxController {
     await PreferenceUtil.setString('accessToken', '');
     isLoading(false);
     _notifyAuthStatusChange();
+  }
+
+  Future<void> signInWithGoogle(Function() onSuccess, Function(String) onError) async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    try {
+      if (!kIsWeb) {
+        await googleSignIn.signOut();
+      }
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {}
+
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    final postData = <String, dynamic>{};
+    postData['googleCredential'] = googleAuth?.idToken;
+    postData['isMobile'] = true;
+
+    try {
+      var response = await DioUtil.postAsync('/auth/google', data: postData);
+      var data = response.data;
+      if (data['success'] as bool) {
+        var userDto = UserDto(data['data']['user']);
+        list.clear();
+        list.value = [userDto];
+        isAuthenticated(true);
+        await PreferenceUtil.setString('accessToken', data['data']['token']);
+        _notifyAuthStatusChange();
+        onSuccess();
+      } else {
+        onError('Đăng nhập bằng google thất bại');
+      }
+    } catch (e) {
+      onError(e.toString());
+    }
   }
 }

@@ -1,49 +1,36 @@
-class UserDto {
-  final String id;
-  final String firstName;
-  final String lastName;
-  final String gender;
-  final String email;
-  final String? phone;
-  final String username;
-  final bool emptyPassword;
-  final String role;
-  final String status;
-  final String fullName;
-  final String? avatar;
+import 'package:hk_mobile/core/utils/map_util.dart';
+import 'package:hk_mobile/dto/generic_dto.dart';
 
-  UserDto(
-    this.id,
-    this.firstName,
-    this.lastName,
-    this.gender,
-    this.email,
-    this.phone,
-    this.username,
-    this.emptyPassword,
-    this.role,
-    this.status,
-    this.fullName,
-    this.avatar,
-  );
+class UserDto extends GenericDto {
+  late String id;
+  late String firstName;
+  late String lastName;
+  late String gender;
+  late String email;
+  late String phone;
+  late String username;
+  late bool emptyPassword;
+  late String role;
+  late String status;
+  late String fullName;
+  late String avatar;
 
-  factory UserDto.fromJson(Map<String, dynamic> json) {
-    return UserDto(
-      json['_id'] as String,
-      json['firstName'] as String,
-      json['lastName'] as String,
-      json['gender'] as String,
-      json['email'] as String,
-      json['phone'] as String?,
-      json['username'] as String,
-      json['emptyPassword'] as bool,
-      json['role'] as String,
-      json['status'] as String,
-      json['fullName'] as String,
-      json['avatar'] as String?,
-    );
+  UserDto(Map<String, dynamic> json) : super(json) {
+    id = MapUtil.getString(json, '_id');
+    firstName = MapUtil.getString(json, 'firstName');
+    lastName = MapUtil.getString(json, 'lastName');
+    gender = MapUtil.getString(json, 'gender');
+    email = MapUtil.getString(json, 'email');
+    phone = MapUtil.getString(json, 'phone');
+    username = MapUtil.getString(json, 'username');
+    emptyPassword = MapUtil.getBool(json, 'emptyPassword');
+    role = MapUtil.getString(json, 'role');
+    status = MapUtil.getString(json, 'status');
+    fullName = MapUtil.getString(json, 'fullName');
+    avatar = MapUtil.getString(json, 'avatar');
   }
 
+  @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         '_id': id,
         'firstName': firstName,

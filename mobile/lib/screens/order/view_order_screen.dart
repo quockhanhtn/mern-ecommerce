@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:hk_mobile/app_theme.dart';
-import 'package:hk_mobile/constants.dart';
 import 'package:hk_mobile/controllers/order_controller.dart';
 import 'package:hk_mobile/core/components/custom_btn.dart';
 import 'package:hk_mobile/core/components/shadow_container.dart';
@@ -82,6 +81,15 @@ class ViewOrderScreen extends StatelessWidget {
       child: SingleChildScrollView(
         child: SafeArea(
           child: Obx(() {
+            if (orderController.isLoadingViewOrder.isTrue) {
+              return const Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: GFLoader(
+                  type: GFLoaderType.circle,
+                  size: GFSize.LARGE * 2,
+                ),
+              );
+            }
             return Column(
               children: _buildListWidget(context),
             );
