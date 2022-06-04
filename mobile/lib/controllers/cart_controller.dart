@@ -59,6 +59,26 @@ class CartController extends GetxController {
     );
   }
 
+  Future<void> addAsync(
+    String productId,
+    ProductVariantDto variant,
+    int qty, {
+    required Function doWhenSuccess,
+    required Function(String) doWhenError,
+  }) async {
+    try {
+      var response = await DioUtil.postAsync('/cart/add', data: CartDto.jsonForAdd(productId, variant.sku, qty));
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        await fetchCartItemsAsync();
+        doWhenSuccess();
+      } else {
+        doWhenError('Xảy ra lổi, vui lòng thử lại');
+      }
+    } catch (e) {
+      e.toString();
+    }
+  }
+
   Future<void> increaseQtyAsync(String productId, String sku) async {
     var postData = <String, dynamic>{};
     postData['productId'] = productId;
@@ -151,19 +171,39 @@ class CartController extends GetxController {
   }
 
   Future<void> fetchCartItemsAsync() async {
-    var response = await DioUtil.postAsync('cart');
-    if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      var result = response.data["data"].map((e) => CartDto(e as Map<String, dynamic>)).toList();
-      list.value = result.cast<CartDto>();
-      errorMgs('');
-      calculateFee();
+    try {
+      var response = await DioUtil.postAsync('cart');
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        var result = response.data["data"].map((e) => CartDto(e as Map<String, dynamic>)).toList();
+        list.value = result.cast<CartDto>();
+        errorMgs('');
+        calculateFee();
+      }
+    } catch (e) {
+      printError(info: e.toString());
     }
   }
 
-  Future<void> removeItemAsync(String productId, String sku) async {
-    var response = await DioUtil.deleteAsync('/cart/$productId/$sku');
-    if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      await fetchCartItemsAsync();
+  Future<void> removeItemAsync(
+    String productId,
+    String sku, {
+    Function? doWhenSuccess,
+    Function(String)? doWhenError,
+  }) async {
+    try {
+      var response = await DioUtil.deleteAsync('/cart/$productId/$sku');
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        await fetchCartItemsAsync();
+        if (doWhenSuccess != null) {
+          doWhenSuccess();
+        }
+      } else {
+        if (doWhenError != null) {
+          doWhenError('Xảy ra lỗi, vui lòng thử lại');
+        }
+      }
+    } catch (e) {
+      printError(info: e.toString());
     }
   }
 

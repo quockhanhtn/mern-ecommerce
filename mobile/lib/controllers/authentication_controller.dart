@@ -66,7 +66,9 @@ class AuthenticationController extends GetxController {
         list.clear();
         list.value = [userDto];
         isAuthenticated(true);
-        await PreferenceUtil.setString('accessToken', response.data['data']['token']);
+        String accessToken = response.data['data']['token'];
+        await PreferenceUtil.setString('accessToken', accessToken);
+        DioUtil.setHeader('authorization', 'Bearer $accessToken');
         onSuccess();
       }
     } catch (e) {
@@ -114,7 +116,9 @@ class AuthenticationController extends GetxController {
         list.clear();
         list.value = [userDto];
         isAuthenticated(true);
-        await PreferenceUtil.setString('accessToken', data['data']['token']);
+        String accessToken = data['data']['token'];
+        await PreferenceUtil.setString('accessToken', accessToken);
+        DioUtil.setHeader('authorization', 'Bearer $accessToken');
         _notifyAuthStatusChange();
         onSuccess();
       } else {

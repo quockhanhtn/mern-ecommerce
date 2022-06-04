@@ -38,17 +38,30 @@ class DetailsScreen extends StatelessWidget {
           child: DefaultButton(
             text: "Thêm vào giỏ hàng",
             press: () {
-              cartController.add(
-                productDto.id,
-                productDto.variants[0],
-                1,
-                doWhenSuccess: () {
-                  GetXUtil.showSnackBarSuccess('Thêm sản phẩm vào giỏ hàng thành công !');
-                },
-                doWhenError: (mgs) {
-                  GetXUtil.showSnackbarError(mgs);
-                },
+              GetXUtil.showOverlay(
+                asyncFunction: () => cartController.addAsync(
+                  productDto.id,
+                  productDto.variants[0],
+                  1,
+                  doWhenSuccess: () {
+                    GetXUtil.showSnackBarSuccess('Thêm sản phẩm vào giỏ hàng thành công !');
+                  },
+                  doWhenError: (mgs) {
+                    GetXUtil.showSnackbarError(mgs);
+                  },
+                ),
               );
+              // cartController.add(
+              //   productDto.id,
+              //   productDto.variants[0],
+              //   1,
+              //   doWhenSuccess: () {
+              //     GetXUtil.showSnackBarSuccess('Thêm sản phẩm vào giỏ hàng thành công !');
+              //   },
+              //   doWhenError: (mgs) {
+              //     GetXUtil.showSnackbarError(mgs);
+              //   },
+              // );
             },
           ),
         ),

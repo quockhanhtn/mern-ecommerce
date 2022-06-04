@@ -173,15 +173,17 @@ class ViewOrderScreen extends StatelessWidget {
     if (dto.paymentMethod == 'vnpay' && dto.paymentStatus != 'paid') {
       rs.addAll([
         const SizedBox(height: 10),
-        SizedBox(
-          height: 50,
-          child: CustomBtn(
-            text: 'Thanh toán lại',
-            btnColor: AppTheme.darkGrey.withOpacity(0.8),
-            textColor: Colors.white,
-            onTap: _handleRePay,
-          ),
-        ),
+        Obx(() {
+          return SizedBox(
+            height: 50,
+            child: CustomBtn(
+              text: 'Thanh toán lại',
+              btnColor: AppTheme.darkGrey.withOpacity(0.8),
+              textColor: Colors.white,
+              onTap: _handleRePay,
+            ),
+          );
+        }),
         const SizedBox(height: 10),
       ]);
     }
