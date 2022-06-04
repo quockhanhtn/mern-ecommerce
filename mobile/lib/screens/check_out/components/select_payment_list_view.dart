@@ -2,10 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:hk_mobile/app_theme.dart';
 import 'package:hk_mobile/constants.dart';
 import 'package:hk_mobile/controllers/order_controller.dart';
-import 'package:hk_mobile/core/utils/format_util.dart';
 import 'package:hk_mobile/screens/check_out/components/custom_radio.dart';
 import 'package:hk_mobile/size_config.dart';
 

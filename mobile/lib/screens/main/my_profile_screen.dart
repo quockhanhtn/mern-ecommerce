@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/controllers/authentication_controller.dart';
+import 'package:hk_mobile/core/utils/alert_util.dart';
 import 'package:hk_mobile/screens/address_book/address_book_screen.dart';
 import 'package:hk_mobile/screens/main/components/profile_menu.dart';
 import 'package:hk_mobile/screens/order/list_order_screen.dart';
 import 'package:hk_mobile/screens/sign_in/sign_in_screen.dart';
 import 'package:hk_mobile/ui_view/profile_picture.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class MyProfileScreen extends StatelessWidget {
   final AuthenticationController authController = Get.put(AuthenticationController());
@@ -16,7 +18,7 @@ class MyProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: _buildBody(),
+      body: _buildBody(context),
     );
   }
 
@@ -35,14 +37,14 @@ class MyProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Obx(() {
         if (authController.isLoading.isTrue) {
           return const Center(child: CircularProgressIndicator());
         } else if (authController.isAuthenticated.isTrue) {
-          return Column(children: _buildItems());
+          return Column(children: _buildItems(context));
         } else {
           return Column(
             children: [
@@ -60,15 +62,10 @@ class MyProfileScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildItems() {
+  List<Widget> _buildItems(BuildContext context) {
     return [
       ProfilePicture(url: authController.list.first.avatar),
       const SizedBox(height: 20),
-      ProfileMenu(
-        text: "Tài khoản",
-        icon: "assets/icons/ic_user.svg",
-        press: () => {},
-      ),
       ProfileMenu(
         text: "Địa chỉ",
         icon: "assets/icons/ic_location.svg",
@@ -86,12 +83,24 @@ class MyProfileScreen extends StatelessWidget {
       ProfileMenu(
         text: "Cài đặt",
         icon: "assets/icons/Settings.svg",
-        press: () {},
+        press: () {
+          AlertUtil.showSimple(
+            context,
+            content: 'Tính năng đang phát triển',
+            type: AlertType.warning,
+          );
+        },
       ),
       ProfileMenu(
         text: "Hỗ trợ",
         icon: "assets/icons/Question mark.svg",
-        press: () {},
+        press: () {
+          AlertUtil.showSimple(
+            context,
+            content: 'Tính năng đang phát triển',
+            type: AlertType.warning,
+          );
+        },
       ),
       ProfileMenu(
         text: "Đăng xuất",
