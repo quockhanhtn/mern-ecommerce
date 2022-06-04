@@ -9,10 +9,7 @@ import '../../../size_config.dart';
 import 'sign_form.dart';
 
 class Body extends StatelessWidget {
-  Body({
-    Key? key,
-    this.onLoginSuccess,
-  }) : super(key: key);
+  Body({Key? key}) : super(key: key);
 
   Function? onLoginSuccess;
 
@@ -42,7 +39,7 @@ class Body extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: SizeConfig.screenHeight * 0.08),
-                SignForm(onLoginSuccess: onLoginSuccess),
+                SignForm(),
                 SizedBox(height: SizeConfig.screenHeight * 0.08),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -74,7 +71,26 @@ class Body extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: getProportionateScreenHeight(20)),
-                const NoAccountText(),
+                NoAccountText(
+                  onTap: () {
+                    GetXUtil.showSnackBarSuccess(
+                      'Đăng ký với Google',
+                      title: 'Google',
+                      duration: 5,
+                    );
+                    GetXUtil.showOverlay(
+                      asyncFunction: () => authController.signInWithGoogle(
+                        () {
+                          GetXUtil.showSnackBarSuccess('Đăng nhập thành công!');
+                          Get.off(() => const MainScreen());
+                        },
+                        (err) {
+                          GetXUtil.showSnackbarError(err);
+                        },
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),

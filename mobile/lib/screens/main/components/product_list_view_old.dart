@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/controllers/product_controller.dart';
 import 'package:hk_mobile/core/components/product_card.dart';
-import 'package:hk_mobile/size_config.dart';
 
 class ProductsListViewOld extends StatelessWidget {
   final ProductController productController = Get.put(ProductController());

@@ -23,6 +23,11 @@ class ProductController extends GetxController {
   final remainingItemsCat = 0.obs;
   final isLoadingMoreCat = false.obs;
 
+  RxString viewId = ''.obs;
+  RxBool isLoadingView = false.obs;
+  RxString errorMgsView = ''.obs;
+  RxList<ProductDto> view = <ProductDto>[].obs; // use first
+
   CancelToken searchCancelToken = CancelToken();
 
   @override
@@ -141,5 +146,43 @@ class ProductController extends GetxController {
     }, onFinally: () {
       isLoadingMore(false);
     });
+  }
+
+  void setSelectId(String id) {
+    viewId(id);
+    isLoadingView(true);
+
+    DioUtil.get(
+      'products/${viewId.value}',
+      onSuccess: (data) {
+        view.clear();
+        var result = ProductDto.fromJson(data["data"] as Map<String, dynamic>);
+        view.add(result);
+        view.refresh();
+      },
+      onError: (e) {},
+      onFinally: () {
+        isLoadingView(false);
+      },
+    );
+  }
+
+  Future<void> getOneAsync(String id) async {
+    isLoadingView(true);
+
+    try {
+      var response = await DioUtil.getAsync('products/${viewId.value}');
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        view.clear();
+        var data = response.data;
+        if (data != null && data.runtimeType != String) {
+          var result = ProductDto.fromJson(data["data"] as Map<String, dynamic>);
+          view.add(result);
+        }
+        view.refresh();
+      }
+    } catch (e) {}
+
+    isLoadingView(false);
   }
 }

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:hk_mobile/screens/sign_up/sign_up_screen.dart';
 
 import '../../constants.dart';
 import '../../size_config.dart';
 
 class NoAccountText extends StatelessWidget {
-  const NoAccountText({
+  NoAccountText({
     Key? key,
+    this.onTap,
   }) : super(key: key);
+
+  Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +21,13 @@ class NoAccountText extends StatelessWidget {
           style: TextStyle(fontSize: getProportionateScreenWidth(16)),
         ),
         GestureDetector(
-          onTap: () => Navigator.pushNamed(context, SignUpScreen.routeName),
+          onTap: onTap,
           child: Text(
             "Đăng ký",
             style: TextStyle(
-                fontSize: getProportionateScreenWidth(16),
-                color: kPrimaryColor),
+              fontSize: getProportionateScreenWidth(16),
+              color: kPrimaryColor,
+            ),
           ),
         ),
       ],

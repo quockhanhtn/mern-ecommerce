@@ -120,7 +120,7 @@ class _ProductsListViewState extends State<ProductsListView> with TickerProvider
 }
 
 class ProductView extends StatelessWidget {
-  const ProductView({
+  ProductView({
     Key? key,
     required this.product,
     this.animationController,
@@ -131,8 +131,11 @@ class ProductView extends StatelessWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
 
+  final ProductController productController = Get.put(ProductController());
+
   void onTap() {
-    Get.to(() => DetailsScreen(productDto: product));
+    productController.setSelectId(product.id);
+    Get.to(() => DetailsScreen());
   }
 
   @override

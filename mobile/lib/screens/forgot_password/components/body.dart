@@ -16,8 +16,7 @@ class Body extends StatelessWidget {
       width: double.infinity,
       child: SingleChildScrollView(
         child: Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
           child: Column(
             children: [
               SizedBox(height: SizeConfig.screenHeight * 0.04),
@@ -68,8 +67,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
                 setState(() {
                   errors.remove(kEmailNullError);
                 });
-              } else if (emailValidatorRegExp.hasMatch(value) &&
-                  errors.contains(kInvalidEmailError)) {
+              } else if (emailValidatorRegExp.hasMatch(value) && errors.contains(kInvalidEmailError)) {
                 setState(() {
                   errors.remove(kInvalidEmailError);
                 });
@@ -81,8 +79,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
                 setState(() {
                   errors.add(kEmailNullError);
                 });
-              } else if (!emailValidatorRegExp.hasMatch(value) &&
-                  !errors.contains(kInvalidEmailError)) {
+              } else if (!emailValidatorRegExp.hasMatch(value) && !errors.contains(kInvalidEmailError)) {
                 setState(() {
                   errors.add(kInvalidEmailError);
                 });
@@ -110,7 +107,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
             },
           ),
           SizedBox(height: SizeConfig.screenHeight * 0.1),
-          const NoAccountText(),
+          NoAccountText(),
         ],
       ),
     );

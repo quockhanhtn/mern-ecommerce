@@ -5,17 +5,14 @@ import 'package:hk_mobile/core/components/components.dart';
 import 'package:hk_mobile/core/utils/get_x_util.dart';
 import 'package:hk_mobile/helper/keyboard.dart';
 import 'package:hk_mobile/screens/forgot_password/forgot_password_screen.dart';
-import 'package:hk_mobile/screens/login_success/login_success_screen.dart';
 import 'package:hk_mobile/screens/main/main_screen.dart';
-import 'package:hk_mobile/screens/profile/profile_screen.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
 
 class SignForm extends StatefulWidget {
-  SignForm({Key? key, this.onLoginSuccess}) : super(key: key);
+  SignForm({Key? key}) : super(key: key);
 
-  Function? onLoginSuccess;
   @override
   _SignFormState createState() => _SignFormState();
 }
