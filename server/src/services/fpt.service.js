@@ -2,8 +2,10 @@ import axios from 'axios';
 import mongoose from 'mongoose';
 import { convert } from 'html-to-text';
 
-import productService from '../services/products.service.js';
-import userBehaviorService from '../services/user-behavior.service.js';
+import productService from './products.service.js';
+import categoryService from './categories.service.js';
+import brandService from './brands.service.js';
+import userBehaviorService from './user-behavior.service.js';
 
 import ProductRecom from '../models/product-recom.model.js';
 import SlackUtils from '../utils/SlackUtils.js';
@@ -34,14 +36,12 @@ const getFormatDateTime = (dt = null) => {
 };
 
 const loadProductData = async () => {
-  const { list } = await productService.getAllProducts(
-    'slug,name,category,brand,variants.variantName,desc',
-    100000,
-    1,
-    {},
-    '_id',
-    -1
-  );
+  const { list } = await productService.getAllProducts({
+    fields: 'slug,name,category,brand,variants.variantName,desc',
+    limit: 1000000,
+    sortBy: '_id',
+    sortType: -1
+  });
   return list.map(item => {
     const desc = convert(item.desc)
       .replace(/\[[^\]\[]*\]/g, ' ')
@@ -55,31 +55,93 @@ const loadProductData = async () => {
       .trim();
     return {
       id: item._id.toString(),
-      slug: item.slug,
-      name: item.name,
-      category: item?.category?.name || '',
-      brand: item?.brand?.name || '',
+      // slug: item.slug,
+      name: StringUtils.removeAccents(item.name),
+      category: item?.category?.name || 'No category',
+      brand: item?.brand?.name || 'No brand',
       variants: item.variants.map(x => x.variantName).join(';'),
-      desc: StringUtils.isBlankOrEmpty(desc) ? 'Đang cập nhật' : desc
+      desc: StringUtils.isBlankOrEmpty(desc) ? 'No description' : desc
     };
   });
 }
 
-function delay(delayInMs) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(2);
-    }, delayInMs);
+const loadProductData2 = async () => {
+  const { list } = await productService.getAllProducts({
+    fields: 'slug,name,variants.variantName,desc,category,categorySub1,categorySub2,categorySub3,brand',
+    limit: 1000000,
+    sortBy: '_id',
+    sortType: -1,
+    populateCategory: false,
+    populateBrand: false,
+  });
+
+  var allCategories = (await categoryService.getAll('_id')).map(x => x._id.toString());
+  var allBrand = (await brandService.getAll('_id', {})).map(x => x._id.toString());
+
+  return list.map(item => {
+    const desc = convert(item.desc)
+      .replace(/\[[^\]\[]*\]/g, ' ')
+      .replace(/:+/g, ' ')
+      .replace(/\/+/g, ' ')
+      .replace(/\\n+/g, ' ')
+      .replace(/,+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .replace('Nguồn: thegioididong.com', '')
+      .replace('Nguồn thegioididong.com', '')
+      .trim();
+
+    let convertItem = {
+      id: item._id.toString(),
+      // slug: item.slug,
+      name: item.name,
+      // category: item?.category?.name || 'No category',
+      // brand: item?.brand?.name || 'No brand',
+      variants: item.variants.map(x => x.variantName).join(';') || 'No variants',
+      desc: StringUtils.isBlankOrEmpty(desc) ? 'No description' : desc
+    };
+
+    // convertItem.category = new Array(allCategories.length).fill(0);
+    // convertItem.brand = new Array(allBrand.length).fill(0);
+
+    // var catIndex = allCategories.indexOf(item.category);
+    // if (catIndex > -1) {
+    //   convertItem.category[catIndex] = 1;
+    // }
+    // var brandIndex = allBrand.indexOf(item.brand);
+    // if (brandIndex > -1) {
+    //   convertItem.brand[brandIndex] = 1;
+    // }
+
+    // allCategories.forEach(id => convertItem[id] = 0);
+    // // allBrand.forEach(id => convertItem[id] = 0);
+    
+    // if (item.category && allCategories.includes(item.category.toString())) {
+    //   convertItem[item.category.toString()] = 1;
+    // }
+    // if (item.categorySub1 && allCategories.includes(item.categorySub1.toString())) {
+    //   convertItem[item.categorySub1.toString()] = 1;
+    // }
+    // if (item.categorySub2 && allCategories.includes(item.categorySub2.toString())) {
+    //   convertItem[item.categorySub2.toString()] = 1;
+    // }
+    // if (item.categorySub3 && allCategories.includes(item.categorySub3.toString())) {
+    //   convertItem[item.categorySub3.toString()] = 1;
+    // }
+    // if (item.brand && allBrand.includes(item.brand.toString())) {
+    //   convertItem[item.brand.toString()] = 1;
+    // }
+
+    return convertItem;
   });
 }
 
 async function importProductDataToFpt() {
   const startTime = new Date();
   console.log('Loading data from db ...');
-  let list = await loadProductData();
+  let list = await loadProductData2();
   console.log(`Loaded ${list.length} items from db !`);
 
-  const datasetName = 'CellphonesDataset';
+  const datasetName = 'RelatedItemDataset';
   const baseURL = 'https://recom.fpt.vn/api/v0.1/recommendation/dataset/';
   const apiToken = process.env.FPT_API_TOKEN;
 
@@ -91,7 +153,7 @@ async function importProductDataToFpt() {
   let countError = 0, countSuccess = 0, total = list.length;
   let errorDetails = [];
   let isSuccess = true;
-  let step = 2;
+  let step = 20;
 
   let errorList = [];
   let requestFailed = 0;

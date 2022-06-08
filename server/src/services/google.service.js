@@ -12,7 +12,6 @@ export default {
  * Verify a Google token and return the user's data
  * @param {string} googleCredential Google credential/ access token, get from Google One tap login in the frontend
  * @returns user data - more info: https://developers.google.com/identity/sign-in/web/backend-auth#calling-the-tokeninfo-endpoint
- * @sample return data: {
  */
 async function verify(googleCredential, isMobile = false) {
   if(isMobile){

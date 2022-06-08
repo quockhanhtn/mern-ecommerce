@@ -100,17 +100,17 @@ export const getAllProducts = async (req, res, next) => {
     if (minPrice > 0) { filters.minPrice = { $gte: minPrice }; }
     if (maxPrice > 0) { filters.maxPrice = { $lte: maxPrice }; }
 
-    let { list: products, total, countAll, ...other } = await productService.getAllProducts(
+    let { list: products, total, countAll, ...other } = await productService.getAllProducts({
       fields,
       limit,
       page,
       filters,
-      req.query.sortBy || 'createdAt',
-      ((req.query.sort || 'desc') === 'asc') ? 1 : -1,
-      req.query?.getCategoryFilter === '1',
-      req.query?.getBrandFilter === '1',
-      req.query?.isShowHidden === '1',
-    );
+      sortBy: req.query.sortBy || 'createdAt',
+      sortType: ((req.query.sort || 'desc') === 'asc') ? 1 : -1,
+      getCategoryFilter: req.query?.getCategoryFilter === '1',
+      getBrandFilter: req.query?.getBrandFilter === '1',
+      isShowHidden: req.query?.isShowHidden === '1',
+    });
     products = products.map(p => formatProduct(p, req));
 
     const pagination = {
@@ -174,7 +174,11 @@ export const getListProductsByIds = async (req, res, next) => {
     } = req.body;
     const filter = { '_id': { $in: list } };
 
-    let result = await productService.getAllProducts(fields, list.length, 1, filter);
+    let result = await productService.getAllProducts({
+      fields, 
+      limit: list.length,
+      filter
+    });
     let products = result.list.map(p => formatProduct(p, req));
     if (products) {
       ResponseUtils.status200(res, null, products);

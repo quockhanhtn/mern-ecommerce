@@ -57,10 +57,10 @@ serverApi.listen(serverPort, () => {
     }, scheduleOpts);
 
     // schedule task run every day at 04:00 AM to update recommend data
-    cron.schedule('0 4 * * *', () => {
-      LogUtils.info('SERVER', 'Running a task every day at 04:00 AM to to update recommend data');
-      SlackUtils.sendMessage('*[RECOMMEND_UPDATE]* Running a task every day at 04:00 AM to update recommend data');
-      fptService.updateRecommendData()
-    }, scheduleOpts);
+    // cron.schedule('0 4 * * *', () => {
+    //   LogUtils.info('SERVER', 'Running a task every day at 04:00 AM to to update recommend data');
+    //   SlackUtils.sendMessage('*[RECOMMEND_UPDATE]* Running a task every day at 04:00 AM to update recommend data');
+    //   fptService.updateRecommendData()
+    // }, scheduleOpts);
   }
 });
