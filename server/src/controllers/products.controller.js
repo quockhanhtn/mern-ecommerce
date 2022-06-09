@@ -282,7 +282,7 @@ export const rateProduct = async (req, res, next) => {
 //#endregion
 
 //#region Product extra info
-export const getProductSpecifications = async (req, res, next) => {
+export const getProductSpecifications = async (_req, res, next) => {
   try {
     const data = await productService.getSpecifications();
     ResponseUtils.status200(res, 'Get product overSpecs successfully!', data);

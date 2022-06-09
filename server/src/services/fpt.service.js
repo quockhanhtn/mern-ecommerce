@@ -1,6 +1,7 @@
 import axios from 'axios';
 import mongoose from 'mongoose';
 import { convert } from 'html-to-text';
+import { createObjectCsvWriter } from 'csv-writer';
 
 import productService from './products.service.js';
 import categoryService from './categories.service.js';
@@ -75,30 +76,57 @@ const loadProductData2 = async () => {
     populateBrand: false,
   });
 
-  var allCategories = (await categoryService.getAll('_id')).map(x => x._id.toString());
-  var allBrand = (await brandService.getAll('_id', {})).map(x => x._id.toString());
+  var allCategories = await categoryService.getAll('_id name', {});
+  var allBrand = await brandService.getAll('_id name', {});
 
   return list.map(item => {
-    const desc = convert(item.desc)
-      .replace(/\[[^\]\[]*\]/g, ' ')
-      .replace(/:+/g, ' ')
-      .replace(/\/+/g, ' ')
-      .replace(/\\n+/g, ' ')
-      .replace(/,+/g, ' ')
-      .replace(/\s+/g, ' ')
-      .replace('Nguồn: thegioididong.com', '')
+    const desc = StringUtils.keepLetterAndDigitOnly(StringUtils.htmlToText(item.desc))
+      .replace('. Nguồn thegioididong.com', '')
       .replace('Nguồn thegioididong.com', '')
       .trim();
+    // .replace('Nguồn thegioididong.com', '')
+    // .replace('httpswwwthegioididongcom', '')
+    // .replace('thegioididongcom', '');
 
     let convertItem = {
       id: item._id.toString(),
       // slug: item.slug,
-      name: item.name,
-      // category: item?.category?.name || 'No category',
-      // brand: item?.brand?.name || 'No brand',
+      name: StringUtils.keepLetterAndDigitOnly(item.name),
+      category: '',
+      brand: '',
       variants: item.variants.map(x => x.variantName).join(';') || 'No variants',
       desc: StringUtils.isBlankOrEmpty(desc) ? 'No description' : desc
     };
+
+    let cats = [];
+    [item.category, item.categorySub1, item.categorySub2, item.categorySub3]
+      .filter(x => x)
+      .map(x => x.toString())
+      .forEach(categoryId => {
+        if (categoryId) {
+          const category = allCategories.find(x => x._id.toString() === categoryId);
+          if (category) {
+            cats.push(category.name);
+          }
+        }
+      });
+
+    if (cats && cats.length > 0) {
+      convertItem.category = cats.join(' | ');
+    } else {
+      convertItem.category = 'No category';
+    }
+
+    if (item.brand) {
+      const b = allBrand.find(x => x._id.toString() === item.brand.toString());
+      if (b) {
+        convertItem.brand = b.name;
+      } else {
+        convertItem.brand = 'No brand';
+      }
+    } else {
+      convertItem.brand = 'No brand';
+    }
 
     // convertItem.category = new Array(allCategories.length).fill(0);
     // convertItem.brand = new Array(allBrand.length).fill(0);
@@ -114,7 +142,7 @@ const loadProductData2 = async () => {
 
     // allCategories.forEach(id => convertItem[id] = 0);
     // // allBrand.forEach(id => convertItem[id] = 0);
-    
+
     // if (item.category && allCategories.includes(item.category.toString())) {
     //   convertItem[item.category.toString()] = 1;
     // }
@@ -140,6 +168,23 @@ async function importProductDataToFpt() {
   console.log('Loading data from db ...');
   let list = await loadProductData2();
   console.log(`Loaded ${list.length} items from db !`);
+
+  const csvWriter = createObjectCsvWriter({
+    path: process.cwd() + '/product-data.csv',
+    header: [
+      { id: 'id', title: 'id' },
+      { id: 'name', title: 'name' },
+      { id: 'category', title: 'category' },
+      { id: 'brand', title: 'brand' },
+      { id: 'variants', title: 'variants' },
+      { id: 'desc', title: 'desc' }
+    ],
+    encoding: 'utf-8'
+  });
+
+  csvWriter.writeRecords(list).then(() => {
+    console.log('Write csv Done!');
+  });
 
   const datasetName = 'RelatedItemDataset';
   const baseURL = 'https://recom.fpt.vn/api/v0.1/recommendation/dataset/';
