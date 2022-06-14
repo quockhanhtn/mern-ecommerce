@@ -2,10 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:hk_mobile/app_theme.dart';
 import 'package:hk_mobile/constants.dart';
 import 'package:hk_mobile/controllers/order_controller.dart';
-import 'package:hk_mobile/core/utils/format_util.dart';
 import 'package:hk_mobile/screens/check_out/components/custom_radio.dart';
 import 'package:hk_mobile/size_config.dart';
 
@@ -119,71 +117,15 @@ class SelectPaymentListView extends StatelessWidget {
       ),
     );
 
-    if (kDebugMode) {
-      children.add(
-        Text(orderController.paymentMethod.value),
-      );
-      children.add(
-        Text(orderController.isReceiveAtStore.toString()),
-      );
-    }
+    // if (kDebugMode) {
+    //   children.add(
+    //     Text(orderController.paymentMethod.value),
+    //   );
+    //   children.add(
+    //     Text(orderController.isReceiveAtStore.toString()),
+    //   );
+    // }
 
     return children;
-  }
-
-  Widget _buildReceiveMethod() {
-    return ListView.builder(
-      //padding: const EdgeInsets.only(top: 0, bottom: 0, right: 16, left: 16),
-      itemCount: 2,
-      scrollDirection: Axis.vertical,
-      itemBuilder: (BuildContext context, int index) {
-        return SizedBox(
-            height: 400,
-            child: Row(
-              children: [
-                GFRadio<bool>(
-                  onChanged: (value) {
-                    orderController.setIsReceiveAtStore(value);
-                  },
-                  value: index == 0 ? false : true,
-                  size: GFSize.MEDIUM * 2 / 3,
-                  radioColor: AppTheme.nearlyBlue,
-                  activeBgColor: AppTheme.nearlyBlue.withOpacity(0.2),
-                  activeBorderColor: AppTheme.nearlyBlue,
-                  type: GFRadioType.basic,
-                  groupValue: orderController.isReceiveAtStore.value,
-                ),
-                Text(index == 0 ? 'Giao nhận tơi' : 'Nhận tại cửa hàng'),
-              ],
-            ));
-      },
-    );
-  }
-
-  Widget _buildPaymentMethod() {
-    return ListView.builder(
-      padding: const EdgeInsets.only(top: 0, bottom: 0, right: 16, left: 16),
-      itemCount: kOrderPaymentMethod.length,
-      scrollDirection: Axis.vertical,
-      itemBuilder: (BuildContext context, int index) {
-        return GFRadioListTile(
-          onChanged: (value) {
-            orderController.setPaymentMethod(value);
-          },
-          value: kOrderPaymentMethod[index],
-          groupValue: orderController.paymentMethod.value,
-          titleText: 'Arthur Shelby',
-          subTitleText: 'By order of the peaky blinders',
-          avatar: const GFAvatar(
-            backgroundImage: AssetImage('Assets image here'),
-          ),
-          size: 25,
-          activeBorderColor: Colors.green,
-          focusColor: Colors.green,
-          type: GFRadioType.square,
-          inactiveIcon: null,
-        );
-      },
-    );
   }
 }

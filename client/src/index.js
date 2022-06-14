@@ -17,6 +17,12 @@ import 'react-image-lightbox/style.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+// lazy image
+import 'lazysizes';
+import 'lazysizes/plugins/attrchange/ls.attrchange';
+import 'lazysizes/plugins/object-fit/ls.object-fit';
+import 'lazysizes/plugins/parent-fit/ls.parent-fit';
+
 // simplebar-react
 import 'simplebar/dist/simplebar.min.css';
 

@@ -46,7 +46,11 @@ async function getProductInfo(productId, sku, notClean = true) {
 
 async function getCartItemsFromData(items) {
   const filter = { '_id': { $in: items.map(i => i.productId) } };
-  const { list: products } = await productService.getAllProducts(SELECTED_FIELDS, items.length, 1, filter);
+  const { list: products } = await productService.getAllProducts({
+    fields: SELECTED_FIELDS,
+    limit: items.length,
+    filter
+  });
 
   let result = [];
   for (let i = 0; i < items.length; i++) {

@@ -1,9 +1,7 @@
 import { Router } from 'express';
-import UserBehavior from '../../models/user-behavior.model.js';
-import Product from '../../models/product.model.js';
 import fptService from '../../services/fpt.service.js';
-import userBehaviorService from '../../services/user-behavior.service.js';
 import productService from '../../services/products.service.js';
+import userBehaviorService from '../../services/user-behavior.service.js';
 
 const router = Router();
 

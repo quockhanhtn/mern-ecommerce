@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/constants.dart';
-import 'package:hk_mobile/screens/home/home_screen.dart';
-import 'package:hk_mobile/size_config.dart';
-
 import 'package:hk_mobile/core/components/default_button.dart';
 import 'package:hk_mobile/core/utils/preference_util.dart';
+import 'package:hk_mobile/screens/main/main_screen.dart';
+import 'package:hk_mobile/size_config.dart';
+
 import 'intro_content.dart';
 
 class Body extends StatefulWidget {
@@ -79,7 +79,7 @@ class _BodyState extends State<Body> {
                       text: AppLocalizations.of(context)!.next,
                       press: () {
                         PreferenceUtil.setBool('seen', true);
-                        Get.to(() => const HomeScreen());
+                        Get.to(() => const MainScreen());
                         // Navigator.pushNamed(context, HomeScreen.routeName);
                       },
                     ),

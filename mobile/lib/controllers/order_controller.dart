@@ -181,7 +181,7 @@ class OrderController extends GetxController {
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         list.clear();
         var data = response.data;
-        if (data != null && !StrUtil.isNullOrEmpty(data)) {
+        if (data != null && data.runtimeType != String) {
           var result = data["data"].map((e) => OrderDto(e as Map<String, dynamic>)).toList();
           list.value = result.cast<OrderDto>();
         }

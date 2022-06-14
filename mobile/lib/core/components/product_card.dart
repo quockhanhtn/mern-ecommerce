@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hk_mobile/controllers/product_controller.dart';
 import 'package:hk_mobile/core/components/network_img.dart';
 import 'package:hk_mobile/core/utils/format_util.dart';
 import 'package:hk_mobile/dto/product_dto.dart';
@@ -8,12 +10,14 @@ import '../../constants.dart';
 import '../../size_config.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({
+  ProductCard({
     Key? key,
     this.width = 160,
     this.aspectRatio = 1.02,
     required this.product,
   }) : super(key: key);
+
+  final ProductController productController = Get.put(ProductController());
 
   final double width, aspectRatio;
   final ProductDto product;
@@ -26,12 +30,8 @@ class ProductCard extends StatelessWidget {
         width: getProportionateScreenWidth(width),
         child: GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DetailsScreen(productDto: product),
-              ),
-            );
+            productController.setSelectId(product.id);
+            Get.to(() => DetailsScreen());
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,3 +1,4 @@
+import { convert } from 'html-to-text';
 import { REGEX } from '../constants.js';
 
 class StringUtils {
@@ -82,6 +83,48 @@ class StringUtils {
 
   static isBlankOrEmpty(str) {
     return this.isEmpty(str) || this.isBlank(str);
+  }
+
+  static isLetter(str) {
+    if (typeof str !== 'string') {
+      return false;
+    }
+    return str.toLowerCase() !== str.toUpperCase();
+  }
+
+  static isDigit(str) {
+    if (typeof str !== 'string') {
+      return false;
+    }
+    return str.match(/^\d+$/) !== null;
+  }
+
+  static htmlToText(str) {
+    str = this.replaceAll(str, '&nbsp;', ' ')
+      .replace(/<img .*?>/g, '');
+    return convert(str, {
+      selectors: [
+        { selector: 'a', options: { ignoreHref: true } }
+      ]
+    });
+  }
+
+  static keepLetterAndDigitOnly(str) {
+    ['\n', '\t', '\r', '\r\n'].forEach(item => {
+      str = StringUtils.replaceAll(str, item, ' ');
+    });
+
+    let result = '';
+    for (let i = 0; i < str.length; i++) {
+      const c = str[i];
+      if (this.isLetter(c) || this.isDigit(c) || c === ' ' || c === '.' || c === ',') {
+        result += c;
+      } else {
+        result += ' ';
+      }
+    }
+
+    return this.removeMultiSpace(result).trim();
   }
 }
 

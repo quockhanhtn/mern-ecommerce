@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/controllers/authentication_controller.dart';
 import 'package:hk_mobile/core/components/components.dart';
+import 'package:hk_mobile/core/utils/get_x_util.dart';
 import 'package:hk_mobile/helper/keyboard.dart';
 import 'package:hk_mobile/screens/forgot_password/forgot_password_screen.dart';
-import 'package:hk_mobile/screens/login_success/login_success_screen.dart';
-import 'package:hk_mobile/screens/profile/profile_screen.dart';
+import 'package:hk_mobile/screens/main/main_screen.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
 
 class SignForm extends StatefulWidget {
-  SignForm({Key? key, this.onLoginSuccess}) : super(key: key);
+  SignForm({Key? key}) : super(key: key);
 
-  Function? onLoginSuccess;
   @override
   _SignFormState createState() => _SignFormState();
 }
@@ -87,9 +86,9 @@ class _SignFormState extends State<SignForm> {
             if (authController.isLoading.isTrue) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (authController.isAuthenticated.isTrue) {
-              Navigator.pushNamed(context, ProfileScreen.routeName);
-            }
+            // if (authController.isAuthenticated.isTrue) {
+            //   Navigator.pushNamed(context, ProfileScreen.routeName);
+            // }
             return DefaultButton(
               text: "Tiếp tục",
               press: () {
@@ -98,11 +97,16 @@ class _SignFormState extends State<SignForm> {
 
                   // if all are valid then go to success screen
                   KeyboardUtil.hideKeyboard(context);
-                  authController.login(
-                    email!,
-                    password!,
-                    () {},
-                    (err) {},
+                  GetXUtil.showOverlay(
+                    asyncFunction: () => authController.login(
+                      email!,
+                      password!,
+                      () {
+                        GetXUtil.showSnackBarSuccess('Đăng nhập thành công');
+                        Get.off(() => const MainScreen());
+                      },
+                      (err) {},
+                    ),
                   );
                   //Navigator.pushNamed(context, LoginSuccessScreen.routeName);
                 }

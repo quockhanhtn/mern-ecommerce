@@ -208,22 +208,30 @@ async function deleteProductVariants(identity, sku) {
  * @param {Boolean} isShowHidden 
  * @returns 
  */
-async function getAllProducts(
-  fields, limit = 10, page = 1, filter = {},
-  sortBy = 'createdAt', sortType = -1,
-  getCategoryFilter, getBrandFilter = false, isShowHidden = false
-) {
-  if (fields === null || fields == '' || fields === undefined) { fields = SELECT_FIELD; }
+async function getAllProducts(options = {}) {
+  let {
+    fields = SELECT_FIELD,
+    limit = 10,
+    page = 1,
+    filter = {},
+    sortBy = 'createdAt',
+    sortType = -1,
+    getCategoryFilter = false,
+    getBrandFilter = false,
+    isShowHidden = false,
+    populateCategory = true,
+    populateBrand = true,
+  } = options;
 
   if (fields.indexOf(',') > -1) {
     fields = fields.split(',').join(' ');
   }
 
   const populateOpts = [];
-  if (fields.includes('category')) {
+  if (fields.includes('category') && populateCategory) {
     populateOpts.push({ path: 'category', select: 'name slug image _id -children', model: 'Category' });
   }
-  if (fields.includes('brand')) {
+  if (fields.includes('brand') && populateBrand) {
     populateOpts.push({ path: 'brand', select: 'name slug image _id', model: 'Brand' });
   }
 

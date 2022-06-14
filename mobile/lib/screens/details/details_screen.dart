@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getwidget/getwidget.dart';
+import 'package:hk_mobile/controllers/authentication_controller.dart';
 import 'package:hk_mobile/controllers/cart_controller.dart';
+import 'package:hk_mobile/controllers/product_controller.dart';
 import 'package:hk_mobile/core/components/default_button.dart';
 import 'package:hk_mobile/core/utils/get_x_util.dart';
-
-import 'package:hk_mobile/dto/product_dto.dart';
 import 'package:hk_mobile/screens/details/components/top_rounded_container.dart';
+import 'package:hk_mobile/screens/sign_in/sign_in_screen.dart';
+
 import '../../size_config.dart';
 import 'components/body.dart';
 import 'components/custom_app_bar.dart';
 
 class DetailsScreen extends StatelessWidget {
   static String routeName = "/details";
+  final AuthenticationController authController = Get.put(AuthenticationController());
   final CartController cartController = Get.put(CartController());
+  final ProductController productController = Get.put(ProductController());
 
-  DetailsScreen({Key? key, required this.productDto}) : super(key: key);
-  final ProductDto productDto;
+  DetailsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,19 @@ class DetailsScreen extends StatelessWidget {
         preferredSize: Size.fromHeight(AppBar().preferredSize.height),
         child: const CustomAppBar(rating: 4.5),
       ),
-      body: Body(product: productDto),
+      body: Obx(() {
+        if (productController.isLoadingView.isTrue) {
+          return const Padding(
+            padding: EdgeInsets.only(top: 20),
+            child: GFLoader(
+              type: GFLoaderType.ios,
+              size: GFSize.LARGE * 2,
+            ),
+          );
+        }
+
+        return Body(product: productController.view.first);
+      }),
       bottomNavigationBar: TopRoundedContainer(
         color: Colors.white,
         child: Padding(
@@ -38,17 +54,35 @@ class DetailsScreen extends StatelessWidget {
           child: DefaultButton(
             text: "Thêm vào giỏ hàng",
             press: () {
-              cartController.add(
-                productDto.id,
-                productDto.variants[0],
-                1,
-                doWhenSuccess: () {
-                  GetXUtil.showSnackBarSuccess('Thêm sản phẩm vào giỏ hàng thành công !');
-                },
-                doWhenError: (mgs) {
-                  GetXUtil.showSnackbarError(mgs);
-                },
+              if (authController.isAuthenticated.isFalse) {
+                GetXUtil.showSnackbarError('Vui lòng đăng nhập', title: 'Yêu cầu đăng nhập');
+                Get.to(const SignInScreen());
+                return;
+              }
+              GetXUtil.showOverlay(
+                asyncFunction: () => cartController.addAsync(
+                  productController.view.first.id,
+                  productController.view.first.variants[0],
+                  1,
+                  doWhenSuccess: () {
+                    GetXUtil.showSnackBarSuccess('Thêm sản phẩm vào giỏ hàng thành công !');
+                  },
+                  doWhenError: (mgs) {
+                    GetXUtil.showSnackbarError(mgs);
+                  },
+                ),
               );
+              // cartController.add(
+              //   productDto.id,
+              //   productDto.variants[0],
+              //   1,
+              //   doWhenSuccess: () {
+              //     GetXUtil.showSnackBarSuccess('Thêm sản phẩm vào giỏ hàng thành công !');
+              //   },
+              //   doWhenError: (mgs) {
+              //     GetXUtil.showSnackbarError(mgs);
+              //   },
+              // );
             },
           ),
         ),

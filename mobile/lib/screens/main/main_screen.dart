@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hk_mobile/app_theme.dart';
+import 'package:hk_mobile/core/utils/alert_util.dart';
 import 'package:hk_mobile/screens/cart/cart_screen.dart';
 import 'package:hk_mobile/screens/main/my_profile_screen.dart';
 import 'package:hk_mobile/screens/search/search_screen.dart';
 import 'package:hk_mobile/screens/main/components/bottom_bar_view.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'my_home_screen.dart';
 
@@ -80,6 +82,14 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             Get.to(() => const SearchScreen());
           },
           changeIndex: (int index) {
+            if (index == 1) {
+              AlertUtil.showSimple(
+                context,
+                content: 'Tính năng đang phát triển',
+                type: AlertType.warning,
+              );
+              return;
+            }
             animationController?.reverse().then<dynamic>((data) {
               if (!mounted) {
                 return;

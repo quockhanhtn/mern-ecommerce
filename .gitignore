@@ -164,3 +164,6 @@ client/certificate/ssl.key
 client/certificate/ssl.crt
 
 server/tool/*imported.json
+
+# python venv
+*/venv/*

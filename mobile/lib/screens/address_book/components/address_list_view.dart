@@ -46,12 +46,14 @@ class AddressListView extends StatelessWidget {
   }
 
   Widget _buildItem(BuildContext context, int index) {
-    return AddressCard(
-      accountController.lstAdd[index],
-      onEdit: _handleEditAddress,
-      onSetDefault: (addressId) => _handleSetDefaultAddress(context, addressId),
-      onDelete: (addressId, name) => _handleDeleteAddress(context, addressId, name),
-    );
+    return Obx(() {
+      return AddressCard(
+        accountController.lstAdd[index],
+        onEdit: _handleEditAddress,
+        onSetDefault: (addressId) => _handleSetDefaultAddress(context, addressId),
+        onDelete: (addressId, name) => _handleDeleteAddress(context, addressId, name),
+      );
+    });
   }
 
   void _handleEditAddress(String addressId) {}
