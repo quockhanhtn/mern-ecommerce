@@ -119,6 +119,8 @@ class StringUtils {
       const c = str[i];
       if (this.isLetter(c) || this.isDigit(c) || c === ' ' || c === '.' || c === ',') {
         result += c;
+      } else {
+        result += ' ';
       }
     }
 

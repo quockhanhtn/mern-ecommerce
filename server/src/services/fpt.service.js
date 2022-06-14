@@ -289,13 +289,11 @@ async function importProductDataToFpt() {
 async function updateRecommendData() {
   const startTime = new Date();
   const url = 'https://recom.fpt.vn/api/v0.1/recommendation/api/result/getBatchResult';
-  const fptApiId = process.env.FPT_API_ID;
-  const fptApiKey = process.env.FPT_API_KEY;
+  const fptApiId = process.env.FPT_RELATED_ITEM_ID;
+  const fptApiKey = process.env.FPT_RELATED_ITEM_KEY;
 
   const axiosInstance = axios.create({ baseURL: url });
 
-  const item = await ProductRecom.findOne().select('version').sort('-version').lean().exec();
-  const prevVersion = parseInt(item?.version, 10) || 0;
   const nextVersion = Date.now();
 
   let page = 0, countError = 0, countSuccess = 0;
@@ -304,6 +302,7 @@ async function updateRecommendData() {
 
   while (true) {
     try {
+      console.log(`Page: ${page}`);
       const { data } = await axiosInstance.get(fptApiId, { params: { page, key: fptApiKey } });
 
       if (data.message === 'No data found' || !data.data) {
@@ -311,13 +310,19 @@ async function updateRecommendData() {
       }
 
       for (let i = 0; i < data.data.length; i++) {
-        const { input_id, recommend_id } = data.data[i];
+        let { input_id, recommend_id } = data.data[i];
+        recommend_id = recommend_id.filter(x => x.includes('"id":'))
         const productId = input_id.toString().replace(/}/g, '').replace(/{/g, '');
 
         const newItem = new ProductRecom({
           _id: new mongoose.Types.ObjectId(),
           productId,
-          recommend: recommend_id.map(x => x.toString().replace(/}/g, '').replace(/{/g, '')),
+          recommend: recommend_id.map(x => x.toString()
+            .replace(/}/g, '').replace(/{/g, '')
+            .replace(/\[/g, '').replace(/]/g, '')
+            .replace(/\"/g, '').replace('id:', '')
+            .replace(/\s/g, '')
+          ),
           version: nextVersion
         });
         await newItem.save();
@@ -342,10 +347,7 @@ async function updateRecommendData() {
 
   let mgs = `[From *${getFormatDateTime(startTime)}* to *${getFormatDateTime()}*]\n`;
   mgs += `Update recommend data *${isSuccess ? 'succeed' : 'failed'}*. Total page: ${page} | Success: ${countSuccess} | Error: ${countError}.`;
-  if (countError === 0) {
-    const deleteResult = await ProductRecom.deleteMany({ version: { $lte: prevVersion } });
-    mgs += `\nDelete old data: ${deleteResult.deletedCount}`;
-  } else {
+  if (errorDetails?.length > 0) {
     mgs += `\n\nError details: \n`;
     errorDetails.forEach(item => {
       mgs += `\t- *${item.page}* Message: ${item.errorMgs}, stack: ${item.stack}\n`;
