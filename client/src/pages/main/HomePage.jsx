@@ -7,7 +7,7 @@ import { Box, Container, Card, CardContent, CardHeader, Stack, Typography } from
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllProducts, getProductForYou } from '../../redux/slices/productSlice';
 // hooks
-import useLocales from '../../hooks/useLocales';
+import { useLocales, useAuth } from '../../hooks';
 // components
 import Page from '../../components/Page';
 import Label from '../../components/Label';
@@ -30,6 +30,7 @@ const LIMIT = 20;
 
 export default function HomePage() {
   const { t } = useLocales();
+  const { user } = useAuth();
 
   const dispatch = useDispatch();
   const { listSimple: brandsListRaw, isLoading: isLoadingBrand } = useSelector((state) => state.brand);
@@ -58,7 +59,7 @@ export default function HomePage() {
   }));
 
   useEffect(() => {
-    dispatch(getProductForYou());
+    dispatch(getProductForYou(user?._id || ''));
   }, [dispatch]);
 
   useEffect(() => {

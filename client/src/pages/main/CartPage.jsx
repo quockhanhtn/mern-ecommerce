@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 // material
-import { Box, Grid, Step, Stepper, Container, StepLabel } from '@material-ui/core';
+import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector, useMediaQuery } from '@material-ui/core';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 // hooks
 import { useSelector } from 'react-redux';
@@ -52,7 +52,8 @@ const StepperStyle = styled(Stepper)(({ theme }) => ({
     zIndex: 1000,
     alignItems: 'center',
     justifyContent: 'center'
-  }
+  },
+  paddingTop: 100 // top bar size
 }));
 
 const StepLabelStyle = styled(StepLabel)(({ theme }) => ({
@@ -65,6 +66,7 @@ const StepLabelStyle = styled(StepLabel)(({ theme }) => ({
 
 export default function CartPage() {
   const { t } = useLocales();
+  const isExtraScreen = useMediaQuery((theme) => theme.breakpoints.up(1440));
   const { activeStep } = useSelector((state) => state.order);
 
   const steps = [
@@ -85,14 +87,13 @@ export default function CartPage() {
   return (
     <Page title={t('cart.page-title')} sx={{ mt: -7 }}>
       <Container sx={{ mt: 0, mb: (theme) => theme.spacing(5) }}>
-        <Grid container justifyContent="flex-start">
+        <Grid container justifyContent="center">
           <Grid item xs={12} md={8} sx={{ mb: 5 }}>
             <StepperStyle
               alternativeLabel
               activeStep={activeStep}
-              // connector={<QontoConnector />}
-              connector={null}
-              orientation="vertical"
+              connector={isExtraScreen ? null : <StepConnector />}
+              orientation={isExtraScreen ? 'vertical' : 'horizontal'}
             >
               {steps.map((s) => (
                 <Step key={s.label}>

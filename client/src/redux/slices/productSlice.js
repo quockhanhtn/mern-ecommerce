@@ -310,12 +310,22 @@ export const getRelatedProducts = (id) => async (dispatch) => {
   }
 };
 
-export const getProductForYou = () => async (dispatch, getState) => {
+export const getProductForYou = (userId) => async (dispatch) => {
   try {
     dispatch(actions.forYouStartLoading());
-    const { data } = await api.getBestSellerProduct();
+    const fptRes = await getUserBasedRecommendation(userId);
+    const listIds = fptRes.data.data.map((x) => x.id);
+    const { data } = await api.getRelatedProduct(listIds.slice(0, 10));
+    if (!data.data.length) {
+      throw new Error('No data');
+    }
     dispatch(actions.forYouGetSuccess({ list: data.data }));
-  } catch (e) {
-    dispatch(actions.forYouHasError(e));
+  } catch {
+    try {
+      const { data } = await api.getBestSellerProduct();
+      dispatch(actions.forYouGetSuccess({ list: data.data }));
+    } catch (e) {
+      dispatch(actions.forYouHasError(e));
+    }
   }
 };
