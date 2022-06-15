@@ -310,11 +310,12 @@ export const getRelatedProducts = (id) => async (dispatch) => {
   }
 };
 
-export const getProductForYou = () => async (dispatch, getState) => {
+export const getProductForYou = (userId) => async (dispatch) => {
   try {
     dispatch(actions.forYouStartLoading());
-    const { data } = await getUserBasedRecommendation();
-    console.log('getProductForYou', data);
+    const fptRes = await getUserBasedRecommendation(userId);
+    const listIds = fptRes.data.data.map((x) => x.id);
+    const { data } = await api.getRelatedProduct(listIds.slice(0, 10));
     if (!data.data.length) {
       throw new Error('No data');
     }

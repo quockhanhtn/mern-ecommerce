@@ -1,0 +1,243 @@
+version: "3.1"
+
+nlu:
+- intent: give_name
+  examples: |
+    - [Anh](cust_sex) là [Hoàng](cust_name)
+    - [Anh](cust_sex) là [Huy Hoàng](cust_name)
+    - [Anh](cust_sex) là [Hồ Huy Hoàng](cust_name)
+    - [Chị](cust_sex) là [Hằng](cust_name)
+    - [Em](cust_sex) là [Trang](cust_name)
+    - [Cô](cust_sex) [Vân](cust_name)
+    - [Chú](cust_sex) [Hùng](cust_name)
+    - [Anh](cust_sex) tên [Hoàng](cust_name)
+    - [Hoàng](cust_name)
+- intent: greet
+  examples: |
+    - xin chào
+    - chào bạn
+    - hello
+    - hi
+    - hey
+    - mình có vài câu hỏi
+    - có ai giúp mình không
+    - bạn ơi
+    - anh ơi
+    - chị ơi
+    - cháu ơi
+    - hello
+    - chào
+    - hi
+    - có ai ở đây không?
+    - shop ơi
+
+- intent: bye
+  examples: |
+    - tạm biệt
+    - chào tạm biệt
+    - chào tạm biệt em
+    - tạm biệt em
+    - tạm biệt em nhé
+    - bye shop
+    - bai shop
+    - bai
+    - bye
+
+- intent: thank
+  examples: |
+    - chuẩn
+    - hay
+    - siêu
+    - tuyệt
+    - cảm ơn
+    - thanks
+    - thank you
+    - ok
+    - cảm ơn em
+    - cảm ơn em nhiều nhé
+    - cảm ơn
+
+- intent: ask_func_list
+  examples: |
+    - bạn có thể làm được những gì
+    - bạn giúp được gì nào
+    - chức năng của bạn là gì
+    - bạn có thể làm được mấy chức năng
+    - bạn giỏi nhất làm gì
+    - bạn có tư vấn giúp mình được không
+    - việc gì bạn làm được
+    - kể xem bạn làm được gì
+    - cho mình biết bạn làm được gì nhé
+    - bạn hữu dụng như thế nào
+    - bạn có ích trong những việc gì
+    - lĩnh vực gì bạn giỏi nhất
+    - mình tò mò về những việc bạn làm được
+    - chẳng biết bạn làm được gì
+    - bạn biết được những lĩnh vực gì
+    - bạn giỏi hỗ trợ nhất trong lĩnh vực gì
+    - kể cho mình biết những việc bạn có thể làm được nhé
+    - nói cho mình về những việc bạn giúp được mình
+    - bạn giúp được mình gì nào
+    - bạn có thể làm gì
+    - em giúp được gì
+    - em biết làm gì
+    - bạn biết làm gì
+    - biết làm gì
+    - làm được gì
+    - có làm được gì
+    - có làm được trò gì
+    - giúp giúp cái gì
+    - biết gì mà nói
+    - làm được gì
+    - giúp được gì
+    - mày làm được gì
+    - có biết gì
+
+- intent: ask_name
+  examples: |
+    - bạn tên gì
+    - tên gì
+    - chị tên gì
+    - anh tên gì
+    - tên của bạn là gì
+    - tên của chị là gì
+    - tên của anh là gì
+    - cho mình hỏi tên nhé
+    - mình muốn biết tên bạn
+    - mình muốn tiện xưng hộ hơn, cho mình biết tên nhé
+    - để tiện xưng hộ thì tên bạn là gì
+    - cho em xin tên của anh ạ
+    - cho em xin tên của chị ạ
+    - được biết tên bạn thì tốt nhỉ
+    - vui lòng cho mình biết tên nhé
+    - xin phép hỏi tên của bạn
+    - vậy thì tên bạn là gì
+    - tên bạn trong tiếng việt là gì
+    - bạn có vui lòng cho mình biết tên được không
+    - chúng ta nên biết tên nhau nhỉ?
+    - em tên là gì thế
+    - tên em là gì
+    - tên em
+    - tên bạn
+    - bạn tên là gì
+    - bạn tên gì thế
+    - em tên gì
+
+- intent: open
+  examples: |
+    - mở cửa
+    - đóng cửa
+    - mấy giờ mở cửa
+    - mấy giờ đóng cửa
+    - cửa hàng mấy giờ mở cửa
+    - cửa hàng mấy giờ đóng vừa
+    - khi nào mở cửa
+    - khi nào đóng cửa
+    - mở cửa mấy giờ
+    - đóng cửa mấy giờ
+
+- intent: address
+  examples: |
+    - địa chỉ
+    - địa chỉ cửa hàng
+    - cửa hàng ở đâu
+    - bàn hàng ở đâu
+    - ở đâu
+    - chỗ nào
+    - bán chỗ nào
+    - bán ở đâu
+    - shop ở đâu
+    - ở miền nào
+    - địa điểm cụ thể
+
+- intent: phone
+  examples: |
+    - số điện thoại
+    - sdt
+    - sđt
+    - cho mình xin sdt
+    - số điện thoại cửa hàng
+    - cửa hàng có số điện thoại không ạ
+    - cho mình xin số điện thoại của cửa hàng mình ạ
+    - phone
+    - gọi điện 
+    - nhắn tin
+    - gọi điện cho cửa hàng
+    - nhắn tin cho cửa hàng
+    - alo
+
+- intent: discount
+  examples: |
+    - khuyến mãi
+    - có khuyến mãi gì không ạ
+    - có khuyến mãi không
+    - cho khuyến mãi
+    - khuyến mãi gì
+    - có khuyến mãi không
+    - discount
+    - khuyến mãi gì không
+    - đưa ra khuyến mãi
+    - khuyến mãi đây
+    - có khuyến mãi
+    - đưa ra khuyến mãi
+    - có đưa ra khuyến mãi không
+    - khuyến mãi cho tụi mình đi ạ
+    - cho mình khuyến mãi thêm đi ạ
+    - có khuyến mãi cho mình không
+
+- intent: payment
+  examples: |
+    - thanh toán
+    - shop có ship code
+    - thanh toán khi nhận hàng
+    - thanh toán qua ngân hàng
+    - chuyển khoản
+    - momo
+    - momo được không ạ
+    - thanh toán tiền mặt
+    - tiền mặt
+
+- intent: ship
+  examples: |
+    - ship khoảng bao lâu
+    - ship mất bao lâu
+    - ship
+    - bao lâu
+    - ship mất thời gian
+    - thời gian ship
+    - phí ship
+    - ship nội thành
+    - ship
+    - vận chuyển tỉnh
+    - vận chuyển nội thành
+    - vận chuyển đi đâu
+    - thời gian bao lâu
+    - mất bao nhiêu tiền
+    - tiền ship bao nhiêu
+    - có free ship không
+    - free ship
+    - ship free
+    - vận chuyển miễn phí
+    - miễn phí vận chuyển
+
+- intent: sell
+  examples: |
+    - cửa hàng bán những gì
+    - bán gì
+    - mua bán những gì
+    - mình cần mua
+    - mình mua
+    - mua
+    - bán
+    - có bán iphone
+    - có bán điện thoại
+    - có bán máy tính bảng
+    - có bán phụ kiện không 
+    - bán gì á
+    - có bán samsung
+    - bán những gì
+    - có bán gì
+    - bán gì á
+    
+
+

@@ -79,3 +79,33 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MERN_ECOMMERCE_B848D }}'
           channelId: live
           projectId: mern-ecommerce-b848d
+
+  build_chat_bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v2
+
+      # - name: 💿 NodeJs set up
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: '14'
+      
+      # - name: 💫 Run unit test on server app
+      #   working-directory: server
+      #   env:
+      #     CI: false
+      #     NODE_OPTIONS: '--max-old-space-size=8192'
+      #   run: |
+      #     set -x
+      #     npm ci
+      #     npm test
+
+      - name: 🚀 Deploy Rasa chatbot to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          appdir: rasa-chatbot
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "rasa-hkmobile"
+          heroku_email: "quockhanhdev@gmail.com"
+          usedocker: true
