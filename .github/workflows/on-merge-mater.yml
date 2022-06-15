@@ -15,7 +15,7 @@ jobs:
       #   uses: actions/setup-node@v2
       #   with:
       #     node-version: '14'
-      
+
       # - name: 💫 Run unit test on server app
       #   working-directory: server
       #   env:
@@ -30,8 +30,8 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "api-mobile7076"
-          heroku_email: "quockhanhdev@gmail.com"
+          heroku_app_name: 'api-mobile7076'
+          heroku_email: 'quockhanhdev@gmail.com'
 
   build_and_deploy_client_app:
     runs-on: ubuntu-latest
@@ -72,6 +72,10 @@ jobs:
           name: build
           path: build
 
+      - name: 👀 Display structure of folder to deploy
+        run: ls -R
+        working-directory: build
+
       - name: 🚀 Deploy Client app to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -90,7 +94,7 @@ jobs:
       #   uses: actions/setup-node@v2
       #   with:
       #     node-version: '14'
-      
+
       # - name: 💫 Run unit test on server app
       #   working-directory: server
       #   env:
@@ -105,7 +109,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-        
+
       - name: 💫 Train Rasa model
         working-directory: rasa-chatbot
         run: |
@@ -117,11 +121,27 @@ jobs:
           rasa train
           deactivate
 
+      - name: ↗️ Archive chatbot artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: rasa-chatbot-with-models
+          path: ./rasa-chatbot
+
+      - name: ↙️ Download chatbot artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: rasa-chatbot-with-models
+          path: rasa-chatbot-with-models
+
+      - name: 👀 Display structure of folder to deploy
+        run: ls -R
+        working-directory: rasa-chatbot-with-models
+
       - name: 🚀 Deploy Rasa chatbot to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          appdir: rasa-chatbot
+          appdir: rasa-chatbot-with-models
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "rasa-hkmobile"
-          heroku_email: "quockhanhdev@gmail.com"
+          heroku_app_name: 'rasa-hkmobile'
+          heroku_email: 'quockhanhdev@gmail.com'
           usedocker: true
