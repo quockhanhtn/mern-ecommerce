@@ -61,13 +61,13 @@ jobs:
           npm run build
 
       - name: ↗️ Archive client build artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build
           path: ./client/build
 
       - name: ↙️ Download artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: build
           path: build
@@ -120,6 +120,8 @@ jobs:
           cd ./app
           rasa train
           deactivate
+          rm -rf ./env
+          rm -rf ./app/.rasa
 
       - name: ↗️ Archive chatbot artifact
         uses: actions/upload-artifact@v3
