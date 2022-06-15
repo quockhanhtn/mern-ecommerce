@@ -111,7 +111,9 @@ jobs:
         run: |
           python3.8 -m venv env
           source env/bin/activate
+          pip3 install -r requirements.txt   
           rasa train
+          deactivate
 
       - name: 🚀 Deploy Rasa chatbot to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
