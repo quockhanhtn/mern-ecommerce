@@ -120,6 +120,7 @@ jobs:
           cd ./app
           rasa train
           deactivate
+          cd ..
           rm -rf ./env
           rm -rf ./app/.rasa
 
