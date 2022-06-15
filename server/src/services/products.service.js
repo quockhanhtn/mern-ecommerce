@@ -277,7 +277,7 @@ async function getBestSellerProducts(limit = 10) {
   const result = await Product.aggregate([
     { "$addFields": { "totalSold": { "$sum": "$variants.sold" } } },
     { "$sort": { "totalSold": -1 } },
-    { "$limit": limit },
+    { "$limit": limit + 1 },
     { "$lookup": { "from": "categories", "localField": "category", "foreignField": "_id", "as": "category" } },
     { "$unwind": "$category" },
     { "$lookup": { "from": "brands", "localField": "brand", "foreignField": "_id", "as": "brand" } },

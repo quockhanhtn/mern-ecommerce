@@ -15,6 +15,9 @@ export const getRelatedItems = (input) => {
 };
 
 export const getUserBasedRecommendation = (input) => {
+  if (!input) {
+    input = localStorage.getItem('uid');
+  }
   const params = { input, key: userBehaviorKey };
   return fptApiIns.get(userBehaviorId, { params });
 };

@@ -313,9 +313,18 @@ export const getRelatedProducts = (id) => async (dispatch) => {
 export const getProductForYou = () => async (dispatch, getState) => {
   try {
     dispatch(actions.forYouStartLoading());
-    const { data } = await api.getBestSellerProduct();
+    const { data } = await getUserBasedRecommendation();
+    console.log('getProductForYou', data);
+    if (!data.data.length) {
+      throw new Error('No data');
+    }
     dispatch(actions.forYouGetSuccess({ list: data.data }));
-  } catch (e) {
-    dispatch(actions.forYouHasError(e));
+  } catch {
+    try {
+      const { data } = await api.getBestSellerProduct();
+      dispatch(actions.forYouGetSuccess({ list: data.data }));
+    } catch (e) {
+      dispatch(actions.forYouHasError(e));
+    }
   }
 };
