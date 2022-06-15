@@ -1,8 +1,8 @@
-name: Deploy to Firebase Hosting on PR
+name: Build on pull request
 'on': pull_request
 
 jobs:
-  build_and_preview:
+  build_client_app:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
     steps:
@@ -14,21 +14,11 @@ jobs:
         with:
           node-version: '14'
 
-      # - name: 💫 Run Unit test on server app
-      #   working-directory: server
-      #   env:
-      #     CI: false
-      #     NODE_OPTIONS: '--max-old-space-size=8192'
-      #   run: |
-      #     set -x
-      #     npm ci
-      #     npm test
-
       - name: ⭐ Build Client app
         working-directory: client
         env:
           CI: false
-          NODE_OPTIONS: "--max-old-space-size=8192"
+          NODE_OPTIONS: '--max-old-space-size=8192'
           REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL }}
           REACT_APP_FIREBASE_CONFIG: ${{ secrets.REACT_APP_FIREBASE_CONFIG }}
           REACT_APP_FPT_RELATED_ITEM_ID: ${{ secrets.REACT_APP_FPT_RELATED_ITEM_ID }}
@@ -39,22 +29,3 @@ jobs:
           set -x
           npm ci
           npm run build
-
-      - name: ↗️ Archive build artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: build
-          path: ./client/build
-
-      - name: ↙️ Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: build
-          path: build
-
-      - name: 🚀 Deploy preview on Firebase
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MERN_ECOMMERCE_B848D }}'
-          projectId: mern-ecommerce-b848d
