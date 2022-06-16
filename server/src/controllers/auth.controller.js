@@ -26,10 +26,10 @@ export const register = async (req, res, next) => {
 
 export const googleOAuth = async (req, res, next) => {
   try {
-    const { googleCredential, isMobile = false } = req.body;
+    const { googleCredential, clientId = null } = req.body;
     const ipAddress = req.ipv4;
 
-    const payload = await googleServices.verify(googleCredential, isMobile);
+    const payload = await googleServices.verify(googleCredential, clientId);
     if (!payload) {
       throw new Error('Google OAuth failed !');
     }

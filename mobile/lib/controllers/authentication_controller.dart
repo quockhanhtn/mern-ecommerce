@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -104,9 +106,16 @@ class AuthenticationController extends GetxController {
     // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
+    String clientId = '';
+    if (Platform.isAndroid) {
+      clientId = '121156975071-raj6o7il1j65r8nq4u6t9rc3fk0fvfik.apps.googleusercontent.com';
+    } else if (Platform.isIOS) {
+      clientId = '121156975071-ai3jl21e4kh4slobk5upp9j8e08tof57.apps.googleusercontent.com';
+    }
+
     final postData = <String, dynamic>{};
     postData['googleCredential'] = googleAuth?.idToken;
-    postData['isMobile'] = true;
+    postData['clientId'] = clientId;
 
     try {
       var response = await DioUtil.postAsync('/auth/google', data: postData);
