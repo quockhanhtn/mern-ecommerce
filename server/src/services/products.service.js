@@ -210,7 +210,7 @@ async function deleteProductVariants(identity, sku) {
  */
 async function getAllProducts(options = {}) {
   let {
-    fields = SELECT_FIELD,
+    fields,
     limit = 10,
     page = 1,
     filter = {},
@@ -222,6 +222,10 @@ async function getAllProducts(options = {}) {
     populateCategory = true,
     populateBrand = true,
   } = options;
+
+  if (StringUtils.isBlankOrEmpty(fields)) {
+    fields = SELECT_FIELD;
+  }
 
   if (fields.indexOf(',') > -1) {
     fields = fields.split(',').join(' ');

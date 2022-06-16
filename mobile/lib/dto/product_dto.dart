@@ -92,6 +92,16 @@ class ProductDto {
   bool isOutOfStock;
 
   factory ProductDto.fromJson(Map<String, dynamic> json) {
+    CategoryDto? categoryDto;
+    BrandDto? brandDto;
+
+    if (json['category'] != null && json['category'] is Map<String, dynamic>) {
+      categoryDto = CategoryDto(json['category']);
+    }
+    if (json['brand'] != null && json['brand'] is Map<String, dynamic>) {
+      brandDto = BrandDto(json['brand']);
+    }
+
     return ProductDto(
       json['_id'] as String,
       json['name'] as String,
@@ -101,8 +111,8 @@ class ProductDto {
       List<String>.from(json['tags'] ?? List<String>.empty()),
       json['warrantyPeriod'] as int?,
       json['origin'] as String?,
-      json['category'] != null ? CategoryDto(json['category']) : null,
-      json['brand'] != null ? BrandDto(json['brand']) : null,
+      categoryDto,
+      brandDto,
       json['views'] as int?,
       //json['rates'] as List<Object>?,
       List<String>.from(json['policies'] ?? List<String>.empty()),

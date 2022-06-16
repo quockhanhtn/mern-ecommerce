@@ -95,6 +95,8 @@ export const createByUser = async (req, res, next) => {
   try {
     const userId = req?.user?._id || null;
 
+    const clientUrl = req.body?.clientUrl || req.headers.origin;
+
     const order = await orderService.tryCreate(
       userId,
       req.body
@@ -111,7 +113,7 @@ export const createByUser = async (req, res, next) => {
       paymentUrl = await vnpayService.createPaymentUrl(
         req.ipv4,
         apiUrl,
-        req.headers.origin,
+        clientUrl,
         order._id.toString(),
         order.total
       );
