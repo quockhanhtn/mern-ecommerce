@@ -15,38 +15,39 @@ class PopularProducts extends StatelessWidget {
     return Column(
       children: [
         Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: getProportionateScreenWidth(20),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Obx(() {
-                  if (productController.keyword.isEmpty) {
-                    return Text(
-                      'Nhập từ khóa để tìm kiếm sản phẩm',
-                      style: TextStyle(
-                        fontSize: getProportionateScreenWidth(14),
-                        color: Colors.black,
-                      ),
-                    );
-                  }
-                  return RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: getProportionateScreenWidth(14),
-                        color: Colors.black,
-                      ),
-                      children: <TextSpan>[
-                        const TextSpan(text: 'Kết quả tìm kiếm cho '),
-                        TextSpan(
-                            text: productController.keyword.value, style: const TextStyle(fontWeight: FontWeight.bold)),
-                      ],
+          padding: EdgeInsets.symmetric(
+            horizontal: getProportionateScreenWidth(20),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Obx(() {
+                if (productController.keyword.isEmpty) {
+                  return Text(
+                    'Nhập từ khóa để tìm kiếm sản phẩm',
+                    style: TextStyle(
+                      fontSize: getProportionateScreenWidth(14),
+                      color: Colors.black,
                     ),
                   );
-                })
-              ],
-            )),
+                }
+                return RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: getProportionateScreenWidth(14),
+                      color: Colors.black,
+                    ),
+                    children: <TextSpan>[
+                      const TextSpan(text: 'Kết quả tìm kiếm cho '),
+                      TextSpan(
+                          text: productController.keyword.value, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                );
+              })
+            ],
+          ),
+        ),
         SizedBox(height: getProportionateScreenWidth(20)),
         Obx(() {
           if (productController.isSearching.isTrue) {
@@ -62,7 +63,10 @@ class PopularProducts extends StatelessWidget {
                 ...List.generate(
                   productController.searchResult.length,
                   (index) {
-                    return ProductCard(product: productController.searchResult[index]);
+                    return ProductCard(
+                      product: productController.searchResult[index],
+                      width: getProportionateScreenWidth(160),
+                    );
                   },
                 ),
                 SizedBox(width: getProportionateScreenWidth(20)),

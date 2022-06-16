@@ -196,7 +196,12 @@ class ViewOrderScreen extends StatelessWidget {
     ]);
 
     for (var i = 0; i < dto.items.length; i++) {
-      rs.add(OrderItem(item: dto.items[i]));
+      rs.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+          child: OrderItem(item: dto.items[i]),
+        ),
+      );
     }
 
     rs.addAll([

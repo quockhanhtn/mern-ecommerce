@@ -73,16 +73,17 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-        // appBar: AppBar(
-        //   title: const Text("Tìm kiếm sản phẩm"),
-        // ),
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(AppBar().preferredSize.height + getProportionateScreenHeight(20)),
-          child: Column(children: [
-            SizedBox(height: getProportionateScreenHeight(20)),
-            CustomAppBar2(),
-          ]),
-        ),
-        body: Body());
+      // appBar: AppBar(
+      //   title: const Text("Tìm kiếm sản phẩm"),
+      // ),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(AppBar().preferredSize.height + getProportionateScreenHeight(20)),
+        child: Column(children: [
+          SizedBox(height: getProportionateScreenHeight(20)),
+          CustomAppBar2(),
+        ]),
+      ),
+      body: Body(),
+    );
   }
 }
