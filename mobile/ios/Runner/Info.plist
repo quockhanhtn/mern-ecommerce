@@ -50,5 +50,20 @@
 			<string>https</string>
 			<string>http</string>
 		</array>
+		<!-- Put me in the [my_project]/ios/Runner/Info.plist file -->
+		<!-- Google Sign-In section -->
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+					<string>com.googleusercontent.apps.121156975071-ai3jl21e4kh4slobk5upp9j8e08tof57</string>
+				</array>
+			</dict>
+		</array>
+		<!-- End of the Google Sign-In section -->
 	</dict>
 </plist>

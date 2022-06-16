@@ -1,11 +1,11 @@
 // ref: https://developers.google.com/identity/sign-in/web/backend-auth
 
 import { OAuth2Client } from 'google-auth-library';
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-const clientMobile = new OAuth2Client(process.env.GOOGLE_CLIENT_ID_MOBILE);
+// const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+// const clientMobile = new OAuth2Client(process.env.GOOGLE_CLIENT_ID_MOBILE);
 
 export default {
-  verify
+  verify,
 };
 
 /**
@@ -13,20 +13,18 @@ export default {
  * @param {string} googleCredential Google credential/ access token, get from Google One tap login in the frontend
  * @returns user data - more info: https://developers.google.com/identity/sign-in/web/backend-auth#calling-the-tokeninfo-endpoint
  */
-async function verify(googleCredential, isMobile = false) {
-  if(isMobile){
-    const ticketM = await clientMobile.verifyIdToken({
-      idToken: googleCredential,
-      audience: process.env.GOOGLE_CLIENT_ID_MOBILE
-    });
-    return ticketM.getPayload();
-  } else {
-    const ticket = await client.verifyIdToken({
-      idToken: googleCredential,
-      audience: process.env.GOOGLE_CLIENT_ID
-    });
-    return ticket.getPayload();
+async function verify(googleCredential, clientId) {
+  if (!clientId) {
+    clientId = process.env.GOOGLE_CLIENT_ID;
   }
+  const client = new OAuth2Client(clientId);
+
+  const ticket = await client.verifyIdToken({
+    idToken: googleCredential,
+    audience: clientId,
+    requiredAudience: clientId
+  });
+  return ticket.getPayload();
 }
 
 // {
@@ -37,7 +35,7 @@ async function verify(googleCredential, isMobile = false) {
 //   "aud": "1008719970978-hb24n2dstb40o45d4feuo2ukqmcc6381.apps.googleusercontent.com",
 //   "iat": "1433978353",
 //   "exp": "1433981953",
- 
+
 //   // These seven fields are only included when the user has granted the "profile" and
 //   // "email" OAuth scopes to the application.
 //   "email": "testuser@gmail.com",

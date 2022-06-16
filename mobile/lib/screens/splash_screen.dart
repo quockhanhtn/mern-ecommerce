@@ -22,10 +22,10 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayoutMixin<Splas
 
     if (_seen) {
       // Get.to(() =>const HomeScreen());
-      Get.to(() => const MainScreen());
+      Get.offAll(() => const MainScreen());
       //Navigator.pushNamed(context, HomeScreen.routeName);
     } else {
-      Get.to(() => const IntroScreen());
+      Get.offAll(() => const IntroScreen());
       //Navigator.pushNamed(context, IntroScreen.routeName);
     }
   }

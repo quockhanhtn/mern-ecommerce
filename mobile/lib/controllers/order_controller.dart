@@ -89,6 +89,7 @@ class OrderController extends GetxController {
     _data['paymentMethod'] = paymentMethod.value;
     _data['receiveMethod'] = receiveMethod.value;
     _data['isReceiveAtStore'] = isReceiveAtStore.value;
+    _data['clientUrl'] = 'https://mern-ecommerce-b848d.web.app';
 
     try {
       var response = await DioUtil.postAsync('orders', data: _data);
@@ -120,6 +121,7 @@ class OrderController extends GetxController {
     _data['paymentMethod'] = paymentMethod.value;
     _data['receiveMethod'] = receiveMethod.value;
     _data['isReceiveAtStore'] = isReceiveAtStore.value;
+    _data['clientUrl'] = 'https://mern-ecommerce-b848d.web.app';
 
     DioUtil.post(
       'orders',

@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:121156975071:android:a86f797071ab54c3876c6a",
+        "mobilesdk_app_id": "1:121156975071:android:6b5be74bb8651c0f876c6a",
         "android_client_info": {
-          "package_name": "com.example.hk_mobile"
+          "package_name": "com.hk.ecommerce"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "121156975071-hjaechi4qh45o4ee2jagekhr63dg56eo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hk.ecommerce",
+            "certificate_hash": "25e9610bf568d95cf066d36364b41c7fe4103aa5"
+          }
+        },
         {
           "client_id": "121156975071-raj6o7il1j65r8nq4u6t9rc3fk0fvfik.apps.googleusercontent.com",
           "client_type": 3
