@@ -213,7 +213,7 @@ async function getAllProducts(options = {}) {
     fields,
     limit = 10,
     page = 1,
-    filter = {},
+    filters = {},
     sortBy = 'createdAt',
     sortType = -1,
     getCategoryFilter = false,
@@ -243,12 +243,12 @@ async function getAllProducts(options = {}) {
   sortOtp[sortBy] = sortType;
 
   if (!isShowHidden) {
-    filter.isHide = false;
+    filters.isHide = false;
   }
 
   const countAll = await Product.estimatedDocumentCount();
-  const total = await countProduct(filter);
-  const list = await Product.find(filter)
+  const total = await countProduct(filters);
+  const list = await Product.find(filters)
     .select(fields)
     .populate(populateOpts)
     .skip((page - 1) * limit)
@@ -259,7 +259,7 @@ async function getAllProducts(options = {}) {
   let result = { countAll, total, list };
 
   if (getCategoryFilter) {
-    const lstCatId = await Product.distinct('category', filter).lean().exec();
+    const lstCatId = await Product.distinct('category', filters).lean().exec();
     result.categoryFilter = await categoryService.getAll('name slug image _id -children', { _id: { $in: lstCatId } });
     if (lstCatId.some(x => !x)) {
       result.categoryFilter = [{ _id: 'null', name: '', slug: '', image: '' }, ...result.categoryFilter];
@@ -267,7 +267,7 @@ async function getAllProducts(options = {}) {
   }
 
   if (getBrandFilter) {
-    const lstBrandId = await Product.distinct('brand', filter).lean().exec();
+    const lstBrandId = await Product.distinct('brand', filters).lean().exec();
     result.brandFilter = await brandService.getAll('name slug image _id', { _id: { $in: lstBrandId } });
     if (lstBrandId.some(x => !x)) {
       result.brandFilter = [{ _id: 'null', name: '', slug: '', image: '' }, ...result.brandFilter];

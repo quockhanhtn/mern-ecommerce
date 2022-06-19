@@ -134,7 +134,7 @@ async function update(identity, updatedData) {
     firstName: updatedData.firstName,
     lastName: updatedData.lastName,
     gender: updatedData.gender,
-    birthDay: updatedData.birthDay,
+    dob: updatedData.dob,
     phone: updatedData.phone,
     fullName: `${updatedData.firstName} ${updatedData.lastName}`,
   });
