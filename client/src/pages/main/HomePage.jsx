@@ -60,7 +60,7 @@ export default function HomePage() {
 
   useEffect(() => {
     dispatch(getProductForYou(user?._id || ''));
-  }, [dispatch]);
+  }, [dispatch, user?._id]);
 
   useEffect(() => {
     dispatch(getAllProducts('', '', '', page, LIMIT));
@@ -119,7 +119,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Box>
+            {/* <Box>
               <Card sx={{ marginBottom: 1.5, padding: 3 }}>
                 <CardContent sx={{ padding: 0, '&:last-child': { paddingBottom: 0 } }}>
                   <Box sx={{ display: 'flex', marginBottom: -1 }}>
@@ -133,7 +133,7 @@ export default function HomePage() {
                 </CardContent>
               </Card>
               <ProductList products={productForYou.list} isLoading={productForYou.isLoading} />
-            </Box>
+            </Box> */}
 
             <Box>
               <Card sx={{ marginBottom: 1.5, padding: 3 }}>
