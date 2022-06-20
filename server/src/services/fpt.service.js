@@ -1,7 +1,6 @@
 import axios from 'axios';
 import mongoose from 'mongoose';
 import { convert } from 'html-to-text';
-import { createObjectCsvWriter } from 'csv-writer';
 
 import productService from './products.service.js';
 import categoryService from './categories.service.js';
@@ -168,23 +167,6 @@ async function importProductDataToFpt() {
   console.log('Loading data from db ...');
   let list = await loadProductData2();
   console.log(`Loaded ${list.length} items from db !`);
-
-  const csvWriter = createObjectCsvWriter({
-    path: process.cwd() + '/product-data.csv',
-    header: [
-      { id: 'id', title: 'id' },
-      { id: 'name', title: 'name' },
-      { id: 'category', title: 'category' },
-      { id: 'brand', title: 'brand' },
-      { id: 'variants', title: 'variants' },
-      { id: 'desc', title: 'desc' }
-    ],
-    encoding: 'utf-8'
-  });
-
-  csvWriter.writeRecords(list).then(() => {
-    console.log('Write csv Done!');
-  });
 
   const datasetName = 'RelatedItemDataset';
   const baseURL = 'https://recom.fpt.vn/api/v0.1/recommendation/dataset/';

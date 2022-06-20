@@ -172,12 +172,12 @@ export const getListProductsByIds = async (req, res, next) => {
       list,
       fields
     } = req.body;
-    const filter = { '_id': { $in: list } };
+    const filters = { '_id': { $in: list } };
 
     let result = await productService.getAllProducts({
       fields, 
       limit: list.length,
-      filter
+      filters
     });
     let products = result.list.map(p => formatProduct(p, req));
     if (products) {

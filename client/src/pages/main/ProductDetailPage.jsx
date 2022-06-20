@@ -26,7 +26,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 import Markdown from '../../components/Markdown';
 import { ProductDetailsReview } from '../../components/dashboard/product-details';
 import { CarouselThumbnail } from '../../components/carousel';
-import { ProductList, ProductVariantInfo } from '../../components/e-commerce';
+import { ProductCarousel, ProductList, ProductVariantInfo } from '../../components/e-commerce';
 //
 import { fShortenNumber } from '../../utils/formatNumber';
 
@@ -97,8 +97,10 @@ export default function ProductDetailPage() {
   }, [product, selectedV]);
 
   useEffect(() => {
-    fetchRelatedItems(product?._id);
-    dispatch(trackingViewCount({ productId: product?._id }));
+    if (product?._id) {
+      fetchRelatedItems(product._id);
+      dispatch(trackingViewCount({ productId: product._id }));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product?._id]);
 
@@ -161,6 +163,7 @@ export default function ProductDetailPage() {
             </Typography>
           </Stack>
         </Box>
+
         <Card>
           <Grid container>
             <Grid item xs={12} md={6} lg={7} sx={{ marginBottom: theme.spacing(1) }}>
@@ -194,6 +197,12 @@ export default function ProductDetailPage() {
               </Box>
             </Grid>
           ))}
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={12} md={12} lg={12}>
+            <ProductCarousel products={relatedItems} isLoading={isLoadingRelated} />
+          </Grid>
         </Grid>
 
         <Card>
