@@ -12,7 +12,7 @@ import { useLocales, useAuth } from '../../hooks';
 import Page from '../../components/Page';
 import Label from '../../components/Label';
 import { CarouselAnimation, CarouselMiniList } from '../../components/carousel';
-import ProductList from '../../components/e-commerce/ProductList';
+import { ProductCarousel, ProductList } from '../../components/e-commerce';
 
 // ----------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ export default function HomePage() {
 
   useEffect(() => {
     dispatch(getProductForYou(user?._id || ''));
-  }, [dispatch]);
+  }, [dispatch, user?._id]);
 
   useEffect(() => {
     dispatch(getAllProducts('', '', '', page, LIMIT));
@@ -119,7 +119,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Box>
+            {/* <Box>
               <Card sx={{ marginBottom: 1.5, padding: 3 }}>
                 <CardContent sx={{ padding: 0, '&:last-child': { paddingBottom: 0 } }}>
                   <Box sx={{ display: 'flex', marginBottom: -1 }}>
@@ -133,6 +133,22 @@ export default function HomePage() {
                 </CardContent>
               </Card>
               <ProductList products={productForYou.list} isLoading={productForYou.isLoading} />
+            </Box> */}
+
+            <Box>
+              <Card sx={{ marginBottom: 1.5, padding: 3 }}>
+                <CardContent sx={{ padding: 0, '&:last-child': { paddingBottom: 0 } }}>
+                  <Box sx={{ display: 'flex', marginBottom: -1 }}>
+                    <Typography variant="h5" component="h2" sx={{ padding: 0 }}>
+                      SẢN PHẨM DÀNH CHO BẠN
+                    </Typography>
+                    <Label color="info" sx={{ ml: 1 }}>
+                      Phù hợp nhất
+                    </Label>
+                  </Box>
+                </CardContent>
+              </Card>
+              <ProductCarousel products={productForYou.list} isLoading={productForYou.isLoading} />
             </Box>
 
             <Box>

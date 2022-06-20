@@ -1,7 +1,6 @@
 import axios from 'axios';
 import mongoose from 'mongoose';
 import { convert } from 'html-to-text';
-import { createObjectCsvWriter } from 'csv-writer';
 
 import productService from './products.service.js';
 import categoryService from './categories.service.js';
@@ -91,11 +90,11 @@ const loadProductData2 = async () => {
     let convertItem = {
       id: item._id.toString(),
       // slug: item.slug,
-      name: StringUtils.keepLetterAndDigitOnly(item.name),
+      name: StringUtils.removeAccents(StringUtils.keepLetterAndDigitOnly(item.name)),
       category: '',
       brand: '',
-      variants: item.variants.map(x => x.variantName).join(';') || 'No variants',
-      desc: StringUtils.isBlankOrEmpty(desc) ? 'No description' : desc
+      variants: StringUtils.removeAccents(item.variants.map(x => x.variantName).join(';') || 'No variants'),
+      desc: StringUtils.isBlankOrEmpty(desc) ? 'No description' : StringUtils.removeAccents(desc)
     };
 
     let cats = [];
@@ -112,7 +111,7 @@ const loadProductData2 = async () => {
       });
 
     if (cats && cats.length > 0) {
-      convertItem.category = cats.join(' | ');
+      convertItem.category = StringUtils.removeAccents(cats.join(' | '));
     } else {
       convertItem.category = 'No category';
     }
@@ -120,7 +119,7 @@ const loadProductData2 = async () => {
     if (item.brand) {
       const b = allBrand.find(x => x._id.toString() === item.brand.toString());
       if (b) {
-        convertItem.brand = b.name;
+        convertItem.brand = StringUtils.removeAccents(b.name);
       } else {
         convertItem.brand = 'No brand';
       }
@@ -169,24 +168,7 @@ async function importProductDataToFpt() {
   let list = await loadProductData2();
   console.log(`Loaded ${list.length} items from db !`);
 
-  const csvWriter = createObjectCsvWriter({
-    path: process.cwd() + '/product-data.csv',
-    header: [
-      { id: 'id', title: 'id' },
-      { id: 'name', title: 'name' },
-      { id: 'category', title: 'category' },
-      { id: 'brand', title: 'brand' },
-      { id: 'variants', title: 'variants' },
-      { id: 'desc', title: 'desc' }
-    ],
-    encoding: 'utf-8'
-  });
-
-  csvWriter.writeRecords(list).then(() => {
-    console.log('Write csv Done!');
-  });
-
-  const datasetName = 'RelatedItemDataset';
+  const datasetName = 'RelatedItem_Dataset';
   const baseURL = 'https://recom.fpt.vn/api/v0.1/recommendation/dataset/';
   const apiToken = process.env.FPT_API_TOKEN;
 

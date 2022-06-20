@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  rasa:
+    build:
+      dockerfile: Dockerfile
+    image: my-rasa-app
+    ports:
+      - 5005:5005
+    command:
+      - run

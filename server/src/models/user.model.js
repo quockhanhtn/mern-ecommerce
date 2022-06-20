@@ -16,7 +16,7 @@ const userSchema = mongoose.Schema(
       enum: Object.values(constants.USER.GENDER),
       default: constants.USER.GENDER.OTHER
     },
-    birthDay: { type: Date, trim: true, required: false },
+    dob: { type: Date, trim: true, required: false },
     email: {
       type: String,
       match: [constants.REGEX.EMAIL, 'Please fill a valid email address'],

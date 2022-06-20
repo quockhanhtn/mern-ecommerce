@@ -7,6 +7,9 @@ const TypographyStyle = styled(Typography)({
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   display: '-webkit-box',
+  lineHeight: '1rem',
+  height: '2rem',
+  lineClamp: 2,
   WebkitLineClamp: 2,
   WebkitBoxOrient: 'vertical'
 });

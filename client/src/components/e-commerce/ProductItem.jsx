@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
+import { Icon } from '@iconify/react';
+import searchFill from '@iconify/icons-eva/search-fill';
 import { useNavigate } from 'react-router-dom';
 // material
-import { Box, Card, Typography, Stack } from '@material-ui/core';
+import { Box, Card, Button, Typography, Stack } from '@material-ui/core';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 //
 import { useDispatch } from 'react-redux';
@@ -15,6 +17,26 @@ import { fCurrency } from '../../utils/formatNumber';
 import { trackingClick } from '../../redux/slices/userBehaviorSlice';
 
 // ----------------------------------------------------------------------
+
+const ContainerStyle = styled(Card)(({ theme }) => ({
+  height: '100%',
+  flexGrow: 1,
+  zIndex: 1,
+  '&:hover': {
+    transform: 'scale(1.02)',
+    boxShadow: theme.customShadows.z8,
+    '& .btn-recommend': {
+      display: 'unset',
+      position: 'absolute',
+      bottom: '-20px',
+      /* transform: translateY(100%); */
+      zIndex: 2
+    }
+  },
+  '& .btn-recommend': {
+    display: 'none'
+  }
+}));
 
 const ProductImgStyle = styled('img')({
   top: 0,
@@ -57,13 +79,7 @@ export default function ProductItem({ product }) {
   };
 
   return (
-    <Card
-      sx={{
-        height: '100%',
-        flexGrow: 1,
-        '&:hover': { transform: 'scale(1.02)', boxShadow: (theme) => theme.customShadows.z8 }
-      }}
-    >
+    <ContainerStyle>
       <Box sx={{ pt: '90%', position: 'relative' }}>
         {image ? (
           <ProductImgStyle
@@ -96,6 +112,11 @@ export default function ProductItem({ product }) {
           </Typography>
         </PriceBoxStyle>
       </Stack>
-    </Card>
+      {/* <Box sx={{ position: 'fixed' }}>
+        <Button className="btn-recommend" size="small" type="button" fullWidth startIcon={<Icon icon={searchFill} />}>
+          Tìm sản phẩm tương tự
+        </Button>
+      </Box> */}
+    </ContainerStyle>
   );
 }
