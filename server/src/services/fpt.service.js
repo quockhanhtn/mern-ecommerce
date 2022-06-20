@@ -90,11 +90,11 @@ const loadProductData2 = async () => {
     let convertItem = {
       id: item._id.toString(),
       // slug: item.slug,
-      name: StringUtils.keepLetterAndDigitOnly(item.name),
+      name: StringUtils.removeAccents(StringUtils.keepLetterAndDigitOnly(item.name)),
       category: '',
       brand: '',
-      variants: item.variants.map(x => x.variantName).join(';') || 'No variants',
-      desc: StringUtils.isBlankOrEmpty(desc) ? 'No description' : desc
+      variants: StringUtils.removeAccents(item.variants.map(x => x.variantName).join(';') || 'No variants'),
+      desc: StringUtils.isBlankOrEmpty(desc) ? 'No description' : StringUtils.removeAccents(desc)
     };
 
     let cats = [];
@@ -111,7 +111,7 @@ const loadProductData2 = async () => {
       });
 
     if (cats && cats.length > 0) {
-      convertItem.category = cats.join(' | ');
+      convertItem.category = StringUtils.removeAccents(cats.join(' | '));
     } else {
       convertItem.category = 'No category';
     }
@@ -119,7 +119,7 @@ const loadProductData2 = async () => {
     if (item.brand) {
       const b = allBrand.find(x => x._id.toString() === item.brand.toString());
       if (b) {
-        convertItem.brand = b.name;
+        convertItem.brand = StringUtils.removeAccents(b.name);
       } else {
         convertItem.brand = 'No brand';
       }
@@ -168,7 +168,7 @@ async function importProductDataToFpt() {
   let list = await loadProductData2();
   console.log(`Loaded ${list.length} items from db !`);
 
-  const datasetName = 'RelatedItemDataset';
+  const datasetName = 'RelatedItem_Dataset';
   const baseURL = 'https://recom.fpt.vn/api/v0.1/recommendation/dataset/';
   const apiToken = process.env.FPT_API_TOKEN;
 
