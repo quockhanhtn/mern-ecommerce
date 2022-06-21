@@ -1,0 +1,32 @@
+@startuml manager_categories_add
+!theme cerulean
+
+actor       User       as u
+participant LoginPage as lp
+participant DashboardPage as dash
+participant Server as s
+participant Database as d
+
+alt Đăng nhập với tài khoản admin
+  u -> dash: Thêm danh mục
+  dash -> u: Hiển thị form nhập thông tin
+  u -> dash: Nhập thông tin, nhấn nút thêm
+  dash -> dash: ValidateInput()
+  dash -> s: Request()
+  s -> s: ValidateInput()
+  s -> d: QueryInsert()
+  d -> s: Result()
+
+  alt Thêm thành công
+    s -> dash: SuccessResponse()
+    dash -> u: Hiển thị danh sách danh mục
+  else Thêm thất bại
+    s -> dash: ErrorResponse()
+    dash -> u: Hiển thị lỗi
+  end
+else Chưa đăng nhập
+  u -> lp: Chuyển đến trang Đăng nhập
+end
+
+
+@enduml

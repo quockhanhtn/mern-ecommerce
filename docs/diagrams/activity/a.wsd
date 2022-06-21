@@ -1,0 +1,33 @@
+@startuml category
+!theme cerulean
+
+|u| Người dùng
+|s| Hệ thống
+
+|u|
+start
+:Vào trang quản lý danh mục;
+:Nhấn nút thêm danh mục;
+
+repeat 
+  |s|
+  :Hiển thị form\nnhập thông tin danh mục;
+  |u|
+  :Nhập thông tin danh mục;
+  :Nhấn nút lưu;
+
+  |s|
+  :Kiểm tra\nthông tin danh mục;
+backward :Hiển thị thông báo lỗi;
+
+repeat while (Thông tin chính xác?) is (no) not (yes)
+:Hiển thị danh sách danh mục;
+
+stop
+
+@enduml
+
+
+
+
+

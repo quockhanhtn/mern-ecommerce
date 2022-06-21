@@ -1,4 +1,4 @@
-@startuml add category
+@startuml manager_brands_view
 !theme cerulean
 
 actor       User       as u
@@ -8,19 +8,15 @@ participant Server as s
 participant Database as d
 
 alt Đăng nhập với tài khoản admin
-  u -> dash: Thêm danh mục
-  dash -> u: Hiển thị form nhập thông tin
-  u -> dash: Nhập thông tin, nhấn nút thêm
-  dash -> dash: ValidateInput()
+  u -> dash: Quản lý thương hiệu
   dash -> s: Request()
-  s -> s: ValidateInput()
-  s -> d: QueryInsert()
+  s -> d: Query()
   d -> s: Result()
 
-  alt Thêm thành công
+  alt Lấy danh sách thành công
     s -> dash: SuccessResponse()
-    dash -> u: Hiển thị danh sách danh mục
-  else Thêm thất bại
+    dash -> u: Hiển thị danh sách thương hiệu
+  else Lấy danh sách thất bại
     s -> dash: ErrorResponse()
     dash -> u: Hiển thị lỗi
   end

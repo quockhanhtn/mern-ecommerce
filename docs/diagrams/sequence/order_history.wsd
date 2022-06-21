@@ -8,8 +8,9 @@ participant Server as s
 participant Firebase as f
 participant Database as d
 
+u -> ohp: Xem lịch sử đơn hàng
+
 alt Đã đăng nhập
-  u -> ohp: Xem lịch sử đơn hàng
   ohp -> s: Request()
   s -> d: Query()
   d -> s: Result()
@@ -22,13 +23,15 @@ alt Đã đăng nhập
     ohp -> u: Hiển thị lỗi
   end
 else Chưa đăng nhập
+  ohp -> u: Hiển thị form nhập số điện thoại
   u -> otp: Nhập số điện thoại
   otp -> otp: ValidatePhone()
   otp -> f: GenerateOTP()
+  f -> u: OTP code
   otp -> u: Hiển thị form nhập OTP
   u -> otp: Nhập OTP
   otp -> s: Request()
-  s -> f: verifyOTP()
+  s -> f: VerifyOTP()
   alt OTP đúng
     f -> s: Data()
     s -> d: Query()
