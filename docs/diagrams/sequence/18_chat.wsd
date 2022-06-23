@@ -1,0 +1,31 @@
+@startuml 18_chat
+!theme cerulean
+
+actor       User       as u
+participant Web as w
+participant FacebookMessage as fbm
+participant RasaChatBotServer as rsb
+participant RasaChatBotModel as rsbm
+participant ServerApi as s
+
+u     -> w    : Nhắn tin
+w     -> fbm  : Invoke()
+fbm   -> u    : Hiển thị\nform nhắn tin
+
+u     -> fbm  : Gửi tin nhắn
+fbm   -> rsb  : SendData(user, message)
+
+alt Cần thông tin từ server api
+  rsb   ->  s     : GetData()
+  s     ->  rsb   : Data()
+  rsb   ->  fbm   : ResponeMessage()
+else Có thể phản hồi từ model 
+  rsb   ->  rsbm  : GetScriptForMessage()
+  rsbm  ->  rsb   : Message()
+  rsb   ->  fbm   : ResponeMessage()
+end
+
+
+fbm   -> u  : Trả lời tin nhắn
+
+@enduml

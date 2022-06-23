@@ -1,0 +1,23 @@
+@startuml 01_find_product
+!theme cerulean
+
+actor       User       as u
+participant SearchPage as sp
+participant Server as s
+participant Database as d
+
+u   -> sp: Tìm kiếm sản phẩm theo tên, thương hiệu, danh mục
+
+sp  -> s: Request()
+s   -> d: Query()
+d   -> s: Result()
+
+alt Lấy danh sách thành công
+  s   -> sp: SuccessResponse()
+  sp  -> u: Hiển thị danh sách sản phẩm
+else Lấy danh sách thất bại
+  s   -> sp: ErrorResponse()
+  sp  -> u: Thông báo lỗi
+end
+
+@enduml

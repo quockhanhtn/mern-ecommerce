@@ -1,0 +1,48 @@
+@startuml 06_edit_profile
+!theme cerulean
+
+actor       User       as u
+participant EditForm as ef
+participant LoginPage as lp
+participant AccountPage as ap
+participant Server as s
+participant Database as d
+
+alt Đã đăng nhập
+  u -> ap: Quản lý Thông tin
+  ap -> s: Request()
+  s -> d: Query()
+  d -> s: Result()
+
+  alt Lấy thông tin thành công
+    s -> ap: SuccessResponse()
+    ap -> u: Hiển thị thông tin tài khoản
+    u -> ap: Chỉnh sửa thông tin
+    ap -> ef: Invoke()
+    ef -> u: Hiển thị form chỉnh sửa
+    u -> ef: Chỉnh sửa thông tin
+    ef -> ef: ValidateInput()
+    ef -> ap: SendData()
+
+    ap -> s: Request()
+    s -> d: QueryToUpdate()
+    d -> s: Result()
+
+    alt Cập nhật thành công
+       s -> ap: SuccessResponse()
+      ap -> u: Hiển thị thông tin tài khoản
+    else Cập nhật thất bại
+      s -> ap: ErrorResponse()
+      ap -> u: Hiển thị lỗi
+    end
+
+  else Lấy thông tin thất bại
+    s -> ap: ErrorResponse()
+    ap -> u: Hiển thị lỗi
+  end
+else Chưa đăng nhập
+  u -> lp: Chuyển đến trang Đăng nhập
+end
+
+
+@enduml

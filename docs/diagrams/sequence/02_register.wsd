@@ -1,0 +1,26 @@
+@startuml 02_register
+!theme cerulean
+
+actor       User       as u
+participant RegisterPage as lp
+participant Server as s
+participant Database as d
+participant LocalStorage as ls
+
+u   -> lp: Nhập thông tin\nClick "Đăng ký"
+lp  -> lp: ValidateInput()
+
+lp  -> s: Request()
+s   -> d: Query()
+d   -> s: Result()
+
+alt Đăng ký thành công
+  s   -> lp: SuccessResponse()
+  lp  -> ls: SaveAccessToken()
+  lp  -> u: Chuyển đến trang chủ
+else Đăng ký thất bại
+  s   -> lp: ErrorResponse()
+  lp  -> u: Thông báo lỗi
+end
+
+@enduml

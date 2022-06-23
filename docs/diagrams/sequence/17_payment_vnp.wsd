@@ -1,0 +1,34 @@
+@startuml 17_payment_vnp
+!theme cerulean
+
+actor       User       as u
+participant PaymentPage as pp
+participant Server as s
+participant VNPay as vnp
+participant Database as d
+
+u -> pp: Thanh toán bằng VNPay
+pp -> s: Lấy thông tin đơn hàng()
+s -> d: Query()
+d -> s: Thông tin đơn hàng()
+s -> vnp: CreatePaymentUrl()
+vnp -> s: GenerateUrl()
+s -> pp: Response(url)
+pp -> vnp: RedirectToPaymentUrl()
+vnp -> u: Hiển thị trang thanh toán
+u -> vnp: Nhập thông tin thanh toán
+
+alt Thanh toán thành công
+vnp -> s: Thanh toán thành công()
+s -> d: QueryToUpdate()
+d -> s: UpdateResult()
+s -> pp: SuccessResponse()
+pp -> u: Thông báo thanh toán thành công
+else Thanh toán thất bại
+vnp -> s: Thanh toán thất bại()
+s -> pp: ErrorResponse()
+pp -> u: Hiển thị lỗi
+end
+
+
+@enduml

@@ -1,0 +1,29 @@
+@startuml 05_add_to_cart
+!theme cerulean
+
+actor       User       as u
+participant ProductDetailPage as pdp
+participant Server as s
+participant Database as d
+participant LocalStorage as ls
+
+u -> pdp: Thêm sản phẩm\nvào giỏ hàng
+
+alt Đã đăng nhập
+  pdp -> s: Request()
+  s -> d: Query()
+  d -> s: Result()
+  alt Thêm thành công
+    s -> pdp: SuccessResponse()
+    pdp -> u: Thông báo\nthêm thành công
+  else Thêm thất bại
+    s -> pdp: ErrorResponse()
+    pdp -> u: Hiển thị lỗi
+  end
+
+else Chưa đăng nhập
+  pdp -> ls: UpdateData()
+  pdp -> u: Thông báo\nthêm thành công
+end
+
+@enduml
