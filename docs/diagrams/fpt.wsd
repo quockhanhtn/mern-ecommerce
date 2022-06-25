@@ -2,17 +2,17 @@
 !theme cerulean
 
 actor       User       as u
-participant FptModule as f
+participant FptRecommendationPlatform as f
 participant Client as c
 participant Server as s
 participant Database as d
 
-u -> c: view product
-c -> f: GetRecommended(productId)
+u -> c: Xem sản phẩm
+c -> f: GetRecommendedRelatedItem(productId)
 
 alt Fpt No Response
   f -> c: < No content >
-  c -> u: Hide section related product on UI
+  c -> u: Ẩn mục sản phẩm liên quan trên giao diện
 
 else Fpt Response Data
   f -> c: listProductId (related to the sent productId)
@@ -21,12 +21,12 @@ else Fpt Response Data
   s -> d: QueryToFind()
   d -> s: Result()
 
-  alt  Server not found or all products are sold out
+  alt Không tìm thấy hoặc sản phẩm bị ẩn/xóa/bán hết
     s -> c: ErrorResponse()
-    c -> u: Hide section related product on UI
-  else Server found products by list id
+    c -> u: Ẩn mục sản phẩm liên quan trên giao diện
+  else Tìm thấy danh sách sản phẩm theo id
     s -> c: SuccessResponse()
-    c -> u: Show list product related   
+    c -> u: Hiển thị danh sách sản phẩm liên quan
   end
 end
 
