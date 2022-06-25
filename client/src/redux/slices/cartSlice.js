@@ -107,7 +107,19 @@ const cartSlice = createSlice({
       localStorage.setItem('cart', JSON.stringify(state.allItems));
     },
     addItem(state, action) {
-      state.allItems.push(action.payload);
+      const product = state.allItems?.find(
+        ({ productId, sku }) => productId === action.payload.productId && sku === action.payload.sku
+      );
+      if (product && product.skuVariant === action.payload.skuVariant) {
+        const index = state.allItems.findIndex(
+          (product) => product.productId === action.payload.productId && product.sku === action.payload.sku
+        );
+        state.allItems.splice(index, 1);
+        product.qty += action.payload.qty;
+        state.allItems.push(product);
+      } else {
+        state.allItems.push(action.payload);
+      }
       state.selectedItems.push({ productId: action.payload.productId, sku: action.payload.sku });
       state.itemsCount = state.allItems.length;
       state.isLoading = false;

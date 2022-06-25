@@ -59,6 +59,7 @@ export default function AccountPopover({ menuOptions, isShowTitle }) {
   };
   const handleLogout = async () => {
     await logout();
+    localStorage.removeItem('cart');
   };
 
   const iconBtnSx = {
