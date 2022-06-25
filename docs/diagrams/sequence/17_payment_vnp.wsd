@@ -1,4 +1,4 @@
-@startuml payment with vnpay
+@startuml 17_payment_vnp
 !theme cerulean
 
 actor       User       as u
@@ -11,11 +11,11 @@ u -> pp: Thanh toán bằng VNPay
 pp -> s: Lấy thông tin đơn hàng()
 s -> d: Query()
 d -> s: Thông tin đơn hàng()
-s -> vnp: createPaymentUrl()
-vnp -> s: url()
+s -> vnp: CreatePaymentUrl()
+vnp -> s: GenerateUrl()
 s -> pp: Response(url)
-pp -> u: redirectToPaymentUrl()
-
+pp -> vnp: RedirectToPaymentUrl()
+vnp -> u: Hiển thị trang thanh toán
 u -> vnp: Nhập thông tin thanh toán
 
 alt Thanh toán thành công

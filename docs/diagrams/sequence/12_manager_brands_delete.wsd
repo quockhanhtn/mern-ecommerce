@@ -1,4 +1,4 @@
-@startuml edit category
+@startuml 12_manager_brands_delete
 !theme cerulean
 
 actor       User       as u
@@ -8,26 +8,23 @@ participant Server as s
 participant Database as d
 
 alt Đăng nhập với tài khoản admin
-  u -> dash: Quản lý Danh mục
+  u -> dash: Quản lý thương hiệu
   dash -> s: Request()
   s -> d: Query()
   d -> s: Result()
 
   alt Lấy danh sách thành công
     s -> dash: SuccessResponse()
-    dash -> u: Hiển thị danh sách danh mục
-    u -> dash: Chọn danh mục cần chỉnh sửa
-    dash -> u: Hiển thị form chỉnh sửa
-    u -> dash: Nhấn nút Lưu
-    dash -> dash: ValidateInput()
-    dash -> s: RequestUpdate()
-    s -> d: QueryUpdate()
+    dash -> u: Hiển thị danh sách thương hiệu
+    u -> dash: Chọn thương hiệu cần xóa
+    dash -> s: RequestDelete()
+    s -> d: QueryDelete()
     d -> s: Result()
 
-    alt Chỉnh sửa thành công
+    alt Xóa thành công
       s -> dash: SuccessResponse()
-      dash -> u: Hiển thị danh sách danh mục
-    else Chỉnh sửa thất bại
+      dash -> u: Hiển thị danh sách thương hiệu
+    else Xóa thất bại
       s -> dash: ErrorResponse()
       dash -> u: Hiển thị lỗi
     end

@@ -1,0 +1,28 @@
+@startuml 02_register_with_google
+!theme cerulean
+
+actor       User       as u
+participant RegisterPage as rp
+participant Firebase as f
+participant Server as s
+participant Database as d
+
+u   -> rp : Đăng ký bằng tài khoản google
+rp  -> f  : Invoke()
+f   -> u  : Hiện popup chọn tài khoản
+u   -> f  : Cung cấp tài khoản
+f   -> rp : TokenId()
+rp  -> s  : Request(TokenId)
+s   -> s  : DecodeDataFromToken()
+s   -> d  : Query()
+d   -> s  : Result()
+
+alt Đăng ký thành công
+  s   -> rp : SuccessResponse()
+  rp  -> u  : Chuyển đến trang chủ
+else Đăng ký thất bại
+  s   -> rp : ErrorResponse()
+  rp  -> u  : Thông báo lỗi
+end
+
+@enduml

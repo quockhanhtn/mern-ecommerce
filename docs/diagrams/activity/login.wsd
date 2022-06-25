@@ -1,0 +1,24 @@
+@startuml login
+!theme cerulean
+
+|Người dùng|
+start
+
+:Vào trang đăng nhập;
+repeat :Nhập tài khoản, mật khẩu;
+  :Nhấn nút đăng nhập;
+
+|Hệ thống|
+  :Kiểm tra\nthông tin đăng nhập;
+backward:Hiển thị thông báo lỗi;
+repeat while (Thông tin chính xác?) is (no) not (yes)
+:Chuyển người dùng\nđến trang phù hợp;
+
+stop
+
+@enduml
+
+
+
+
+

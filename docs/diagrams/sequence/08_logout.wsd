@@ -1,0 +1,12 @@
+@startuml 08_logout
+!theme cerulean
+
+actor       User       as u
+participant Client as c
+participant LocalStorage as ls
+
+u -> c: Đăng xuất
+c -> ls: ClearAccessToken();
+c -> c: ReloadData()
+
+@enduml

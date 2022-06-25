@@ -1,0 +1,40 @@
+@startuml 04_comment_rate
+!theme cerulean
+
+actor       User       as u
+participant CommentForm as otp
+participant InfoForm as ifrm
+participant CommentAndRateForm as crp
+participant Server as s
+participant Database as d
+
+u -> crp: Đánh giá sản phẩm
+crp -> otp: Invoke()
+otp -> u: Hiển thị form bình luận
+u -> otp: Đánh giá và\nnhập bình luận
+otp -> otp: ValidateInput()
+otp -> crp: SendData()
+
+
+alt Chưa đăng nhập
+  crp -> ifrm: Invoke()
+  ifrm -> u: Hiển thị\nform nhập thông tin
+  u -> ifrm: Nhập thông tin
+  ifrm -> ifrm: ValidateInput()
+  ifrm -> crp: SendData()
+end
+
+crp -> s: Request()
+s -> d: Query()
+d -> s: Result()
+
+alt Bình luận thành công
+  s -> crp: SuccessResponse()
+  crp -> u: Hiển thị danh sách bình luận
+else Bình luận thất bại
+  s -> crp: ErrorResponse()
+  crp -> u: Hiển thị lỗi
+end
+
+
+@enduml

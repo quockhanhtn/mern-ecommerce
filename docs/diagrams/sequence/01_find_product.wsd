@@ -1,4 +1,4 @@
-@startuml find product
+@startuml 01_find_product
 !theme cerulean
 
 actor       User       as u
