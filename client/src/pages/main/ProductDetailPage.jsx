@@ -129,21 +129,22 @@ export default function ProductDetailPage() {
 
   const productMoreInfos = [
     {
-      title: '100% Chính hãng',
-      description: 'Tất cả các sản phẩm tại HK Mobile đều là hàng chính hãng tại Việt Nam',
+      title: t('products.infor-1-title'),
+      description: t('products.infor-1-content'),
       icon: roundVerified
     },
     {
-      title: '15 ngày đổi trả',
-      description: 'Cam kết đổi trả trong vòng 15 ngày nếu xảy ra lỗi',
+      title: t('products.infor-2-title'),
+      description: t('products.infor-2-content'),
       icon: clockFill
     }
   ];
 
   if (product?.warrantyPeriod) {
+    const warrantyPeriod = product?.warrantyPeriod;
     productMoreInfos.push({
-      title: 'Bảo hành chính hãng',
-      description: `Sản phẩm được bảo hành chính hãng ${product?.warrantyPeriod} tháng`,
+      title: t('products.infor-3-title'),
+      description: t('products.infor-3-content', { warrantyPeriod }),
       icon: roundVerifiedUser
     });
   }
@@ -250,10 +251,10 @@ export default function ProductDetailPage() {
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h5" component="h2" sx={{ padding: 0, mt: 5, mb: 2 }}>
-            SẢN PHẨM TƯƠNG TỰ
+            {t('products.list-product-same')}
           </Typography>
           <Button color="inherit" href={`/related/${product?.slug}`} endIcon={<Icon icon={arrowIosForwardFill} />}>
-            Xem thêm
+            {t('common.see-more')}
           </Button>
         </Box>
         <ProductList products={relatedItems} isLoading={isLoadingRelated} limit={5} />

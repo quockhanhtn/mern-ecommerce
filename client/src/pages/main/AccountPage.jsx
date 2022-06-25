@@ -68,12 +68,6 @@ export default function AccountPage() {
       component: <AccountGeneral />
     },
     {
-      label: t('account.order'),
-      value: 'order',
-      icon: <Icon icon={roundReceipt} width={20} height={20} />,
-      component: <AccountBilling />
-    },
-    {
       label: t('account.address-book'),
       value: 'address-book',
       icon: <Icon icon={baselineLocationOn} width={20} height={20} />,

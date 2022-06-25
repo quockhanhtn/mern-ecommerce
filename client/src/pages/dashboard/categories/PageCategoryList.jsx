@@ -167,7 +167,7 @@ export default function PageCategoryList() {
       id: 'countProduct',
       align: 'left',
       disablePadding: false,
-      label: 'Số SP'
+      label: t('dashboard.categories.available')
     },
     {
       id: 'createdAt',

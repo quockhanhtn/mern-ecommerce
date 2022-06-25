@@ -27,7 +27,9 @@ export default {
     'no-options': 'Không có tùy chọn',
     continue: 'Tiếp tục',
     back: 'Quay lại',
-    'save-change': 'Lưu thay đổi'
+    'save-change': 'Lưu thay đổi',
+    'see-more': 'Xem thêm',
+    information: 'Thành công hay thất bại trong kinh doanh là do thái độ trong suy nghĩ nhiều hơn là khả năng suy nghĩ.'
   },
   home: {
     'page-title': 'Điện thoại di dộng chính hãng và phụ kiện | HK Mobile',
@@ -279,7 +281,8 @@ export default {
       'edit-title': 'Chỉnh sửa danh mục',
       delete: 'Xóa danh mục',
       'confirm-delete': 'Bạn có muốn xoá danh mục - {{nameInfo}}?',
-      image: 'Hình ảnh'
+      image: 'Hình ảnh',
+      available: 'Số SP'
     },
     brands: {
       'page-title': 'Quản lý Thương hiệu | HK Mobile',
@@ -375,7 +378,9 @@ export default {
     },
     orders: {
       title: 'Đơn hàng',
-      add: 'Thêm đơn hàng'
+      add: 'Thêm đơn hàng',
+      buy: 'Mua ngay',
+      'add-to-cart': 'Thêm vào giỏ hàng'
     },
     comments: {
       title: 'Thêm bình luận',
@@ -396,6 +401,9 @@ export default {
     'page-title': 'Quản lý sản phẩm | HK Mobile',
     title: 'Sản phẩm',
     list: 'Danh sách sản phẩm',
+    'list-me': 'SẢN PHẨM DÀNH CHO BẠN',
+    'list-product-same': 'SẢN PHẨM TƯƠNG TỰ',
+    'list-far': 'Phù hợp nhất',
     'title-not-found': 'Danh sách sản phẩm trống!',
     heading: 'Danh sách Sản phẩm',
     'heading-create': 'Tạo sản phẩm mới',
@@ -440,6 +448,13 @@ export default {
     status: 'Trạng thái',
     hidden: 'Ẩn',
     visible: 'Hiển thị',
-    error: 'An error occurred, please try again.'
+    error: 'An error occurred, please try again.',
+    'label-toolbar': 'Hiển thị sản phẩm đã ẩn',
+    'infor-1-title': '100% Chính hãng',
+    'infor-1-content': 'Tất cả các sản phẩm tại HK Mobile đều là hàng chính hãng tại Việt Nam',
+    'infor-2-title': '15 ngày đổi trả',
+    'infor-2-content': 'Cam kết đổi trả trong vòng 15 ngày nếu xảy ra lỗi',
+    'infor-3-title': 'Bảo hành chính hãng',
+    'infor-3-content': 'Sản phẩm được bảo hành chính hãng {{product?.warrantyPeriod}} tháng'
   }
 };

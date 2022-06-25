@@ -308,7 +308,7 @@ export default function PageProductList() {
         />
         <Card>
           <ProductTableToolbar
-            searchPlaceHolder="Tìm kiếm sản phẩm"
+            searchPlaceHolder={t('products.search-product-placeholder')}
             numSelected={selected.length}
             initialValue={search}
             onSearch={(e, search) => setSearch(search)}

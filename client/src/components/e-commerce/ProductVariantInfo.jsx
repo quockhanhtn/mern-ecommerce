@@ -278,10 +278,10 @@ function ProductVariantInfo({ allVariants, productId, productName, onChangeVaria
           sx={{ whiteSpace: 'nowrap' }}
           disabled={isLoadingCart || isSoldOut}
         >
-          Thêm vào giỏ hàng
+          {t('dashboard.orders.add-to-cart')}
         </MButton>
         <Button fullWidth size="large" variant="contained" disabled={isSoldOut} onClick={handleBuyNow}>
-          Mua ngay
+          {t('dashboard.orders.buy')}
         </Button>
       </Stack>
     </RootStyle>

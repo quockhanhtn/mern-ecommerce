@@ -1,0 +1,44 @@
+@startuml fpt_user_base
+!theme cerulean
+
+actor       User       as u
+participant FptRecommendationPlatform as f
+participant Client as c
+participant Server as s
+participant Database as d
+
+alt every hour at minute 45
+  s -> d: GetTrackingData()
+  d -> s: Result()
+  s -> s: CalculatingUserInteraction()
+  s -> f: UpdateNewData()
+end
+
+alt every hour at minute 0
+  f -> f: Train model with new data
+end
+
+
+u -> c: Xem sản phẩm hoặc ở trang thủ
+c -> f: GetRecommendedByUser(userIdentifier)
+
+alt Fpt No Response
+  f -> c: < No content >
+  c -> s: BestSellerProducts()
+else Fpt Response Data
+  f -> c: listProductId (related to the sent productId)
+  c -> s: GetProductById(listProductId)
+end
+
+s -> d: QueryToFind()
+d -> s: Result()
+
+alt Lấy thất bại
+  s -> c: ErrorResponse()
+  c -> u: Ẩn mục sản phẩm gợi ý trên giao diện
+else Lấy thành công
+  s -> c: SuccessResponse()
+  c -> u: Hiển thị danh sách sản phẩm gợi ý
+end
+
+@endumc

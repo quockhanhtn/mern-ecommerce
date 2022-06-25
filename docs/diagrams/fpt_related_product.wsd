@@ -1,4 +1,4 @@
-@startuml fpt recom
+@startuml fpt_related_product
 !theme cerulean
 
 actor       User       as u
@@ -6,6 +6,17 @@ participant FptRecommendationPlatform as f
 participant Client as c
 participant Server as s
 participant Database as d
+
+alt at 02:00 AM
+s -> d: GetListProduct()
+d -> s: Result()
+s -> f: UpdateNewData()
+end
+
+alt at 03:00 AM
+f -> f: Train model with new data
+end
+
 
 u -> c: Xem sản phẩm
 c -> f: GetRecommendedRelatedItem(productId)
@@ -29,6 +40,5 @@ else Fpt Response Data
     c -> u: Hiển thị danh sách sản phẩm liên quan
   end
 end
-
 
 @endumc

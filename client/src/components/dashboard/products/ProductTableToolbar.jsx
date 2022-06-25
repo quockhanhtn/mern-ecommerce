@@ -25,6 +25,7 @@ import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -82,6 +83,7 @@ export default function ProductTableToolbar({
   const [showHidden, setShowHidden] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState(null);
+  const { t } = useLocales();
 
   useEffect(() => {
     setCategoryOpts([{ _id: '', name: 'Tất cả', slug: '', image: '' }, ...lstCategories]);
@@ -182,7 +184,7 @@ export default function ProductTableToolbar({
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                 <FormControlLabel
                   control={<Switch checked={showHidden} onChange={handleChangeShowHidden} />}
-                  label="Hiển thị sản phẩm đã ẩn"
+                  label={t('products.label-toolbar')}
                 />
               </Box>
             </Grid>
