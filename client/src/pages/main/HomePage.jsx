@@ -140,10 +140,10 @@ export default function HomePage() {
                 <CardContent sx={{ padding: 0, '&:last-child': { paddingBottom: 0 } }}>
                   <Box sx={{ display: 'flex', marginBottom: -1 }}>
                     <Typography variant="h5" component="h2" sx={{ padding: 0 }}>
-                      SẢN PHẨM DÀNH CHO BẠN
+                      {t('products.list-me')}
                     </Typography>
                     <Label color="info" sx={{ ml: 1 }}>
-                      Phù hợp nhất
+                      {t('products.list-far')}
                     </Label>
                   </Box>
                 </CardContent>

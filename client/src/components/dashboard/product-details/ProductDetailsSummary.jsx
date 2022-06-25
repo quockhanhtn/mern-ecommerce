@@ -162,10 +162,10 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
               sx={{ whiteSpace: 'nowrap' }}
               disabled={isLoadingCart}
             >
-              Thêm vào giỏ hàng
+              {t('dashboard.orders.add-to-cart')}
             </MButton>
             <Button fullWidth size="large" type="submit" variant="contained">
-              Mua ngay
+              {t('dashboard.orders.buy')}
             </Button>
           </Stack>
         </Form>

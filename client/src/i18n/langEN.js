@@ -15,6 +15,9 @@ export default {
     cancel: 'Cancel',
     edit: 'Edit',
     delete: 'Delete',
+    continue: 'Continue',
+    back: 'Back',
+    'see-more': 'See more',
     'invalid-file-type': 'Invalid file type !',
     upload: {
       'from-url': 'Select from URL',
@@ -23,7 +26,8 @@ export default {
       'drop-files-here-or-click': 'Drop files here or click',
       browse: 'Browse',
       'thorough-your-machine': 'thorough your machine'
-    }
+    },
+    information: 'Success or failure in business depends more on attitude in thinking than in ability to think.'
   },
   home: {
     'page-title': 'Genuine cellphone and accessories | HK Mobile',
@@ -42,6 +46,121 @@ export default {
     'address-book': 'Address book',
     'change-password': 'Change password',
     config: 'Config'
+  },
+  address: {
+    title: 'Address',
+    list: 'Address list',
+    'full-name': 'Full name',
+    'full-name-required': 'Name cannot be left blank',
+    'full-name-min': 'Name must have at least 3 characters',
+    'full-name-max': 'Name cannot exceed 50 characters',
+    phone: 'Phone number',
+    'phone-required': 'Phone number can not be left blank',
+    'phone-invalid': 'Phone number must be in the form 0xxxxxxxxx or 0xx-xxx-xxxx (x from 0 to 9)',
+    street: 'Specific address',
+    'street-required': 'The specific address cannot be left blank',
+    province: 'Province/City',
+    'province-required': 'Province/City cannot be left blank',
+    district: 'District',
+    'district-required': 'District cannot be left blank',
+    ward: 'Wards',
+    'ward-required': 'Ward/Commune cannot be left blank',
+    type: 'Address type',
+    'type-home': 'Home',
+    'type-office': 'Office',
+    'type-other': 'Other',
+    note: 'Note',
+    'note-empty': '(no notes)',
+    'add-title': 'Add address',
+    'edit-title': 'Edit address'
+  },
+  cart: {
+    'page-title': 'Shopping cart | HK Mobile',
+    title: 'Cart',
+    'title-detail': 'Cart details',
+    item: 'product',
+    notification: {
+      remove: 'Product removed from cart successfully!',
+      increase: 'Increase the number of successful products!',
+      decrease: 'Reduce the number of successful products!'
+    },
+    empty: 'Cart is empty',
+    'empty-desc': 'You have no items in your shopping cart',
+    'empty-action': 'Continue shopping',
+    checkout: 'Pay',
+    order: {
+      summary: 'Information line',
+      'sub-total': 'Total amount of goods',
+      'shipping-fee': 'Transport fee',
+      discount: 'Discount',
+      total: 'Total amount',
+      'include-vat': 'Including VAT',
+      action: 'Order'
+    },
+    step: {
+      1: 'Cart',
+      2: 'Information',
+      3: 'Payment'
+    },
+    quantity: 'Amount',
+    'unit-price': 'Unit price',
+    'amount-price': 'Amount of money',
+    available: 'Also {{available}} SP',
+    // payment-method
+    'payment-method': 'Payment methods',
+    'payment-method-required': 'Please choose a payment method',
+    'payment-method-cash': 'Cash',
+    'payment-method-cash-desc': 'Pay in cash at the store',
+    'payment-method-cod': 'Payment on delivery',
+    'payment-method-cod-desc': 'Checked and paid on receipt',
+    'payment-method-vnpay': 'Payment via VNPAY',
+    'payment-method-vnpay-desc': 'Paying via VNPAY is safe and fast',
+    'payment-method-paypal': 'Payment via Paypal',
+    'payment-method-paypal-desc': 'Paying via PayPal is safe and fast',
+    'payment-method-momo': 'Payment via Momo wallet',
+    'payment-method-momo-desc': 'Payment via Momo wallet is safe and fast',
+    'payment-method-zalopay': 'Payment via ZaloPay wallet',
+    'payment-method-zalopay-desc': 'Paying via ZaloPay wallet is safe and fast',
+    // receive-method
+    'receive-method': 'Delivery method',
+    'receive-method-required': 'Delivery method cannot be empty',
+    'receive-at-store': 'Pick up at the store',
+    'receive-at-store-desc': 'Receive and experience the product at the store with the support of the staff',
+    'delivery-to-home': 'Home delivery',
+    'delivery-to-home-desc': 'Give us the address, the order will be delivered to your door!'
+  },
+  order: {
+    'page-title': 'Orders | HK Mobile',
+    'dashboard-page-title': 'Order Management | HK Mobile',
+    heading: 'Order List',
+    title: 'Order',
+    'search-placeholder': 'Order search...',
+    'search-placeholder-desc': 'Enter order number or phone number to search',
+    // order-status
+    'order-status': 'Order Status',
+    'status-all': 'All',
+    'status-pending': 'Waiting for progressing',
+    'status-confirmed': 'Confirmed',
+    'status-shipping': 'Delivery in progress',
+    'status-cancelled': 'Cancelled',
+    'status-completed': 'Accomplished',
+    // payement-method
+    'payment-method': 'Payment methods',
+    'payment-method-cash': 'Cash',
+    'payment-method-cod': 'Payment on delivery',
+    'payment-method-vnpay': 'Payment via VNPAY',
+    'payment-method-paypal': 'Payment via Paypal',
+    'payment-method-momo': 'Payment via Momo wallet',
+    'payment-method-zalopay': 'Payment via ZaloPay wallet',
+    // payment-status
+    'payment-status': 'Payment Status',
+    'payment-status-all': 'All',
+    'payment-status-pending': 'Unpaid',
+    'payment-status-paid': 'Paid',
+    'payment-status-cancelled': 'Cancellation of payment',
+    //
+    'order-id': 'Code orders',
+    'order-date': 'Order date'
   },
   settings: {
     title: 'Setting',
@@ -97,14 +216,34 @@ export default {
 
     phone: 'Phone number',
     'phone-required': 'Phone number is require',
-    'phone-invalid': 'Phone number is invalid'
+    'phone-invalid': 'Phone number is invalid',
+    'current-password': 'Current password',
+    'current-password-required': 'The current password cannot be left blank',
+    'new-password': 'A new password',
+    'new-password-min': 'New password must be at least 6 characters',
+    'new-password-max': 'New password cannot exceed 32 characters',
+    'new-password-required': 'New password cannot be left blank',
+    'confirm-password-required': 'Please confirm new password',
+    'confirm-password-not-match': 'Confirm password does not match',
+    'change-password-success': 'Change password successfully!',
+    'acc-no-pass': 'Your account has not been set a password. Set a password to help you log in to the system',
+    email: 'Email',
+    'email-invalid': 'Invalid email',
+    'email-required': 'Email cannot be left blank',
+    'first-name': 'Name',
+    'first-name-min': 'Name must have at least 2 characters',
+    'first-name-max': 'Name cannot exceed 32 characters',
+    'first-name-required': 'Name cannot be left blank',
+    'last-name': 'Last name',
+    'last-name-min': 'Last name must have at least 2 characters',
+    'last-name-max': 'Last name cannot exceed 32 characters',
+    'last-name-required': 'Last name cannot be left blank'
   },
   dashboard: {
     title: 'Dashboard',
     general: 'General',
     management: 'Management',
     statics: 'Statics',
-    orders: 'Orders',
     ecommerce: 'E-commerce',
     'created-at': 'Created at',
     'updated-at': 'Updated at',
@@ -130,7 +269,8 @@ export default {
       edit: 'Edit category',
       'edit-title': 'Edit category',
       delete: 'Delete category',
-      'confirm-delete': 'Do you want to remove the category - {{nameInfo}}?'
+      'confirm-delete': 'Do you want to remove the category - {{nameInfo}}?',
+      available: 'Number of SP'
     },
     brands: {
       'page-title': 'Brand management | HK Mobile',
@@ -208,7 +348,9 @@ export default {
       sold: 'Sold',
       status: 'Status',
       hidden: 'Hidden',
-      visible: 'Visible'
+      visible: 'Visible',
+      'staff-list': 'List of employee',
+      'customer-list': 'List of customers'
     },
     statistics: {
       title: 'Congratulations,',
@@ -225,6 +367,12 @@ export default {
       'product-name': 'Product name',
       total: 'Total',
       top: 'Top'
+    },
+    orders: {
+      title: 'Order',
+      add: 'Add order',
+      buy: 'Buy',
+      'add-to-cart': 'Add to cart'
     },
     comments: {
       title: 'Add review',
@@ -244,11 +392,15 @@ export default {
     'page-title': 'Product management | HK Mobile',
     title: 'Products',
     list: 'Product list',
+    'list-me': 'PRODUCTS FOR YOU',
+    'list-product-same': 'SIMILAR PRODUCT',
+    'list-far': 'Best fit',
     'title-not-found': 'Products not found!',
     heading: 'Product List',
     'heading-create': 'Create a new product',
     'search-product-placeholder': 'Search product...',
     add: 'Add product',
+    variant: 'Variant',
     create: 'Create product',
     save: 'Save Changes',
     'add-title': 'Ecommerce: Add new product | HK Mobile',
@@ -289,6 +441,13 @@ export default {
     status: 'Status',
     hidden: 'Hidden',
     visible: 'Visible',
-    error: 'An error occurred, please try again.'
+    error: 'An error occurred, please try again.',
+    'label-toolbar': 'Show hidden products',
+    'infor-1-title': '100% genuine',
+    'infor-1-content': 'All products at HK Mobile are genuine in Vietnam',
+    'infor-2-title': '15 days return',
+    'infor-2-content': 'Commit to return within 15 days if there is an error',
+    'infor-3-title': 'Warranty genuine',
+    'infor-3-content': 'The product has a genuine {{warrantyPeriod}} month warranty'
   }
 };

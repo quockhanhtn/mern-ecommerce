@@ -74,7 +74,7 @@ export default function MainFooter() {
           </Grid>
           <Grid item xs={8} md={3}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
-              Thành công hay thất bại trong kinh doanh là do thái độ trong suy nghĩ nhiều hơn là khả năng suy nghĩ.
+              Success or failure in business depends more on attitude in thinking than in ability to think.
             </Typography>
 
             <Stack

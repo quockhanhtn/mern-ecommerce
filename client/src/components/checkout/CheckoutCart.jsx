@@ -171,7 +171,7 @@ export default function CheckoutCart() {
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             {t('cart.order.sub-total')}
           </Typography>
-          <Typography variant="subtitle2">{`${fNumber(subTotal)} ₫`}</Typography>
+          <Typography variant="subtitle2">{fCurrency(subTotal, currentLang.value)}</Typography>
         </Stack>
 
         <Stack direction="row" justifyContent="space-between">
