@@ -1,0 +1,23 @@
+@startuml 01_view_product_detail
+!theme cerulean
+
+actor       User       as u
+participant ProductDetailPage as sp
+participant Server as s
+participant Database as d
+
+u   -> sp: Xem chi tiết sản phẩm
+
+sp  -> s: Request()
+s   -> d: Query()
+d   -> s: Result()
+
+alt Lấy thông tin thành công
+  s   -> sp: SuccessResponse()
+  sp  -> u: Hiển thông tin sản phẩm
+else Lấy thông tin thất bại
+  s   -> sp: ErrorResponse()
+  sp  -> u: Thông báo lỗi
+end
+
+@enduml

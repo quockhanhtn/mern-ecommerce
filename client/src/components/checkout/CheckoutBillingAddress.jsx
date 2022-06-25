@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 // icons
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
@@ -24,7 +25,7 @@ import {
   TextField
 } from '@material-ui/core';
 // form validation
-import { Form, FormikProvider, useFormik } from 'formik';
+import { Form, FormikProvider, useFormik, useFormikContext } from 'formik';
 import * as Yup from 'yup';
 // hooks
 import { useDispatch, useSelector } from 'react-redux';
@@ -54,6 +55,49 @@ const OptionStyle = styled('div')(({ theme }) => ({
   border: `solid 1px ${theme.palette.grey[500_32]}`
 }));
 
+const ActionArea = ({ onBack, setErrorMgs }) => {
+  const { t } = useLocales();
+  const { values, errors, submitForm } = useFormikContext();
+  const handleOnClick = (_e) => {
+    if (values.isReceiveAtStore) {
+      if (!values.name && !values.phone) {
+        setErrorMgs('Vui lòng điền đầy đủ thông tin để tiếp tục');
+      } else if (!values.name) {
+        setErrorMgs(errors.name);
+      } else if (!values.phone) {
+        setErrorMgs(errors.phone);
+      } else {
+        setErrorMgs(null);
+      }
+    }
+    submitForm();
+  };
+  return (
+    <Grid item xs={12} md={4}>
+      <CheckoutSummary />
+      <Button fullWidth size="large" variant="contained" onClick={handleOnClick}>
+        {t('common.continue')}
+      </Button>
+
+      <Button
+        size="small"
+        fullWidth
+        color="inherit"
+        onClick={onBack}
+        startIcon={<Icon icon={arrowIosBackFill} />}
+        sx={{ mt: 3 }}
+      >
+        {t('common.back')}
+      </Button>
+    </Grid>
+  );
+};
+
+ActionArea.propTypes = {
+  onBack: PropTypes.func,
+  setErrorMgs: PropTypes.func
+};
+
 export default function CheckoutBillingAddress() {
   const { t } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
@@ -63,6 +107,7 @@ export default function CheckoutBillingAddress() {
   const { list: addressList, isLoading } = useSelector((state) => state.account.addresses);
 
   const [openForm, setOpenForm] = useState(false);
+  const [receiveAtStoreError, setReceiveAtStoreError] = useState(false);
 
   const initInfo = cartHelper.getOrderInfo();
 
@@ -123,7 +168,11 @@ export default function CheckoutBillingAddress() {
 
     userAddressId: Yup.string().when('isAuthenticated', {
       is: true,
-      then: Yup.string().required('Vui lòng chọn địa chỉ nhận hàng'),
+      then: Yup.string().when('isReceiveAtStore', {
+        is: false,
+        then: Yup.string().required('Vui lòng chọn địa chỉ nhận hàng'),
+        otherwise: Yup.string().notRequired()
+      }),
       otherwise: Yup.string().notRequired()
     }),
 
@@ -170,15 +219,12 @@ export default function CheckoutBillingAddress() {
       userAddressId: initInfo.userAddressId || ''
     },
     validationSchema: OrderInfoSchema,
-    onSubmit: async (values, { setSubmitting }) => {
-      console.log('Submit', {
-        values,
-        errors
-      });
+    onSubmit: async (values, { setTouched, setSubmitting }) => {
+      setSubmitting(true);
       try {
         cartHelper.saveBillingInfo(values);
         handleNextStep();
-        setSubmitting(true);
+        // setSubmitting(true);
       } catch (e) {
         enqueueSnackbar('Lỗi', {
           variant: 'error'
@@ -237,10 +283,6 @@ export default function CheckoutBillingAddress() {
       }
     }
   };
-
-  // const handleApplyShipping = () => {
-  //   //
-  // };
 
   const handleNextStep = () => {
     dispatch(setOrderInfo(formik.values));
@@ -399,20 +441,25 @@ export default function CheckoutBillingAddress() {
                               {isStore && (
                                 <Collapse in={values.receiveMethod === 'store'} sx={{ width: '100%' }}>
                                   <Stack spacing={{ xs: 2, sm: 3 }} sx={{ mb: 3 }}>
+                                    {/* {receiveAtStoreError && !(touched.name || touched.phone) && (
+                                      <Alert sx={{ mb: 2 }} severity="error">
+                                        {receiveAtStoreError}
+                                      </Alert>
+                                    )} */}
                                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                                       <TextField
                                         fullWidth
                                         label={t('address.full-name')}
                                         {...getFieldProps('name')}
-                                        error={Boolean(touched.name && errors.name)}
-                                        helperText={touched.name && errors.name}
+                                        error={Boolean((touched.name || receiveAtStoreError) && errors.name)}
+                                        helperText={(touched.name || receiveAtStoreError) && errors.name}
                                       />
                                       <TextField
                                         fullWidth
                                         label={t('address.phone')}
                                         {...getFieldProps('phone')}
-                                        error={Boolean(touched.phone && errors.phone)}
-                                        helperText={touched.phone && errors.phone}
+                                        error={Boolean((touched.name || receiveAtStoreError) && errors.phone)}
+                                        helperText={(touched.phone || receiveAtStoreError) && errors.phone}
                                       />
                                     </Stack>
                                   </Stack>
@@ -452,23 +499,7 @@ export default function CheckoutBillingAddress() {
               )} */}
             </Grid>
 
-            <Grid item xs={12} md={4}>
-              <CheckoutSummary />
-              <Button type="submit" fullWidth size="large" variant="contained">
-                {t('common.continue')}
-              </Button>
-
-              <Button
-                size="small"
-                fullWidth
-                color="inherit"
-                onClick={handleBackStep}
-                startIcon={<Icon icon={arrowIosBackFill} />}
-                sx={{ mt: 3 }}
-              >
-                {t('common.back')}
-              </Button>
-            </Grid>
+            <ActionArea onBack={handleBackStep} setErrorMgs={setReceiveAtStoreError} />
           </Grid>
         </Form>
       </FormikProvider>
