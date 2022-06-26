@@ -95,6 +95,22 @@ export default function DiscountForm({ currentId, open, setOpen }) {
     return _discountData;
   };
 
+  const checkExisted = async (code) => {
+    if (currentId) {
+      return false;
+    }
+    let isExistCode = false;
+    try {
+      const { data } = await checkExistedDiscountCode(code);
+      if (data?.data && data.data === '1') {
+        isExistCode = true;
+      }
+    } catch {
+      //
+    }
+    return isExistCode;
+  };
+
   useEffect(() => {
     if (discount) {
       setDiscountData({ ...discountData, ...discount });
@@ -228,20 +244,13 @@ export default function DiscountForm({ currentId, open, setOpen }) {
     validationSchema: DiscountSchema,
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       try {
-        let isExistCode = false;
-        try {
-          const { data } = await checkExistedDiscountCode(values.code);
-          if (data?.data && data.data === '1') {
-            isExistCode = true;
-          }
-        } finally {
-          if (isExistCode) {
-            setFieldError('code', 'Mã khuyến mãi đã tồn tại');
-            enqueueSnackbar('Mã khuyến mãi đã tồn tại', { variant: 'error' });
-            setSubmitting(false);
-          } else {
-            handleSave();
-          }
+        const isExistCode = await checkExisted(values.code);
+        if (isExistCode) {
+          setFieldError('code', 'Mã khuyến mãi đã tồn tại');
+          enqueueSnackbar('Mã khuyến mãi đã tồn tại', { variant: 'error' });
+          setSubmitting(false);
+        } else {
+          handleSave();
         }
       } catch (error) {
         enqueueSnackbar(t('dashboard.discounts.error'), { variant: 'error' });

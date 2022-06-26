@@ -5,8 +5,8 @@ import { trackingInCart } from './userBehaviorSlice';
 const calculateFee = (allItems, selectedItems) => {
   let saveMoney = 0;
   let subTotal = 0;
-  let discount = 0;
-  let shipping = 0;
+  const discount = 0;
+  const shipping = 0;
   allItems
     .filter(
       (item) =>
@@ -16,9 +16,6 @@ const calculateFee = (allItems, selectedItems) => {
       subTotal += item.price * item.qty;
       saveMoney += (item.marketPrice - item.price) * item.qty;
     });
-
-  shipping = 20000;
-  discount = 20000;
 
   // if (subTotal <= 100000) {
   //   shipping = 10000;

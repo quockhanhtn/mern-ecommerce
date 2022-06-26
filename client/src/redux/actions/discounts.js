@@ -6,7 +6,8 @@ export const getAllDiscounts = (isSimple) => async (dispatch) => {
     dispatch({ type: actionTypes.START_LOADING });
     const params = {};
     if (isSimple) {
-      params.fields = 'name slug image code desc';
+      params.fields =
+        'name,code,beginDate,endDate,quantity,unlimitedQty,discount,discountType,minimumTotal,maximumApplied';
     } else {
       params.isShowAllDate = '1';
       params.isShowHidden = '1';

@@ -1,41 +1,31 @@
-import { Icon } from '@iconify/react';
-import closeFill from '@iconify/icons-eva/close-fill';
-
-import PropTypes from 'prop-types';
-import { useState, useCallback, useEffect } from 'react';
-// material
 import {
-  Button,
+  Alert,
   Box,
+  Button,
   Card,
   CardContent,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
-  FormControlLabel,
-  Grid,
-  InputAdornment,
-  Radio,
-  RadioGroup,
   Stack,
-  Switch,
-  TextField,
   Typography
 } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { Form, FormikProvider, useFormik } from 'formik';
+
+import PropTypes from 'prop-types';
+// hooks
+import { useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { merge } from 'lodash';
+import { useSelector } from 'react-redux';
+import { useLocales } from '../../hooks';
 
 import { fCurrency } from '../../utils/formatNumber';
-import { useLocales } from '../../hooks';
+import { fDate } from '../../utils/formatTime';
 import { MotionInView, varFadeInUp } from '../animate';
-import { MIconButton, MRadio } from '../@material-extend';
 
 // ----------------------------------------------------------------------
 
-const DiscountItem = ({ item, subTotal }) => {
+// eslint-disable-next-line react/prop-types
+const DiscountItem = ({ item, language, onSelected }) => {
   const {
     name,
     code,
@@ -46,30 +36,45 @@ const DiscountItem = ({ item, subTotal }) => {
     discount,
     discountType,
     minimumTotal,
-    maximumApplied
+    maximumApplied,
+    available
   } = item;
 
-  const available = minimumTotal <= subTotal;
+  const handleOnSelect = (e) => {
+    onSelected(item);
+  };
 
-  const describe = `Giảm${discountType === 'percent' ? `${discount} %` : fCurrency(discount)}`;
-  let condition = '';
-  if (minimumTotal < 1000) {
-    condition = 'Không có';
-  } else {
-    condition = `Đơn hàng tối thiểu ${fCurrency(discount)}`;
-  }
   return (
     <MotionInView variants={varFadeInUp}>
       <Card sx={{ boxShadow: (theme) => theme.customShadows.z8 }}>
         <CardContent>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
             <Box>
-              <Typography>{name}</Typography>
-              <Typography>{describe}</Typography>
-              <Typography>{condition}</Typography>
-              <Typography>{available ? 'aa' : 'no'}</Typography>
+              <Typography>
+                Mã{' '}
+                <Typography color="inherit" variant="subtitle1" component="span">
+                  {code}
+                </Typography>
+                {' - '}
+                {name}
+              </Typography>
+              <Typography>
+                Giảm{' '}
+                <Typography color="error" variant="subtitle1" component="span">
+                  {discountType === 'price' ? fCurrency(discount, language) : `${discount}%`}
+                </Typography>{' '}
+                {minimumTotal < 1000 ? ' cho tất cả đơn hàng' : ` cho đơn hàng từ ${fCurrency(minimumTotal, language)}`}
+              </Typography>
+              <Typography>
+                Có giá trị đến ngày{' '}
+                <Typography color="inherit" variant="subtitle1" component="span">
+                  {fDate(endDate, language)}
+                </Typography>
+              </Typography>
             </Box>
-            <Button>Chọn</Button>
+            <Button variant="contained" size="large" color={available ? 'primary' : 'inherit'} onClick={handleOnSelect}>
+              CHỌN
+            </Button>
           </Box>
         </CardContent>
       </Card>
@@ -77,18 +82,35 @@ const DiscountItem = ({ item, subTotal }) => {
   );
 };
 
-function CheckoutDiscountForm({ open, setOpen, discounts, subTotal }) {
-  const { t } = useLocales();
-  const dispatch = useDispatch();
+DiscountItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  language: PropTypes.string,
+  onSelected: PropTypes.func
+};
+
+function CheckoutDiscountForm({ open, setOpen, subTotal, onSelectedCode }) {
+  const { t, currentLang } = useLocales();
+  const { listSimple: discounts } = useSelector((state) => state.discount);
+  const [errorMgs, setErrorMgs] = useState('');
 
   const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSelectDiscountCode = (selectedDiscount) => {
+    if (!selectedDiscount.available) {
+      setErrorMgs(`Đơn hàng không đủ điều kiện để chọn mã ${selectedDiscount.code}`);
+      return;
+    }
+    setErrorMgs('');
+    onSelectedCode(selectedDiscount.code);
     setOpen(false);
   };
 
   const isEmpty = !discounts || discounts.length < 1;
 
   return (
-    <Dialog disableEscapeKeyDown onBackdropClick="false" maxWidth="sm" fullWidth open={open} onClose={handleClose}>
+    <Dialog disableEscapeKeyDown maxWidth="sm" fullWidth open={open} onClose={handleClose}>
       <DialogTitle sx={{ bgcolor: 'background.neutral' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
           <Typography variant="h4" marginBottom={2} sx={{ textTransform: 'uppercase' }}>
@@ -101,9 +123,17 @@ function CheckoutDiscountForm({ open, setOpen, discounts, subTotal }) {
       </DialogTitle>
       <DialogContent sx={{ bgcolor: 'background.neutral' }}>
         <Stack spacing={3}>
-          {discounts.map((item, index) => (
-            <DiscountItem key={`discount-item-${index}`} item={item} subTotal={subTotal} />
-          ))}
+          {errorMgs && <Alert severity="error">{errorMgs}</Alert>}
+          {discounts
+            .map((x) => ({ ...x, available: x.minimumTotal <= subTotal }))
+            .map((item, index) => (
+              <DiscountItem
+                key={`discount-item-${index}`}
+                item={item}
+                onSelected={handleSelectDiscountCode}
+                language={currentLang.value}
+              />
+            ))}
         </Stack>
       </DialogContent>
     </Dialog>
@@ -113,8 +143,8 @@ function CheckoutDiscountForm({ open, setOpen, discounts, subTotal }) {
 CheckoutDiscountForm.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  discounts: PropTypes.array,
-  subTotal: PropTypes.number
+  subTotal: PropTypes.number,
+  onSelectedCode: PropTypes.func
 };
 
 export default CheckoutDiscountForm;

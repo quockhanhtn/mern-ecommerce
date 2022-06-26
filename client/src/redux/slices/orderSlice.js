@@ -7,7 +7,28 @@ const initialState = {
   error: null,
   activeStep: 0,
   orderInfo: {},
-  orderCreated: null
+  orderCreated: null,
+  fee: {
+    subTotal: 0,
+    saveMoney: 0,
+    discount: 0,
+    shipping: 0,
+    total: 0
+  },
+  discountApplied: {}
+};
+
+const calculateShippingFee = (orderInfo, currentFee) => {
+  let shipping;
+  if (currentFee.subTotal > 500000 || orderInfo?.isReceiveAtStore) {
+    shipping = 0;
+  } else if (orderInfo?.province?.toUpperCase().includes('HỒ CHÍ MINH')) {
+    shipping = 20000;
+  } else {
+    shipping = 30000;
+  }
+  const total = currentFee.subTotal + shipping - currentFee.discount;
+  return { ...currentFee, total, shipping };
 };
 
 const orderSlice = createSlice({
@@ -23,12 +44,24 @@ const orderSlice = createSlice({
     },
     setOrderInfo(state, action) {
       state.orderInfo = action.payload;
+      state.fee = calculateShippingFee(action.payload, state.fee);
+    },
+    setAppliedDiscount(state, action) {
+      state.fee = {
+        ...state.fee,
+        total: state.fee.total - action.payload.amount,
+        discount: action.payload.amount
+      };
+      state.discountApplied = action.payload.info;
     },
     backStepOrder(state) {
       state.activeStep -= 1;
     },
     nextStepOrder(state) {
       state.activeStep += 1;
+    },
+    updateFee(state, action) {
+      state.fee = { ...action.payload };
     },
     createdOrder(state, action) {
       state.isLoading = false;
@@ -40,13 +73,18 @@ const orderSlice = createSlice({
 
 const { actions, reducer } = orderSlice;
 export default reducer;
-export const { setOrderInfo, backStepOrder, nextStepOrder } = actions;
+export const { setOrderInfo, backStepOrder, nextStepOrder, setAppliedDiscount } = actions;
+
+export const updateFeeFromCart = () => async (dispatch, getState) => {
+  const { fee } = getState().cart;
+  dispatch(actions.updateFee(fee));
+};
 
 export const createOrder = (orderData) => async (dispatch, getState) => {
   try {
     dispatch(actions.startLoading());
 
-    const { orderInfo } = getState().order;
+    const { orderInfo, discountApplied } = getState().order;
     const { allItems, selectedItems } = getState().cart;
 
     const buyItems = allItems
@@ -79,7 +117,8 @@ export const createOrder = (orderData) => async (dispatch, getState) => {
       ...orderInfo,
       customerInfo: customer,
       address,
-      items: buyItems
+      items: buyItems,
+      discountCode: discountApplied.code
     };
 
     const { data } = await api.createOrder(dataToSend);

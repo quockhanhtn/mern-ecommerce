@@ -143,7 +143,16 @@ export default function CheckoutPayment() {
 
   return (
     <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+      <Form
+        autoComplete="off"
+        noValidate
+        onSubmit={handleSubmit}
+        onKeyPress={(e) => {
+          if (e.which === 13) {
+            e.preventDefault();
+          }
+        }}
+      >
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
             <CheckoutPaymentMethods formik={formik} paymentOptions={paymentOpts} />

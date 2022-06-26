@@ -14,13 +14,16 @@ import {
   InputAdornment
 } from '@material-ui/core';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useSnackbar } from 'notistack';
 import { useLocales } from '../../hooks';
 
 import CustomLoadingOverlay from '../loading-overlay';
 import CheckoutDiscountForm from './CheckoutDiscountForm';
 
-import { getAllDiscount, validateDiscount } from '../../api';
+import { setAppliedDiscount } from '../../redux/slices/orderSlice';
+
+import { estDiscountAmount } from '../../api';
 // utils
 import { fCurrency, fNumber } from '../../utils/formatNumber';
 
@@ -33,50 +36,66 @@ CheckoutSummary.propTypes = {
 
 export default function CheckoutSummary({ showDetail = false, sx }) {
   const { t, currentLang } = useLocales();
+  const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
   const {
     fee: { discount, subTotal, saveMoney, shipping, total }
-  } = useSelector((state) => state.cart);
-  const [discountList, setDiscountList] = useState([]);
+  } = useSelector((state) => state.order);
   const [discountCode, setDiscountCode] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMgs, setErrorMgs] = useState('');
 
-  async function fetchDiscounts() {
+  async function appliedDiscount(code) {
+    if (code?.length < 1) {
+      setErrorMgs('Bạn chưa nhập mã giảm giá');
+      return;
+    }
+
     setIsLoading(true);
     try {
-      const { data } = await getAllDiscount({
-        field: 'name,code,beginDate,endDate,quantity,unlimitedQty,discount,discountType,minimumTotal,maximumApplied'
-      });
-      setDiscountList(data.data);
-    } catch {
-      // do something
+      const { data } = await estDiscountAmount({ code, orderSubtotal: subTotal });
+      dispatch(setAppliedDiscount(data.data));
+      setErrorMgs('');
+      enqueueSnackbar('Áp dụng mã giãm giá thành công !', { variant: 'success' });
+    } catch (e) {
+      let mgs = 'Không thể áp dụng mã giảm giá';
+      const err = e?.response?.data?.message;
+      if (err[currentLang.value]) {
+        mgs = err[currentLang.value];
+      }
+      setErrorMgs(mgs);
     }
     setIsLoading(false);
   }
 
-  const handShowListDiscount = async (e) => {
-    if (!discountList || discountList.length < 1) {
-      await fetchDiscounts();
-    }
+  const handShowListDiscount = async (_event) => {
     setIsOpen(true);
   };
-  const handleApplyDiscount = async (e) => {
-    setIsLoading(true);
-    try {
-      const { data } = await validateDiscount({ code: discountCode, orderSubtotal: subTotal });
-    } catch (e) {
-      const mgs = '';
-      setErrorMgs(mgs);
-    }
+  const handleApplyDiscount = (_event) => {
+    appliedDiscount(discountCode);
+  };
 
-    setIsLoading(false);
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleApplyDiscount(null);
+    }
+  };
+
+  const handleSelectCodeFromForm = (selectCode) => {
+    setDiscountCode(() => selectCode);
+    appliedDiscount(selectCode);
   };
 
   return (
     <>
       {showDetail && (
-        <CheckoutDiscountForm open={isOpen} setOpen={setIsOpen} discounts={discountList} subTotal={subTotal} />
+        <CheckoutDiscountForm
+          open={isOpen}
+          setOpen={setIsOpen}
+          subTotal={subTotal}
+          onSelectedCode={handleSelectCodeFromForm}
+        />
       )}
       {showDetail && isLoading && <CustomLoadingOverlay active={isLoading} />}
       {showDetail && (
@@ -89,6 +108,7 @@ export default function CheckoutSummary({ showDetail = false, sx }) {
                 fullWidth
                 placeholder="Mã giảm giá"
                 value={discountCode}
+                onKeyDown={handleKeyDown}
                 onChange={(e) => setDiscountCode(e.target.value.trim().toUpperCase())}
                 InputProps={{
                   endAdornment: (
@@ -121,7 +141,7 @@ export default function CheckoutSummary({ showDetail = false, sx }) {
 
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Tiết kiệm
+                Giảm giá
               </Typography>
               <Typography variant="subtitle2">{fCurrency(saveMoney, currentLang.value)}</Typography>
             </Stack>
@@ -135,12 +155,14 @@ export default function CheckoutSummary({ showDetail = false, sx }) {
               </Stack>
             )}
 
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {t('cart.order.shipping-fee')}
-              </Typography>
-              <Typography variant="subtitle2">{fCurrency(shipping, currentLang.value)}</Typography>
-            </Stack>
+            {showDetail && (
+              <Stack direction="row" justifyContent="space-between">
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {t('cart.order.shipping-fee')}
+                </Typography>
+                <Typography variant="subtitle2">{fCurrency(shipping, currentLang.value)}</Typography>
+              </Stack>
+            )}
 
             <Divider />
 

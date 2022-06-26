@@ -46,13 +46,12 @@ export const checkExistedCode = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-export const validateDiscount = async (req, res, next) => {
+export const estDiscountAmt = async (req, res, next) => {
   try {
     const code = (req.query?.code ?? '').trim();
     const orderSubtotal = Number.parseInt(req.query?.orderSubtotal ?? '0', 10);
-
-    const found = await discountService.getAll({ fields: '_id', filters: { code: code }, isShowHidden: true, isShowAllDate: true });
-    ResponseUtils.status200(res, '', (found && found.length > 0) ? '1' : '0');
+    const result = await discountService.calculateDiscountAmt(code, orderSubtotal);
+    ResponseUtils.status200(res, 'Est success', result);
   } catch (err) { next(err); }
 };
 

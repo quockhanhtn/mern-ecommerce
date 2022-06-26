@@ -1,10 +1,14 @@
 import mongoose from 'mongoose';
 import Discount from '../models/discount.model.js';
+import responseDef from '../responseCode.js';
+import ApiErrorUtils from '../utils/ApiErrorUtils.js';
 import StringUtils from '../utils/StringUtils.js';
+import { DISCOUNT_CONS } from '../constants.js';
 
 export default {
   getAll,
   getOne,
+  calculateDiscountAmt,
   create,
   update,
   hidden,
@@ -65,6 +69,40 @@ async function getOne(identity) {
     ? { _id: identity }
     : { slug: identity };
   return Discount.findOne(filter).lean().exec();
+}
+
+async function calculateDiscountAmt(code, subTotal) {
+  const today = new Date().toISOString();
+
+  const filters = {
+    code: code,
+    $or: [{ quantity: { $gte: 0 } }, { unlimitedQty: true }],
+    beginDate: { $lte: today },
+    endDate: { $gte: today }
+  };
+
+  const discount = await Discount
+    .findOne(filters)
+    .select('code unlimitedQty discount discountType minimumTotal maximumApplied')
+    .lean().exec();
+  if (!discount) {
+    throw ApiErrorUtils.simple2(responseDef.DISCOUNT.NOT_FOUND);
+  }
+
+  if (discount.minimumTotal > subTotal) {
+    throw ApiErrorUtils.simple2(responseDef.DISCOUNT.MINIMUM_TOTAL(discount.minimumTotal));
+  }
+
+  let discountAmount = 0;
+  if (discount.discountType === DISCOUNT_CONS.TYPE.PERCENT) {
+    discountAmount = (subTotal * discount.discount) / 100;
+  } else {
+    discountAmount = discount.discount;
+  }
+  return {
+    amount: discountAmount,
+    info: discount
+  };
 }
 
 /**
