@@ -4,7 +4,14 @@ import * as api from '../../api';
 export const getAllDiscounts = (isSimple) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.START_LOADING });
-    const { data } = await api.getAllDiscount(isSimple ? 'name slug image code desc' : null);
+    const params = {};
+    if (isSimple) {
+      params.fields = 'name slug image code desc';
+    } else {
+      params.isShowAllDate = '1';
+      params.isShowHidden = '1';
+    }
+    const { data } = await api.getAllDiscount(params);
 
     dispatch({
       type: isSimple ? actionTypes.DISCOUNT.GET_ALL_SIMPLE : actionTypes.DISCOUNT.GET_ALL,

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import slugGenerator from 'mongoose-slug-updater';
+import { DISCOUNT } from '../constants.js';
 import removeMultiSpace from './plugins/remove-multi-space.js';
 
 const discountSchema = mongoose.Schema(
@@ -9,11 +10,22 @@ const discountSchema = mongoose.Schema(
     slug: { type: String, slug: "name", slugPaddingSize: 2, unique: true },
     desc: { type: String, trim: true, required: false },
 
-    code: { type: String, trim: true, required: true },
-    fromDate: { type: Date, trim: true, required: true },
-    endDate: { type: Date, trim: true, required: true },
-    quantity: { type: Number, trim: true, required: false, default: 0 },
-    discount: { type: Number, trim: true, required: false, default: 0 },
+    code: { type: String, trim: true, required: true, unique: true },
+
+    beginDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
+
+    quantity: { type: Number, required: false, default: 0 },
+    unlimitedQty: { type: Boolean, required: false, default: false },
+    discount: { type: Number, required: true, default: 0 },
+    discountType: {
+      type: String, trim: true,
+      enum: Object.values(DISCOUNT.TYPE),
+      default: DISCOUNT.TYPE.PERCENT
+    },
+
+    minimumTotal: { type: Number, required: false, default: 0 },
+    maximumApplied: { type: Number, required: false, default: 0 },
 
     image: { type: String, trim: true, required: false },
     isHide: { type: Boolean, required: true, default: false }

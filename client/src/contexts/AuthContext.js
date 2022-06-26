@@ -92,7 +92,6 @@ function AuthProvider({ children }) {
 
           const { data } = await api.getInfo();
           const userInfo = data.data;
-          console.log(userInfo);
 
           dispatch({ type: 'INITIALIZE', payload: { isAuthenticated: true, user: userInfo } });
         } else {
@@ -161,6 +160,8 @@ function AuthProvider({ children }) {
   };
 
   const logoutAction = async () => {
+    localStorage.removeItem('orderLocalStorage');
+    localStorage.removeItem('cart');
     setSession(null);
     dispatch({ type: 'LOGOUT' });
     dispatch(setAuthenticated(false));

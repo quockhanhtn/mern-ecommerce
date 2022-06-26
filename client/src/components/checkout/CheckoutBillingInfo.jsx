@@ -21,7 +21,7 @@ export default function CheckoutBillingInfo({ orderInfo, onBackStep, sx }) {
   return (
     <Card sx={{ mb: 3, ...sx }}>
       <CardHeader
-        title={t('address.title')}
+        title={orderInfo?.isReceiveAtStore ? 'Nhận tại cửa hàng' : t('address.title')}
         action={
           <Button size="small" type="button" startIcon={<Icon icon={editFill} />} onClick={onBackStep}>
             {t('common.edit')}
@@ -35,10 +35,11 @@ export default function CheckoutBillingInfo({ orderInfo, onBackStep, sx }) {
           {/*  */}
           {/* </Typography> */}
         </Typography>
-
-        <Typography variant="body2" gutterBottom>
-          {`${street}, ${ward}, ${district}, ${province}.`}
-        </Typography>
+        {!orderInfo?.isReceiveAtStore && (
+          <Typography variant="body2" gutterBottom>
+            {`${street}, ${ward}, ${district}, ${province}.`}
+          </Typography>
+        )}
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           {phone}
         </Typography>

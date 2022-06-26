@@ -1,3 +1,5 @@
+import numeral from 'numeral';
+
 class FormatUtils {
   /**
    * Format the image url
@@ -55,6 +57,15 @@ class FormatUtils {
       result = '0 second';
     }
     return result;
+  }
+
+  static formatCurrency(number, language = 'vi') {
+    const format = language === 'vi' ? '0,0' : '0,0[.]00';
+    const price = language === 'vi' ? number : parseFloat(number) / 23000;
+    if (language === 'en') {
+      return `$ ${numeral(price).format(format)}`;
+    }
+    return `${numeral(price).format(format)} đ`.replace(/,+/g, '.');
   }
 }
 export default FormatUtils;

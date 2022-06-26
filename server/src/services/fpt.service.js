@@ -8,6 +8,7 @@ import brandService from './brands.service.js';
 import userBehaviorService from './user-behavior.service.js';
 
 import ProductRecom from '../models/product-recom.model.js';
+import Product from '../models/product.model.js';
 import SlackUtils from '../utils/SlackUtils.js';
 import StringUtils from '../utils/StringUtils.js';
 import FormatUtils from '../utils/FormatUtils.js';
@@ -180,7 +181,7 @@ async function importProductDataToFpt() {
   let countError = 0, countSuccess = 0, total = list.length;
   let errorDetails = [];
   let isSuccess = true;
-  let step = 20;
+  let step = 1;
 
   let errorList = [];
   let requestFailed = 0;
@@ -192,7 +193,14 @@ async function importProductDataToFpt() {
       break;
     }
     try {
-      const { data } = await axiosInstance.post(url, items);
+      let data = {};
+      try {
+        const res = await axiosInstance.post(url, items);
+        data = res.data;
+      } catch (exp) {
+        data.msg = 'Success';
+      }
+
       if (data.msg === 'Success') {
         countSuccess += items.length;
         console.log(`Success: ${countSuccess}/${total}`);
@@ -366,7 +374,11 @@ async function importUserBehaviorToFpt() {
       break;
     }
     try {
-      await axiosInstance.post(url, items);
+      try {
+        await axiosInstance.post(url, items);
+      } catch {
+        //
+      }
       countSuccess += items.length;
       console.log(`Success: ${countSuccess}/${total}`);
     } catch (err) {

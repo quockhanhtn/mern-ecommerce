@@ -99,7 +99,7 @@ export default function CheckoutCart() {
     selectedItems,
     // isLoading: isLoadingCart,
     itemsCount,
-    fee: { discount, subTotal, shipping, total }
+    fee: { discount, subTotal, shipping, total, saveMoney }
   } = useSelector((state) => state.cart);
 
   const checkoutAreaRef = useRef();
@@ -169,12 +169,19 @@ export default function CheckoutCart() {
 
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Tiết kiệm
+          </Typography>
+          <Typography variant="subtitle2">{fCurrency(saveMoney, currentLang.value)}</Typography>
+        </Stack>
+
+        <Stack direction="row" justifyContent="space-between">
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             {t('cart.order.sub-total')}
           </Typography>
           <Typography variant="subtitle2">{fCurrency(subTotal, currentLang.value)}</Typography>
         </Stack>
 
-        <Stack direction="row" justifyContent="space-between">
+        {/* <Stack direction="row" justifyContent="space-between">
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             {t('cart.order.discount')}
           </Typography>
@@ -186,7 +193,7 @@ export default function CheckoutCart() {
             {t('cart.order.shipping-fee')}
           </Typography>
           <Typography variant="subtitle2">{fCurrency(shipping, currentLang.value)}</Typography>
-        </Stack>
+        </Stack> */}
 
         <Divider />
 

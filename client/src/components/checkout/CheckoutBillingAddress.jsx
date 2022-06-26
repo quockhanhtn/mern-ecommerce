@@ -219,12 +219,11 @@ export default function CheckoutBillingAddress() {
       userAddressId: initInfo.userAddressId || ''
     },
     validationSchema: OrderInfoSchema,
-    onSubmit: async (values, { setTouched, setSubmitting }) => {
-      setSubmitting(true);
+    onSubmit: async (values, { setSubmitting }) => {
       try {
         cartHelper.saveBillingInfo(values);
         handleNextStep();
-        // setSubmitting(true);
+        setSubmitting(true);
       } catch (e) {
         enqueueSnackbar('Lỗi', {
           variant: 'error'

@@ -10,6 +10,10 @@ function formatLocale(date, formatStr, locale) {
 }
 
 export function fDate(date, lang = 'vi') {
+  const dateObj = new Date(date);
+  if (dateObj.getFullYear() > 200000) {
+    return lang === 'vi' ? 'Vô hạn' : 'Infinity';
+  }
   return formatLocale(date, 'dd MMMM yyyy', locales[lang]);
 }
 

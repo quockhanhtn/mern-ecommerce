@@ -48,6 +48,7 @@
     "node-cron": "^3.0.0",
     "nodemailer": "^6.7.2",
     "nodemailer-express-handlebars": "^4.0.0",
+    "numeral": "^2.0.6",
     "query-string": "^7.0.1",
     "sanitize-html": "^2.6.0",
     "sharp": "^0.29.2",
