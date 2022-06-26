@@ -121,6 +121,10 @@ export default function ProductDetailsReviewList({ product }) {
     // console.log('comments', comments);
   }, [comments]);
 
+  if (!comments || comments.length < 1) {
+    return null;
+  }
+
   return (
     <Box sx={{ pt: 3, px: 2, pb: 5 }}>
       <List disablePadding>

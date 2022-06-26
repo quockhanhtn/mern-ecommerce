@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { allowImageMineTypes } from '../../constants.js';
-import { createDiscount, deleteDiscount, getDiscount, checkExistedCode, getDiscounts, hiddenDiscount, updateDiscount } from '../../controllers/discounts.controller.js';
-import { isAdmin, isCustomer } from '../../middlewares/jwt-auth.js';
+import { createDiscount, deleteDiscount, getDiscount, checkExistedCode, getDiscounts, hiddenDiscount, updateDiscount, validateDiscount } from '../../controllers/discounts.controller.js';
+import { isAdmin } from '../../middlewares/jwt-auth.js';
 import UploadUtils from '../../utils/UploadUtils.js';
 
 const router = Router();
@@ -24,6 +24,7 @@ router.route('/')
   );
 
 router.get('/isExistedCode/:code', isAdmin, checkExistedCode);
+router.get('/validate', validateDiscount);
 
 /* identity is _id or slug */
 router.route('/:identity')

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 // material
 import {
+  Alert,
   Box,
   Card,
   Stack,
@@ -15,6 +16,11 @@ import {
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocales } from '../../hooks';
+
+import CustomLoadingOverlay from '../loading-overlay';
+import CheckoutDiscountForm from './CheckoutDiscountForm';
+
+import { getAllDiscount, validateDiscount } from '../../api';
 // utils
 import { fCurrency, fNumber } from '../../utils/formatNumber';
 
@@ -30,20 +36,55 @@ export default function CheckoutSummary({ showDetail = false, sx }) {
   const {
     fee: { discount, subTotal, saveMoney, shipping, total }
   } = useSelector((state) => state.cart);
-
+  const [discountList, setDiscountList] = useState([]);
   const [discountCode, setDiscountCode] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMgs, setErrorMgs] = useState('');
 
-  const handleApplyDiscount = (e) => {
-    // nothing
+  async function fetchDiscounts() {
+    setIsLoading(true);
+    try {
+      const { data } = await getAllDiscount({
+        field: 'name,code,beginDate,endDate,quantity,unlimitedQty,discount,discountType,minimumTotal,maximumApplied'
+      });
+      setDiscountList(data.data);
+    } catch {
+      // do something
+    }
+    setIsLoading(false);
+  }
+
+  const handShowListDiscount = async (e) => {
+    if (!discountList || discountList.length < 1) {
+      await fetchDiscounts();
+    }
+    setIsOpen(true);
+  };
+  const handleApplyDiscount = async (e) => {
+    setIsLoading(true);
+    try {
+      const { data } = await validateDiscount({ code: discountCode, orderSubtotal: subTotal });
+    } catch (e) {
+      const mgs = '';
+      setErrorMgs(mgs);
+    }
+
+    setIsLoading(false);
   };
 
   return (
     <>
       {showDetail && (
+        <CheckoutDiscountForm open={isOpen} setOpen={setIsOpen} discounts={discountList} subTotal={subTotal} />
+      )}
+      {showDetail && isLoading && <CustomLoadingOverlay active={isLoading} />}
+      {showDetail && (
         <Card sx={{ mb: 3, ...sx }}>
           <CardHeader title="Giảm giá" />
           <CardContent>
             <Stack spacing={2}>
+              {errorMgs && <Alert severity="error">{errorMgs}</Alert>}
               <TextField
                 fullWidth
                 placeholder="Mã giảm giá"
@@ -59,6 +100,9 @@ export default function CheckoutSummary({ showDetail = false, sx }) {
                   )
                 }}
               />
+              <Button size="small" type="button" onClick={handShowListDiscount}>
+                Chọn mã giảm giá
+              </Button>
             </Stack>
           </CardContent>
         </Card>

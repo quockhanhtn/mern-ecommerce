@@ -1,4 +1,7 @@
 /* cSpell:disable */
+
+import FormatUtils from './utils/FormatUtils.js';
+
 export const responseDef = {
   AUTH: {
     USER_NOT_FOUND: {
@@ -108,6 +111,24 @@ export const responseDef = {
         en: 'Can not delete brand because it has products'
       }
     }
+  },
+  DISCOUNT: {
+    NOT_FOUND: {
+      status: 404,
+      code: 404001,
+      message: {
+        en: 'Discount not valid or expired',
+        vi: `Mã khuyến mãi không tồn tại hoặc đã hết hạn`
+      }
+    },
+    MINIMUM_TOTAL: (minimumTotal) => ({
+      status: 400,
+      code: 400001,
+      message: {
+        en: `Minimun order sub-total is ${FormatUtils.formatCurrency(minimumTotal, 'en')}`,
+        vi: `Giá trị đơn hàng tối thiểu là ${FormatUtils.formatCurrency(minimumTotal, 'vi')}`
+      }
+    }),
   }
 }
 

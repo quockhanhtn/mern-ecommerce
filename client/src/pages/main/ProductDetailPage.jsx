@@ -200,11 +200,11 @@ export default function ProductDetailPage() {
           ))}
         </Grid>
 
-        <Grid container>
+        {/* <Grid container>
           <Grid item xs={12} md={12} lg={12}>
             <ProductCarousel products={relatedItems} isLoading={isLoadingRelated} />
           </Grid>
-        </Grid>
+        </Grid> */}
 
         <Card>
           <TabContext value={tab}>
