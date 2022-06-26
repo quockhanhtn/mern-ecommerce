@@ -42,7 +42,7 @@ import {
   decreaseItemQty,
   removeItem
 } from '../../redux/slices/cartSlice';
-import { nextStepOrder } from '../../redux/slices/orderSlice';
+import { updateFeeFromCart, nextStepOrder } from '../../redux/slices/orderSlice';
 import { trackingClick } from '../../redux/slices/userBehaviorSlice';
 import { fCurrency, fNumber } from '../../utils/formatNumber';
 
@@ -128,6 +128,7 @@ export default function CheckoutCart() {
   };
 
   const handleNextStep = () => {
+    dispatch(updateFeeFromCart());
     dispatch(nextStepOrder());
   };
 
@@ -281,10 +282,7 @@ export default function CheckoutCart() {
                           onChange={handleSelectAll}
                           inputProps={{ 'aria-label': 'select all desserts' }}
                           color="primary"
-                          sx={{
-                            color: 'rgba(0,0,0,0)',
-                            '&:hover': { color: (theme) => theme.palette.primary.main }
-                          }}
+                          sx={{ color: 'rgba(0,0,0,0)', '&:hover': { color: (theme) => theme.palette.primary.main } }}
                         />
                       </TableCell>
                       <TableCell>{t('products.title')}</TableCell>
@@ -342,6 +340,14 @@ export default function CheckoutCart() {
                           </TableCell>
 
                           <TableCell align="right" sx={{ minWidth: 150 }}>
+                            {marketPrice && (
+                              <Typography
+                                variant="body2"
+                                sx={{ color: 'text.secondary', textDecoration: 'line-through' }}
+                              >
+                                {fCurrency(marketPrice, currentLang.value)}
+                              </Typography>
+                            )}
                             {fCurrency(price, currentLang.value)}
                           </TableCell>
 

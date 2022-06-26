@@ -39,7 +39,7 @@ export const ORDER = {
   }
 };
 
-export const DISCOUNT = {
+export const DISCOUNT_CONS = {
   TYPE: {
     PERCENT: 'percent',
     PRICE: 'price'

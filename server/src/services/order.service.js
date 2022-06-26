@@ -2,8 +2,10 @@ import mongoose from 'mongoose';
 import Order from '../models/order.model.js';
 import Product from '../models/product.model.js';
 import User from '../models/user.model.js';
+import Discount from '../models/discount.model.js';
 import constants from '../constants.js';
 import ApiErrorUtils from '../utils/ApiErrorUtils.js';
+import discountService from './discounts.service.js';
 
 export default {
   getOne,
@@ -131,9 +133,29 @@ async function createWithTransaction(orderData, createdBy) {
       return acc + cur.quantity * cur.pricePerUnit;
     }, 0);
 
-    // TODO: calculate shipping fee + check discount if have
-    const shippingFee = 0;
-    const discount = 0;
+    let discount = 0;
+    if (orderData.discountCode) {
+      try {
+        const { amount, info: discountInfo } = await discountService.calculateDiscountAmt(orderData.discountCode);
+        discount = amount;
+        if (!(discountInfo?.unlimitedQty || false)) {
+          await Discount.findByIdAndUpdate(
+            discountInfo._id,
+            { $inc: { 'quantity': -1 } },
+            { session }
+          );
+        }
+      } catch { }
+    }
+
+    let shippingFee;
+    if (subTotal > 500000 || orderData?.isReceiveAtStore) {
+      shippingFee = 0;
+    } else if (orderData?.address?.province?.toUpperCase().includes('HỒ CHÍ MINH')) {
+      shippingFee = 20000;
+    } else {
+      shippingFee = 30000;
+    }
 
     orderToSave.subTotal = subTotal;
     orderToSave.shippingFee = shippingFee;
@@ -319,8 +341,6 @@ async function update(userId, orderId, data) {
       throw ApiErrorUtils.simple('Order is not pending', 400);
     }
   }
-
-
 
   data.updatedBy = userId;
 
