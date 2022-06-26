@@ -75,8 +75,9 @@ export const updateBrand = (identity, updatedBrand) => API.patch(`/brands/${iden
 export const deleteBrand = (identity) => API.delete(`/brands/${identity}`);
 
 // ----------------------------Discount--------------------------------
-export const getAllDiscount = (fields) => (fields ? API.get(`/discounts?fields=${fields}`) : API.get('/discounts'));
+export const getAllDiscount = (params) => API.get('/discounts', { params });
 export const getOneDiscount = (identity) => API.get(`/discounts/${identity}`);
+export const checkExistedDiscountCode = (code) => API.get(`/discounts/isExistedCode/${code}`);
 export const createDiscount = (newDiscount) => API.post('/discounts', newDiscount);
 export const updateDiscount = (identity, updatedDiscount) => API.patch(`/discounts/${identity}`, updatedDiscount);
 export const deleteDiscount = (identity) => API.delete(`/discounts/${identity}`);

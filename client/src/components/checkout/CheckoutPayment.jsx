@@ -43,6 +43,7 @@ export default function CheckoutPayment() {
         redirect = orderCreated.paymentUrl;
       }
       window.open(redirect, '_self');
+      localStorage.removeItem('orderLocalStorage');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderCreated, error]);
@@ -150,7 +151,7 @@ export default function CheckoutPayment() {
 
           <Grid item xs={12} md={4}>
             <CheckoutBillingInfo orderInfo={orderInfo} onBackStep={handleBackStep} />
-            <CheckoutSummary />
+            <CheckoutSummary showDetail />
             <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isCreatingOrder}>
               {t('cart.order.action')}
             </LoadingButton>

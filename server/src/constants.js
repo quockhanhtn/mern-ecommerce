@@ -39,6 +39,13 @@ export const ORDER = {
   }
 };
 
+export const DISCOUNT = {
+  TYPE: {
+    PERCENT: 'percent',
+    PRICE: 'price'
+  }
+}
+
 export const REGEX = {
   /*
     * Username regex validation explain

@@ -8,8 +8,15 @@ const formatDiscount = (discount, req) => {
 
 export const getDiscounts = async (req, res, next) => {
   try {
-    const fields = req.query.fields || null;
-    let discounts = await discountService.getAll(fields);
+    const fields = req.query.fields || '';
+
+    let discounts = await discountService.getAll({
+      fields,
+      sortBy: req.query.sortBy || 'createdAt',
+      sortType: ((req.query.sort || 'desc') === 'asc') ? 1 : -1,
+      isShowAllDate: req.query?.isShowAllDate === '1',
+      isShowHidden: req.query?.isShowHidden === '1',
+    });
     discounts = discounts.map(discount => formatDiscount(discount, req));
     if (discounts && discounts.length > 0) {
       ResponseUtils.status200(res, 'Gets all discounts successfully', discounts);
@@ -30,6 +37,14 @@ export const getDiscount = async (req, res, next) => {
     }
   } catch (err) { next(err); }
 }
+
+export const checkExistedCode = async (req, res, next) => {
+  try {
+    const { code } = req.params;
+    const found = await discountService.getAll({ fields: '_id', filters: { code: code }, isShowHidden: true, isShowAllDate: true });
+    ResponseUtils.status200(res, '', (found && found.length > 0) ? '1' : '0');
+  } catch (err) { next(err); }
+};
 
 export const createDiscount = async (req, res, next) => {
   try {

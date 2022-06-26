@@ -11,22 +11,47 @@ export default {
   remove
 };
 
-const SELECT_FIELD = '_id slug name desc code fromDate endDate quantity discount image isHide createdAt updatedAt';
+const SELECT_FIELD = '_id slug name desc code beginDate endDate quantity discount image isHide createdAt updatedAt';
 
 /**
  *
  * @returns all discounts
  */
-async function getAll(fields) {
-  if (fields === null || fields == '') { fields = SELECT_FIELD; }
+async function getAll(options = {}) {
+  let {
+    fields,
+    filters = {},
+    sortBy = 'createdAt',
+    sortType = -1,
+    isShowHidden = false,
+    isShowAllDate = false,
+  } = options;
 
-  if (fields && fields.indexOf(',') > -1) {
+  if (StringUtils.isBlankOrEmpty(fields)) {
+    fields = SELECT_FIELD;
+  }
+
+  if (fields.indexOf(',') > -1) {
     fields = fields.split(',').join(' ');
   }
 
-  return await Discount.find()
+  if (!isShowHidden) {
+    filters.isHide = false;
+  }
+
+  const today = new Date().toISOString();
+
+  if (!isShowAllDate) {
+    filters.beginDate = { $lte: today };
+    filters.endDate = { $gte: today };
+  }
+
+  const sortOtp = {};
+  sortOtp[sortBy] = sortType;
+
+  return Discount.find(filters)
     .select(fields)
-    .sort({ createdAt: -1 })
+    .sort(sortOtp)
     .lean().exec();
 }
 
@@ -53,7 +78,16 @@ async function create(data) {
     _id: new mongoose.Types.ObjectId(),
     ...data
   });
-  return await discount.save();
+
+  if (!discount.beginDate) {
+    discount.beginDate = new Date(Date.now() - 86400000); // yesterday
+  }
+
+  if (!discount.endDate) {
+    discount.endDate = new Date(8640000000000000);
+  }
+
+  return discount.save();
 }
 
 /**

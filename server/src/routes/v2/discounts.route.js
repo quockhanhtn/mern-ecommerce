@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { allowImageMineTypes } from '../../constants.js';
-import { createDiscount, deleteDiscount, getDiscount, getDiscounts, hiddenDiscount, updateDiscount } from '../../controllers/discounts.controller.js';
+import { createDiscount, deleteDiscount, getDiscount, checkExistedCode, getDiscounts, hiddenDiscount, updateDiscount } from '../../controllers/discounts.controller.js';
 import { isAdmin, isCustomer } from '../../middlewares/jwt-auth.js';
-import  UploadUtils from '../../utils/UploadUtils.js';
+import UploadUtils from '../../utils/UploadUtils.js';
 
 const router = Router();
 const upload = UploadUtils.multerUpload('/discounts/', allowImageMineTypes);
@@ -22,6 +22,8 @@ router.route('/')
     UploadUtils.handleFilePath('image'),
     createDiscount
   );
+
+router.get('/isExistedCode/:code', isAdmin, checkExistedCode);
 
 /* identity is _id or slug */
 router.route('/:identity')

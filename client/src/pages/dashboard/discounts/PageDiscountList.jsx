@@ -26,9 +26,9 @@ import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
 import useLocales from '../../../hooks/useLocales';
 import LoadingScreen from '../../../components/LoadingScreen';
 import Label from '../../../components/Label';
-import { fDateTime } from '../../../utils/formatTime';
+import { fDateTime, fDate } from '../../../utils/formatTime';
 import Scrollbar from '../../../components/Scrollbar';
-import * as Helper from '../../../helper/listHelper';
+import { stableSort, getComparator } from '../../../helper/listHelper';
 import { DiscountListToolbar, DiscountListHead, DiscountMoreMenu } from '../../../components/dashboard/discount-list';
 import { deleteDiscount, getAllDiscounts } from '../../../redux/actions/discounts';
 import DiscountForm from './DiscountForm';
@@ -76,18 +76,18 @@ export default function PageDiscountList() {
       disablePadding: true,
       label: t('dashboard.discounts.code')
     },
-    {
-      id: 'quantity',
-      numeric: false,
-      disablePadding: true,
-      label: t('dashboard.discounts.quantity')
-    },
-    {
-      id: 'discount',
-      numeric: false,
-      disablePadding: true,
-      label: t('dashboard.discounts.discount')
-    },
+    // {
+    //   id: 'quantity',
+    //   numeric: false,
+    //   disablePadding: true,
+    //   label: t('dashboard.discounts.quantity')
+    // },
+    // {
+    //   id: 'discount',
+    //   numeric: false,
+    //   disablePadding: true,
+    //   label: t('dashboard.discounts.discount')
+    // },
     {
       id: 'isHide',
       numeric: false,
@@ -95,7 +95,7 @@ export default function PageDiscountList() {
       label: t('dashboard.discounts.status')
     },
     {
-      id: 'fromDate',
+      id: 'beginDate',
       numeric: true,
       disablePadding: false,
       label: t('dashboard.discounts.date-start')
@@ -114,9 +114,9 @@ export default function PageDiscountList() {
   ];
 
   const handleDeleteDiscount = async (id, slug) => {
-    await dispatch(deleteDiscount(id));
+    dispatch(deleteDiscount(id));
     dispatch(getAllDiscounts());
-    enqueueSnackbar(t('dashboard.brands.delete'), { variant: 'success' });
+    enqueueSnackbar(t('dashboard.discounts.delete'), { variant: 'success' });
     const index = selected.indexOf(slug);
     selected.splice(index, 1);
   };
@@ -228,10 +228,10 @@ export default function PageDiscountList() {
                     onSelectAllClick={handleSelectAllClick}
                   />
                   <TableBody>
-                    {Helper.stableSort(discountsList, Helper.getComparator(order, orderBy))
+                    {stableSort(discountsList, getComparator(order, orderBy))
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row, index) => {
-                        const { _id, slug, name, code, discount, quantity, image, fromDate, endDate, isHide } = row;
+                        const { _id, slug, name, code, image, beginDate, endDate, isHide } = row;
                         const isItemSelected = isSelected(slug);
                         const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -271,7 +271,7 @@ export default function PageDiscountList() {
                                 {code.toUpperCase()}
                               </Typography>
                             </TableCell>
-                            <TableCell align="left" style={{ minWidth: 40 }}>
+                            {/* <TableCell align="left" style={{ minWidth: 40 }}>
                               <Typography variant="subtitle4" noWrap>
                                 {quantity}
                               </Typography>
@@ -280,20 +280,20 @@ export default function PageDiscountList() {
                               <Typography variant="subtitle4" noWrap>
                                 {discount}%
                               </Typography>
-                            </TableCell>
+                            </TableCell> */}
                             <TableCell align="left">
                               <Label
                                 variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
                                 color={isHide ? 'default' : 'success'}
                               >
-                                {t(`dashboard.brands.${isHide ? 'hidden' : 'visible'}`)}
+                                {t(`dashboard.discounts.${isHide ? 'hidden' : 'visible'}`)}
                               </Label>
                             </TableCell>
                             <TableCell align="right" style={{ minWidth: 160 }}>
-                              {fDateTime(fromDate, currentLang.value)}
+                              {fDate(beginDate, currentLang.value)}
                             </TableCell>
                             <TableCell align="right" style={{ minWidth: 160 }}>
-                              {fDateTime(endDate, currentLang.value)}
+                              {fDate(endDate, currentLang.value)}
                             </TableCell>
                             <TableCell align="right" onClick={(event) => event.stopPropagation()}>
                               <DiscountMoreMenu
