@@ -353,7 +353,7 @@ async function importUserBehaviorToFpt() {
   let list = await userBehaviorService.getDataWithCalculateScore();
   console.log(`Loaded ${list.length} items from db !`);
 
-  const datasetName = 'UserBehaviorDataset';
+  const datasetName = 'UserBased_Dataset';
   const baseURL = 'https://recom.fpt.vn/api/v0.1/recommendation/dataset/';
   const apiToken = process.env.FPT_API_TOKEN;
 
