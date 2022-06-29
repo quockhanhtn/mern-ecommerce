@@ -6,7 +6,7 @@ import plusFill from '@iconify/icons-eva/plus-fill';
 import editFill from '@iconify/icons-eva/edit-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 // material
-import { Box, Card, Button, Typography, Stack, Paper } from '@material-ui/core';
+import { Box, Grid, Card, Button, Typography, Stack, Paper } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 import { addressActions } from '../../redux/slices/accountSlice';
@@ -15,7 +15,7 @@ import useLocales from '../../hooks/useLocales';
 //
 import AddressForm from './AddressForm';
 import Label from '../Label';
-import { MButton } from '../@material-extend';
+import { MButton, MCircularProgress } from '../@material-extend';
 
 // ----------------------------------------------------------------------
 
@@ -89,6 +89,19 @@ export default function AccountAddressBook() {
     }
     setOpenForm(false);
   };
+
+  if (isLoading) {
+    return (
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
+            <MCircularProgress />
+            <Typography>{t('common.please-wait')}</Typography>
+          </Card>
+        </Grid>
+      </Grid>
+    );
+  }
 
   return (
     <>

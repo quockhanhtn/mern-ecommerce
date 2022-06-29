@@ -2,6 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import * as api from '../../api';
 
 const initialState = {
+  info: {},
+  isLoading: true,
+  error: null,
   addresses: {
     isLoading: false,
     error: null,
@@ -13,6 +16,19 @@ const accountSlice = createSlice({
   name: 'account',
   initialState,
   reducers: {
+    startLoading(state) {
+      state.isLoading = true;
+    },
+    hasError(state, action) {
+      state.error = action.payload;
+      state.isLoading = false;
+    },
+    getInfoSuccess(state, action) {
+      state.info = action.payload;
+      state.isLoading = false;
+      state.error = null;
+    },
+
     addressesStartLoading(state) {
       state.addresses.isLoading = true;
     },
@@ -46,6 +62,16 @@ const accountSlice = createSlice({
 const { actions, reducer } = accountSlice;
 
 export default reducer;
+
+export const getAccountInfo = () => async (dispatch) => {
+  try {
+    dispatch(actions.startLoading());
+    const { data } = await api.getInfo();
+    dispatch(actions.getInfoSuccess(data.data));
+  } catch (e) {
+    dispatch(actions.hasError(e?.response?.data || e));
+  }
+};
 
 export const addressActions = {
   getAll: () => async (dispatch) => {

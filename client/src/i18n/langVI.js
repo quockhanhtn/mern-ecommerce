@@ -1,6 +1,7 @@
 /* cSpell:disable */
 export default {
   common: {
+    'please-wait': 'Vui lòng chờ ...',
     'search-placeholder': 'Tìm kiếm...',
     'search-btn': 'Tìm',
     'rows-per-page': 'Số hàng trên trang',
@@ -48,7 +49,15 @@ export default {
     order: 'Đơn hàng',
     'address-book': 'Sổ địa chỉ',
     'change-password': 'Đổi mật khẩu',
-    config: 'Cài đặt'
+    config: 'Cài đặt',
+    'first-name': 'Tên',
+    'first-name-required': 'Vui lòng nhập tên',
+    'first-name-min': 'Tên phải có ít nhất 3 kí tự',
+    'first-name-max': 'Tên có tối đa 30 kí tự',
+    'last-name': 'Họ & tên đệm',
+    'last-name-required': 'Vui lòng nhập Họ & tên đệm',
+    'last-name-min': 'Họ & tên đệm phải có ít nhất 3 kí tự',
+    'last-name-max': 'Họ & tên đệm có tối đa 30 kí tự'
   },
   address: {
     title: 'Địa chỉ',

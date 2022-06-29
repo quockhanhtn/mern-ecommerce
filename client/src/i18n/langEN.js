@@ -1,5 +1,6 @@
 export default {
   common: {
+    'please-wait': 'Please wait ...',
     'search-placeholder': 'Search...',
     'search-btn': 'Search',
     'rows-per-page': 'Rows per page',

@@ -8,8 +8,8 @@ import CipherUtils from '../utils/CipherUtils.js';
 const userSchema = mongoose.Schema(
   {
     _id: mongoose.Types.ObjectId,
-    firstName: { type: String, trim: true, required: true },
-    lastName: { type: String, trim: true, required: true },
+    firstName: { type: String, trim: true, required: true, minLength: 3, maxLength: 30 },
+    lastName: { type: String, trim: true, required: true, minLength: 3, maxLength: 50 },
 
     gender: {
       type: String, trim: true,

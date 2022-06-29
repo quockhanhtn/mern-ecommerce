@@ -1,59 +1,83 @@
-// import faker from 'faker';
-// import * as Yup from 'yup';
-// import { useSnackbar } from 'notistack';
-// import { useCallback } from 'react';
-// import { Form, FormikProvider, useFormik } from 'formik';
+// form validation
+import * as Yup from 'yup';
+import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { Box, Grid, Card, Stack, Switch, FormControlLabel, Typography } from '@material-ui/core';
 // hooks
-// import { useIsMountedRef } from '../../hooks';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocales } from '../../hooks';
+import { getAccountInfo } from '../../redux/slices/accountSlice';
+
+import { MCircularProgress } from '../@material-extend';
 import { UploadAvatar } from '../upload';
+
 // utils
 import { fData } from '../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
-  // const isMountedRef = useIsMountedRef();
-  // const { enqueueSnackbar } = useSnackbar();
-  // const user = {
-  //   id: '8864c717-587d-472a-929a-8e5f298024da-0',
-  //   displayName: 'Jaydon Frankie',
-  //   email: 'demo@minimals.cc',
-  //   password: 'demo1234',
-  //   photoURL: '/static/mock-images/avatars/avatar_default.jpg',
-  //   phoneNumber: '+40 777666555',
-  //   country: 'United States',
-  //   address: '90210 Broadway Blvd',
-  //   state: 'California',
-  //   city: 'San Francisco',
-  //   zipCode: '94116',
-  //   about: faker.lorem.paragraphs(),
-  //   role: 'admin',
-  //   isPublic: true
-  // };
+  const { t } = useLocales();
+  const dispatch = useDispatch();
+  const { info: accountInfo, isLoading, error } = useSelector((state) => state.account);
 
-  // const handleDrop = useCallback(
-  //   (acceptedFiles) => {
-  //     const file = acceptedFiles[0];
-  //     if (file) {
-  //       setFieldValue('photoURL', {
-  //         ...file,
-  //         preview: URL.createObjectURL(file)
-  //       });
-  //     }
-  //   },
-  //   [setFieldValue]
-  // );
+  useEffect(() => {
+    dispatch(getAccountInfo());
+  }, []);
+
+  const AccountInfoSchema = Yup.object().shape({
+    firstName: Yup.string()
+      .required(t('account.first-name-required'))
+      .min(3, t('account.first-name-min'))
+      .max(30, t('account.first-name-max')),
+    lastName: Yup.string()
+      .required(t('account.last-name-required'))
+      .min(3, t('account.last-name-min'))
+      .max(50, t('account.last-name-max')),
+    dob: Yup.date(),
+    email: Yup.string()
+      .required(t('account.email-required'))
+      .matches(
+        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+        t('account.email-invalid')
+      ),
+    phone: Yup.string()
+      .required(t('address.phone-required'))
+      .matches(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, t('address.phone-invalid')),
+    avatar: Yup.string()
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      firstName: ''
+    },
+    validationSchema: AccountInfoSchema,
+    onSubmit: async (values, { setSubmitting }) => {
+      // onsubmit
+    }
+  });
+
+  if (isLoading) {
+    return (
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
+            <MCircularProgress />
+            <Typography>{t('common.please-wait')}</Typography>
+          </Card>
+        </Grid>
+      </Grid>
+    );
+  }
 
   return (
-    // <Form autoComplete="off" noValidate>
     <Grid container spacing={3}>
       <Grid item xs={12} md={4}>
         <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
           <UploadAvatar
             accept="image/*"
-            // file={values.photoURL}
+            file={accountInfo.avatar}
             // maxSize={3145728}
             // onDrop={handleDrop}
             // error={Boolean(touched.photoURL && errors.photoURL)}
