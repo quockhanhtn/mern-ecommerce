@@ -9,7 +9,7 @@ import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import { Box, Card, Button, Typography, Stack, Paper } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllAddresses, createAddress, updateAddress, deleteAddress } from '../../redux/actions/account';
+import { addressActions } from '../../redux/slices/accountSlice';
 //
 import useLocales from '../../hooks/useLocales';
 //
@@ -58,7 +58,7 @@ export default function AccountAddressBook() {
   const [editAddress, setEditAddress] = useState(null);
 
   useEffect(() => {
-    dispatch(getAllAddresses());
+    dispatch(addressActions.getAll());
   }, [dispatch]);
 
   const handleAdd = () => {
@@ -74,7 +74,7 @@ export default function AccountAddressBook() {
   };
 
   const handleDelete = (id) => {
-    dispatch(deleteAddress(id));
+    dispatch(addressActions.delete(id));
   };
 
   const handleClose = () => {
@@ -83,9 +83,9 @@ export default function AccountAddressBook() {
 
   const handleSave = (data) => {
     if (editAddress) {
-      dispatch(updateAddress(editAddress._id, data));
+      dispatch(addressActions.update(editAddress._id, data));
     } else {
-      dispatch(createAddress(data));
+      dispatch(addressActions.create(data));
     }
     setOpenForm(false);
   };
