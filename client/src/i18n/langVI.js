@@ -57,7 +57,12 @@ export default {
     'last-name': 'Họ & tên đệm',
     'last-name-required': 'Vui lòng nhập Họ & tên đệm',
     'last-name-min': 'Họ & tên đệm phải có ít nhất 3 kí tự',
-    'last-name-max': 'Họ & tên đệm có tối đa 30 kí tự'
+    'last-name-max': 'Họ & tên đệm có tối đa 30 kí tự',
+    dob: 'Ngày sinh',
+    gender: 'Giới tính',
+    'gender-male': 'Nam',
+    'gender-female': 'Nữ',
+    'gender-other': 'Khác'
   },
   address: {
     title: 'Địa chỉ',
