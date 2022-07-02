@@ -19,7 +19,7 @@ alt every hour at minute 0
 end
 
 
-u -> c: Xem sản phẩm hoặc ở trang thủ
+u -> c: Xem sản phẩm hoặc ở trang chủ
 c -> f: GetRecommendedByUser(userIdentifier)
 
 alt Fpt No Response
