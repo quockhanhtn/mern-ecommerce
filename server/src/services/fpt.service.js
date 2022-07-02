@@ -181,7 +181,7 @@ async function importProductDataToFpt() {
   let countError = 0, countSuccess = 0, total = list.length;
   let errorDetails = [];
   let isSuccess = true;
-  let step = 1;
+  let step = 20;
 
   let errorList = [];
   let requestFailed = 0;
@@ -194,12 +194,9 @@ async function importProductDataToFpt() {
     }
     try {
       let data = {};
-      try {
-        const res = await axiosInstance.post(url, items);
-        data = res.data;
-      } catch (exp) {
-        data.msg = 'Success';
-      }
+
+      const res = await axiosInstance.post(url, items);
+      data = res.data;
 
       if (data.msg === 'Success') {
         countSuccess += items.length;
@@ -374,11 +371,7 @@ async function importUserBehaviorToFpt() {
       break;
     }
     try {
-      try {
-        await axiosInstance.post(url, items);
-      } catch {
-        //
-      }
+      await axiosInstance.post(url, items);
       countSuccess += items.length;
       console.log(`Success: ${countSuccess}/${total}`);
     } catch (err) {

@@ -1,59 +1,124 @@
-// import faker from 'faker';
-// import * as Yup from 'yup';
-// import { useSnackbar } from 'notistack';
-// import { useCallback } from 'react';
-// import { Form, FormikProvider, useFormik } from 'formik';
+// form validation
+import * as Yup from 'yup';
+import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import { Box, Grid, Card, Stack, Switch, FormControlLabel, Typography } from '@material-ui/core';
+import {
+  Autocomplete,
+  Button,
+  Box,
+  Grid,
+  Card,
+  Stack,
+  Switch,
+  FormControlLabel,
+  TextField,
+  Typography
+} from '@material-ui/core';
+import { MobileDatePicker, LoadingButton } from '@material-ui/lab';
 // hooks
-// import { useIsMountedRef } from '../../hooks';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocales } from '../../hooks';
+import { getAccountInfo } from '../../redux/slices/accountSlice';
+
+import { MCircularProgress } from '../@material-extend';
 import { UploadAvatar } from '../upload';
+
 // utils
 import { fData } from '../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
-  // const isMountedRef = useIsMountedRef();
-  // const { enqueueSnackbar } = useSnackbar();
-  // const user = {
-  //   id: '8864c717-587d-472a-929a-8e5f298024da-0',
-  //   displayName: 'Jaydon Frankie',
-  //   email: 'demo@minimals.cc',
-  //   password: 'demo1234',
-  //   photoURL: '/static/mock-images/avatars/avatar_default.jpg',
-  //   phoneNumber: '+40 777666555',
-  //   country: 'United States',
-  //   address: '90210 Broadway Blvd',
-  //   state: 'California',
-  //   city: 'San Francisco',
-  //   zipCode: '94116',
-  //   about: faker.lorem.paragraphs(),
-  //   role: 'admin',
-  //   isPublic: true
-  // };
+  const { t } = useLocales();
+  const dispatch = useDispatch();
+  const { info: accountInfo, isLoading, error } = useSelector((state) => state.account);
 
-  // const handleDrop = useCallback(
-  //   (acceptedFiles) => {
-  //     const file = acceptedFiles[0];
-  //     if (file) {
-  //       setFieldValue('photoURL', {
-  //         ...file,
-  //         preview: URL.createObjectURL(file)
-  //       });
-  //     }
-  //   },
-  //   [setFieldValue]
-  // );
+  const genderOpts = [
+    { name: t('account.gender-male'), value: 'male' },
+    { name: t('account.gender-female'), value: 'female' },
+    { name: t('account.gender-other'), value: 'other' }
+  ];
+
+  useEffect(() => {
+    dispatch(getAccountInfo());
+  }, []);
+
+  const AccountInfoSchema = Yup.object().shape({
+    firstName: Yup.string()
+      .required(t('account.first-name-required'))
+      .min(3, t('account.first-name-min'))
+      .max(30, t('account.first-name-max')),
+    lastName: Yup.string()
+      .required(t('account.last-name-required'))
+      .min(3, t('account.last-name-min'))
+      .max(50, t('account.last-name-max')),
+    dob: Yup.date(),
+    email: Yup.string()
+      // .required(t('account.email-required'))
+      .matches(
+        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+        t('account.email-invalid')
+      ),
+    phone: Yup.string()
+      // .required(t('address.phone-required'))
+      .matches(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, t('address.phone-invalid')),
+    avatar: Yup.string()
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      firstName: '',
+      gender: 'other',
+      dob: null
+    },
+    validationSchema: AccountInfoSchema,
+    onSubmit: async (values, { setSubmitting }) => {
+      // onsubmit
+    }
+  });
+
+  const { values, errors, touched, getFieldProps, setFieldValue } = formik;
+
+  useEffect(() => {
+    Object.entries(accountInfo).forEach(([key, value]) => {
+      if (key === 'dob' && !value) {
+        setFieldValue(key, null);
+      } else {
+        setFieldValue(key, value);
+      }
+    });
+  }, [accountInfo, setFieldValue]);
+
+  const handleCancel = (_e) => {
+    Object.entries(accountInfo).forEach(([key, value]) => {
+      setFieldValue(key, value);
+    });
+  };
+  const handleSaveChange = (_e) => {
+    // change
+  };
+
+  if (isLoading) {
+    return (
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
+            <MCircularProgress />
+            <Typography>{t('common.please-wait')}</Typography>
+          </Card>
+        </Grid>
+      </Grid>
+    );
+  }
 
   return (
-    // <Form autoComplete="off" noValidate>
     <Grid container spacing={3}>
       <Grid item xs={12} md={4}>
-        <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
+        <Card sx={{ py: 8, px: 3, textAlign: 'center' }}>
           <UploadAvatar
             accept="image/*"
-            // file={values.photoURL}
+            file={accountInfo.avatar}
             // maxSize={3145728}
             // onDrop={handleDrop}
             // error={Boolean(touched.photoURL && errors.photoURL)}
@@ -90,49 +155,78 @@ export default function AccountGeneral() {
       <Grid item xs={12} md={8}>
         <Card sx={{ p: 3 }}>
           <Stack spacing={{ xs: 2, md: 3 }}>
-            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-              {/* <TextField fullWidth label="Name" {...getFieldProps('displayName')} /> */}
-              {/* <TextField fullWidth disabled label="Email Address" {...getFieldProps('email')} /> */}
-            </Stack>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label={t('account.last-name')}
+                  {...getFieldProps('lastName')}
+                  error={Boolean(touched.lastName && errors.lastName)}
+                  helperText={touched.lastName && errors.lastName}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label={t('account.first-name')}
+                  {...getFieldProps('firstName')}
+                  error={Boolean(touched.firstName && errors.firstName)}
+                  helperText={touched.firstName && errors.firstName}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Autocomplete
+                  disableClearable
+                  required
+                  fullWidth
+                  options={genderOpts}
+                  getOptionLabel={(option) => option.name}
+                  value={genderOpts.find((x) => x.value === values.gender)}
+                  onChange={(e, newValue) => {
+                    if (newValue && newValue?.value) {
+                      setFieldValue('gender', newValue.value);
+                    }
+                  }}
+                  renderInput={(params) => <TextField {...params} label={t('account.gender')} margin="none" />}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <MobileDatePicker
+                  orientation="portrait"
+                  label={t('account.dob')}
+                  inputFormat="dd/MM/yyyy"
+                  value={values.dob}
+                  minDate={new Date('1900-01-01')}
+                  maxDate={new Date(Date.now() - 86400000 * 365 * 5)}
+                  onChange={(newValue) => setFieldValue('dob', newValue)}
+                  renderInput={(params) => <TextField fullWidth {...params} value="5" margin="none" />}
+                />
+              </Grid>
+            </Grid>
 
-            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-              {/* <TextField fullWidth label="Phone Number" {...getFieldProps('phoneNumber')} />
-                <TextField fullWidth label="Address" {...getFieldProps('address')} /> */}
-            </Stack>
-
-            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-              {/* <TextField
-                    select
-                    fullWidth
-                    label="Country"
-                    placeholder="Country"
-                    {...getFieldProps('country')}
-                    SelectProps={{ native: true }}
-                    error={Boolean(touched.country && errors.country)}
-                    helperText={touched.country && errors.country}
-                  >
-                    <option value="" />
-                    {countries.map((option) => (
-                      <option key={option.code} value={option.label}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </TextField> */}
-              {/* <TextField fullWidth label="State/Region" {...getFieldProps('state')} /> */}
-            </Stack>
-
-            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-              {/* <TextField fullWidth label="City" {...getFieldProps('city')} /> */}
-              {/* <TextField fullWidth label="Zip/Code" {...getFieldProps('zipCode')} /> */}
-            </Stack>
-
-            {/* <TextField {...getFieldProps('about')} fullWidth multiline minRows={4} maxRows={4} label="About" /> */}
+            <TextField
+              fullWidth
+              label={t('auth.email')}
+              {...getFieldProps('email')}
+              error={Boolean(touched.email && errors.email)}
+              helperText={touched.email && errors.email}
+            />
+            <TextField
+              fullWidth
+              label={t('auth.phone')}
+              {...getFieldProps('phone')}
+              error={Boolean(touched.phone && errors.phone)}
+              helperText={touched.phone && errors.phone}
+            />
           </Stack>
 
           <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-            {/* <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Save Changes
-              </LoadingButton> */}
+            <Button variant="outlined" color="inherit" sx={{ mr: 2 }} onClick={handleCancel}>
+              {t('common.cancel')}
+            </Button>
+            <LoadingButton variant="contained" loading={isLoading} onClick={handleSaveChange}>
+              {t('common.save-change')}
+            </LoadingButton>
           </Box>
         </Card>
       </Grid>

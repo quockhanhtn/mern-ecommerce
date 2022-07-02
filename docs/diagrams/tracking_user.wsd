@@ -1,0 +1,40 @@
+@startuml tracking_user
+!theme cerulean
+
+actor       User       as u
+participant Client as c
+participant Server as s
+participant Database as d
+
+u -> c: Truy cập
+
+alt Đã đăng nhập
+  c -> c: SetUserIdentifier(userId)
+else Chưa dăng nhập
+  c -> c: SetUserIdentifier(Gen UUID)
+end
+
+u -> c: Click vào sản phẩm
+c -> c: Lưu lại hành vi người dùng
+u -> c: Xem sản phẩm
+c -> c: Lưu lại hành vi người dùng
+u -> c: Thêm vào giỏ hàng
+c -> c: Lưu lại hành vi người dùng
+u -> c: Mua hàng
+c -> c: Lưu lại hành vi người dùng
+
+alt every 5s
+  c -> s: SendTrackingData(data, userIdentifier)
+  s -> d: SaveData()
+  d -> s: SaveResult()
+
+  alt Lưu tracking data thành công
+    s -> c: SuccessResponse()
+    c -> c: ClearSentData()
+  else Lưu tracking data thất bại
+    s -> c: ErrorResponse()
+    c -> c: KeepData()
+  end
+end
+
+@endumc

@@ -40,8 +40,8 @@ import CheckoutSummary from './CheckoutSummary';
 // other
 import * as cartHelper from '../../helper/localStorageHelper';
 // actions
-import { getAllAddresses, createAddress } from '../../redux/actions/account';
 import { setOrderInfo, backStepOrder, nextStepOrder } from '../../redux/slices/orderSlice';
+import { addressActions } from '../../redux/slices/accountSlice';
 
 // ----------------------------------------------------------------------
 
@@ -112,7 +112,7 @@ export default function CheckoutBillingAddress() {
   const initInfo = cartHelper.getOrderInfo();
 
   useEffect(() => {
-    dispatch(getAllAddresses());
+    dispatch(addressActions.getAll());
   }, [user, dispatch]);
 
   // useEffect(() => {
@@ -244,7 +244,7 @@ export default function CheckoutBillingAddress() {
   };
 
   const handleSaveAddress = (data) => {
-    dispatch(createAddress(data));
+    dispatch(addressActions.create(data));
     setOpenForm(false);
   };
 
