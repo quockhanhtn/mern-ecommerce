@@ -11,7 +11,7 @@ import { LoadingButton } from '@material-ui/lab';
 import { useLayoutEffect } from 'react';
 import { useSnackbar } from 'notistack';
 import { useSelector, useDispatch } from 'react-redux';
-import { useAuth, useLocales } from '../../hooks';
+import { useLocales } from '../../hooks';
 // components
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutBillingInfo from './CheckoutBillingInfo';

@@ -66,7 +66,7 @@ export default reducer;
 export const getAccountInfo = () => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    const { data } = await api.getInfo();
+    const { data } = await api.getAccountInfo();
     dispatch(actions.getInfoSuccess(data.data));
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));

@@ -16,7 +16,7 @@ export default {
 };
 
 const SELECTED_FIELDS =
-  '_id firstName lastName gender email phone username avatar role status emptyPassword createdAt updatedAt';
+  '_id firstName lastName gender dob email phone username avatar role status emptyPassword createdAt updatedAt';
 
 /**
  *
@@ -47,7 +47,10 @@ async function getListByRole(role) {
 async function getOne(identity, selectFields = null, needVirtuals = true) {
   const filter = {};
 
-  if (StringUtils.isEmailAddress(identity)) {
+  if (StringUtils.isUUID(identity)) {
+    filter._id = identity;
+  }
+  else if (StringUtils.isEmailAddress(identity)) {
     filter.email = identity;
   } else if (StringUtils.isPhoneNumber(identity)) {
     filter.phone = identity;
@@ -130,16 +133,21 @@ async function update(identity, updatedData) {
 
   let updatedDataNew = new User({
     ...updatedData,
-    username: updatedData.email,
+    // username: updatedData.email,
     firstName: updatedData.firstName,
     lastName: updatedData.lastName,
     gender: updatedData.gender,
     dob: updatedData.dob,
     phone: updatedData.phone,
+    email: updatedData.email,
     fullName: `${updatedData.firstName} ${updatedData.lastName}`,
   });
 
-  const updatedUser = await User.findByIdAndUpdate(currentUser._id, updatedDataNew, { new: true });
+  const updatedUser = await User.findByIdAndUpdate(
+    currentUser._id,
+    updatedDataNew,
+    { new: true, fields: SELECTED_FIELDS }
+  );
   if (updatedUser) {
     return updatedUser;
   } else {
@@ -153,7 +161,7 @@ async function updateById(id, updated, selectFields = null) {
   return User.findByIdAndUpdate(
     id,
     updated,
-    { new: true, select: SELECTED_FIELDS }
+    { new: true, select: selectFields }
   );
 }
 

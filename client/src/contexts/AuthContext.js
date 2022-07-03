@@ -72,7 +72,8 @@ const AuthContext = createContext({
   user: null,
   register: () => Promise.resolve(),
   login: () => Promise.resolve(),
-  logout: () => Promise.resolve()
+  logout: () => Promise.resolve(),
+  reInitialize: () => Promise.resolve()
 });
 
 AuthProvider.propTypes = {
@@ -82,34 +83,34 @@ AuthProvider.propTypes = {
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  useEffect(() => {
-    const initialize = async () => {
-      try {
-        const accessToken = window.localStorage.getItem('accessToken');
+  const initialize = async () => {
+    try {
+      const accessToken = window.localStorage.getItem('accessToken');
 
-        if (accessToken && isValidToken(accessToken)) {
-          setSession(accessToken);
+      if (accessToken && isValidToken(accessToken)) {
+        setSession(accessToken);
 
-          const { data } = await api.getInfo();
-          const userInfo = data.data;
+        const { data } = await api.getAccountInfo();
+        const userInfo = data.data;
 
-          dispatch({ type: 'INITIALIZE', payload: { isAuthenticated: true, user: userInfo } });
-        } else {
-          setSession(null); // clear session
-          dispatch({ type: 'INITIALIZE', payload: { isAuthenticated: false, user: null } });
-        }
-      } catch (err) {
-        console.error(err);
-        dispatch({
-          type: 'INITIALIZE',
-          payload: {
-            isAuthenticated: false,
-            user: null
-          }
-        });
+        dispatch({ type: 'INITIALIZE', payload: { isAuthenticated: true, user: userInfo } });
+      } else {
+        setSession(null); // clear session
+        dispatch({ type: 'INITIALIZE', payload: { isAuthenticated: false, user: null } });
       }
-    };
+    } catch (err) {
+      console.error(err);
+      dispatch({
+        type: 'INITIALIZE',
+        payload: {
+          isAuthenticated: false,
+          user: null
+        }
+      });
+    }
+  };
 
+  useEffect(() => {
     initialize();
   }, []);
 
@@ -174,7 +175,8 @@ function AuthProvider({ children }) {
         register: registerAction,
         login: loginAction,
         logout: logoutAction,
-        googleOAuth: googleOAuthAction
+        googleOAuth: googleOAuthAction,
+        reInitialize: initialize
       }}
     >
       {children}
