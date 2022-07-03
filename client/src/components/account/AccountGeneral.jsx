@@ -1,6 +1,6 @@
 // form validation
 import * as Yup from 'yup';
-import { useFormik, Form, FormikProvider } from 'formik';
+import { useFormik } from 'formik';
 // material
 import {
   Autocomplete,
@@ -14,15 +14,19 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
-import { MobileDatePicker, LoadingButton } from '@material-ui/lab';
+import { MobileDatePicker } from '@material-ui/lab';
 // hooks
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocales } from '../../hooks';
+import { useSnackbar } from 'notistack';
+import { useLocales, useAuth } from '../../hooks';
 import { getAccountInfo } from '../../redux/slices/accountSlice';
 
+import CustomLoadingOverlay from '../loading-overlay';
 import { MCircularProgress } from '../@material-extend';
 import { UploadAvatar } from '../upload';
+
+import { updateAccountInfo } from '../../api';
 
 // utils
 import { fData } from '../../utils/formatNumber';
@@ -31,8 +35,11 @@ import { fData } from '../../utils/formatNumber';
 
 export default function AccountGeneral() {
   const { t } = useLocales();
+  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const { info: accountInfo, isLoading, error } = useSelector((state) => state.account);
+  const { reInitialize } = useAuth();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const genderOpts = [
     { name: t('account.gender-male'), value: 'male' },
@@ -44,14 +51,27 @@ export default function AccountGeneral() {
     dispatch(getAccountInfo());
   }, []);
 
+  async function handleUpdateAccountInfo(data) {
+    setIsUpdating(true);
+    try {
+      await updateAccountInfo(data);
+      dispatch(getAccountInfo());
+      await reInitialize();
+      enqueueSnackbar(t('account.update-success'), { variant: 'success' });
+    } catch (e) {
+      console.log('Update account info error: ', e);
+    }
+    setIsUpdating(false);
+  }
+
   const AccountInfoSchema = Yup.object().shape({
     firstName: Yup.string()
       .required(t('account.first-name-required'))
-      .min(3, t('account.first-name-min'))
+      // .min(1, t('account.first-name-min'))
       .max(30, t('account.first-name-max')),
     lastName: Yup.string()
       .required(t('account.last-name-required'))
-      .min(3, t('account.last-name-min'))
+      // .min(1, t('account.last-name-min'))
       .max(50, t('account.last-name-max')),
     dob: Yup.date(),
     email: Yup.string()
@@ -72,10 +92,10 @@ export default function AccountGeneral() {
       gender: 'other',
       dob: null
     },
-    validationSchema: AccountInfoSchema,
-    onSubmit: async (values, { setSubmitting }) => {
-      // onsubmit
-    }
+    validationSchema: AccountInfoSchema
+    // onSubmit: async (values, { setSubmitting }) => {
+    //   await handleUpdateAccountInfo(values);
+    // }
   });
 
   const { values, errors, touched, getFieldProps, setFieldValue } = formik;
@@ -96,24 +116,36 @@ export default function AccountGeneral() {
     });
   };
   const handleSaveChange = (_e) => {
-    // change
+    if (errors) {
+      const mgs = Object.entries(errors)
+        .map(([_, mgs]) => mgs)
+        .join('\n');
+      enqueueSnackbar(mgs, { variant: 'error' });
+      return;
+    }
+    handleUpdateAccountInfo(values);
   };
 
   if (isLoading) {
     return (
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
-            <MCircularProgress />
-            <Typography>{t('common.please-wait')}</Typography>
-          </Card>
+      <>
+        {isUpdating && <CustomLoadingOverlay active={isUpdating} />}
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
+              <MCircularProgress />
+              <Typography>{t('common.please-wait')}</Typography>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
+      </>
     );
   }
 
   return (
     <Grid container spacing={3}>
+      {isUpdating && <CustomLoadingOverlay active={isUpdating} />}
+
       <Grid item xs={12} md={4}>
         <Card sx={{ py: 8, px: 3, textAlign: 'center' }}>
           <UploadAvatar
@@ -208,25 +240,25 @@ export default function AccountGeneral() {
               fullWidth
               label={t('auth.email')}
               {...getFieldProps('email')}
-              error={Boolean(touched.email && errors.email)}
-              helperText={touched.email && errors.email}
+              error={Boolean(errors.email)}
+              helperText={errors.email}
             />
             <TextField
               fullWidth
               label={t('auth.phone')}
               {...getFieldProps('phone')}
-              error={Boolean(touched.phone && errors.phone)}
-              helperText={touched.phone && errors.phone}
+              error={Boolean(errors.phone)}
+              helperText={errors.phone}
             />
           </Stack>
 
           <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button variant="outlined" color="inherit" sx={{ mr: 2 }} onClick={handleCancel}>
+            <Button type="reset" variant="outlined" color="inherit" sx={{ mr: 2 }} onClick={handleCancel}>
               {t('common.cancel')}
             </Button>
-            <LoadingButton variant="contained" loading={isLoading} onClick={handleSaveChange}>
+            <Button type="button" variant="contained" onClick={handleSaveChange}>
               {t('common.save-change')}
-            </LoadingButton>
+            </Button>
           </Box>
         </Card>
       </Grid>

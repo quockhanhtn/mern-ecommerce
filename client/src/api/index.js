@@ -51,8 +51,8 @@ export const login = (username, password) => API.post('/auth/login', { username,
 export const logout = (refreshToken) => API.post('/auth/logout', { refreshToken });
 
 // ----------------------------Account----------------------------------
-export const getInfo = () => API.get('/account');
-export const updateInfo = (data) => API.patch('/account', data);
+export const getAccountInfo = () => API.get('/account');
+export const updateAccountInfo = (data) => API.patch('/account', data);
 export const changePassword = (data) => API.patch('/account/change-password', data);
 
 export const getAddresses = () => API.get('/account/addresses');

@@ -47,7 +47,7 @@ AccountPopover.defaultProps = {
 
 export default function AccountPopover({ menuOptions, isShowTitle }) {
   const anchorRef = useRef(null);
-  const { t } = useLocales();
+  const { t, currentLang } = useLocales();
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
@@ -76,6 +76,18 @@ export default function AccountPopover({ menuOptions, isShowTitle }) {
         bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72)
       }
     })
+  };
+
+  const getUserInfo = () => {
+    let info = user?.fullName || user?.email;
+    if (user?.firstName || user?.lastName) {
+      if (currentLang.value === 'vi') {
+        info = `${user?.lastName} ${user?.firstName}`.trim();
+      } else {
+        info = `${user?.firstName} ${user?.lastName}`.trim();
+      }
+    }
+    return info;
   };
 
   if (!user) {
@@ -121,7 +133,7 @@ export default function AccountPopover({ menuOptions, isShowTitle }) {
                 />
               }
             >
-              {user?.fullName || user?.email}
+              {getUserInfo()}
             </MButton>
           </MHidden>
         </Box>

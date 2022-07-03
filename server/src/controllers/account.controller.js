@@ -21,7 +21,8 @@ export const updateInfo = async (req, res, next) => {
       ResponseUtils.status200(
         res,
         `Update info successfully!`,
-        formatOneUser(updateUser, req)
+        updateUser
+        // formatOneUser(updateUser, req)
       );
     } else {
       ResponseUtils.status404(res, `User '${identity}' not found!`);

@@ -6,7 +6,7 @@ import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles
 import { Box } from '@material-ui/core';
 import { MCircularProgress } from '../@material-extend';
 
-import { CarouselControlsPaging2, CarouselControlsArrowsBasic2 } from '../carousel/controls';
+import { CarouselControlsPaging2, CarouselControlsArrowsBasic3 } from '../carousel/controls';
 import ProductItem from './ProductItem';
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -67,7 +67,7 @@ function ProductCarousel(props) {
           </Box>
         ))}
       </Slider>
-      <CarouselControlsArrowsBasic2 onNext={handleNext} onPrevious={handlePrevious} />
+      <CarouselControlsArrowsBasic3 onNext={handleNext} onPrevious={handlePrevious} />
     </RootStyle>
   );
 }

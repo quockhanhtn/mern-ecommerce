@@ -62,7 +62,9 @@ export default {
     gender: 'Giới tính',
     'gender-male': 'Nam',
     'gender-female': 'Nữ',
-    'gender-other': 'Khác'
+    'gender-other': 'Khác',
+    'update-success': 'Cập nhật thông tin thành công !',
+    'update-failed': 'Cập nhật thông tin không thành công !'
   },
   address: {
     title: 'Địa chỉ',
