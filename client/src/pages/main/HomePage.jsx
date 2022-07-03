@@ -11,7 +11,8 @@ import { useLocales, useAuth } from '../../hooks';
 // components
 import Page from '../../components/Page';
 import Label from '../../components/Label';
-import { CarouselAnimation, CarouselMiniList } from '../../components/carousel';
+import { DiscountCarousel } from '../../components/discount';
+import { CarouselMiniList } from '../../components/carousel';
 import { ProductCarousel, ProductList } from '../../components/e-commerce';
 
 // ----------------------------------------------------------------------
@@ -34,7 +35,7 @@ export default function HomePage() {
 
   const dispatch = useDispatch();
   const { listSimple: brandsListRaw, isLoading: isLoadingBrand } = useSelector((state) => state.brand);
-  const { listSimple: discountsListRaw } = useSelector((state) => state.discount);
+  const { listSimple: discountList } = useSelector((state) => state.discount);
   const {
     list: productsApi,
     isLoading: isLoadingProduct,
@@ -49,13 +50,6 @@ export default function HomePage() {
     image: x.image,
     description: x.description,
     path: `/q?b=${x.slug}`
-  }));
-  const discountList = discountsListRaw.map((x) => ({
-    _id: x._id,
-    image: x.image || 'https://source.unsplash.com/random/800x600',
-    title: x.name,
-    link: `/d/${x.code}`,
-    description: x.desc
   }));
 
   useEffect(() => {
@@ -80,7 +74,7 @@ export default function HomePage() {
         <Container maxWidth="lg">
           <Stack spacing={5}>
             {/* Discount carousel */}
-            <CarouselAnimation items={discountList} />
+            <DiscountCarousel discounts={discountList} />
 
             {/* Brand List carousel */}
             <Card>

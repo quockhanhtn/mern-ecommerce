@@ -98,7 +98,7 @@ export default function CarouselAnimation({ items, otherProps }) {
     slidesToShow: 1,
     slidesToScroll: 1,
     rtl: Boolean(theme.direction === 'rtl'),
-    beforeChange: (current, next) => setCurrentIndex(next),
+    beforeChange: (_current, next) => setCurrentIndex(next),
     ...otherProps
   };
 

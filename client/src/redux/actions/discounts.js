@@ -7,7 +7,7 @@ export const getAllDiscounts = (isSimple) => async (dispatch) => {
     const params = {};
     if (isSimple) {
       params.fields =
-        'name,code,beginDate,endDate,quantity,unlimitedQty,discount,discountType,minimumTotal,maximumApplied,image';
+        'name,desc,code,beginDate,endDate,quantity,unlimitedQty,discount,discountType,minimumTotal,maximumApplied,image';
     } else {
       params.isShowAllDate = '1';
       params.isShowHidden = '1';
