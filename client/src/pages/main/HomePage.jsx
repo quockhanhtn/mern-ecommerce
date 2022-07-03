@@ -11,8 +11,8 @@ import { useLocales, useAuth } from '../../hooks';
 // components
 import Page from '../../components/Page';
 import Label from '../../components/Label';
+import { BrandCarousel } from '../../components/brand';
 import { DiscountCarousel } from '../../components/discount';
-import { CarouselMiniList } from '../../components/carousel';
 import { ProductCarousel, ProductList } from '../../components/e-commerce';
 
 // ----------------------------------------------------------------------
@@ -34,8 +34,8 @@ export default function HomePage() {
   const { user } = useAuth();
 
   const dispatch = useDispatch();
-  const { listSimple: brandsListRaw, isLoading: isLoadingBrand } = useSelector((state) => state.brand);
-  const { listSimple: discountList } = useSelector((state) => state.discount);
+  const { listSimple: brandsList, isLoading: isLoadingBrand } = useSelector((state) => state.brand);
+  const { listSimple: discountList, isLoading: isLoadingDiscount } = useSelector((state) => state.discount);
   const {
     list: productsApi,
     isLoading: isLoadingProduct,
@@ -44,13 +44,6 @@ export default function HomePage() {
   } = useSelector((state) => state.product);
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
-
-  const brandsList = brandsListRaw.map((x) => ({
-    title: x.name,
-    image: x.image,
-    description: x.description,
-    path: `/q?b=${x.slug}`
-  }));
 
   useEffect(() => {
     dispatch(getProductForYou(user?._id || ''));
@@ -74,60 +67,15 @@ export default function HomePage() {
         <Container maxWidth="lg">
           <Stack spacing={5}>
             {/* Discount carousel */}
-            <DiscountCarousel discounts={discountList} />
+            <DiscountCarousel discounts={discountList} isLoading={isLoadingDiscount} />
 
             {/* Brand List carousel */}
             <Card>
               <CardHeader title={t('dashboard.brands.heading').toUpperCase()} />
               <CardContent>
-                <CarouselMiniList
-                  items={brandsList}
-                  numberPerRow={2}
-                  numberShow={2}
-                  isLoading={isLoadingBrand}
-                  width={200}
-                  height={60}
-                  isShowTitle={false}
-                  imgObjectFit="contain"
-                  otherSlickSetting={{
-                    infinite: true,
-                    swipeToSlide: true,
-                    slidesPerRow: 2,
-                    rows: 2,
-                    responsive: [
-                      {
-                        breakpoint: 1024,
-                        settings: { slidesToShow: 3, slidesToScroll: 3, infinite: true, dots: true }
-                      },
-                      {
-                        breakpoint: 600,
-                        settings: { slidesToShow: 2, slidesToScroll: 2, initialSlide: 2 }
-                      },
-                      {
-                        breakpoint: 480,
-                        settings: { slidesToShow: 1, slidesToScroll: 1 }
-                      }
-                    ]
-                  }}
-                />
+                <BrandCarousel items={brandsList} isLoading={isLoadingBrand} />
               </CardContent>
             </Card>
-
-            {/* <Box>
-              <Card sx={{ marginBottom: 1.5, padding: 3 }}>
-                <CardContent sx={{ padding: 0, '&:last-child': { paddingBottom: 0 } }}>
-                  <Box sx={{ display: 'flex', marginBottom: -1 }}>
-                    <Typography variant="h5" component="h2" sx={{ padding: 0 }}>
-                      SẢN PHẨM DÀNH CHO BẠN
-                    </Typography>
-                    <Label color="info" sx={{ ml: 1 }}>
-                      Phù hợp nhất
-                    </Label>
-                  </Box>
-                </CardContent>
-              </Card>
-              <ProductList products={productForYou.list} isLoading={productForYou.isLoading} />
-            </Box> */}
 
             <Box>
               <Card sx={{ marginBottom: 1.5, padding: 3 }}>

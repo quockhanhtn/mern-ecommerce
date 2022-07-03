@@ -4,13 +4,12 @@ import { motion } from 'framer-motion';
 import { useState, useRef } from 'react';
 // material
 import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Card, Paper, Typography, CardContent } from '@material-ui/core';
+import { Box, Card, Paper, Typography, CardContent, Skeleton } from '@material-ui/core';
 //
 import { varFadeInRight, MotionContainer } from '../animate';
 import { CarouselControlsArrowsIndex } from '../carousel/controls';
 import { useLocales } from '../../hooks';
 import { fCurrency } from '../../utils/formatNumber';
-import { fDate } from '../../utils/formatTime';
 
 // ----------------------------------------------------------------------
 
@@ -25,29 +24,12 @@ const CarouselImgStyle = styled('img')({
 // ----------------------------------------------------------------------
 
 function CarouselItem({ item, isActive }) {
-  const { currentLang } = useLocales();
   const theme = useTheme();
-  const {
-    image,
-    name,
-    code,
-    beginDate,
-    endDate,
-    quantity,
-    unlimitedQty,
-    discount,
-    discountType,
-    minimumTotal,
-    maximumApplied,
-    available
-  } = item;
-
-  const handleOnClick = (_e) => {
-    _e.cancel();
-  };
+  const { currentLang } = useLocales();
+  const { image, name, desc, code, discount, discountType, minimumTotal } = item;
 
   return (
-    <Paper sx={{ position: 'relative', paddingTop: { xs: '50vh', md: '60vh' } }} onClick={handleOnClick}>
+    <Paper sx={{ position: 'relative', paddingTop: { xs: '50vh', md: '60vh' } }}>
       <CarouselImgStyle alt={name} src={image || 'https://source.unsplash.com/random/800x600'} />
       <Box
         sx={{
@@ -58,22 +40,30 @@ function CarouselItem({ item, isActive }) {
           backgroundImage: `linear-gradient(to top, ${theme.palette.grey[900]} 0%,${alpha(
             theme.palette.grey[900],
             0
-          )} 100%)`
+          )} 50%)`
         }}
       />
       <CardContent
-        sx={{ bottom: 0, width: '100%', maxWidth: 480, textAlign: 'left', position: 'absolute', color: 'common.white' }}
+        sx={{
+          width: '100%',
+          maxWidth: 480,
+          textAlign: 'left',
+          position: 'absolute',
+          color: 'common.white',
+          bottom: 0,
+          padding: `${theme.spacing(0, 0, 2, 2)} !important`
+        }}
       >
         <MotionContainer open={isActive}>
           <motion.div variants={varFadeInRight}>
             <Typography variant="h3" gutterBottom>
-              {item.name}
+              {name}
             </Typography>
           </motion.div>
           <motion.div variants={varFadeInRight}>
-            {item.desc && (
+            {desc && (
               <Typography variant="body2" noWrap gutterBottom>
-                {item.desc}
+                {desc}
               </Typography>
             )}
             <Typography variant="body2" noWrap gutterBottom>
@@ -97,9 +87,12 @@ function CarouselItem({ item, isActive }) {
   );
 }
 
-CarouselItem.propTypes = { item: PropTypes.object, isActive: PropTypes.bool };
+CarouselItem.propTypes = {
+  item: PropTypes.object,
+  isActive: PropTypes.bool
+};
 
-function DiscountCarousel({ discounts, otherProps }) {
+function DiscountCarousel({ discounts, isLoading, otherProps }) {
   // const discountList = discountsListRaw.map((x) => ({
   //   _id: x._id,
   //   image: x.image || 'https://source.unsplash.com/random/800x600',
@@ -131,24 +124,48 @@ function DiscountCarousel({ discounts, otherProps }) {
     carouselRef.current.slickNext();
   };
 
-  if (!discounts || discounts.length === 0) {
+  function renderSkeleton() {
+    return [...Array(1).keys()].map((i) => (
+      <Paper key={`skeleton-${i}`} sx={{ position: 'relative', paddingTop: { xs: '50vh', md: '60vh' } }}>
+        <Skeleton
+          variant="rect"
+          width="100%"
+          height={400}
+          sx={{
+            top: 0,
+            width: '100%',
+            height: '100%',
+            position: 'absolute'
+          }}
+        />
+      </Paper>
+    ));
+  }
+
+  function renderItems() {
+    return discounts.map((item, index) => (
+      <CarouselItem key={`discount${index}`} item={item} isActive={index === currentIndex} />
+    ));
+  }
+
+  if (!isLoading && !discounts && discounts?.length < 1) {
     return <></>;
   }
 
   return (
     <Card>
       <Slider ref={carouselRef} {...settings}>
-        {discounts.map((item, index) => (
-          <CarouselItem key={`discount${index}`} item={item} isActive={index === currentIndex} />
-        ))}
+        {isLoading ? renderSkeleton() : renderItems()}
       </Slider>
 
-      <CarouselControlsArrowsIndex
-        index={currentIndex}
-        total={discounts.length}
-        onNext={handleNext}
-        onPrevious={handlePrevious}
-      />
+      {!isLoading && (
+        <CarouselControlsArrowsIndex
+          index={currentIndex}
+          total={discounts.length}
+          onNext={handleNext}
+          onPrevious={handlePrevious}
+        />
+      )}
     </Card>
   );
 }
@@ -162,6 +179,7 @@ DiscountCarousel.propTypes = {
       link: PropTypes.string
     })
   ).isRequired,
+  isLoading: PropTypes.bool,
   otherProps: PropTypes.object
 };
 
