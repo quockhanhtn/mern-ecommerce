@@ -1,7 +1,7 @@
 // @see https://blog.logrocket.com/send-emails-nodejs-nodemailer/
 import { createTransport } from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
-import { resolve } from 'path';
+import path from 'path';
 import LogUtils from '../utils/LogUtils.js';
 
 // initialize nodemailer
@@ -13,7 +13,7 @@ const transporter = createTransport({
   }
 });
 
-const templateDir = resolve('public/mail-template');
+const templateDir = path.resolve('public/mail-template');
 
 // point to the template folder
 const handlebarOptions = {
