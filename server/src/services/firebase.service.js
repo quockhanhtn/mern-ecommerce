@@ -24,6 +24,21 @@ async function verifyToken(token) {
   }
 }
 
+async function verifyTokenWithPhone(phone, token) {
+  const decodeData = await verifyToken(token);
+  if (!decodeData) {
+    return false;
+  }
+
+  if (decodeData.exp < Date.now() / 1000) {
+    return false;
+  }
+
+  const phoneNumber = decodeData.phone_number.replace('+84', '0');
+  return phoneNumber === phone;
+}
+
 export default {
-  verifyToken
+  verifyToken,
+  verifyTokenWithPhone
 };

@@ -100,3 +100,26 @@ export const logout = async (req, res, next) => {
     ResponseUtils.status204(res);
   } catch (err) { next(err) }
 };
+
+export const sendOtpCode = async (req, res, next) => {
+  try {
+    const email = req.body?.email ?? '';
+    const language = req.headers['accept-language'];
+    await authService.sendOtpViaMail(email, language);
+    ResponseUtils.status200(res, 'Send OTP success');
+  } catch (err) { next(err) }
+};
+
+export const forgotPassword = async (req, res, next) => {
+  try {
+    const {
+      account = '',     // email or phone number
+      otpOrToken = '',  // otp or firebase token
+      newPassword = ''
+    } = req.body;
+
+    await authService.forgotPassword(account, otpOrToken, newPassword);
+
+    ResponseUtils.status204(res);
+  } catch (err) { next(err) }
+};

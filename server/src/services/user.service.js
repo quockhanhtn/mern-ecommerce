@@ -9,6 +9,7 @@ export default {
   getOne,
   getOneById,
   getOrCreateByGoogleId,
+  isExistEmail,
   create,
   update,
   updateById,
@@ -105,6 +106,11 @@ async function getOrCreateByGoogleId(
   });
   await newUser.save();
   return getOneById(newUser._id, selectFields, needVirtuals);
+}
+
+async function isExistEmail(email) {
+  const user = await User.findOne({ email: email }).select('_id');
+  return !!user;
 }
 
 /**

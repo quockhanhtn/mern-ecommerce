@@ -40,7 +40,8 @@ router.get('/p', async (req, res, next) => {
 });
 
 router.get('/mail', async (req, res, next) => {
-  mailerService.sendMail('quockhanhdev@gmail.com', 'Testing', 'Testing title !', 'Mã otp là 123456');
+  await mailerService.sendWithOtpTemplate('quockhanhdev@gmail.com', '123456');
+  // mailerService.sendMail('quockhanhdev@gmail.com', 'Testing', 'Testing title !', 'Mã otp là 123456');
   res.status(200).json({ done: true });
   res.end();
 });
