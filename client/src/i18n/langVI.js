@@ -194,7 +194,8 @@ export default {
   auth: {
     'page-title': {
       login: 'Đăng nhập | HK Mobile',
-      register: 'Đăng ký | HK Mobile'
+      register: 'Đăng ký | HK Mobile',
+      'reset-password': 'Đặt lại mật khẩu | HK Mobile'
     },
     salutation: 'Chào mừng quay trở lại !',
     register: 'Đăng ký',
@@ -223,6 +224,7 @@ export default {
     'remember-me': 'Ghi nhớ đăng nhập',
     'forgot-password': 'Quên mật khẩu ?',
     'reset-password': 'Đặt lại mật khẩu',
+    'reset-password-desc': 'Vui lòng nhập email hoặc số điện thoại liên kết với tài khoản của bạn để xác minh',
     'enter-new-password': 'Nhập mật khẩu mới',
     'confirm-new-password': 'Xác nhận mật khẩu mới',
 
@@ -265,7 +267,12 @@ export default {
 
     phone: 'Số điện thoại',
     'phone-required': 'Số điện thoại không thể bỏ trống',
-    'phone-invalid': 'Số điện thoại không hợp lệ'
+    'phone-invalid': 'Số điện thoại không hợp lệ',
+
+    'email-or-phone': 'Email hoặc số điện thoại',
+    'email-or-phone-required': 'Vui lòng nhập email hoặc số điện thoại',
+    'email-or-phone-invalid': 'Email\nsố điện thoại không hợp lệ',
+    'send-otp': 'Gửi mã'
   },
   dashboard: {
     title: 'Bảng điều khiển',
