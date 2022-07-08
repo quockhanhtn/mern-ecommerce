@@ -9,7 +9,7 @@ const otpSchema = mongoose.Schema(
       trim: true,
     },
     otp: { type: String },
-    time: { type: Date, default: Date.now, index: { expires: 120 } }
+    time: { type: Date, default: Date.now, index: { expires: 60 * 5 } }
   },
   { timestamps: false, versionKey: false, id: false, _id: true }
 );

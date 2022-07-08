@@ -1,22 +1,29 @@
-import { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 // material
+import { Alert, Box, Button, Container, Typography } from '@material-ui/core';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Button, Container, Typography } from '@material-ui/core';
 // redux
-import { useSelector, useDispatch } from 'react-redux';
-import { sendPhoneOtp, sentEmailOtp, checkOtpEmail, checkOtpPhone } from '../../redux/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  checkOtpEmail,
+  checkOtpPhone,
+  resetPassword as resetPasswordAction,
+  resendOtp as resendOtpAction,
+  sentOtpViaEmail,
+  sentOtpViaPhone,
+  clearOtpState
+} from '../../redux/slices/authSlice';
 // layouts
 import LogoOnlyLayout from '../../layouts/LogoOnlyLayout';
-// routes
-import { PATH_AUTH } from '../../routes/paths';
 // components
+import { NewPasswordForm, OtpInputForm, ResetPasswordForm } from '../../components/authentication/reset-password';
 import Page from '../../components/Page';
-import { ResetPasswordForm, OtpInputForm } from '../../components/authentication/reset-password';
+import { PATH_AUTH } from '../../routes/paths';
 //
-import { SentIcon } from '../../assets';
-import { useLocales } from '../../hooks';
+import { CheckIcon, SentIcon } from '../../assets';
 import { regexCons } from '../../constants';
+import { useLocales } from '../../hooks';
 // firebase
 import firebase from '../../firebase';
 
@@ -34,16 +41,19 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function ResetPassword() {
   const { t, currentLang } = useLocales();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
+    emailOrPhone: account,
     isLoading: isHandlingOtp,
     isVerifying,
     isSent,
     isVerified,
+    isChangingPass,
+    isChangeSuccess,
     error: otpError
   } = useSelector((state) => state.auth.otp);
 
-  const [email, setEmail] = useState('');
   const [errorMgs, setErrorMgs] = useState('');
 
   useEffect(() => {
@@ -66,29 +76,85 @@ export default function ResetPassword() {
   }, []);
 
   const handleSendOtp = (emailOrPhone) => {
-    setEmail(emailOrPhone);
-
     if (regexCons.email.test(emailOrPhone)) {
-      dispatch(sentEmailOtp(emailOrPhone));
+      dispatch(sentOtpViaEmail(emailOrPhone));
     } else {
-      dispatch(sendPhoneOtp(emailOrPhone));
+      dispatch(sentOtpViaPhone(emailOrPhone));
     }
   };
 
   const handleResentOtp = () => {
-    if (regexCons.email.test(email)) {
-      dispatch(sentEmailOtp(email));
-    } else {
-      dispatch(sendPhoneOtp(email));
-    }
+    dispatch(resendOtpAction());
   };
 
   const handleVerifyOtp = (otpCode) => {
-    if (regexCons.email.test(email)) {
-      dispatch(checkOtpEmail(email, otpCode));
+    if (regexCons.email.test(account)) {
+      dispatch(checkOtpEmail(account, otpCode));
     } else {
-      dispatch(checkOtpPhone(email, otpCode));
+      dispatch(checkOtpPhone(account, otpCode));
     }
+  };
+
+  const handleChangePassword = (newPassword) => {
+    dispatch(resetPasswordAction(newPassword));
+  };
+
+  const handleGotoLogin = (_event) => {
+    dispatch(clearOtpState());
+    navigate(PATH_AUTH.login);
+  };
+
+  const renderBody = () => {
+    if (isChangeSuccess) {
+      return (
+        <Box sx={{ textAlign: 'center' }}>
+          <CheckIcon sx={{ mb: 5, mx: 'auto', height: 160 }} />
+
+          <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
+            {t('auth.set-new-password-success')}
+          </Typography>
+
+          <Button fullWidth size="large" onClick={handleGotoLogin} variant="contained">
+            {t('auth.login').toUpperCase()}
+          </Button>
+        </Box>
+      );
+    }
+    if (!isSent) {
+      return (
+        <>
+          <Typography variant="h3" paragraph>
+            {t('auth.reset-password')}
+          </Typography>
+          <Typography sx={{ color: 'text.secondary', mb: 5 }}>{t('auth.reset-password-desc')}</Typography>
+
+          <ResetPasswordForm onSendOtp={handleSendOtp} isSending={isHandlingOtp} />
+        </>
+      );
+    }
+    if (!isVerified) {
+      return (
+        <Box sx={{ textAlign: 'center' }}>
+          <SentIcon sx={{ mb: 5, mx: 'auto', height: 160 }} />
+
+          <Typography variant="h3" gutterBottom>
+            {t('auth.send-otp-success')}
+          </Typography>
+          <Typography>{t('auth.send-otp-desc')}</Typography>
+
+          <OtpInputForm onResentOtp={handleResentOtp} onVerifyOtp={handleVerifyOtp} isLoading={isVerifying} />
+        </Box>
+      );
+    }
+    return (
+      <Box sx={{ textAlign: 'center' }}>
+        <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
+          {t('auth.set-new-password')}
+        </Typography>
+
+        <NewPasswordForm onChangePassword={handleChangePassword} isLoading={isChangingPass} />
+      </Box>
+    );
   };
 
   return (
@@ -97,37 +163,12 @@ export default function ResetPassword() {
 
       <Container>
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
-          {!isSent ? (
-            <>
-              <Typography variant="h3" paragraph>
-                {t('auth.reset-password')}
-              </Typography>
-              <Typography sx={{ color: 'text.secondary', mb: 5 }}>{t('auth.reset-password-desc')}</Typography>
-
-              <ResetPasswordForm onSendOtp={handleSendOtp} isSending={isHandlingOtp} errorMgs={errorMgs} />
-
-              <Button fullWidth size="large" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 1 }}>
-                {t('common.back').toUpperCase()}
-              </Button>
-            </>
-          ) : (
-            <Box sx={{ textAlign: 'center' }}>
-              <SentIcon sx={{ mb: 5, mx: 'auto', height: 160 }} />
-
-              <Typography variant="h3" gutterBottom>
-                Request sent successfully
-              </Typography>
-              <Typography>
-                We have sent a confirmation email to &nbsp;
-                <strong>{email}</strong>
-                <br />
-                Please check your email.
-              </Typography>
-
-              <OtpInputForm onResentOtp={handleResentOtp} onVerifyOtp={handleVerifyOtp} isLoading={isVerifying} />
-            </Box>
+          {renderBody()}
+          {errorMgs && (
+            <Alert severity="error" sx={{ mt: 3 }}>
+              {errorMgs}
+            </Alert>
           )}
-          <p> verified: {isVerified.toString()}</p>
         </Box>
       </Container>
     </RootStyle>

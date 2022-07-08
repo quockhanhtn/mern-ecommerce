@@ -19,7 +19,7 @@ export const genOtp = async (email) => {
 };
 
 export const validateOtp = async (email, otpCode) => {
-  const otpHash = CipherUtils.hashPassword(otpCode);
-  const otp = await _Otp.findOne({ otp: otpHash }).sort({ 'time': -1 }).lean();
-  return otp.email === email;
+  const otp = await _Otp.findOne({ email }).sort({ 'time': -1 }).lean();
+  if (!otp) { return false; }
+  return CipherUtils.comparePassword(otpCode, otp.otp);
 };

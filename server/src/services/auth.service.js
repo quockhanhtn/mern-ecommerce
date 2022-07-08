@@ -20,7 +20,7 @@ export default {
   sendOtpViaMail,
   checkEmailOtp,
   changePassword,
-  forgotPassword: resetPassword,
+  resetPassword,
 };
 
 async function googleAuthenticate(payload, ipAddress) {

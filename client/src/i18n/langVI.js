@@ -272,7 +272,11 @@ export default {
     'email-or-phone': 'Email hoặc số điện thoại',
     'email-or-phone-required': 'Vui lòng nhập email hoặc số điện thoại',
     'email-or-phone-invalid': 'Email\nsố điện thoại không hợp lệ',
-    'send-otp': 'Gửi mã'
+    'send-otp': 'Gửi mã',
+    'send-otp-success': 'Gửi mã xác thực thành công',
+    'send-otp-desc': 'Vui lòng kiểm tra email hoặc tin nhắn để lấy mã xác thực',
+    'set-new-password': 'Đặt mật khẩu mới',
+    'set-new-password-success': 'Đặt lại mật khẩu mới thành công'
   },
   dashboard: {
     title: 'Bảng điều khiển',

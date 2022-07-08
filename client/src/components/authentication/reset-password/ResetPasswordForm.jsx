@@ -1,9 +1,12 @@
-import * as Yup from 'yup';
 import PropTypes from 'prop-types';
+// form validation
+import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
-import { TextField, Alert, Stack } from '@material-ui/core';
+import { Box, Button, TextField, Alert, Stack } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
+import { Link as RouterLink } from 'react-router-dom';
+import { PATH_AUTH } from '../../../routes/paths';
 // hooks
 import { useLocales } from '../../../hooks';
 
@@ -17,7 +20,7 @@ ResetPasswordForm.propTypes = {
   errorMgs: PropTypes.string
 };
 
-export default function ResetPasswordForm({ onSendOtp, isSending, errorMgs }) {
+export default function ResetPasswordForm({ onSendOtp, isSending }) {
   const { t } = useLocales();
 
   const ResetPasswordSchema = Yup.object().shape({
@@ -25,7 +28,7 @@ export default function ResetPasswordForm({ onSendOtp, isSending, errorMgs }) {
       .required(t('auth.email-or-phone-required'))
       .test('test-name', (value, { createError }) => {
         // phone
-        if (/^[0-9].+$/.test(value)) {
+        if (/^\d.+$/.test(value)) {
           if (regexCons.phone.test(value)) {
             return true;
           }
@@ -56,8 +59,6 @@ export default function ResetPasswordForm({ onSendOtp, isSending, errorMgs }) {
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
-          {errorMgs && <Alert severity="error">{errorMgs}</Alert>}
-
           <TextField
             fullWidth
             {...getFieldProps('emailOrPhone')}
@@ -67,9 +68,14 @@ export default function ResetPasswordForm({ onSendOtp, isSending, errorMgs }) {
             helperText={touched.emailOrPhone && errors.emailOrPhone}
           />
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSending}>
-            {t('auth.send-otp').toUpperCase()}
-          </LoadingButton>
+          <Box display="flex" justifyContent="center">
+            <Button fullWidth size="large" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 1 }}>
+              {t('common.back').toUpperCase()}
+            </Button>
+            <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSending}>
+              {t('auth.send-otp').toUpperCase()}
+            </LoadingButton>
+          </Box>
         </Stack>
       </Form>
     </FormikProvider>

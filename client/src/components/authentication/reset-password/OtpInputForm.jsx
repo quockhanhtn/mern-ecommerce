@@ -59,6 +59,13 @@ export default function OtpInputForm({ onVerifyOtp, onResentOtp, isLoading }) {
 
   const { values, errors, isValid, touched, handleSubmit, getFieldProps } = formik;
 
+  useEffect(() => {
+    const firstCodeInput = document.querySelector(`input[name="verify-code-input-code1"]`);
+    if (firstCodeInput) {
+      firstCodeInput.focus();
+    }
+  }, []);
+
   const handleOnChange = (e) => {
     const code = e.target.name.replace('verify-code-input-', '');
     formik.setFieldValue(code, e.target.value);
@@ -69,22 +76,33 @@ export default function OtpInputForm({ onVerifyOtp, onResentOtp, isLoading }) {
       const nextInput = document.querySelector(`input[name="verify-code-input-${order[index + 1]}"]`);
       if (nextInput) {
         nextInput.focus();
+        nextInput.select();
       }
     }
   };
 
-  const handleResent = (e) => {
+  const handleResent = (_event) => {
     if (typeUtils.isFunction(onResentOtp)) {
       onResentOtp();
     }
   };
 
-  useEffect(() => {
-    const firstCodeInput = document.querySelector(`input[name="verify-code-input-code1"]`);
-    if (firstCodeInput) {
-      firstCodeInput.focus();
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 8 && !event.target.value) {
+      event.stopPropagation();
+      // Backspace press
+      const order = ['code1', 'code2', 'code3', 'code4', 'code5', 'code6'];
+      const code = event.target.name.replace('verify-code-input-', '');
+
+      const index = order.indexOf(code);
+      if (index > 0) {
+        const prevInput = document.querySelector(`input[name="verify-code-input-${order[index - 1]}"]`);
+        if (prevInput) {
+          prevInput.focus();
+        }
+      }
     }
-  }, []);
+  };
 
   return (
     <FormikProvider value={formik}>
@@ -109,6 +127,8 @@ export default function OtpInputForm({ onVerifyOtp, onResentOtp, isLoading }) {
                     height: { xs: 36, sm: 56 }
                   }
                 }}
+                onFocus={(e) => e.target.select}
+                onKeyDown={handleKeyDown}
                 name={`verify-code-input-${item}`}
               />
             ))}
@@ -121,7 +141,7 @@ export default function OtpInputForm({ onVerifyOtp, onResentOtp, isLoading }) {
           </Box>
 
           <Box display="flex" justifyContent="center">
-            <Button fullWidth onClick={handleResent} color="inherit" sx={{ m: 1 }}>
+            <Button fullWidth onClick={handleResent} color="inherit" sx={{ m: 1 }} disabled={isLoading}>
               Gửi lại
             </Button>
             <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading} sx={{ m: 1 }}>

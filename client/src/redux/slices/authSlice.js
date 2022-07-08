@@ -1,18 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { auth as firebaseAuth } from '../../firebase';
 import * as api from '../../api';
+import { regexCons } from '../../constants';
+
+const otpInitialState = {
+  isLoading: false,
+  isVerifying: false,
+  isSent: false,
+  isVerified: false,
+  isChangingPass: false,
+  isChangeSuccess: false,
+  error: null,
+  emailOrPhone: '',
+  token: '',
+  confirmResult: null
+};
 
 const initialState = {
-  otp: {
-    isLoading: false,
-    isVerifying: false,
-    isSent: false,
-    isVerified: false,
-    error: null,
-    emailOrPhone: '',
-    token: '',
-    confirmResult: null
-  }
+  otp: otpInitialState
 };
 
 const authSlice = createSlice({
@@ -21,16 +26,25 @@ const authSlice = createSlice({
   reducers: {
     startLoadingOtp(state) {
       state.otp.isLoading = true;
+      state.otp.isChangeSuccess = false;
+      state.otp.error = null;
     },
     startVerifyingOtp(state) {
       state.otp.isVerifying = true;
+      state.otp.isChangeSuccess = false;
+      state.otp.error = null;
+    },
+    startChangingPass(state) {
+      state.otp.isChangingPass = true;
+      state.otp.isChangeSuccess = false;
+      state.otp.error = null;
     },
     hasErrorOtp(state, action) {
-      state.otp.isLoading = false;
       state.otp.error = action.payload.error;
-      state.otp.emailOrPhone = action.payload.emailOrPhone;
+      state.otp.isLoading = false;
       state.otp.isVerifying = false;
-      state.otp.isVerified = false;
+      state.otp.isVerified = action.payload?.isVerified || false;
+      state.otp.isChangeSuccess = false;
     },
     sentEmailOtpSuccess(state, action) {
       state.otp.isSent = true;
@@ -51,8 +65,22 @@ const authSlice = createSlice({
       state.otp.isVerifying = false;
       state.otp.isVerified = true;
     },
-    setOtpToken(state, action) {
-      state.otp.token = action.payload;
+    changePassViaOtpSuccess(state) {
+      state.otp = {
+        isLoading: false,
+        isVerifying: false,
+        isSent: false,
+        isVerified: false,
+        isChangingPass: false,
+        isChangeSuccess: true,
+        error: null,
+        emailOrPhone: '',
+        token: '',
+        confirmResult: null
+      };
+    },
+    clearOtpState(state) {
+      state.otp = otpInitialState;
     }
   }
 });
@@ -61,7 +89,9 @@ const { actions, reducer } = authSlice;
 
 export default reducer;
 
-export const sentEmailOtp = (email) => async (dispatch) => {
+export const clearOtpState = () => (dispatch) => dispatch(actions.clearOtpState());
+
+export const sentOtpViaEmail = (email) => async (dispatch) => {
   try {
     dispatch(actions.startLoadingOtp());
     await api.sendEmailOtp(email);
@@ -72,7 +102,7 @@ export const sentEmailOtp = (email) => async (dispatch) => {
   }
 };
 
-export const sendPhoneOtp = (phone) => async (dispatch) => {
+export const sentOtpViaPhone = (phone) => async (dispatch) => {
   try {
     dispatch(actions.startLoadingOtp());
 
@@ -108,6 +138,15 @@ export const sendPhoneOtp = (phone) => async (dispatch) => {
   }
 };
 
+export const resendOtp = () => async (dispatch, getState) => {
+  const { emailOrPhone } = getState().auth.otp;
+  if (regexCons.email.test(emailOrPhone)) {
+    dispatch(sentOtpViaEmail(emailOrPhone));
+  } else {
+    dispatch(sentOtpViaPhone(emailOrPhone));
+  }
+};
+
 export const checkOtpEmail = (email, otp) => async (dispatch) => {
   try {
     dispatch(actions.startVerifyingOtp());
@@ -130,13 +169,33 @@ export const checkOtpPhone = (phone, otp) => async (dispatch, getState) => {
 
       if (accessToken && expirationTime) {
         dispatch(actions.checkOtpSuccess({ emailOrPhone: phone, token: accessToken }));
+      } else {
+        dispatch(
+          actions.hasErrorOtp({
+            error: { message: { vi: 'Mã OTP không đúng', en: 'OTP is invalid' } },
+            emailOrPhone: phone
+          })
+        );
       }
     })
     .catch((err) => {
-      console.log(err);
-      actions.hasErrorOtp({
-        error: { message: { vi: 'Mã OTP không đúng', en: 'OTP is invalid' } },
-        emailOrPhone: phone
-      });
+      console.log('checkOtpPhone-error', err);
+      dispatch(
+        actions.hasErrorOtp({
+          error: { message: { vi: 'Mã OTP không đúng', en: 'OTP is invalid' } },
+          emailOrPhone: phone
+        })
+      );
     });
+};
+
+export const resetPassword = (newPassword) => async (dispatch, getState) => {
+  const { emailOrPhone, token } = getState().auth.otp;
+  try {
+    dispatch(actions.startChangingPass());
+    await api.resetPassword(emailOrPhone, token, newPassword);
+    dispatch(actions.changePassViaOtpSuccess());
+  } catch (e) {
+    dispatch(actions.hasErrorOtp({ error: e?.response?.data || e, isVerified: true }));
+  }
 };
