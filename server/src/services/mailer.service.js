@@ -1,19 +1,20 @@
 // @see https://blog.logrocket.com/send-emails-nodejs-nodemailer/
 import { createTransport } from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
-import { resolve } from 'path';
+import path from 'path';
 import LogUtils from '../utils/LogUtils.js';
+
+const mailerService = process.env.MAILER_SERVICE || 'gmail';
+const mailerUsername = process.env.MAILER_AUTH_USER;
+const mailerPassword = process.env.MAILER_AUTH_PASS;
 
 // initialize nodemailer
 const transporter = createTransport({
-  service: process.env.MAILER_SERVICE || 'gmail',
-  auth: {
-    user: process.env.MAILER_AUTH_USER,
-    pass: process.env.MAILER_AUTH_PASS
-  }
+  service: mailerService,
+  auth: { user: mailerUsername, pass: mailerPassword }
 });
 
-const templateDir = resolve('public/mail-template');
+const templateDir = path.resolve('public/mail-template');
 
 // point to the template folder
 const handlebarOptions = {
@@ -26,6 +27,21 @@ const handlebarOptions = {
 
 // use a template file with nodemailer
 transporter.use('compile', hbs(handlebarOptions));
+
+export const sendMailSync = async (receiver, subject, templateName, context, attachments) => {
+  if (typeof receiver === 'string') {
+    receiver = [receiver];
+  }
+
+  return transporter.sendMail({
+    from: mailerUsername,
+    to: receiver,
+    subject,
+    template: templateName,
+    context,
+    attachments
+  });
+};
 
 // need to custom template
 export const sendMail = (receiver, subject, title, content) => {
@@ -81,3 +97,46 @@ export const sendMail = (receiver, subject, title, content) => {
     }
   });
 };
+
+
+export const sendWithOtpTemplate = async (receiver, otp, language = 'vi') => {
+  let subject;
+  let templateName = 'otp' + '.' + language;
+  if (language === 'en') {
+    subject = `Email verification code: ${otp}`;
+  } else {
+    subject = `Mã xác minh của bạn là: ${otp}`;
+  }
+
+  return sendMailSync(receiver, subject, templateName, {
+    logoHref: 'https://mern-ecommerce-b848d.web.app/',
+    otpCode: otp,
+  }, [
+    {
+      filename: 'hk.png',
+      path: `${templateDir}/img/hk.png`,
+      cid: 'logo'
+    },
+    {
+      filename: 'facebook.png',
+      path: `${templateDir}/img/facebook.png`,
+      cid: 'facebook'
+    },
+    {
+      filename: 'twitter.png',
+      path: `${templateDir}/img/twitter.png`,
+      cid: 'twitter'
+    },
+    {
+      filename: 'instagram.png',
+      path: `${templateDir}/img/instagram.png`,
+      cid: 'instagram'
+    },
+    {
+      filename: 'github.png',
+      path: `${templateDir}/img/github.png`,
+      cid: 'github'
+    }
+  ]);
+}
+

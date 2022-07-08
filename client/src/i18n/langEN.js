@@ -176,7 +176,8 @@ export default {
   auth: {
     'page-title': {
       login: 'Log in | HK Mobile',
-      register: 'Register | HK Mobile'
+      register: 'Register | HK Mobile',
+      'reset-password': 'Reset password | HK Mobile'
     },
     salutation: 'Hi, Welcome back',
     register: 'Register',
@@ -198,6 +199,7 @@ export default {
     'remember-me': 'Remember me',
     'forgot-password': 'Forgot password ?',
     'reset-password': 'Reset password',
+    'reset-password-desc': 'Please enter the email address or phone number associated with your account to verify',
     'confirm-password': 'Confirm password',
     'enter-new-password': 'Enter new password',
     'confirm-new-password': 'Confirm new password',

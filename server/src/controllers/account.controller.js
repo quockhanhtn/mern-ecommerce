@@ -45,6 +45,22 @@ export const changePassword = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+export const isExistedEmail = async (req, res, next) => {
+  try {
+    const { email } = req.params;
+    const isExisted = await userService.isExistEmail(email);
+    ResponseUtils.sendJson(res, 200, '', { isExisted });
+  } catch (err) { next(err); }
+};
+
+export const isExistedPhone = async (req, res, next) => {
+  try {
+    const { phone } = req.params;
+    const isExisted = await userService.isExistPhone(phone);
+    ResponseUtils.sendJson(res, 200, '', { isExisted });
+  } catch (err) { next(err); }
+};
+
 
 // Add address --------------------------------------------
 export const getAddresses = async (req, res, next) => {

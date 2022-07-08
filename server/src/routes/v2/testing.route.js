@@ -2,6 +2,7 @@ import { Router } from 'express';
 import fptService from '../../services/fpt.service.js';
 import productService from '../../services/products.service.js';
 import userBehaviorService from '../../services/user-behavior.service.js';
+import * as mailerService from '../../services/mailer.service.js';
 
 const router = Router();
 
@@ -37,6 +38,14 @@ router.get('/p', async (req, res, next) => {
   res.status(200).json(rs);
   res.end();
 });
+
+router.get('/mail', async (req, res, next) => {
+  await mailerService.sendWithOtpTemplate('quockhanhdev@gmail.com', '123456');
+  // mailerService.sendMail('quockhanhdev@gmail.com', 'Testing', 'Testing title !', 'Mã otp là 123456');
+  res.status(200).json({ done: true });
+  res.end();
+});
+
 
 
 export default router;

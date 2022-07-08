@@ -20,6 +20,30 @@ export const responseDef = {
         vi: 'Mật khẩu không đúng'
       }
     },
+    INVALID_EMAIL: {
+      status: 401,
+      code: 401003,
+      message: {
+        en: 'Invalid email',
+        vi: 'Email không hợp lệ'
+      }
+    },
+    INVALID_ACCOUNT: {
+      status: 401,
+      code: 401004,
+      message: {
+        en: 'Invalid account',
+        vi: 'Tài khoản không hợp lệ'
+      }
+    },
+    INVALID_OTP: {
+      status: 401,
+      code: 401005,
+      message: {
+        en: 'Invalid OTP',
+        vi: 'Mã OTP không hợp lệ'
+      }
+    },
     USER_ALREADY_EXISTS: {
       status: 409,
       code: 409002,

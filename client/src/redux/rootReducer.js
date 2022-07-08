@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import authSlice from './slices/authSlice';
 import categorySlice from './slices/categorySlice';
 import cartSlice from './slices/cartSlice';
 import orderSlice from './slices/orderSlice';
@@ -15,6 +16,7 @@ import commentsReduces from './reducers/comments';
 import userBehaviorSlice from './slices/userBehaviorSlice';
 
 const rootReducer = combineReducers({
+  auth: authSlice,
   category: categorySlice,
   cart: cartSlice,
   order: orderSlice,

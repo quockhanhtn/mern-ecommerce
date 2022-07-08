@@ -5,6 +5,8 @@ import {
   getInfo,
   updateInfo,
   changePassword,
+  isExistedEmail,
+  isExistedPhone,
   getAddresses,
   addAddress,
   updateAddress,
@@ -32,8 +34,9 @@ router.route('/')
     updateInfo
   );
 
-router.route('/change-password')
-  .patch(isAuthorized, changePassword);
+router.patch('/change-password', isAuthorized, changePassword);
+router.get('/is-existed-email/:email', isExistedEmail);
+router.get('/is-existed-phone/:phone', isExistedPhone);
 
 // Start defining routes for addresses
 router.route('/addresses')

@@ -22,9 +22,12 @@ const ContainerStyle = styled(Card)(({ theme }) => ({
   height: '100%',
   flexGrow: 1,
   zIndex: 1,
+  boxShadow: 'none',
+  border: `solid 2px ${theme.palette.divider}`,
   '&:hover': {
     transform: 'scale(1.02)',
     boxShadow: theme.customShadows.z8,
+    // border: `solid 3px ${theme.palette.primary.main}`,
     '& .btn-recommend': {
       display: 'unset',
       position: 'absolute',

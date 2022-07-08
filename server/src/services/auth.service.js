@@ -1,10 +1,15 @@
+import { randomBytes } from 'crypto';
 import RefreshToken from '../models/refresh-token.model.js';
 import userService from './user.service.js';
-import { randomBytes } from 'crypto';
-import JwtUtils from '../utils/JwtUtils.js';
-import CipherUtils from '../utils/CipherUtils.js';
-import ApiErrorUtils from '../utils/ApiErrorUtils.js';
+import firebaseService from './firebase.service.js';
+import * as otpService from './otp.service.js';
+import * as mailerService from './mailer.service.js';
+
 import responseDef from '../responseCode.js';
+import ApiErrorUtils from '../utils/ApiErrorUtils.js';
+import CipherUtils from '../utils/CipherUtils.js';
+import JwtUtils from '../utils/JwtUtils.js';
+import StringUtils from '../utils/StringUtils.js';
 
 
 export default {
@@ -12,7 +17,10 @@ export default {
   authenticate,
   refreshToken,
   revokeToken,
-  changePassword
+  sendOtpViaMail,
+  checkEmailOtp,
+  changePassword,
+  resetPassword,
 };
 
 async function googleAuthenticate(payload, ipAddress) {
@@ -41,7 +49,7 @@ async function googleAuthenticate(payload, ipAddress) {
     jwtToken,
     refreshToken: refreshToken.token
   };
-};
+}
 
 async function authenticate(username, password, ipAddress) {
   const user = await userService.getOne(username, '-addresses');
@@ -114,6 +122,29 @@ async function getRefreshToken(token) {
   return refreshToken;
 }
 
+async function sendOtpViaMail(email, language) {
+  if (!StringUtils.isEmailAddress(email)) {
+    throw ApiErrorUtils.simple2(responseDef.AUTH.INVALID_EMAIL);
+  }
+  const isExistUser = await userService.isExistEmail(email);
+  if (!isExistUser) {
+    throw ApiErrorUtils.simple2(responseDef.AUTH.USER_NOT_FOUND);
+  }
+
+  const otpCode = await otpService.genOtp(email);
+  await mailerService.sendWithOtpTemplate(email, otpCode, language);
+  return true;
+}
+
+async function checkEmailOtp(email, otp) {
+  const isValidOtp = await otpService.validateOtp(email, otp);
+  if (!isValidOtp) {
+    throw ApiErrorUtils.simple2(responseDef.AUTH.INVALID_OTP);
+  }
+  const otpToken = JwtUtils.generateToken({ email: email }, '1h');
+  return otpToken;
+}
+
 async function changePassword(userId, oldPassword, newPassword) {
   const user = await userService.getOneById(userId, '_id password emptyPassword googleId email');
   if (!user) {
@@ -148,6 +179,32 @@ async function changePassword(userId, oldPassword, newPassword) {
 
   updateData.password = CipherUtils.hashPassword(newPassword);
   const result = await userService.updateById(user._id, updateData);
+  return result;
+}
+
+async function resetPassword(account, token, newPassword) {
+  let isValidOtp = false;
+  if (StringUtils.isEmailAddress(account)) {
+    isValidOtp = JwtUtils.verifyToken(token).email === account;
+  } else if (StringUtils.isPhoneNumber(account)) {
+    isValidOtp = await firebaseService.verifyTokenWithPhone(account, token);
+  } else {
+    throw ApiErrorUtils.simple2(responseDef.AUTH.INVALID_ACCOUNT);
+  }
+
+  if (!isValidOtp) {
+    throw ApiErrorUtils.simple2(responseDef.AUTH.INVALID_OTP);
+  }
+
+  if (newPassword.length < 6) {
+    throw ApiErrorUtils.simple2(responseDef.AUTH.PASSWORD_TOO_SHORT);
+  }
+  if (newPassword.length > 32) {
+    throw ApiErrorUtils.simple2(responseDef.AUTH.PASSWORD_TOO_LONG);
+  }
+  const user = await userService.getOne(account, '_id');
+  const passwordHash = CipherUtils.hashPassword(newPassword);
+  const result = await userService.updateById(user._id, { password: passwordHash });
   return result;
 }
 

@@ -1,4 +1,5 @@
 // icons
+export { default as CheckIcon } from './ic_check';
 export { default as DocIcon } from './ic_doc';
 export { default as EmptyBoxIcon } from './ic_empty_box';
 export { default as FacebookIcon } from './ic_facebook';
