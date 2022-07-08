@@ -5,28 +5,25 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import { TextField, Alert, Stack } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
 // hooks
-import { useState } from 'react';
-import { useAuth, useLocales } from '../../../hooks';
+import { useLocales } from '../../../hooks';
 
 import { regexCons } from '../../../constants';
 
 // ----------------------------------------------------------------------
 
 ResetPasswordForm.propTypes = {
-  onSent: PropTypes.func,
-  onGetEmail: PropTypes.func
+  onSendOtp: PropTypes.func,
+  isSending: PropTypes.bool,
+  errorMgs: PropTypes.string
 };
 
-export default function ResetPasswordForm() {
-  const { resetPassword } = useAuth();
+export default function ResetPasswordForm({ onSendOtp, isSending, errorMgs }) {
   const { t } = useLocales();
-  const [isLoading, setIsLoading] = useState(false);
 
   const ResetPasswordSchema = Yup.object().shape({
     emailOrPhone: Yup.string()
       .required(t('auth.email-or-phone-required'))
       .test('test-name', (value, { createError }) => {
-        console.log('Yup.string', value);
         // phone
         if (/^[0-9].+$/.test(value)) {
           if (regexCons.phone.test(value)) {
@@ -49,11 +46,7 @@ export default function ResetPasswordForm() {
     validationSchema: ResetPasswordSchema,
     onSubmit: async (values) => {
       const { emailOrPhone } = values;
-      if (regexCons.phone.test(emailOrPhone)) {
-        // handle when phone number
-      } else {
-        // handle when email
-      }
+      onSendOtp(emailOrPhone);
     }
   });
 
@@ -63,7 +56,7 @@ export default function ResetPasswordForm() {
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
-          {errors.afterSubmit && <Alert severity="error">{errors.afterSubmit}</Alert>}
+          {errorMgs && <Alert severity="error">{errorMgs}</Alert>}
 
           <TextField
             fullWidth
@@ -74,7 +67,7 @@ export default function ResetPasswordForm() {
             helperText={touched.emailOrPhone && errors.emailOrPhone}
           />
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSending}>
             {t('auth.send-otp').toUpperCase()}
           </LoadingButton>
         </Stack>

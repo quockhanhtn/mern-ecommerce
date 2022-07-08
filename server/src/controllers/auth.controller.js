@@ -110,15 +110,24 @@ export const sendOtpCode = async (req, res, next) => {
   } catch (err) { next(err) }
 };
 
-export const forgotPassword = async (req, res, next) => {
+export const checkOtp = async (req, res, next) => {
+  try {
+    const email = req.body?.email ?? '';
+    const otp = req.body?.otp ?? '';
+    const token = await authService.checkEmailOtp(email, otp);
+    ResponseUtils.status200(res, 'Send OTP success', { token });
+  } catch (err) { next(err) }
+};
+
+export const resetPassword = async (req, res, next) => {
   try {
     const {
       account = '',     // email or phone number
-      otpOrToken = '',  // otp or firebase token
+      token = '',  // otp token (from auth/check-otp) or firebase token
       newPassword = ''
     } = req.body;
 
-    await authService.forgotPassword(account, otpOrToken, newPassword);
+    await authService.resetPassword(account, token, newPassword);
 
     ResponseUtils.status204(res);
   } catch (err) { next(err) }

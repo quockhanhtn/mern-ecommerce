@@ -14,6 +14,9 @@ API.interceptors.request.use((req) => {
     req.headers.authorization = `Bearer ${accessToken}`;
   }
 
+  const language = localStorage.getItem('i18nextLng') ?? 'vi';
+  req.headers['accept-language'] = language;
+
   let uid = localStorage.getItem('uid');
   if (!uid) {
     uid = Date.now();
@@ -49,16 +52,37 @@ export const googleOAuth = (googleCredential) => API.post('/auth/google', { goog
 export const register = (data) => API.post('/auth/login', data);
 export const login = (username, password) => API.post('/auth/login', { username, password });
 export const logout = (refreshToken) => API.post('/auth/logout', { refreshToken });
+export const sendEmailOtp = (email) => API.post('/auth/send-otp', { email });
+export const checkEmailOtp = (email, otp) => API.post('/auth/check-otp', { email, otp });
+export const resetPassword = (account, token, newPassword) =>
+  API.post('/auth/reset-password', { account, token, newPassword });
 
 // ----------------------------Account----------------------------------
 export const getAccountInfo = () => API.get('/account');
 export const updateAccountInfo = (data) => API.patch('/account', data);
 export const changePassword = (data) => API.patch('/account/change-password', data);
 
+export const isExistedAccountEmail = (email) => API.get(`/account/is-existed-email/${email}`);
+export const isExistedAccountPhone = (phone) => API.get(`/account/is-existed-phone/${phone}`);
+
 export const getAddresses = () => API.get('/account/addresses');
 export const addAddress = (data) => API.post('/account/addresses', data);
 export const updateAddress = (id, data) => API.patch(`/account/addresses/${id}`, data);
 export const deleteAddress = (id) => API.delete(`/account/addresses/${id}`);
+
+// ----------------------------User (staff) --------------------------
+export const getAllStaffs = () => API.get('/users/staff');
+export const getStaff = (identity) => API.get(`/users/staff/${identity}`);
+export const createStaff = (newUser) => API.post('/users/staff', newUser);
+export const updateStaff = (identity, updatedUser) => API.patch(`/users/staff/${identity}`, updatedUser);
+export const deleteStaff = (identity) => API.delete(`/users/staff/${identity}`);
+
+// ----------------------------User (customer) -----------------------
+export const getAllCustomers = () => API.get('/users/customer');
+export const getOneUser = (identity) => API.get(`/users/customer/${identity}`);
+export const createUser = (newUser) => API.post('/users/customer', newUser);
+export const updateUser = (identity, updatedUser) => API.patch(`/users/customer/${identity}`, updatedUser);
+export const deleteUser = (identity) => API.delete(`/users/customer/${identity}`);
 
 // ----------------------------Category--------------------------------
 export const getAllCategory = (fields) => (fields ? API.get(`/categories?fields=${fields}`) : API.get('/categories'));
@@ -106,20 +130,6 @@ export const createProductVariant = (identity, newProductVariant) =>
 export const updateProductVariant = (identity, sku, updatedProduct) =>
   API.patch(`/products/${identity}/variants/${sku}`, updatedProduct);
 export const deleteProductVariant = (identity, sku) => API.delete(`/products/${identity}/variants/${sku}`);
-
-// ----------------------------User (staff) --------------------------
-export const getAllStaffs = () => API.get('/users/staff');
-export const getStaff = (identity) => API.get(`/users/staff/${identity}`);
-export const createStaff = (newUser) => API.post('/users/staff', newUser);
-export const updateStaff = (identity, updatedUser) => API.patch(`/users/staff/${identity}`, updatedUser);
-export const deleteStaff = (identity) => API.delete(`/users/staff/${identity}`);
-
-// ----------------------------User (customer) -----------------------
-export const getAllCustomers = () => API.get('/users/customer');
-export const getOneUser = (identity) => API.get(`/users/customer/${identity}`);
-export const createUser = (newUser) => API.post('/users/customer', newUser);
-export const updateUser = (identity, updatedUser) => API.patch(`/users/customer/${identity}`, updatedUser);
-export const deleteUser = (identity) => API.delete(`/users/customer/${identity}`);
 
 // ----------------------------Payment--------------------------------
 export const redirectVnPay = (paymentInfo) => API.post(`/payment/vn_pay`, paymentInfo);

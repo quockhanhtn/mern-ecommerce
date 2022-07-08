@@ -10,6 +10,7 @@ export default {
   getOneById,
   getOrCreateByGoogleId,
   isExistEmail,
+  isExistPhone,
   create,
   update,
   updateById,
@@ -109,7 +110,12 @@ async function getOrCreateByGoogleId(
 }
 
 async function isExistEmail(email) {
-  const user = await User.findOne({ email: email }).select('_id');
+  const user = await User.findOne({ email }).select('_id');
+  return !!user;
+}
+
+async function isExistPhone(phone) {
+  const user = await User.findOne({ phone }).select('_id');
   return !!user;
 }
 

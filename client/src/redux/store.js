@@ -17,10 +17,14 @@ import logger from 'redux-logger';
 import rootReducer from './rootReducer';
 
 const middleware = (getDefaultMiddleware) => {
+  let middlewares = getDefaultMiddleware({
+    serializableCheck: false
+  });
+
   if (process.env.NODE_ENV === `development`) {
-    return getDefaultMiddleware().concat(logger);
+    middlewares = middlewares.concat(logger);
   }
-  return getDefaultMiddleware();
+  return middlewares;
 };
 
 const store = configureStore({

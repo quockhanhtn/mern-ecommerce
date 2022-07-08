@@ -38,6 +38,7 @@ router.route('/logout').post(authController.logout);
 router.route('/google').post(authController.googleOAuth);
 
 router.route('/send-otp').post(authController.sendOtpCode);
-router.route('/forgot-password').post(authController.forgotPassword);
+router.route('/check-otp').post(authController.checkOtp);
+router.route('/reset-password').post(authController.resetPassword);
 
 export default router;

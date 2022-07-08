@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import ApiErrorUtils from './ApiErrorUtils.js';
 
 const secretKey = process.env.JWT_SECRET;
-const opts = { expiresIn: process.env.JWT_EXPIRES_IN };
+const defaultExpiresIn = process.env.JWT_EXPIRES_IN;
 
 class JwtUtils {
   /**
@@ -10,8 +10,8 @@ class JwtUtils {
    * @param {*} payload - token payload
    * @returns jwt token
    */
-  static generateToken(payload) {
-    const token = jwt.sign(payload, secretKey, opts);
+  static generateToken(payload, expiresIn = defaultExpiresIn) {
+    const token = jwt.sign(payload, secretKey, { expiresIn });
     return token;
   }
 

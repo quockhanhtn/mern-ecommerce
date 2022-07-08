@@ -1,19 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Button, Container, Typography } from '@material-ui/core';
+// redux
+import { useSelector, useDispatch } from 'react-redux';
+import { sendPhoneOtp, sentEmailOtp, checkOtpEmail, checkOtpPhone } from '../../redux/slices/authSlice';
 // layouts
 import LogoOnlyLayout from '../../layouts/LogoOnlyLayout';
 // routes
 import { PATH_AUTH } from '../../routes/paths';
 // components
 import Page from '../../components/Page';
-import { ResetPasswordForm } from '../../components/authentication/reset-password';
+import { ResetPasswordForm, OtpInputForm } from '../../components/authentication/reset-password';
 //
 import { SentIcon } from '../../assets';
-
 import { useLocales } from '../../hooks';
+import { regexCons } from '../../constants';
+// firebase
+import firebase from '../../firebase';
 
 // ----------------------------------------------------------------------
 
@@ -28,9 +33,63 @@ const RootStyle = styled(Page)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function ResetPassword() {
-  const { t } = useLocales();
+  const { t, currentLang } = useLocales();
+  const dispatch = useDispatch();
+  const {
+    isLoading: isHandlingOtp,
+    isVerifying,
+    isSent,
+    isVerified,
+    error: otpError
+  } = useSelector((state) => state.auth.otp);
+
   const [email, setEmail] = useState('');
-  const [sent, setSent] = useState(false);
+  const [errorMgs, setErrorMgs] = useState('');
+
+  useEffect(() => {
+    if (!otpError) {
+      setErrorMgs(null);
+    } else {
+      setErrorMgs(otpError?.message?.[currentLang.value] || 'Lỗi');
+    }
+  }, [currentLang.value, otpError]);
+
+  useEffect(() => {
+    // eslint-disable-next-line import/no-named-as-default-member
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('invisible-recaptcha', {
+      size: 'invisible',
+      defaultCountry: 'VN',
+      callback: (response) => {
+        console.log('response', response);
+      }
+    });
+  }, []);
+
+  const handleSendOtp = (emailOrPhone) => {
+    setEmail(emailOrPhone);
+
+    if (regexCons.email.test(emailOrPhone)) {
+      dispatch(sentEmailOtp(emailOrPhone));
+    } else {
+      dispatch(sendPhoneOtp(emailOrPhone));
+    }
+  };
+
+  const handleResentOtp = () => {
+    if (regexCons.email.test(email)) {
+      dispatch(sentEmailOtp(email));
+    } else {
+      dispatch(sendPhoneOtp(email));
+    }
+  };
+
+  const handleVerifyOtp = (otpCode) => {
+    if (regexCons.email.test(email)) {
+      dispatch(checkOtpEmail(email, otpCode));
+    } else {
+      dispatch(checkOtpPhone(email, otpCode));
+    }
+  };
 
   return (
     <RootStyle title={t('auth.page-title.reset-password')}>
@@ -38,14 +97,14 @@ export default function ResetPassword() {
 
       <Container>
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
-          {!sent ? (
+          {!isSent ? (
             <>
               <Typography variant="h3" paragraph>
                 {t('auth.reset-password')}
               </Typography>
               <Typography sx={{ color: 'text.secondary', mb: 5 }}>{t('auth.reset-password-desc')}</Typography>
 
-              <ResetPasswordForm onSent={() => setSent(true)} onGetEmail={(value) => setEmail(value)} />
+              <ResetPasswordForm onSendOtp={handleSendOtp} isSending={isHandlingOtp} errorMgs={errorMgs} />
 
               <Button fullWidth size="large" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 1 }}>
                 {t('common.back').toUpperCase()}
@@ -65,11 +124,10 @@ export default function ResetPassword() {
                 Please check your email.
               </Typography>
 
-              <Button size="large" variant="contained" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 5 }}>
-                Back
-              </Button>
+              <OtpInputForm onResentOtp={handleResentOtp} onVerifyOtp={handleVerifyOtp} isLoading={isVerifying} />
             </Box>
           )}
+          <p> verified: {isVerified.toString()}</p>
         </Box>
       </Container>
     </RootStyle>

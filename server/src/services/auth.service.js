@@ -18,8 +18,9 @@ export default {
   refreshToken,
   revokeToken,
   sendOtpViaMail,
+  checkEmailOtp,
   changePassword,
-  forgotPassword,
+  forgotPassword: resetPassword,
 };
 
 async function googleAuthenticate(payload, ipAddress) {
@@ -135,6 +136,15 @@ async function sendOtpViaMail(email, language) {
   return true;
 }
 
+async function checkEmailOtp(email, otp) {
+  const isValidOtp = await otpService.validateOtp(email, otp);
+  if (!isValidOtp) {
+    throw ApiErrorUtils.simple2(responseDef.AUTH.INVALID_OTP);
+  }
+  const otpToken = JwtUtils.generateToken({ email: email }, '1h');
+  return otpToken;
+}
+
 async function changePassword(userId, oldPassword, newPassword) {
   const user = await userService.getOneById(userId, '_id password emptyPassword googleId email');
   if (!user) {
@@ -172,12 +182,12 @@ async function changePassword(userId, oldPassword, newPassword) {
   return result;
 }
 
-async function forgotPassword(account, otpOrToken, newPassword) {
+async function resetPassword(account, token, newPassword) {
   let isValidOtp = false;
   if (StringUtils.isEmailAddress(account)) {
-    isValidOtp = await otpService.validateOtp(account, otpOrToken);
+    isValidOtp = JwtUtils.verifyToken(token).email === account;
   } else if (StringUtils.isPhoneNumber(account)) {
-    isValidOtp = await firebaseService.verifyTokenWithPhone(account, otpOrToken);
+    isValidOtp = await firebaseService.verifyTokenWithPhone(account, token);
   } else {
     throw ApiErrorUtils.simple2(responseDef.AUTH.INVALID_ACCOUNT);
   }
