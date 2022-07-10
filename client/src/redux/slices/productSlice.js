@@ -211,7 +211,7 @@ export const getProductById = (id) => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
     const fields =
-      '_id name slug desc video overSpecs detailSpecs origin category brand tags views rate variants quantity warrantyPeriod isHide createdAt updatedAt';
+      '_id name slug desc video overSpecs policies detailSpecs origin category brand tags views rate variants quantity warrantyPeriod isHide createdAt updatedAt';
     const { data } = await api.getOneProduct(id, fields);
     dispatch(actions.getOneSuccess(data));
   } catch (e) {
