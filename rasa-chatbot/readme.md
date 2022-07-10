@@ -22,4 +22,5 @@ rasa shell            # Loads your trained model and lets you talk to your assis
 On Debian you need the build-essential package:
 ```bash
 sudo apt install build-essential
+sudo apt install libpq-dev
 ```

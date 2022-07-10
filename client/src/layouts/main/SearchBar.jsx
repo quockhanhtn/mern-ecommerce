@@ -183,15 +183,15 @@ export default function SearchBar({ iconSx }) {
         getOptionLabel={(option) => option.name || ''}
         renderOption={(props, product) => renderResultItem(product)}
         placeholder={t('common.search-placeholder')}
-        startAdornment={
-          <InputAdornment position="start">
-            <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled', width: 20, height: 20 }} />
-          </InputAdornment>
-        }
+        // startAdornment={
+        //   <InputAdornment position="start">
+        //     <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled', width: 20, height: 20 }} />
+        //   </InputAdornment>
+        // }
         renderInput={(params) => (
           <TextField
             {...params}
-            disableUnderline
+            // disableUnderline
             placeholder={t('common.search-placeholder')}
             // variant="standard"
             size="small"

@@ -4,6 +4,8 @@ import productService from '../../services/products.service.js';
 import userBehaviorService from '../../services/user-behavior.service.js';
 import * as mailerService from '../../services/mailer.service.js';
 
+// import { insertData } from '../../../tool/update-data.js';
+
 const router = Router();
 
 router.get('/update', (req, res) => {
@@ -45,6 +47,13 @@ router.get('/mail', async (req, res, next) => {
   res.status(200).json({ done: true });
   res.end();
 });
+
+// router.get('/insert', async (req, res, next) => {
+//   insertData();
+//   res.status(200).json({ done: true });
+//   res.end();
+// });
+
 
 
 

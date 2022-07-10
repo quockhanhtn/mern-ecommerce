@@ -117,7 +117,7 @@ export const getFullAllProduct = () => API.get('/products/all');
 export const getRelatedProduct = (listId) =>
   API.post('/products/get-by-ids', { list: listId, fields: '_id name slug category brand views rate variants' });
 export const getBestSellerProduct = () => API.get('/products/best-seller');
-export const getOneProduct = (identity) => API.get(`/products/${identity}`);
+export const getOneProduct = (identity, fields) => API.get(`/products/${identity}?fields=${fields}`);
 
 export const createProduct = (newProduct) => API.post('/products', newProduct);
 export const updateProduct = (identity, updatedProduct) => API.patch(`/products/${identity}`, updatedProduct);

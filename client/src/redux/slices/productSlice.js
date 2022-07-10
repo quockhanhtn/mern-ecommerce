@@ -131,8 +131,7 @@ const productSlice = createSlice({
         products: action.payload.products
       };
     },
-    // eslint-disable-next-line no-unused-vars
-    relatedExists(state, _action) {
+    relatedExists(state) {
       state.related.isLoading = false;
       state.related.error = null;
     },
@@ -211,7 +210,9 @@ export const getFullAllProducts = () => async (dispatch) => {
 export const getProductById = (id) => async (dispatch) => {
   try {
     dispatch(actions.startLoading());
-    const { data } = await api.getOneProduct(id);
+    const fields =
+      '_id name slug desc video overSpecs detailSpecs origin category brand tags views rate variants quantity warrantyPeriod isHide createdAt updatedAt';
+    const { data } = await api.getOneProduct(id, fields);
     dispatch(actions.getOneSuccess(data));
   } catch (e) {
     dispatch(actions.hasError(e));

@@ -144,8 +144,9 @@ export const getAllProducts = async (req, res, next) => {
 export const getProductById = async (req, res, next) => {
   try {
     const { identity } = req.params;
+    const { fields } = req.query;
     // inc views and get new data for return
-    const product = await productService.getOneProduct(identity, true);
+    const product = await productService.getOneProduct(identity, true, false, fields);
     if (product) {
       ResponseUtils.status200(res, null, formatProduct(product, req));
     } else {
@@ -175,7 +176,7 @@ export const getListProductsByIds = async (req, res, next) => {
     const filters = { '_id': { $in: list } };
 
     let result = await productService.getAllProducts({
-      fields, 
+      fields,
       limit: list.length,
       filters
     });

@@ -37,7 +37,7 @@ export default function AccountGeneral() {
   const { t } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const { info: accountInfo, isLoading, error } = useSelector((state) => state.account);
+  const { info: accountInfo, isLoading } = useSelector((state) => state.account);
   const { reInitialize } = useAuth();
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -49,7 +49,7 @@ export default function AccountGeneral() {
 
   useEffect(() => {
     dispatch(getAccountInfo());
-  }, []);
+  }, [dispatch]);
 
   async function handleUpdateAccountInfo(data) {
     setIsUpdating(true);
