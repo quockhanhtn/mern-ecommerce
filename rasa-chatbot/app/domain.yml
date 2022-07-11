@@ -14,6 +14,10 @@ intents:
   - payment
   - ship
   - sell
+  - iphone
+  - samsung
+  - fix
+  - warranty
 
 entities:
  - cust_sex
@@ -62,6 +66,14 @@ responses:
     - text: "Thời gian vận chuyển tuỳ thuộc vào từng vùng miền ạ. Thời gian cho nội thành phố là 1-3 ngày còn các tỉnh thành thường 5-7 ngày tuỳ vào thời tiếc ạ. Đơn hàng sẽ được miễn phí vận chuyển."
   utter_sell:
     - text: "Cửa hàng chúng em bán rất nhiều sản phẩm thuộc những danh mục chính: điện thoại, máy tính bảng, đồng hồ, laptop, âm thanh và phụ kiện,..."
+  utter_iphone:
+    - text: "Thưa quý khách, cửa hàng chúng tôi có bán tất cả các dòng điện iphone có trên thị trường."
+  utter_samsung:
+    - text: "Thưa quý khách, cửa hàng chúng tôi có bán tất cả các dòng điện samsung có trên thị trường."
+  utter_fix:
+    - text: "Thưa quý khách, hiện tại cửa hàng chúng tôi không sửa chửa điện thoại, phụ kiện mà chỉ bảo hành sản phẩm còn trong thời gian bảo hành. "
+  utter_warranty:
+    - text: "Thưa quý khách, cửa hàng chúng tôi thời gian bảo hành là khoảng từ 10 - 15 ngày tuỳ thời gian của hãng. "
   utter_unclear:
     - text: "Thưa quý khách, hiện tại tôi chưa hiểu được yêu cầu của Quý khách. "
 
@@ -82,6 +94,10 @@ actions:
   - utter_payment
   - utter_ship
   - utter_sell
+  - utter_iphone
+  - utter_samsung
+  - utter_fix
+  - utter_warranty
 
 session_config:
   session_expiration_time: 60
