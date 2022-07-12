@@ -48,8 +48,15 @@ export default function PhoneVerifyDialog({ open, onClose, onSuccess }) {
     onSuccess();
   };
 
+  const handleClose = (_event, reason) => {
+    if (reason && (reason === 'backdropClick' || reason === 'escapeKeyDown')) {
+      return;
+    }
+    onClose();
+  };
+
   return (
-    <Dialog disableEscapeKeyDown onBackdropClick="false" open={open} onClose={onClose}>
+    <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
       <DialogTitle>
         <Typography variant="h5">{isSent ? 'Nhập mã OTP' : ' Nhập số điện thoại để xác thực'}</Typography>
       </DialogTitle>

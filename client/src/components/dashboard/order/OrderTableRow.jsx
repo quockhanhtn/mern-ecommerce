@@ -17,7 +17,7 @@ import Label from '../../Label';
 // ----------------------------------------------------------------------
 
 // eslint-disable-next-line react/prop-types
-export default function OrderTableRow({ key, row, onClick }) {
+export default function OrderTableRow({ row, onClick }) {
   const { t, currentLang } = useLocales();
 
   const handleViewDetail = () => {
@@ -25,7 +25,7 @@ export default function OrderTableRow({ key, row, onClick }) {
   };
 
   return (
-    <TableRow hover key={key}>
+    <TableRow hover>
       <TableCell align="left" scope="row" padding="none">
         {row?.numericId}
       </TableCell>

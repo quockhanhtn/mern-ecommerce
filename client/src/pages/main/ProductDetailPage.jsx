@@ -26,7 +26,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 import Markdown from '../../components/Markdown';
 import { ProductDetailsReview } from '../../components/dashboard/product-details';
 import { CarouselThumbnail } from '../../components/carousel';
-import { ProductCarousel, ProductList, ProductVariantInfo } from '../../components/e-commerce';
+import { ProductCarousel, ProductList, ProductVariantInfo, ProductSpecification } from '../../components/e-commerce';
 //
 import { fShortenNumber } from '../../utils/formatNumber';
 
@@ -210,6 +210,14 @@ export default function ProductDetailPage() {
           <TabContext value={tab}>
             <Box sx={{ px: 3, bgcolor: 'background.neutral' }}>
               <TabList onChange={handleChangeTab}>
+                {product?.overSpecs?.length > 0 && (
+                  <Tab
+                    disableRipple
+                    value="0"
+                    label={t('products.specifications')}
+                    sx={{ '& .MuiTab-wrapper': { whiteSpace: 'nowrap' } }}
+                  />
+                )}
                 <Tab disableRipple value="1" label={t('home.product-desc')} />
                 {product?.video && (
                   <Tab disableRipple value="2" label="Video" sx={{ '& .MuiTab-wrapper': { whiteSpace: 'nowrap' } }} />
@@ -223,6 +231,9 @@ export default function ProductDetailPage() {
               </TabList>
             </Box>
             <Divider />
+            <TabPanel value="0">
+              <ProductSpecification overSpecs={product?.overSpecs} detailSpecs={product?.detailSpecs} />
+            </TabPanel>
             <TabPanel value="1">
               <SimpleBarReact style={{ maxHeight: '600px' }}>
                 <Box sx={{ p: 3 }}>

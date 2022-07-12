@@ -239,5 +239,92 @@ nlu:
     - có bán gì
     - bán gì á
     
+- intent: iphone
+  examples: |
+    - bên mình có bán iphone không
+    - iphone
+    - iphone 13 promax
+    - iphone 13
+    - iphone 13 mini
+    - ihpone 13 pro
+    - iphone 12 promax
+    - iphone 12 pro
+    - iphone 12 mini
+    - iphone 12
+    - iphone 11 promax
+    - iphone 11 pro
+    - iphone 11 mini
+    - iphone 11
+    - iphone x
+    - iphone xs
+    - iphone xsmax
+    - iphone 8 plus
+    - iphone 8
+    - iphone 7
+    - iphone 7 plus
+    - iphone 6
+    - iphone 6 plus
+    - bên mình bán iphone gì ạ
+    - bán iphone
+    - mình cần mua iphone
+    - mua iphone chứ
+    - mình mua iphone
+    - mình bán iphone
+    - mua iphone đi nè
+    - mua iphone đi nè
+    - mình mua iphone
+    - iphone mua đi
 
+- intent: samsung
+  examples: |
+    - bên mình có bán samsung không
+    - samsung
+    - samsung note 7
+    - samsung note 8
+    - samsung note 6
+    - samsung note 9
+    - samsung galaxy
+    - samsung z fold 3
+    - samsung A10
+    - samsung A20
+    - samsung A30
+    - samsung A40
+    - samsung A50
+    - samsung A70
+    - samsung A52s
+    - samsung M51
+    - samsung S21
+    - samsung S20
+    - bên mình bán samsung gì ạ
+    - bán samsung
+    - mình cần mua samsung
+    - mua samsung chứ
+    - mình mua samsung
+    - mình bán samsung
+    - mua samsung đi nè
+    - mua samsung đi nè
+    - mình mua samsung
+    - samsung mua đi
+
+- intent: fix
+  examples: |
+    - cửa hàng có sửa điện thoại không ạ
+    - sửa chửa điện thoại
+    - sửa chửa
+    - fix
+    - sửa sửa phụ kiện
+    - sửa chửa điện thoại
+    - fix điện thoại
+    - sửa chửa iphone
+    - sửa chửa samsung
+
+- intent: warranty
+  examples: |
+    - thời gian bảo hành
+    - bảo hành
+    - bảo hành bao lâu
+    - bảo hành ở đâu
+    - ở đâu bảo hành
+    - bảo hành chính hãng
+    - chính hãng bảo hành
 

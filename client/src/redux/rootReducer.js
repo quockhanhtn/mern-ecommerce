@@ -9,6 +9,7 @@ import accountSlice from './slices/accountSlice';
 import brandSlice from './slices/brandSlice';
 import discountsReducer from './reducers/discounts';
 import productsReducer from './slices/productSlice';
+import searchProductsReducer from './slices/searchProductSlice';
 import usersReducer from './reducers/users';
 // import accountReducer from './reducers/account';
 import ordersReducer from './reducers/orders';
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   brand: brandSlice,
   discount: discountsReducer,
   product: productsReducer,
+  searchProduct: searchProductsReducer,
   user: usersReducer,
   // account: accountReducer,
   orderManager: ordersReducer,

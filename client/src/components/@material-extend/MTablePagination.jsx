@@ -6,7 +6,7 @@ MTablePagination.propTypes = {
   count: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   page: PropTypes.number.isRequired,
-  onChangePage: PropTypes.func.isRequired,
+  onChangePage: PropTypes.func,
   onRowsPerPageChange: PropTypes.func.isRequired,
   rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number)
 };

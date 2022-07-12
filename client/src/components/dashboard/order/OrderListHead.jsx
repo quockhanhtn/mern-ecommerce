@@ -11,7 +11,7 @@ OrderListHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   headLabel: PropTypes.array.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired
 };
 

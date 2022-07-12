@@ -104,13 +104,24 @@ productSchema.index(
     name: 'text',
     desc: 'text',
     'variants.variantName': 'text',
+    'overSpecs.name': 'text',
+    'overSpecs.values': 'text',
+    'detailSpecs.groupName': 'text',
+    'detailSpecs.groupItems.name': 'text',
+    'detailSpecs.groupItems.values': 'text',
   },
   {
     weights: {
       name: 20,
-      'variants.variantName': 2,
+      'variants.variantName': 5,
       desc: 1,
-    }
+      'overSpecs.name': 1,
+      'overSpecs.values': 2,
+      'detailSpecs.groupName': 1,
+      'detailSpecs.groupItems.name': 1,
+      'detailSpecs.groupItems.values': 2,
+    },
+    name: 'searchIndex'
   }
 );
 

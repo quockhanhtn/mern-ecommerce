@@ -110,3 +110,38 @@ stories:
     - action: utter_open
     - intent: sell
     - action: utter_sell
+
+- story: story 13
+  steps:
+    - intent: open
+    - action: utter_open
+    - intent: iphone
+    - action: utter_iphone
+
+- story: story 14
+  steps:
+    - intent: open
+    - action: utter_open
+    - intent: samsung
+    - action: utter_samsung
+
+- story: story 15
+  steps:
+    - intent: open
+    - action: utter_open
+    - intent: samsung
+    - action: utter_samsung
+
+- story: story 16
+  steps:
+    - intent: open
+    - action: utter_open
+    - intent: fix
+    - action: utter_fix
+
+- story: story 17
+  steps:
+    - intent: open
+    - action: utter_open
+    - intent: warranty
+    - action: utter_warranty

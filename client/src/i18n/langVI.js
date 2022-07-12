@@ -457,6 +457,7 @@ export default {
     variant: 'Phiên bản',
     quantity: 'Số lượng',
     'warranty-period': 'Warranty Period',
+    specifications: 'Thông số kỹ thuật',
     'specifications-name': 'Thông số',
     'specifications-value': 'Giá trị',
     thumbnail: 'Hình thu nhỏ',

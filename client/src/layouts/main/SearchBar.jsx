@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 // icons
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
@@ -16,17 +16,20 @@ import {
 } from '@material-ui/core';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 // hook
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import useLocales from '../../hooks/useLocales';
-import useLocalStorage from '../../hooks/useLocalStorage';
-//
-import { getSearchSuggest } from '../../api';
+import { useLocales, useLocalStorage } from '../../hooks';
 // components
 import { MCircularProgress } from '../../components/@material-extend';
 import { ThumbImgStyle } from '../../components/@styled';
 // utils
 import { fCurrency } from '../../utils/formatNumber';
 import Label from '../../components/Label';
+
+import { quickSearchProduct } from '../../redux/slices/searchProductSlice';
+
+import * as typeUtils from '../../utils/typeUtils';
 
 // ----------------------------------------------------------------------
 
@@ -41,38 +44,124 @@ const StyledAutocomplete = styled(Autocomplete)(({ theme }) => ({
   }
 }));
 
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  maxWidth: 400,
+  marginLeft: 3,
+  zIndex: 999,
+  backgroundColor: `${theme.palette.primary.lighter}40`
+}));
+
+const StyledBox = styled(Box)(({ theme }) => ({
+  position: 'fixed',
+  backgroundColor: 'white',
+  display: 'flex',
+  flexDirection: 'column',
+  maxWidth: 400,
+  maxHeight: '50vh',
+  overflowX: 'hidden',
+  overflowY: 'auto'
+}));
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  cursor: 'pointer',
+  display: 'flex',
+  margin: theme.spacing(1, 1),
+  padding: theme.spacing(1, 1),
+  border: `solid 2px ${theme.palette.divider}`,
+  flexDirection: 'row',
+  '&:hover': {
+    boxShadow: theme.customShadows.z8,
+    color: theme.palette.primary.main,
+    border: `solid 3px ${theme.palette.primary.main}`
+  }
+}));
+
+// ----------------------------------------------------------------------
+
+function ResultItem({ product, onClick }) {
+  const { currentLang } = useLocales();
+  const { price, marketPrice } = product.variants[0];
+  const discountPercent = Math.ceil(((marketPrice - price) * 100) / marketPrice);
+
+  const handleOnClick = (event) => {
+    if (typeUtils.isFunction(onClick)) {
+      console.log('handleOnClick', product);
+      onClick(product);
+    }
+    event.stopPropagation();
+  };
+
+  return (
+    <StyledPaper onClick={handleOnClick}>
+      <ThumbImgStyle alt={product.name} src={product.variants[0].thumbnail} />
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Typography variant="subtitle1" style={{ wordWrap: 'break-word' }}>
+          {product.name}
+        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          <Typography variant="body1" sx={{ color: 'inherit', mr: 2 }}>
+            {fCurrency(price, currentLang.value)}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.disabled', textDecoration: 'line-through', mr: 2 }}>
+            {fCurrency(marketPrice, currentLang.value)}
+          </Typography>
+          <Label color="error">{`${discountPercent}%`}</Label>
+          <Box sx={{ flexGrow: 1 }} />
+        </Box>
+      </Box>
+    </StyledPaper>
+  );
+}
+
+ResultItem.propTypes = {
+  product: PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    variants: PropTypes.arrayOf(
+      PropTypes.shape({
+        price: PropTypes.number,
+        marketPrice: PropTypes.number,
+        thumbnail: PropTypes.string
+      })
+    )
+  }),
+  onClick: PropTypes.func
+};
+
+// ----------------------------------------------------------------------
+
 export default function SearchBar({ iconSx }) {
-  const { t, currentLang } = useLocales();
+  const { t } = useLocales();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { results, isLoading } = useSelector((state) => state.searchProduct.quickSearch);
+
   const [isOpen, setOpen] = useState(true);
   const [keyWord, setKeyWord] = useState('');
   const [searchHistory, setSearchHistory] = useLocalStorage('searchHistory', []);
 
-  const [results, setResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  async function fetchData(keyword) {
-    try {
-      setIsLoading(true);
-      const { data } = await getSearchSuggest(keyword);
-      setResults((_prev) => [...data.data]);
-    } catch (e) {
-      console.log(e);
-    }
-    setIsLoading(false);
-  }
+  const [showResult, setShowResult] = useState(false);
 
   useEffect(() => {
     if (keyWord.trim()) {
-      fetchData(keyWord);
+      dispatch(quickSearchProduct(keyWord));
     } else {
       setKeyWord('');
-      setResults([]);
+      dispatch(quickSearchProduct(''));
     }
-  }, [keyWord]);
+  }, [dispatch, keyWord]);
 
   const handleTextChange = (e) => {
-    setKeyWord(e.target.value);
+    setKeyWord(e.target.value.trim());
+    if (e.target.value.trim() && !showResult) {
+      setShowResult(true);
+    }
+  };
+
+  const handleTextOnClick = (_event) => {
+    setOpen(true);
+    setShowResult(true);
   };
 
   const handleOpen = () => {
@@ -81,6 +170,7 @@ export default function SearchBar({ iconSx }) {
 
   const handleClose = () => {
     setOpen(false);
+    setShowResult(false);
   };
 
   const handleNavigate = () => {
@@ -91,8 +181,10 @@ export default function SearchBar({ iconSx }) {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       handleNavigate();
+      setShowResult(false);
     } else if (event.key === 'Escape') {
       setOpen(false);
+      setShowResult(false);
     }
   };
 
@@ -106,48 +198,17 @@ export default function SearchBar({ iconSx }) {
 
     navigate(`/p/${product.slug}`);
     setOpen(false);
+    setShowResult(false);
   };
 
-  const renderResultItem = (product) => {
-    const { price, marketPrice } = product.variants[0];
-    const discountPercent = Math.ceil(((marketPrice - price) * 100) / marketPrice);
+  const renderResultItem = (props, product) => {
+    console.log('useEffect-renderResultItem', product);
 
     if (isLoading) {
       return <MCircularProgress size={15} sx={{ my: 3 }} />;
     }
-
     return (
-      <Grid key={product._id} item onClick={() => handleOnClickResultItem(product)} sx={{ cursor: 'pointer' }}>
-        <Paper
-          sx={{
-            display: 'flex',
-            marginLeft: 3,
-            marginBottom: 2,
-            flexDirection: 'row',
-            '&:hover': {
-              boxShadow: (theme) => theme.customShadows.z8,
-              color: (theme) => theme.palette.primary.main
-            }
-          }}
-        >
-          <ThumbImgStyle alt={product.name} src={product.variants[0].thumbnail} />
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography variant="subtitle1" style={{ wordWrap: 'break-word' }}>
-              {product.name}
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-              <Typography variant="body1" sx={{ color: 'inherit', mr: 2 }}>
-                {fCurrency(price, currentLang.value)}
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'text.disabled', textDecoration: 'line-through', mr: 2 }}>
-                {fCurrency(marketPrice, currentLang.value)}
-              </Typography>
-              <Label color="error">{`${discountPercent}%`}</Label>
-              <Box sx={{ flexGrow: 1 }} />
-            </Box>
-          </Box>
-        </Paper>
-      </Grid>
+      <ResultItem {...props} key={product._id} product={product} onClick={() => handleOnClickResultItem(product)} />
     );
   };
 
@@ -169,50 +230,58 @@ export default function SearchBar({ iconSx }) {
     );
   };
 
+  const renderSearchResult = () => {
+    if (!showResult || !keyWord.trim()) {
+      return null;
+    }
+
+    let children;
+    if (isLoading) {
+      children = (
+        <Typography variant="body2" sx={{ ml: 3, mt: 1, mb: 1, width: 50000 }}>
+          Đang tìm kiếm sản phẩm ....
+        </Typography>
+      );
+    } else if (results?.length < 1) {
+      children = (
+        <Typography variant="body2" sx={{ ml: 3, mt: 1, mb: 1, width: 50000 }}>
+          Không có sản phẩm phù hợp.
+        </Typography>
+      );
+    } else {
+      children = results.map((product) => (
+        <ResultItem key={product._id} product={product} onClick={handleOnClickResultItem} />
+      ));
+    }
+    return <StyledBox>{children}</StyledBox>;
+  };
+
   return (
     <ClickAwayListener onClickAway={handleClose}>
-      <StyledAutocomplete
-        fullWidth
-        freeSolo
-        autoComplete
-        open={isOpen}
-        loading={isLoading}
-        loadingText="Đang tìm kiếm sản phẩm ...."
-        noOptionsText="Không có sản phẩm phù hợp."
-        options={results}
-        getOptionLabel={(option) => option.name || ''}
-        renderOption={(props, product) => renderResultItem(product)}
-        placeholder={t('common.search-placeholder')}
-        startAdornment={
-          <InputAdornment position="start">
-            <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled', width: 20, height: 20 }} />
-          </InputAdornment>
-        }
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            disableUnderline
-            placeholder={t('common.search-placeholder')}
-            // variant="standard"
-            size="small"
-            InputProps={{
-              ...params.InputProps,
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Box
-                    component={Icon}
-                    icon={searchFill}
-                    sx={{ color: 'text.disabled', width: 20, height: 20, zIndex: 999 }}
-                  />
-                </InputAdornment>
-              )
-            }}
-            onClick={() => setOpen(true)}
-            onChange={handleTextChange}
-          />
-        )}
-        onKeyDown={handleKeyDown}
-      />
+      <>
+        <StyledTextField
+          fullWidth
+          placeholder={t('common.search-placeholder')}
+          size="small"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Box
+                  component={Icon}
+                  icon={searchFill}
+                  sx={{ color: 'text.disabled', width: 20, height: 20, zIndex: 999 }}
+                />
+              </InputAdornment>
+            )
+          }}
+          onClick={handleTextOnClick}
+          onChange={handleTextChange}
+          onKeyDown={handleKeyDown}
+          onBlur={() => setShowResult(false)}
+          onFocus={() => setShowResult(true)}
+        />
+        {renderSearchResult()}
+      </>
     </ClickAwayListener>
   );
 }

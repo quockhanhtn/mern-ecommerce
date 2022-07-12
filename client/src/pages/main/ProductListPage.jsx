@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// icons
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
 // material
@@ -18,15 +17,22 @@ import {
   Typography
 } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
-// redux
-import { useSelector, useDispatch } from 'react-redux';
-import { getAllProducts } from '../../redux/slices/productSlice';
 // hooks
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useQuery from '../../hooks/useQuery';
 import useLocales from '../../hooks/useLocales';
 // components
 import Page from '../../components/Page';
-import ProductList from '../../components/e-commerce/ProductList';
+import { ProductList } from '../../components/e-commerce';
+
+import {
+  initialSearch,
+  searchProduct,
+  setSelectedCategories,
+  setSelectedBrands
+} from '../../redux/slices/searchProductSlice';
 
 // ----------------------------------------------------------------------
 
@@ -50,13 +56,17 @@ export default function ProductListPage() {
   const categorySlug = query.get('c');
   const search = query.get('search');
 
-  const { list: productsApi, isLoading: isLoadingProduct, pagination } = useSelector((state) => state.product);
+  const {
+    isInitialized,
+    categoryOpts,
+    brandOpts,
+    selectedCategories,
+    selectedBrands,
+    list: productsApi,
+    isLoading: isLoadingProduct,
+    pagination
+  } = useSelector((state) => state.searchProduct);
 
-  const { listSimple: categoryList } = useSelector((state) => state.category);
-  const { listSimple: brandList } = useSelector((state) => state.brand);
-
-  const [categoriesSelected, setCategoriesSelected] = useState([]);
-  const [brandsSelected, setBrandsSelected] = useState([]);
   const [searchText, setSearchText] = useState(decodeURIComponent(search || ''));
 
   const [products, setProducts] = useState([]);
@@ -64,24 +74,26 @@ export default function ProductListPage() {
   const limit = 10;
 
   useEffect(() => {
-    setCategoriesSelected([...categoryList.filter((x) => categorySlug?.split(',').includes(x.slug))]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categoryList]);
+    dispatch(initialSearch());
+  }, [dispatch]);
 
   useEffect(() => {
-    setBrandsSelected([...brandList.filter((x) => brandSlug?.split(',').includes(x.slug))]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brandList]);
+    const cs = [...categoryOpts.filter((x) => categorySlug?.split(',').includes(x.slug))];
+    dispatch(setSelectedCategories(cs));
+    const bs = [...brandOpts.filter((x) => brandSlug?.split(',').includes(x.slug))];
+    dispatch(setSelectedBrands(bs));
 
-  useEffect(() => {
-    setCategoriesSelected([...categoryList.filter((x) => categorySlug?.split(',').includes(x.slug))]);
-    setBrandsSelected([...brandList.filter((x) => brandSlug?.split(',').includes(x.slug))]);
-
-    const b = brandsSelected.map((x) => x._id).join(',');
-    const c = categoriesSelected.map((x) => x._id).join(',');
-    dispatch(getAllProducts(searchText, b, c, page, limit));
+    const b = selectedBrands.map((x) => x._id).join(',');
+    const c = selectedCategories.map((x) => x._id).join(',');
+    dispatch(searchProduct({ search: searchText, category: c, brand: b, page, limit }));
 
     console.log('searchpage', {
+      cs,
+      bs,
+      selectedBrands,
+      selectedCategories,
+      categoryOpts,
+      brandOpts,
       categorySlug,
       brandSlug,
       search,
@@ -89,9 +101,8 @@ export default function ProductListPage() {
       b,
       searchText
     });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug, brandSlug, search, page]);
+  }, [dispatch, isInitialized, categorySlug, brandSlug, search, page]);
 
   useEffect(() => {
     if (page === 1) {
@@ -116,22 +127,20 @@ export default function ProductListPage() {
     setSearchText(e.target.value);
   };
 
-  const handleCategoriesChange = (e, value) => {
-    setCategoriesSelected(value);
+  const handleCategoriesChange = (_e, value) => {
+    dispatch(setSelectedCategories(value));
   };
 
-  const handleBrandsChange = (e, value) => {
-    setBrandsSelected(value);
+  const handleBrandsChange = (_e, value) => {
+    dispatch(setSelectedBrands(value));
   };
 
   const handleSearch = () => {
-    const b = brandsSelected.map((x) => x._id).join(',');
-    const bQuery = brandsSelected.map((x) => x.slug).join(',');
-    const c = categoriesSelected.map((x) => x._id).join(',');
-    const cQuery = categoriesSelected.map((x) => x.slug).join(',');
+    const bQuery = selectedBrands.map((x) => x.slug).join(',');
+    const cQuery = selectedCategories.map((x) => x.slug).join(',');
 
     setPage(1);
-    dispatch(getAllProducts(searchText, b, c, page, limit));
+    dispatch(searchProduct({ search: searchText, page, limit }));
     navigate(`/q?c=${cQuery}&b=${bQuery}&search=${encodeURIComponent(searchText)}`);
   };
 
@@ -167,9 +176,9 @@ export default function ProductListPage() {
                           <Autocomplete
                             multiple
                             fullWidth
-                            options={categoryList}
+                            options={categoryOpts}
                             getOptionLabel={(item) => item.name}
-                            value={categoriesSelected}
+                            value={selectedCategories}
                             filterSelectedOptions
                             renderInput={(params) => <TextField {...params} label={t('dashboard.categories.title')} />}
                             onChange={handleCategoriesChange}
@@ -179,9 +188,9 @@ export default function ProductListPage() {
                           <Autocomplete
                             multiple
                             fullWidth
-                            options={brandList}
+                            options={brandOpts}
                             getOptionLabel={(item) => item?.name}
-                            value={brandsSelected}
+                            value={selectedBrands}
                             filterSelectedOptions
                             renderInput={(params) => <TextField {...params} label={t('dashboard.brands.title')} />}
                             onChange={handleBrandsChange}
@@ -209,7 +218,7 @@ export default function ProductListPage() {
                     variant="outlined"
                     sx={{ backgroundColor: 'white', width: '50%' }}
                     onClick={handleLoadMore}
-                    isLoading={isLoadingProduct}
+                    loading={isLoadingProduct}
                   >
                     Xem thêm
                   </LoadingButton>
