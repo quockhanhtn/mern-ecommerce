@@ -10,7 +10,13 @@ const initialState = {
   categoryOpts: [],
   selectedCategories: [],
   brandOpts: [],
-  selectedBrands: []
+  selectedBrands: [],
+
+  quickSearch: {
+    results: [],
+    isLoading: false,
+    prevKeyword: ''
+  }
 };
 
 const searchProductSlice = createSlice({
@@ -40,7 +46,17 @@ const searchProductSlice = createSlice({
     },
     setSelectedBrands(state, action) {
       state.selectedBrands = [...action.payload];
+    },
+
+    // #region quick search
+    startLoadingQuickSearch(state) {
+      state.quickSearch.isLoading = true;
+    },
+    quickSearchSuccess(state, action) {
+      state.quickSearch.isLoading = false;
+      state.quickSearch.results = action.payload;
     }
+    // #endregion
   }
 });
 
@@ -84,5 +100,15 @@ export const searchProduct = (options) => async (dispatch, getState) => {
     dispatch(actions.searchSuccess(data));
   } catch (e) {
     dispatch(actions.hasError(e?.response?.data || e));
+  }
+};
+
+export const quickSearchProduct = (keyword) => async (dispatch) => {
+  try {
+    dispatch(actions.startLoadingQuickSearch());
+    const { data } = await api.getSearchSuggest(keyword);
+    dispatch(actions.quickSearchSuccess(data.data));
+  } catch (e) {
+    // console.log(e);
   }
 };

@@ -24,7 +24,7 @@ import OrderCard from './OrderCard';
 // ----------------------------------------------------------------------
 
 OrderDetailForm.propTypes = {
-  order: PropTypes.any.isRequired,
+  order: PropTypes.any,
   open: PropTypes.bool,
   setOpen: PropTypes.func,
   handleUpdate: PropTypes.func,
@@ -119,7 +119,10 @@ export default function OrderDetailForm({ order, open, setOpen, handleUpdate, ac
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (_event, reason) => {
+    if (reason && (reason === 'backdropClick' || reason === 'escapeKeyDown')) {
+      return;
+    }
     setOpen(false);
   };
 
@@ -209,7 +212,7 @@ export default function OrderDetailForm({ order, open, setOpen, handleUpdate, ac
   };
 
   return (
-    <Dialog disableEscapeKeyDown fullWidth maxWidth="lg" onBackdropClick="false" open={open} onClose={handleClose}>
+    <Dialog fullWidth maxWidth="lg" open={open} onClose={handleClose}>
       <DialogTitle>
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Typography variant="h4" marginBottom={2} sx={{ textTransform: 'uppercase', mb: 0 }}>

@@ -114,7 +114,7 @@ export default function HomePage() {
                   variant="outlined"
                   sx={{ backgroundColor: 'white', width: '50%' }}
                   onClick={handleLoadMore}
-                  isLoading={isLoadingProduct}
+                  loading={isLoadingProduct}
                 >
                   {`Xem thêm ${productPagination.countAll - productPagination.page * LIMIT} sản phẩm`}
                 </LoadingButton>

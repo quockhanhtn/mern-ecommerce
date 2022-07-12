@@ -120,7 +120,8 @@ productSchema.index(
       'detailSpecs.groupName': 1,
       'detailSpecs.groupItems.name': 1,
       'detailSpecs.groupItems.values': 2,
-    }
+    },
+    name: 'searchIndex'
   }
 );
 
