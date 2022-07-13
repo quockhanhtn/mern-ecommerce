@@ -16,7 +16,7 @@ export const getInfo = async (req, res, next) => {
 
 export const updateInfo = async (req, res, next) => {
   try {
-    const updateUser = await userService.update(req.user._id, req.body);
+    const updateUser = await userService.updateBasicInfo(req.user._id, req.body);
     if (updateUser) {
       ResponseUtils.status200(
         res,
@@ -29,6 +29,40 @@ export const updateInfo = async (req, res, next) => {
     }
   } catch (err) { next(err); }
 }
+
+export const updateEmail = async (req, res, next) => {
+  try {
+    const updateUser = await userService.updateEmail(req.user._id, req.body);
+    if (updateUser) {
+      ResponseUtils.status200(
+        res,
+        `Update info successfully!`,
+        updateUser
+        // formatOneUser(updateUser, req)
+      );
+    } else {
+      ResponseUtils.status404(res, `User '${identity}' not found!`);
+    }
+  } catch (err) { next(err); }
+}
+
+
+export const updatePhone = async (req, res, next) => {
+  try {
+    const updateUser = await userService.updatePhone(req.user._id, req.body);
+    if (updateUser) {
+      ResponseUtils.status200(
+        res,
+        `Update info successfully!`,
+        updateUser
+        // formatOneUser(updateUser, req)
+      );
+    } else {
+      ResponseUtils.status404(res, `User '${identity}' not found!`);
+    }
+  } catch (err) { next(err); }
+}
+
 
 export const changePassword = async (req, res, next) => {
   try {

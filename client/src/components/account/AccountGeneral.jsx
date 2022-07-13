@@ -116,10 +116,13 @@ export default function AccountGeneral() {
     });
   };
   const handleSaveChange = (_e) => {
-    if (errors) {
-      const mgs = Object.entries(errors)
+    let mgs = '';
+    if (errors && Object.entries(errors)) {
+      mgs = Object.entries(errors)
         .map(([_, mgs]) => mgs)
         .join('\n');
+    }
+    if (mgs) {
       enqueueSnackbar(mgs, { variant: 'error' });
       return;
     }
@@ -185,10 +188,49 @@ export default function AccountGeneral() {
       </Grid>
 
       <Grid item xs={12} md={8}>
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 3, mb: 3 }}>
           <Stack spacing={{ xs: 2, md: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+            <Typography variant="overline" sx={{ color: 'text.secondary' }}>
+              {t('account.email-and-phone')}
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+              <TextField
+                fullWidth
+                label={t('auth.email')}
+                {...getFieldProps('email')}
+                error={Boolean(errors.email)}
+                helperText={errors.email}
+                disabled
+                sx={{ mr: 2 }}
+              />
+              <Button type="button" size="small" variant="outlined" sx={{ my: 1, minWidth: 120 }}>
+                {t('common.edit')}
+              </Button>
+            </Box>
+            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+              <TextField
+                fullWidth
+                label={t('auth.phone')}
+                {...getFieldProps('phone')}
+                error={Boolean(errors.phone)}
+                helperText={errors.phone}
+                disabled
+                sx={{ mr: 2 }}
+              />
+              <Button type="button" size="small" variant="outlined" sx={{ my: 1, minWidth: 120 }}>
+                {t('common.edit')}
+              </Button>
+            </Box>
+          </Stack>
+        </Card>
+        <Card sx={{ p: 3 }}>
+          <Stack>
+            <Typography variant="overline" sx={{ color: 'text.secondary' }}>
+              {t('account.basic-info')}
+            </Typography>
+
+            <Grid container spacing={2} sx={{ mt: 3 }}>
+              <Grid item xs={12} sm={6} sx={{ margin: 'auto' }}>
                 <TextField
                   fullWidth
                   label={t('account.last-name')}
@@ -197,7 +239,7 @@ export default function AccountGeneral() {
                   helperText={touched.lastName && errors.lastName}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={6} sx={{ margin: 'auto' }}>
                 <TextField
                   fullWidth
                   label={t('account.first-name')}
@@ -206,7 +248,7 @@ export default function AccountGeneral() {
                   helperText={touched.firstName && errors.firstName}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={6} sx={{ margin: 'auto' }}>
                 <Autocomplete
                   disableClearable
                   required
@@ -222,7 +264,7 @@ export default function AccountGeneral() {
                   renderInput={(params) => <TextField {...params} label={t('account.gender')} margin="none" />}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={6} sx={{ margin: 'auto' }}>
                 <MobileDatePicker
                   orientation="portrait"
                   label={t('account.dob')}
@@ -235,28 +277,13 @@ export default function AccountGeneral() {
                 />
               </Grid>
             </Grid>
-
-            <TextField
-              fullWidth
-              label={t('auth.email')}
-              {...getFieldProps('email')}
-              error={Boolean(errors.email)}
-              helperText={errors.email}
-            />
-            <TextField
-              fullWidth
-              label={t('auth.phone')}
-              {...getFieldProps('phone')}
-              error={Boolean(errors.phone)}
-              helperText={errors.phone}
-            />
           </Stack>
 
           <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button type="reset" variant="outlined" color="inherit" sx={{ mr: 2 }} onClick={handleCancel}>
+            <Button size="medium" type="reset" variant="outlined" color="inherit" sx={{ mr: 2 }} onClick={handleCancel}>
               {t('common.cancel')}
             </Button>
-            <Button type="button" variant="contained" onClick={handleSaveChange}>
+            <Button size="medium" type="button" variant="contained" onClick={handleSaveChange}>
               {t('common.save-change')}
             </Button>
           </Box>
