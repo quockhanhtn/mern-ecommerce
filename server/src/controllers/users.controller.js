@@ -54,7 +54,7 @@ export const getInfo = async (req, res, next) => {
 
 export const updateInfo = async (req, res, next) => {
   try {
-    const updateUser = await userService.update(req.user._id, req.body);
+    const updateUser = await userService.updateBasicInfo(req.user._id, req.body);
     if (updateUser) {
       ResponseUtils.status200(
         res,

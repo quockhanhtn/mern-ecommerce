@@ -12,7 +12,7 @@ export default {
   isExistEmail,
   isExistPhone,
   create,
-  update,
+  updateBasicInfo,
   updateById,
   remove
 };
@@ -133,38 +133,31 @@ async function create(data) {
   return user.save();
 }
 
-/**
- * Update user
- * @param {*} identity, updatedData
- * @param updatedData
- * @returns
- */
-
-async function update(identity, updatedData) {
-  const currentUser = await getOne(identity);
-
-  let updatedDataNew = new User({
-    ...updatedData,
-    // username: updatedData.email,
-    firstName: updatedData.firstName,
-    lastName: updatedData.lastName,
-    gender: updatedData.gender,
-    dob: updatedData.dob,
-    phone: updatedData.phone,
-    email: updatedData.email,
-    fullName: `${updatedData.firstName} ${updatedData.lastName}`,
-  });
-
-  const updatedUser = await User.findByIdAndUpdate(
-    currentUser._id,
-    updatedDataNew,
-    { new: true, fields: SELECTED_FIELDS }
-  );
-  if (updatedUser) {
-    return updatedUser;
-  } else {
+async function updateBasicInfo(identity, updatedData) {
+  const user = await getOne(identity);
+  if (!user) {
     throw new Error(`User '${identity}' not found!`);
   }
+
+  // only update basic info
+  const dataToUpdate = {};
+  if (updatedData?.firstName) {
+    dataToUpdate.firstName = updatedData.firstName;
+  }
+  if (updatedData?.lastName) {
+    dataToUpdate.lastName = updatedData.lastName;
+  }
+  if (updatedData?.gender) {
+    dataToUpdate.gender = updatedData.gender;
+  }
+  if (updatedData?.dob) {
+    dataToUpdate.dob = updatedData.dob;
+  }
+  if (updatedData?.avatar) {
+    dataToUpdate.avatar = updatedData.avatar;
+  }
+
+  return updateById(user._id, dataToUpdate, SELECTED_FIELDS);
 }
 
 async function updateById(id, updated, selectFields = null) {

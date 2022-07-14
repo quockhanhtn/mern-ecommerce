@@ -99,7 +99,7 @@ export default function ProductItem({ product }) {
       </Box>
 
       <Stack spacing={1} sx={{ p: 2 }}>
-        <ProductNameTypo name={name} onClick={handleOnClick} />
+        <ProductNameTypo name={name.replaceAll('/', '/ ')} onClick={handleOnClick} />
 
         <PriceBoxStyle>
           <Typography variant="subtitle1" noWrap color="primary" sx={{ mr: 2 }}>

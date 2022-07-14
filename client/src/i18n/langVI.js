@@ -52,7 +52,7 @@ export default {
     config: 'Cài đặt',
     'first-name': 'Tên',
     'first-name-required': 'Vui lòng nhập tên',
-    'first-name-min': 'Tên phải có ít nhất 3 kí tự',
+    'first-name-min': 'Tên phải có ít nhất 1 kí tự',
     'first-name-max': 'Tên có tối đa 30 kí tự',
     'last-name': 'Họ & tên đệm',
     'last-name-required': 'Vui lòng nhập Họ & tên đệm',
@@ -64,7 +64,9 @@ export default {
     'gender-female': 'Nữ',
     'gender-other': 'Khác',
     'update-success': 'Cập nhật thông tin thành công !',
-    'update-failed': 'Cập nhật thông tin không thành công !'
+    'update-failed': 'Cập nhật thông tin không thành công !',
+    'basic-info': 'Thông tin cơ bản',
+    'email-and-phone': 'Email và số điện thoại'
   },
   address: {
     title: 'Địa chỉ',

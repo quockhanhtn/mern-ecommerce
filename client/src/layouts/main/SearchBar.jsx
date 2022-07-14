@@ -253,12 +253,12 @@ export default function SearchBar({ iconSx }) {
         <ResultItem key={product._id} product={product} onClick={handleOnClickResultItem} />
       ));
     }
-    return <StyledBox>{children}</StyledBox>;
+    return <StyledBox onBlur={() => setShowResult(false)}>{children}</StyledBox>;
   };
 
   return (
     <ClickAwayListener onClickAway={handleClose}>
-      <>
+      <Box>
         <StyledTextField
           fullWidth
           placeholder={t('common.search-placeholder')}
@@ -277,11 +277,11 @@ export default function SearchBar({ iconSx }) {
           onClick={handleTextOnClick}
           onChange={handleTextChange}
           onKeyDown={handleKeyDown}
-          onBlur={() => setShowResult(false)}
+          // onBlur={() => setShowResult(false)}
           onFocus={() => setShowResult(true)}
         />
         {renderSearchResult()}
-      </>
+      </Box>
     </ClickAwayListener>
   );
 }

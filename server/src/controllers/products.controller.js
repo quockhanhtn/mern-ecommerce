@@ -80,7 +80,11 @@ export const getAllProducts = async (req, res, next) => {
       return;
     }
 
+    let sortBy = req.query.sortBy || 'createdAt';
+    let sortType = ((req.query.sort || 'desc') === 'asc') ? 1 : -1;
+
     let filters = {};
+    let projection = null;
     if (category) {
       if (category === 'null') {
         filters.category = null;
@@ -95,7 +99,13 @@ export const getAllProducts = async (req, res, next) => {
         filters.brand = [...brand.split(',')];
       }
     }
-    if (search) { filters.name = { $regex: search, $options: 'i' }; }
+    if (search) {
+      // filters.name = { $regex: search, $options: 'i' };
+      filters['$text'] = { $search: new RegExp(search, 'gmi') }
+      projection = { score: { $meta: "textScore" } }
+      sortBy = 'score';
+      sortType = { $meta: 'textScore' };
+    }
 
     if (minPrice > 0) { filters.minPrice = { $gte: minPrice }; }
     if (maxPrice > 0) { filters.maxPrice = { $lte: maxPrice }; }
@@ -105,11 +115,14 @@ export const getAllProducts = async (req, res, next) => {
       limit,
       page,
       filters,
-      sortBy: req.query.sortBy || 'createdAt',
-      sortType: ((req.query.sort || 'desc') === 'asc') ? 1 : -1,
+      projection,
+      sortBy,
+      sortType,
       getCategoryFilter: req.query?.getCategoryFilter === '1',
       getBrandFilter: req.query?.getBrandFilter === '1',
       isShowHidden: req.query?.isShowHidden === '1',
+      fullTextSearch: req.query?.fullTextSearch === '1',
+      keyword: search
     });
     products = products.map(p => formatProduct(p, req));
 
