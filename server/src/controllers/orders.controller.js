@@ -102,24 +102,24 @@ export const createByUser = async (req, res, next) => {
       req.body
     );
 
-    userBehaviorService.handleUpdateBoughtCount(
-      userId ?? req.userIdentifier,
-      JSON.parse(JSON.stringify(order)).items
-    );
-
-    let paymentUrl = '';
-    if (req.body.paymentMethod === constants.ORDER.PAYMENT_METHOD.VNPAY) {
-      const apiUrl = `${req.protocol}://${req.get('host')}`
-      paymentUrl = await vnpayService.createPaymentUrl(
-        req.ipv4,
-        apiUrl,
-        clientUrl,
-        order._id.toString(),
-        order.total
-      );
-    }
-
     if (order) {
+      userBehaviorService.handleUpdateBoughtCount(
+        userId ?? req.userIdentifier,
+        JSON.parse(JSON.stringify(order)).items
+      );
+
+      let paymentUrl = '';
+      if (req.body.paymentMethod === constants.ORDER.PAYMENT_METHOD.VNPAY) {
+        const apiUrl = `${req.protocol}://${req.get('host')}`
+        paymentUrl = await vnpayService.createPaymentUrl(
+          req.ipv4,
+          apiUrl,
+          clientUrl,
+          order._id.toString(),
+          order.total
+        );
+      }
+
       ResponseUtils.status201(
         res,
         'Create order success',
