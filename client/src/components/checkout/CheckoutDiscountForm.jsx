@@ -65,6 +65,14 @@ const DiscountItem = ({ item, language, onSelected }) => {
                 </Typography>{' '}
                 {minimumTotal < 1000 ? ' cho tất cả đơn hàng' : ` cho đơn hàng từ ${fCurrency(minimumTotal, language)}`}
               </Typography>
+              {discountType !== 'price' && (
+                <Typography>
+                  Giảm tối đa{' '}
+                  <Typography color="error" variant="subtitle1" component="span">
+                    {fCurrency(maximumApplied, language)}
+                  </Typography>
+                </Typography>
+              )}
               <Typography>
                 Có giá trị đến ngày{' '}
                 <Typography color="inherit" variant="subtitle1" component="span">

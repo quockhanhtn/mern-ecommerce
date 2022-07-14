@@ -170,7 +170,7 @@ export default function CheckoutCart() {
 
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Tiết kiệm
+            {t('cart.order.saved')}
           </Typography>
           <Typography variant="subtitle2">{fCurrency(saveMoney, currentLang.value)}</Typography>
         </Stack>
