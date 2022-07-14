@@ -86,21 +86,6 @@ export default function ProductListPage() {
     const b = selectedBrands.map((x) => x._id).join(',');
     const c = selectedCategories.map((x) => x._id).join(',');
     dispatch(searchProduct({ search: searchText, category: c, brand: b, page, limit }));
-
-    console.log('searchpage', {
-      cs,
-      bs,
-      selectedBrands,
-      selectedCategories,
-      categoryOpts,
-      brandOpts,
-      categorySlug,
-      brandSlug,
-      search,
-      c,
-      b,
-      searchText
-    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, isInitialized, categorySlug, brandSlug, search, page]);
 
@@ -136,6 +121,7 @@ export default function ProductListPage() {
   };
 
   const handleSearch = () => {
+    setProducts((_prev) => []);
     const bQuery = selectedBrands.map((x) => x.slug).join(',');
     const cQuery = selectedCategories.map((x) => x.slug).join(',');
 

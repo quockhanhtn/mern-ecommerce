@@ -95,7 +95,8 @@ export const searchProduct = (options) => async (dispatch, getState) => {
       sortBy,
       getBrandFilter: '1',
       getCategoryFilter: '1',
-      isShowHidden: false
+      isShowHidden: '0',
+      fullTextSearch: '1'
     });
     dispatch(actions.searchSuccess(data));
   } catch (e) {

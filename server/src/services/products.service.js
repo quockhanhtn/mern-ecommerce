@@ -214,6 +214,7 @@ async function getAllProducts(options = {}) {
     limit = 10,
     page = 1,
     filters = {},
+    projection = null,
     sortBy = 'createdAt',
     sortType = -1,
     getCategoryFilter = false,
@@ -221,6 +222,7 @@ async function getAllProducts(options = {}) {
     isShowHidden = false,
     populateCategory = true,
     populateBrand = true,
+    fullTextSearch = false
   } = options;
 
   if (StringUtils.isBlankOrEmpty(fields)) {
@@ -247,8 +249,9 @@ async function getAllProducts(options = {}) {
   }
 
   const countAll = await Product.estimatedDocumentCount();
-  const total = await countProduct(filters);
-  const list = await Product.find(filters)
+  // const total = await countProduct(filters);
+  const total = await Product.count(filters, null);
+  const list = await Product.find(filters, projection, null, null)
     .select(fields)
     .populate(populateOpts)
     .skip((page - 1) * limit)
