@@ -35,40 +35,40 @@ export default function InvoiceToolbar({ invoice }) {
 
   return (
     <>
-      <Stack mb={5} direction="row" justifyContent="flex-end" spacing={1.5}>
-        <MButton color="error" size="small" variant="contained" endIcon={<Icon icon={shareFill} />}>
-          Share
-        </MButton>
+      {/* <Stack mb={5} direction="row" justifyContent="flex-end" spacing={1.5}> */}
+      {/*  <MButton color="error" size="small" variant="contained" endIcon={<Icon icon={shareFill} />}> */}
+      {/*    Share */}
+      {/*  </MButton> */}
 
-        <MButton
-          color="info"
-          size="small"
-          variant="contained"
-          onClick={handleOpenPreview}
-          endIcon={<Icon icon={eyeFill} />}
-          sx={{ mx: 1 }}
-        >
-          Preview
-        </MButton>
+      {/*  <MButton */}
+      {/*    color="info" */}
+      {/*    size="small" */}
+      {/*    variant="contained" */}
+      {/*    onClick={handleOpenPreview} */}
+      {/*    endIcon={<Icon icon={eyeFill} />} */}
+      {/*    sx={{ mx: 1 }} */}
+      {/*  > */}
+      {/*    Preview */}
+      {/*  </MButton> */}
 
-        <PDFDownloadLink
-          document={<InvoicePDF invoice={invoice} />}
-          fileName={`INVOICE-${invoice?._id}`}
-          style={{ textDecoration: 'none' }}
-        >
-          {({ loading }) => (
-            <LoadingButton
-              size="small"
-              loading={loading}
-              variant="contained"
-              loadingPosition="end"
-              endIcon={<Icon icon={downloadFill} />}
-            >
-              Download
-            </LoadingButton>
-          )}
-        </PDFDownloadLink>
-      </Stack>
+      {/*  <PDFDownloadLink */}
+      {/*    document={<InvoicePDF invoice={invoice} />} */}
+      {/*    fileName={`INVOICE-${invoice?._id}`} */}
+      {/*    style={{ textDecoration: 'none' }} */}
+      {/*  > */}
+      {/*    {({ loading }) => ( */}
+      {/*      <LoadingButton */}
+      {/*        size="small" */}
+      {/*        loading={loading} */}
+      {/*        variant="contained" */}
+      {/*        loadingPosition="end" */}
+      {/*        endIcon={<Icon icon={downloadFill} />} */}
+      {/*      > */}
+      {/*        Download */}
+      {/*      </LoadingButton> */}
+      {/*    )} */}
+      {/*  </PDFDownloadLink> */}
+      {/* </Stack> */}
 
       <DialogAnimate fullScreen open={openPDF}>
         <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>

@@ -10,7 +10,7 @@ import { FacebookIcon, GoogleIcon, TwitterIcon } from '../../assets';
 
 // ----------------------------------------------------------------------
 
-export default function AuthWithSocial() {
+export default function AuthWithSocial({ isLogin }) {
   const { t } = useLocales();
   const { googleOAuth, loginWithFaceBook, loginWithTwitter } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
@@ -73,11 +73,13 @@ export default function AuthWithSocial() {
         </Button>
       </Stack>
 
-      <Divider sx={{ my: 3 }}>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {t('auth.or').toUpperCase()}
-        </Typography>
-      </Divider>
+      {isLogin && (
+        <Divider sx={{ my: 3 }}>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {t('auth.or').toUpperCase()}
+          </Typography>
+        </Divider>
+      )}
     </>
   );
 }
