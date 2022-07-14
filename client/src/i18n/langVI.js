@@ -111,6 +111,8 @@ export default {
     checkout: 'Thanh toán',
     order: {
       summary: 'Thông tin đơn hàng',
+      'original-fee': 'Giá gốc',
+      saved: 'Tiết kiệm',
       'sub-total': 'Tổng tiền hàng',
       'shipping-fee': 'Phí vận chuyển',
       discount: 'Giảm giá',

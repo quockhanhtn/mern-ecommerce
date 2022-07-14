@@ -49,7 +49,7 @@ const orderSlice = createSlice({
     setAppliedDiscount(state, action) {
       state.fee = {
         ...state.fee,
-        total: state.fee.total - action.payload.amount,
+        total: state.fee.subTotal + state.fee.shipping - action.payload.amount,
         discount: action.payload.amount
       };
       state.discountApplied = action.payload.info;

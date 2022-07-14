@@ -132,18 +132,27 @@ export default function CheckoutSummary({ showDetail = false, sx }) {
 
         <CardContent>
           <Stack spacing={2}>
+            {!showDetail && [
+              <Stack key="original-fee" direction="row" justifyContent="space-between">
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {t('cart.order.original-fee')}
+                </Typography>
+                <Typography variant="subtitle2">{fCurrency(subTotal + saveMoney, currentLang.value)}</Typography>
+              </Stack>,
+
+              <Stack key="saved" direction="row" justifyContent="space-between">
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {t('cart.order.saved')}
+                </Typography>
+                <Typography variant="subtitle2">{fCurrency(saveMoney, currentLang.value)}</Typography>
+              </Stack>
+            ]}
+
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {t('cart.order.sub-total')}
               </Typography>
               <Typography variant="subtitle2">{fCurrency(subTotal, currentLang.value)}</Typography>
-            </Stack>
-
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Giảm giá
-              </Typography>
-              <Typography variant="subtitle2">{fCurrency(saveMoney, currentLang.value)}</Typography>
             </Stack>
 
             {showDetail && (

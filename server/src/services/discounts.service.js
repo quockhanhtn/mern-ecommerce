@@ -96,6 +96,9 @@ async function calculateDiscountAmt(code, subTotal) {
   let discountAmount = 0;
   if (discount.discountType === DISCOUNT_CONS.TYPE.PERCENT) {
     discountAmount = (subTotal * discount.discount) / 100;
+    if (discountAmount > discount.maximumApplied) {
+      discountAmount = discount.maximumApplied;
+    }
   } else {
     discountAmount = discount.discount;
   }
