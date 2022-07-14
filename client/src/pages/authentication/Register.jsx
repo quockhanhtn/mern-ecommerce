@@ -109,20 +109,20 @@ export default function Register() {
             <Typography sx={{ color: 'text.secondary' }}>{t('auth.register-subtitle')}</Typography>
           </Box>
 
-          <AuthWithSocial />
+          <AuthWithSocial isLogin={false} />
 
-          <Stack spacing={3}>
-            {errorMgs && <Alert severity="error">{errorMgs}</Alert>}
-            <CustomPhoneInput
-              label={t('auth.phone')}
-              value={phoneNumber}
-              onChange={(phone) => setPhoneNumber(phone.trim())}
-              onEnter={handleRegister}
-            />
-            <LoadingButton fullWidth size="large" variant="contained" onClick={handleRegister}>
-              {t('auth.register')}
-            </LoadingButton>
-          </Stack>
+          {/* <Stack spacing={3}> */}
+          {/*  {errorMgs && <Alert severity="error">{errorMgs}</Alert>} */}
+          {/*  <CustomPhoneInput */}
+          {/*    label={t('auth.phone')} */}
+          {/*    value={phoneNumber} */}
+          {/*    onChange={(phone) => setPhoneNumber(phone.trim())} */}
+          {/*    onEnter={handleRegister} */}
+          {/*  /> */}
+          {/*  <LoadingButton fullWidth size="large" variant="contained" onClick={handleRegister}> */}
+          {/*    {t('auth.register')} */}
+          {/*  </LoadingButton> */}
+          {/* </Stack> */}
 
           {/* <RegisterForm /> */}
 

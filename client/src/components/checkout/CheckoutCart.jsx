@@ -282,7 +282,10 @@ export default function CheckoutCart() {
                           onChange={handleSelectAll}
                           inputProps={{ 'aria-label': 'select all desserts' }}
                           color="primary"
-                          sx={{ color: 'rgba(0,0,0,0)', '&:hover': { color: (theme) => theme.palette.primary.main } }}
+                          sx={{
+                            color: (theme) => theme.palette.divider,
+                            '&:hover': { color: (theme) => theme.palette.primary.main }
+                          }}
                         />
                       </TableCell>
                       <TableCell>{t('products.title')}</TableCell>
@@ -312,7 +315,7 @@ export default function CheckoutCart() {
                               onChange={(e) => handleSelectChange(e, productId, sku)}
                               checked={isItemSelected}
                               sx={{
-                                color: 'rgba(0,0,0,0)',
+                                color: (theme) => theme.palette.divider,
                                 '&:hover': {
                                   color: (theme) => theme.palette.primary.main
                                 }

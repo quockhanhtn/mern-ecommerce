@@ -49,7 +49,6 @@ function VariantGrid(props) {
   const { variantName, thumbnail, sku } = variant;
 
   const handleOnClick = () => {
-    console.log('VariantGrid', variant);
     onClick(variant);
   };
 
