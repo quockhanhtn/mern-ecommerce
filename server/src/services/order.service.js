@@ -136,7 +136,7 @@ async function createWithTransaction(orderData, createdBy) {
     let discount = 0;
     if (orderData.discountCode) {
       try {
-        const { amount, info: discountInfo } = await discountService.calculateDiscountAmt(orderData.discountCode);
+        const { amount, info: discountInfo } = await discountService.calculateDiscountAmt(orderData.discountCode, subTotal);
         discount = amount;
         if (!(discountInfo?.unlimitedQty || false)) {
           await Discount.findByIdAndUpdate(
@@ -147,6 +147,8 @@ async function createWithTransaction(orderData, createdBy) {
         }
       } catch { }
     }
+
+    if (!discount || discount === undefined || isNaN(discount)) { discount = 0; }
 
     let shippingFee;
     if (subTotal > 500000 || orderData?.isReceiveAtStore) {
