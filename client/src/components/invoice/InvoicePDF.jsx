@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
 // ----------------------------------------------------------------------
 
 InvoicePDF.propTypes = {
-  invoice: PropTypes.object.isRequired
+  invoice: PropTypes.object
 };
 
 export default function InvoicePDF({ invoice }) {
