@@ -1,0 +1,28 @@
+@startuml 17_payment_vnp
+!theme cerulean
+
+actor       User       as u
+participant VNPay as vnp
+participant Client as pp
+participant Server as s
+
+u -> pp: Select Pay with VNPay
+pp -> s: SendRequest()
+s -> pp: Response(url)
+pp -> vnp: RedirectToPaymentUrl()
+vnp -> u: Show Payment UI
+u -> vnp: Input info
+
+vnp -> s: CallbackUrl()
+s -> s: DecodePayementData()
+
+alt Payment success
+s -> pp: SuccessResponse()
+pp -> u: Show success message and order info
+else Payment fail
+s -> pp: ErrorResponse()
+pp -> u: Show error message and Repay button
+end
+
+
+@enduml

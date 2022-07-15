@@ -19,7 +19,7 @@ import InvoicePDF from './InvoicePDF';
 // ----------------------------------------------------------------------
 
 InvoiceToolbar.propTypes = {
-  invoice: PropTypes.object.isRequired
+  invoice: PropTypes.object
 };
 
 export default function InvoiceToolbar({ invoice }) {

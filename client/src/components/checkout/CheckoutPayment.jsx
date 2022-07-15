@@ -19,6 +19,8 @@ import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 
 import { createOrder, backStepOrder } from '../../redux/slices/orderSlice';
 
+import * as typeUtils from '../../utils/typeUtils';
+
 // ----------------------------------------------------------------------
 
 export default function CheckoutPayment() {
@@ -34,16 +36,20 @@ export default function CheckoutPayment() {
     }
 
     if (orderCreated) {
-      // Helper.clearAfterOrder();
-      // if (isAuthenticated) {
-      //   dispatch(cleanCart());
-      // }
-      let redirect = `/order/${orderCreated._id}`;
-      if (orderCreated.paymentUrl) {
-        redirect = orderCreated.paymentUrl;
+      if (typeUtils.isNotEmptyStr(orderCreated._id)) {
+        // Helper.clearAfterOrder();
+        // if (isAuthenticated) {
+        //   dispatch(cleanCart());
+        // }
+        let redirect = `/order/${orderCreated._id}`;
+        if (orderCreated.paymentUrl) {
+          redirect = orderCreated.paymentUrl;
+        }
+        window.open(redirect, '_self');
+        localStorage.removeItem('orderLocalStorage');
+      } else {
+        enqueueSnackbar('Hệ thống bận, vui lòng thử lại !', { variant: 'error' });
       }
-      window.open(redirect, '_self');
-      localStorage.removeItem('orderLocalStorage');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderCreated, error]);
