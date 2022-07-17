@@ -68,7 +68,7 @@ async function createWithTransaction(orderData, createdBy) {
   const session = await mongoose.startSession();
 
   try {
-    session.startTransaction();
+    await session.startTransaction();
 
     const orderToSave = new Order({
       _id: new mongoose.Types.ObjectId(),
@@ -253,7 +253,7 @@ async function getListByUser(userId, search, status, paymentStatus, selectedFiel
  */
 async function tryCreate(customerInfo, orderData, createdBy) {
   let countError = 0;
-  while (countError < 5) {
+  while (countError < 3) {
     try {
       const order = await create(customerInfo, orderData, createdBy);
       return order;
