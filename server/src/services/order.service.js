@@ -253,14 +253,16 @@ async function getListByUser(userId, search, status, paymentStatus, selectedFiel
  */
 async function tryCreate(customerInfo, orderData, createdBy) {
   let countError = 0;
-  while (countError < 5) {
+  while (countError < 3) {
     try {
       const order = await create(customerInfo, orderData, createdBy);
       return order;
     } catch (err) {
       const errMsg = (err?.message || '').toLowerCase();
       if (errMsg.startsWith('transaction') && errMsg.endsWith('has been committed.')) {
-        countError++;
+        setTimeout(() => {
+          countError++;
+        }, 1000);
       } else {
         throw err;
       }
