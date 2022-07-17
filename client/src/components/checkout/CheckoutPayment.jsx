@@ -33,6 +33,7 @@ export default function CheckoutPayment() {
     if (error) {
       console.log('orderError', error);
       enqueueSnackbar(error?.message || 'Có lỗi', { variant: 'error' });
+      return;
     }
 
     if (orderCreated) {

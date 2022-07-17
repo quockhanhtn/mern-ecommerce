@@ -122,16 +122,24 @@ export const createOrder = (orderData) => async (dispatch, getState) => {
     };
 
     const { data } = await api.createOrder(dataToSend);
-    dispatch(
-      actions.createdOrder({
-        ...data.data,
-        paymentUrl: data.paymentUrl
-      })
-    );
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < buyItems.length; i++) {
-      const element = buyItems[i];
-      dispatch(removeItem(element));
+    if (data && data?.message === 'Create order success') {
+      dispatch(
+        actions.createdOrder({
+          ...data.data,
+          paymentUrl: data.paymentUrl
+        })
+      );
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < buyItems.length; i++) {
+        const element = buyItems[i];
+        dispatch(removeItem(element));
+      }
+    } else {
+      dispatch(
+        actions.hasError({
+          message: 'Đặt hàng thất bại, vui lòng thử lại !'
+        })
+      );
     }
   } catch (error) {
     dispatch(actions.hasError(error));
