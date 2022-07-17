@@ -68,7 +68,7 @@ async function createWithTransaction(orderData, createdBy) {
   const session = await mongoose.startSession();
 
   try {
-    session.startTransaction();
+    await session.startTransaction();
 
     const orderToSave = new Order({
       _id: new mongoose.Types.ObjectId(),
