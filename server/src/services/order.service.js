@@ -174,12 +174,12 @@ async function createWithTransaction(orderData, createdBy) {
     const order = orderToSave.save({ session });
 
     await session.commitTransaction();
-    session.endSession();
+    await session.endSession();
 
     return order;
   } catch (err) {
     await session.abortTransaction();
-    session.endSession();
+    await session.endSession();
 
     if (err instanceof ApiErrorUtils) {
       throw err;
