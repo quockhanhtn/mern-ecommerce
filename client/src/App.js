@@ -28,12 +28,12 @@ export default function App() {
   const dispatch = useDispatch();
   const { isInitialized, isAuthenticated } = useAuth();
 
-  useInterval(
-    () => {
-      dispatch(sendTrackingData());
-    },
-    isDevMode ? 10 : 5
-  );
+  // useInterval(
+  //   () => {
+  //     dispatch(sendTrackingData());
+  //   },
+  //   isDevMode ? 10 : 5
+  // );
 
   useEffect(() => {
     if (isInitialized && isAuthenticated) {
