@@ -97,7 +97,7 @@ export const createByUser = async (req, res, next) => {
 
     const clientUrl = req.body?.clientUrl || req.headers.origin;
 
-    const order = await orderService.tryCreate(
+    const order = await orderService.create(
       userId,
       req.body
     );
