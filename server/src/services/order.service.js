@@ -260,9 +260,7 @@ async function tryCreate(customerInfo, orderData, createdBy) {
     } catch (err) {
       const errMsg = (err?.message || '').toLowerCase();
       if (errMsg.startsWith('transaction') && errMsg.endsWith('has been committed.')) {
-        setTimeout(() => {
-          countError++;
-        }, 1000);
+        countError++;
       } else {
         throw err;
       }
