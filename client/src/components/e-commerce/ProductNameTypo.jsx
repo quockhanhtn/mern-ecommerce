@@ -18,7 +18,7 @@ ProductNameTypo.propTypes = {
   name: PropTypes.string.isRequired,
   tooltip: PropTypes.bool,
   customTooltipTitle: PropTypes.any,
-  tooltipPlacement: PropTypes.oneOf(
+  tooltipPlacement: PropTypes.oneOf([
     'bottom-end',
     'bottom-start',
     'bottom',
@@ -31,7 +31,7 @@ ProductNameTypo.propTypes = {
     'top-end',
     'top-start',
     'top'
-  ),
+  ]),
   tooltipTransitionComponent: PropTypes.any
 };
 

@@ -14,7 +14,7 @@ MTableHead.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,
-      align: PropTypes.oneOf('left', 'center', 'right', 'justify', 'inherit'),
+      align: PropTypes.oneOf(['left', 'center', 'right', 'justify', 'inherit']),
       disablePadding: PropTypes.bool
     })
   ),

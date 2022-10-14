@@ -3,12 +3,11 @@
   "version": "0.1.0",
   "description": "",
   "scripts": {
-    "start": "react-scripts start",
-    "prebuild": "set \"GENERATE_SOURCEMAP=false\"",
-    "build": "react-scripts build",
-    "pullrequest": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "react-app-rewired start",
+    "build": "set \"GENERATE_SOURCEMAP=false\" && react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject",
+  
     "lint": "eslint --ext .js,.jsx ./src",
     "lint:fix": "eslint --fix --ext .js,.jsx ./src"
   },
@@ -141,6 +140,7 @@
   "devDependencies": {
     "@babel/core": "^7.14.3",
     "@babel/eslint-parser": "^7.14.3",
+    "customize-cra": "^1.0.0",
     "eslint": "^7.26.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -151,6 +151,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "react-app-rewired": "^2.2.1"
   }
 }
