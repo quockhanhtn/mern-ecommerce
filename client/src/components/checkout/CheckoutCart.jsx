@@ -44,7 +44,7 @@ import {
 } from '../../redux/slices/cartSlice';
 import { updateFeeFromCart, nextStepOrder } from '../../redux/slices/orderSlice';
 import { trackingClick } from '../../redux/slices/userBehaviorSlice';
-import { fCurrency, fNumber } from '../../utils/formatNumber';
+import { fCurrency } from '../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
@@ -99,7 +99,7 @@ export default function CheckoutCart() {
     selectedItems,
     // isLoading: isLoadingCart,
     itemsCount,
-    fee: { discount, subTotal, shipping, total, saveMoney }
+    fee: { subTotal, total, saveMoney }
   } = useSelector((state) => state.cart);
 
   const checkoutAreaRef = useRef();

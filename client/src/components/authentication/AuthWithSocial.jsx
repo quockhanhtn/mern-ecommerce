@@ -1,3 +1,4 @@
+import PropType from 'prop-types';
 // material
 import { Stack, Button, Divider, Typography } from '@mui/material';
 import { GoogleLogin } from 'react-google-login';
@@ -10,7 +11,7 @@ import { FacebookIcon, GoogleIcon, TwitterIcon } from '../../assets';
 
 // ----------------------------------------------------------------------
 
-export default function AuthWithSocial({ isLogin }) {
+function AuthWithSocial({ isLogin }) {
   const { t } = useLocales();
   const { googleOAuth, loginWithFaceBook, loginWithTwitter } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
@@ -83,3 +84,9 @@ export default function AuthWithSocial({ isLogin }) {
     </>
   );
 }
+
+AuthWithSocial.propTypes = {
+  isLogin: PropType.bool
+};
+
+export default AuthWithSocial;

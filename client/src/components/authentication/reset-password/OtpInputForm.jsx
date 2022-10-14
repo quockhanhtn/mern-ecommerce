@@ -6,8 +6,7 @@ import { Form, FormikProvider, useFormik } from 'formik';
 // material
 import { Button, Box, OutlinedInput, FormHelperText, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-// hooks
-import { useLocales } from '../../../hooks';
+
 import * as typeUtils from '../../../utils/typeUtils';
 
 // ----------------------------------------------------------------------
@@ -28,8 +27,6 @@ OtpInputForm.propTypes = {
 // ----------------------------------------------------------------------
 
 export default function OtpInputForm({ onVerifyOtp, onResentOtp, isLoading }) {
-  const { t } = useLocales();
-
   const VerifyCodeSchema = Yup.object().shape({
     code1: Yup.number().required('Code is required'),
     code2: Yup.number().required('Code is required'),
@@ -81,6 +78,7 @@ export default function OtpInputForm({ onVerifyOtp, onResentOtp, isLoading }) {
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleResent = (_event) => {
     if (typeUtils.isFunction(onResentOtp)) {
       onResentOtp();
