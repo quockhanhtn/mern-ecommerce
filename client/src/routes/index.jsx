@@ -77,14 +77,14 @@ export default function Router() {
         </AuthGuard>
       ),
       children: [
-        { path: '/', element: <Navigate to="/dashboard/statics" replace /> },
+        { path: '', element: <Navigate to="/dashboard/statics" replace /> },
         { path: 'orders', element: <PageOrderList /> },
         { path: 'statics', element: <PageStatistic /> },
         {
           path: 'app',
           children: [
             {
-              path: '/',
+              path: '',
               element: <Navigate to="/dashboard/app/categories" replace />
             },
             { path: 'categories', element: <PageCategoryList /> },
@@ -93,7 +93,7 @@ export default function Router() {
             {
               path: 'products',
               children: [
-                { path: '/', element: <Navigate to="/dashboard/products/list" replace /> },
+                { path: '', element: <Navigate to="/dashboard/products/list" replace /> },
                 { path: 'list', element: <PageProductList /> },
                 { path: 'create', element: <PageProduct /> },
                 { path: ':id/edit', element: <PageProductEdit /> }
@@ -102,7 +102,7 @@ export default function Router() {
             {
               path: 'users',
               children: [
-                { path: '/', element: <Navigate to="/dashboard/users/user_list" replace /> },
+                { path: '', element: <Navigate to="/dashboard/users/user_list" replace /> },
                 { path: 'customer/list', element: <PageCustomerList /> },
                 { path: 'staff/list', element: <PageStaffList /> }
               ]

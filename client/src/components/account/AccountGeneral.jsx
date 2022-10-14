@@ -110,13 +110,15 @@ export default function AccountGeneral() {
     });
   }, [accountInfo, setFieldValue]);
 
-  const handleCancel = (_e) => {
+  const handleCancel = (e) => {
+    e.preventDefault();
     Object.entries(accountInfo).forEach(([key, value]) => {
       setFieldValue(key, value);
     });
   };
 
-  const handleSaveChange = (_e) => {
+  const handleSaveChange = (e) => {
+    e.preventDefault();
     let mgs = '';
     if (errors && Object.entries(errors)) {
       mgs = Object.entries(errors)
