@@ -19,12 +19,12 @@ import {
   Switch,
   TextField,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useSnackbar } from 'notistack';
 import * as Yup from 'yup';
-import { MobileDatePicker } from '@material-ui/lab';
+import { MobileDatePicker } from '@mui/lab';
 import { merge } from 'lodash';
 
 import { checkExistedDiscountCode } from '../../../api';
@@ -120,6 +120,7 @@ export default function DiscountForm({ currentId, open, setOpen }) {
     } else {
       setDiscountData(initialData);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [discount]);
 
   const handleDropSingleFile = useCallback((acceptedFiles) => {
@@ -139,6 +140,7 @@ export default function DiscountForm({ currentId, open, setOpen }) {
       uploadFile.preview = URL.createObjectURL(uploadFile);
       setUploadImage(uploadFile);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSave = () => {
@@ -191,11 +193,6 @@ export default function DiscountForm({ currentId, open, setOpen }) {
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const testUniqueCode = (code) => {
-    const a = '5';
-    return false;
   };
 
   const DiscountSchema = Yup.object().shape({

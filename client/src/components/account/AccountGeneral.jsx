@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // form validation
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -13,8 +14,8 @@ import {
   FormControlLabel,
   TextField,
   Typography
-} from '@material-ui/core';
-import { MobileDatePicker } from '@material-ui/lab';
+} from '@mui/material';
+import { MobileDatePicker } from '@mui/lab';
 // hooks
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -115,6 +116,7 @@ export default function AccountGeneral() {
       setFieldValue(key, value);
     });
   };
+
   const handleSaveChange = (_e) => {
     let mgs = '';
     if (errors && Object.entries(errors)) {

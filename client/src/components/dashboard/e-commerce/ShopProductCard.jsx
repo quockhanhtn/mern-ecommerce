@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // material
-import { Box, Card, Link, Typography, Stack } from '@material-ui/core';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { Box, Card, Link, Typography, Stack } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { ImageIllustration } from '../../../assets';
 //
 import { fCurrency, fNumber } from '../../../utils/formatNumber';
@@ -47,7 +47,7 @@ export default function ShopProductCard({ product }) {
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link to={linkTo} color="inherit" component={RouterLink}>
+        <Link to={linkTo} color="inherit" component={RouterLink} underline="hover">
           <Typography variant="subtitle2" noWrap>
             {name}
           </Typography>

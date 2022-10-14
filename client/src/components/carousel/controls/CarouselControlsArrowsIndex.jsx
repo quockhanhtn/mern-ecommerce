@@ -3,8 +3,8 @@ import { Icon } from '@iconify/react';
 import arrowLeftFill from '@iconify/icons-eva/arrow-left-fill';
 import arrowRightFill from '@iconify/icons-eva/arrow-right-fill';
 // material
-import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import { alpha, useTheme, styled } from '@mui/material/styles';
+import { Typography } from '@mui/material';
 //
 import { MIconButton } from '../../@material-extend';
 

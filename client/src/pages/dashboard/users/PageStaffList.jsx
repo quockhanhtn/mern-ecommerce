@@ -1,5 +1,5 @@
 // material
-import { Container, Typography } from '@material-ui/core';
+import { Container, Typography } from '@mui/material';
 // components
 import Page from '../../../components/Page';
 

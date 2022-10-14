@@ -60,6 +60,11 @@ export default function Input(theme) {
           }
         }
       }
+    },
+    MuiTextField: {
+      defaultProps: {
+        variant: 'outlined'
+      }
     }
   };
 }

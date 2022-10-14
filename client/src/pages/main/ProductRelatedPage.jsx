@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { LoadingButton } from '@material-ui/lab';
-import { Box, Container, Card, CardContent, Stack, Typography } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { LoadingButton } from '@mui/lab';
+import { Box, Container, Card, CardContent, Stack, Typography } from '@mui/material';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
 import { getProductById } from '../../redux/slices/productSlice';

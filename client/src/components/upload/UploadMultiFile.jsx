@@ -6,7 +6,7 @@ import fileFill from '@iconify/icons-eva/file-fill';
 import closeFill from '@iconify/icons-eva/close-fill';
 import { motion, AnimatePresence } from 'framer-motion';
 // material
-import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
+import { alpha, styled } from '@mui/material/styles';
 import {
   Box,
   List,
@@ -19,7 +19,7 @@ import {
   ListItemIcon,
   ListItemText,
   ListItemSecondaryAction
-} from '@material-ui/core';
+} from '@mui/material';
 // utils
 import { fData } from '../../utils/formatNumber';
 //
@@ -53,6 +53,7 @@ UploadMultiFile.propTypes = {
   onRemove: PropTypes.func,
   onRemoveAll: PropTypes.func,
   uploadAll: PropTypes.func,
+  isShowUploadAll: PropTypes.bool,
   sx: PropTypes.object
 };
 

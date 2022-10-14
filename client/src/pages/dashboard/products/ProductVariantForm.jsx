@@ -13,14 +13,14 @@ import {
   Card,
   FormHelperText,
   InputAdornment
-} from '@material-ui/core';
+} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useSnackbar } from 'notistack';
 import * as Yup from 'yup';
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
-import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { UploadMultiFile, UploadSingleFile } from '../../../components/upload';
 import useLocales from '../../../hooks/useLocales';
 import { MIconButton } from '../../../components/@material-extend';
@@ -37,9 +37,10 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 
 ProductVariantForm.propTypes = {
   currentVariant: PropTypes.object,
-  currentVariantId: PropTypes.any.isRequired,
+  currentProductId: PropTypes.any.isRequired,
   open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired
+  handleClose: PropTypes.func,
+  handleCreateDone: PropTypes.func
 };
 
 export default function ProductVariantForm({ currentVariant, currentProductId, open, handleClose, handleCreateDone }) {
@@ -67,11 +68,12 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
       setSpecifications(currentVariant?.addSpecifications);
     }
     setUploadImage(currentVariant?.thumbnail);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentVariant?.addSpecifications]);
 
   useEffect(() => {
     dispatch(getProductById(currentProductId));
-  }, [currentProductId]);
+  }, [currentProductId, dispatch]);
 
   const handleChangeInput = (id, event) => {
     setIsErrorSpecifications(false);
@@ -162,6 +164,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
       uploadFile.preview = URL.createObjectURL(uploadFile);
       setUploadImage(uploadFile);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const validationCustomer = () => {
@@ -234,6 +237,7 @@ export default function ProductVariantForm({ currentVariant, currentProductId, o
         }
       );
     }
+    return false;
   };
 
   const handleUploadMultiple = async () => {

@@ -1,5 +1,5 @@
 // material
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 // redux
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';

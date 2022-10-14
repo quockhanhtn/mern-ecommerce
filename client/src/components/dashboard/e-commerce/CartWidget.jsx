@@ -3,8 +3,8 @@ import { Icon } from '@iconify/react';
 import { Link as RouterLink } from 'react-router-dom';
 import shoppingCartFill from '@iconify/icons-eva/shopping-cart-fill';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Badge } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Badge } from '@mui/material';
 // redux
 import { useSelector } from 'react-redux';
 // routes

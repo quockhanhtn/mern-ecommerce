@@ -1,5 +1,5 @@
 // material
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
 // hooks
 import useLocales from '../../hooks/useLocales';
 

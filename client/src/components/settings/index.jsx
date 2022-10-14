@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
 import options2Fill from '@iconify/icons-eva/options-2-fill';
 // material
-import { Box, Backdrop, Paper, Tooltip, Divider, Typography, Stack } from '@material-ui/core';
+import { Box, Backdrop, Paper, Tooltip, Divider, Typography, Stack } from '@mui/material';
 // hook
 import useLocales from '../../hooks/useLocales';
 //

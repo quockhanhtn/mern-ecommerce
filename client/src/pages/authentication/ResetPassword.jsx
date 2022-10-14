@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 // material
-import { Alert, Box, Button, Container, Typography } from '@material-ui/core';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { Alert, Box, Button, Container, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 // redux
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';

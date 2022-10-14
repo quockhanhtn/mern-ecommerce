@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
 // material
-import { alpha } from '@material-ui/core/styles';
-import { Box, MenuItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { alpha } from '@mui/material/styles';
+import { Box, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 // hooks
 import { useRef, useState } from 'react';
 import { useSnackbar } from 'notistack';

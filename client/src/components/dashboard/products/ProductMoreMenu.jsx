@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { paramCase } from 'change-case';
 // material
-import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
+import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 import { useLocales } from '../../../hooks';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import DialogConfirm from '../../dialog/DialogConfirm';
@@ -58,7 +58,7 @@ export default function ProductMoreMenu({ productId, productName, isHide, onChan
 
   return (
     <>
-      <IconButton ref={ref} onClick={() => setIsOpen(true)}>
+      <IconButton ref={ref} onClick={() => setIsOpen(true)} size="large">
         <Icon icon={moreVerticalFill} width={20} height={20} />
       </IconButton>
       <Menu

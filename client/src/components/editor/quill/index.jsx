@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import ReactQuill from 'react-quill';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
 //
 import EditorToolbar, { formats, redoChange, undoChange } from './QuillEditorToolbar';
 

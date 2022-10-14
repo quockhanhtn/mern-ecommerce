@@ -6,7 +6,7 @@ import plusFill from '@iconify/icons-eva/plus-fill';
 import editFill from '@iconify/icons-eva/edit-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 // material
-import { Box, Grid, Card, Button, Typography, Stack, Paper } from '@material-ui/core';
+import { Box, Grid, Card, Button, Typography, Stack, Paper } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 import { addressActions } from '../../redux/slices/accountSlice';

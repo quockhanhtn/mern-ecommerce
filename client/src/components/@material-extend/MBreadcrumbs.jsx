@@ -2,7 +2,7 @@ import { last } from 'lodash';
 import PropTypes from 'prop-types';
 // material
 import { Link as RouterLink } from 'react-router-dom';
-import { Typography, Box, Link, Breadcrumbs } from '@material-ui/core';
+import { Typography, Box, Link, Breadcrumbs } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +27,7 @@ function LinkItem({ link }) {
         color: 'text.primary',
         '& > div': { display: 'inherit' }
       }}
+      underline="hover"
     >
       {icon && (
         <Box

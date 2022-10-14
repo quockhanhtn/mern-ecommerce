@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { useState, useRef } from 'react';
 // material
-import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Card, Paper, Typography, CardContent, Skeleton } from '@material-ui/core';
+import { alpha, useTheme, styled } from '@mui/material/styles';
+import { Box, Card, Paper, Typography, CardContent, Skeleton } from '@mui/material';
 //
 import { varFadeInRight, MotionContainer } from '../animate';
 import { CarouselControlsArrowsIndex } from '../carousel/controls';
@@ -128,7 +128,7 @@ function DiscountCarousel({ discounts, isLoading, otherProps }) {
     return [...Array(1).keys()].map((i) => (
       <Paper key={`skeleton-${i}`} sx={{ position: 'relative', paddingTop: { xs: '50vh', md: '60vh' } }}>
         <Skeleton
-          variant="rect"
+          variant="rectangular"
           width="100%"
           height={400}
           sx={{

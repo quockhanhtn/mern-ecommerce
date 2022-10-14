@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 // material
-import { Card, Table, Button, TableRow, TableBody, TableCell, Container, TableContainer } from '@material-ui/core';
+import { Card, Table, Button, TableRow, TableBody, TableCell, Container, TableContainer } from '@mui/material';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllOrders, updateOrder } from '../../../redux/actions/orders';

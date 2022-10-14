@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { useState, useRef } from 'react';
 // material
-import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Card, Paper, Typography, CardContent } from '@material-ui/core';
+import { alpha, useTheme, styled } from '@mui/material/styles';
+import { Box, Card, Paper, Typography, CardContent } from '@mui/material';
 //
 import { varFadeInRight, MotionContainer } from '../animate';
 import { CarouselControlsArrowsIndex } from './controls';

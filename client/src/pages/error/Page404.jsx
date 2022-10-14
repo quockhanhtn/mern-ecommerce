@@ -2,8 +2,8 @@ import { motion } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
 import { useLocation } from 'react-router';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Button, Typography, Container } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box, Button, Typography, Container } from '@mui/material';
 // components
 import { MotionContainer, varBounceIn } from '../../components/animate';
 import Page from '../../components/Page';

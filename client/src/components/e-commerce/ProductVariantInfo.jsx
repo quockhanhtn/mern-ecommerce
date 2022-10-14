@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 // material
-import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import {
   Autocomplete,
   Box,
@@ -19,7 +19,7 @@ import {
   Stack,
   TextField,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 // components
 import { useState, useEffect } from 'react';
 //

@@ -17,7 +17,7 @@ import {
   CardHeader,
   CardContent,
   FormControlLabel
-} from '@material-ui/core';
+} from '@mui/material';
 //
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';

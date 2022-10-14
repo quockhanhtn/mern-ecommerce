@@ -6,8 +6,9 @@ import alertCircleFill from '@iconify/icons-eva/alert-circle-fill';
 import alertTriangleFill from '@iconify/icons-eva/alert-triangle-fill';
 import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
 // material
-import { alpha, makeStyles } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import { alpha } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

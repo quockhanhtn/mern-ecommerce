@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
-import { Button, Box, OutlinedInput, FormHelperText, Stack } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import { Button, Box, OutlinedInput, FormHelperText, Stack } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // hooks
 import { useLocales } from '../../../hooks';
 import * as typeUtils from '../../../utils/typeUtils';

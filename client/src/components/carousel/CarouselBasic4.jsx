@@ -5,8 +5,8 @@ import { useRef } from 'react';
 import { Icon } from '@iconify/react';
 import moreHorizontalFill from '@iconify/icons-eva/more-horizontal-fill';
 // material
-import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Card, Typography } from '@material-ui/core';
+import { alpha, useTheme, styled } from '@mui/material/styles';
+import { Box, Card, Typography } from '@mui/material';
 // utils
 import { mockImgFeed } from '../../utils/mockImages';
 //

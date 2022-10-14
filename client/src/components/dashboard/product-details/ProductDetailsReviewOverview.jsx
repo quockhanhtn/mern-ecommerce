@@ -4,8 +4,8 @@ import { Icon } from '@iconify/react';
 import { Link as ScrollLink } from 'react-scroll';
 import edit2Fill from '@iconify/icons-eva/edit-2-fill';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Grid, Rating, Button, Typography, LinearProgress, Stack } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Grid, Rating, Button, Typography, LinearProgress, Stack } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { fShortenNumber } from '../../../utils/formatNumber';

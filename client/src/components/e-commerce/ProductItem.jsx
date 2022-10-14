@@ -3,8 +3,8 @@ import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
 import { useNavigate } from 'react-router-dom';
 // material
-import { Box, Card, Button, Typography, Stack } from '@material-ui/core';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { Box, Card, Button, Typography, Stack } from '@mui/material';
+import { styled } from '@mui/material/styles';
 //
 import { useDispatch } from 'react-redux';
 import { useLocales } from '../../hooks';

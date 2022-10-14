@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import editFill from '@iconify/icons-eva/edit-fill';
 // material
-import { Card, Button, Typography, CardHeader, CardContent } from '@material-ui/core';
+import { Card, Button, Typography, CardHeader, CardContent } from '@mui/material';
 import useLocales from '../../hooks/useLocales';
 
 // ----------------------------------------------------------------------

@@ -5,7 +5,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
-import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import {
   Card,
   Chip,
@@ -17,7 +17,7 @@ import {
   FormHelperText,
   Link,
   Button
-} from '@material-ui/core';
+} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { QuillEditor } from '../../../components/editor';
@@ -80,7 +80,7 @@ export default function PageProductEdit() {
 
   useEffect(() => {
     dispatch(getProductById(id));
-  }, [id]);
+  }, [dispatch, id]);
 
   const validationCustomer = () => {
     if (!values.brand) {
@@ -232,7 +232,7 @@ export default function PageProductEdit() {
                       error={Boolean(true)}
                     />
                   )}
-                  <Link to={PATH_DASHBOARD.app.brands} color="inherit" component={RouterLink}>
+                  <Link to={PATH_DASHBOARD.app.brands} color="inherit" component={RouterLink} underline="hover">
                     <Typography
                       variant="inherit"
                       sx={{
@@ -268,7 +268,7 @@ export default function PageProductEdit() {
                       )}
                     />
                   )}
-                  <Link to={PATH_DASHBOARD.app.categories} color="inherit" component={RouterLink}>
+                  <Link to={PATH_DASHBOARD.app.categories} color="inherit" component={RouterLink} underline="hover">
                     <Typography
                       variant="inherit"
                       sx={{

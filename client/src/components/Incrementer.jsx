@@ -8,8 +8,8 @@ import { Icon } from '@iconify/react';
 //
 import { useField } from 'formik';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Typography } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box, Typography } from '@mui/material';
 // components
 import { MIconButton } from './@material-extend';
 

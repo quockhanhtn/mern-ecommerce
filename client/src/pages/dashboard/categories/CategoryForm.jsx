@@ -18,7 +18,7 @@ import {
   Radio,
   Stack,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 // from validation
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
@@ -90,6 +90,7 @@ export default function CategoryForm({ currentId, open, setOpen }) {
       uploadFile.preview = URL.createObjectURL(uploadFile);
       setUploadImage(uploadFile);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSave = () => {

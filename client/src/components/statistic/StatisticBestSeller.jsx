@@ -1,6 +1,6 @@
 import { sentenceCase } from 'change-case';
 // material
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Card,
@@ -13,9 +13,9 @@ import {
   CardHeader,
   Typography,
   TableContainer
-} from '@material-ui/core';
+} from '@mui/material';
 // utils
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 //
 import Label from '../Label';
@@ -29,15 +29,11 @@ import * as api from '../../api';
 export default function StatisticBestSeller() {
   const { t } = useLocales();
   const dispatch = useDispatch();
-  const { listFull: productsList } = useSelector((state) => state.product);
+  // const { listFull: productsList } = useSelector((state) => state.product);
   const theme = useTheme();
   const [listProductBestSeller, setListProductBestSeller] = useState([]);
 
-  useEffect(() => {
-    dispatch(getFullAllProducts());
-  }, [dispatch]);
-
-  useEffect(async () => {
+  const fetchData = async () => {
     const bestSellers = [];
     await api.getFullAllProduct().then((data) => {
       const productsList = data.data.data;
@@ -70,6 +66,14 @@ export default function StatisticBestSeller() {
       bestSellersRank.push(productItem);
     }
     setListProductBestSeller(bestSellersRank);
+  };
+
+  useEffect(() => {
+    dispatch(getFullAllProducts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   return (

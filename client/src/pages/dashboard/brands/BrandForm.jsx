@@ -14,7 +14,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio
-} from '@material-ui/core';
+} from '@mui/material';
 // icons
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
@@ -77,6 +77,7 @@ export default function BrandForm({ currentId, open, setOpen }) {
         image: ''
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [brand]);
 
   const handleDropSingleFile = useCallback((acceptedFiles) => {
@@ -96,6 +97,7 @@ export default function BrandForm({ currentId, open, setOpen }) {
       uploadFile.preview = URL.createObjectURL(uploadFile);
       setUploadImage(uploadFile);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSave = () => {

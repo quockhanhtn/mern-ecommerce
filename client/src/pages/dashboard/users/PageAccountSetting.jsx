@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import roundVpnKey from '@iconify/icons-ic/round-vpn-key';
 import roundReceipt from '@iconify/icons-ic/round-receipt';
 // material
-import { Container, Tab, Box, Tabs, Stack } from '@material-ui/core';
+import { Container, Tab, Box, Tabs, Stack } from '@mui/material';
 // redux
 import { useDispatch } from 'react-redux';
 // routes

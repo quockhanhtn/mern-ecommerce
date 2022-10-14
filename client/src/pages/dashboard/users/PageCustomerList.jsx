@@ -11,9 +11,9 @@ import {
   TablePagination,
   TableRow,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 import { useEffect, useState } from 'react';
-import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import Page from '../../../components/Page';
 import { PATH_DASHBOARD } from '../../../routes/paths';

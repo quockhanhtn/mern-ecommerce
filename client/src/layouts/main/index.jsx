@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation, Outlet } from 'react-router-dom';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
 // material
 // hooks
 import { useGoogleOneTapLogin } from 'react-google-one-tap-login';

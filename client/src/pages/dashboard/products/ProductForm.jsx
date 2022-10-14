@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
-import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import {
   Card,
   Chip,
@@ -20,7 +20,7 @@ import {
   FormControlLabel,
   Link,
   Button
-} from '@material-ui/core';
+} from '@mui/material';
 // icons
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
@@ -182,6 +182,7 @@ export default function ProductForm() {
       uploadFile.preview = URL.createObjectURL(uploadFile);
       setUploadImage(uploadFile);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const validationCustomer = () => {
@@ -515,7 +516,7 @@ export default function ProductForm() {
                     )}
                     error={Boolean(true)}
                   />
-                  <Link to={PATH_DASHBOARD.app.brands} color="inherit" component={RouterLink}>
+                  <Link to={PATH_DASHBOARD.app.brands} color="inherit" component={RouterLink} underline="hover">
                     <Typography
                       variant="inherit"
                       sx={{
@@ -550,7 +551,7 @@ export default function ProductForm() {
                       />
                     )}
                   />
-                  <Link to={PATH_DASHBOARD.app.brands} color="inherit" component={RouterLink}>
+                  <Link to={PATH_DASHBOARD.app.brands} color="inherit" component={RouterLink} underline="hover">
                     <Typography
                       variant="inherit"
                       sx={{

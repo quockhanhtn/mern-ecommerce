@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 // material
-import { Box, Radio, RadioGroup } from '@material-ui/core';
+import { Box, Radio, RadioGroup } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

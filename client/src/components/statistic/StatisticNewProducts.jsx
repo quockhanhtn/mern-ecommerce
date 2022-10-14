@@ -2,8 +2,8 @@ import Slider from 'react-slick';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // material
-import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Card, Button, CardContent, Typography } from '@material-ui/core';
+import { alpha, useTheme, styled } from '@mui/material/styles';
+import { Box, Card, Button, CardContent, Typography } from '@mui/material';
 // utils
 import { mockImgProduct } from '../../utils/mockImages';
 //

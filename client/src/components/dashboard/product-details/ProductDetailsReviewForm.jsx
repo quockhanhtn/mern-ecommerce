@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useSnackbar } from 'notistack';
 // material
-import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
-import { Button, Rating, TextField, Typography, FormHelperText, Stack } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import { styled, useTheme } from '@mui/material/styles';
+import { Button, Rating, TextField, Typography, FormHelperText, Stack } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { useDispatch, useSelector } from 'react-redux';
 import useLocales from '../../../hooks/useLocales';
 import useAuth from '../../../hooks/useAuth';

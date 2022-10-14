@@ -9,7 +9,7 @@ import editFill from '@iconify/icons-eva/edit-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
 // material
-import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
+import { useTheme, styled } from '@mui/material/styles';
 import {
   Autocomplete,
   Box,
@@ -21,7 +21,7 @@ import {
   IconButton,
   OutlinedInput,
   InputAdornment
-} from '@material-ui/core';
+} from '@mui/material';
 
 import useLocales from '../../../hooks/useLocales';
 
@@ -32,7 +32,7 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
   padding: theme.spacing(0, 1, 0, 3),
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down('md')]: {
     height: 96 * 2
   }
 }));

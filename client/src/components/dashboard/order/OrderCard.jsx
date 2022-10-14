@@ -12,8 +12,8 @@ import {
   TableHead,
   TableRow,
   Typography
-} from '@material-ui/core';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 // hooks
 import { useLocales } from '../../../hooks';
 // components
@@ -141,7 +141,7 @@ export default function OrderCard({ order, isShowTitle, handleRePay }) {
               {handleRePay !== null &&
                 order?.paymentStatus === 'pending' &&
                 ['cash', 'cod', '', undefined, null].indexOf(order?.paymentMethod) < 0 && (
-                  <Link href="#" onClick={handleRePay} sx={{ ml: 2 }}>
+                  <Link href="#" onClick={handleRePay} sx={{ ml: 2 }} underline="hover">
                     Thanh toán ngay
                   </Link>
                 )}

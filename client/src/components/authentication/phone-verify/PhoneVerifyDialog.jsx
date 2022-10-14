@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // material
-import { Box, Dialog, DialogContent, DialogTitle, Typography } from '@material-ui/core';
+import { Box, Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
 // hooks
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

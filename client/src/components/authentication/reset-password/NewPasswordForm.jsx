@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 // material
-import { Stack, TextField } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import { Stack, TextField } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // hooks
 import { useLocales } from '../../../hooks';
 //

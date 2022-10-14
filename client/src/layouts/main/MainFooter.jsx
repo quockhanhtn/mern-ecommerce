@@ -6,11 +6,10 @@ import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import { Link as ScrollLink } from 'react-scroll';
 import { Link as RouterLink } from 'react-router-dom';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Grid, Link, Divider, Container, Typography, IconButton, Stack } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Grid, Link, Divider, Container, Typography, IconButton, Stack } from '@mui/material';
 //
 import Logo from '../../components/Logo';
-import useLocales from '../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -29,8 +28,6 @@ const RootStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function MainFooter() {
-  const t = useLocales();
-
   const LINKS = [
     {
       headline: 'VỀ CHÚNG TÔI',
@@ -84,7 +81,14 @@ export default function MainFooter() {
               sx={{ mt: 5, mb: { xs: 5, md: 0 } }}
             >
               {SOCIALS.map((social) => (
-                <IconButton key={social.name} color="primary" sx={{ p: 1 }} href={social.url} target="_blank">
+                <IconButton
+                  key={social.name}
+                  color="primary"
+                  sx={{ p: 1 }}
+                  href={social.url}
+                  target="_blank"
+                  size="large"
+                >
                   <Icon icon={social.icon} width={16} height={16} />
                 </IconButton>
               ))}
@@ -109,6 +113,7 @@ export default function MainFooter() {
                           variant="body2"
                           component={RouterLink}
                           sx={{ display: 'block' }}
+                          underline="hover"
                         >
                           {link.name}
                         </Link>

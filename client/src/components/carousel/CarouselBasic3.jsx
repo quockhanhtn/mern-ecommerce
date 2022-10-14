@@ -3,8 +3,8 @@ import Slider from 'react-slick';
 import PropTypes from 'prop-types';
 import { useRef } from 'react';
 // material
-import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import { useTheme, styled } from '@mui/material/styles';
+import { Box } from '@mui/material';
 // utils
 import { mockImgFeed } from '../../utils/mockImages';
 //

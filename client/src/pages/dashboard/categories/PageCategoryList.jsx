@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 // material
-import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
+import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Button,
@@ -17,7 +17,7 @@ import {
   TableContainer,
   TableRow,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 import { useSnackbar } from 'notistack';
 // redux
 import { useSelector, useDispatch } from 'react-redux';

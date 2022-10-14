@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
 // material
-import { alpha, ThemeProvider, createTheme, useTheme } from '@material-ui/core/styles';
+import { alpha, ThemeProvider, StyledEngineProvider, createTheme, useTheme, adaptV4Theme } from '@mui/material/styles';
 // hooks
 import useSettings from '../hooks/useSettings';
 //
@@ -32,8 +32,12 @@ export default function ThemePrimaryColor({ children }) {
     [setColor, outerTheme]
   );
 
-  const theme = createTheme(themeOptions);
+  const theme = createTheme(adaptV4Theme(themeOptions));
   theme.components = componentsOverride(theme);
 
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </StyledEngineProvider>
+  );
 }

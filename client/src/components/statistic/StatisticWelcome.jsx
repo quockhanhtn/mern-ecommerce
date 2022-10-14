@@ -1,6 +1,6 @@
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Typography, Button, Card, CardContent } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Typography, Button, Card, CardContent } from '@mui/material';
 //
 import MotivationIllustration from '../../assets/illustration_motivation';
 import useLocales from '../../hooks/useLocales';

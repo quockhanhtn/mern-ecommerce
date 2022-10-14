@@ -1,7 +1,7 @@
 import faker from 'faker';
 import PropTypes from 'prop-types';
 // material
-import { Card, CardHeader, Typography, Stack } from '@material-ui/core';
+import { Card, CardHeader, Typography, Stack } from '@mui/material';
 // utils
 import { fPercent, fCurrency } from '../../utils/formatNumber';
 //

@@ -5,8 +5,8 @@ import { useDropzone } from 'react-dropzone';
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, FormControlLabel, Switch, Typography, TextField, Tooltip } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box, FormControlLabel, Switch, Typography, TextField, Tooltip } from '@mui/material';
 import { MLinearProgress, MIconButton, MLabelTypo } from '../@material-extend';
 //
 import { UploadIllustration } from '../../assets';

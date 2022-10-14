@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import arrowLeftFill from '@iconify/icons-eva/arrow-left-fill';
 import arrowRightFill from '@iconify/icons-eva/arrow-right-fill';
 // material
-import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
+import { useTheme, styled } from '@mui/material/styles';
 //
 import { MIconButton } from '../../@material-extend';
 

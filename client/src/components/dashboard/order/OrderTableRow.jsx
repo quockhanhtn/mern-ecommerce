@@ -3,8 +3,8 @@
 import { Icon } from '@iconify/react';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 // material
-import { IconButton, TableCell, TableRow, Typography } from '@material-ui/core';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { IconButton, TableCell, TableRow, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 //
 import useLocales from '../../../hooks/useLocales';
 import { fCurrency } from '../../../utils/formatNumber';
@@ -53,7 +53,7 @@ export default function OrderTableRow({ row, onClick }) {
       <TableCell align="right">{fCurrency(row?.total, currentLang.value)}</TableCell>
       <TableCell align="right">{fDateTime(row?.createdAt, currentLang.value)}</TableCell>
       <TableCell align="right">
-        <IconButton onClick={handleViewDetail}>
+        <IconButton onClick={handleViewDetail} size="large">
           <Icon icon={eyeFill} />
         </IconButton>
       </TableCell>

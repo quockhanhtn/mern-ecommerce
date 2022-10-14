@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import moonFill from '@iconify/icons-eva/moon-fill';
 import sunFill from '@iconify/icons-eva/sun-fill';
 // material
-import { Box, Grid, Radio, Paper, RadioGroup, CardActionArea, FormControlLabel } from '@material-ui/core';
+import { Box, Grid, Radio, Paper, RadioGroup, CardActionArea, FormControlLabel } from '@mui/material';
 // hooks
 import useSettings from '../../hooks/useSettings';
 

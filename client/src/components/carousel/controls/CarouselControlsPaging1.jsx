@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

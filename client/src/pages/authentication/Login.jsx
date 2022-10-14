@@ -1,7 +1,7 @@
 import { Link as RouterLink } from 'react-router-dom';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Card, Link, Container, Typography } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box, Card, Link, Container, Typography } from '@mui/material';
 // routes
 import { PATH_AUTH } from '../../routes/paths';
 // hooks
@@ -77,7 +77,7 @@ export default function Login() {
           <MHidden width="smUp">
             <Typography variant="body2" align="center" sx={{ mt: 3 }}>
               {t('auth.dont-have-account')}&nbsp;
-              <Link variant="subtitle2" component={RouterLink} to={PATH_AUTH.register}>
+              <Link variant="subtitle2" component={RouterLink} to={PATH_AUTH.register} underline="hover">
                 {t('auth.get-started')}
               </Link>
             </Typography>

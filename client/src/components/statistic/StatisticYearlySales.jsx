@@ -2,7 +2,7 @@ import { merge } from 'lodash';
 import { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 // material
-import { Card, CardHeader, Box, TextField } from '@material-ui/core';
+import { Card, CardHeader, Box, TextField } from '@mui/material';
 //
 import BaseOptionChart from '../charts/BaseOptionChart';
 

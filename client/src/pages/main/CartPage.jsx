@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 // material
-import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector, useMediaQuery } from '@material-ui/core';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector, useMediaQuery } from '@mui/material';
+import { styled } from '@mui/material/styles';
 // hooks
 import { useSelector } from 'react-redux';
 import { useLocales } from '../../hooks';

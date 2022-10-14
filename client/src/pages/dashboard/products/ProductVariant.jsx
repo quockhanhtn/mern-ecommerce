@@ -1,4 +1,4 @@
-import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import {
   Card,
   Grid,
@@ -11,7 +11,7 @@ import {
   TableRow,
   TableCell,
   Box
-} from '@material-ui/core';
+} from '@mui/material';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { useSnackbar } from 'notistack';
@@ -49,6 +49,7 @@ export default function ProductVariant() {
 
   useEffect(() => {
     dispatch(getProductById(id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     variants = currentProduct?.variants;
   }, [id, variants?.length]);
 

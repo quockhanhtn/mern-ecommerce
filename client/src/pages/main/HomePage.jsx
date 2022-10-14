@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { LoadingButton } from '@material-ui/lab';
-import { Box, Container, Card, CardContent, CardHeader, Stack, Typography } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { LoadingButton } from '@mui/lab';
+import { Box, Container, Card, CardContent, CardHeader, Stack, Typography } from '@mui/material';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllProducts, getProductForYou } from '../../redux/slices/productSlice';

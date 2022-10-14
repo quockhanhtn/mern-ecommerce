@@ -5,7 +5,7 @@ import editFill from '@iconify/icons-eva/edit-fill';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 // material
-import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
+import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 import DialogConfirm from '../../dialog/DialogConfirm';
 import useLocales from '../../../hooks/useLocales';
 
@@ -38,7 +38,7 @@ export default function OrderMoreMenu({ editTitle, onEdit, deleteTitle, onDelete
 
   return (
     <>
-      <IconButton ref={ref} onClick={() => setIsOpen(true)}>
+      <IconButton ref={ref} onClick={() => setIsOpen(true)} size="large">
         <Icon icon={moreVerticalFill} width={20} height={20} />
       </IconButton>
 

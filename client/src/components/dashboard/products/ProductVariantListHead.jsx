@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { visuallyHidden } from '@material-ui/utils';
-import { Box, TableRow, TableCell, TableHead, TableSortLabel } from '@material-ui/core';
+import { visuallyHidden } from '@mui/utils';
+import { Box, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

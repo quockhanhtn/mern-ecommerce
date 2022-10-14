@@ -1,7 +1,7 @@
 import { isString } from 'lodash';
 import PropTypes from 'prop-types';
 // material
-import { Box, Typography, Link, Stack } from '@material-ui/core';
+import { Box, Typography, Link, Stack } from '@mui/material';
 //
 import { MBreadcrumbs } from './@material-extend';
 
@@ -30,12 +30,20 @@ export default function HeaderBreadcrumbs({ links, action, heading, moreLink = '
       </Stack>
 
       {isString(moreLink) ? (
-        <Link href={moreLink} target="_blank" variant="body2">
+        <Link href={moreLink} target="_blank" variant="body2" underline="hover">
           {moreLink}
         </Link>
       ) : (
         moreLink.map((href) => (
-          <Link noWrap key={href} href={href} variant="body2" target="_blank" sx={{ display: 'flex' }}>
+          <Link
+            noWrap
+            key={href}
+            href={href}
+            variant="body2"
+            target="_blank"
+            sx={{ display: 'flex' }}
+            underline="hover"
+          >
             {href}
           </Link>
         ))

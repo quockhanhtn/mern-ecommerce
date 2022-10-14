@@ -6,7 +6,7 @@ import plusFill from '@iconify/icons-eva/plus-fill';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
 import {
   Alert,
   Box,
@@ -23,7 +23,7 @@ import {
   Stack,
   Typography,
   TextField
-} from '@material-ui/core';
+} from '@mui/material';
 // form validation
 import { Form, FormikProvider, useFormik, useFormikContext } from 'formik';
 import * as Yup from 'yup';

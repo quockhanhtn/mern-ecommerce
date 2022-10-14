@@ -1,5 +1,5 @@
-import { Link, Tooltip, Typography, Zoom } from '@material-ui/core';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { Link, Tooltip, Typography, Zoom } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 
 const TypographyStyle = styled(Typography)({

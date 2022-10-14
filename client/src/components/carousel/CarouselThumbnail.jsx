@@ -2,8 +2,8 @@ import Slider from 'react-slick';
 import PropTypes from 'prop-types';
 import { useState, useRef, useEffect } from 'react';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box } from '@mui/material';
 //
 import { CarouselControlsArrowsIndex, CarouselControlsArrowsBasic2 } from './controls';
 

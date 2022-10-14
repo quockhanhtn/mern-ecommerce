@@ -12,8 +12,8 @@ import {
   DialogTitle,
   Grid,
   TextField
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 // hooks
 import { useEffect, useState } from 'react';
 import useLocales from '../../../hooks/useLocales';
@@ -218,7 +218,7 @@ export default function OrderDetailForm({ order, open, setOpen, handleUpdate, ac
           <Typography variant="h4" marginBottom={2} sx={{ textTransform: 'uppercase', mb: 0 }}>
             Đơn hàng #{order?.numericId}
           </Typography>
-          <IconButton color="inherit" edge="start" onClick={handleClose}>
+          <IconButton color="inherit" edge="start" onClick={handleClose} size="large">
             <CloseIcon />
           </IconButton>
         </Box>

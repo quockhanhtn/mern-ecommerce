@@ -3,8 +3,8 @@ import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
-import { OutlinedInput, FormHelperText, Stack } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import { OutlinedInput, FormHelperText, Stack } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // utils

@@ -8,8 +8,8 @@ import eyeFill from '@iconify/icons-eva/eye-fill';
 import closeFill from '@iconify/icons-eva/close-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 // material
-import { Link, Stack, Alert, TextField, IconButton, InputAdornment } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import { Link, Stack, Alert, TextField, IconButton, InputAdornment } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // hooks
 import { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
@@ -110,7 +110,7 @@ export default function LoginForm() {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={handleShowPassword} edge="end">
+                  <IconButton onClick={handleShowPassword} edge="end" size="large">
                     <Icon icon={showPassword ? eyeFill : eyeOffFill} />
                   </IconButton>
                 </InputAdornment>
@@ -128,7 +128,7 @@ export default function LoginForm() {
             label={t('auth.remember-me')}
           /> */}
 
-          <Link component={RouterLink} variant="subtitle2" to={PATH_AUTH.resetPassword}>
+          <Link component={RouterLink} variant="subtitle2" to={PATH_AUTH.resetPassword} underline="hover">
             {t('auth.forgot-password')}
           </Link>
         </Stack>

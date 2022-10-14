@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import { useRef } from 'react';
 import Slider from 'react-slick';
 //
-import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import { useTheme, styled } from '@mui/material/styles';
+import { Box } from '@mui/material';
 import { MCircularProgress } from '../@material-extend';
 
 import { CarouselControlsPaging2, CarouselControlsArrowsBasic3 } from '../carousel/controls';

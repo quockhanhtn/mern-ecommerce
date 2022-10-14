@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
-import { Button, Box, Link, OutlinedInput, FormHelperText, Stack } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import { Button, Box, Link, OutlinedInput, FormHelperText, Stack } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // hooks
 // import useLocales from '../../../hooks/useLocales';
 
@@ -138,7 +138,7 @@ export default function VerifyCodeForm({ confirmResult, onResentOtp, onGoBack, o
           </Stack>
 
           <Box display="flex" justifyContent="space-between">
-            <Link component="button" variant="subtitle2" onClick={onResentOtp}>
+            <Link component="button" variant="subtitle2" onClick={onResentOtp} underline="hover">
               Gửi lại mã OTP
             </Link>
 

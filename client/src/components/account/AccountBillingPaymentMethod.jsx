@@ -4,8 +4,8 @@ import { Form, FormikProvider } from 'formik';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 // material
-import { Box, Paper, Stack, Card, Button, Collapse, TextField, IconButton, Typography } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import { Box, Paper, Stack, Card, Button, Collapse, TextField, IconButton, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------
 
@@ -50,6 +50,7 @@ export default function AccountBillingPaymentMethod({ formik, cards, isOpen, onO
                 right: 8,
                 position: 'absolute'
               }}
+              size="large"
             >
               <Icon icon={moreVerticalFill} width={20} height={20} />
             </IconButton>

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types';
 // icons
 import { Icon } from '@iconify/react';
@@ -13,8 +14,8 @@ import {
   TextField,
   Link,
   ClickAwayListener
-} from '@material-ui/core';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 // hook
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,16 +34,16 @@ import * as typeUtils from '../../utils/typeUtils';
 
 // ----------------------------------------------------------------------
 
-const StyledAutocomplete = styled(Autocomplete)(({ theme }) => ({
-  fontWeight: 'fontWeightBold',
-  maxWidth: 400,
-  marginLeft: 3,
-  zIndex: 999,
-  backgroundColor: `${theme.palette.primary.lighter}40`,
-  '& .MuiAutocomplete-listbox': {
-    maxHeight: '80vh'
-  }
-}));
+// const StyledAutocomplete = styled(Autocomplete)(({ theme }) => ({
+//   fontWeight: 'fontWeightBold',
+//   maxWidth: 400,
+//   marginLeft: 3,
+//   zIndex: 999,
+//   backgroundColor: `${theme.palette.primary.lighter}40`,
+//   '& .MuiAutocomplete-listbox': {
+//     maxHeight: '80vh'
+//   }
+// }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   maxWidth: 400,
@@ -130,7 +131,7 @@ ResultItem.propTypes = {
 
 // ----------------------------------------------------------------------
 
-export default function SearchBar({ iconSx }) {
+export default function SearchBar() {
   const { t } = useLocales();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -222,7 +223,9 @@ export default function SearchBar({ iconSx }) {
         <Grid container spacing={1.5}>
           {searchHistory.map(({ name, slug }) => (
             <Grid key={slug} item sm={12} md={6} sx={{ cursor: 'pointer' }}>
-              <Link href={`/p/${slug}`}>{name}</Link>
+              <Link href={`/p/${slug}`} underline="hover">
+                {name}
+              </Link>
             </Grid>
           ))}
         </Grid>

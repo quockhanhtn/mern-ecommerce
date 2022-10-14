@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // material
-import { useTheme } from '@material-ui/core/styles';
-import { CircularProgress } from '@material-ui/core';
+import { useTheme } from '@mui/material/styles';
+import { CircularProgress } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

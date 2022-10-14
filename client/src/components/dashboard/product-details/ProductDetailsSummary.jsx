@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Stack, Button, Divider, Typography, FormHelperText } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box, Stack, Button, Divider, Typography, FormHelperText } from '@mui/material';
 // components
 import { MButton } from '../../@material-extend';
 import { fCurrency } from '../../../utils/formatNumber';

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // material
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
 import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------

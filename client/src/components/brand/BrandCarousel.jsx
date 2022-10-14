@@ -3,8 +3,8 @@ import { useRef } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 import Slider from 'react-slick';
 // material
-import { Box, Link, Skeleton } from '@material-ui/core';
-import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+import { Box, Link, Skeleton } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
 //
 import { CarouselControlsArrowsBasic3, CarouselControlsPaging1 } from '../carousel/controls';
 
@@ -105,7 +105,7 @@ export default function BrandCarousel({ isLoading, items, customHeight, sx }) {
         <Box sx={{ mb: 1, position: 'relative', pt: '100%', display: 'flex', justifyContent: 'space-around' }}>
           <Skeleton
             key={`ske-${i}`}
-            variant="rect"
+            variant="rectangular"
             width="100%"
             height={customHeight}
             sx={{

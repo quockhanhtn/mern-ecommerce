@@ -9,9 +9,9 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import SimpleBarReact from 'simplebar-react';
 // material
-import { alpha, experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
-import { Box, Button, Tab, Card, Grid, Divider, Container, Typography, Rating, Stack } from '@material-ui/core';
-import { TabContext, TabList, TabPanel } from '@material-ui/lab';
+import { alpha, styled, useTheme } from '@mui/material/styles';
+import { Box, Button, Tab, Card, Grid, Divider, Container, Typography, Rating, Stack } from '@mui/material';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductById } from '../../redux/slices/productSlice';
@@ -26,7 +26,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 import Markdown from '../../components/Markdown';
 import { ProductDetailsReview } from '../../components/dashboard/product-details';
 import { CarouselThumbnail } from '../../components/carousel';
-import { ProductCarousel, ProductList, ProductVariantInfo, ProductSpecification } from '../../components/e-commerce';
+import { ProductList, ProductVariantInfo, ProductSpecification } from '../../components/e-commerce';
 //
 import { fShortenNumber } from '../../utils/formatNumber';
 

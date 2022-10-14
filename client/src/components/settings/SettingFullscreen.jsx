@@ -4,8 +4,8 @@ import { Icon } from '@iconify/react';
 import roundFullscreen from '@iconify/icons-ic/round-fullscreen';
 import roundFullscreenExit from '@iconify/icons-ic/round-fullscreen-exit';
 // material
-import { alpha } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import { alpha } from '@mui/material/styles';
+import { Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

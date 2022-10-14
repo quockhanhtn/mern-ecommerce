@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 // material
-import { alpha, experimentalStyled as styled, emphasize } from '@material-ui/core/styles';
-import { Chip } from '@material-ui/core';
+import { alpha, styled, emphasize } from '@mui/material/styles';
+import { Chip } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

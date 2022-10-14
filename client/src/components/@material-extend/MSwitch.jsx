@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // material
-import { alpha, useTheme } from '@material-ui/core/styles';
-import { Switch } from '@material-ui/core';
+import { alpha, useTheme } from '@mui/material/styles';
+import { Switch } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

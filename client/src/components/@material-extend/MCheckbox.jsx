@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 // material
-import { alpha, useTheme } from '@material-ui/core/styles';
-import { Checkbox } from '@material-ui/core';
+import { alpha, useTheme } from '@mui/material/styles';
+import { Checkbox } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

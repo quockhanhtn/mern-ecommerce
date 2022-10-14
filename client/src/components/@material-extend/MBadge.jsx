@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 // material
-import { useTheme } from '@material-ui/core/styles';
-import { Badge } from '@material-ui/core';
+import { useTheme } from '@mui/material/styles';
+import { Badge } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

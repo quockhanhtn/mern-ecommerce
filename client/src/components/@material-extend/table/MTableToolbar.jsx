@@ -5,8 +5,8 @@ import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
 import { Icon } from '@iconify/react';
 // material
-import { Box, IconButton, InputAdornment, OutlinedInput, Toolbar, Tooltip, Typography } from '@material-ui/core';
-import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+import { Box, IconButton, InputAdornment, OutlinedInput, Toolbar, Tooltip, Typography } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
 
 import PropTypes from 'prop-types';
 import { useState } from 'react';
@@ -100,26 +100,26 @@ export default function MTableToolbar({ searchPlaceHolder, numSelected, initialV
           {numSelected === 1 && (
             <>
               <Tooltip title="Edit">
-                <IconButton>
+                <IconButton size="large">
                   <Icon icon={editFill} />
                 </IconButton>
               </Tooltip>
               <Tooltip title="Hide / show">
-                <IconButton>
+                <IconButton size="large">
                   <Icon icon={eyeFill} />
                 </IconButton>
               </Tooltip>
             </>
           )}
           <Tooltip title="Delete">
-            <IconButton>
+            <IconButton size="large">
               <Icon icon={trash2Fill} />
             </IconButton>
           </Tooltip>
         </Box>
       ) : (
         <Tooltip title="Filter list">
-          <IconButton onClick={handleOnFilter}>
+          <IconButton onClick={handleOnFilter} size="large">
             <Icon icon={roundFilterList} />
           </IconButton>
         </Tooltip>

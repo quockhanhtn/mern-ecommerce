@@ -1,8 +1,8 @@
 import { useSnackbar } from 'notistack';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import { Card, Stack, Switch, Typography, FormControlLabel } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import { Card, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------
 

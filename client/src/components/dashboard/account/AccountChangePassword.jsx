@@ -2,8 +2,8 @@ import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import { Stack, Card, TextField } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import { Stack, Card, TextField } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // utils
 
 // ----------------------------------------------------------------------

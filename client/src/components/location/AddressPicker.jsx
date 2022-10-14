@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 // material
-import { Stack, TextField } from '@material-ui/core';
+import { Stack, TextField } from '@mui/material';
 // hooks
 import { useEffect, useState } from 'react';
 import useLocales from '../../hooks/useLocales';

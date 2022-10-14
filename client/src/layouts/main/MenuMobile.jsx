@@ -6,8 +6,8 @@ import { NavLink as RouterLink, useLocation } from 'react-router-dom';
 import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill';
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 // material
-import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, List, Drawer, Link, Collapse, ListItem, ListItemText, ListItemIcon } from '@material-ui/core';
+import { alpha, styled } from '@mui/material/styles';
+import { Box, List, Drawer, Link, Collapse, ListItem, ListItemText, ListItemIcon } from '@mui/material';
 // components
 import Logo from '../../components/Logo';
 import NavSection from '../../components/NavSection';
@@ -177,7 +177,7 @@ export default function MenuMobile({ isOffset, isHome }) {
         PaperProps={{ sx: { pb: 5, width: 260 } }}
       >
         <Scrollbar>
-          <Link component={RouterLink} to="/" sx={{ display: 'inline-flex' }}>
+          <Link component={RouterLink} to="/" sx={{ display: 'inline-flex' }} underline="hover">
             <Logo sx={{ mx: PADDING, my: 3 }} />
           </Link>
 

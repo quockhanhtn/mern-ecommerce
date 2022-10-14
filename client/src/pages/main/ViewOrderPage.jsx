@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
 import {
   Box,
   Link,
@@ -16,7 +16,7 @@ import {
   TableCell,
   Typography,
   TableContainer
-} from '@material-ui/core';
+} from '@mui/material';
 // hooks
 import { useParams } from 'react-router-dom';
 import useLocales from '../../hooks/useLocales';
@@ -184,7 +184,7 @@ export default function ViewOrderPage() {
                   </Label>
                   {order?.paymentStatus === 'pending' &&
                     ['cash', 'cod', '', undefined, null].indexOf(order?.paymentMethod) < 0 && (
-                      <Link href="#" onClick={handleRePay} sx={{ ml: 2 }}>
+                      <Link href="#" onClick={handleRePay} sx={{ ml: 2 }} underline="hover">
                         Thanh toán ngay
                       </Link>
                     )}

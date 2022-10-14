@@ -4,8 +4,8 @@ import { Icon } from '@iconify/react';
 import { useDropzone } from 'react-dropzone';
 import roundAddAPhoto from '@iconify/icons-ic/round-add-a-photo';
 // material
-import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Typography, Paper } from '@material-ui/core';
+import { alpha, styled } from '@mui/material/styles';
+import { Box, Typography, Paper } from '@mui/material';
 // utils
 import { fData } from '../../utils/formatNumber';
 

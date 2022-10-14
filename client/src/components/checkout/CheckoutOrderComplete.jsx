@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import filePdfFilled from '@iconify/icons-fluent/document-pdf-16-filled';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Link, Button, Divider, Typography, Stack } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box, Link, Button, Divider, Typography, Stack } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 //
@@ -45,7 +45,9 @@ export default function CheckoutOrderComplete({ ...other }) {
 
           <Typography align="left" paragraph>
             Thanks for placing order &nbsp;
-            <Link href="#">01dc1370-3df6-11eb-b378-0242ac130002</Link>
+            <Link href="#" underline="hover">
+              01dc1370-3df6-11eb-b378-0242ac130002
+            </Link>
           </Typography>
 
           <Typography align="left" sx={{ color: 'text.secondary' }}>

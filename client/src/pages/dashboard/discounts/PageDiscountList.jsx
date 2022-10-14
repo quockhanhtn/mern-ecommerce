@@ -13,11 +13,11 @@ import {
   TablePagination,
   TableRow,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { useEffect, useState } from 'react';
-import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import Page from '../../../components/Page';
@@ -26,7 +26,7 @@ import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
 import useLocales from '../../../hooks/useLocales';
 import LoadingScreen from '../../../components/LoadingScreen';
 import Label from '../../../components/Label';
-import { fDateTime, fDate } from '../../../utils/formatTime';
+import { fDate } from '../../../utils/formatTime';
 import Scrollbar from '../../../components/Scrollbar';
 import { stableSort, getComparator } from '../../../helper/listHelper';
 import { DiscountListToolbar, DiscountListHead, DiscountMoreMenu } from '../../../components/dashboard/discount-list';

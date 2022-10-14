@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import plusSquareOutline from '@iconify/icons-eva/plus-square-outline';
 import minusSquareOutline from '@iconify/icons-eva/minus-square-outline';
 import closeSquareOutline from '@iconify/icons-eva/close-square-outline';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

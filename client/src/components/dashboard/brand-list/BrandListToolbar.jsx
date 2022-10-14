@@ -4,8 +4,8 @@ import searchFill from '@iconify/icons-eva/search-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
 // material
-import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Toolbar, Tooltip, Typography, IconButton, OutlinedInput, InputAdornment } from '@material-ui/core';
+import { useTheme, styled } from '@mui/material/styles';
+import { Box, Toolbar, Tooltip, Typography, IconButton, OutlinedInput, InputAdornment } from '@mui/material';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 import editFill from '@iconify/icons-eva/edit-fill';
 import useLocales from '../../../hooks/useLocales';
@@ -74,26 +74,26 @@ export default function BrandListToolbar({ numSelected, filterName, onFilterName
           {numSelected === 1 && (
             <>
               <Tooltip title="Edit">
-                <IconButton>
+                <IconButton size="large">
                   <Icon icon={editFill} />
                 </IconButton>
               </Tooltip>
               <Tooltip title="Hide / show">
-                <IconButton>
+                <IconButton size="large">
                   <Icon icon={eyeFill} />
                 </IconButton>
               </Tooltip>
             </>
           )}
           <Tooltip title={t('common.delete')}>
-            <IconButton>
+            <IconButton size="large">
               <Icon icon={trash2Fill} />
             </IconButton>
           </Tooltip>
         </Box>
       ) : (
         <Tooltip title={t('common.filter-list')}>
-          <IconButton>
+          <IconButton size="large">
             <Icon icon={roundFilterList} />
           </IconButton>
         </Tooltip>

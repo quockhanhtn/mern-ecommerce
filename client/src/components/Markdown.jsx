@@ -4,8 +4,8 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import rehypeHighlight from 'rehype-highlight';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Link, Typography, Divider } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Link, Typography, Divider } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -82,9 +82,11 @@ LinkTo.propTypes = {
 
 function LinkTo({ href, children }) {
   return !href.includes('http') ? (
-    <Link href={href}>{children}</Link>
+    <Link href={href} underline="hover">
+      {children}
+    </Link>
   ) : (
-    <Link href={href} target="_blank" rel="nofollow noreferrer noopener">
+    <Link href={href} target="_blank" rel="nofollow noreferrer noopener" underline="hover">
       {children}
     </Link>
   );

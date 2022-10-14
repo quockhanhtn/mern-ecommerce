@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 // material
-import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import { alpha, styled } from '@mui/material/styles';
+import { Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

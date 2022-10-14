@@ -2,7 +2,7 @@ import arrowLeftFill from '@iconify/icons-eva/arrow-left-fill';
 import arrowRightFill from '@iconify/icons-eva/arrow-right-fill';
 import { Icon } from '@iconify/react';
 import PropTypes from 'prop-types';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
 import { MIconButton } from '../../@material-extend';
 
 // ----------------------------------------------------------------------

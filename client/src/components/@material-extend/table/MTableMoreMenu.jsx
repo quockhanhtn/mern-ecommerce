@@ -1,7 +1,7 @@
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import { Icon } from '@iconify/react';
 // material
-import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@material-ui/core';
+import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
 
@@ -23,7 +23,7 @@ export default function MTableMoreMenu({ menuItems }) {
 
   return (
     <>
-      <IconButton ref={ref} onClick={() => setIsOpen(true)}>
+      <IconButton ref={ref} onClick={() => setIsOpen(true)} size="large">
         <Icon icon={moreVerticalFill} width={20} height={20} />
       </IconButton>
 

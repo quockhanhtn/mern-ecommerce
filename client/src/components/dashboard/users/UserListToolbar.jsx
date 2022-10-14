@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Toolbar, OutlinedInput, InputAdornment, IconButton, Tooltip } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box, Toolbar, OutlinedInput, InputAdornment, IconButton, Tooltip } from '@mui/material';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
 import useLocales from '../../../hooks/useLocales';
 
@@ -47,7 +47,7 @@ export default function UserListToolbar({ filterName, onFilterName }) {
         }
       />
       <Tooltip title={t('common.filter-list')}>
-        <IconButton>
+        <IconButton size="large">
           <Icon icon={roundFilterList} />
         </IconButton>
       </Tooltip>

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // material
-import { Autocomplete, TextField } from '@material-ui/core';
+import { Autocomplete, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
 import {
   Box,
   Card,
@@ -13,7 +13,7 @@ import {
   Radio,
   RadioGroup,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 
 // ----------------------------------------------------------------------
 

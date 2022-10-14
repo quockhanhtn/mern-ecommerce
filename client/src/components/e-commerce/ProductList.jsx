@@ -1,5 +1,5 @@
-import { Box, Skeleton } from '@material-ui/core';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { Box, Skeleton } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 
 import ProductItem from './ProductItem';
@@ -13,10 +13,10 @@ const BoxListStyle = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down('md+')]: {
     gridTemplateColumns: 'repeat(4, 1fr)'
   },
-  [theme.breakpoints.down('md')]: {
+  [theme.breakpoints.down('lg')]: {
     gridTemplateColumns: 'repeat(3, 1fr)'
   },
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down('md')]: {
     gridTemplateColumns: 'repeat(2, 1fr)'
   }
 }));

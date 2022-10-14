@@ -1,5 +1,5 @@
 // material
-import { Stack, Button, Divider, Typography } from '@material-ui/core';
+import { Stack, Button, Divider, Typography } from '@mui/material';
 import { GoogleLogin } from 'react-google-login';
 // hooks
 import { useSnackbar } from 'notistack';

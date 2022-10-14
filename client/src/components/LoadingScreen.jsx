@@ -2,8 +2,9 @@ import NProgress from 'nprogress';
 import { motion } from 'framer-motion';
 import { useEffect, useMemo } from 'react';
 // material
-import { alpha, makeStyles, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import { alpha, styled } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 //
 import Logo from './Logo';
 

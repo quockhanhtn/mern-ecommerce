@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // material
-import { useTheme } from '@material-ui/core/styles';
-import { TimelineDot } from '@material-ui/lab';
+import { useTheme } from '@mui/material/styles';
+import { TimelineDot } from '@mui/lab';
 
 // ----------------------------------------------------------------------
 

@@ -2,7 +2,7 @@
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
 import {
   Autocomplete,
   Box,
@@ -15,8 +15,8 @@ import {
   Stack,
   TextField,
   Typography
-} from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+} from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // hooks
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
@@ -121,6 +121,7 @@ export default function ProductListPage() {
   };
 
   const handleSearch = () => {
+    // eslint-disable-next-line no-unused-vars
     setProducts((_prev) => []);
     const bQuery = selectedBrands.map((x) => x.slug).join(',');
     const cQuery = selectedCategories.map((x) => x.slug).join(',');

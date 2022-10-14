@@ -2,8 +2,8 @@ import { Icon } from '@iconify/react';
 import { useState } from 'react';
 import searchFill from '@iconify/icons-eva/search-fill';
 // material
-import { experimentalStyled as styled, alpha } from '@material-ui/core/styles';
-import { Box, Input, Slide, Button, InputAdornment, ClickAwayListener } from '@material-ui/core';
+import { styled, alpha } from '@mui/material/styles';
+import { Box, Input, Slide, Button, InputAdornment, ClickAwayListener } from '@mui/material';
 // hook
 import useLocales from '../../hooks/useLocales';
 // components

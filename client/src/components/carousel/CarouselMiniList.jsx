@@ -3,8 +3,8 @@ import Slider from 'react-slick';
 import PropTypes from 'prop-types';
 import { NavLink as RouterLink } from 'react-router-dom';
 // material
-import { useTheme } from '@material-ui/core/styles';
-import { Box, Link, Typography, Skeleton } from '@material-ui/core';
+import { useTheme } from '@mui/material/styles';
+import { Box, Link, Typography, Skeleton } from '@mui/material';
 //
 import { CarouselControlsPaging1, CarouselControlsArrowsBasic2 } from './controls';
 
@@ -76,7 +76,7 @@ export default function CarouselMiniList({
   function renderSkeleton() {
     return [...Array(10).keys()].map((i) => (
       <>
-        <Skeleton key={`ske-${i}`} variant="rect" width="100%" height={200} />
+        <Skeleton key={`ske-${i}`} variant="rectangular" width="100%" height={200} />
       </>
     ));
   }

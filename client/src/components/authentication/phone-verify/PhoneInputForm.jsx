@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // material
-import { Box, Stack, TextField, Button } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import { Box, Stack, TextField, Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // form validation
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';

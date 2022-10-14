@@ -11,6 +11,11 @@ export default function Typography(theme) {
           marginBottom: theme.spacing(1)
         }
       }
+    },
+    MuiLink: {
+      defaultProps: {
+        underline: 'hover'
+      }
     }
   };
 }

@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 // icon
 import { Icon } from '@iconify/react';
@@ -11,8 +10,8 @@ import roundReceipt from '@iconify/icons-ic/round-receipt';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
 import baselineSettings from '@iconify/icons-ic/baseline-settings';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, IconButton, AppBar, Toolbar, Container, Stack, Divider } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box, IconButton, AppBar, Toolbar, Container, Stack } from '@mui/material';
 // hooks
 import { useOffSetTop, useLocales } from '../../hooks';
 // components
@@ -93,7 +92,7 @@ function NavbarItem({ badgeContent, text, icon, color, ...other }) {
   return (
     <>
       <MHidden width="mdUp">
-        <IconButton color={color} {...other}>
+        <IconButton color={color} {...other} size="large">
           <Icon icon={icon} />
         </IconButton>
       </MHidden>

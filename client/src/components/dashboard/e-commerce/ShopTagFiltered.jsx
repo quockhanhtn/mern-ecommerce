@@ -4,8 +4,8 @@ import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
 import roundClearAll from '@iconify/icons-ic/round-clear-all';
 // material
-import { useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Chip, Typography, Stack } from '@material-ui/core';
+import { useTheme, styled } from '@mui/material/styles';
+import { Chip, Typography, Stack } from '@mui/material';
 import { MButton } from '../../@material-extend';
 import getColorName from '../../../utils/getColorName';
 // utils

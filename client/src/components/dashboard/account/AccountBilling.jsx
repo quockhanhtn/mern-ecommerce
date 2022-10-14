@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 // material
-import { Box, Grid, Card, Button, Typography, Stack } from '@material-ui/core';
+import { Box, Grid, Card, Button, Typography, Stack } from '@mui/material';
 // redux
 import { useSelector } from 'react-redux';
 // util

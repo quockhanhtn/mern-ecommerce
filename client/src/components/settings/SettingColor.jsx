@@ -1,5 +1,5 @@
-import { alpha } from '@material-ui/core/styles';
-import { Box, Grid, Paper, Radio, RadioGroup, CardActionArea, FormControlLabel } from '@material-ui/core';
+import { alpha } from '@mui/material/styles';
+import { Box, Grid, Paper, Radio, RadioGroup, CardActionArea, FormControlLabel } from '@mui/material';
 // hooks
 import useSettings from '../../hooks/useSettings';
 

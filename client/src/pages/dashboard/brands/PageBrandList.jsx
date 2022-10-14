@@ -17,8 +17,8 @@ import {
   TableRow,
   Tooltip,
   Typography
-} from '@material-ui/core';
-import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+} from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
 //
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

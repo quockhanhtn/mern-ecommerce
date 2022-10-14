@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-import { Link as RouterLink, Navigate, useLocation } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Avatar, Box, Link, Drawer, Typography } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Avatar, Box, Link, Drawer, Typography } from '@mui/material';
 // hook
 import useLocales from '../../hooks/useLocales';
 import useAuth from '../../hooks/useAuth';

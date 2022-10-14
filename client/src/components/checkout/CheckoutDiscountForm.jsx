@@ -9,7 +9,7 @@ import {
   DialogTitle,
   Stack,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 
 import PropTypes from 'prop-types';
 // hooks

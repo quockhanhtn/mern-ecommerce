@@ -22,8 +22,8 @@ import {
   Tooltip,
   Typography,
   Zoom
-} from '@material-ui/core';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 // hooks
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';

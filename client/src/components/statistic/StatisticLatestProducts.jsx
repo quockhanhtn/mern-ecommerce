@@ -3,8 +3,8 @@ import { sample } from 'lodash';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Link, Card, CardHeader, Typography, Stack } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box, Link, Card, CardHeader, Typography, Stack } from '@mui/material';
 // utils
 import { fCurrency } from '../../utils/formatNumber';
 import { mockImgProduct } from '../../utils/mockImages';
@@ -55,7 +55,7 @@ function ProductItem({ product }) {
       <ThumbImgStyle alt={name} src={image} />
 
       <Box sx={{ flexGrow: 1, minWidth: 200 }}>
-        <Link component={RouterLink} to="#" sx={{ color: 'text.primary', typography: 'subtitle2' }}>
+        <Link component={RouterLink} to="#" sx={{ color: 'text.primary', typography: 'subtitle2' }} underline="hover">
           {name}
         </Link>
 

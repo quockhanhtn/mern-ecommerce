@@ -5,8 +5,8 @@ import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import { Grid, Button } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import { Grid, Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // hooks
 import { useLayoutEffect } from 'react';
 import { useSnackbar } from 'notistack';

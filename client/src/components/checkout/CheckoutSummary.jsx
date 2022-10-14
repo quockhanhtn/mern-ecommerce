@@ -12,7 +12,7 @@ import {
   Typography,
   CardContent,
   InputAdornment
-} from '@material-ui/core';
+} from '@mui/material';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';

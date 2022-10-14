@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 //
 import { Icon } from '@iconify/react';
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
-import { Box, Container, Accordion, AccordionSummary, Typography, AccordionDetails } from '@material-ui/core';
+import { Box, Container, Accordion, AccordionSummary, Typography, AccordionDetails } from '@mui/material';
 
 const LEFT_WIDTH = 200;
 

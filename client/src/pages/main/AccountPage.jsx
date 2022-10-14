@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { useMediaQuery, Box, Container, Stack, Tab, Tabs, Typography } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { useMediaQuery, Box, Container, Stack, Tab, Tabs, Typography } from '@mui/material';
 // icons
 import { Icon } from '@iconify/react';
 import baselineLocationOn from '@iconify/icons-ic/baseline-location-on';
 import roundVpnKey from '@iconify/icons-ic/round-vpn-key';
-import roundReceipt from '@iconify/icons-ic/round-receipt';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
 import baselineSettings from '@iconify/icons-ic/baseline-settings';
 // hooks
@@ -17,7 +16,6 @@ import useLocales from '../../hooks/useLocales';
 import Page from '../../components/Page';
 import {
   AccountGeneral,
-  AccountBilling,
   AccountAddressBook,
   AccountChangePassword,
   AccountNotifications
@@ -42,7 +40,7 @@ export default function AccountPage() {
   const query = useQuery();
   const tabSlug = query.get('tab');
 
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('lg'));
 
   const [currentTab, setCurrentTab] = useState(tabSlug || 'info');
 

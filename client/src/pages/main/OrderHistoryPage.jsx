@@ -1,4 +1,4 @@
-import { Card, Container, Table, TableRow, TableBody, TableCell, TableContainer } from '@material-ui/core';
+import { Card, Container, Table, TableRow, TableBody, TableCell, TableContainer } from '@mui/material';
 // hooks
 import { useEffect, useState } from 'react';
 import useLocales from '../../hooks/useLocales';

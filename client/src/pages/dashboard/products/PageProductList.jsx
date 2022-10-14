@@ -17,8 +17,8 @@ import {
   TablePagination,
   TableRow,
   Typography
-} from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 //
 import { Link as RouterLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -53,6 +53,7 @@ export default function PageProductList() {
 
   const [selected, setSelected] = useState([]);
   const [isCompact, setIsCompact] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [currentId, setCurrentId] = useState(null);
 
   const { list: productsList, isLoading, hasError, pagination } = useSelector((state) => state.product.dashboard);

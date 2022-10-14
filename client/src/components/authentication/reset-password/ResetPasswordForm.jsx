@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
-import { Box, Button, TextField, Alert, Stack } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import { Box, Button, TextField, Alert, Stack } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { Link as RouterLink } from 'react-router-dom';
 import { PATH_AUTH } from '../../../routes/paths';
 // hooks

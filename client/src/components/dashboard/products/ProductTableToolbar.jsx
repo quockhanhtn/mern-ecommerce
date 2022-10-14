@@ -19,8 +19,8 @@ import {
   Toolbar,
   Tooltip,
   Typography
-} from '@material-ui/core';
-import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles';
+} from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
 //
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
@@ -221,26 +221,26 @@ export default function ProductTableToolbar({
           {numSelected === 1 && (
             <>
               <Tooltip title="Edit">
-                <IconButton>
+                <IconButton size="large">
                   <Icon icon={editFill} />
                 </IconButton>
               </Tooltip>
               <Tooltip title="Hide / show">
-                <IconButton>
+                <IconButton size="large">
                   <Icon icon={eyeFill} />
                 </IconButton>
               </Tooltip>
             </>
           )}
           <Tooltip title="Delete">
-            <IconButton>
+            <IconButton size="large">
               <Icon icon={trash2Fill} />
             </IconButton>
           </Tooltip>
         </Box>
       ) : (
         <Tooltip title="Bỏ lọc">
-          <IconButton onClick={handleClearFilter}>
+          <IconButton onClick={handleClearFilter} size="large">
             <Icon icon={closeCircleFill} />
           </IconButton>
         </Tooltip>

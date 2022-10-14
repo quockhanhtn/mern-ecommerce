@@ -2,8 +2,9 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import Lightbox from 'react-image-lightbox';
 // material
-import { alpha, makeStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import { alpha } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

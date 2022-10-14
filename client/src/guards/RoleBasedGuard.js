@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Container, Alert, AlertTitle } from '@material-ui/core';
+import { Container, Alert, AlertTitle } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

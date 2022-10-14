@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
-import { Box, Card, Typography } from '@material-ui/core';
+import { Box, Card, Typography } from '@mui/material';
 import { MotionContainer, varBounceIn } from './animate';
 import { EmptyBoxIcon } from '../assets';
 

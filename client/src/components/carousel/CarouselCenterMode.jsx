@@ -5,8 +5,8 @@ import { Icon } from '@iconify/react';
 import { Link as RouterLink } from 'react-router-dom';
 import arrowForwardFill from '@iconify/icons-eva/arrow-forward-fill';
 // material
-import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Paper, Link, Typography, CardContent } from '@material-ui/core';
+import { alpha, useTheme, styled } from '@mui/material/styles';
+import { Box, Paper, Link, Typography, CardContent } from '@mui/material';
 //
 import { CarouselControlsArrowsBasic2 } from './controls';
 
@@ -94,6 +94,7 @@ function CarouselItem({ item }) {
             transition: (theme) => theme.transitions.create('opacity'),
             '&:hover': { opacity: 1 }
           }}
+          underline="hover"
         >
           learn More
           <Box component={Icon} icon={arrowForwardFill} sx={{ width: 16, height: 16, ml: 1 }} />

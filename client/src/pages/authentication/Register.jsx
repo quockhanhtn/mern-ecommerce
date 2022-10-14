@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Alert, Box, Card, Link, Container, Stack, Typography } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import { styled } from '@mui/material/styles';
+import { Alert, Box, Card, Link, Container, Stack, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // form validation
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
@@ -141,7 +142,7 @@ export default function Register() {
           <MHidden width="smUp">
             <Typography variant="subtitle2" sx={{ mt: 3, textAlign: 'center' }}>
               {t('auth.already-have-account')}&nbsp;
-              <Link to={PATH_AUTH.login} component={RouterLink}>
+              <Link to={PATH_AUTH.login} component={RouterLink} underline="hover">
                 {t('auth.login')}
               </Link>
             </Typography>

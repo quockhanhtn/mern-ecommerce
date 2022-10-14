@@ -1,5 +1,5 @@
 // material
-import { Container, Grid } from '@material-ui/core';
+import { Container, Grid } from '@mui/material';
 // components
 import Page from '../../../components/Page';
 import {
