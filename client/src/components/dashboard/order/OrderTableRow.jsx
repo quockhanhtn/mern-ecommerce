@@ -1,22 +1,25 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 // icons
 import { Icon } from '@iconify/react';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 // material
 import { IconButton, TableCell, TableRow, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
 //
-import useLocales from '../../../hooks/useLocales';
-import { fCurrency } from '../../../utils/formatNumber';
+import { useLocales } from '~/hooks';
 // utils
-import { fDateTime } from '../../../utils/formatTime';
-import { getOrderStatusColor, getPaymentStatusColor } from '../../../utils/labelColor';
+import { fDateTime } from '~/utils/formatTime';
+import { fCurrency } from '~/utils/formatNumber';
+import { getOrderStatusColor, getPaymentStatusColor } from '~/utils/labelColor';
 // components
-import Label from '../../Label';
+import Label from '~/components/Label';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
+OrderTableRow.propTypes = {
+  row: PropTypes.any,
+  onClick: PropTypes.func
+};
+
 export default function OrderTableRow({ row, onClick }) {
   const { t, currentLang } = useLocales();
 

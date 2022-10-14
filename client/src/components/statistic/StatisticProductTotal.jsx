@@ -9,12 +9,12 @@ import { Box, Card, Typography, Stack } from '@mui/material';
 // utils
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { fNumber, fPercent } from '../../utils/formatNumber';
+import { fNumber, fPercent } from '~/utils/formatNumber';
 //
+import { getAllProducts } from '~/redux/slices/productSlice';
+import useLocales from '~/hooks/useLocales';
+import * as api from '~/api';
 import BaseOptionChart from '../charts/BaseOptionChart';
-import { getAllProducts } from '../../redux/slices/productSlice';
-import useLocales from '../../hooks/useLocales';
-import * as api from '../../api';
 
 // ----------------------------------------------------------------------
 

@@ -21,10 +21,10 @@ import {
   ListItemSecondaryAction
 } from '@mui/material';
 // utils
-import { fData } from '../../utils/formatNumber';
+import { fData } from '~/utils/formatNumber';
 //
-import { MIconButton } from '../@material-extend';
-import { varFadeInRight } from '../animate';
+import { MIconButton } from '~/components/@material-extend';
+import { varFadeInRight } from '~/components/animate';
 import { UploadIllustration } from '../../assets';
 
 // ----------------------------------------------------------------------

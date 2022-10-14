@@ -7,7 +7,7 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import { Button, Box, OutlinedInput, FormHelperText, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
-import * as typeUtils from '../../../utils/typeUtils';
+import * as typeUtils from '~/utils/typeUtils';
 
 // ----------------------------------------------------------------------
 
@@ -78,7 +78,6 @@ export default function OtpInputForm({ onVerifyOtp, onResentOtp, isLoading }) {
     }
   };
 
-  // eslint-disable-next-line no-unused-vars
   const handleResent = (_event) => {
     if (typeUtils.isFunction(onResentOtp)) {
       onResentOtp();

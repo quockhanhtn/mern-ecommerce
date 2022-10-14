@@ -4,9 +4,9 @@ import Slider from 'react-slick';
 //
 import { useTheme, styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import { MCircularProgress } from '../@material-extend';
+import { MCircularProgress } from '~/components/@material-extend';
 
-import { CarouselControlsPaging2, CarouselControlsArrowsBasic3 } from '../carousel/controls';
+import { CarouselControlsPaging2, CarouselControlsArrowsBasic3 } from '~/components/carousel/controls';
 import ProductItem from './ProductItem';
 
 const RootStyle = styled('div')(({ theme }) => ({

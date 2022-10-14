@@ -7,9 +7,9 @@ import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 // hooks
 import { useEffect, useState } from 'react';
-import useLocales from '../../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 // firebase
-import firebase, { auth as firebaseAuth } from '../../../firebase';
+import firebase, { auth as firebaseAuth } from '~/firebase';
 
 // ----------------------------------------------------------------------
 

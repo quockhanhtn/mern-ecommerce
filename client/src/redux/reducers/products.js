@@ -1,4 +1,4 @@
-import * as actionTypes from '../../constants/actionTypes';
+import * as actionTypes from '~/constants/actionTypes';
 
 const initialState = { isLoading: true, hasError: false, list: [], listFull: [], item: {}, pagination: {} };
 

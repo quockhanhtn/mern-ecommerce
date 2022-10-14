@@ -5,9 +5,9 @@ import searchFill from '@iconify/icons-eva/search-fill';
 import { styled, alpha } from '@mui/material/styles';
 import { Box, Input, Slide, Button, InputAdornment, ClickAwayListener } from '@mui/material';
 // hook
-import useLocales from '../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 // components
-import { MIconButton } from '../../components/@material-extend';
+import { MIconButton } from '~/components/@material-extend';
 
 // ----------------------------------------------------------------------
 

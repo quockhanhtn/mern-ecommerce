@@ -1,7 +1,3 @@
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
-import { useState } from 'react';
-import { useSnackbar } from 'notistack';
 // material
 import { Box, Grid, Card, Button, Typography, Stack } from '@mui/material';
 // redux
@@ -13,36 +9,35 @@ import AccountBillingAddressBook from './AccountBillingAddressBook';
 // ----------------------------------------------------------------------
 
 export default function AccountBilling() {
-  const { cards, invoices, addressBook } = useSelector((state) => state.user);
-  const [open, setOpen] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
+  const { addressBook } = useSelector((state) => state.user);
+  // const [open, setOpen] = useState(false);
 
-  const NewCardSchema = Yup.object().shape({
-    cardName: Yup.string().required('Name is required'),
-    cardNumber: Yup.string().required('Card number is required'),
-    cardExpired: Yup.string().required('Card expired is required'),
-    cardCvv: Yup.string().required('Cvv is required')
-  });
+  // const NewCardSchema = Yup.object().shape({
+  //   cardName: Yup.string().required('Name is required'),
+  //   cardNumber: Yup.string().required('Card number is required'),
+  //   cardExpired: Yup.string().required('Card expired is required'),
+  //   cardCvv: Yup.string().required('Cvv is required')
+  // });
 
-  const formik = useFormik({
-    initialValues: {
-      cardName: '',
-      cardNumber: '',
-      cardExpired: '',
-      cardCvv: ''
-    },
-    validationSchema: NewCardSchema,
-    onSubmit: async (values, { setSubmitting, resetForm }) => {}
-  });
+  // const formik = useFormik({
+  //   initialValues: {
+  //     cardName: '',
+  //     cardNumber: '',
+  //     cardExpired: '',
+  //     cardCvv: ''
+  //   },
+  //   validationSchema: NewCardSchema,
+  //   onSubmit: async (values, { setSubmitting, resetForm }) => {}
+  // });
 
-  const handleOpenAddCard = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
+  // const handleOpenAddCard = () => {
+  //   setOpen((prevOpen) => !prevOpen);
+  // };
 
-  const handleCancel = () => {
-    setOpen(false);
-    formik.resetForm();
-  };
+  // const handleCancel = () => {
+  //   setOpen(false);
+  //   formik.resetForm();
+  // };
 
   return (
     <Grid container spacing={5}>

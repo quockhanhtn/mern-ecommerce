@@ -7,8 +7,8 @@ import menu2Fill from '@iconify/icons-eva/menu-2-fill';
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
 //
-import Logo from '../../components/Logo';
-import { MHidden } from '../../components/@material-extend';
+import { MHidden } from '~/components/@material-extend';
+import Logo from '~/components/Logo';
 import DashboardSearchBar from './DashboardSearchBar';
 import AccountPopover from '../common/AccountPopover';
 import LanguagePopover from '../common/LanguagePopover';

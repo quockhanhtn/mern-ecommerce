@@ -1,16 +1,17 @@
-import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useFormik, Form, FormikProvider } from 'formik';
-import { useSnackbar } from 'notistack';
 // material
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Button, Rating, TextField, Typography, FormHelperText, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { useDispatch, useSelector } from 'react-redux';
-import useLocales from '../../../hooks/useLocales';
-import useAuth from '../../../hooks/useAuth';
-import { createComment } from '../../../redux/actions/comments';
-// utils
+
+import * as Yup from 'yup';
+import { useFormik, Form, FormikProvider } from 'formik';
+
+import { useDispatch } from 'react-redux';
+import { useSnackbar } from 'notistack';
+import { useAuth, useLocales } from '~/hooks';
+
+import { createComment } from '~/redux/actions/comments';
 
 // ----------------------------------------------------------------------
 
@@ -24,16 +25,16 @@ const RootStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 ProductDetailsReviewForm.propTypes = {
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  product: PropTypes.object
 };
 
 export default function ProductDetailsReviewForm({ onClose, product, ...other }) {
   const { t } = useLocales();
-  const theme = useTheme();
   const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const { item: comments, isLoading } = useSelector((state) => state.comment);
+  // const { item: comments, isLoading } = useSelector((state) => state.comment);
 
   let ReviewSchema = Yup.object().shape({
     star: Yup.mixed().required('Rating is required'),

@@ -1,6 +1,6 @@
 import { Box, Grid, Paper, Radio, RadioGroup, CardActionArea, FormControlLabel } from '@mui/material';
 // hooks
-import useSettings from '../../hooks/useSettings';
+import useSettings from '~/hooks/useSettings';
 
 // ----------------------------------------------------------------------
 

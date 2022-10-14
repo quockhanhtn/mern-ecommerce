@@ -5,12 +5,12 @@ import roundThumbUp from '@iconify/icons-ic/round-thumb-up';
 import roundVerified from '@iconify/icons-ic/round-verified';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 // material
-import { Box, List, Button, Rating, Avatar, ListItem, Pagination, Typography, Stack } from '@mui/material';
+import { Box, List, Button, Rating, Avatar, ListItem, Typography, Stack } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { fDate } from '../../../utils/formatTime';
-import { fShortenNumber } from '../../../utils/formatNumber';
-import { getAllComments } from '../../../redux/actions/comments';
-import useLocales from '../../../hooks/useLocales';
+import { fDate } from '~/utils/formatTime';
+import { fShortenNumber } from '~/utils/formatNumber';
+import { getAllComments } from '~/redux/actions/comments';
+import useLocales from '~/hooks/useLocales';
 
 // utils
 
@@ -22,11 +22,11 @@ ReviewItem.propTypes = {
 
 function ReviewItem({ review }) {
   const { t } = useLocales();
-  const [isHelpful, setHelpfuls] = useState(false);
+  const [isHelpful, setHelpful] = useState(false);
   const { author, content, star, anonymousAuthor, createdAt } = review;
 
   const handleClickHelpful = () => {
-    setHelpfuls((prev) => !prev);
+    setHelpful((prev) => !prev);
   };
 
   return (
@@ -109,13 +109,12 @@ ProductDetailsReviewList.propTypes = {
 };
 
 export default function ProductDetailsReviewList({ product }) {
-  const { t } = useLocales();
   const dispatch = useDispatch();
-  const { list: comments, isLoading } = useSelector((state) => state.comment);
+  const { list: comments } = useSelector((state) => state.comment);
 
   useEffect(() => {
     dispatch(getAllComments(product._id));
-  }, [dispatch]);
+  }, [dispatch, product._id]);
 
   useEffect(() => {
     // console.log('comments', comments);

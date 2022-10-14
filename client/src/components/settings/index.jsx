@@ -5,10 +5,10 @@ import options2Fill from '@iconify/icons-eva/options-2-fill';
 // material
 import { Box, Backdrop, Paper, Tooltip, Divider, Typography, Stack } from '@mui/material';
 // hook
-import useLocales from '../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 //
+import { MIconButton } from '~/components/@material-extend';
 import Scrollbar from '../Scrollbar';
-import { MIconButton } from '../@material-extend';
 import SettingMode from './SettingMode';
 import SettingColor from './SettingColor';
 import SettingDirection from './SettingDirection';

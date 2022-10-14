@@ -6,7 +6,7 @@ import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
-import useLocales from '../../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 
 // ----------------------------------------------------------------------
 

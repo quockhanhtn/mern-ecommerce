@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {
   Alert,
   Box,
@@ -10,35 +11,19 @@ import {
   Stack,
   Typography
 } from '@mui/material';
-
-import PropTypes from 'prop-types';
 // hooks
 import { useState } from 'react';
-import { useSnackbar } from 'notistack';
 import { useSelector } from 'react-redux';
-import { useLocales } from '../../hooks';
+import { useLocales } from '~/hooks';
 
-import { fCurrency } from '../../utils/formatNumber';
-import { fDate } from '../../utils/formatTime';
-import { MotionInView, varFadeInUp } from '../animate';
+import { fCurrency } from '~/utils/formatNumber';
+import { fDate } from '~/utils/formatTime';
+import { MotionInView, varFadeInUp } from '~/components/animate';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 const DiscountItem = ({ item, language, onSelected }) => {
-  const {
-    name,
-    code,
-    beginDate,
-    endDate,
-    quantity,
-    unlimitedQty,
-    discount,
-    discountType,
-    minimumTotal,
-    maximumApplied,
-    available
-  } = item;
+  const { name, code, endDate, discount, discountType, minimumTotal, maximumApplied, available } = item;
 
   const handleOnSelect = (e) => {
     onSelected(item);
@@ -97,7 +82,7 @@ DiscountItem.propTypes = {
 };
 
 function CheckoutDiscountForm({ open, setOpen, subTotal, onSelectedCode }) {
-  const { t, currentLang } = useLocales();
+  const { currentLang } = useLocales();
   const { listSimple: discounts } = useSelector((state) => state.discount);
   const [errorMgs, setErrorMgs] = useState('');
 
@@ -115,7 +100,7 @@ function CheckoutDiscountForm({ open, setOpen, subTotal, onSelectedCode }) {
     setOpen(false);
   };
 
-  const isEmpty = !discounts || discounts.length < 1;
+  // const isEmpty = !discounts || discounts.length < 1;
 
   return (
     <Dialog disableEscapeKeyDown maxWidth="sm" fullWidth open={open} onClose={handleClose}>

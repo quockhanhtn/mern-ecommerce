@@ -5,9 +5,9 @@ import { Link as RouterLink } from 'react-router-dom';
 import { alpha, useTheme, styled } from '@mui/material/styles';
 import { Box, Card, Button, CardContent, Typography } from '@mui/material';
 // utils
-import { mockImgProduct } from '../../utils/mockImages';
+import { mockImgProduct } from '~/utils/mockImages';
 //
-import { CarouselControlsPaging1 } from '../carousel/controls';
+import { CarouselControlsPaging1 } from '~/components/carousel/controls';
 
 // ----------------------------------------------------------------------
 

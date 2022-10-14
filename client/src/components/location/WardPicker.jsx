@@ -33,6 +33,7 @@ export default function WardPicker({ getFieldProps, touched, errors, label, dist
         setWards(listWards);
       })
       .catch((error) => console.log(error));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

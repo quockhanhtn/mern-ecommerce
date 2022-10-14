@@ -6,8 +6,6 @@ import { Form, FormikProvider, useFormik } from 'formik';
 // material
 import { Button, Box, Link, OutlinedInput, FormHelperText, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-// hooks
-// import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 

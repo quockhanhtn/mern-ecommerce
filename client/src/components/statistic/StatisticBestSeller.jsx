@@ -18,11 +18,11 @@ import {
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 //
-import Label from '../Label';
+import useLocales from '~/hooks/useLocales';
+import { getFullAllProducts } from '~/redux/slices/productSlice';
+import * as api from '~/api';
 import Scrollbar from '../Scrollbar';
-import useLocales from '../../hooks/useLocales';
-import { getFullAllProducts } from '../../redux/slices/productSlice';
-import * as api from '../../api';
+import Label from '../Label';
 
 // ----------------------------------------------------------------------
 

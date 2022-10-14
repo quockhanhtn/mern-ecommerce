@@ -10,13 +10,13 @@ import { Link as RouterLink } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
 import { Avatar, Button, Box, Divider, MenuItem, Typography } from '@mui/material';
 // hooks
-import useLocales from '../../hooks/useLocales';
-import useAuth from '../../hooks/useAuth';
+import useLocales from '~/hooks/useLocales';
+import useAuth from '~/hooks/useAuth';
 // components
-import { LoginIcon, LogoutIcon, UserIcon } from '../../assets';
-import { MButton, MIconButton, MHidden } from '../../components/@material-extend';
-import MenuPopover from '../../components/MenuPopover';
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { MButton, MIconButton, MHidden } from '~/components/@material-extend';
+import { PATH_DASHBOARD } from '~/routes/paths';
+import { LoginIcon, UserIcon } from '~/assets';
+import MenuPopover from '~/components/MenuPopover';
 
 // ----------------------------------------------------------------------
 

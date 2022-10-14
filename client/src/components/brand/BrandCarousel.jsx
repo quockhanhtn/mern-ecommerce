@@ -6,7 +6,7 @@ import Slider from 'react-slick';
 import { Box, Link, Skeleton } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 //
-import { CarouselControlsArrowsBasic3, CarouselControlsPaging1 } from '../carousel/controls';
+import { CarouselControlsArrowsBasic3, CarouselControlsPaging1 } from '~/components/carousel/controls';
 
 const ImgStyle = styled('img')(({ theme }) => ({
   objectFit: 'contain',

@@ -7,7 +7,7 @@ import roundAddAPhoto from '@iconify/icons-ic/round-add-a-photo';
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Typography, Paper } from '@mui/material';
 // utils
-import { fData } from '../../utils/formatNumber';
+import { fData } from '~/utils/formatNumber';
 
 // ----------------------------------------------------------------------
 

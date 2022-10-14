@@ -8,7 +8,7 @@ import { useTheme, styled } from '@mui/material/styles';
 import { Box, Toolbar, Tooltip, Typography, IconButton, OutlinedInput, InputAdornment } from '@mui/material';
 import editFill from '@iconify/icons-eva/edit-fill';
 import eyeFill from '@iconify/icons-eva/eye-fill';
-import useLocales from '../../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +35,9 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 DiscountListToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired
+  numSelected: PropTypes.number.isRequired,
+  filterName: PropTypes.string,
+  onFilterName: PropTypes.func
 };
 
 export default function DiscountListToolbar({ numSelected, filterName, onFilterName }) {

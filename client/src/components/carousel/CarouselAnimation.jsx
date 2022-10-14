@@ -6,7 +6,7 @@ import { useState, useRef } from 'react';
 import { alpha, useTheme, styled } from '@mui/material/styles';
 import { Box, Card, Paper, Typography, CardContent } from '@mui/material';
 //
-import { varFadeInRight, MotionContainer } from '../animate';
+import { varFadeInRight, MotionContainer } from '~/components/animate';
 import { CarouselControlsArrowsIndex } from './controls';
 
 // ----------------------------------------------------------------------

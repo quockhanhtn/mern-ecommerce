@@ -9,11 +9,11 @@ import { Box, Card, Typography, Stack } from '@mui/material';
 // utils
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { fNumber, fPercent } from '../../utils/formatNumber';
+import { fNumber } from '~/utils/formatNumber';
 //
+import useLocales from '~/hooks/useLocales';
+import { getAllProducts } from '~/redux/slices/productSlice';
 import BaseOptionChart from '../charts/BaseOptionChart';
-import useLocales from '../../hooks/useLocales';
-import { getAllProducts } from '../../redux/slices/productSlice';
 
 // ----------------------------------------------------------------------
 
@@ -38,6 +38,7 @@ export default function StatisticProductSold() {
   const dispatch = useDispatch();
   const { list: productsList } = useSelector((state) => state.product);
   const [productSold, setProductSold] = useState(0);
+  // eslint-disable-next-line no-unused-vars
   const [percent, setPercent] = useState(53);
 
   useEffect(() => {
@@ -46,9 +47,7 @@ export default function StatisticProductSold() {
 
   useEffect(() => {
     let productSoldTotal = 0;
-    // eslint-disable-next-line no-plusplus
     for (let i = 0; i < productsList?.length; i++) {
-      // eslint-disable-next-line no-plusplus
       for (let j = 0; j < productsList[i]?.variants.length; j++) {
         productSoldTotal += productsList[i].variants[j].sold;
       }

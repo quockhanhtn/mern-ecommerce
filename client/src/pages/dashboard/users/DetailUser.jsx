@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // material
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
-import useLocales from '../../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +11,6 @@ DetailUser.propTypes = {
   setOpen: PropTypes.func.isRequired
 };
 
-// eslint-disable-next-line no-unused-vars
 export default function DetailUser({ currentId, open, setOpen }) {
   const { t } = useLocales();
 

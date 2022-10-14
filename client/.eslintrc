@@ -1,27 +1,33 @@
 {
-  "root": true,
+  // "root": true,
   "env": {
     "browser": true,
     "node": true
   },
   "extends": [
+    "eslint:recommended",
     "airbnb",
     "prettier",
     "plugin:jsx-a11y/recommended",
     "plugin:react-hooks/recommended"
   ],
   "plugins": [
+    "import",
+    "module-resolver",
     "prettier",
-    "react",
-    "react-hooks"
+    "react-hooks",
+    "react"
   ],
-  "parser": "@babel/eslint-parser",
+  // "parser": "@babel/eslint-parser",
+  "parser": "babel-eslint",
   "parserOptions": {
-    "ecmaVersion": 8,
+    "ecmaVersion": 12,
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
-      "impliedStrict": true
-    }
+      "impliedStrict": true,
+      "jsx": true
+    },
+    "sourceType": "module"
   },
   "rules": {
     "comma-dangle": 0,
@@ -30,8 +36,10 @@
     "import/no-cycle": 0,
     "import/no-extraneous-dependencies": 0,
     "import/prefer-default-export": 0,
+    "import/extensions": 0,
     "jsx-a11y/anchor-is-valid": 0,
     "max-len": 0,
+    "module-resolver/use-alias": 2,
     "no-alert": 0,
     "no-console": 0,
     "no-param-reassign": 0,
@@ -60,7 +68,8 @@
     "no-unused-vars": [
       1,
       {
-        "ignoreRestSiblings": false
+        "ignoreRestSiblings": false,
+        "args": "none"
       }
     ],
     "prettier/prettier": [
@@ -72,5 +81,12 @@
         "tabWidth": 2
       }
     ]
+  },
+  "settings": {
+    "import/resolver": {
+      "babel-module": {
+        "allowExistingDirectories": true
+      }
+    }
   }
 }

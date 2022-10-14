@@ -1,4 +1,4 @@
-import { paymentCallback, redirectVnPay } from '../api';
+import { paymentCallback, redirectVnPay } from '~/api';
 
 export async function paymentVnPay(values) {
   const info = {

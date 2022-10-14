@@ -5,21 +5,21 @@ import plusFill from '@iconify/icons-eva/plus-fill';
 import { Card, Table, Button, TableRow, TableBody, TableCell, Container, TableContainer } from '@mui/material';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllOrders, updateOrder } from '../../../redux/actions/orders';
+import { getAllOrders, updateOrder } from '~/redux/actions/orders';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
-import { useLocales } from '../../../hooks';
+import { PATH_DASHBOARD } from '~/routes/paths';
+import { useLocales } from '~/hooks';
 // components
-import Page from '../../../components/Page';
-import Scrollbar from '../../../components/Scrollbar';
-import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
-import LoadingScreen from '../../../components/LoadingScreen';
-import EmptyCard from '../../../components/EmptyCard';
-import { OrderDetailForm, OrderListHead, OrderListToolbar, OrderTableRow } from '../../../components/dashboard/order';
+import { MTablePagination } from '~/components/@material-extend';
+import { stableSort, getComparator } from '~/helper/listHelper';
+import Page from '~/components/Page';
+import Scrollbar from '~/components/Scrollbar';
+import HeaderBreadcrumbs from '~/components/HeaderBreadcrumbs';
+import LoadingScreen from '~/components/LoadingScreen';
+import EmptyCard from '~/components/EmptyCard';
+import { OrderDetailForm, OrderListHead, OrderListToolbar, OrderTableRow } from '~/components/dashboard/order';
 import CategoryForm from '../categories/CategoryForm';
-import { MTablePagination } from '../../../components/@material-extend';
 //
-import { stableSort, getComparator } from '../../../helper/listHelper';
 
 // ----------------------------------------------------------------------
 

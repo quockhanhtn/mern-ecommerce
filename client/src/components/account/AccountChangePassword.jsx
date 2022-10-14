@@ -7,10 +7,9 @@ import { LoadingButton } from '@mui/lab';
 // hooks
 import { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import useAuth from '../../hooks/useAuth';
-import useLocales from '../../hooks/useLocales';
+import { useAuth, useLocales } from '~/hooks';
 //
-import * as api from '../../api';
+import * as api from '~/api';
 
 // ----------------------------------------------------------------------
 

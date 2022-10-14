@@ -88,7 +88,7 @@ export function backStepOrder(step) {
 }
 
 export function getStepOrder() {
-  const activeStep = localStorage.getItem('activeStep');
+  // const activeStep = localStorage.getItem('activeStep');
   // Current I not handler it and remove 0
   return 0;
 }

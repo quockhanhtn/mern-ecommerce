@@ -4,7 +4,7 @@ import sunFill from '@iconify/icons-eva/sun-fill';
 // material
 import { Box, Grid, Radio, Paper, RadioGroup, CardActionArea, FormControlLabel } from '@mui/material';
 // hooks
-import useSettings from '../../hooks/useSettings';
+import useSettings from '~/hooks/useSettings';
 
 // ----------------------------------------------------------------------
 

@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
-import { Box, Button, TextField, Alert, Stack } from '@mui/material';
+import { Box, Button, TextField, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Link as RouterLink } from 'react-router-dom';
-import { PATH_AUTH } from '../../../routes/paths';
+import { PATH_AUTH } from '~/routes/paths';
 // hooks
-import { useLocales } from '../../../hooks';
+import { useLocales } from '~/hooks';
 
-import { regexCons } from '../../../constants';
+import { regexCons } from '~/constants';
 
 // ----------------------------------------------------------------------
 

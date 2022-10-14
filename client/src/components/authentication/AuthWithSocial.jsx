@@ -4,8 +4,8 @@ import { Stack, Button, Divider, Typography } from '@mui/material';
 import { GoogleLogin } from 'react-google-login';
 // hooks
 import { useSnackbar } from 'notistack';
-import useAuth from '../../hooks/useAuth';
-import useLocales from '../../hooks/useLocales';
+import useAuth from '~/hooks/useAuth';
+import useLocales from '~/hooks/useLocales';
 // icons
 import { FacebookIcon, GoogleIcon, TwitterIcon } from '../../assets';
 

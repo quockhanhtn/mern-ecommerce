@@ -14,21 +14,21 @@ import { Box, Button, Tab, Card, Grid, Divider, Container, Typography, Rating, S
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { getProductById } from '../../redux/slices/productSlice';
-import { trackingViewCount, trackingViewTime } from '../../redux/slices/userBehaviorSlice';
-import * as api from '../../api';
-import { getRelatedItems } from '../../api/fpt';
+import { getProductById } from '~/redux/slices/productSlice';
+import { trackingViewCount, trackingViewTime } from '~/redux/slices/userBehaviorSlice';
+import * as api from '~/api';
+import { getRelatedItems } from '~/api/fpt';
 // hooks
-import { useLocales, useInterval } from '../../hooks';
+import { useLocales, useInterval } from '~/hooks';
 // components
-import Page from '../../components/Page';
-import LoadingScreen from '../../components/LoadingScreen';
-import Markdown from '../../components/Markdown';
-import { ProductDetailsReview } from '../../components/dashboard/product-details';
-import { CarouselThumbnail } from '../../components/carousel';
-import { ProductList, ProductVariantInfo, ProductSpecification } from '../../components/e-commerce';
+import { CarouselThumbnail } from '~/components/carousel';
+import { ProductList, ProductVariantInfo, ProductSpecification } from '~/components/e-commerce';
+import { fShortenNumber } from '~/utils/formatNumber';
+import Page from '~/components/Page';
+import LoadingScreen from '~/components/LoadingScreen';
+import Markdown from '~/components/Markdown';
+import { ProductDetailsReview } from '~/components/dashboard/product-details';
 //
-import { fShortenNumber } from '../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
@@ -114,7 +114,6 @@ export default function ProductDetailPage() {
     [product?._id]
   );
 
-  // eslint-disable-next-line no-unused-vars
   const handleChangeTab = (_e, newValue) => {
     setTab(newValue);
   };

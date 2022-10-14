@@ -10,16 +10,11 @@ import roundVpnKey from '@iconify/icons-ic/round-vpn-key';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
 import baselineSettings from '@iconify/icons-ic/baseline-settings';
 // hooks
-import useQuery from '../../hooks/useQuery';
-import useLocales from '../../hooks/useLocales';
+import useQuery from '~/hooks/useQuery';
+import useLocales from '~/hooks/useLocales';
 // components
-import Page from '../../components/Page';
-import {
-  AccountGeneral,
-  AccountAddressBook,
-  AccountChangePassword,
-  AccountNotifications
-} from '../../components/account';
+import { AccountGeneral, AccountAddressBook, AccountChangePassword, AccountNotifications } from '~/components/account';
+import Page from '~/components/Page';
 
 // ----------------------------------------------------------------------
 

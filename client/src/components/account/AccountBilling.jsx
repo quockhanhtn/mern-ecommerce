@@ -5,10 +5,6 @@ import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 // material
 import { Box, Grid, Card, Button, Typography, Stack } from '@mui/material';
-// // redux
-// import { useSelector } from '../../../../redux/store';
-// // utils
-// import fakeRequest from '../../../../utils/fakeRequest';
 //
 import AccountAddressBook from './AccountAddressBook';
 import AccountBillingPaymentMethod from './AccountBillingPaymentMethod';

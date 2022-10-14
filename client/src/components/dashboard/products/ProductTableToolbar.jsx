@@ -25,7 +25,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import useLocales from '../../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 
 // ----------------------------------------------------------------------
 

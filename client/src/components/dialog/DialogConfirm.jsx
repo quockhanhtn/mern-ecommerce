@@ -1,11 +1,12 @@
+import PropTypes from 'prop-types';
 // material
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
 // hooks
-import useLocales from '../../hooks/useLocales';
+import { useLocales } from '~/hooks';
 
 // ----------------------------------------------------------------------
 
-export default function DialogConfirm({ open, setOpen, handleSubmit, textContent }) {
+function DialogConfirm({ open, setOpen, handleSubmit, textContent }) {
   const { t } = useLocales();
   const handleClose = () => {
     setOpen(false);
@@ -31,3 +32,12 @@ export default function DialogConfirm({ open, setOpen, handleSubmit, textContent
     </Dialog>
   );
 }
+
+DialogConfirm.propTypes = {
+  open: PropTypes.bool,
+  setOpen: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  textContent: PropTypes.string
+};
+
+export default DialogConfirm;

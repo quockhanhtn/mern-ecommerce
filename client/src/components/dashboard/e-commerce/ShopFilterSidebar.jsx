@@ -20,9 +20,9 @@ import {
   FormControlLabel
 } from '@mui/material';
 //
+import { MIconButton } from '~/components/@material-extend';
 import Scrollbar from '../../Scrollbar';
 import ColorManyPicker from '../../ColorManyPicker';
-import { MIconButton } from '../../@material-extend';
 
 // ----------------------------------------------------------------------
 

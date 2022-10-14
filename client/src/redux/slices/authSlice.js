@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { auth as firebaseAuth } from '../../firebase';
-import * as api from '../../api';
-import { regexCons } from '../../constants';
+import { auth as firebaseAuth } from '~/firebase';
+import * as api from '~/api';
+import { regexCons } from '~/constants';
 
 const otpInitialState = {
   isLoading: false,

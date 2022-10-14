@@ -13,19 +13,19 @@ import {
   sentOtpViaEmail,
   sentOtpViaPhone,
   clearOtpState
-} from '../../redux/slices/authSlice';
+} from '~/redux/slices/authSlice';
 // layouts
-import LogoOnlyLayout from '../../layouts/LogoOnlyLayout';
 // components
-import { NewPasswordForm, OtpInputForm, ResetPasswordForm } from '../../components/authentication/reset-password';
-import Page from '../../components/Page';
-import { PATH_AUTH } from '../../routes/paths';
+import { NewPasswordForm, OtpInputForm, ResetPasswordForm } from '~/components/authentication/reset-password';
+import { PATH_AUTH } from '~/routes/paths';
 //
-import { CheckIcon, SentIcon } from '../../assets';
-import { regexCons } from '../../constants';
-import { useLocales } from '../../hooks';
+import { regexCons } from '~/constants';
+import { useLocales } from '~/hooks';
 // firebase
-import firebase from '../../firebase';
+import firebase from '~/firebase';
+import { CheckIcon, SentIcon } from '~/assets';
+import Page from '~/components/Page';
+import LogoOnlyLayout from '~/layouts/LogoOnlyLayout';
 
 // ----------------------------------------------------------------------
 

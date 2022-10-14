@@ -23,11 +23,11 @@ import {
 // components
 import { useState, useEffect } from 'react';
 //
-import { OptionStyle, ThumbImgStyle } from '../@styled';
-import { MButton } from '../@material-extend';
-import { fCurrency } from '../../utils/formatNumber';
-import { addItemToCart } from '../../redux/slices/cartSlice';
-import { useLocales } from '../../hooks';
+import { OptionStyle, ThumbImgStyle } from '~/components/@styled';
+import { MButton } from '~/components/@material-extend';
+import { fCurrency } from '~/utils/formatNumber';
+import { addItemToCart } from '~/redux/slices/cartSlice';
+import { useLocales } from '~/hooks';
 import { Incrementer } from '../Incrementer';
 
 // ----------------------------------------------------------------------

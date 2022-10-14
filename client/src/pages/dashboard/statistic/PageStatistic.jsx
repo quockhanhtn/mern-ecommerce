@@ -1,7 +1,7 @@
 // material
 import { Container, Grid } from '@mui/material';
 // components
-import Page from '../../../components/Page';
+import Page from '~/components/Page';
 import {
   StatisticBestSeller,
   StatisticBrandTotal,
@@ -13,7 +13,7 @@ import {
   StatisticTotalUser,
   StatisticWelcome,
   StatisticTurnover
-} from '../../../components/statistic';
+} from '~/components/statistic';
 
 // ----------------------------------------------------------------------
 

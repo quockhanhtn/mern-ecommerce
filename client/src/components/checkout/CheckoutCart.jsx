@@ -29,22 +29,16 @@ import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import { useLocales, useOnScreen } from '../../hooks';
+import { useLocales, useOnScreen } from '~/hooks';
 // components
-import { MCheckbox, MIconButton } from '../@material-extend';
-import EmptyContent from '../EmptyContent';
-import Scrollbar from '../Scrollbar';
+import { MCheckbox, MIconButton } from '~/components/@material-extend';
+import { changeSelect, selectAllItems, increaseItemQty, decreaseItemQty, removeItem } from '~/redux/slices/cartSlice';
+import { updateFeeFromCart, nextStepOrder } from '~/redux/slices/orderSlice';
+import { trackingClick } from '~/redux/slices/userBehaviorSlice';
+import { fCurrency } from '~/utils/formatNumber';
 import { Incrementer } from '../Incrementer';
-import {
-  changeSelect,
-  selectAllItems,
-  increaseItemQty,
-  decreaseItemQty,
-  removeItem
-} from '../../redux/slices/cartSlice';
-import { updateFeeFromCart, nextStepOrder } from '../../redux/slices/orderSlice';
-import { trackingClick } from '../../redux/slices/userBehaviorSlice';
-import { fCurrency } from '../../utils/formatNumber';
+import Scrollbar from '../Scrollbar';
+import EmptyContent from '../EmptyContent';
 
 // ----------------------------------------------------------------------
 

@@ -16,9 +16,9 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 // hooks
 import { useEffect, useState } from 'react';
-import useLocales from '../../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 // components
-import { MotionInView, varFadeInUp } from '../../animate';
+import { MotionInView, varFadeInUp } from '~/components/animate';
 import OrderCard from './OrderCard';
 
 // ----------------------------------------------------------------------

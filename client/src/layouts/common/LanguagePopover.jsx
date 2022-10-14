@@ -8,10 +8,10 @@ import { Box, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 // hooks
 import { useRef, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import useLocales from '../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 // components
-import MenuPopover from '../../components/MenuPopover';
-import { MButton, MIconButton, MHidden } from '../../components/@material-extend';
+import { MButton, MIconButton, MHidden } from '~/components/@material-extend';
+import MenuPopover from '~/components/MenuPopover';
 
 // ----------------------------------------------------------------------
 

@@ -25,23 +25,21 @@ import { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
 //
-import { useLocales } from '../../../hooks';
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { useLocales } from '~/hooks';
+import { PATH_DASHBOARD } from '~/routes/paths';
 
-import { ThumbImgStyle } from '../../../components/@styled';
-import { ProductMoreMenu, ProductTableToolbar } from '../../../components/dashboard/products';
-import EmptyCard from '../../../components/EmptyCard';
-import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
-import Label from '../../../components/Label';
-import Page from '../../../components/Page';
-import Scrollbar from '../../../components/Scrollbar';
-import SearchNotFound from '../../../components/SearchNotFound';
-import { deleteProduct, getProductDashboard, toggleHideProduct } from '../../../redux/slices/productSlice';
-
-import { MCircularProgress } from '../../../components/@material-extend';
-import { MTableHead } from '../../../components/@material-extend/table';
-
-import { fDateTime } from '../../../utils/formatTime';
+import { ThumbImgStyle } from '~/components/@styled';
+import { deleteProduct, getProductDashboard, toggleHideProduct } from '~/redux/slices/productSlice';
+import { MCircularProgress } from '~/components/@material-extend';
+import { MTableHead } from '~/components/@material-extend/table';
+import { fDateTime } from '~/utils/formatTime';
+import { ProductMoreMenu, ProductTableToolbar } from '~/components/dashboard/products';
+import EmptyCard from '~/components/EmptyCard';
+import HeaderBreadcrumbs from '~/components/HeaderBreadcrumbs';
+import Label from '~/components/Label';
+import Page from '~/components/Page';
+import Scrollbar from '~/components/Scrollbar';
+import SearchNotFound from '~/components/SearchNotFound';
 
 // ----------------------------------------------------------------------
 

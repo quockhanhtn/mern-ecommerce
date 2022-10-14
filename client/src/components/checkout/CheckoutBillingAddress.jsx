@@ -30,18 +30,18 @@ import * as Yup from 'yup';
 // hooks
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import { useLocales, useAuth } from '../../hooks';
+import { useLocales, useAuth } from '~/hooks';
 // components
-import { MHidden } from '../@material-extend';
+import { MHidden } from '~/components/@material-extend';
+import * as cartHelper from '~/helper/localStorageHelper';
+import { setOrderInfo, backStepOrder, nextStepOrder } from '~/redux/slices/orderSlice';
+import { addressActions } from '~/redux/slices/accountSlice';
 import AddressPicker from '../location/AddressPicker';
 import AddressForm from '../account/AddressForm';
 import CheckoutSummary from './CheckoutSummary';
 // import CheckoutDelivery from './CheckoutDelivery';
 // other
-import * as cartHelper from '../../helper/localStorageHelper';
 // actions
-import { setOrderInfo, backStepOrder, nextStepOrder } from '../../redux/slices/orderSlice';
-import { addressActions } from '../../redux/slices/accountSlice';
 
 // ----------------------------------------------------------------------
 
@@ -252,7 +252,6 @@ export default function CheckoutBillingAddress() {
     setOpenForm(false);
   };
 
-  // eslint-disable-next-line no-unused-vars
   const handleChangeAddress = (e) => {
     setFieldValue('userAddressId', e.target.value);
     const add = addressList.find((item) => item._id === e.target.value);

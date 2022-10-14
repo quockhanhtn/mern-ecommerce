@@ -1,10 +1,13 @@
+import PropTypes from 'prop-types';
+// icons
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
+import roundFilterList from '@iconify/icons-ic/round-filter-list';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Toolbar, OutlinedInput, InputAdornment, IconButton, Tooltip } from '@mui/material';
-import roundFilterList from '@iconify/icons-ic/round-filter-list';
-import useLocales from '../../../hooks/useLocales';
+
+import { useLocales } from '~/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -30,7 +33,10 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-UserListToolbar.propTypes = {};
+UserListToolbar.propTypes = {
+  filterName: PropTypes.string,
+  onFilterName: PropTypes.func
+};
 
 export default function UserListToolbar({ filterName, onFilterName }) {
   const { t } = useLocales();

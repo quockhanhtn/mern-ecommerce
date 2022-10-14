@@ -5,8 +5,8 @@ import { useLocation } from 'react-router';
 import { styled } from '@mui/material/styles';
 import { Box, Button, Typography, Container } from '@mui/material';
 // components
-import { MotionContainer, varBounceIn } from '../../components/animate';
-import Page from '../../components/Page';
+import { MotionContainer, varBounceIn } from '~/components/animate';
+import Page from '~/components/Page';
 import { PageNotFoundIllustration } from '../../assets';
 
 // ----------------------------------------------------------------------

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { createContext, useReducer } from 'react';
-import * as Api from '../api';
-import * as Helper from '../helper/localStorageHelper';
+import * as Api from '~/api';
+import * as Helper from '~/helper/localStorageHelper';
 
 // ----------------------------------------------------------------------
 const initialState = {

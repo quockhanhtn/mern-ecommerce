@@ -27,16 +27,16 @@ import * as Yup from 'yup';
 import { MobileDatePicker } from '@mui/lab';
 import { merge } from 'lodash';
 
-import { checkExistedDiscountCode } from '../../../api';
+import { checkExistedDiscountCode } from '~/api';
 
-import { UploadSingleFile } from '../../../components/upload';
-import { useLocales } from '../../../hooks';
-import { MotionInView, varFadeInUp } from '../../../components/animate';
-import { MIconButton, MRadio } from '../../../components/@material-extend';
-import { createDiscount, updateDiscount } from '../../../redux/actions/discounts';
-import LoadingScreen from '../../../components/LoadingScreen';
-import { allowImageMineTypes } from '../../../constants/imageMineTypes';
-import { firebaseUploadSingle } from '../../../helper/firebaseHelper';
+import { useLocales } from '~/hooks';
+import { MotionInView, varFadeInUp } from '~/components/animate';
+import { MIconButton, MRadio } from '~/components/@material-extend';
+import { createDiscount, updateDiscount } from '~/redux/actions/discounts';
+import { allowImageMineTypes } from '~/constants/imageMineTypes';
+import { firebaseUploadSingle } from '~/helper/firebaseHelper';
+import LoadingScreen from '~/components/LoadingScreen';
+import { UploadSingleFile } from '~/components/upload';
 
 // ----------------------------------------------------------------------
 DiscountForm.propTypes = {

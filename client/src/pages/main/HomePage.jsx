@@ -5,15 +5,15 @@ import { LoadingButton } from '@mui/lab';
 import { Box, Container, Card, CardContent, CardHeader, Stack, Typography } from '@mui/material';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllProducts, getProductForYou } from '../../redux/slices/productSlice';
+import { getAllProducts, getProductForYou } from '~/redux/slices/productSlice';
 // hooks
-import { useLocales, useAuth } from '../../hooks';
+import { useLocales, useAuth } from '~/hooks';
 // components
-import Page from '../../components/Page';
-import Label from '../../components/Label';
-import { BrandCarousel } from '../../components/brand';
-import { DiscountCarousel } from '../../components/discount';
-import { ProductCarousel, ProductList } from '../../components/e-commerce';
+import { BrandCarousel } from '~/components/brand';
+import { DiscountCarousel } from '~/components/discount';
+import { ProductCarousel, ProductList } from '~/components/e-commerce';
+import Label from '~/components/Label';
+import Page from '~/components/Page';
 
 // ----------------------------------------------------------------------
 

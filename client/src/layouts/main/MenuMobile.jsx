@@ -9,10 +9,10 @@ import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 import { alpha, styled } from '@mui/material/styles';
 import { Box, List, Drawer, Link, Collapse, ListItem, ListItemText, ListItemIcon } from '@mui/material';
 // components
-import Logo from '../../components/Logo';
-import NavSection from '../../components/NavSection';
-import Scrollbar from '../../components/Scrollbar';
-import { MIconButton } from '../../components/@material-extend';
+import { MIconButton } from '~/components/@material-extend';
+import Logo from '~/components/Logo';
+import NavSection from '~/components/NavSection';
+import Scrollbar from '~/components/Scrollbar';
 //
 import menuConfig from './MenuConfig';
 

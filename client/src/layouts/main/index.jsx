@@ -5,11 +5,11 @@ import { styled } from '@mui/material/styles';
 // hooks
 import { useGoogleOneTapLogin } from 'react-google-one-tap-login';
 import { useSelector, useDispatch } from 'react-redux';
-import useAuth from '../../hooks/useAuth';
+import useAuth from '~/hooks/useAuth';
 // actions
-import { getAllCategories } from '../../redux/slices/categorySlice';
-import { getAllBrands } from '../../redux/slices/brandSlice';
-import { getAllDiscounts } from '../../redux/actions/discounts';
+import { getAllCategories } from '~/redux/slices/categorySlice';
+import { getAllBrands } from '~/redux/slices/brandSlice';
+import { getAllDiscounts } from '~/redux/actions/discounts';
 //
 import MainNavbar from './MainNavbar';
 import MainFooter from './MainFooter';

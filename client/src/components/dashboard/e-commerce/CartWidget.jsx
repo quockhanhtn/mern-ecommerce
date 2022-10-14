@@ -8,7 +8,7 @@ import { Badge } from '@mui/material';
 // redux
 import { useSelector } from 'react-redux';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD } from '~/routes/paths';
 
 // ----------------------------------------------------------------------
 

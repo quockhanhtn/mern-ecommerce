@@ -2,13 +2,13 @@
 import { Container } from '@mui/material';
 // redux
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD } from '~/routes/paths';
 // components
-import Page from '../../../components/Page';
-import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
+import useLocales from '~/hooks/useLocales';
+import Page from '~/components/Page';
+import HeaderBreadcrumbs from '~/components/HeaderBreadcrumbs';
 import ProductFormEdit from './ProductFormEdit';
 import ProductVariant from './ProductVariant';
-import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 

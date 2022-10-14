@@ -15,17 +15,17 @@ import {
 import { useEffect, useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import Page from '../../../components/Page';
-import { PATH_DASHBOARD } from '../../../routes/paths';
-import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
-import useLocales from '../../../hooks/useLocales';
-import LoadingScreen from '../../../components/LoadingScreen';
-import Label from '../../../components/Label';
-import Scrollbar from '../../../components/Scrollbar';
-import * as Helper from '../../../helper/listHelper';
-import { ImageBrokenIcon } from '../../../assets';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../../../components/dashboard/users';
-import { getAllUsers } from '../../../redux/actions/users';
+import { PATH_DASHBOARD } from '~/routes/paths';
+import useLocales from '~/hooks/useLocales';
+import * as Helper from '~/helper/listHelper';
+import { getAllUsers } from '~/redux/actions/users';
+import Page from '~/components/Page';
+import HeaderBreadcrumbs from '~/components/HeaderBreadcrumbs';
+import LoadingScreen from '~/components/LoadingScreen';
+import Label from '~/components/Label';
+import Scrollbar from '~/components/Scrollbar';
+import { ImageBrokenIcon } from '~/assets';
+import { UserListHead, UserListToolbar, UserMoreMenu } from '~/components/dashboard/users';
 import DetailUser from './DetailUser';
 // ----------------------------------------------------------------------
 const ThumbImgStyle = styled('img')(({ theme }) => ({

@@ -6,17 +6,17 @@ import { LoadingButton } from '@mui/lab';
 import { Box, Container, Card, CardContent, Stack, Typography } from '@mui/material';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getProductById } from '../../redux/slices/productSlice';
-import * as api from '../../api';
-import { getRelatedItems } from '../../api/fpt';
+import { getProductById } from '~/redux/slices/productSlice';
+import * as api from '~/api';
+import { getRelatedItems } from '~/api/fpt';
 // hooks
-import { useLocales } from '../../hooks';
+import { useLocales } from '~/hooks';
 // components
-import Page from '../../components/Page';
-import ProductList from '../../components/e-commerce/ProductList';
-import { ThumbImgStyle } from '../../components/@styled';
+import { ThumbImgStyle } from '~/components/@styled';
+import { fCurrency } from '~/utils/formatNumber';
+import Page from '~/components/Page';
+import ProductList from '~/components/e-commerce/ProductList';
 //
-import { fCurrency } from '../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 

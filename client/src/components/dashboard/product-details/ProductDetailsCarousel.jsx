@@ -1,12 +1,14 @@
-import Slider from 'react-slick';
-import { findIndex } from 'lodash';
 import PropTypes from 'prop-types';
+import { findIndex } from 'lodash';
+
 import { useState, useRef, useEffect } from 'react';
+import Slider from 'react-slick';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import LightboxModal from '../../LightboxModal';
-import { CarouselControlsArrowsIndex } from '../../carousel';
+
+import { CarouselControlsArrowsIndex } from '~/components/carousel';
+import LightboxModal from '~/components/LightboxModal';
 //
 
 // ----------------------------------------------------------------------
@@ -86,6 +88,10 @@ function ThumbnailItem({ item }) {
     </ThumbWrapperStyle>
   );
 }
+
+ProductDetailsCarousel.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.string)
+};
 
 export default function ProductDetailsCarousel({ images }) {
   const [openLightbox, setOpenLightbox] = useState(false);

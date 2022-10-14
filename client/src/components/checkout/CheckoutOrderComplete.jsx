@@ -1,14 +1,11 @@
 import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router-dom';
-import filePdfFilled from '@iconify/icons-fluent/document-pdf-16-filled';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Link, Button, Divider, Typography, Stack } from '@mui/material';
-// redux
-import { useDispatch, useSelector } from 'react-redux';
 //
-import { DialogAnimate } from '../animate';
+import { DialogAnimate } from '~/components/animate';
 import { OrderCompleteIllustration } from '../../assets';
 
 // ----------------------------------------------------------------------
@@ -27,7 +24,6 @@ const DialogStyle = styled(DialogAnimate)(({ theme }) => ({
 
 export default function CheckoutOrderComplete({ ...other }) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleResetStep = () => {
     navigate('/');

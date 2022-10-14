@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import * as api from '../../api';
+import * as api from '~/api';
 import { trackingInCart } from './userBehaviorSlice';
 
 const calculateFee = (allItems, selectedItems) => {
@@ -154,7 +154,6 @@ const cartSlice = createSlice({
       }
       state.fee = calculateFee(state.allItems, state.selectedItems);
     },
-    // eslint-disable-next-line no-unused-vars
     selectAllItems(state, action) {
       if (state.selectedItems.length === state.itemsCount) {
         state.selectedItems = [];

@@ -8,9 +8,9 @@ import { styled } from '@mui/material/styles';
 import { Grid, Rating, Button, Typography, LinearProgress, Stack } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { fShortenNumber } from '../../../utils/formatNumber';
-import useLocales from '../../../hooks/useLocales';
-import { getAllComments } from '../../../redux/actions/comments';
+import { fShortenNumber } from '~/utils/formatNumber';
+import useLocales from '~/hooks/useLocales';
+import { getAllComments } from '~/redux/actions/comments';
 
 // ----------------------------------------------------------------------
 
@@ -68,13 +68,13 @@ ProductDetailsReviewOverview.propTypes = {
 export default function ProductDetailsReviewOverview({ product, onOpen }) {
   const { t } = useLocales();
   const dispatch = useDispatch();
-  const { list: comments, isLoading } = useSelector((state) => state.comment);
+  const { list: comments } = useSelector((state) => state.comment);
   const { rates, views, ratings } = product;
   const [totalStar, setTotalStar] = useState(0);
 
   useEffect(() => {
     dispatch(getAllComments(product._id));
-  }, [dispatch]);
+  }, [dispatch, product._id]);
 
   useEffect(() => {
     let star = 0;

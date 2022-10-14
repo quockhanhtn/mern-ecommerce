@@ -1,20 +1,17 @@
 import PropTypes from 'prop-types';
-import { Icon } from '@iconify/react';
-import searchFill from '@iconify/icons-eva/search-fill';
 import { useNavigate } from 'react-router-dom';
 // material
-import { Box, Card, Button, Typography, Stack } from '@mui/material';
+import { Box, Card, Typography, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 //
 import { useDispatch } from 'react-redux';
-import { useLocales } from '../../hooks';
+import { useLocales } from '~/hooks';
 
-import { ImageBrokenIcon } from '../../assets';
+import { ImageBrokenIcon } from '~/assets';
+import { fCurrency } from '~/utils/formatNumber';
+import { trackingClick } from '~/redux/slices/userBehaviorSlice';
 
 import ProductNameTypo from './ProductNameTypo';
-
-import { fCurrency } from '../../utils/formatNumber';
-import { trackingClick } from '../../redux/slices/userBehaviorSlice';
 
 // ----------------------------------------------------------------------
 
@@ -75,7 +72,6 @@ export default function ProductItem({ product }) {
   const image = variants?.[0]?.thumbnail || null;
   const linkTo = `/${category?.slug || 'c'}/${slug}`;
 
-  // eslint-disable-next-line no-unused-vars
   const handleOnClick = (_e) => {
     dispatch(trackingClick({ productId: _id }));
     navigate(linkTo);

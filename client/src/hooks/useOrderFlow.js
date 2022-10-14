@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { OrderContext } from '../contexts/OrderContext';
+import { OrderContext } from '~/contexts/OrderContext';
 
 // ----------------------------------------------------------------------
 

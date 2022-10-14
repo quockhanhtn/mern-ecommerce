@@ -7,10 +7,10 @@ import closeFill from '@iconify/icons-eva/close-fill';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, FormControlLabel, Switch, Typography, TextField, Tooltip } from '@mui/material';
-import { MLinearProgress, MIconButton, MLabelTypo } from '../@material-extend';
+import { MLinearProgress, MIconButton, MLabelTypo } from '~/components/@material-extend';
 //
+import useLocales from '~/hooks/useLocales';
 import { UploadIllustration } from '../../assets';
-import useLocales from '../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 

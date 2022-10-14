@@ -1,9 +1,8 @@
+import PropTypes from 'prop-types';
 // icons
 import { Icon } from '@iconify/react';
 import roundAddShoppingCart from '@iconify/icons-ic/round-add-shopping-cart';
-//
-
-import { useSnackbar } from 'notistack';
+// hooks
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -11,10 +10,10 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import { styled } from '@mui/material/styles';
 import { Box, Stack, Button, Divider, Typography, FormHelperText } from '@mui/material';
 // components
-import { MButton } from '../../@material-extend';
-import { fCurrency } from '../../../utils/formatNumber';
-import { addItemToCart } from '../../../redux/slices/cartSlice';
-import { useLocales } from '../../../hooks';
+import { MButton } from '~/components/@material-extend';
+import { fCurrency } from '~/utils/formatNumber';
+import { addItemToCart } from '~/redux/slices/cartSlice';
+import { useLocales } from '~/hooks';
 import { IncrementerField } from '../../Incrementer';
 
 // ----------------------------------------------------------------------
@@ -28,10 +27,9 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function ProductDetailsSummary({ isLoading, product, indexVariant, handleChangeIndexVariant }) {
+function ProductDetailsSummary({ isLoading, product, indexVariant, handleChangeIndexVariant }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { enqueueSnackbar } = useSnackbar();
 
   const { isLoading: isLoadingCart, isAuthenticated } = useSelector((state) => state.cart);
   const { t, currentLang } = useLocales();
@@ -40,8 +38,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
     return null;
   }
 
-  // eslint-disable-next-line react/prop-types
-  const { _id, name, price, cover, views, variants, rates } = product;
+  const { _id, name, price, cover, variants } = product;
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const formik = useFormik({
@@ -65,7 +62,7 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
     }
   });
 
-  const { values, touched, errors, getFieldProps, handleSubmit } = formik;
+  const { values, touched, errors, handleSubmit } = formik;
 
   const handleAddCart = () => {
     const selectVariant = product?.variants?.[indexVariant];
@@ -173,3 +170,12 @@ export default function ProductDetailsSummary({ isLoading, product, indexVariant
     </RootStyle>
   );
 }
+
+ProductDetailsSummary.propTypes = {
+  isLoading: PropTypes.bool,
+  product: PropTypes.object,
+  indexVariant: PropTypes.number,
+  handleChangeIndexVariant: PropTypes.func
+};
+
+export default ProductDetailsSummary;

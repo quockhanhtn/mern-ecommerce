@@ -16,11 +16,11 @@ import {
   FormControlLabel
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import useLocales from '../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 //
-import { DialogAnimate } from '../animate';
+import { DialogAnimate } from '~/components/animate';
+import { MLabelTypo } from '~/components/@material-extend';
 import AddressPicker from '../location/AddressPicker';
-import { MLabelTypo } from '../@material-extend';
 
 // ----------------------------------------------------------------------
 

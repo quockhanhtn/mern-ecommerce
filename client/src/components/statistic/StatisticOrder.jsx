@@ -9,11 +9,11 @@ import { Box, Card, Typography, Stack } from '@mui/material';
 // utils
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { fNumber, fPercent } from '../../utils/formatNumber';
+import { fNumber } from '~/utils/formatNumber';
 //
+import useLocales from '~/hooks/useLocales';
+import { getAllOrders } from '~/redux/actions/orders';
 import BaseOptionChart from '../charts/BaseOptionChart';
-import useLocales from '../../hooks/useLocales';
-import { getAllOrders } from '../../redux/actions/orders';
 
 // ----------------------------------------------------------------------
 

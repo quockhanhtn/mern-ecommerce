@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import TablePagination from '@mui/material/TablePagination';
-import useLocales from '../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 
 MTablePagination.propTypes = {
   count: PropTypes.number.isRequired,

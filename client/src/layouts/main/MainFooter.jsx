@@ -9,7 +9,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Grid, Link, Divider, Container, Typography, IconButton, Stack } from '@mui/material';
 //
-import Logo from '../../components/Logo';
+import Logo from '~/components/Logo';
 
 // ----------------------------------------------------------------------
 

@@ -9,13 +9,13 @@ import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import { Box, Grid, Card, Button, Typography, Stack, Paper } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { addressActions } from '../../redux/slices/accountSlice';
+import { addressActions } from '~/redux/slices/accountSlice';
 //
-import useLocales from '../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 //
+import { MButton, MCircularProgress } from '~/components/@material-extend';
 import AddressForm from './AddressForm';
 import Label from '../Label';
-import { MButton, MCircularProgress } from '../@material-extend';
 
 // ----------------------------------------------------------------------
 

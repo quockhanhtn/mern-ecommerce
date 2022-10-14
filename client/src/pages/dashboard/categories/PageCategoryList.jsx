@@ -1,3 +1,4 @@
+// icons
 import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
@@ -21,28 +22,30 @@ import {
 import { useSnackbar } from 'notistack';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllCategories, deleteCategory } from '../../../redux/slices/categorySlice';
-import { useLocales } from '../../../hooks';
+import { getAllCategories, deleteCategory } from '~/redux/slices/categorySlice';
+import { useLocales } from '~/hooks';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
-// components
-import { ThumbImgStyle } from '../../../components/@styled';
-import { MTablePagination } from '../../../components/@material-extend';
-import { MTableHead, MTableToolbar } from '../../../components/@material-extend/table';
+import { PATH_DASHBOARD } from '~/routes/paths';
 
-import Page from '../../../components/Page';
-import Label from '../../../components/Label';
-import Scrollbar from '../../../components/Scrollbar';
-import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
-import LoadingScreen from '../../../components/LoadingScreen';
-import EmptyCard from '../../../components/EmptyCard';
-import { CategoryMoreMenu } from '../../../components/dashboard/category-list';
+import { fDateTime } from '~/utils/formatTime';
+import { stableSort, getComparator } from '~/helper/listHelper';
+
+import { ImageBrokenIcon } from '~/assets';
+
+// components
+import { ThumbImgStyle } from '~/components/@styled';
+import { MTablePagination } from '~/components/@material-extend';
+import { MTableHead, MTableToolbar } from '~/components/@material-extend/table';
+import Page from '~/components/Page';
+import Label from '~/components/Label';
+import Scrollbar from '~/components/Scrollbar';
+import HeaderBreadcrumbs from '~/components/HeaderBreadcrumbs';
+import LoadingScreen from '~/components/LoadingScreen';
+import EmptyCard from '~/components/EmptyCard';
+import { CategoryMoreMenu } from '~/components/dashboard/category-list';
 import CategoryForm from './CategoryForm';
-import { ImageBrokenIcon } from '../../../assets';
 
 // utils
-import { fDateTime } from '../../../utils/formatTime';
-import { stableSort, getComparator } from '../../../helper/listHelper';
 
 // ----------------------------------------------------------------------
 

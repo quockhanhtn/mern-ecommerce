@@ -20,17 +20,17 @@ import { styled } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useLocales, useLocalStorage } from '../../hooks';
+import { useLocales, useLocalStorage } from '~/hooks';
 // components
-import { MCircularProgress } from '../../components/@material-extend';
-import { ThumbImgStyle } from '../../components/@styled';
+import { MCircularProgress } from '~/components/@material-extend';
+import { ThumbImgStyle } from '~/components/@styled';
 // utils
-import { fCurrency } from '../../utils/formatNumber';
-import Label from '../../components/Label';
+import { fCurrency } from '~/utils/formatNumber';
 
-import { quickSearchProduct } from '../../redux/slices/searchProductSlice';
+import { quickSearchProduct } from '~/redux/slices/searchProductSlice';
 
-import * as typeUtils from '../../utils/typeUtils';
+import * as typeUtils from '~/utils/typeUtils';
+import Label from '~/components/Label';
 
 // ----------------------------------------------------------------------
 

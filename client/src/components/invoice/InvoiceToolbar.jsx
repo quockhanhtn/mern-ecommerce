@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // icons
 import { Icon } from '@iconify/react';
 import eyeFill from '@iconify/icons-eva/eye-fill';
@@ -12,8 +13,8 @@ import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { Box, Tooltip, IconButton, DialogActions, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 //
-import { MButton } from '../@material-extend';
-import { DialogAnimate } from '../animate';
+import { MButton } from '~/components/@material-extend';
+import { DialogAnimate } from '~/components/animate';
 import InvoicePDF from './InvoicePDF';
 
 // ----------------------------------------------------------------------

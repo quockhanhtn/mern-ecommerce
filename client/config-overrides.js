@@ -1,5 +1,6 @@
-// eslint-disable-next-line no-unused-vars
-module.exports = function override(config, env) {
-  // do stuff with the webpack config...
-  return config;
-};
+/* eslint-disable prettier/prettier, react-hooks/rules-of-hooks */
+const { override, useBabelRc } = require('customize-cra');
+
+module.exports = override(
+  useBabelRc()
+);

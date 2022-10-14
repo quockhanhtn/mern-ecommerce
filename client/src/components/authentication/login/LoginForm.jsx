@@ -13,13 +13,11 @@ import { LoadingButton } from '@mui/lab';
 // hooks
 import { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import useAuth from '../../../hooks/useAuth';
-import useLocales from '../../../hooks/useLocales';
-// import useIsMountedRef from '../../../hooks/useIsMountedRef';
+import { useAuth, useLocales } from '~/hooks';
 // routes
-import { PATH_AUTH } from '../../../routes/paths';
+import { PATH_AUTH } from '~/routes/paths';
 //
-import { MIconButton } from '../../@material-extend';
+import { MIconButton } from '~/components/@material-extend';
 
 // ----------------------------------------------------------------------
 

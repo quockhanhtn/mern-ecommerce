@@ -10,6 +10,7 @@ DistrictPicker.propTypes = {
   errors: PropTypes.object,
   label: PropTypes.string.isRequired,
   value: PropTypes.string,
+  defaultDistrictName: PropTypes.string,
   provinceCode: PropTypes.string,
   onChange: PropTypes.func.isRequired
 };

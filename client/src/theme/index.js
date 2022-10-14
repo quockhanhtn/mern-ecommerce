@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles';
 // hooks
-import useSettings from '../hooks/useSettings';
+import useSettings from '~/hooks/useSettings';
 //
 import shape from './shape';
 import palette from './palette';

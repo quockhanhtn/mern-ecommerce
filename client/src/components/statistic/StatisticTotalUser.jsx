@@ -9,11 +9,11 @@ import { Box, Card, Typography, Stack } from '@mui/material';
 // utils
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { fNumber, fPercent } from '../../utils/formatNumber';
+import { fNumber, fPercent } from '~/utils/formatNumber';
 //
+import useLocales from '~/hooks/useLocales';
+import { getAllUsers } from '~/redux/actions/users';
 import BaseOptionChart from '../charts/BaseOptionChart';
-import useLocales from '../../hooks/useLocales';
-import { getAllUsers } from '../../redux/actions/users';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const PERCENT = 26.3;
+// const PERCENT = 26.3;
 const CHART_DATA = [{ data: [12, 14, 2, 47, 42, 15, 47, 75, 65, 19, 14] }];
 
 export default function StatisticTotalUser() {

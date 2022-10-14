@@ -6,14 +6,15 @@ import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
-import useLocales from '../../../hooks/useLocales';
-import DialogConfirm from '../../dialog/DialogConfirm';
+import { useLocales } from '~/hooks';
+import DialogConfirm from '~/components/dialog/DialogConfirm';
 
 // ----------------------------------------------------------------------
 
 BrandMoreMenu.propTypes = {
   onEdit: PropTypes.func,
-  onDelete: PropTypes.func
+  onDelete: PropTypes.func,
+  nameInfo: PropTypes.string
 };
 
 export default function BrandMoreMenu({ onEdit, onDelete, nameInfo }) {
@@ -26,6 +27,7 @@ export default function BrandMoreMenu({ onEdit, onDelete, nameInfo }) {
   useEffect(() => {
     const text = t('dashboard.brands.confirm-delete', { nameInfo });
     setTextConfirmDelete(text);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nameInfo]);
 
   const handleDelete = () => {

@@ -6,7 +6,7 @@ import arrowRightFill from '@iconify/icons-eva/arrow-right-fill';
 import { alpha, useTheme, styled } from '@mui/material/styles';
 import { Typography } from '@mui/material';
 //
-import { MIconButton } from '../../@material-extend';
+import { MIconButton } from '~/components/@material-extend';
 
 // ----------------------------------------------------------------------
 

@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { useSnackbar } from 'notistack';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { Stack, Card, TextField } from '@mui/material';
@@ -9,8 +8,6 @@ import { LoadingButton } from '@mui/lab';
 // ----------------------------------------------------------------------
 
 export default function AccountChangePassword() {
-  const { enqueueSnackbar } = useSnackbar();
-
   const ChangePassWordSchema = Yup.object().shape({
     oldPassword: Yup.string().required('Old Password is required'),
     newPassword: Yup.string().min(6, 'Password must be at least 6 characters').required('New Password is required'),

@@ -5,7 +5,7 @@ import { Box, Dialog, DialogContent, DialogTitle, Typography } from '@mui/materi
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // components
-import { MotionInView, varFadeInUp } from '../../animate';
+import { MotionInView, varFadeInUp } from '~/components/animate';
 import PhoneInputForm from './PhoneInputForm';
 import VerifyCodeForm from './VerifyCodeForm';
 

@@ -24,17 +24,17 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import { useSnackbar } from 'notistack';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { createBrand, updateBrand } from '../../../redux/slices/brandSlice';
+import { createBrand, updateBrand } from '~/redux/slices/brandSlice';
 // hooks
-import useLocales from '../../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 // components
-import CountryPicker, { defaultCountryName } from '../../../components/CountryPicker';
-import { UploadSingleFile } from '../../../components/upload';
-import { MotionInView, varFadeInUp } from '../../../components/animate';
-import { MIconButton, MRadio } from '../../../components/@material-extend';
+import { MotionInView, varFadeInUp } from '~/components/animate';
+import { MIconButton, MRadio } from '~/components/@material-extend';
 // others
-import { allowImageMineTypes } from '../../../constants/imageMineTypes';
-import { firebaseUploadSingle } from '../../../helper/firebaseHelper';
+import { allowImageMineTypes } from '~/constants/imageMineTypes';
+import { firebaseUploadSingle } from '~/helper/firebaseHelper';
+import { UploadSingleFile } from '~/components/upload';
+import CountryPicker, { defaultCountryName } from '~/components/CountryPicker';
 
 // ----------------------------------------------------------------------
 

@@ -10,18 +10,18 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // hooks
-import { useLocales } from '../../hooks';
+import { useLocales } from '~/hooks';
 // routes
-import { PATH_AUTH } from '../../routes/paths';
+import { PATH_AUTH } from '~/routes/paths';
 // layouts
-import AuthLayout from '../../layouts/AuthLayout';
+import { MHidden } from '~/components/@material-extend';
+import { CustomPhoneInput } from '~/components/@input';
+import firebase, { auth as firebaseAuth } from '~/firebase';
+import AuthLayout from '~/layouts/AuthLayout';
 // components
-import Page from '../../components/Page';
-import { MHidden } from '../../components/@material-extend';
-import AuthWithSocial from '../../components/authentication/AuthWithSocial';
-import { CustomPhoneInput } from '../../components/@input';
+import Page from '~/components/Page';
+import AuthWithSocial from '~/components/authentication/AuthWithSocial';
 // firebase
-import firebase, { auth as firebaseAuth } from '../../firebase';
 
 // ----------------------------------------------------------------------
 

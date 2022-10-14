@@ -16,8 +16,8 @@ import {
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 //
+import { DialogAnimate } from '~/components/animate';
 import CountryPicker from '../CountryPicker';
-import { DialogAnimate } from '../animate';
 
 // ----------------------------------------------------------------------
 

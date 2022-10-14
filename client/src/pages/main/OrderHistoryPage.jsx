@@ -1,17 +1,17 @@
 import { Card, Container, Table, TableRow, TableBody, TableCell, TableContainer } from '@mui/material';
 // hooks
 import { useEffect, useState } from 'react';
-import useLocales from '../../hooks/useLocales';
-import useAuth from '../../hooks/useAuth';
+import useLocales from '~/hooks/useLocales';
+import useAuth from '~/hooks/useAuth';
 // components
-import Page from '../../components/Page';
-import Scrollbar from '../../components/Scrollbar';
-import { OrderDetailForm, OrderListHead, OrderListToolbar, OrderTableRow } from '../../components/dashboard/order';
-import { MTablePagination } from '../../components/@material-extend';
-import { PhoneVerifyDialog } from '../../components/authentication/phone-verify';
-import { stableSort, getComparator } from '../../helper/listHelper';
+import { MTablePagination } from '~/components/@material-extend';
+import { PhoneVerifyDialog } from '~/components/authentication/phone-verify';
+import { stableSort, getComparator } from '~/helper/listHelper';
 //
-import * as api from '../../api';
+import * as api from '~/api';
+import { OrderDetailForm, OrderListHead, OrderListToolbar, OrderTableRow } from '~/components/dashboard/order';
+import Scrollbar from '~/components/Scrollbar';
+import Page from '~/components/Page';
 // ----------------------------------------------------------------------
 
 export default function OrderHistoryPage() {

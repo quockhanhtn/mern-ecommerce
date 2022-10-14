@@ -14,17 +14,22 @@ import {
 } from '@mui/material';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
+// hooks
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import useLocales from '../../../hooks/useLocales';
-import * as Helper from '../../../helper/listHelper';
-import Scrollbar from '../../../components/Scrollbar';
+import { useLocales } from '~/hooks';
+
+import * as Helper from '~/helper/listHelper';
+
+import { deleteProductVariant, getProductById } from '~/redux/slices/productSlice';
+
+import { ImageBrokenIcon } from '~/assets';
+import Scrollbar from '~/components/Scrollbar';
+import { ProductVariantListHead, ProductVariantMoreMenu } from '~/components/dashboard/products';
 import ProductVariantForm from './ProductVariantForm';
-import { ImageBrokenIcon } from '../../../assets';
-import { deleteProductVariant, getProductById } from '../../../redux/slices/productSlice';
-import { ProductVariantListHead, ProductVariantMoreMenu } from '../../../components/dashboard/products';
+
 // ----------------------------------------------------------------------
 const ThumbImgStyle = styled('img')(({ theme }) => ({
   width: 64,

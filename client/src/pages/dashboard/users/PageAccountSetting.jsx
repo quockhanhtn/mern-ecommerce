@@ -8,11 +8,11 @@ import { Container, Tab, Box, Tabs, Stack } from '@mui/material';
 // redux
 import { useDispatch } from 'react-redux';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD } from '~/routes/paths';
 // components
-import Page from '../../../components/Page';
-import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
-import { AccountBilling, AccountChangePassword } from '../../../components/dashboard/account';
+import Page from '~/components/Page';
+import HeaderBreadcrumbs from '~/components/HeaderBreadcrumbs';
+import { AccountBilling, AccountChangePassword } from '~/components/dashboard/account';
 
 // ----------------------------------------------------------------------
 

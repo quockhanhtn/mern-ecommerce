@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 // form validation
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -20,17 +19,17 @@ import { MobileDatePicker } from '@mui/lab';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import { useLocales, useAuth } from '../../hooks';
-import { getAccountInfo } from '../../redux/slices/accountSlice';
+import { useLocales, useAuth } from '~/hooks';
+import { getAccountInfo } from '~/redux/slices/accountSlice';
 
-import CustomLoadingOverlay from '../loading-overlay';
-import { MCircularProgress } from '../@material-extend';
-import { UploadAvatar } from '../upload';
+import { MCircularProgress } from '~/components/@material-extend';
 
-import { updateAccountInfo } from '../../api';
+import { updateAccountInfo } from '~/api';
 
 // utils
-import { fData } from '../../utils/formatNumber';
+import { fData } from '~/utils/formatNumber';
+import { UploadAvatar } from '../upload';
+import CustomLoadingOverlay from '../loading-overlay';
 
 // ----------------------------------------------------------------------
 

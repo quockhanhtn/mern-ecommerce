@@ -22,15 +22,15 @@ import {
 } from '@mui/material';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
-import { MRadio, MIconButton, MLabelTypo } from '../../../components/@material-extend';
+import { MRadio, MIconButton, MLabelTypo } from '~/components/@material-extend';
 //
-import { UploadSingleFile } from '../../../components/upload';
-import { varFadeInUp, MotionInView } from '../../../components/animate';
-import useLocales from '../../../hooks/useLocales';
-import { createCategory, updateCategory } from '../../../redux/slices/categorySlice';
-import { firebaseUploadSingle } from '../../../helper/firebaseHelper';
-import LoadingScreen from '../../../components/LoadingScreen';
-import { allowImageMineTypes } from '../../../constants/imageMineTypes';
+import { varFadeInUp, MotionInView } from '~/components/animate';
+import useLocales from '~/hooks/useLocales';
+import { createCategory, updateCategory } from '~/redux/slices/categorySlice';
+import { firebaseUploadSingle } from '~/helper/firebaseHelper';
+import { allowImageMineTypes } from '~/constants/imageMineTypes';
+import LoadingScreen from '~/components/LoadingScreen';
+import { UploadSingleFile } from '~/components/upload';
 
 // ----------------------------------------------------------------------
 

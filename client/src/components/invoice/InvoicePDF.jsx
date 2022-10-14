@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Page, View, Text, Font, Image, Document, StyleSheet } from '@react-pdf/renderer';
 // utils
-import { fCurrency } from '../../utils/formatNumber';
+import { fCurrency } from '~/utils/formatNumber';
 
 // ----------------------------------------------------------------------
 

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 // hooks
 import { Navigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import useAuth from '../hooks/useAuth';
+import useAuth from '~/hooks/useAuth';
 // pages
 import Login from '../pages/authentication/Login';
 

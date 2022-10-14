@@ -1,5 +1,5 @@
-import * as actionTypes from '../../constants/actionTypes';
-import { orderManager as apiOrderMgr } from '../../api';
+import * as actionTypes from '~/constants/actionTypes';
+import { orderManager as apiOrderMgr } from '~/api';
 
 const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Stack, TextField } from '@mui/material';
 // hooks
 import { useEffect, useState } from 'react';
-import useLocales from '../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 // components
 import ProvincePicker, { getProvinceCode } from './ProvincePicker';
 import DistrictPicker, { getDistrictCode } from './DistrictPicker';
@@ -66,6 +66,7 @@ export default function AddressPicker({ formik, ...other }) {
       district: formik.values.district,
       ward: formik.values.ward
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

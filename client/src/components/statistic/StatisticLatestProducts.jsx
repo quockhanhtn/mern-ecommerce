@@ -6,8 +6,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Link, Card, CardHeader, Typography, Stack } from '@mui/material';
 // utils
-import { fCurrency } from '../../utils/formatNumber';
-import { mockImgProduct } from '../../utils/mockImages';
+import { fCurrency } from '~/utils/formatNumber';
+import { mockImgProduct } from '~/utils/mockImages';
 //
 import Scrollbar from '../Scrollbar';
 import ColorPreview from '../ColorPreview';

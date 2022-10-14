@@ -26,19 +26,19 @@ import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllBrands } from '../../../redux/slices/brandSlice';
-import { getAllCategories } from '../../../redux/slices/categorySlice';
-import { createProduct } from '../../../redux/slices/productSlice';
+import { getAllBrands } from '~/redux/slices/brandSlice';
+import { getAllCategories } from '~/redux/slices/categorySlice';
+import { createProduct } from '~/redux/slices/productSlice';
 // components
-import CountryPicker from '../../../components/CountryPicker';
-import { QuillEditor } from '../../../components/editor';
-import { UploadMultiFile, UploadSingleFile } from '../../../components/upload';
-import { MIconButton } from '../../../components/@material-extend';
+import { MIconButton } from '~/components/@material-extend';
 // others
-import useLocales from '../../../hooks/useLocales';
-import { PATH_DASHBOARD } from '../../../routes/paths';
-import { allowImageMineTypes } from '../../../constants/imageMineTypes';
-import { firebaseUploadMultiple, firebaseUploadSingle } from '../../../helper/firebaseHelper';
+import useLocales from '~/hooks/useLocales';
+import { PATH_DASHBOARD } from '~/routes/paths';
+import { allowImageMineTypes } from '~/constants/imageMineTypes';
+import { firebaseUploadMultiple, firebaseUploadSingle } from '~/helper/firebaseHelper';
+import { UploadMultiFile, UploadSingleFile } from '~/components/upload';
+import { QuillEditor } from '~/components/editor';
+import CountryPicker from '~/components/CountryPicker';
 
 // ----------------------------------------------------------------------
 

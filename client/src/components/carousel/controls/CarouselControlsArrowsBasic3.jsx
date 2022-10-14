@@ -3,7 +3,7 @@ import arrowRightFill from '@iconify/icons-eva/arrow-right-fill';
 import { Icon } from '@iconify/react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
-import { MIconButton } from '../../@material-extend';
+import { MIconButton } from '~/components/@material-extend';
 
 // ----------------------------------------------------------------------
 

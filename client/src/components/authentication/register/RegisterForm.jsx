@@ -10,11 +10,11 @@ import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 import { Stack, TextField, IconButton, InputAdornment, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // hooks
-import useAuth from '../../../hooks/useAuth';
-import useIsMountedRef from '../../../hooks/useIsMountedRef';
-import useLocales from '../../../hooks/useLocales';
+import useAuth from '~/hooks/useAuth';
+import useIsMountedRef from '~/hooks/useIsMountedRef';
+import useLocales from '~/hooks/useLocales';
 //
-import { MIconButton } from '../../@material-extend';
+import { MIconButton } from '~/components/@material-extend';
 
 // ----------------------------------------------------------------------
 

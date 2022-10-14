@@ -1,29 +1,12 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
 // icons
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
-import eyeFill from '@iconify/icons-eva/eye-fill';
-import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
-import editFill from '@iconify/icons-eva/edit-fill';
-import trash2Fill from '@iconify/icons-eva/trash-2-fill';
-import roundFilterList from '@iconify/icons-ic/round-filter-list';
 // material
-import { useTheme, styled } from '@mui/material/styles';
-import {
-  Autocomplete,
-  Box,
-  Grid,
-  Toolbar,
-  Tooltip,
-  Typography,
-  TextField,
-  IconButton,
-  OutlinedInput,
-  InputAdornment
-} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Autocomplete, Box, Grid, Toolbar, TextField, OutlinedInput, InputAdornment } from '@mui/material';
 
-import useLocales from '../../../hooks/useLocales';
+import { useLocales } from '~/hooks';
 
 // ----------------------------------------------------------------------
 

@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { createContext } from 'react';
 // hooks
-import useLocalStorage from '../hooks/useLocalStorage';
+import useLocalStorage from '~/hooks/useLocalStorage';
 // theme
-import palette from '../theme/palette';
+import palette from '~/theme/palette';
 
 // ----------------------------------------------------------------------
 

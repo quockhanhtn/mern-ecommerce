@@ -5,16 +5,16 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Avatar, Box, Link, Drawer, Typography } from '@mui/material';
 // hook
-import useLocales from '../../hooks/useLocales';
-import useAuth from '../../hooks/useAuth';
+import useLocales from '~/hooks/useLocales';
+import useAuth from '~/hooks/useAuth';
 // routes
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { PATH_DASHBOARD } from '~/routes/paths';
 // components
-import LogoFull from '../../components/LogoFull';
-import Scrollbar from '../../components/Scrollbar';
-import NavSection from '../../components/NavSection';
-import SvgIconStyle from '../../components/SvgIconStyle';
-import { MHidden } from '../../components/@material-extend';
+import { MHidden } from '~/components/@material-extend';
+import LogoFull from '~/components/LogoFull';
+import Scrollbar from '~/components/Scrollbar';
+import NavSection from '~/components/NavSection';
+import SvgIconStyle from '~/components/SvgIconStyle';
 
 // ----------------------------------------------------------------------
 

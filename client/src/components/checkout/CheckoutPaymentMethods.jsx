@@ -21,9 +21,9 @@ import {
 //
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
-import { useLocales } from '../../hooks';
-import { MHidden } from '../@material-extend';
-import { OptionStyle } from '../@styled';
+import { useLocales } from '~/hooks';
+import { MHidden } from '~/components/@material-extend';
+import { OptionStyle } from '~/components/@styled';
 
 // ----------------------------------------------------------------------
 

@@ -11,15 +11,13 @@ import { LoadingButton } from '@mui/lab';
 import { useLayoutEffect } from 'react';
 import { useSnackbar } from 'notistack';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocales } from '../../hooks';
+import { useLocales } from '~/hooks';
 // components
+import { createOrder, backStepOrder } from '~/redux/slices/orderSlice';
+import * as typeUtils from '~/utils/typeUtils';
 import CheckoutSummary from './CheckoutSummary';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
-
-import { createOrder, backStepOrder } from '../../redux/slices/orderSlice';
-
-import * as typeUtils from '../../utils/typeUtils';
 
 // ----------------------------------------------------------------------
 

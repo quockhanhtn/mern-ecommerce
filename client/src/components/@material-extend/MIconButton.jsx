@@ -4,7 +4,7 @@ import { forwardRef } from 'react';
 import { alpha, useTheme } from '@mui/material/styles';
 import { IconButton } from '@mui/material';
 //
-import { ButtonAnimate } from '../animate';
+import { ButtonAnimate } from '~/components/animate';
 
 // ----------------------------------------------------------------------
 

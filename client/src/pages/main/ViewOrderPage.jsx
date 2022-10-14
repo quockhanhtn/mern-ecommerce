@@ -19,19 +19,20 @@ import {
 } from '@mui/material';
 // hooks
 import { useParams } from 'react-router-dom';
-import useLocales from '../../hooks/useLocales';
+import { useLocales } from '~/hooks';
 // components
-import Page from '../../components/Page';
-import Label from '../../components/Label';
-import LoadingScreen from '../../components/LoadingScreen';
-import Scrollbar from '../../components/Scrollbar';
-import { ImageBrokenIcon } from '../../assets';
-import { InvoiceToolbar } from '../../components/invoice';
+import * as Api from '~/api';
+import { fCurrency } from '~/utils/formatNumber';
+import { getOrderStatusColor, getPaymentStatusColor } from '~/utils/labelColor';
+
+import { ImageBrokenIcon } from '~/assets';
+import Page from '~/components/Page';
+import Label from '~/components/Label';
+import LoadingScreen from '~/components/LoadingScreen';
+import Scrollbar from '~/components/Scrollbar';
+import { InvoiceToolbar } from '~/components/invoice';
 //
-import * as Api from '../../api';
 // utils
-import { fCurrency } from '../../utils/formatNumber';
-import { getOrderStatusColor, getPaymentStatusColor } from '../../utils/labelColor';
 
 // ----------------------------------------------------------------------
 

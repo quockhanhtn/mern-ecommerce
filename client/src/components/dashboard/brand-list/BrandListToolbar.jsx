@@ -8,7 +8,7 @@ import { useTheme, styled } from '@mui/material/styles';
 import { Box, Toolbar, Tooltip, Typography, IconButton, OutlinedInput, InputAdornment } from '@mui/material';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 import editFill from '@iconify/icons-eva/edit-fill';
-import useLocales from '../../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 
 // ----------------------------------------------------------------------
 

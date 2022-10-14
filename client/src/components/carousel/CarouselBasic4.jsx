@@ -8,11 +8,11 @@ import moreHorizontalFill from '@iconify/icons-eva/more-horizontal-fill';
 import { alpha, useTheme, styled } from '@mui/material/styles';
 import { Box, Card, Typography } from '@mui/material';
 // utils
-import { mockImgFeed } from '../../utils/mockImages';
+import { mockImgFeed } from '~/utils/mockImages';
 //
+import { MIconButton } from '~/components/@material-extend';
 import { CarouselControlsArrowsBasic2 } from './controls';
 //
-import { MIconButton } from '../@material-extend';
 
 // ----------------------------------------------------------------------
 

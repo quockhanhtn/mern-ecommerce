@@ -1,3 +1,6 @@
+import { Icon } from '@iconify/react';
+import plusFill from '@iconify/icons-eva/plus-fill';
+
 import {
   Box,
   Button,
@@ -14,27 +17,31 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
-import { Icon } from '@iconify/react';
-import plusFill from '@iconify/icons-eva/plus-fill';
+// hooks
 import { useEffect, useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import Page from '../../../components/Page';
-import { PATH_DASHBOARD } from '../../../routes/paths';
-import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
-import useLocales from '../../../hooks/useLocales';
-import LoadingScreen from '../../../components/LoadingScreen';
-import Label from '../../../components/Label';
-import { fDate } from '../../../utils/formatTime';
-import Scrollbar from '../../../components/Scrollbar';
-import { stableSort, getComparator } from '../../../helper/listHelper';
-import { DiscountListToolbar, DiscountListHead, DiscountMoreMenu } from '../../../components/dashboard/discount-list';
-import { deleteDiscount, getAllDiscounts } from '../../../redux/actions/discounts';
+import { useLocales } from '~/hooks';
+
+import { PATH_DASHBOARD } from '~/routes/paths';
+
+import { fDate } from '~/utils/formatTime';
+import { stableSort, getComparator } from '~/helper/listHelper';
+
+import { deleteDiscount, getAllDiscounts } from '~/redux/actions/discounts';
+
+import { ImageBrokenIcon } from '~/assets';
+import Page from '~/components/Page';
+import HeaderBreadcrumbs from '~/components/HeaderBreadcrumbs';
+import LoadingScreen from '~/components/LoadingScreen';
+import Label from '~/components/Label';
+import Scrollbar from '~/components/Scrollbar';
+import EmptyCard from '~/components/EmptyCard';
+import SearchNotFound from '~/components/SearchNotFound';
+import { DiscountListToolbar, DiscountListHead, DiscountMoreMenu } from '~/components/dashboard/discount-list';
 import DiscountForm from './DiscountForm';
-import EmptyCard from '../../../components/EmptyCard';
-import SearchNotFound from '../../../components/SearchNotFound';
-import { ImageBrokenIcon } from '../../../assets';
+
 // ----------------------------------------------------------------------
 const ThumbImgStyle = styled('img')(({ theme }) => ({
   width: 64,

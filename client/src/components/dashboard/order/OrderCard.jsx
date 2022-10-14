@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {
   Box,
   Card,
@@ -15,15 +16,15 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // hooks
-import { useLocales } from '../../../hooks';
+import { useLocales } from '~/hooks';
 // components
-import { ImageBrokenIcon } from '../../../assets';
-import { ThumbImgStyle } from '../../@styled';
-import Label from '../../Label';
-import Scrollbar from '../../Scrollbar';
+import { ImageBrokenIcon } from '~/assets';
+import { ThumbImgStyle } from '~/components/@styled';
+import Label from '~/components/Label';
+import Scrollbar from '~/components/Scrollbar';
 // utils
-import { fCurrency } from '../../../utils/formatNumber';
-import { getOrderStatusColor, getPaymentStatusColor } from '../../../utils/labelColor';
+import { fCurrency } from '~/utils/formatNumber';
+import { getOrderStatusColor, getPaymentStatusColor } from '~/utils/labelColor';
 
 const RowResultStyle = styled(TableRow)(({ theme }) => ({
   '& td': {
@@ -43,7 +44,6 @@ const RowResultStyle = styled(TableRow)(({ theme }) => ({
 const ROW_RESULT_CELL_WIDTH = 180;
 const LEFT_WIDTH = 100;
 
-// eslint-disable-next-line react/prop-types
 const InfoItem = ({ label, value, valueVariant }) => (
   <Box display="flex" alignItems="center">
     <Typography align="left" variant="body2" component="span" sx={{ color: 'text.secondary', width: LEFT_WIDTH }}>
@@ -55,7 +55,13 @@ const InfoItem = ({ label, value, valueVariant }) => (
   </Box>
 );
 
-export default function OrderCard({ order, isShowTitle, handleRePay }) {
+InfoItem.propTypes = {
+  label: PropTypes.object,
+  value: PropTypes.object,
+  valueVariant: PropTypes.object
+};
+
+function OrderCard({ order, isShowTitle, handleRePay }) {
   const { t } = useLocales();
   return (
     <Card sx={{ pt: 5, px: 5, mb: 5 }}>
@@ -256,3 +262,11 @@ export default function OrderCard({ order, isShowTitle, handleRePay }) {
     </Card>
   );
 }
+
+OrderCard.propTypes = {
+  order: PropTypes.object,
+  isShowTitle: PropTypes.bool,
+  handleRePay: PropTypes.func
+};
+
+export default OrderCard;

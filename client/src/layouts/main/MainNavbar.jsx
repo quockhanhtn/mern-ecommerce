@@ -13,11 +13,11 @@ import baselineSettings from '@iconify/icons-ic/baseline-settings';
 import { styled } from '@mui/material/styles';
 import { Box, IconButton, AppBar, Toolbar, Container, Stack } from '@mui/material';
 // hooks
-import { useOffSetTop, useLocales } from '../../hooks';
+import { useOffSetTop, useLocales } from '~/hooks';
 // components
-import Logo from '../../components/Logo';
-import LogoFull from '../../components/LogoFull';
-import { MBadge, MButton, MHidden } from '../../components/@material-extend';
+import { MBadge, MButton, MHidden } from '~/components/@material-extend';
+import Logo from '~/components/Logo';
+import LogoFull from '~/components/LogoFull';
 //
 import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';

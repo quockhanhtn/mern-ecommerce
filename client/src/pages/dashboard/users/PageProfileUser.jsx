@@ -1,8 +1,8 @@
 import { Container } from '@mui/material';
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD } from '~/routes/paths';
 // components
-import Page from '../../../components/Page';
-import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
+import Page from '~/components/Page';
+import HeaderBreadcrumbs from '~/components/HeaderBreadcrumbs';
 import UserForm from './UserForm';
 
 // ----------------------------------------------------------------------

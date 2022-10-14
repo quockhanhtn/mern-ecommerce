@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import { createContext, useEffect, useReducer } from 'react';
-import * as api from '../api';
-import { setAuthenticated } from '../redux/slices/cartSlice';
+import * as api from '~/api';
+import { setAuthenticated } from '~/redux/slices/cartSlice';
 
-import { isValidToken, setSession } from '../utils/jwt';
+import { isValidToken, setSession } from '~/utils/jwt';
 
 // ----------------------------------------------------------------------
 

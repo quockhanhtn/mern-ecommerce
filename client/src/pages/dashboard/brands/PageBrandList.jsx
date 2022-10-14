@@ -19,25 +19,28 @@ import {
   Typography
 } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
-//
+// hooks
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
+import { useLocales } from '~/hooks';
 //
-import Page from '../../../components/Page';
-import { PATH_DASHBOARD } from '../../../routes/paths';
-import HeaderBreadcrumbs from '../../../components/HeaderBreadcrumbs';
-import useLocales from '../../../hooks/useLocales';
-import LoadingScreen from '../../../components/LoadingScreen';
-import { deleteBrand, getAllBrands } from '../../../redux/slices/brandSlice';
-import Label from '../../../components/Label';
-import { fDateTime } from '../../../utils/formatTime';
-import Scrollbar from '../../../components/Scrollbar';
-import { getComparator, stableSort } from '../../../helper/listHelper';
+import { PATH_DASHBOARD } from '~/routes/paths';
+import { getComparator, stableSort } from '~/helper/listHelper';
+import { fDateTime } from '~/utils/formatTime';
+
+import { deleteBrand, getAllBrands } from '~/redux/slices/brandSlice';
+
+import { ImageBrokenIcon } from '~/assets';
+
+import Page from '~/components/Page';
+import HeaderBreadcrumbs from '~/components/HeaderBreadcrumbs';
+import LoadingScreen from '~/components/LoadingScreen';
+import Label from '~/components/Label';
+import Scrollbar from '~/components/Scrollbar';
+import EmptyCard from '~/components/EmptyCard';
+import { BrandListHead, BrandListToolbar, BrandMoreMenu } from '~/components/dashboard/brand-list';
 import BrandForm from './BrandForm';
-import { BrandListHead, BrandListToolbar, BrandMoreMenu } from '../../../components/dashboard/brand-list';
-import { ImageBrokenIcon } from '../../../assets';
-import EmptyCard from '../../../components/EmptyCard';
 
 // ----------------------------------------------------------------------
 

@@ -16,16 +16,15 @@ import {
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import { useLocales } from '../../hooks';
+import { useLocales } from '~/hooks';
 
-import CustomLoadingOverlay from '../loading-overlay';
-import CheckoutDiscountForm from './CheckoutDiscountForm';
+import { setAppliedDiscount } from '~/redux/slices/orderSlice';
 
-import { setAppliedDiscount } from '../../redux/slices/orderSlice';
-
-import { estDiscountAmount } from '../../api';
+import { estDiscountAmount } from '~/api';
 // utils
-import { fCurrency, fNumber } from '../../utils/formatNumber';
+import { fCurrency } from '~/utils/formatNumber';
+import CheckoutDiscountForm from './CheckoutDiscountForm';
+import CustomLoadingOverlay from '../loading-overlay';
 
 // ----------------------------------------------------------------------
 

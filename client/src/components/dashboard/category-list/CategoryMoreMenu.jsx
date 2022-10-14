@@ -6,8 +6,8 @@ import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
+import useLocales from '~/hooks/useLocales';
 import DialogConfirm from '../../dialog/DialogConfirm';
-import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +29,7 @@ export default function CategoryMoreMenu({ editTitle, onEdit, deleteTitle, onDel
   useEffect(() => {
     const text = t('dashboard.categories.confirm-delete', { nameInfo });
     setTextConfirmDelete(text);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nameInfo]);
 
   const handleEdit = (event) => {

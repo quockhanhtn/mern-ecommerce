@@ -6,9 +6,9 @@ import * as Yup from 'yup';
 import { Stack, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // hooks
-import { useLocales } from '../../../hooks';
+import { useLocales } from '~/hooks';
 //
-import * as typeUtils from '../../../utils/typeUtils';
+import * as typeUtils from '~/utils/typeUtils';
 
 // ----------------------------------------------------------------------
 

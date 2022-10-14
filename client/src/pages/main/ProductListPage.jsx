@@ -21,18 +21,18 @@ import { LoadingButton } from '@mui/lab';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useQuery from '../../hooks/useQuery';
-import useLocales from '../../hooks/useLocales';
+import useQuery from '~/hooks/useQuery';
+import useLocales from '~/hooks/useLocales';
 // components
-import Page from '../../components/Page';
-import { ProductList } from '../../components/e-commerce';
+import { ProductList } from '~/components/e-commerce';
 
 import {
   initialSearch,
   searchProduct,
   setSelectedCategories,
   setSelectedBrands
-} from '../../redux/slices/searchProductSlice';
+} from '~/redux/slices/searchProductSlice';
+import Page from '~/components/Page';
 
 // ----------------------------------------------------------------------
 
@@ -121,7 +121,6 @@ export default function ProductListPage() {
   };
 
   const handleSearch = () => {
-    // eslint-disable-next-line no-unused-vars
     setProducts((_prev) => []);
     const bQuery = selectedBrands.map((x) => x.slug).join(',');
     const cQuery = selectedCategories.map((x) => x.slug).join(',');

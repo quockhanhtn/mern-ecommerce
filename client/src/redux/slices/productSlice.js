@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import * as api from '../../api';
-import { getRelatedItems, getUserBasedRecommendation } from '../../api/fpt';
+import * as api from '~/api';
+import { getRelatedItems, getUserBasedRecommendation } from '~/api/fpt';
 
 const initialState = {
   isLoading: true,

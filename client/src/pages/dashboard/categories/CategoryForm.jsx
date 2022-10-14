@@ -24,16 +24,16 @@ import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { createCategory, updateCategory } from '../../../redux/slices/categorySlice';
+import { createCategory, updateCategory } from '~/redux/slices/categorySlice';
 // hooks
-import useLocales from '../../../hooks/useLocales';
+import useLocales from '~/hooks/useLocales';
 // components
-import { MRadio, MIconButton, MLabelTypo } from '../../../components/@material-extend';
-import { UploadSingleFile } from '../../../components/upload';
-import { varFadeInUp, MotionInView } from '../../../components/animate';
-import LoadingScreen from '../../../components/LoadingScreen';
-import { allowImageMineTypes } from '../../../constants/imageMineTypes';
-import { firebaseUploadSingle } from '../../../helper/firebaseHelper';
+import { MRadio, MIconButton, MLabelTypo } from '~/components/@material-extend';
+import { varFadeInUp, MotionInView } from '~/components/animate';
+import { allowImageMineTypes } from '~/constants/imageMineTypes';
+import { firebaseUploadSingle } from '~/helper/firebaseHelper';
+import LoadingScreen from '~/components/LoadingScreen';
+import { UploadSingleFile } from '~/components/upload';
 
 // ----------------------------------------------------------------------
 

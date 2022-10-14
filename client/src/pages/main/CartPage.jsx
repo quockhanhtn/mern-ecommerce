@@ -7,10 +7,10 @@ import { Box, Grid, Step, Stepper, Container, StepLabel, StepConnector, useMedia
 import { styled } from '@mui/material/styles';
 // hooks
 import { useSelector } from 'react-redux';
-import { useLocales } from '../../hooks';
+import { useLocales } from '~/hooks';
 // components
-import Page from '../../components/Page';
-import { CheckoutCart, CheckoutPayment, CheckoutBillingAddress } from '../../components/checkout';
+import Page from '~/components/Page';
+import { CheckoutCart, CheckoutPayment, CheckoutBillingAddress } from '~/components/checkout';
 
 // ----------------------------------------------------------------------
 

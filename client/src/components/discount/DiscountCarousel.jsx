@@ -6,10 +6,10 @@ import { useState, useRef } from 'react';
 import { alpha, useTheme, styled } from '@mui/material/styles';
 import { Box, Card, Paper, Typography, CardContent, Skeleton } from '@mui/material';
 //
-import { varFadeInRight, MotionContainer } from '../animate';
-import { CarouselControlsArrowsIndex } from '../carousel/controls';
-import { useLocales } from '../../hooks';
-import { fCurrency } from '../../utils/formatNumber';
+import { varFadeInRight, MotionContainer } from '~/components/animate';
+import { CarouselControlsArrowsIndex } from '~/components/carousel/controls';
+import { useLocales } from '~/hooks';
+import { fCurrency } from '~/utils/formatNumber';
 
 // ----------------------------------------------------------------------
 

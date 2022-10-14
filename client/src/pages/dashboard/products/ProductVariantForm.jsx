@@ -21,12 +21,12 @@ import * as Yup from 'yup';
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
 import { styled, useTheme } from '@mui/material/styles';
-import { UploadMultiFile, UploadSingleFile } from '../../../components/upload';
-import useLocales from '../../../hooks/useLocales';
-import { MIconButton } from '../../../components/@material-extend';
-import { allowImageMineTypes } from '../../../constants/imageMineTypes';
-import { firebaseUploadMultiple, firebaseUploadSingle } from '../../../helper/firebaseHelper';
-import { createProductVariant, getProductById, updateProductVariant } from '../../../redux/slices/productSlice';
+import useLocales from '~/hooks/useLocales';
+import { MIconButton } from '~/components/@material-extend';
+import { allowImageMineTypes } from '~/constants/imageMineTypes';
+import { firebaseUploadMultiple, firebaseUploadSingle } from '~/helper/firebaseHelper';
+import { createProductVariant, getProductById, updateProductVariant } from '~/redux/slices/productSlice';
+import { UploadMultiFile, UploadSingleFile } from '~/components/upload';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,

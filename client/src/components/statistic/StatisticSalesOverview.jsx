@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 // material
 import { Card, CardHeader, Typography, Stack } from '@mui/material';
 // utils
-import { fPercent, fCurrency } from '../../utils/formatNumber';
+import { fPercent, fCurrency } from '~/utils/formatNumber';
 //
 import MLinearProgress from '../@material-extend/MLinearProgress';
 
