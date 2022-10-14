@@ -38,48 +38,48 @@ const COLOR_DEBUG = '\x1b[35m';
 const LOG_DIR_PATH = path.join(process.cwd(), 'public', 'logs');
 if (!fs.existsSync(LOG_DIR_PATH)) { fs.mkdirSync(LOG_DIR_PATH); }
 
+const saveLog = (type, time, tag, message, object) => {
+  const date = time.substr(0, 10);
+  const dirPath = path.join(LOG_DIR_PATH, date);
+  if (!fs.existsSync(dirPath)) { fs.mkdirSync(dirPath); }
+
+  // append log to file
+  fs.appendFileSync(path.join(dirPath, `${type}_${tag}.log`), `\n${time} ${message}`);
+  // write detail object to file
+  if (object) { fs.writeFileSync(path.join(dirPath, `${type}_${date}.detail.json`), '\n' + JSON.stringify(object)) }
+};
+
+const log = (type, tag, message, object = null) => {
+  const time = new Date().toISOString();
+
+  let logMethod = console[type];
+  let logColor = COLOR_RESET;
+
+  if (type === 'info') { logColor = COLOR_INFO; }
+  else if (type === 'warn') { logColor = COLOR_WARN; }
+  else if (type === 'error') { logColor = COLOR_ERROR; }
+  else if (type === 'debug') { logColor = COLOR_DEBUG; }
+
+  const logMessage = `[${COLOR_DIM + time + COLOR_RESET}] ${logColor}[${type}]${COLOR_RESET} [${tag}] ${message}`;
+
+  if (object) { logMethod(logMessage, object); }
+  else { logMethod(logMessage); }
+
+  saveLog(type, time, tag, message, object);
+};
+
 class LogUtils {
-  static saveLog = (type, time, tag, message, object) => {
-    const date = time.substr(0, 10);
-    const dirPath = path.join(LOG_DIR_PATH, date);
-    if (!fs.existsSync(dirPath)) { fs.mkdirSync(dirPath); }
-
-    // append log to file
-    fs.appendFileSync(path.join(dirPath, `${type}_${tag}.log`), `\n${time} ${message}`);
-    // write detail object to file
-    if (object) { fs.writeFileSync(path.join(dirPath, `${type}_${date}.detail.json`), '\n' + JSON.stringify(object)) }
-  };
-
-  static log = (type, tag, message, object = null) => {
-    const time = new Date().toISOString();
-
-    let logMethod = console[type];
-    let logColor = COLOR_RESET;
-
-    if (type === 'info') { logColor = COLOR_INFO; }
-    else if (type === 'warn') { logColor = COLOR_WARN; }
-    else if (type === 'error') { logColor = COLOR_ERROR; }
-    else if (type === 'debug') { logColor = COLOR_DEBUG; }
-
-    const logMessage = `[${COLOR_DIM + time + COLOR_RESET}] ${logColor}[${type}]${COLOR_RESET} [${tag}] ${message}`;
-
-    if (object) { logMethod(logMessage, object); }
-    else { logMethod(logMessage); }
-
-    this.saveLog(type, time, tag, message, object);
-  };
-
   static info(tag, message, object = null) {
-    this.log('info', tag, message, object);
+    log('info', tag, message, object);
   }
   static warn(tag, message, object = null) {
-    this.log('warn', tag, message, object);
+    log('warn', tag, message, object);
   }
   static error(tag, message, object = null) {
-    this.log('error', tag, message, object);
+    log('error', tag, message, object);
   }
   static debug(tag, message, object = null) {
-    this.log('debug', tag, message, object);
+    log('debug', tag, message, object);
   }
 }
 

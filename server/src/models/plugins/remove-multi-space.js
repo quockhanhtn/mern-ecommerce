@@ -7,7 +7,7 @@ const removeMultiSpace = (schema, _options) => {
     }
   });
 
-  schema.pre('save', async function (next) {
+  schema.pre('save', function (next) {
     const doc = this;
     for (let f of fields) {
       if (doc[f]) {

@@ -14,10 +14,10 @@ const serverIp = Object.entries((Object.entries(os.networkInterfaces())[0]))?.[1
 const serverPort = process.env.PORT || 3001;
 const serverApi = http.createServer(app);
 
-const io = new SocketServer(serverApi, {
-  cors: { origin: '*', }
-});
-io.on('connection', (socket) => socketHandler(io, socket));
+// const io = new SocketServer(serverApi, {
+//   cors: { origin: '*', }
+// });
+// io.on('connection', (socket) => socketHandler(io, socket));
 
 serverApi.listen(serverPort, () => {
   LogUtils.info('SERVER', `Server running at ${serverIp}:${serverPort}`);

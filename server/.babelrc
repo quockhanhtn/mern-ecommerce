@@ -1,0 +1,39 @@
+{
+  "presets": [
+    "@babel/preset-env"
+    // [
+    //   "minify",
+    //   {
+    //     "builtIns": false,
+    //     "evaluate": false,
+    //     "mangle": false
+    //   }
+    // ]
+  ],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": [
+          "./src"
+        ]
+      }
+    ],
+    // [
+    //   "@babel/plugin-transform-runtime",
+    //   {
+    //     "absoluteRuntime": false,
+    //     "corejs": false,
+    //     "helpers": true,
+    //     "regenerator": true
+    //   }
+    // ]
+    [
+      "@babel/plugin-transform-classes",
+      {
+        "loose": true
+      }
+    ]
+  ],
+  "comments": false
+}

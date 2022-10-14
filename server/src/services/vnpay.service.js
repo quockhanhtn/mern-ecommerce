@@ -1,6 +1,5 @@
-import crypto from 'crypto';
+import { createHmac } from 'crypto';
 import queryString from 'query-string';
-import dateFormat from 'dateformat';
 
 const tmnCode = process.env.VNPAY_TMN_CODE;
 const secretKey = process.env.VNPAY_SECRET;
@@ -15,13 +14,18 @@ async function createPaymentUrl(ipAddress, apiUrl, clientUrl, orderId, orderPayA
   const returnUrl = `${apiUrl}/api/v1/payment/vnpay/callback`;
 
   const date = new Date();
-  const createDate = dateFormat(date, 'yyyymmddHHmmss');
-  const txnRef = dateFormat(date, 'HHmmss');
+  const createDate = date.toISOString()
+    .replace(/-/g, '')
+    .replace(/T/g, '')
+    .replace(/:/g, '')
+    .slice(0, 14);
+  const txnRef = date.toISOString()
+    .replace(/-/g, '')
+    .replace(/T/g, '')
+    .replace(/:/g, '')
+    .slice(8, 14)
 
-  let locale = 'vn';
-  if (language && ['vn', 'en'].indexOf(language) >= 0) {
-    locale = language;
-  }
+  const locale = ['vn', 'en'].indexOf(language) >= 0 ? language : 'vn';
   const currCode = 'VND';
 
   let vnp_Params = {};
@@ -45,7 +49,7 @@ async function createPaymentUrl(ipAddress, apiUrl, clientUrl, orderId, orderPayA
   vnp_Params = sortObject(vnp_Params);
 
   const signData = queryString.stringify(vnp_Params, { encode: false });
-  const hmac = crypto.createHmac("sha512", secretKey);
+  const hmac = createHmac("sha512", secretKey);
   const signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
   vnp_Params['vnp_SecureHash'] = signed;
 
@@ -62,7 +66,7 @@ async function checkPaymentStatus(vnpayResponse) {
   vnp_Params = sortObject(vnp_Params);
 
   const signData = queryString.stringify(vnp_Params, { encode: false });
-  const hmac = crypto.createHmac('sha512', secretKey);
+  const hmac = createHmac('sha512', secretKey);
   const signed = hmac.update(new Buffer(signData, 'utf-8')).digest('hex');
 
   if (secureHash === signed) {

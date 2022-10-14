@@ -65,9 +65,9 @@ app.use('/api/v2', routesV2);                           // api v2 routes
 
 
 // Error handling
-app.use(error.converter);   // if error is not an instanceOf APIError, convert it.
-app.use(error.notFound);    // catch 404 and forward to error handler
-app.use(error.handler);     // error handler, send stacktrace only during development
+app.use(error.converter());   // if error is not an instanceOf APIError, convert it.
+app.use(error.notFound());    // catch 404 and forward to error handler
+app.use(error.handler());     // error handler, send stacktrace only during development
 
 
 //Config connection to MongoDb and listen app

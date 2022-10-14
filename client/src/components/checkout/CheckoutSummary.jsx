@@ -61,7 +61,7 @@ export default function CheckoutSummary({ showDetail = false, sx }) {
     } catch (e) {
       let mgs = 'Không thể áp dụng mã giảm giá';
       const err = e?.response?.data?.message;
-      if (err[currentLang.value]) {
+      if (err?.[currentLang.value]) {
         mgs = err[currentLang.value];
       }
       setErrorMgs(mgs);
