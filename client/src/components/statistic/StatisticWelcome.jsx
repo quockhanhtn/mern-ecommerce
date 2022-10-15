@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Typography, Button, Card, CardContent } from '@mui/material';
 //
 import useLocales from '~/hooks/useLocales';
-import MotivationIllustration from '../../assets/illustration_motivation';
+import MotivationIllustration from '~/assets/illustration_motivation';
 
 // ----------------------------------------------------------------------
 

@@ -14,7 +14,7 @@ import { paramCase } from 'change-case';
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 import { useLocales } from '~/hooks';
 import { PATH_DASHBOARD } from '~/routes/paths';
-import DialogConfirm from '../../dialog/DialogConfirm';
+import DialogConfirm from '~/components/dialog/DialogConfirm';
 
 // ----------------------------------------------------------------------
 

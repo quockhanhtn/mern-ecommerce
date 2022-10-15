@@ -7,7 +7,7 @@ import { useSnackbar } from 'notistack';
 import useAuth from '~/hooks/useAuth';
 import useLocales from '~/hooks/useLocales';
 // icons
-import { FacebookIcon, GoogleIcon, TwitterIcon } from '../../assets';
+import { FacebookIcon, GoogleIcon, TwitterIcon } from '~/assets';
 
 // ----------------------------------------------------------------------
 

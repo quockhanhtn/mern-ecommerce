@@ -1,8 +1,3 @@
-import * as actionTypes from '~/constants/actionTypes';
-import * as api from '~/api';
-
-const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
-
 export const getAllProducts = (_search = '', brand = '', category = '', page = 1, limit = 12) => {
   throw new Error('Not implemented');
 };

@@ -7,7 +7,7 @@ import { Box, Button, Typography, Container } from '@mui/material';
 // components
 import { MotionContainer, varBounceIn } from '~/components/animate';
 import Page from '~/components/Page';
-import { PageNotFoundIllustration } from '../../assets';
+import { PageNotFoundIllustration } from '~/assets';
 
 // ----------------------------------------------------------------------
 

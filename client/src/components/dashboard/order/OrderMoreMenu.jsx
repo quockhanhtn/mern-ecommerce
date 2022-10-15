@@ -7,7 +7,7 @@ import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 import useLocales from '~/hooks/useLocales';
-import DialogConfirm from '../../dialog/DialogConfirm';
+import DialogConfirm from '~/components/dialog/DialogConfirm';
 
 // ----------------------------------------------------------------------
 

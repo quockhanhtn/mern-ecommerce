@@ -1,15 +1,12 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, useRoutes, useLocation } from 'react-router-dom';
+
+import { AuthGuard, GuestGuard } from '~/guards';
 // layouts
-import GuestGuard from '~/guards/GuestGuard';
-import AuthGuard from '~/guards/AuthGuard';
-import MainLayout from '../layouts/main';
-import DashboardLayout from '../layouts/dashboard';
-import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
-// guards
-// import RoleBasedGuard from '../guards/RoleBasedGuard';
-// components
-import LoadingScreen from '../components/LoadingScreen';
+import MainLayout from '~/layouts/main';
+import DashboardLayout from '~/layouts/dashboard';
+import LogoOnlyLayout from '~/layouts/LogoOnlyLayout';
+import LoadingScreen from '~/components/LoadingScreen';
 
 // ----------------------------------------------------------------------
 
@@ -151,39 +148,39 @@ export default function Router() {
 // IMPORT COMPONENTS
 
 // Authentication
-const Login = Loadable(lazy(() => import('../pages/authentication/Login')));
-const Register = Loadable(lazy(() => import('../pages/authentication/Register')));
-const ResetPassword = Loadable(lazy(() => import('../pages/authentication/ResetPassword')));
-// const VerifyCode = Loadable(lazy(() => import('../pages/authentication/VerifyCode')));
+const Login = Loadable(lazy(() => import('~/pages/authentication/Login')));
+const Register = Loadable(lazy(() => import('~/pages/authentication/Register')));
+const ResetPassword = Loadable(lazy(() => import('~/pages/authentication/ResetPassword')));
+// const VerifyCode = Loadable(lazy(() => import('~/pages/authentication/VerifyCode')));
 
 // Dashboard
-const PageStatistic = Loadable(lazy(() => import('../pages/dashboard/statistic/PageStatistic')));
+const PageStatistic = Loadable(lazy(() => import('~/pages/dashboard/statistic/PageStatistic')));
 // Orders
-const PageOrderList = Loadable(lazy(() => import('../pages/dashboard/orders/PageOrderList')));
+const PageOrderList = Loadable(lazy(() => import('~/pages/dashboard/orders/PageOrderList')));
 // Category
-const PageCategoryList = Loadable(lazy(() => import('../pages/dashboard/categories/PageCategoryList')));
+const PageCategoryList = Loadable(lazy(() => import('~/pages/dashboard/categories/PageCategoryList')));
 // Brand
-const PageBrandList = Loadable(lazy(() => import('../pages/dashboard/brands/PageBrandList')));
+const PageBrandList = Loadable(lazy(() => import('~/pages/dashboard/brands/PageBrandList')));
 // Discount
-const PageDiscountList = Loadable(lazy(() => import('../pages/dashboard/discounts/PageDiscountList')));
+const PageDiscountList = Loadable(lazy(() => import('~/pages/dashboard/discounts/PageDiscountList')));
 // Product
-const PageProductList = Loadable(lazy(() => import('../pages/dashboard/products/PageProductList')));
-const PageProduct = Loadable(lazy(() => import('../pages/dashboard/products/PageProduct')));
-const PageProductEdit = Loadable(lazy(() => import('../pages/dashboard/products/PageProductEdit')));
+const PageProductList = Loadable(lazy(() => import('~/pages/dashboard/products/PageProductList')));
+const PageProduct = Loadable(lazy(() => import('~/pages/dashboard/products/PageProduct')));
+const PageProductEdit = Loadable(lazy(() => import('~/pages/dashboard/products/PageProductEdit')));
 // User
-const PageCustomerList = Loadable(lazy(() => import('../pages/dashboard/users/PageCustomerList')));
-const PageStaffList = Loadable(lazy(() => import('../pages/dashboard/users/PageStaffList')));
-const PageAccountSetting = Loadable(lazy(() => import('../pages/dashboard/users/PageAccountSetting')));
-const PageProfileUser = Loadable(lazy(() => import('../pages/dashboard/users/PageProfileUser')));
+const PageCustomerList = Loadable(lazy(() => import('~/pages/dashboard/users/PageCustomerList')));
+const PageStaffList = Loadable(lazy(() => import('~/pages/dashboard/users/PageStaffList')));
+const PageAccountSetting = Loadable(lazy(() => import('~/pages/dashboard/users/PageAccountSetting')));
+const PageProfileUser = Loadable(lazy(() => import('~/pages/dashboard/users/PageProfileUser')));
 // General
-const NotFound = Loadable(lazy(() => import('../pages/error/Page404')));
+const NotFound = Loadable(lazy(() => import('~/pages/error/Page404')));
 
 // Main
-const HomePage = Loadable(lazy(() => import('../pages/main/HomePage')));
-const AccountPage = Loadable(lazy(() => import('../pages/main/AccountPage')));
-const ProductListPage = Loadable(lazy(() => import('../pages/main/ProductListPage')));
-const ProductDetailPage = Loadable(lazy(() => import('../pages/main/ProductDetailPage')));
-const ProductRelatedPage = Loadable(lazy(() => import('../pages/main/ProductRelatedPage')));
-const CartPage = Loadable(lazy(() => import('../pages/main/CartPage')));
-const ViewOrderPage = Loadable(lazy(() => import('../pages/main/ViewOrderPage')));
-const OrderHistoryPage = Loadable(lazy(() => import('../pages/main/OrderHistoryPage')));
+const HomePage = Loadable(lazy(() => import('~/pages/main/HomePage')));
+const AccountPage = Loadable(lazy(() => import('~/pages/main/AccountPage')));
+const ProductListPage = Loadable(lazy(() => import('~/pages/main/ProductListPage')));
+const ProductDetailPage = Loadable(lazy(() => import('~/pages/main/ProductDetailPage')));
+const ProductRelatedPage = Loadable(lazy(() => import('~/pages/main/ProductRelatedPage')));
+const CartPage = Loadable(lazy(() => import('~/pages/main/CartPage')));
+const ViewOrderPage = Loadable(lazy(() => import('~/pages/main/ViewOrderPage')));
+const OrderHistoryPage = Loadable(lazy(() => import('~/pages/main/OrderHistoryPage')));

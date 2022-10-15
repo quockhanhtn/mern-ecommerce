@@ -1,10 +1,11 @@
 import { isString } from 'lodash';
 import PropTypes from 'prop-types';
-import { Icon } from '@iconify/react';
 import { useDropzone } from 'react-dropzone';
+import { motion, AnimatePresence } from 'framer-motion';
+// icons
+import { Icon } from '@iconify/react';
 import fileFill from '@iconify/icons-eva/file-fill';
 import closeFill from '@iconify/icons-eva/close-fill';
-import { motion, AnimatePresence } from 'framer-motion';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import {
@@ -23,9 +24,9 @@ import {
 // utils
 import { fData } from '~/utils/formatNumber';
 //
+import { UploadIllustration } from '~/assets';
 import { MIconButton } from '~/components/@material-extend';
 import { varFadeInRight } from '~/components/animate';
-import { UploadIllustration } from '../../assets';
 
 // ----------------------------------------------------------------------
 

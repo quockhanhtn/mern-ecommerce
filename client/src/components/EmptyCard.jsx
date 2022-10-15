@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Box, Card, Typography } from '@mui/material';
-import { MotionContainer, varBounceIn } from './animate';
-import { EmptyBoxIcon } from '../assets';
+
+import { EmptyBoxIcon } from '~/assets';
+import { MotionContainer, varBounceIn } from '~/components/animate';
 
 // ----------------------------------------------------------------------
 

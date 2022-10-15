@@ -10,7 +10,7 @@ import { Box, FormControlLabel, Switch, Typography, TextField, Tooltip } from '@
 import { MLinearProgress, MIconButton, MLabelTypo } from '~/components/@material-extend';
 //
 import useLocales from '~/hooks/useLocales';
-import { UploadIllustration } from '../../assets';
+import { UploadIllustration } from '~/assets';
 
 // ----------------------------------------------------------------------
 

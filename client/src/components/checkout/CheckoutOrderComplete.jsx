@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Link, Button, Divider, Typography, Stack } from '@mui/material';
 //
 import { DialogAnimate } from '~/components/animate';
-import { OrderCompleteIllustration } from '../../assets';
+import { OrderCompleteIllustration } from '~/assets';
 
 // ----------------------------------------------------------------------
 
