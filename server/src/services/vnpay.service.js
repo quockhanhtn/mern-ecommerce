@@ -1,10 +1,11 @@
 import crypto from 'crypto';
 import queryString from 'query-string';
 import dateFormat from 'dateformat';
+import configs from '../configs.js';
 
-const tmnCode = process.env.VNPAY_TMN_CODE;
-const secretKey = process.env.VNPAY_SECRET;
-const vnpUrl = process.env.VNPAY_URL;
+const tmnCode = configs.vnPay.tmnCode;
+const secretKey = configs.vnPay.secret;
+const vnpUrl = configs.vnPay.url;
 
 export default {
   createPaymentUrl,

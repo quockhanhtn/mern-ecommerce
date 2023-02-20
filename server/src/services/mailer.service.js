@@ -2,11 +2,12 @@
 import { createTransport } from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
 import path from 'path';
+import configs from '../configs.js';
 import LogUtils from '../utils/LogUtils.js';
 
-const mailerService = process.env.MAILER_SERVICE || 'gmail';
-const mailerUsername = process.env.MAILER_AUTH_USER;
-const mailerPassword = process.env.MAILER_AUTH_PASS;
+const mailerService = configs.mailer.service;
+const mailerUsername = configs.mailer.user;
+const mailerPassword = configs.mailer.pass;
 
 // initialize nodemailer
 const transporter = createTransport({
@@ -50,7 +51,7 @@ export const sendMail = (receiver, subject, title, content) => {
   }
 
   const mailOptions = {
-    from: process.env.MAILER_AUTH_USER, // sender address
+    from: configs.mailer.user, // sender address
     to: receiver,
     subject,
     template: 'verification', // public/mail-template/verification.hbs

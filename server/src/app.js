@@ -13,6 +13,7 @@ import routesV1 from './routes/v1/index.js';
 import routesV2 from './routes/v2/index.js';
 
 import LogUtils from './utils/LogUtils.js';
+import configs from './configs.js';
 
 //------------------------------------------------------------------------------
 
@@ -71,7 +72,7 @@ app.use(error.handler);     // error handler, send stacktrace only during develo
 
 
 //Config connection to MongoDb and listen app
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(configs.mongoUri)
   .then(() => LogUtils.info('DATABASE', `Connected successfully to MongoDB`))
   .catch(err => LogUtils.info('DATABASE', 'Connect to MongoDB failed', err));
 

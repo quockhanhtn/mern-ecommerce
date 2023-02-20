@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
+import configs from '../configs.js';
 import ApiErrorUtils from './ApiErrorUtils.js';
 
-const secretKey = process.env.JWT_SECRET;
-const defaultExpiresIn = process.env.JWT_EXPIRES_IN;
+const secretKey = configs.jwtSecret;
+const defaultExpiresIn = configs.jwtExpiresIn;
 
 class JwtUtils {
   /**

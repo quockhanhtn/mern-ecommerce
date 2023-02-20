@@ -4,6 +4,7 @@ import os from 'os';
 import { Server as SocketServer } from 'socket.io';
 
 import app from './app.js';
+import configs from './configs.js';
 import socketHandler from './socket.io.js';
 import fptService from './services/fpt.service.js';
 import LogUtils from './utils/LogUtils.js';
@@ -11,7 +12,7 @@ import SlackUtils from './utils/SlackUtils.js';
 import FormatUtils from './utils/FormatUtils.js';
 
 const serverIp = Object.entries((Object.entries(os.networkInterfaces())[0]))?.[1]?.[1]?.filter(x => x.family === 'IPv4')?.[0]?.address || '';
-const serverPort = process.env.PORT || 3001;
+const serverPort = configs.port;
 const serverApi = http.createServer(app);
 
 const io = new SocketServer(serverApi, {
@@ -22,7 +23,7 @@ io.on('connection', (socket) => socketHandler(io, socket));
 serverApi.listen(serverPort, () => {
   LogUtils.info('SERVER', `Server running at ${serverIp}:${serverPort}`);
 
-  if (process.env.NODE_ENV !== 'dev') {
+  if (configs.isProd) {
     let startMgs = '------------------------------------------------------';
     startMgs += `\nServer running at *${serverIp}:${serverPort}*`;
     const machineInfo = {
@@ -35,7 +36,7 @@ serverApi.listen(serverPort, () => {
       memory: `${FormatUtils.formatBytes(os.freemem())} / ${FormatUtils.formatBytes(os.totalmem())}`,
     }
     startMgs += `\nMachine info: \`\`\`${JSON.stringify(machineInfo, null, 2)}\`\`\``;
-   
+
     startMgs += '\n------------------------------------------------------\n';
     SlackUtils.sendMessage(startMgs);
 

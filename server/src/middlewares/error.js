@@ -3,6 +3,7 @@ import httpStatus from 'http-status';
 import ApiErrorUtils from '../utils/ApiErrorUtils.js';
 import UploadUtils from '../utils/UploadUtils.js';
 import SlackUtils from '../utils/SlackUtils.js';
+import configs from '../configs.js';
 
 export default {
   converter,
@@ -77,7 +78,7 @@ function handler(err, req, res, _) {
 
   SlackUtils.sendMessage(mgs, 'C03FMRF45K7');
 
-  if (process.env.NODE_ENV !== 'dev') {
+  if (configs.isProd) {
     delete response.stack;
   } else {
     console.log(response);

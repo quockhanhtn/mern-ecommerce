@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import sanitizeHtml from 'sanitize-html';
 import slugGenerator from 'mongoose-slug-updater';
 import removeMultiSpace from './plugins/remove-multi-space.js';
+import configs from '../configs.js';
 
 const { Schema } = mongoose;
 
@@ -130,10 +131,10 @@ productSchema.pre('validate', function (next) {
     return next();
   }
 
-  // sanitize html to prevent XSS
-  if (process.env.NODE_ENV !== 'dev') {
+  if (!configs.isDev) {
     this.desc = sanitizeHtml(this.desc);
   }
+
   next();
 });
 

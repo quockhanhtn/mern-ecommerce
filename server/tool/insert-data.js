@@ -6,10 +6,11 @@ import Category from '../src/models/category.model.js';
 import Brand from '../src/models/brand.model.js';
 import Product from '../src/models/product.model.js';
 import StringUtils from '../src/utils/StringUtils.js';
+import configs from '../src/configs.js';
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect( configs.mongoUri )
   .then(() => {
-    console.log('Connected to database ' + process.env.MONGO_URI);
+    console.log('Connected to database ' + configs.mongoUri);
     insertData();
   })
   .catch(err => console.log('Connect to MongoDB failed', err));

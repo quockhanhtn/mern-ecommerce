@@ -7,13 +7,6 @@ import Brand from '../src/models/brand.model.js';
 import Product from '../src/models/product.model.js';
 import StringUtils from '../src/utils/StringUtils.js';
 
-// mongoose.connect(process.env.MONGO_URI)
-//   .then(() => {
-//     console.log('Connected to database ' + process.env.MONGO_URI);
-//     insertData();
-//   })
-//   .catch(err => console.log('Connect to MongoDB failed', err));
-
 const categoryMap = {
   'dtdd': mongoose.Types.ObjectId('c00000000000000000000001'),
   'may-tinh-bang': mongoose.Types.ObjectId('c00000000000000000000002'),

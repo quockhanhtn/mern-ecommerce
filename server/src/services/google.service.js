@@ -1,6 +1,7 @@
 // ref: https://developers.google.com/identity/sign-in/web/backend-auth
 
 import { OAuth2Client } from 'google-auth-library';
+import configs from '../configs.js';
 // const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // const clientMobile = new OAuth2Client(process.env.GOOGLE_CLIENT_ID_MOBILE);
 
@@ -15,7 +16,7 @@ export default {
  */
 async function verify(googleCredential, clientId) {
   if (!clientId) {
-    clientId = process.env.GOOGLE_CLIENT_ID;
+    clientId = configs.google.clientId;
   }
   const client = new OAuth2Client(clientId);
 
