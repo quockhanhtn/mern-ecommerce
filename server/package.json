@@ -35,12 +35,13 @@
     "axios": "^0.27.2",
     "bcrypt": "^5.1.0",
     "dateformat": "^2.2.0",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.1",
     "envalid": "^7.3.1",
     "express": "^4.17.1",
     "express-validation": "^3.0.8",
     "firebase-admin": "^10.0.1",
     "google-auth-library": "^7.10.3",
+    "html-to-text": "^8.1.0",
     "http-status": "^1.5.0",
     "joi": "^17.4.2",
     "jsonwebtoken": "^8.5.1",
@@ -60,7 +61,6 @@
   },
   "devDependencies": {
     "csv-writer": "^1.6.0",
-    "html-to-text": "^8.1.0",
     "nodemon": "^2.0.14"
   }
 }
