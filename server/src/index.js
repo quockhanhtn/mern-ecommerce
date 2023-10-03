@@ -5,11 +5,11 @@ import { Server as SocketServer } from 'socket.io';
 
 import app from './app.js';
 import configs from './configs.js';
-import socketHandler from './socket.io.js';
-import fptService from './services/fpt.service.js';
+import socketHandler from './socket.io.js'; 
 import LogUtils from './utils/LogUtils.js';
-import SlackUtils from './utils/SlackUtils.js';
-import FormatUtils from './utils/FormatUtils.js';
+
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const serverIp = Object.entries((Object.entries(os.networkInterfaces())[0]))?.[1]?.[1]?.filter(x => x.family === 'IPv4')?.[0]?.address || '';
 const serverPort = configs.port;
